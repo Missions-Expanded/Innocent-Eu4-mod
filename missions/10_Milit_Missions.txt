@@ -1,0 +1,386 @@
+Military_Missions = {
+	slot = 8
+	generic = no
+	ai = yes
+	potential = {
+		always = yes
+	}
+	has_country_shield = no
+	
+	Offensive_Leader = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 1
+		trigger = {
+			offensive_ideas = 1
+			has_leader_with = {
+				fire = 4
+				shock = 4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Offensive_tradition"
+				duration = 7300
+			}
+		}
+	}
+	Offensive_war_win = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Offensive_Leader }
+		position = 2
+		trigger = {
+			offensive_ideas = 4
+			is_in_war = {
+				attacker_leader = ROOT
+				war_score = 75
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Offensive_Period_of_Peace"
+				duration = 7300
+			}
+		}
+	}
+	Offensive_artillery = {
+		icon = mission_cannons_firing
+		required_missions = { Offensive_war_win }
+		position = 3
+		trigger = {
+			offensive_ideas = 5
+			num_of_artillery = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Offensive_Siege"
+				duration = 7300
+			}
+		}
+	}
+	Defensive_Fortified_border = {
+		icon = mission_conquer_50_development
+		required_missions = { }
+		position = 4
+		trigger = {
+			defensive_ideas = 1
+			calc_true_if = {
+				all_owned_province = {
+					any_neighbor_province = {
+					NOT = { owned_by = ROOT }
+					}
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+					}
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Defensive_upkeep"
+				duration = -1
+			}
+		}
+	}
+	Defensive_Scorched_Earth = {
+		icon = mission_have_two_subjects
+		required_missions = { Defensive_Fortified_border }
+		position = 5
+		trigger = {
+			defensive_ideas = 5
+			calc_true_if = {
+				all_owned_province = {
+					has_province_modifier = scorched_earth 
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Defensive_Deadly_Attrition"
+				duration = 1825
+			}
+		}
+	}
+	Defensive_bleed_enemies_out = {
+		icon = mission_assemble_an_army
+		required_missions = { Defensive_Scorched_Earth }
+		position = 6
+		trigger = {
+			defensive_ideas = 7
+			any_country = {
+				is_in_war = {
+					defender_leader = ROOT
+				}
+				manpower_percentage = 0
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Defensive_Counterattack"
+				duration = 7300
+			}
+		}
+	}
+	Quality_Discipline = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 7
+		trigger = {
+			quality_ideas = 1
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Quality_discipline"
+				duration = 7300
+			}
+		}
+	}
+	Quality_Professional_army = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Quality_Discipline }
+		position = 8
+		trigger = {
+			quality_ideas = 2
+			army_professionalism = 0.25
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Quality_Professional_army"
+				duration = 7300
+			}
+		}
+	}
+	Quality_Great_Leader = {
+		icon = mission_alliances
+		required_missions = { Quality_Professional_army }
+		position = 9
+		trigger = {
+			quality_ideas = 7
+			has_commanding_three_star = yes
+		}
+		effect = {
+			create_general = 110
+		}
+	}
+	Quantity_Manpower = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 10
+		trigger = {
+			quantity_ideas = 2
+			manpower_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Quantity_big_army"
+				duration = 7300
+			}
+		}
+	}
+	Quantity_Rival = {
+		icon = mission_empire
+		required_missions = { Quantity_Manpower }
+		position = 11
+		trigger = {
+			quantity_ideas = 5
+			calc_true_if = {
+				all_rival_country = {
+					army_strength = {
+						who = ROOT
+						value = 2
+					}
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Quantity_prestige"
+				duration = 7300
+			}
+		}
+	}
+	Quantity_Force_limit = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Quantity_Rival }
+		position = 12
+		trigger = {
+			quantity_ideas = 7
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Quantity_Manpower"
+				duration = 7300
+			}
+		}
+	}
+	Naval_war_fleet = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 13
+		trigger = {
+			naval_ideas = 1
+			OR = {
+				num_of_galley = 20
+				num_of_heavy_ship = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Naval_War_fleet_economy"
+				duration = -1
+			}
+		}
+	}
+	Naval_Tradition = {
+		icon = mission_sea_battles
+		required_missions = { Naval_war_fleet }
+		position = 14
+		trigger = {
+			naval_ideas = 3
+			navy_tradition = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Naval_traditional"
+				duration = -1
+			}
+		}
+	}
+	Naval_Sailors = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { Naval_Tradition }
+		position = 15
+		trigger = {
+			naval_ideas = 5
+			sailors_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Naval_sailors"
+				duration = -1
+			}
+		}
+	}
+	Naval_Strongest = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { Naval_Sailors }
+		position = 16
+		trigger = {
+			naval_ideas = 7
+			NOT = {
+				any_country = {
+					navy_size = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Naval_Upkeep"
+				duration = -1
+			}
+		}
+	}
+	Aristocratic_cavalry = {
+		icon = mission_conquer_5_states
+		required_missions = { }
+		position = 17
+		trigger = {
+			aristocracy_ideas = 1
+			num_of_cavalry = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Aristocratic_Cavalry"
+				duration = 7300
+			}
+		}
+	}
+	Aristocratic_Kingdom = {
+		icon = mission_empire
+		required_missions = { Aristocratic_cavalry }
+		position = 18
+		trigger = {
+			aristocracy_ideas = 4
+			government_rank = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Aristocratic_Prestige"
+				duration = -1
+			}
+		}
+	}
+	Aristocratic_Personal_union = {
+		icon = mission_alliances
+		required_missions = { Aristocratic_Kingdom }
+		position = 19
+		trigger = {
+			aristocracy_ideas = 7
+			# num_of_unions = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Aristocratic_Integration"
+				duration = 18250
+			}
+		}
+	}
+	Plutocratic_RT = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 20
+		trigger = {
+			plutocracy_ideas = 1
+			republican_tradition = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Plutocratic_RT_Boost"
+				duration = 18250
+			}
+		}
+	}
+	Plutocratic_Courthouse = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { Plutocratic_RT }
+		position = 21
+		trigger = {
+			plutocracy_ideas = 4
+			capital_scope = {
+				has_building = courthouse
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Plutocratic_Just"
+				duration = 7300
+			}
+		}
+	}
+	Plutocratic_stability = {
+		icon = mission_high_income
+		required_missions = { Plutocratic_Courthouse }
+		position = 22
+		trigger = {
+			plutocracy_ideas = 4
+			stability = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Plutocratic_Stability"
+				duration = 18250
+			}
+		}
+	}
+}

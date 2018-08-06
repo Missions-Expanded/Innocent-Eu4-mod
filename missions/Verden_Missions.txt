@@ -1,0 +1,602 @@
+verden_catholic = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = VER
+	}
+	has_country_shield = yes
+	
+	ver_go_catholic = {
+		icon = mission_european_church
+		trigger = {
+			adm_power = 50
+			NOT = {
+				has_country_flag = ver_protestant_focus
+			}
+		}
+		effect = {
+			set_country_flag = ver_catholic_focus
+			add_adm_power = -50
+			add_country_modifier = {
+				name = ver_catholic 
+			}
+		}
+	}
+	
+	ver_papal_delegation = {
+		icon = mission_alliances
+		required_missions = { ver_go_catholic }
+		trigger = {
+			PAP = {
+				has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {	
+				name = ver_papal_focus
+				duration = 10950
+			}
+			add_cardinal = yes
+		}
+	}
+	
+	ver_expand_chapter = {
+		icon = mission_hands_praying
+		required_missions = { ver_papal_delegation }
+		trigger = {
+			54 = {
+				has_building = temple
+			}
+			papal_influence = 40
+		}
+	}
+	
+	ver_swiss_guard = {
+		icon = mission_have_two_subjects
+		required_missions = { ver_expand_chapter }
+		position = 4
+		trigger = {
+			mil_tech = 7
+			treasury = 200
+			SWI = {
+				religion = catholic
+				has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ver_swiss_guards
+			}
+			add_mil_power = 250
+		}
+	}
+	
+	ver_embrace_counter_reformation = {
+		icon = mission_conquer_5_states
+		required_missions = { ver_swiss_guard }
+		position = 5
+		trigger = {
+			is_year = 1520
+			religion = catholic
+			adm_power = 50
+		}
+		effect = {
+			add_adm_power = -50
+			add_country_modifier = {
+				name = ver_counter_reformation
+			}
+		}
+	}
+}
+	
+	
+
+verden_protestant = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = VER
+	}
+	has_country_shield = yes
+	
+	ver_go_protestant = {
+		icon = mission_european_church
+		trigger = {
+			adm_power = 50
+			NOT = {
+				has_country_flag = ver_catholic_focus 
+			}
+		}
+		effect = {
+			set_country_flag = ver_protestant_focus
+			add_adm_power = -50
+			add_country_modifier = {
+				name = ver_protestant 
+			}
+		}
+	}
+	
+	ver_verdener_influence = {
+		icon = mission_early_game_buildings
+		required_missions = { ver_go_protestant }
+		position = 2
+		trigger = {
+			adm = 3
+			PAP = {
+				has_spy_network_from = {
+					who = ROOT
+					value = 20
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ver_verdeners
+				duration = 10950
+			}
+			PAP = {
+				add_opinion = {	
+					who = ROOT
+					modifier = renounced_as_heretics
+				}
+			}
+		}
+	}
+	
+	ver_elective_monarchy = {
+		icon = mission_empire
+		required_missions = { ver_verdener_influence }
+		position = 3
+		trigger = {
+			adm_tech = 5
+			adm_power = 150
+			total_development = 25
+		}
+		effect = {
+			country_event = { id = flavor_ver.1 }
+			add_adm_power = -150
+		}
+	}
+	
+	ver_end_papal_dominance = {
+		icon = mission_european_church
+		required_missions = { ver_elective_monarchy }
+		position = 4
+		trigger = {
+			dip_tech = 6
+			workshop = 2
+			prestige = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = ver_free_verden
+			}
+			add_country_modifier = {
+				name = ver_heresy
+				duration = 109590
+			}
+		}
+	}
+	
+	ver_convert_to_protestant = {
+		icon = mission_european_church
+		required_missions = { ver_end_papal_dominance }
+		position = 5
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+			}
+			temple = 4
+			marketplace = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = ver_converted_protestant
+			}
+		}
+	}
+}
+
+ver_conquest_2 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = VER
+	}
+	has_country_shield = yes
+	
+	ver_bremen = {
+		icon = mission_monarch_in_throne_room 
+		required_missions = { }
+		trigger = {
+			OR = {
+				BRE = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				BRE = {
+					has_spy_network_from = {
+						who = ROOT
+						value = 60
+					}
+				}
+			}
+			army_size = BRE
+			has_heir = yes
+		}
+	effect = {
+		inherit = BRE
+		add_country_modifier = {
+			name = ver_inherit_bremen
+			duration = 10950
+		}
+            55 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            53 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            1758 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            2971 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+	}
+}
+	
+	ver_oldenburg = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { ver_bremen }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 54
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			54 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+            westphalia_area = {     
+				limit = {
+                    NOT = { owned_by = ROOT }
+                    NOT = { is_core = ROOT }
+                }
+                add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	ver_westphalia = {
+		icon = mission_assemble_an_army
+		required_missions = { ver_oldenburg }
+		position = 3
+		trigger = {
+			westphalia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			if = {
+            hesse_area = {     
+				limit = {
+                    NOT = {
+                        owned_by = ROOT
+                        is_core = ROOT
+                    }
+                }
+                add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ver_hesse = {
+		icon = mission_cannons_firing
+		required_missions = { ver_westphalia }
+		position = 4
+		trigger = {
+			hesse_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+            44 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            45 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+		}
+	}
+	
+	
+	ver_hansa = {
+		icon = mission_dominate_home_trade_node
+		required_missions = {
+			ver_hesse
+			ver_mecklenburg
+			ver_north_saxony
+		}
+		position = 5
+		trigger = {
+			44 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			45 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ver_conquered_hansa
+				duration = 23000
+			}
+		}
+	}
+	
+	ver_unite_westphalia = {
+		icon = mission_empire 
+		required_missions = { ver_hansa }
+		position = 6
+		trigger = {
+			adm_tech = 8
+			adm = 4
+		}
+		effect = {
+			change_tag = WES
+			add_prestige = 50
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+ver_conquest_1 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = VER
+	}
+	has_country_shield = yes
+	
+	ver_luneburg = {
+		icon = mission_cannons_firing
+		required_missions = { ver_bremen }
+		position = 2
+		trigger = {
+			53 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+            1857 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+		}
+	}
+	
+	ver_lauenburg = {
+		icon = mission_assemble_an_army
+		required_missions = { ver_luneburg }
+		position = 3
+		trigger = {
+			1857 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+            46 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            2996 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+		}
+	}
+	
+	ver_mecklenburg = {
+		icon = mission_conquer_5_states
+		required_missions = { ver_lauenburg }
+		position = 4
+		trigger = {
+			46 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			2996 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+	}
+}
+
+ver_conquest_3 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = VER
+	}
+	has_country_shield = yes
+	
+	ver_hannover = {
+		icon = mission_assemble_an_army
+		required_missions = { ver_bremen }
+		position = 2
+		trigger = {
+			1758 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			2971 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+            57 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            2964 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+            51 = {     
+				IF = {
+                    limit = {
+                        NOT = { owned_by = ROOT }
+                        NOT = { is_core = ROOT }
+                    }
+					add_permanent_claim = ROOT
+                }
+			}
+		}
+	}
+	
+	ver_brunswick = {
+		icon = mission_conquer_5_states
+		required_missions = { ver_hannover }
+		position = 3
+		trigger = {
+			57 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			2964 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			51 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			if = {
+            northern_saxony_area = {     
+				limit = {
+                    NOT = {
+                        owned_by = ROOT
+                        is_core = ROOT
+                    }
+                }
+                add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	ver_north_saxony = {
+		icon = mission_unite_home_region
+		required_missions = { ver_brunswick }
+		position = 4
+		trigger = {
+			northern_saxony_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ver_saxons_united
+				duration = 23000
+			}
+		}
+	}
+}
+
+	
+	

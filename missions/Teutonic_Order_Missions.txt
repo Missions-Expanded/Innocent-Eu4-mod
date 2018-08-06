@@ -1,0 +1,290 @@
+survival_in_region = {
+	slot = 1 
+	generic = no
+	ai = yes
+	potential = {
+    OR = {
+        tag = TEU
+        }
+    }
+	has_country_shield = yes
+	
+	teu_wealth_of_the_order = {
+		icon = mission_war_chest
+			required_missions = { }
+ 		
+		trigger = {
+				treasury = 200		
+			calc_true_if = {
+				all_owned_province = {
+					OR = {		
+						has_building = marketplace
+					}
+				}
+				amount = 2
+				all_owned_province = {
+					OR = {		
+						has_building = temple
+					}
+				}
+				amount = 2				
+			}
+		}	
+
+		
+		effect = {
+			capital_scope = {
+				add_base_tax = 1
+				add_base_production = 1
+			}	
+				add_country_modifier = {
+				name = "teutonic_wealth"
+				duration = 5500
+				}							
+			}	
+		}	
+	teu_revive_the_military_might_of_order = {
+		icon = mission_build_up_to_force_limit 
+		required_missions = { teu_wealth_of_the_order } 
+		position = 3
+		
+		trigger = {
+			army_size_percentage = 1
+			num_of_generals = 2
+			calc_true_if = {
+				all_owned_province = {
+					OR = {		
+						has_building = barracks
+					}
+				}
+				amount = 2
+			}
+		}	
+
+		effect = {
+			add_prestige = 15
+			add_mil_power = 100
+			capital_scope = {
+			add_base_manpower = 1
+			}
+				add_country_modifier = {
+				name = "teutonic_army_reformation"
+				duration = 5500
+					}
+		}
+	}	
+		teu_conquest_of_hinter_pommern = {
+		icon = mission_cannons_firing 
+		required_missions = { teu_revive_the_military_might_of_order }
+		position = 5		
+		provinces_to_highlight = {
+			OR = {
+				area = hinter_pommern_area
+			}	
+		}	
+		trigger = {
+			hinter_pommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+		}	
+		
+		effect = {
+			add_prestige = 15
+				vorpommern_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+				add_province_modifier = {
+					name = "new_dioecesis"
+					duration = 5475
+				}
+			}
+		}
+	}
+}	
+	
+baltic_might = {
+	slot = 5  
+	generic = no 
+	ai = yes 
+	potential = {
+    OR = {
+        tag = TEU
+        }
+    }
+	has_country_shield = yes
+
+	teu_restore_relations_with_livonia = {
+		icon = mission_alliances 
+		required_missions = { } 
+		
+		trigger = {
+						alliance_with = LIV
+						LIV = {
+							has_opinion = {
+								who = ROOT
+								value = 170
+								}
+							}
+						}	
+		effect = { 
+			add_dip_power = 150 
+			add_country_modifier = {
+				name = "teutonic_livonian_friendship"
+				duration = 7000
+			}
+		}
+	}	
+	
+	teu_stop_commonwealth = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { teu_restore_relations_with_livonia }
+		position = 2
+				provinces_to_highlight = {
+			OR = {
+			province_id = 2963
+			province_id = 254
+			province_id = 255						
+			}
+		}
+		
+		trigger = { 
+			owns_core_province = 2963 			
+			owns_core_province = 254
+			owns_core_province = 255 			 			
+		} 
+		effect = {
+			add_mil_power = 100		
+			add_army_tradition = 1
+			samogitia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+			name = "great_teutonic_victory" 
+			duration = 18250 
+			} 
+		} 
+	}
+	
+	teu_conquer_samogitia = {
+		icon = mission_conquer_50_development
+		required_missions = { teu_stop_commonwealth } 
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = samogitia_area
+			}
+		}
+		trigger = { 
+			samogitia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+		}
+	}	
+		effect = {
+			add_prestige = 20
+			add_mil_power = 150
+			add_meritocracy_effect = yes
+			add_country_modifier = {
+			name = "land_investment"
+			duration = 3190
+			}
+			}
+		}		
+	
+	vassalise_livonia = {
+		icon = mission_assemble_an_army
+		required_missions = { teu_conquer_samogitia }
+		position = 4
+		trigger = {
+		LIV = {	vassal_of = TEU	}
+						LIV = {
+							has_opinion = {
+								who = ROOT
+								value = 200
+								}
+							}
+						}		
+		effect = {
+		inherit = LIV
+		inherit = RIG
+			add_country_modifier = {
+				name = "united_german_order"
+				duration = 5475
+			}
+		}
+	}
+	
+		teu_baltic_dominance = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { vassalise_livonia }
+		position = 5
+			provinces_to_highlight = {
+				province_id = 1926
+				}
+ 		
+		trigger = {
+				1926 = {
+					is_strongest_trade_power = ROOT
+				}
+			}	
+		
+		effect = {
+			45 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 21300
+					power = 20
+					key = swedish_trade_concession	
+					}
+				add_country_modifier = {
+				name = "free_trade_reforms"
+				duration = -1
+					}
+				}
+			}	
+		}
+	}
+
+newgovernement = {
+	slot = 3  
+	generic = no 
+	ai = yes 
+	potential = {
+    OR = {
+        tag = TEU
+        }
+    }
+	has_country_shield = yes
+
+		teu_government_reformation = {
+		icon = mission_high_income
+		required_missions = { teu_conquest_of_hinter_pommern
+						teu_baltic_dominance
+						}
+		position = 6
+ 		
+		trigger = {
+				has_institution = printing_press
+				advisor = statesman
+				adm_tech = 10
+			}	
+				
+		effect = {
+			change_government = prussian_monarchy
+			change_tag = PRU
+
+					add_country_modifier = {
+					name = "governmental_reforms"
+					duration = -1
+					}
+				}	
+			}
+			}

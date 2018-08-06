@@ -1,0 +1,181 @@
+utrecht_missions_main_slot = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = UTR
+		}	
+	}
+	has_country_shield = yes
+	
+	
+	utr_align_with_the_pope = {
+		icon = mission_religious
+		position = 1
+		required_missions = { }
+		trigger = {
+			reverse_has_opinion = {
+				who = PAP
+				value = 100
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "align_with_the_pope_modifier"
+				duration = 3650
+			}
+		}
+	}
+	
+	utr_control_the_dikes = {
+		icon = mission_establish_high_seas_navy
+		position = 2
+		required_missions = { utr_align_with_the_pope }
+		trigger = {
+			navy_size = HOL
+			navy_size = FRI
+			navy_size = BRB
+			navy_size = GEL
+		}
+		effect = {
+			add_dip_power = 100
+			add_stability = 1
+		}
+	}
+	
+	utr_patronage = {
+		icon = mission_early_game_buildings
+		position = 3
+		required_missions = { utr_control_the_dikes }
+		trigger = {
+			total_development = 30
+			temple = 1
+		}
+		effect = {
+			capital_scope = {
+				add_building = cathedral
+			}
+		}
+	}
+	
+	utr_religious_center = {
+		icon = mission_european_church
+		position = 4
+		required_missions = { utr_patronage }
+		provinces_to_highlight = {
+				province_id = 99
+				province_id = 95
+		}
+		trigger = {
+			legitimacy_equivalent = 90
+			has_institution = renaissance
+		}
+		effect = {
+			99 = {
+				add_permanent_claim = ROOT
+			}
+			95 = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	utr_save_our_bretherin = {
+		icon = mission_hands_praying
+		position = 5
+		required_missions = { utr_religious_center }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 95
+				province_id = 99				
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			OR = {
+				is_core = 95
+				is_core = 99
+			}
+		}
+		effect = {
+			holland_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			frisia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	utr_unite_holland_area = {
+		icon = mission_cannons_firing
+		position = 6
+		required_missions = { utr_save_our_bretherin }
+		provinces_to_highlight = {
+			OR = {
+				area = holland_area 
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			holland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_prestige = 20
+		}
+	}
+}	
+
+utrecht_missions_side_slot = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = UTR
+		}	
+	}
+	has_country_shield = yes
+	
+	
+	utr_unite_frisia_area = {
+		icon = mission_cannons_firing
+		position = 6
+		required_missions = { utr_save_our_bretherin }
+		provinces_to_highlight = {
+			OR = {
+				area = frisia_area 
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			frisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_prestige = 20
+		}
+	}	
+}

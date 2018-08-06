@@ -1,0 +1,210 @@
+bos_1 = {
+	slot = 1
+	ai = yes
+	potential = {
+		tag = BOS
+	}
+	has_country_shield = yes
+	
+	bos_dalmatia = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 137
+		}
+		trigger = {
+			137 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		effect = {
+			croatia_area = {
+				limit = {
+					NOT = { is_core = ROOT 
+					 owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	bos_croatia = {
+		icon = mission_assemble_an_army
+		required_missions = { bos_dalmatia }
+		provinces_to_highlight = {
+			area = croatia_area
+		}
+		trigger = {
+			croatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			serbia_area = {
+				limit = {
+					NOT = { is_core = ROOT 
+					 owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bos_serbia = {
+		icon = mission_assemble_an_army
+		required_missions = { bos_croatia }
+		provinces_to_highlight = {
+			area = serbia_area
+		}
+	
+		trigger = {
+			serbia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			rascia_area = {
+				limit = {
+					NOT = { is_core = ROOT 
+					 owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bos_serbia_2 = {
+		icon = mission_assemble_an_army
+		required_missions = { bos_serbia }
+		provinces_to_highlight = {
+			area = rascia_area
+		}
+
+		trigger = {
+			rascia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		effect = {
+			bulgaria_area = {
+				limit = {
+					NOT = { is_core = ROOT 
+					 owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bos_bulgaria = {
+		icon = mission_assemble_an_army
+		required_missions = { bos_serbia_2 }
+		provinces_to_highlight = {
+			area = bulgaria_area
+		}
+
+		trigger = {
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+		}
+	}
+}
+
+bos_5 = {
+	slot = 5
+	ai = yes
+	potential = {
+		tag = BOS
+	}
+	has_country_shield = yes
+
+	bos_islam = {
+		icon = mission_mosque
+		required_missions = { }
+		position = 3
+		trigger = {
+			OR = {
+				rascia_area = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				rascia_area = {
+					country_or_non_sovereign_subject_holds = TUR
+				}
+				serbia_area = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				serbia_area = {
+					country_or_non_sovereign_subject_holds = TUR
+				}
+			}
+		}
+		effect = {
+			change_religion = sunni
+			3002 = { 
+				change_religion = sunni
+			}
+			add_stability = 1
+			add_country_modifier = {
+				name = "bos_islam_1"
+				duration = 9125
+			}
+		}
+	}
+		bos_tech = {
+			icon = mission_alliances
+			required_missions = { bos_islam }
+			position = 4
+			trigger = {
+				OR = {
+					has_opinion = {
+						who = TUR
+						value = 150
+					}
+					has_opinion = {
+						who = MAM
+						value = 150
+					}
+					has_opinion = {
+						who = TUN
+						value = 150
+					}
+				}
+				religious_unity = 0.80
+			}
+			effect = {
+				add_country_modifier = {
+					name = "bos_tech_share"
+					duration = 9125
+				}
+			}
+		}
+
+		bos_mil_ref = {
+			icon = mission_assemble_an_army
+			required_missions = { bos_tech }
+			position = 5
+			trigger = {
+				OR = {
+					army_tradition = 40
+					army_professionalism = 0.1
+				}
+				mil_tech = 10
+			}
+			effect = {
+				add_country_modifier = {
+					name = "bos_mil"
+					duration = -1
+				}
+			}
+		}
+	}

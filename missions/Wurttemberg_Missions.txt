@@ -1,0 +1,179 @@
+wur_one = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = WUR
+	}
+	has_country_shield = yes
+	
+	wur_unify_wurttemberg = {
+		icon = mission_cannons_firing
+		trigger = {
+			manpower = 5
+			war_exhaustion = 0
+			is_at_war = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = wur_unifying_wurttemberg
+				duration = 18250
+			}
+			add_manpower = -5
+			add_prestige = 20
+		}
+	}
+	
+	wur_stabilize_economy = {
+		icon = mission_high_income
+		required_missions = { wur_unify_wurttemberg }
+		position = 3
+		trigger = {
+			num_of_loans = 0
+			stability = 1
+			monthly_income = 4
+		}
+		effect = {
+			add_prestige = 5
+			add_country_modifier = {
+				name = wur_stable_economy
+				duration = -1
+			}
+		}
+	}
+	
+	wur_incorporate_legal = {
+		icon = mission_religious
+		required_missions = { wur_stabilize_economy }
+		position = 5
+		trigger = {
+			adm_power = 300
+		}
+		effect = {
+			add_stability = 2
+			add_country_modifier = {
+				name = wur_legal_code_revised
+				duration = -1
+			}
+		}
+	}
+}
+
+wur_five = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = WUR
+	}
+	has_country_shield = yes
+	
+	wur_build_churches = {
+		icon = mission_european_church
+		trigger = {
+			temple = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = wur_religious_focus
+				duration = 10950
+			}
+			70 = {
+				add_building = cathedral
+			}
+		}
+	}
+	
+	wur_artisians = {
+		icon = mission_have_manufactories
+		required_missions = { wur_build_churches }
+		position = 3
+		trigger = {
+			marketplace = 3
+			workshop = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = wur_artisian_guilds
+				duration = 18250
+			}
+		}
+	}
+	
+	wur_wine = {
+		icon = mission_high_income 
+		required_missions = { wur_artisians }
+		position = 5
+		trigger = {
+			trading_bonus = {
+				trade_goods = wine
+				value = yes
+			}
+		}
+		effect = {
+			add_prestige = 30
+			add_treasury = 1000
+		}
+	}
+}
+
+wur_three = {
+	slot = 3
+	potential = {
+		tag = WUR
+	}
+	has_country_shield = yes
+	
+	wur_form_swabia = {
+		icon = mission_empire
+		required_missions = { swa_recover_from_wars }
+		position = 7
+		trigger = {
+			is_at_war = no
+			70 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			74 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			68 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			OR = {
+				1880 = {
+					owned_by = ROOT
+					is_core = ROOT
+				}
+				1868 = {
+					owned_by = ROOT
+					is_core = ROOT
+				}
+			}
+			SWB = {
+				exists = no
+			}
+		}
+		effect = {
+			change_tag = SWB
+			swap_non_generic_missions = yes
+			add_country_modifier = {
+				name = "centralization_modifier"
+				duration = 7300
+			}
+			add_prestige = 50
+			set_country_flag = formed_swabia_flag
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+			add_country_modifier = {
+				name = wur_united_swabia
+				duration = -1
+			}
+			add_prestige = 50
+		}
+	}
+}

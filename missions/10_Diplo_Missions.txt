@@ -1,0 +1,411 @@
+Diplomatic_Missions = {
+	slot = 7
+	generic = no
+	ai = yes
+	potential = {
+		always = yes
+	}
+	has_country_shield = no
+	
+	Espionage_network = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 1
+		trigger = {
+			spy_ideas = 1
+			calc_true_if = {
+				all_rival_country = {
+					has_spy_network_from = {
+						who = ROOT
+						value = 100
+					}
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Espionage_Mastery"
+				duration = -1
+			}
+		}
+	}
+	Espionage_unsuspecting = {
+		icon = mission_alliances
+		required_missions = { Espionage_network }
+		position = 2
+		trigger = {
+			spy_ideas = 2
+			calc_true_if = {
+				all_neighbor_country = {
+					reverse_has_opinion = {
+						who = PREV
+						value = 50
+					}
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Espionage_Unsuspecting"
+				duration = -1
+			}
+		}
+	}
+	Espionage_claims = {
+		icon = mission_alliances
+		required_missions = { Espionage_unsuspecting }
+		position = 3
+		trigger = {
+			spy_ideas = 5
+			calc_true_if = {
+				all_province = {
+					is_claim = ROOT
+					any_neighbor_province = {
+						owned_by = ROOT
+					}
+				}
+				amount = 10
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Espionage_efficient_claiming"
+				duration = 7300
+			}
+		}
+	}
+	Espionage_uncorruptible = {
+		icon = mission_have_two_subjects
+		required_missions = { Espionage_claims }
+		position = 4
+		trigger = {
+			full_group = spy_ideas
+			NOT = { corruption = 0.01 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Espionage_corruption_defense"
+				duration = -1
+			}
+		}
+	}
+	Diplomatic_Strong_Nation_help = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 5
+		trigger = {
+			diplomatic_ideas = 1
+			any_country = {
+				total_development = 300
+				alliance_with = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Diplomatic_safe"
+				duration = 7300
+			}
+		}
+	}
+	Diplomatic_Friends = {
+		icon = mission_alliances
+		required_missions = { Diplomatic_Strong_Nation_help }
+		position = 6
+		trigger = {
+			diplomatic_ideas = 4
+			num_of_allies = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Diplomatic_popular"
+				duration = 7300
+			}
+		}
+	}
+	Diplomatic_Neighbors = {
+		icon = mission_alliances
+		required_missions = { Diplomatic_Friends }
+		position = 7
+		trigger = {
+			diplomatic_ideas = 5
+			calc_true_if = {
+				all_neighbor_country = {
+					reverse_has_opinion = {
+						who = PREV
+						value = 100
+					}
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Diplomatic_unsuspecting"
+				duration = 7300
+			}
+		}
+	}
+	Trade_Our_home_node = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { }
+		position = 8
+		trigger = {
+			trade_ideas = 1
+			home_trade_node = {
+				trade_share = {
+					country = ROOT
+					share = 75
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Trade_Domination"
+				duration = 7300
+			}
+		}
+	}
+	Trade_Merchants = {
+		icon = mission_trade_company_region_abroad
+		required_missions = { Trade_Our_home_node }
+		position = 9
+		trigger = {
+			trade_ideas = 5
+			home_trade_node = {
+				trade_share = {
+					country = ROOT
+					share = 100
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Trade_Goods"
+				duration = 7300
+			}
+		}
+	}
+	Trade_Fleet = {
+		icon = mission_galleys_in_port
+		required_missions = { Trade_Merchants }
+		position = 10
+		trigger = {
+			trade_ideas = 6
+			num_of_light_ship = 25
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Trade_Fleet"
+				duration = 7300
+			}
+		}
+	}
+	Exploration_speedy_explorer = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 11
+		trigger = {
+			exploration_ideas = 2
+			has_leader_with = {
+				manuever = 3
+				admiral = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Exploration_range"
+				duration = 7300
+			}
+		}
+	}
+	Exploration_colonies = {
+		icon = mission_colonial
+		required_missions = { Exploration_speedy_explorer }
+		position = 12
+		trigger = {
+			exploration_ideas = 4
+			num_of_colonies = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Exploration_Settlers"
+				duration = 7300
+			}
+		}
+	}
+	Exploration_Armada = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { Exploration_colonies }
+		position = 13
+		trigger = {
+			exploration_ideas = 7
+			num_of_heavy_ship = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Exploration_cheap"
+				duration = -1
+			}
+		}
+	}
+	Exploration_discover_4_continents = {
+		icon = mission_unite_home_region
+		required_missions = { Exploration_Armada }
+		position = 14
+		trigger = {
+			exploration_ideas = 7
+			num_of_continents = 4
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Exploration_global"
+				duration = 10950
+			}
+		}
+	}
+	Maritime_Strong_Fleet = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { }
+		position = 15
+		trigger = {
+			maritime_ideas = 1
+			navy_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Maritime_Tranport"
+				duration = -1
+			}
+		}
+	}
+	Maritime_bigger_than_rivals = {
+		icon = mission_sea_battles
+		required_missions = { Maritime_Strong_Fleet }
+		position = 16
+		trigger = {
+			maritime_ideas = 3
+			calc_true_if = {
+				all_rival_country = {
+					NOT = { navy_size = ROOT }
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Maritime_big_navy"
+				duration = -1
+			}
+		}
+	}
+	Maritime_Docks = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { Maritime_bigger_than_rivals }
+		position = 17
+		trigger = {
+			maritime_ideas = 3
+			calc_true_if = {
+				all_owned_province = {
+					has_building = dock
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Maritime_durability"
+				duration = -1
+			}
+		}
+	}
+	Maritime_Unbeatable = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { Maritime_Docks }
+		position = 18
+		trigger = {
+			maritime_ideas = 4
+			any_country = {
+				navy_size = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Maritime_war"
+				duration = -1
+			}
+		}
+	}
+	Maritime_Great_leader = {
+		icon = mission_galleys_in_port
+		required_missions = { Maritime_Unbeatable }
+		position = 19
+		trigger = {
+			maritime_ideas = 7
+			has_leader_with = {
+				shock = 3
+				fire = 3
+				admiral = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Maritime_soldiers"
+				duration = -1
+			}
+		}
+	}
+	Influence_subjects = {
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 20
+		trigger = {
+			influence_ideas = 2
+			num_of_subjects = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Influence_relation"
+				duration = 36500
+			}
+		}
+	}
+	Influence_subject_opinion = {
+		icon = mission_alliances
+		required_missions = { Influence_subjects }
+		position = 21
+		trigger = {
+			influence_ideas = 4
+			all_subject_country = {
+				reverse_has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Influence_boost"
+				duration = 7300
+			}
+		}
+	}
+	Influence_strong_subject = {
+		icon = mission_have_two_subjects
+		required_missions = { Influence_subject_opinion }
+		position = 22
+		trigger = {
+			influence_ideas = 7
+			any_subject_country = {
+				total_development = 300
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Influence_cost"
+				duration = 7300
+			}
+		}
+	}
+}

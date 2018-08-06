@@ -1,0 +1,507 @@
+avignon_mission_group = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = AVI
+		}
+	}
+	has_country_shield = yes
+	
+	avignon_declare_independence = {
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 1
+		trigger = {
+			is_subject = no
+		}
+		effect = {
+			if = {
+				limit = {
+					offensive_war_with = PAP
+				}
+				add_country_modifier = {
+					name = "avignon_independence_war"
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	avignon_gain_independence = {
+		icon = mission_have_two_subjects
+		required_missions = { avignon_declare_independence }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 202
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 3
+		trigger = {
+			is_subject = no
+			owns_core_province = 202
+			is_at_war = no
+		}
+		effect = {
+			provence_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	avignon_conquer_provence = {
+		icon = mission_assemble_an_army
+		required_missions = { avignon_gain_independence }
+		provinces_to_highlight = {
+			OR = {
+				area = provence_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 6
+		trigger = {
+			provence_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			languedoc_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			liguria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	avignon_conquer_languedoc = {
+		icon = mission_conquer_5_states
+		required_missions = { avignon_conquer_provence }
+		provinces_to_highlight = {
+			OR = {
+				area = languedoc_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 7
+		trigger = {
+			languedoc_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			savoy_dauphine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	avignon_conquer_savoy = {
+		icon = mission_conquer_50_development
+		required_missions = {
+			avignon_conquer_languedoc
+			avignon_conquer_piedmont
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = savoy_dauphine_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			savoy_dauphine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "avignon_capital_area_secured"
+				duration = 7300
+			}
+		}
+	}
+}
+
+avignon_mission_group_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = AVI
+		}
+	}
+	has_country_shield = yes
+	
+	avignon_conquer_liguria = {
+		icon = mission_galleys_in_port
+		required_missions = { avignon_conquer_provence }
+		provinces_to_highlight = {
+			OR = {
+				area = liguria_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 7
+		trigger = {
+			liguria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			piedmont_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tuscany_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			101 = {				# Genoa
+				add_trade_modifier = {
+					who = root
+					duration = 7300
+					power = 25
+					key = avignon_control_genoa
+				}
+			}
+		}
+	}
+	
+	avignon_conquer_piedmont = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { avignon_conquer_liguria }
+		provinces_to_highlight = {
+			OR = {
+				area = piedmont_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			savoy_dauphine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lombardy_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			venetia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "avignon_piedmontese_wine"
+				duration = 5475
+			}
+		}
+	}
+	
+	avignon_conquer_lombardy_venetia = {
+		icon = mission_cannons_firing
+		required_missions = { avignon_conquer_piedmont }
+		provinces_to_highlight = {
+			OR = {
+				area = lombardy_area
+				area = venetia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			112 = {				# Venice
+				add_trade_modifier = {
+					who = root
+					duration = 9125
+					power = 35
+					key = avignon_control_venice
+				}
+			}
+			add_country_modifier = {
+				name = "avignon_trade_efficiency"
+				duration = 5475
+			}
+		}
+	}
+}
+
+avignon_mission_group_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = AVI
+		}
+	}
+	has_country_shield = yes
+	
+	avignon_conquer_emilia_romagna = {
+		icon = mission_cossack_cavalry
+		required_missions = { avignon_conquer_piedmont }
+		provinces_to_highlight = {
+			OR = {
+				area = emilia_romagna_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 9
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			central_italy_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
+
+avignon_mission_group_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = AVI
+		}
+	}
+	has_country_shield = yes
+	
+	avignon_conquer_tuscany = {
+		icon = mission_conquer_50_development
+		required_missions = { avignon_conquer_liguria }
+		provinces_to_highlight = {
+			OR = {
+				area = tuscany_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 8
+		trigger = {
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			central_italy_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			118 = {
+				IF = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "avignon_center_of_arts_and_technology"
+				duration = 7300
+			}
+		}
+	}
+	
+	avignon_conquer_central_italy = {
+		icon = mission_religious
+		required_missions = { 
+			avignon_conquer_emilia_romagna
+			avignon_conquer_tuscany
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = central_italy_area
+				province_id = 118
+			}
+			NOT = { owned_by = ROOT }
+		}
+		position = 10
+		trigger = {
+			2977 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2976 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			119 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			118 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_accepted_culture = umbrian
+		}
+	}
+	
+	avignon_restore_holy_see = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { avignon_conquer_central_italy }
+		position = 11
+		trigger = {
+			2977 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2976 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			119 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			118 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			change_government = papal_government
+			change_primary_culture = umbrian
+			AVI = {
+				set_capital = 118
+			}
+			add_country_modifier = {
+				name = "avignon_the_holy_see"
+				duration = 7300
+			}
+		}
+	}
+}
+
+avignon_mission_group_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = AVI
+		}
+	}
+	has_country_shield = yes
+	
+	avignon_join_the_empire = {
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 6
+		trigger = {
+			ROOT = {
+				is_part_of_hre = yes
+			}
+		}
+		effect = {
+			add_adm_power = 20
+			add_dip_power = 30
+		}
+	}
+	
+	avignon_develop_capital = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		position = 7
+		trigger = {
+			202 = {
+				has_building = temple
+				has_building = workshop
+			}
+		}
+		effect = {
+			202 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+		}
+	}
+	
+	avignon_develop_textile_industry = {
+		icon = mission_have_manufactories
+		required_missions = { avignon_develop_capital }
+		position = 8
+		trigger = {
+			202 = {
+				base_production = 6
+				has_building = textile
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "avignon_textile_industry"
+				duration = 5475
+			}
+		}
+	}
+}

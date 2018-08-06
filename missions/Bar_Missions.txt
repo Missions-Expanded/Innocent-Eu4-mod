@@ -1,0 +1,151 @@
+Bar_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = BAR
+	}
+	has_country_shield = yes
+	
+	Bar_Independence = {
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 5
+		trigger = {
+			NOT = { is_subject = yes }
+		}
+		effect = {
+			add_mil_power = 50
+		}
+	}
+	Bar_Army = {
+		icon = mission_assemble_an_army
+		required_missions = { Bar_Independence }
+		position = 6
+		trigger = {
+			army_size_percentage = 1
+			manpower_percentage = 1
+		}
+		effect = {
+			add_dip_power = 50
+		}
+	}
+	Bar_Allies = {
+		icon = mission_alliances
+		required_missions = { Bar_Army }
+		position = 7
+		trigger = {
+			num_of_allies = 2
+		}
+		effect = {
+			add_adm_power = 50
+		}
+	}
+	Bar_Treasury = {
+		icon = mission_war_chest
+		required_missions = { Bar_Allies }
+		position = 8
+		trigger = {
+			treasury = 100
+		}
+		effect = {
+			lorraine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	Bar_Lorraine = {
+		icon = mission_unite_home_region
+		required_missions = { Bar_Treasury }
+		position = 9
+		trigger = {
+			lorraine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_dip_power = 50
+			add_adm_power = 50
+		}
+	}
+	Bar_Protect_From_Burgundy = {
+		icon = mission_assemble_an_army
+		required_missions = { Bar_Lorraine }
+		position = 10
+		trigger = {
+			army_size = BUR
+		}
+		effect = {
+			bourgogne_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	Bar_Burgundy = {
+		icon = mission_cannons_firing
+		required_missions = { Bar_Protect_From_Burgundy }
+		position = 11
+		trigger = {
+			bourgogne_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			94 = {
+				if = {
+					limit = {
+						NOT = {
+							owned_by = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	Bar_Luxemburg = {
+		icon = mission_conquer_50_development
+		required_missions = { Bar_Burgundy }
+		position = 12
+		trigger = {
+			94 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			champagne_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	Bar_Champagne = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { Bar_Luxemburg }
+		position = 13
+		trigger = {
+			champagne_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 60
+		}
+	}
+}

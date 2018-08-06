@@ -1,0 +1,280 @@
+memmingen_missions = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEM
+	}
+	has_country_shield = yes
+
+	memmingen_dev_25 = {
+		icon = mission_have_manufactories
+		required_missions = { }
+		position = 1
+		trigger = {
+			68 = {
+				development = 25
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HRE_prosperity
+				duration = 9125
+			}
+		}
+	}
+	memmingen_church = {
+		icon = mission_early_game_buildings
+		required_missions = { memmingen_dev_25 }
+		trigger = {
+			68 = {
+				has_building = temple
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HRE_prosperity
+				duration = 9125
+			}
+		}
+	}
+	memmingen_dev_40 = {
+		icon = mission_have_manufactories
+		required_missions = { memmingen_church }
+		trigger = {
+			68 = {
+				development = 40
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HRE_prosperity
+				duration = 9125
+			}
+		}
+	}
+	memmingen_workshop = {
+		icon = mission_early_game_buildings
+		required_missions = { memmingen_dev_40 }
+		trigger = {
+			68 = {
+				has_building = workshop
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HRE_prosperity
+				duration = 9125
+			}
+		}
+	}
+	memmingen_dev_60 = {
+		icon = mission_have_manufactories
+		required_missions = { memmingen_workshop }
+		trigger = {
+			68 = {
+				development = 60
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HRE_prosperity
+				duration = 9125
+			}
+		}
+	}
+	memmingen_unite_upper_swabia = {
+		icon = mission_assemble_an_army
+		required_missions = { memmingen_dev_60 }
+		provinces_to_highlight = {
+			OR = {
+				area = upper_swabia_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			upper_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			69 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 1
+			}
+			1868 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 1
+			}
+		}
+	}
+}
+
+mem_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEM
+	}
+	has_country_shield = yes
+	
+	mem_ulm = {
+	required_missions = { }
+	
+	trigger = {
+	1872 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+	effect = {
+	lower_swabia_area = {
+									limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mem_swabia = {
+	icon = mission_conquer_5_states
+	required_missions = { mem_ulm }
+	
+	trigger = {
+	lower_swabia_area = {
+	type = all
+					country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+	effect = {
+	franconia_area = {
+										limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mem_franconia = {
+	icon = mission_early_game_buildings
+	required_missions = { mem_swabia }
+	
+	trigger = {
+		franconia_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+	effect = {
+	lower_bavaria_area = {
+											limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mem_bav_1 = {
+	icon = mission_cossack_cavalry
+	required_missions = { mem_franconia }
+	
+	trigger = {
+		lower_bavaria_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+	effect = {
+		upper_bavaria_area = {
+											limit = {
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mem_bav_2 = {
+	icon = mission_empire
+	required_missions = { mem_bav_1 }
+	
+	trigger = {
+		upper_bavaria_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+	effect = {
+	add_adm_power = 100
+		}
+	}
+}
+
+mem_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = MEM
+	}
+	has_country_shield = yes
+	
+	mem_form_swabia = {
+		icon = mission_empire
+		required_missions = { swa_recover_from_wars }
+		position = 7
+		trigger = {
+			is_at_war = no
+			70 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			74 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			68 = {
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			OR = {
+				1880 = {
+					owned_by = ROOT
+					is_core = ROOT
+				}
+				1868 = {
+					owned_by = ROOT
+					is_core = ROOT
+				}
+			}
+			SWB = {
+				exists = no
+			}
+		}
+		effect = {
+			change_tag = SWB
+			swap_non_generic_missions = yes
+			add_country_modifier = {
+				name = "centralization_modifier"
+				duration = 7300
+			}
+			add_prestige = 50
+			set_country_flag = formed_swabia_flag
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+			add_country_modifier = {
+				name = wur_united_swabia
+				duration = -1
+			}
+			add_prestige = 50
+		}
+	}
+}
