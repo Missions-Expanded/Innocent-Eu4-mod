@@ -13,20 +13,22 @@ cultural_centre = {
 		icon = mission_religious
 		required_missions = {  } 
 		trigger = {
-		advisor = artist
-		has_institution = renaissance
-		or = {
-		innovativeness_ideas = 1
-		humanist_ideas = 1
-
+			advisor = artist
+			has_institution = renaissance
+			OR = {
+				innovativeness_ideas = 1
+				humanist_ideas = 1
+				any_province = {
+					is_institution_origin = renaissance
+				}
+			}
 		}
-	}	
 		effect = {
-		add_prestige = 50
+			add_prestige = 25
 			116 = {
 				add_base_tax = 1
 				add_base_production = 1
-				add_country_modifier = {
+				add_province_modifier = {
 					name = "renaissance_centre"
 					duration = 9125	
 					}
@@ -50,15 +52,23 @@ cultural_centre = {
 		}
 	}
 	renaissance_humanism_mission = {
-		icon = rennaissance
+		icon = mission_early_game_buildings
 		required_missions = { cultural_centre_of_europe_mission }
 		trigger = {
-		or ={
-		full_idea_group = innovativeness_ideas
-		full_idea_group = humanist_ideas
+			or ={
+				full_idea_group = innovativeness_ideas
+				full_idea_group = humanist_ideas
+				AND = {
+					any_owned_province = {
+						is_institution_origin = renaissance
+					}
+					all_owned_province = {
+						has_institution = renaissance
+					}
+				}
 
-		}
-	}	
+			}
+		}	
 		effect = {
 			add_country_modifier = {
 				name = "humanism"
@@ -71,14 +81,20 @@ cultural_centre = {
 		required_missions = { renaissance_humanism_mission }
 		position = 5
 		trigger = {
-		has_institution = printing_press
-		advisor = natural_scientist
-		any_owned_province = {
-		printing_press = 100
-		has_owner_culture = yes
-				development = 100
-				is_capital = yes
+			OR = {
+				AND = {
+					capital_scope = {
+						printing_press = 100
+						has_owner_culture = yes
+					}
+					has_institution = printing_press
+				}
+				any_province = {
+					development = 40
+				}
 			}
+			advisor = natural_scientist
+
 		}
 		effect = {
 			add_country_modifier = {
@@ -155,14 +171,14 @@ cultural_centre = {
 			tunisia_area = {
 				limit = { owned_by = ROOT }
 				add_province_modifier = {
-					name = "lan_convert_the_desert"
+					name = "lan_convert_the_muslims"
 					duration = 5475
 				}
 			}
 			djerba_area = {
 				limit = { owned_by = ROOT }
 				add_province_modifier = {
-					name = "lan_convert_the_desert"
+					name = "lan_convert_the_muslims"
 					duration = 5475
 				}
 			}					
@@ -212,14 +228,17 @@ oserva = {
 		required_missions = { reform_science_mission }
 		position = 6
 		trigger = {
-		adm = 5
-		monthly_income = 50
-		NOT = {
-			reverse_has_opinion = {
-				who = PAP
-				value = -100 
-			}
-		}
+			adm = 2
+			monthly_income = 30
+			OR = {
+				NOT = {
+					reverse_has_opinion = {
+						who = PAP
+						value = -100
+					}
+				}
+				NOT = { dominant_religion = catholic }
+			}			
 		}
 		effect = {
 			add_country_modifier = {
@@ -309,9 +328,9 @@ non_farmi_perdere_tempo = {
 						}
 		position = 7				
 		trigger = {	
-			army_size = 75
-			num_of_generals = 3
-			mil = 5
+			army_size = 40
+			num_of_generals = 2
+			mil = 3
 		}
 		effect = {
 			lombardy_area = {
@@ -454,7 +473,7 @@ great_influence = {
 		icon = mission_empire
 		required_missions = { }
 		trigger = {
-			NOT = { is_part_of_hre = yes }
+			num_of_allies = 2
 		}
 		effect = {
 			117 = {
@@ -485,7 +504,9 @@ great_influence = {
 		} 
 		effect = {
 			add_dip_power = 100		
-			inherit = LUC
+			2980 = {
+				add_core = ROOT
+			}
 			emilia_romagna_area = {
 				limit = {
 					NOT = { is_core = ROOT }
