@@ -309,9 +309,124 @@ por_moroccan_conquest = {
 				}
 			}
 		}
+	}	
+}
+
+## Missions for navigation school -> azores -> merchant marine -> thalassocrazy
+Marinha_Portuguesa_missions = {
+	
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = POR
+	}
+	has_country_shield = yes
+
+	POR_mission_VilaDoInfante = {
+		#icon = mission_conquer_50_development
+		icon = mission_escola
+		required_missions = { }
+		position = 1
+	
+		trigger = {
+			owns_core_province = 230
+			is_at_war = no 
+			treasury = 50
+		}
+		
+		effect = {
+			add_navy_tradition = 20.0
+			add_treasury = -50
+			#add_dip_power = 100
+			230 = {
+				add_province_modifier = {
+				name = "vila_do_infante"
+				duration = -1
+				}
+			}
+		}
+	
 	}
 	
+	POR_mission_azores_base = {
+		#icon=mission_dominate_home_trade_node
+		icon = mission_base_flag
+		required_missions = { POR_mission_VilaDoInfante }
+		position = 2
+		
+		provinces_to_highlight = {
+			province_id = 367
+		}
+		
+		trigger = {
+				owns_core_province = 367
+				is_at_war = no 
+				#treasury = 50
+				adm_power = 50
+			}
+		
+		effect = {
+				#add_treasury = -50
+				add_adm_power = -50
+				367 = {
+					add_province_modifier = {
+					name = "azores_naval_base"
+					duration = -1
+					}
+				}
+			}
 	
+	}
+	
+	POR_mission_marina = {
+		#icon = mission_rb_grow_the_channel
+		icon = mission_merchant_navy
+		required_missions = { 
+			POR_mission_azores_base
+			Casa_da_India_mission
+		}
+		position = 3
+		
+		trigger = {  
+			adm_power = 100
+			dip_power = 100
+			mil_power = 100
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "POR_merchant_navy"
+				duration = -1
+			}
+			add_adm_power = -100	
+			add_dip_power = -100
+			add_mil_power = -100
+		}
+	}
+	
+	POR_mission_government = {
+		#icon = mission_trade_company_region_abroad
+		icon = mission_globe_map
+		required_missions = { POR_mission_marina }
+		position = 4
+		
+		trigger = {  
+			adm_power = 200
+			dip_power = 100
+			mil_power = 100
+			overseas_provinces_percentage = 0.51
+			num_of_light_ship = 100
+		}
+		
+		effect = {
+			change_government = monarchy
+			add_government_reform = portuguese_reform
+			add_adm_power = -200
+			add_dip_power = -100
+			add_mil_power = -100
+		}
+	}	
 }
 
 por_brazilian_ambitions = {
@@ -461,6 +576,154 @@ por_brazilian_ambitions = {
 	}
 }
 
+por_dip_missions = {
+
+	slot = 4
+	ai = yes
+	
+	potential = {
+		tag = POR
+	}
+	has_country_shield = yes
+
+	por_dip_missions = {
+		icon = mission_empire
+		required_missions = { }
+		position = 1
+		
+		trigger = { 
+			years_in_union_under = {
+				who = SPA
+				years = 30
+			}
+			OR = {
+				alliance_with = ENG
+				alliance_with = GBR
+			}
+			navy_size = SPA
+		}
+	
+		effect = {
+			break_union = SPA
+		}
+	}
+	
+	por_bermuda_mission = {
+		#icon = mission_rb_take_gibraltar
+		icon = mission_north_map
+		required_missions = { POR_mission_azores_base }
+		position = 3
+		
+		provinces_to_highlight = {
+			province_id = 481
+			has_discovered = ROOT
+			#NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		
+		trigger = { 
+			owns = 481
+		}
+	
+		effect = {
+			481 = {
+			add_province_modifier = {
+				name = "portuguese_rock_fort"
+				duration = -1
+			}
+			}
+		}
+	}
+	
+	por_newfoundland_missions = {
+		#icon = mission_rb_colonise_canada
+		icon = mission_observatory
+		required_missions = { por_bermuda_mission }
+		position = 4
+		
+		provinces_to_highlight = {
+			province_id = 2573
+			has_discovered = ROOT
+		}
+		
+		trigger = { 
+			OR = {
+			#owns = 980	
+			#owns = 981
+			owns = 2573
+			}
+			treasury = 50
+		}
+	
+		effect = {
+			add_treasury = -50
+			add_dip_power = 100
+			2573 = {
+			add_province_modifier = {
+				name = "northern_observatory"
+				duration = -1
+			}
+			}
+		}
+	}
+		
+	por_rb_greenland = {
+		#icon = mission_rb_cod_wars
+		icon = mission_ship_ice
+		required_missions = { por_newfoundland_missions }
+		position = 5
+		
+		provinces_to_highlight = {
+			area = greenland_area
+			NOT = { owned_by = ROOT }
+			has_discovered = ROOT
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = miss_discover_greenland
+				greenland_area = {
+					has_discovered = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = miss_colonize_greenland
+				greenland_area = { 
+					type = all
+					owned_by = ROOT
+					is_city = yes
+				}
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "eng_rb_colony_chance"
+				duration = 5475
+			}
+			1104 = {
+				add_base_production = 3
+				add_base_manpower = 3
+				change_trade_goods = ivory
+				add_province_modifier = {
+					name = "whale_station" 
+					duration = -1
+				}
+			}
+			1105 = {
+				add_base_production = 2
+				add_base_manpower = 2
+				change_trade_goods = ivory
+				add_province_modifier = {
+					name = "whale_station" 
+					duration = -1
+				}
+			}
+		}
+	
+	}
+
+}
+
 por_east_african_ambitions = {
 
 	slot = 4
@@ -470,6 +733,8 @@ por_east_african_ambitions = {
 		tag = POR
 	}
 	has_country_shield = yes
+	
+	
 	
 	por_discovers_cape_good_hope = {
 		icon = mission_sea_battles
@@ -999,4 +1264,258 @@ por_indonesia_trade_dominance = {
 	
 	}
 
+}
+
+## Tree for establishing and improving the casa da india
+CasaDaIndia_missions = {
+
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = POR
+	}
+	has_country_shield = yes
+	
+	
+	POR_mission_first_feitoria = { 
+		##icon = mission_dominate_home_trade_node
+		icon = mission_ship_smallharbor
+		required_missions = { } 
+		position = 1
+		
+		provinces_to_highlight = {
+			province_id = 1111
+			NOT = { owned_by = ROOT }
+		}
+		
+		trigger = {  
+			treasury = 50
+			owns = 1111 
+		}
+			
+		effect = {
+			add_treasury = -50
+			1111 = {
+				add_base_production = 2
+				change_trade_goods = slaves
+				add_province_modifier = {
+					name = "feitoria_first"
+					duration = -1
+				}
+				add_province_modifier = {
+					name = "feitoria_building_up"
+					duration = 1825
+				}
+			}
+		}
+	}
+	
+	#####################################
+	######## CASA FOUND
+	####################################	
+	Casa_da_India_mission = {
+		#icon = mission_colonial
+		#icon = mission_rb_the_bank_of_scotland
+		icon = mission_casa_da_india_pic1
+		required_missions = { 
+			POR_mission_first_feitoria
+			por_discover_african_coast
+		}
+		position = 2
+	
+		trigger = {
+			has_discovered = 1096
+			is_subject = NO
+			owns_core_province = 227
+			is_at_war = NO 
+			treasury = 100
+			capital = 227
+			exploration_ideas = 2
+		}
+		
+		effect = {
+			#add_navy_tradition = 25.0
+			add_treasury = -100
+			add_dip_power = 50
+			capital_scope = {
+				add_base_tax = 3
+				add_base_production = 3
+				add_base_manpower = 3
+				add_province_modifier = {
+				name = "Casa_da_India_building_1"
+				duration = -1
+				}
+			}
+		}
+	}
+
+	POR_mission_fernando_po = {
+		#icon = mission_rb_settle_the_north
+		icon = mission_sugar_plantation
+		required_missions = { Casa_da_India_mission }
+		position = 4
+		
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1097
+				province_id = 1306
+			}
+			has_discovered = ROOT
+		}
+		
+		trigger = {  
+			custom_trigger_tooltip = {
+				tooltip = por_mission_fernando_po.tt
+				has_country_flag = por_colonized_volcanic_islands
+			}
+			owns = 1097
+			owns = 1306
+			treasury = 100
+		}
+		
+		effect = {
+			# add_country_modifier = {
+				# name = "POR_test_1"
+				# duration = 3650
+			# }
+			add_treasury = -100
+			1306 = {
+				change_trade_goods = sugar
+				change_religion = jewish
+				add_base_tax = 2
+				add_base_production = 4
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = "feitoria_plantation_sao_tome"
+					duration = -1
+				}
+			}
+			1097 = {
+				change_trade_goods = sugar
+				add_base_production = 2
+				add_province_modifier = {
+					name = "feitoria_plantation_sao_tome"
+					duration = -1
+				}
+			}
+		}
+	
+	}
+	
+	POR_mission_fort_elmina = { 
+		#icon = mission_dominate_home_trade_node
+		icon = mission_base_flag
+		required_missions = { POR_mission_fernando_po } 
+		position = 5
+		
+		provinces_to_highlight = {
+			province_id = 1139
+			NOT = { owned_by = ROOT }
+			has_discovered = ROOT
+		}
+		
+		trigger = {  
+			custom_trigger_tooltip = {
+				tooltip = por_mission_fort_elmina.tt
+				has_country_flag = por_discovered_elmina
+			}
+			owns = 1139 
+			treasury = 200 
+		}
+		
+		effect = {
+			add_treasury = -200
+			1139 = {
+			add_building = fort_15th
+			#add_base_production = 2
+			change_trade_goods = gold
+				add_province_modifier = {
+				name = "feitoria_fort_elmina"
+				duration = -1
+				}
+				add_province_modifier = {
+					name = "feitoria_building_up"
+					duration = 1825
+				}
+			}
+		}
+		
+	}
+	
+	#####################################
+	######## CASA IMPROVE
+	####################################
+	Casa_da_India_improvement = {
+		#icon = mission_colonial
+		#icon = mission_rb_the_bank_of_scotland
+		icon = mission_casa_da_india_pic1
+		required_missions = { 
+			POR_mission_fort_elmina
+			por_colonise_central_africa
+			portugal_discovers_south_america
+			por_discovers_cape_good_hope
+		}
+		position = 7
+	
+		trigger = {
+			#num_of_colonists = 2
+			is_subject = NO
+			owns_core_province = 227
+			is_at_war = no 
+			treasury = 350
+			capital = 227
+			exploration_ideas = 7
+		}
+		
+		effect = {
+			add_treasury = -350
+			add_dip_power = 150
+			capital_scope = {
+				add_base_tax = 3
+				add_base_production = 4
+				add_base_manpower = 3
+				change_trade_goods = paper
+				remove_province_modifier = Casa_da_India_building_1
+				# remove_province_modifier = {
+				# name = "Casa_da_India_building_1"
+				# }
+				add_province_modifier = {
+				name = "Casa_da_India_building_2"
+				duration = -1
+				}
+			}
+		}
+	}
+	
+	Casa_da_India_focus = {
+		#icon = mission_colonial
+		#icon = mission_rb_the_bank_of_scotland
+		icon = mission_casa_da_india_pic1
+		required_missions = { Casa_da_India_improvement }
+		position = 10
+	
+		trigger = {
+			is_subject = NO
+			owns_core_province = 227
+			is_at_war = no 
+			treasury = 500
+			capital = 227
+			num_of_strong_trade_companies = 3
+			num_of_subjects = 2
+		}
+		
+		effect = {
+			add_treasury = -500
+			add_dip_power = 250
+			capital_scope = {
+				add_base_production = 4
+				remove_province_modifier = Casa_da_India_building_2
+				add_province_modifier = {
+				name = "Casa_da_India_building_3"
+				duration = -1
+				}
+			}
+		}
+	}
 }
