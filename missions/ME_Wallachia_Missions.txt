@@ -1,0 +1,243 @@
+Wallachia_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = WAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Wallachia_alliance = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 6
+		trigger = {
+			num_of_allies = 3
+			OR = {
+				alliance_with = MOS
+				alliance_with = LIT
+				alliance_with = POL
+				alliance_with = HUN
+				alliance_with = HAB
+			}
+		}
+		effect = {
+			every_country = {
+				limit = {
+					alliance_with = WAL
+				}
+				add_trust = {
+    					who = ROOT
+   					value = 25
+    					mutual = yes
+				}
+			}
+		}
+	}
+	Wallachia_support_independence = {
+		icon = mission_have_two_subjects
+		required_missions = { Wallachia_consolidate Wallachia_alliance Wallachia_army }
+		position = 7
+		trigger = {
+			MOL = {
+				NOT = { is_subject = yes }
+			}
+		}
+		effect = {
+			add_dip_power = 200
+			add_adm_power = 200
+			add_mil_power = 200
+		}
+	}
+	Wallachia_ask_to_unite_them = {
+		icon = mission_alliances
+		required_missions = { Wallachia_support_independence }
+		position = 8
+		trigger = {
+			MOL = {
+				reverse_has_opinion = {
+					who = ROOT
+					value = 150
+				}
+			}
+		}
+		effect = {
+			MOL = {
+				country_event = { 
+    					id = wallachia.5
+   					days = 10
+   					random = 5
+ 				}
+			}
+		}
+	}
+	Wallachia_maketh_sure = {
+		icon = mission_have_two_subjects
+		required_missions = { Wallachia_ask_to_unite_them }
+		position = 9
+		trigger = {
+			moldavia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_adm_power = 100
+			add_mil_power = 100
+		}
+	}
+}
+
+
+
+
+Wallachia_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = WAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Wallachia_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 6
+		trigger = {
+			army_size_percentage = 1
+			num_of_generals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Wallachia_Discipline"
+				duration = 18250
+			}
+		}
+	}
+	Wallachia_prepare_Defences = {
+		icon = mission_conquer_50_development
+		required_missions = { Wallachia_consolidate Wallachia_alliance Wallachia_army }
+		position = 7
+		trigger = {
+			has_country_flag = wallachia_Defences
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Wallachia_defence"
+				duration = 18250
+			}
+			set_country_flag = givemedracula
+		}
+	}
+	Wallachia_weaken = {
+		icon = mission_non-western_soldiers
+		required_missions = { Wallachia_prepare_Defences }
+		position = 8
+		trigger = {
+			OR = {
+				AND = {
+					is_in_war = {
+						defender_leader = ROOT
+						attacker_leader = TUR
+					}
+					TUR = {
+						NOT = { manpower_percentage = 0.75 }
+					}
+				}
+				159 = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Wallachia_attack"
+				duration = 7300
+			}
+		}
+	}
+	Wallachia_advance = {
+		icon = mission_conquer_5_states
+		required_missions = { Wallachia_weaken }
+		position = 9
+		trigger = {
+			OR = {
+				AND = {
+					is_in_war = {
+						defender_leader = ROOT
+						attacker_leader = TUR
+					}
+					159 = {
+						controlled_by = ROOT
+					}
+					150 = {
+						controlled_by = ROOT
+					}
+				}
+				159 = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			159 = {
+				add_core = ROOT
+			}
+		}
+	}
+	Wallachia_Silistria_owned = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { Wallachia_advance }
+		position = 10
+		trigger = {
+			159 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			159 = {
+				change_culture = romanian
+			}
+		}
+	}
+}
+
+
+
+Wallachia_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = WAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	Wallachia_consolidate = {
+		icon = mission_early_game_buildings
+		required_missions = { }
+		position = 6
+		trigger = {
+			161 = {
+				development = 15
+			}
+			2998 = {
+				development = 15
+			}
+			160 = {
+				development = 15
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Wallachia_Power"
+				duration = 18250
+			}
+		}
+	}
+}

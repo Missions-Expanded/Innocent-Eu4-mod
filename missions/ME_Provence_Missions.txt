@@ -1,0 +1,385 @@
+PRO_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRO
+	}
+	has_country_shield = yes
+	
+	PRO_avignon = { #conquer avignon
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 202
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		trigger = {
+			202 = {
+				owned_by = ROOT
+			}
+		}
+		
+		effect = {
+			add_casus_belli = {
+				target = NAP
+				type = cb_restore_personal_union 
+				months = 180
+			}
+		}
+	}
+	
+	PRO_naples = {
+		icon = mission_empire
+		required_missions = { PRO_avignon }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				owned_by = NAP
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		trigger = {
+			NAP = {
+				is_subject_of = ROOT
+				is_subject_of_type = personal_union
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = pro_strong_reign
+				duration = 18250
+			}
+			add_casus_belli = {
+				target = ARA
+				type = cb_restore_personal_union 
+				months = 180
+			}
+		}
+	}
+	
+	PRO_aragon = {
+		icon = mission_empire
+		required_missions = { PRO_naples }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				owned_by = ARA
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		trigger = {
+			ARA = {
+				is_subject_of = ROOT
+				is_subject_of_type = personal_union
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = pro_strong_reign
+				duration = 18250
+			}
+			add_ruler_modifier = {
+				name = pro_legit_king 
+				duration = -1
+			}
+		}
+	}
+}
+
+PRO_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRO
+	}
+	has_country_shield = yes
+	
+	PRO_france_friend = { #strengthen ties with France
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 9
+		
+		trigger = {
+			alliance_with = FRA
+			marriage_with = FRA
+			reverse_has_opinion = {
+				who = FRA
+				value = 200
+			}
+			custom_trigger_tooltip = {
+				tooltip = pro_not_hre.tooltip
+				NOT = { has_country_flag = pro_ties_with_hre }
+			}
+		}
+		
+		effect = {
+			set_country_flag = pro_ties_with_france
+			add_historical_friend = FRA
+			add_country_modifier = {
+				name = pro_big_friend_ties
+				duration = 9125
+			}
+		}
+	}
+	PRO_france_claim = {
+		icon = mission_empire
+		required_missions = { PRO_france_friend }
+		position = 11
+
+		trigger = {
+			FRA = {
+				NOT = { development = 500 }
+			}
+			dip = FRA
+			custom_trigger_tooltip = {
+				tooltip = pro_french_friends.toolip
+				had_country_flag = {
+					flag = pro_ties_with_france
+					days = 9125
+				}
+			}
+		}
+		
+		effect = {
+			add_casus_belli = {
+				target = FRA
+				type = cb_restore_personal_union 
+				months = 180
+			}
+		}
+	}
+}
+
+PRO_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRO
+	}
+	has_country_shield = yes
+	
+	PRO_lorraine = { #befriend lorraine
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				owned_by = PRO
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		trigger = {
+			reverse_has_opinion = {
+				who = LOR
+				value = 200
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = pro_integrate_lor
+				duration = 1825
+			}
+		}
+	}
+	
+	PRO_annex_lorraine = {
+		icon = mission_empire
+		required_missions = { PRO_lorraine }
+		position  = 10
+		provinces_to_highlight = {
+			OR = {
+				owned_by = PRO
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		trigger = {
+			188 = {
+				is_core = ROOT
+				owned_by = ROOT
+			}
+			189 = {
+				is_core = ROOT
+				owned_by = ROOT
+			}
+			NOT = { exists = LOR }
+		}
+		
+		effect = {
+			add_prestige = 10
+			add_country_modifier = {
+				name = pro_ducal_claims
+				duration = 3650
+			}
+		}
+	}
+}
+
+PRO_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRO
+	}
+	has_country_shield = yes
+	
+	PRO_hre_friend = { #ties with the HRE
+		icon = mission_have_two_subjects
+		required_missions = { }
+		position = 9
+		
+		trigger = {
+			reverse_has_opinion = {
+				who = emperor
+				value = 150
+			}
+			NOT = { marriage_with = FRA }
+			custom_trigger_tooltip = {
+				tooltip = pro_not_fra.tooltip
+				NOT = { has_country_flag = pro_ties_with_france }
+			}
+		}
+		
+		effect = {
+			capital_scope = {
+				set_in_empire = yes
+			}
+			add_opinion = {
+				who = emperor
+				modifier = pro_joined_empire
+			}
+			add_country_modifier = {
+				name = pro_big_friend_ties
+				duration = 9125
+			}
+			add_dip_power = 100
+			set_country_flag = pro_ties_with_hre
+		}
+	}
+	
+	PRO_hre_elector = { #ties with the HRE
+		icon = mission_empire
+		required_missions = { PRO_hre_friend }
+		position = 11
+		
+		trigger = {
+			OR = {
+				AND = {
+					NOT = { num_of_electors = 7 }
+					development = 350
+					is_great_power = yes
+				}
+				is_elector = yes
+			}
+		}
+		
+		effect = {
+			elector = yes
+			add_dip_power = 400
+		}
+	}
+}
+
+PRO_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRO
+	}
+	has_country_shield = yes
+	
+	PRO_churches = { #restore the 11th century churches
+		icon = mission_european_church
+		required_missions = { }
+		position = 8
+		
+		trigger = {
+			201 = {
+				has_building = temple
+				development = 26
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = pro_churches_mod
+				duration = 9125
+			}
+		}
+	}
+	
+	PRO_holyland = { #new crusade
+		icon = mission_trade_company_region_abroad
+		required_missions = { PRO_churches }
+		position = 10
+		
+		trigger = {
+			has_idea_group = religious_ideas
+			has_idea = divine_supremacy
+			stability = 1
+		}
+		
+		effect = {
+			palestine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	PRO_crusade = {
+		icon = mission_assemble_an_army
+		required_missions = { PRO_holyland }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = palestine_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		
+		trigger = {
+			palestine_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = pro_eternal_crusade
+				duration = -1
+			}
+		}
+	}
+}
