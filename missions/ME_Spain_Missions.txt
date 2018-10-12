@@ -10,7 +10,7 @@ SPA_missions_1 = {
 	}
 	has_country_shield = yes
 	
-	spa_rb_army_ready = {
+	spain_prepare_the_reconquista = {
 		icon = mission_assemble_an_army
 		required_missions = { }
 		position = 1
@@ -28,9 +28,9 @@ SPA_missions_1 = {
 		}
 	}
 	
-	spa_rb_reconquista_one = {
+	spain_reclaim_andalucia = {
 		icon = mission_unite_home_region
-		required_missions = { spa_rb_army_ready }
+		required_missions = { spain_prepare_the_reconquista }
 		position = 2
 		
 		provinces_to_highlight = {
@@ -53,9 +53,9 @@ SPA_missions_1 = {
 		}
 	}
 	
-	spa_rb_iberia_christian = {
+	spain_convert_iberia = {
 		icon = mission_religious
-		required_missions = { spa_rb_reconquista_one }
+		required_missions = { spain_reclaim_andalucia }
 		position = 3
 		provinces_to_highlight = {
 			region = iberia_region
@@ -79,7 +79,7 @@ SPA_missions_1 = {
 	
 	spain_spanish_realm = {
 		icon = mission_conquer_50_development
-		required_missions = { spa_rb_iberia_christian }
+		required_missions = { spain_convert_iberia }
 		position = 5
 		provinces_to_highlight = {
 			region = iberia_region
@@ -1407,6 +1407,36 @@ SPA_missions_3 = {
 					duration = 5475
 				}
 			}
+			if = {
+				limit = {
+					owns_core_province = 224
+				}
+				224 = {
+					if = {
+						limit = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+						}
+						center_of_trade = 3
+					}
+					else_if = {
+						limit = {
+							NOT = { province_has_center_of_trade_of_level = 2 }
+						}
+						add_center_of_trade_level = 2
+					}
+					else_if = {
+						limit = {
+							NOT = { province_has_center_of_trade_of_level = 3 }
+						}
+						add_center_of_trade_level = 1
+					}
+					else = {
+						1293 = {
+							add_trade_node_income = 10
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -1896,48 +1926,71 @@ SPA_missions_4 = {
 		}
 		effect = {
 			# Genoa
-			liguria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			101 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
+			}
+			2992 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			# Milan
-			2979 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+			if = {
+				limit = {
+					NOT = { exists = MLO }
+				}
+				2979 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
 					}
-					add_permanent_claim = ROOT
+				}
+				104 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				1862 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				105 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 			}
-			104 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			1862 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			105 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			else = {
+				add_casus_belli = {
+					target = MLO
+					type = cb_vassalize_mission
+					months = 300
 				}
 			}
 		}
@@ -1949,7 +2002,8 @@ SPA_missions_4 = {
 		position = 9
 		provinces_to_highlight = {
 			OR = {
-				area = liguria_area
+				province_id = 101
+				province_id = 2992
 				province_id = 2979
 				province_id = 104
 				province_id = 1862
@@ -1958,8 +2012,10 @@ SPA_missions_4 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			liguria_area = {
-				type = all
+			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2992 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			OR = {
@@ -1997,30 +2053,75 @@ SPA_missions_4 = {
 		required_missions = { spain_become_emperor }
 		position = 10
 		trigger = {
-			exists = HAB
-			is_subject = no
 			dynasty = "von Habsburg"
-			HAB = {
-				is_subject = no
-				dynasty = "von Habsburg"
-				has_heir = no
+			if = {
+				limit = {
+					exists = HAB
+				}
+				if = {
+					limit = {
+						NOT = { senior_union_with = HAB }
+					}
+					is_subject = no
+					HAB = {
+						is_subject = no
+						dynasty = "von Habsburg"
+						has_heir = no
+					}
+					marriage_with = HAB
+					reverse_has_opinion = {
+						who = HAB
+						value = 200
+					}
+					has_spy_network_in = {
+						who = HAB
+						value = 50
+					}
+				}
+				else = {
+					senior_union_with = HAB
+					legitimacy = 100
+				}
 			}
-			marriage_with = HAB
-			reverse_has_opinion = {
-				who = HAB
-				value = 200
-			}
-			has_spy_network_in = {
-				who = HAB
-				value = 50
+			else = {
+				legitimacy = 100
+				HAB = {
+					all_core_province = {
+						owned_by = ROOT
+					}
+				}
 			}
 		}
 		effect = {
-			add_spy_network_in = {
-				who = HAB
-				value = -50
+			if = {
+				limit = {
+					exists = HAB
+					NOT = { senior_union_with = HAB }
+				}
+				add_spy_network_in = {
+					who = HAB
+					value = -50
+				}
+				country_event = { id = me_spain_missions_events.2 }
+				custom_tooltip = SPA_HAB_UNION_EVENT_WILL_WORSEN_OPINION
 			}
-			country_event = { id = me_spain_missions_events.2 }
+			else = {
+				add_prestige = 25
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_imperial_influence = 10
+				}
+				if = {
+					limit = {
+						senior_union_with = HAB
+					}
+					HAB = {
+						add_liberty_desire = 50
+					}
+				}
+			}
 		}
 	}
 	
