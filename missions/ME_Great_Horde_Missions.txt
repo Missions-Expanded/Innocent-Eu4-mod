@@ -1,0 +1,630 @@
+Great_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	
+	potential = {
+		tag = GOL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Girays_Heir = {
+		icon = mission_empire
+		required_missions = { }
+		position = 1
+		
+		trigger = {
+			if = { 
+				limit = {
+					exists = CRI
+				}
+				has_global_flag = death_of_haji_giray
+				else = { 
+					
+				}
+			}
+		}
+	
+		effect = {
+			if = {
+				limit = {
+					exists = CRI
+				}
+				add_casus_belli = {
+					target = CRI
+					type = cb_vassalize_mission
+				}
+				else = {
+					CRI = {
+						all_core_province = { 
+							add_permanent_claim = GOL
+						}
+					}
+				}	
+			}
+		}
+	}
+	
+	Crimean_Conquest = {
+		icon = mission_cossack_cavalry
+		required_missions = { Girays_Heir }
+		position = 2
+		
+		trigger = {
+			284 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+	
+		effect = {
+			add_army_tradition = 10
+			add_country_modifier = {
+				name = "Army_Reform"
+				duration = 3650
+				}
+		}
+	}
+	
+	Crimean_Trade_Posts = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { Crimean_Conquest }
+		position = 4
+		
+		trigger = {
+			285 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				}
+			285 = {
+				has_building = marketplace
+			}
+					
+			286 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				}
+			286 = {
+				has_building = marketplace
+			}
+		}
+		
+		effect = {
+			285 = {
+				if = {
+                    limit = { 
+						NOT = {  
+							province_has_center_of_trade_of_level = 3 
+						}
+					}
+                    add_center_of_trade_level = 2
+                }
+			}
+			add_mercantilism = 10
+			add_country_modifier = {
+				name = "Western_Trade"
+				duration = 7300
+			}
+		}
+	}
+}
+
+Great_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	
+	potential = {
+		tag = GOL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	A_Great_Khan = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 1
+		
+		trigger = {
+			adm = 2
+			dip = 2
+			mil = 4
+		}
+		
+		effect = {
+			add_horde_unity = 25
+			add_ruler_modifier = {
+				name = "A_New_Hope"
+				duration = -1
+			}
+		}
+	}
+	
+	End_The_Decline = {
+		icon = mission_assemble_an_army
+		required_missions = { A_Great_Khan }
+		position = 2
+		
+		trigger = {
+			army_size_percentage = 1
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			NOT = { num_of_rebel_armies = 1 }
+			horde_unity = 75
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "Ending_The_Decline"
+				duration = 36500
+				}
+			add_stability = 1
+		}
+	}
+
+	Reestablish_Control = {
+		icon = mission_non-western_cavalry_raid
+		required_missions { The_Fractured_Horde }
+		position = 3
+		
+		trigger = {
+			KAZ = {
+				all_core_province = { 
+					owned_by = GOL
+				}
+			}
+		}		
+		effect = {
+			add_stability = 1
+			add_years_of_income = 0.5
+			add_country_modifier = {
+				name = "Tax_Reform"
+				duration = 3650
+				}
+		}
+	}	
+	
+}
+
+Great_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	
+	potential = {
+		tag = GOL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Caucasian_Raids = {
+		icon = mission_unite_home_region
+		required_missions = { }
+		position = 1
+		
+		trigger = {
+			if = {
+				limit = {
+					exists = GAZ
+				}
+					GAZ = {
+						is_subject_of = GOL
+					}
+				else = { 
+					dagestan_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = CIR
+				}
+					CIR = {
+						is_subject_of = GOL
+					}
+				else = { 
+					circassia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		
+		effect = {
+			circassia_area = {
+				add_devastation = 15
+			}
+			dagestan_area = {
+				add_devastation = 15
+			}
+			add_army_tradition = 15
+			add_treasury = 200
+		}
+	}
+	
+	The_Fractured_Horde = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { }
+		position = 2
+		
+		trigger = {
+			army_size = 25
+			is_monarch_leader = yes
+			horde_unity = 75
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			NOT = { num_of_rebel_armies = 1 }			
+		}
+	
+		effect = {
+			if = {
+				limit = {
+					exists = NOG
+				}
+				every_province = {
+					limit = {
+						owned_by = NOG
+					}
+				  add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = SHY
+				}
+				every_province = {
+					limit = {
+						owned_by = SHY
+					}
+				  add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = KAZ
+				}
+				every_province = {
+					limit = {
+						owned_by = KAZ
+					}
+				  add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	The_Rebellious_General = {
+		icon = mission_chinese_general_riding
+		required_missions = { The_Fractured_Horde }
+		position = 3
+		
+		trigger = {
+			if = {
+				limit = {
+					exists = NOG
+				}
+				NOG = {
+					NOT = { army_size = 1 }
+				}
+				NOG = {
+					capital_scope = {
+						OR = {
+							controlled_by = ROOT
+							controller = {
+								OR = {
+									is_subject_of = ROOT
+									alliance_with = ROOT
+									overlord = {
+										alliance_with = ROOT
+									}
+								}
+							}
+						}
+					}
+				}
+				else = {
+					465 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		
+		effect = {
+			add_country_modifier = {
+				name = "Nogai_Integration"
+				duration = 3650
+			}
+			add_manpower = 7.5
+			add_army_tradition = 12.5
+		}
+	}
+}
+
+Great_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	
+	potential = {
+		tag = GOL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	
+	Tithe_The_Faithfull = {
+		icon = mission_mosque
+		required_missions = { }
+		position = 1
+		
+		trigger = {
+			temple = 10
+		}
+		
+		effect = {
+			every_core_province = { 
+				IF = {
+					limit = {
+						has_building = temple
+						has_owner_religion = yes
+					}
+				add_base_tax = 1
+				}
+			}
+		}
+	}
+	
+	Islamic_Courts = {
+		icon = mission_early_game_buildings
+		required_missions = { Tithe_The_Faithfull }
+		position = 2
+		
+		trigger = {
+			courthouse = 10
+		}
+		
+		effect = {
+			every_core_province = {
+				IF = {
+					limit = {
+						has_building = courthouse
+						has_owner_accepted_culture = yes
+						has_owner_religion = yes
+					}
+				add_province_modifier = {
+					name = "Islamic_Court"
+					duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	Restore_Blue_Horde = {
+		icon = mission_conquer_50_development
+		required_missions = { The_Fractured_Horde }
+		position = 3
+		
+		trigger = { 
+			476 = {
+				owned_by = ROOT
+				}
+			476 = {
+				has_building = fort_15th
+				}
+			1075 = {
+				owned_by = ROOT
+				}
+			1075 = {
+				has_building = fort_15th
+				}
+		}
+		effect = {
+			476 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				}
+			1075 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				}
+			add_country_modifier = {
+				name = "Blue_Horde"
+				duration = 9125
+			}
+		}
+	}
+}
+
+Great_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	
+	potential = {
+		tag = GOL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	Extract_Tribute_Ryazan = {
+		icon = mission_high_income
+		required_missions = { }
+		position = 1
+		
+		trigger = {
+			if = {
+				limit = {
+					exists = RYA
+				}
+				RYA = {
+					is_subject_of = ROOT
+				}
+				else = {
+					301 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+	
+		effect = {
+			if = {
+				limit = {
+					exists = RYA
+				}
+				RYA = {
+					add_liberty_desire = -15
+				}
+			}
+			1778 = {
+				add_core = GOL
+			}
+		}
+	}
+	
+	End_Qasim_Occupation = {
+		icon = mission_great_wall
+		required_missions = { Extract_Tribute_Ryazan }
+		position = 2
+		
+		trigger = {
+			1778 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+	
+		effect = {
+			add_prestige = 15
+			add_horde_unity = 15
+			add_mil_power = 75
+		}
+	}
+	
+	Restore_Russian_Tribute = {
+	icon = mission_assemble_an_army
+	required_missions = { End_Qasim_Occupation }
+	position = 3
+	
+		trigger = {
+			MOS = {
+				capital_scope = {
+					OR = {
+						controlled_by = ROOT
+						controller = {
+							OR = {
+								is_subject_of = ROOT
+								alliance_with = ROOT
+								overlord = {
+									alliance_with = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			create_subject = {
+				subject_type = tributary_state
+				subject = MOS
+			}
+			MOS = {
+				add_liberty_desire = -15
+			}
+			add_country_modifier = {
+				name = "Restore_The_Tatar_Yoke"
+				duration = -1
+			}
+			russia_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	Crush_Russian_Resistance = {
+		icon = mission_non-western_soldiers
+		required_missions = { Restore_Russian_Tribute }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = ryazan_area
+				area = moscow_area
+				area = suzdal_area
+				area = tver_area
+				area = yaroslavl_area
+				area = vladimir_area
+				area = novgorod_area
+			}
+			NOT = {
+			country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			ryazan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			moscow_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			suzdal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tver_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			yaroslavl_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			vladimir_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			novgorod_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			
+		}
+		effect = {
+			295 = {
+				add_core = GOL
+			}
+			295 = {
+				add_base_tax = -5
+				add_base_production = -5
+				add_base_manpower = -5
+			}
+			295 = { 
+				change_culture = mishary
+				}
+				
+			310 = { 
+				add_core = GOL
+				add_base_tax = -4
+				add_base_production = -4
+				add_base_manpower = -4
+				change_culture = mishary
+			}
+			add_country_modifier = {
+				name = "Crush_Resistance"
+				duration = -1
+			}
+			add_mil_power = 150
+			add_dip_power = 150
+			add_adm_power = 150
+			add_years_of_income = 1.5
+		}
+	}
+}

@@ -1,0 +1,504 @@
+namespace = me_spain_missions_events
+
+# The Milan Duchy
+country_event = {
+	id = me_spain_missions_events.1
+	title = me_spain_missions_events.EVTNAME1
+	desc = me_spain_missions_events.EVTDESC1
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = me_spain_missions_events1.EVTOPT1
+		
+		ai_chance = { factor = 30 }
+		
+		if = {
+			limit = {
+				exists = MLO
+				overlord_of = MLO
+			}
+			inherit = MLO
+		}
+		
+		2979 = {
+			add_province_modifier = {
+				name = spain_annexed_milan_province_modifier
+				duration = 5475
+			}
+		}
+		104 = {
+			add_province_modifier = {
+				name = spain_annexed_milan_province_modifier
+				duration = 5475
+			}
+		}
+		1862 = {
+			add_province_modifier = {
+				name = spain_annexed_milan_province_modifier
+				duration = 5475
+			}
+		}
+		105 = {
+			add_province_modifier = {
+				name = spain_annexed_milan_province_modifier
+				duration = 5475
+			}
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events1.EVTOPT2
+		
+		ai_chance = { factor = 70 }
+		
+		trigger = {
+			NOT = { exists = MLO }
+			any_owned_province = {
+				is_core = MLO
+			}
+		}
+		
+		tooltip = {
+			release = MLO
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = { is_core = MLO }
+				cede_province = MLO
+			}
+			vassalize = MLO
+		}
+		
+		custom_tooltip = SPA_MLO_WILL_NOT_COST_A_DIPLO_SLOT
+		set_country_flag = spa_mlo_will_not_take_a_diplo_slot
+		if = {
+			limit = {
+				MLO = {
+					government_rank = 2
+				}
+			}
+			MLO = {
+				set_government_rank = 1
+			}
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events1.EVTOPT3
+		
+		ai_chance = { factor = 70 }
+		
+		trigger = {
+			exists = MLO
+		}
+		
+		custom_tooltip = SPA_MLO_WILL_NOT_COST_A_DIPLO_SLOT
+		set_country_flag = spa_mlo_will_not_take_a_diplo_slot
+		if = {
+			limit = {
+				MLO = {
+					government_rank = 2
+				}
+			}
+			MLO = {
+				set_government_rank = 1
+			}
+		}
+	}
+}
+
+# The Habsburg Realm (Spain)
+country_event = {
+	id = me_spain_missions_events.2
+	title = me_spain_missions_events.EVTNAME2
+	desc = me_spain_missions_events.EVTDESC2
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = me_spain_missions_events2.EVTOPT1
+		
+		tooltip = {
+			create_union = HAB
+			HAB = {
+				add_opinion = {
+					who = ROOT
+					modifier = spain_habsburg_union_opinion
+				}
+			}
+			every_elector = {
+				limit = {
+					NOT = { tag = HAB }
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = spain_habsburg_union_elector_opinion
+				}
+			}
+			every_country = {
+				limit = {
+					OR = {
+						is_part_of_hre = yes
+						is_rival = ROOT
+						is_enemy = ROOT
+					}
+					NOT = { tag = HAB }
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+					is_elector = no
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = spain_habsburg_union_small_opinion
+				}
+			}
+		}
+		HAB = {
+			custom_tooltip = HAB_NEEDS_TO_AGREE_TO_BECOME_SPA_PU
+			tooltip = {
+				reverse_add_casus_belli = {
+					target = ROOT
+					type = cb_restore_personal_union
+					months = 300
+				}
+				every_country = {
+					limit = {
+						OR = {
+							is_part_of_hre = yes
+							is_rival = FROM
+							is_enemy = FROM
+						}
+						NOT = { tag = FROM }
+						NOT = { is_subject_of = FROM }
+					}
+					add_opinion = {
+						who = FROM
+						modifier = spain_habsburg_union_small_opinion
+					}
+				}
+			}
+		}
+		custom_tooltip = SPA_HAB_UNION_WILL_ALWAYS_BREAK_ON_MONARCH_DEATH
+		
+		hidden_effect = {
+			HAB = {
+				country_event = { id = me_spain_missions_events.3 }
+			}
+		}
+	}
+}
+
+# The Habsburg Realm (Austria)
+country_event = {
+	id = me_spain_missions_events.3
+	title = me_spain_missions_events.EVTNAME3
+	desc = me_spain_missions_events.EVTDESC3
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = me_spain_missions_events3.EVTOPT1
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		FROM = {
+			create_union = ROOT
+		}
+		
+		add_opinion = {
+			who = FROM
+			modifier = spain_habsburg_union_opinion
+		}
+		every_elector = {
+			limit = {
+				NOT = { tag = ROOT }
+				NOT = { tag = FROM }
+				NOT = { is_subject_of = FROM }
+			}
+			add_opinion = {
+				who = FROM
+				modifier = spain_habsburg_union_elector_opinion
+			}
+		}
+		every_country = {
+			limit = {
+				OR = {
+					is_part_of_hre = yes
+					is_rival = FROM
+					is_enemy = FROM
+				}
+				NOT = { tag = ROOT }
+				NOT = { tag = FROM }
+				NOT = { is_subject_of = FROM }
+				is_elector = no
+			}
+			add_opinion = {
+				who = FROM
+				modifier = spain_habsburg_union_small_opinion
+			}
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events3.EVTOPT2
+		
+		ai_chance = {
+			factor = 90
+		}
+		
+		reverse_add_casus_belli = {
+			target = FROM
+			type = cb_restore_personal_union
+			months = 300
+		}
+		every_country = {
+			limit = {
+				OR = {
+					is_part_of_hre = yes
+					is_rival = FROM
+					is_enemy = FROM
+				}
+				NOT = { tag = FROM }
+				NOT = { is_subject_of = FROM }
+			}
+			add_opinion = {
+				who = FROM
+				modifier = spain_habsburg_union_small_opinion
+			}
+		}
+	}
+}
+
+# Ruler died, remove flags & modifiers
+province_event = {
+	id = me_spain_missions_events.4
+	title = me_spain_missions_events.EVTNAME4
+	desc = me_spain_missions_events.EVTDESC4
+	picture = ANGRY_MOB_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		region = low_countries_region
+		OR = {
+			AND = {
+				has_province_flag = no_dutch_revolt_because_of_spain_mission
+				has_province_flag = no_dutch_revolt
+			}
+			has_province_modifier = spain_iron_fist_in_the_netherlands_province_modifier
+		}
+		owner = {
+			NOT = { has_ruler_flag = spain_iron_fist_in_the_netherlands_ruler_flag }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					has_province_flag = no_dutch_revolt_because_of_spain_mission
+				}
+				clr_province_flag = no_dutch_revolt_because_of_spain_mission
+			}
+			if = {
+				limit = {
+					has_province_flag = no_dutch_revolt
+				}
+				clr_province_flag = no_dutch_revolt
+			}
+			if = {
+				limit = {
+					has_province_modifier = spain_iron_fist_in_the_netherlands_province_modifier
+				}
+				remove_province_triggered_modifier = spain_iron_fist_in_the_netherlands_province_modifier
+			}
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events4.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+# Spanish Hegemony
+country_event = {
+	id = me_spain_missions_events.5
+	title = me_spain_missions_events.EVTNAME5
+	desc = me_spain_missions_events.EVTDESC5
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	major = yes
+	is_triggered_only = yes
+	
+	option = {
+		name = me_spain_missions_events5.EVTOPT1
+		
+		if = {
+			limit = {
+				OR = {
+					current_age = age_of_absolutism
+					current_age = age_of_revolutions
+				}
+			}
+			add_absolutism = 25
+		}
+		else = {
+			add_adm_power = 100
+		}
+		add_government_reform = crusader_kingdom
+		add_country_modifier = {
+			name = spain_spanish_hegemony_modifier
+			duration = -1
+		}
+	}
+}
+
+# Demand Conversion from England
+country_event = {
+	id = me_spain_missions_events.6
+	title = me_spain_missions_events.EVTNAME6
+	desc = me_spain_missions_events.EVTDESC6
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = me_spain_missions_events6.EVTOPT1
+		
+		ai_chance = {
+			factor = 10
+		}
+		
+		change_religion = FROM
+		capital_scope = {
+			change_religion = FROM
+		}
+		
+		hidden_effect = {
+			FROM = { set_country_flag = force_converted }
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events6.EVTOPT2
+		
+		ai_chance = {
+			factor = 90
+		}
+		
+		add_opinion = {
+			who = FROM
+			modifier = insulted
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = insulted
+		}
+		add_casus_belli = {	
+			target = FROM
+			type = cb_insult
+			months = 12
+		}
+		reverse_add_casus_belli = {	
+			target = FROM
+			type = cb_insult
+			months = 12
+		}
+	}
+}
+
+# The Habsburg Realm (Austria)
+country_event = {
+	id = me_spain_missions_events.7
+	title = me_spain_missions_events.EVTNAME7
+	desc = me_spain_missions_events.EVTDESC7
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		exists = HAB
+		senior_union_with = HAB
+		mission_completed = spain_the_habsburg_realm
+		has_regency = yes
+		has_heir = yes
+		NOT = { has_heir_flag = spa_hab_union_under_this_ruler }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			set_heir_flag = spa_hab_union_under_this_ruler
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events7.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = me_spain_missions_events.8
+	title = me_spain_missions_events.EVTNAME8
+	desc = me_spain_missions_events.EVTDESC8
+	picture = BAD_WITH_MONARCH_eventPicture
+	
+	hidden = yes
+	is_triggered_only = yes
+	
+	trigger = {
+		mission_completed = spain_the_habsburg_realm
+		exists = HAB
+		senior_union_with = HAB
+		NOT = { has_ruler_flag = spa_hab_union_under_this_ruler }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			HAB = {
+				grant_independence = yes
+				hidden_effect = {
+					define_ruler = {
+						dynasty = ROOT
+						age = 20
+						culture = THIS
+						religion = THIS
+						male = yes
+						claim = 50
+					}
+				}
+			}
+			add_casus_belli = {
+				target = HAB
+				type = cb_restore_personal_union
+				months = 24
+			}
+		}
+	}
+	
+	option = {
+		name = me_spain_missions_events8.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+	}
+}
