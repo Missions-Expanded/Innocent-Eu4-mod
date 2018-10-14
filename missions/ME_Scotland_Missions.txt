@@ -13,7 +13,9 @@ scotland_trade = {
 		position = 1
 		required_missions = { }
 		trigger = {
+			primary_culture = highland_scottish
 			248 = {
+				culture = highland_scottish
 				base_production = 10
 				development = 25
 			}
@@ -288,6 +290,7 @@ scotland_trade = {
 		}
 	}
 }
+
 scotland_gaelic = {
 	slot = 3
 	generic = no
@@ -310,38 +313,16 @@ scotland_gaelic = {
 		effect = {
 			every_owned_province = {
 				if = {
-					limit = { NOT = { culture = highland_scottish } }
-					change_culture = highland_scottish
+					limit = { NOT = { culture = scottish_celtic } }
+					change_culture = scottish_celtic
 				}
+				add_accepted_culture = scottish_celtic
+				add_dip_power = 100
 			}	
 		}
 	}
-	SCO_easter_egg = {
-		icon = mission_african_soldier
-		position = 5
-		required_missions = { SCO_nibbas }
-		provinces_to_highlight = {
-			province_id = 1140
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		trigger = {
-			DAH  = {
-				is_vassal = yes
-			}	
-			TYR  = {
-				is_vassal = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = +respect
-				duration = 7300
-			}
-		}
-	}
-}	
+}
+
 scotland_diplomacy = {
 	slot = 4
 	generic = no
@@ -418,7 +399,7 @@ scotland_diplomacy = {
                 }
 		}
 	}
-	SCO_nibbas = {
+	SCO_tyrone = {
 		icon = SCO_M3
 		position = 4
 		required_missions = { SCO_ulster }
@@ -456,7 +437,7 @@ scotland_diplomacy = {
 	SCO_tyrconnell = {
 		icon = SCO_M2
 		position = 5
-		required_missions = { SCO_nibbas }
+		required_missions = { SCO_tyrone }
 		provinces_to_highlight = {
 			province_id = 4380
 			NOT = {
@@ -536,7 +517,8 @@ scotland_diplomacy = {
 			add_permanent_claim = 373
 		}
 	}
-}	
+}
+
 scotland_military = {
 	slot = 2
 	generic = no
@@ -626,6 +608,10 @@ scotland_military = {
 		}
 		effect = {
 			east_midlands_area = {
+				if = {
+					limit = { owned_by = ENG }
+					local_unrest = 5
+				}	
 				limit = {
 					NOT = { is_permanent_claim = ROOT	}
 					NOT = { is_core = ROOT	}
@@ -652,6 +638,7 @@ scotland_military = {
 		}
 		effect = {
 			wales_area = {
+			
 				limit = {
 					NOT = { is_permanent_claim = ROOT	}
 					NOT = { is_core = ROOT	}
@@ -678,6 +665,7 @@ scotland_military = {
 		}
 		effect = {
 			wales_area = {
+				change_culture = welsh_celtic
 				limit = {
 					is_core = ROOT
 					owned_by = ROOT
@@ -689,6 +677,33 @@ scotland_military = {
 			create_subject = {
 				subject_type = vassal
 				subject = WLS
+			}
+			add_permanent_claim = 236
+		}
+	}
+	SCO_wessex = {
+		icon = SCO_M5
+		position = 7
+		required_missions = { SCO_wales }
+		provinces_to_highlight = {
+			area = wessex_area
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			wessex_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			SCO = {
+				declare_war_with_cb = {
+					who = ENG
+					casus_belli = cb_conquest
+					war_goal_province = 236
+				}
 			}
 		}
 	}
