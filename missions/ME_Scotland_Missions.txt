@@ -698,12 +698,96 @@ scotland_military = {
 			}
 		}
 		effect = {
-			SCO = {
-				declare_war_with_cb = {
-					who = ENG
-					casus_belli = cb_conquest
-					war_goal_province = 236
+			if = {
+				limit = { 
+					exists = ENG
+					236 = {
+						owned_by = ENG
+					}	
+				}	
+				SCO = {
+					declare_war_with_cb = {
+						who = ENG
+						casus_belli = cb_conquest
+						war_goal_province = 236
+					}
 				}
+			}
+		}
+	}
+}
+scotland_miscellaneous = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SCO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	SCO_darien_scheme = {
+		icon = mission_colonial
+		position = 1
+		required_missions = {  }
+		provinces_to_highlight = {
+			province_id = 2315
+		}
+		trigger = {
+			2819 = {
+				OR = {
+					AND = {
+						country_or_non_sovereign_subject_holds = ROOT
+						is_core = owner
+					}
+					AND = {
+						controlled_by = ROOT
+						colonysize = 500
+					}
+				}
+			}
+		}	
+		effect = {
+			if = {
+				limit = {
+					NOT = { owns = 2819 }
+				}
+				add_colonysize = 500
+				add_core = SCO
+			}
+			add_country_modifier = {
+				name = SCO_panama_modifier
+				duration = -1
+			}	
+			add_treasury = 500
+		}
+	}
+	SCO_suez_canal = {
+		icon = mission_galleys_in_port
+		position = 2
+		required_missions = {  }
+		provinces_to_highlight = {
+			province_id = 2315
+		}
+		trigger = {
+			2315 = {
+				AND = {
+					country_or_non_sovereign_subject_holds = ROOT
+					is_core = owner
+				}
+			}
+		}	
+		effect = {
+			if = {
+				limit = { has_dlc = "Wealth of Nations" }
+				add_country_modifier = {
+					name = SCO_custodian_suez
+					duration = 36500
+				}
+				add_treasury = 500
+			}
+			else = {
+				add_treasury = 750
 			}
 		}
 	}
