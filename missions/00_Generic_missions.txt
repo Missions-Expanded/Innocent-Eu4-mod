@@ -36,7 +36,7 @@ generic_1 = {
 		required_missions = { court_1 }
 		trigger = {
 			prestige = 40
-			legitimacy = 100
+			legitimacy_equivalent = 100
 		}
 		effect = {
 			add_country_modifier = {
@@ -51,9 +51,9 @@ generic_1 = {
 		icon = mission_fred
 		required_missions = { court_2 }
 		trigger = {
-			adm = 3
-			dip = 3
-			mil = 3
+			ADM = 3
+			DIP = 3
+			MIL = 3
 		}
 		effect = {
 			add_country_modifier = {
@@ -67,12 +67,20 @@ generic_1 = {
 		icon = mission_napoleon
 		required_missions = { court_3 }
 		trigger = {
-			government_rank = 3
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 3
+			}
+			else = {
+				total_development = 1000
+			}
 		}
 		effect = {
 			add_country_modifier = {
-			name = empire
-			duration = 7300
+				name = empire
+				duration = 7300
 			}
 		}
 	}
@@ -82,8 +90,8 @@ generic_2 = {
     slot = 2
 	generic = yes
 	ai = yes
-		potential = {
-		always = yes
+	potential = {
+		NOT = { me_unique_missions_also_use_generic_missions = yes }
 	}
 	
 	military_1 = {
@@ -108,8 +116,8 @@ generic_2 = {
 		}
 		effect = {
 			add_country_modifier = {
-			name = the_reserves
-			duration = 7300
+				name = the_reserves
+				duration = 7300
 			}
 		}
 	}
@@ -135,7 +143,7 @@ generic_2 = {
 		icon = mission_military_4
 		required_missions = { military_3 }
 		trigger = {
-			mil = 5
+			MIL = 5
 		}
 		effect = {
 			add_country_modifier = {
@@ -167,7 +175,7 @@ generic_3 = {
 	generic = yes
 	ai = yes
 	potential = {
-		always = yes
+		NOT = { me_unique_missions_also_use_generic_missions = yes }
 	}
 	
 	naval_1 = {
@@ -184,7 +192,6 @@ generic_3 = {
 		}
 	}
 	
-
 	naval_2 = {
 		icon = mission_armada
 		required_missions = { naval_1 }
@@ -193,18 +200,18 @@ generic_3 = {
 		}
 		effect = {
 			if = {
-			limit = {
-			exploration_ideas = 2
+				limit = {
+					exploration_ideas = 2
+				}
+				add_country_modifier = {
+					name = naval_reach
+					duration = 7300
+				}
 			}
-			add_country_modifier = {
-				name = naval_reach
-				duration = 7300
-			}
-		}
-		else = {
-		add_country_modifier = {
-		name = fleeeeeeet
-		duration = 7300
+			else = {
+				add_country_modifier = {
+					name = fleeeeeeet
+					duration = 7300
 				}
 			}
 		}
@@ -215,9 +222,9 @@ generic_3 = {
 		required_missions = { naval_2 }
 		trigger = {
 			OR = {
-				has_discovered = south_america
-                has_discovered = north_america
-                has_discovered = new_world
+				south_america = { has_discovered = ROOT }
+				north_america = { has_discovered = ROOT }
+				new_world = { has_discovered = ROOT }
 			}
 		}
 		effect = {
@@ -262,14 +269,14 @@ generic_4 = {
 	generic = yes
 	ai = yes
 	potential = {
-		always = yes
+		NOT = { me_unique_missions_also_use_generic_missions = yes }
 	}
 	
 	stuff_1 = {
 		icon = mission_high_income
 		required_missions = { }
 		trigger = {
-		years_of_income = 1.0
+			years_of_income = 1
 		}
 		effect = {
 			add_country_modifier = {
@@ -315,8 +322,8 @@ generic_4 = {
 		}
 		effect = {
 			add_country_modifier = {
-			name = income_good
-			duration = 7300
+				name = income_good
+				duration = 7300
 			}
 		}
 	}
@@ -352,7 +359,7 @@ generic_2_2 = {
 	generic = yes
 	ai = yes
 	potential = {
-		always = yes
+		NOT = { me_unique_missions_also_use_generic_missions = yes }
 	}
 
 	military_6 = {
@@ -386,9 +393,8 @@ generic_3_2 = {
 	generic = yes
 	ai = yes
 	potential = {
-		always = yes
+		NOT = { me_unique_missions_also_use_generic_missions = yes }
 	}
-	
 	
 	naval_6 = {
 		icon = mission_dominate_home_trade_node
@@ -412,8 +418,8 @@ generic_3_2 = {
 		}
 		effect = {
 			add_country_modifier = {
-			name = flow_the_market_trade
-			duration = 7300
+				name = flow_the_market_trade
+				duration = 7300
 			}
 		}	
 	}
@@ -424,7 +430,7 @@ generic_4_2 = {
 	generic = yes
 	ai = yes
 	potential = {
-		always = yes
+		NOT = { me_unique_missions_also_use_generic_missions = yes }
 	}
 	
 	stuff_6 = {
@@ -445,11 +451,8 @@ generic_4_2 = {
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
-					OR = {
-						has_province_modifier = center_of_trade_modifier
-						has_province_modifier = inland_center_of_trade_modifier
-					}
-					controlled_by = owner
+					province_has_center_of_trade_of_level = 1
+					controlled_by = ROOT
 					is_core = ROOT
 				}
 				amount = 6
