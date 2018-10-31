@@ -4,7 +4,6 @@ annam_missions_slot_1 = {
 	ai = yes
 	potential = {
 		tag = ANN
-		NOT = { tag = NAM }
 	}
 	has_country_shield = yes
 	
@@ -48,12 +47,17 @@ annam_missions_slot_1 = {
 			}	
 		}
 	}
+	
 	ANN_seize_the_capital = {
 		icon = mission_monarch_in_throne_room
 		position = 3
 		required_missions = { ANN_the_remainder_of_tonkin}
 		provinces_to_highlight = {
 			province_id = 613
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
 		}
 		trigger = {
 			owns_core_province = 613
@@ -63,6 +67,7 @@ annam_missions_slot_1 = {
 				limit = { 
 					exists = DAI
 					DAI = {
+						ai = yes
 						owns = 616
 					}
 				}
@@ -75,19 +80,22 @@ annam_missions_slot_1 = {
 			add_dip_power = 50
 		}
 	}
+	
 	ANN_vietnam_leftovers = {
 		icon = mission_japanese_fort
 		position = 4
 		required_missions = { ANN_seize_the_capital }
 		provinces_to_highlight = {
 			OR = {
-				province_id = 616
-				province_id = 2372
-				province_id = 2373
-			}
-			OR = {
-                NOT = { owned_by = ROOT }
-                NOT = { is_core = ROOT }
+				AND = {
+					province_id = 2371
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				AND = {
+					area = red_river_delta_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
             }
 		}
 		
@@ -107,13 +115,13 @@ annam_missions_slot_1 = {
 		}
 	}
 }
+
 annam_missions_slot_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		tag = ANN
-		NOT = { tag = NAM }
 	}
 	has_country_shield = yes
 	
@@ -122,11 +130,9 @@ annam_missions_slot_2 = {
 		position = 4
 		required_missions = { ANN_seize_the_capital }
 		trigger = {
-			if = {
-				limit = { exists = DAI }				
-					DAI = {
-						is_subject_of = ANN
-					}
+			OR = {
+				NOT = { exists = DAI }
+				overlord_of = DAI
 			}
 		}
 		effect = {
@@ -135,6 +141,7 @@ annam_missions_slot_2 = {
 			add_army_tradition = 10
 		}
 	}
+	
 	ANN_integrate_daiviet = {
 		icon = mission_alliances
 		position = 5
@@ -142,9 +149,12 @@ annam_missions_slot_2 = {
 		trigger = {
 			diplomatic_reputation = 3
 			stability = 1
-			has_opinion = {
-				who = DAI
-				value = 190
+			OR = {
+				NOT = { overlord_of = DAI }
+				has_opinion = {
+					who = DAI
+					value = 190
+				}
 			}
 		}
 		effect = {
@@ -153,6 +163,7 @@ annam_missions_slot_2 = {
 		}
 	}
 }	
+
 annam_missions_slot_3 = {
 	slot = 3
 	generic = no
@@ -214,6 +225,7 @@ annam_missions_slot_3 = {
 		}
 	}
 }
+
 annam_missions_slot_4 = {
 	slot = 4
 	generic = no
@@ -303,13 +315,13 @@ annam_missions_slot_4 = {
 		}
 	}
 }
+
 annam_missions_slot_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
 		tag = ANN
-		NOT = { tag = NAM }
 	}
 	has_country_shield = yes
 
@@ -317,9 +329,24 @@ annam_missions_slot_5 = {
 		icon = NAM_M2
 		position = 1
 		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 100
+				province_id = 610
+				province_id = 613
+				province_id = 616
+				province_id = 2371
+				province_id = 2372
+				province_id = 2373
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			stability = 2
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			owns_core_province = 610
 			owns_core_province = 1016
 			owns_core_province = 613
@@ -338,22 +365,19 @@ annam_missions_slot_5 = {
 				add_base_manpower = 2
 				add_base_production = 2
 			}
-			NAM = {
-				define_ruler = {
-					dynasty = "Nguyen"
-					religion = ROOT
-				}
-			change_capital = 613
-				613 = {
-					capital = "Hanoi"
-					move_capital_effect = yes
-					if = {
-						limit = { NOT = { religion = hinduism } }
-						change_religion = hinduism
-					}
-				}
-				swap_non_generic_missions = yes
+			define_ruler = {
+				dynasty = "Nguyen"
+				religion = ROOT
 			}
+			set_capital = 613
+			613 = {
+				rename_capital = "Hanoi"
+				if = {
+					limit = { NOT = { religion = hinduism } }
+					change_religion = hinduism
+				}
+			}
+			swap_non_generic_missions = yes
 			if = {
 				limit = { has_custom_ideas = no }
 				country_event = { id = ideagroups.1 } 
