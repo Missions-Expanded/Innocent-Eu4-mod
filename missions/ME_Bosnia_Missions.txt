@@ -19,13 +19,10 @@ bos_1 = {
 				name = bos_serbia
 				duration = 7300
 			}
-			
 			136 = {
 				limit = {
-					NOT = {
-						is_permanent_claim = ROOT
-						is_core = ROOT
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -35,10 +32,12 @@ bos_1 = {
 	bos_the_coast = {
 		required_missions = { bos_secure_borders }
 		icon = mission_conquer_romania
+		provinces_to_highlight = {
+			province_id = 136
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			136 = {
-				owned_by = ROOT
-			}
+			owns = 136
 		}
 		effect = {
 			136 = {
@@ -46,19 +45,15 @@ bos_1 = {
 			}
 			rascia_area = {
 				limit = {
-					NOT = {
-						is_permanent_claim = ROOT
-						is_core = ROOT
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			serbia_area = {
-			limit = {
-					NOT = {
-						is_permanent_claim = ROOT
-						is_core = ROOT
-					}
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -68,6 +63,13 @@ bos_1 = {
 	bos_destroy_serbia = {
 		required_missions = { bos_the_coast }
 		icon = mission_the_third_rome
+		provinces_to_highlight = {
+			OR = {
+				area = rascia_area
+				area = serbia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			rascia_area = {
 				owned_by = ROOT
@@ -92,15 +94,43 @@ bos_1 = {
 		required_missions = { bos_destroy_serbia }
 		icon = mission_autocephalous_archbishopric
 		trigger = {
-			HAB = {
-				is_rival = TUR
-			}
-			OR = {
-				POL = {
+			if = {
+				limit = {
+					exists = TUR
+					exists = HAB
+					OR = {
+						exists = POL
+						exists = PLC
+					}
+				}
+				HAB = {
 					is_rival = TUR
 				}
-				PLC = {
-					is_rival = TUR
+				OR = {
+					POL = {
+						is_rival = TUR
+					}
+					PLC = {
+						is_rival = TUR
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					hre_size = 1
+				}
+				any_rival_country = {
+					emperor = {
+						is_rival = PREV
+					}
+				}
+			}
+			else = {
+				any_rival_country = {
+					any_country = {
+						alliance_with = ROOT
+						is_rival = PREV
+					}
 				}
 			}
 		}
@@ -108,10 +138,8 @@ bos_1 = {
 			balkan_region = {
 				limit = {
 					owned_by = TUR
-					NOT = {
-						is_permanent_claim = ROOT
-						is_core = ROOT
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -125,6 +153,10 @@ bos_1 = {
 	bos_final_crusade = {
 		required_missions = { bos_deus_vult }
 		icon = mission_assemble_an_army
+		provinces_to_highlight = {
+			region = balkan_region
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			balkan_region = {
 				type = all
@@ -144,10 +176,32 @@ bos_1 = {
 	bos_hum_gold = {
 		required_missions = { }
 		icon = mission_state_manufactories
+		provinces_to_highlight = {
+			province_id = 139
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					has_no_manufactory_trigger = yes
+				}
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { base_production = 10 }
+				}
+			}
+		}
 		trigger = {
 			139 = {
 				owned_by = ROOT
-				base_production = 10
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_production = 10
+				}
+				else = {
+					has_manufactory_trigger = yes
+				}
 			}
 		}
 		effect = {
@@ -157,9 +211,43 @@ bos_1 = {
 					name = bos_changed_good
 					duration = 7300
 				}
-				add_base_production = -6
+				if = {
+					limit = {
+						base_production = 7
+					}
+					add_base_production = -6
+				}
+				else_if = {
+					limit = {
+						base_production = 6
+					}
+					add_base_production = -5
+				}
+				else_if = {
+					limit = {
+						base_production = 5
+					}
+					add_base_production = -4
+				}
+				else_if = {
+					limit = {
+						base_production = 4
+					}
+					add_base_production = -3
+				}
+				else_if = {
+					limit = {
+						base_production = 3
+					}
+					add_base_production = -2
+				}
+				else_if = {
+					limit = {
+						base_production = 2
+					}
+					add_base_production = -1
+				}
 			}
 		}
 	}
 }
-			
