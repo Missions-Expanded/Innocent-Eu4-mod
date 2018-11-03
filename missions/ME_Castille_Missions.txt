@@ -21,33 +21,25 @@ CAS_missions_1 = {
 			add_adm_power = -50
 		}
 	}
+	
 	Castile_Arguim = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { Castile_Exploration_Bureau }
 		position = 3
-		provinces_to_highlight = {
-			province_id = 1111
-		}
 		trigger = {
 			1111 = {
 				has_discovered = ROOT
 			}
 		}
 		effect = {
-			country_event = { 
-				id = ME_Castile.1
-				days = 15
-				random = 5
-			}
+			country_event = { id = ME_Castile.1 days = 15 random = 5 }
 		}
 	}
+	
 	Castile_Cape_Of_Good_Hope = {
 		icon = mission_colonial
 		required_missions = { Castile_Arguim }
 		position = 4
-		provinces_to_highlight = {
-			province_id = 1177
-		}
 		trigger = {
 			1177 = {
 				has_discovered = ROOT
@@ -74,6 +66,7 @@ CAS_missions_1 = {
 			}
 		}
 	}
+	
 	Castile_Ivory_Coast = {
 		icon = mission_early_game_buildings
 		required_missions = { Castile_Cape_Of_Good_Hope Castile_Brazil }
@@ -89,9 +82,7 @@ CAS_missions_1 = {
 				province_id = 1113
 				province_id = 1114
 			}
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -119,10 +110,15 @@ CAS_missions_1 = {
 			}
 		}
 	}
+	
 	Castile_Cape_Colony = {
 		icon = mission_colonial
 		required_missions = { Castile_Ivory_Coast }
 		position = 8
+		provinces_to_highlight = {
+			province_id = 1177
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			1177 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -138,6 +134,7 @@ CAS_missions_1 = {
 			}
 		}
 	}
+	
 	Castile_Spice_Trade = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { Castile_Cape_Colony }
@@ -189,7 +186,12 @@ CAS_missions_2 = {
 			}
 			if = {
 				limit = {
-					224 = { owned_by = ROOT }
+					224 = {
+						owned_by = ROOT
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+						NOT = { has_construction = building }
+					}
 				}
 				224 = {
 					add_building_construction = {
@@ -203,11 +205,17 @@ CAS_missions_2 = {
 				limit = {
 					any_owned_province = {
 						can_build = shipyard
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+						NOT = { has_construction = building }
 					}
 				}
 				random_owned_province = {
 					limit = {
 						can_build = shipyard
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+						NOT = { has_construction = building }
 					}
 					add_building_construction = {
 						building = shipyard
@@ -216,8 +224,12 @@ CAS_missions_2 = {
 					}
 				}
 			}
+			else = {
+				add_navy_tradition = 10
+			}
 		}
 	}
+	
 	spa_rb_caribbean_discovery = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { Castile_Explorer }
@@ -240,7 +252,6 @@ CAS_missions_2 = {
 				}
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = "spa_hispaniola_discovered"
@@ -252,13 +263,11 @@ CAS_missions_2 = {
 		icon = mission_trade_company_region_abroad
 		required_missions = { spa_rb_caribbean_colony spa_rb_caribbean_discovery }
 		position = 5
-		
 		provinces_to_highlight = {
 			colonial_region = colonial_la_plata
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = yes
 		}
-		
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = spa_rb_la_plata.tooltip
@@ -269,7 +278,6 @@ CAS_missions_2 = {
 				}
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = "spa_rb_overseas_trade"
@@ -277,10 +285,16 @@ CAS_missions_2 = {
 			}
 		}
 	}
+	
 	Castile_Brazil = {
 		icon = mission_early_game_buildings
 		required_missions = { spa_rb_la_plata }
 		position = 6
+		provinces_to_highlight = {
+			colonial_region = colonial_brazil
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = yes
+		}
 		trigger = {
 			OR = {
 				1531 = {
@@ -300,6 +314,7 @@ CAS_missions_2 = {
 			}
 		}
 	}
+	
 	spa_rb_incans = {
 		icon = mission_assemble_an_army
 		required_missions = { spa_rb_spanish_main }
@@ -316,7 +331,6 @@ CAS_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = yes
 		}
-		
 		trigger = {
 			upper_peru = {
 				type = all
@@ -342,7 +356,6 @@ CAS_missions_2 = {
 			}
 			
 		}
-		
 		effect = {
 			add_treasury = 500
 			795 = {
@@ -376,7 +389,6 @@ CAS_missions_2 = {
 		icon = mission_cannons_firing
 		required_missions = { spa_rb_incans }
 		position = 9
-		
 		provinces_to_highlight = {
 			OR = {
 				area = huanuco_area
@@ -391,11 +403,8 @@ CAS_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = yes
 		}
-		
 		trigger = {
-			NOT = {
-				exists = INC
-			}
+			NOT = { exists = INC }
 			huanuco_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -424,7 +433,6 @@ CAS_missions_2 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
 		effect = {
 			add_treasury = 800
 			colonial_peru = {
@@ -467,6 +475,7 @@ CAS_missions_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
+	
 	Castile_Colonization_Bureau = {
 		icon = mission_asian_trader
 		required_missions = { Castile_Explorer }
@@ -480,17 +489,16 @@ CAS_missions_3 = {
 			add_adm_power = -50
 		}
 	}
+	
 	spa_rb_caribbean_colony = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { spa_rb_caribbean_discovery Castile_Colonization_Bureau }
 		position = 4
-		
 		provinces_to_highlight = {
 			colonial_region = colonial_the_carribean
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = yes
 		}
-		
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = miss_colonize_caribbean
@@ -501,7 +509,6 @@ CAS_missions_3 = {
 				}
 			}
 		}
-		
 		effect = {
 			add_prestige = 15
 			add_country_modifier = {
@@ -515,13 +522,11 @@ CAS_missions_3 = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { spa_rb_caribbean_colony }
 		position = 7
-		
 		provinces_to_highlight = {
 			colonial_region = colonial_colombia
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = yes
 		}
-		
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = spa_rb_spanish_main.tooltip
@@ -532,7 +537,6 @@ CAS_missions_3 = {
 				}
 			}
 		}
-		
 		effect = {
 			upper_peru = {
 				limit = {
@@ -639,7 +643,6 @@ CAS_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			
 			eastern_mexico_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -675,42 +678,34 @@ CAS_missions_3 = {
 			}
 		}
 	}
+	
 	spa_rb_aztecs = {
 		icon = mission_conquer_50_development
 		required_missions = { spa_rb_spanish_main }
 		position = 8
-			
 		provinces_to_highlight = {
-			OR = {
-				area = mexico_area
-				owned_by = AZT
-			}
+			area = mexico_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = yes
 		}
-			
 		trigger = {
-			NOT = {
-				exists = AZT 
-			}
+			NOT = { exists = AZT }
 			mexico_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
 		effect = {
 			add_treasury = 800
 		}
 	}
+	
 	Castile_Mediterranean_Ambitions = {
 		icon = mission_galleys_in_port
 		required_missions = { spa_rb_reconquista_three }
 		position = 9
 		provinces_to_highlight = {
-			OR = {
-				area = corsica_sardinia_area
-			}
+			area = corsica_sardinia_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -743,11 +738,11 @@ CAS_missions_3 = {
 			}
 		}
 	}
+	
 	spa_rb_italian_ambition = {
 		icon = mission_conquer_50_development
 		required_missions = { Castile_Mediterranean_Ambitions }
 		position = 10
-		
 		provinces_to_highlight = {
 			OR = {
 				area = sicily_area
@@ -756,7 +751,6 @@ CAS_missions_3 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			sicily_area = {
 				type = all
@@ -771,7 +765,6 @@ CAS_missions_3 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = "spa_rb_italian_ambition_mod"
@@ -800,6 +793,7 @@ CAS_missions_3 = {
 			}
 		}
 	}
+	
 	Castile_Italy = {
 		icon = mission_conquer_50_development
 		required_missions = { spa_rb_italian_ambition Castile_Rouergue Castile_Provence }
@@ -818,7 +812,6 @@ CAS_missions_3 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			sicily_area = {
 				type = all
@@ -875,6 +868,7 @@ CAS_missions_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
+	
 	Castile_Sevilla_World_Port = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Castile_Colonization_Bureau }
@@ -892,7 +886,6 @@ CAS_missions_4 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			1139 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -923,7 +916,7 @@ CAS_missions_4 = {
 			custom_tooltip = cas_sevilla_world_port
 			hidden_effect = {
 				224 = {
-					add_center_of_trade_level = 3
+					add_center_of_trade_level = 2
 				}
 			}
 			224 = {
@@ -934,22 +927,21 @@ CAS_missions_4 = {
 			}
 		}
 	}
+	
 	spa_rb_iberia_christian = {
 		icon = mission_religious
 		required_missions = { spa_rb_reconquista_one }
 		position = 4
-		
 		provinces_to_highlight = {
 			region = iberia_region
+			NOT = { religion_group = ROOT }
 		}
-		
 		trigger = {
 			iberia_region = {
 				type = all
 				religion_group = ROOT
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = "spa_rb_christian_iberia"
@@ -967,27 +959,25 @@ CAS_missions_4 = {
 			}
 		}
 	}
+	
 	spa_rb_reconquista_four = {
 		icon = mission_assemble_an_army
 		required_missions = { spa_rb_iberia_christian }
 		position = 5
-		
 		provinces_to_highlight = {
 			area = northern_morocco_area
 			NOT = { owned_by = ROOT }
 		}
-		
 		trigger = {
 			northern_morocco_area = {
 				type = all
 				owned_by = ROOT
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
-			name = "completing_the_reconquista"
-			duration = 5475
+				name = "completing_the_reconquista"
+				duration = 5475
 			}
 			western_morocco_area = {
 				limit = {
@@ -1033,6 +1023,7 @@ CAS_missions_4 = {
 			}
 		}
 	}
+	
 	Castile_Conquer_Morocco = {
 		icon = mission_arabian_fort
 		required_missions = { spa_rb_reconquista_four }
@@ -1048,7 +1039,6 @@ CAS_missions_4 = {
 			}
 			NOT = { owned_by = ROOT }
 		}
-		
 		trigger = {
 			northern_morocco_area = {
 				type = all
@@ -1087,6 +1077,7 @@ CAS_missions_4 = {
 			}
 		}
 	}
+	
 	Castile_Assimilate_Morocco = {
 		icon = mission_religious
 		required_missions = { Castile_Conquer_Morocco }
@@ -1102,7 +1093,6 @@ CAS_missions_4 = {
 			}
 			NOT = { religion = ROOT }
 		}
-		
 		trigger = {
 			northern_morocco_area = {
 				type = all
@@ -1135,6 +1125,7 @@ CAS_missions_4 = {
 			set_country_flag = cas_morocco_culture
 		}
 	}
+	
 	Castile_Maya = {
 		icon = mission_unite_home_region
 		required_missions = { spa_rb_spanish_main }
@@ -1148,7 +1139,6 @@ CAS_missions_4 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			guatemala_area = {
 				type = all
@@ -1175,11 +1165,11 @@ CAS_missions_4 = {
 			add_prestige = 10
 		}
 	}
+	
 	spa_rb_reconquista_two = {
 		icon = mission_cannons_firing
 		required_missions = { spa_rb_reconquista_three }
 		position = 9
-		
 		provinces_to_highlight = {
 			OR = {
 				area = beieras_area
@@ -1187,7 +1177,6 @@ CAS_missions_4 = {
 			}
 			NOT = { owned_by = ROOT }
 		}
-		
 		trigger = {
 			beieras_area = {
 				type = all
@@ -1198,12 +1187,12 @@ CAS_missions_4 = {
 				owned_by = ROOT
 			}
 		}
-		
 		effect = {
 			add_prestige = 25
 			add_adm_power = 100
 		}
 	}
+	
 	Castile_Vasconia  = {
 		icon = mission_unite_home_region
 		required_missions = { Castile_Narbonne }
@@ -1215,7 +1204,6 @@ CAS_missions_4 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			pyrenees_area = {
 				type = all
@@ -1236,17 +1224,15 @@ CAS_missions_4 = {
 			}
 		}
 	}
+	
 	Castile_Rouergue = {
 		icon = mission_unite_home_region
 		required_missions = { Castile_Vasconia }
 		position = 11
 		provinces_to_highlight = {
-			OR = {
-				area = guyenne_area
-			}
+			area = guyenne_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			guyenne_area = {
 				type = all
@@ -1290,14 +1276,12 @@ CAS_missions_5 = {
 		icon = mission_assemble_an_army
 		required_missions = {  }
 		position = 1
-		
 		trigger = {
 			army_size_percentage = 1
 			navy_size_percentage = 1
 			manpower_percentage = 0.6
 			num_of_generals = 1
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = "spa_rb_morale"
@@ -1317,19 +1301,16 @@ CAS_missions_5 = {
 		icon = mission_unite_home_region
 		required_missions = { spa_rb_army_ready }
 		position = 3
-		
 		provinces_to_highlight = {
 			area = upper_andalucia_area
 			NOT = { owned_by = ROOT }
 		}
-		
 		trigger = {
 			upper_andalucia_area = {
 				type = all
 				owned_by = ROOT
 			}
 		}
-		
 		effect = {
 			beieras_area = {
 				limit = {
@@ -1368,11 +1349,11 @@ CAS_missions_5 = {
 			}
 		}
 	}
+	
 	spa_rb_reconquista_three = {
 		icon = mission_have_two_subjects
 		required_missions = { spa_rb_reconquista_one }
 		position = 8
-		
 		provinces_to_highlight = {
 			OR = {
 				area = valencia_area
@@ -1381,7 +1362,6 @@ CAS_missions_5 = {
 			}
 			NOT = { owned_by = ROOT }
 		}
-		
 		trigger = {
 			valencia_area = {
 				type = all
@@ -1396,7 +1376,6 @@ CAS_missions_5 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
 		effect = {
 			add_dip_power = 100
 			add_prestige = 10
@@ -1430,17 +1409,15 @@ CAS_missions_5 = {
 			}
 		}
 	}
+	
 	Castile_Narbonne  = {
 		icon = mission_unite_home_region
 		required_missions = { spa_rb_reconquista_three }
 		position = 9
 		provinces_to_highlight = {
-			OR = {
-				area = languedoc_area
-			}
+			area = languedoc_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			languedoc_area = {
 				type = all
@@ -1464,6 +1441,7 @@ CAS_missions_5 = {
 			}
 		}
 	}
+	
 	Castile_Provence = {
 		icon = mission_unite_home_region
 		required_missions = { Castile_Narbonne }
@@ -1475,7 +1453,6 @@ CAS_missions_5 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			savoy_dauphine_area = {
 				type = all

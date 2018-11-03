@@ -11,18 +11,14 @@ Catalan_Missions = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { }
 		trigger = {
-			CAT = {
-				NOT = { is_subject = yes }
-			}
+			is_subject = no
 		}
 		effect = {
 			127 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -30,16 +26,15 @@ Catalan_Missions = {
 			2986 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	Catalonia_Conquer_Sardinia = {
 		icon = mission_galleys_in_port
 		required_missions = { Catalonia_Independence }
@@ -48,9 +43,7 @@ Catalan_Missions = {
 				province_id = 127
 				province_id = 2986
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			127 = {
@@ -70,16 +63,13 @@ Catalan_Missions = {
 			}
 		}
 	}
+	
 	Catalonia_Conquer_Aragon = {
 		icon = mission_cannons_firing
 		required_missions = { Catalonia_Conquer_Sardinia }
 		provinces_to_highlight = {
-			OR = {
-				area = aragon_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = aragon_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			aragon_area = {
@@ -97,16 +87,13 @@ Catalan_Missions = {
 			}
 		}
 	}
+	
 	Catalonia_Conquer_Sicily = {
 		icon = mission_assemble_an_army
 		required_missions = { Catalonia_Conquer_Aragon }
 		provinces_to_highlight = {
-			OR = {
-				area = sicily_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = sicily_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			sicily_area = {
@@ -121,34 +108,59 @@ Catalan_Missions = {
 			}
 		}
 	}
+	
 	Catalonian_Claim_To_Naples = {
 		icon = mission_have_two_subjects
 		required_missions = { Catalonia_Conquer_Sicily }
+		provinces_to_highlight = {
+			NOT = { exists = NAP }
+			is_core = NAP
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			has_spy_network_in = {
-				who = NAP
-				value = 50
+			if = {
+				limit = {
+					exists = NAP
+				}
+				has_spy_network_in = {
+					who = NAP
+					value = 50
+				}
+			}
+			else = {
+				all_province = {
+					OR = {
+						country_or_non_sovereign_subject_holds = ROOT
+						NOT = { is_core = NAP }
+					}
+				}
 			}
 		}
 		effect = {
-			add_casus_belli = {
-				target = NAP
-				type = cb_restore_personal_union
-				months = 600
+			if = {
+				limit = {
+					exists = NAP
+				}
+				add_casus_belli = {
+					target = NAP
+					type = cb_restore_personal_union
+					months = 600
+				}
+				add_claim = 2753
 			}
-			add_claim = 2753
+			else = {
+				add_prestige = 10
+				add_legitimacy = 10
+			}
 		}
 	}
+	
 	Catalonia_Conquer_Languedoc = {
 		icon = mission_conquer_50_development
 		required_missions = { Catalonian_Claim_To_Naples }
 		provinces_to_highlight = {
-			OR = {
-				area = languedoc_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = languedoc_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			languedoc_area = {
