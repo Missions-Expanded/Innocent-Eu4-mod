@@ -1,4 +1,4 @@
-Conversion_Route = {
+CHA_Conversion_Route = {
     slot = 1
     generic = no
     ai = yes
@@ -11,7 +11,6 @@ Conversion_Route = {
 		icon = mission_buddhist_monk_praying
 		required_missions = { }
 		position = 1
-		
 		trigger = { 
 			religion = buddhism
 		}
@@ -22,11 +21,11 @@ Conversion_Route = {
 			}
 		}	
 	}
+	
 	Convert_Provinces = {
 		icon = mission_hands_praying
 		required_missions = { Change_Religion }
 		position = 2
-		
 		trigger = { 
 			all_owned_province = { 
 				religion = buddhism
@@ -41,8 +40,9 @@ Conversion_Route = {
 			}	
 		}
 	}
-}	
-Conquest_of_Khmer = {
+}
+
+CHA_Conquest_of_Khmer = {
     slot = 4
     generic = no
     ai = yes
@@ -55,12 +55,19 @@ Conquest_of_Khmer = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { }
 		position = 1
-		
+		provinces_to_highlight = {
+			province_id = 2375
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { religion = ROOT }
+			}
+		}
 		trigger = { 
 			OR = {
 				religion = buddhism
 				religion = hinduism
 			}
+			owns = 2375
 			2375 = {
 				religion = ROOT
 			}
@@ -72,6 +79,7 @@ Conquest_of_Khmer = {
 			}	
 		}
 	}
+	
 	Angkor_Palace = {
 		icon = mission_japanese_fort
 		required_missions = { Tay_Nguyen_Convert }
@@ -91,12 +99,16 @@ Conquest_of_Khmer = {
 				if = {
 					limit = {
 						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
 					}
 					add_building = fort_15th
 				}
 				if = {
 					limit = {
 						NOT = { has_building = temple }
+						NOT = { has_building = cathedral }
 					}
 					add_building = temple
 				}
@@ -105,6 +117,7 @@ Conquest_of_Khmer = {
 			add_claim = 2377
 		}
 	}
+	
 	The_Mekong_Delta = {
 		icon = mission_unite_home_region
 		required_missions = { Angkor_Palace }
@@ -143,6 +156,7 @@ Conquest_of_Khmer = {
 			}
 		}
 	}
+	
 	The_Fall_of_Khmer = {
 		icon = mission_chinese_general_riding
 		required_missions = { The_Mekong_Delta }
@@ -168,7 +182,7 @@ Conquest_of_Khmer = {
 		effect = { 
 			2379 = {
 				add_unrest = 10
-				add_core = CHA
+				add_core = ROOT
 			}
 			604 = {
 				add_base_production = 1
@@ -193,7 +207,8 @@ Conquest_of_Khmer = {
 		}
 	}	
 }
-Vietnam_Flashbacks = {
+
+CHA_Vietnam_Flashbacks = {
     slot = 2
     generic = no
     ai = yes
@@ -207,11 +222,27 @@ Vietnam_Flashbacks = {
 		required_missions = {}
 		position = 1
 		provinces_to_highlight = {
-			province_id = 1022
+			OR = {
+				AND = {
+					province_id = 1022
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				AND = {
+					province_id = 2373
+					NOT = { is_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+			}
 		}
 		trigger = { 
 			owns_core_province = 1022
-			has_claim = 2373
+			OR = {
+				is_claim = 2373
+				is_core = 2373
+			}
 		}		
 		effect = {
 			if = {
@@ -227,7 +258,7 @@ Vietnam_Flashbacks = {
 				limit = { 
 					DAI = { 
 						owns = 2373
-						is_rivaled = CHA
+						is_rival = CHA
 					} 
 				}
 				DAI = {
@@ -267,6 +298,7 @@ Vietnam_Flashbacks = {
 			add_claim = 2371
 		}	
 	}
+	
 	Vietnam_Proper = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { Remaining_Tonkin }
@@ -307,7 +339,8 @@ Vietnam_Flashbacks = {
 		}	
 	}
 }
-Miscellaneous = {
+
+CHA_Miscellaneous = {
     slot = 3
     generic = no
     ai = yes
@@ -334,13 +367,20 @@ Miscellaneous = {
 			}	
 		}	
 	}
+	
 	The_Utsul = {
 		icon = mission_galleys_in_port
 		required_missions = { Champa_Rice }
 		position = 2
-		trigger = { 
-			has_claim = 666
-			has_claim = 2160
+		trigger = {
+			OR = {
+				is_claim = 666
+				is_core = 666
+			}
+			OR = {
+				is_claim = 2160
+				is_core = 2160
+			}
 			NOT = { war_with = MNG }
 		}		
 		effect = {
@@ -354,24 +394,39 @@ Miscellaneous = {
 			}
 		}
 	}
+	
 	Developing_the_Lands = {
 		icon = mission_early_game_buildings
 		required_missions = { The_Utsul }
 		position = 3
-		trigger = { 
-			all_owned_province = {
-				development = 20
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				all_owned_province = {
+					development = 20
+				}
+			}
+			else = {
+				all_owned_province = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+				}
 			}
 		}		
 		effect = {
 			add_country_modifier = {
-			name = CHA_development
-			duration = -1
+				name = CHA_development
+				duration = -1
 			}
 		}
 	}
 }
-Becoming_Stronk = {
+
+CHA_Becoming_Stronk = {
     slot = 2
     generic = no
     ai = yes
@@ -424,12 +479,17 @@ Becoming_Stronk = {
 			}
 		}
 	}
+	
 	Battambang_AYU = {
 		icon = mission_have_manufactories
 		required_missions = { Luang_Prabang }
 		position = 5
 		provinces_to_highlight = {
 			province_id = 2379
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
 		}
 		trigger = { 
 			owns_core_province = 2379
@@ -442,21 +502,20 @@ Becoming_Stronk = {
 				add_base_manpower = 1
 				if = {
 					limit = {
-						ROOT = { religion = hinduism }
+						ROOT = {
+							OR = {
+								religion = hinduism
+								religion = buddhism
+							}
+						}
 						has_owner_religion = no
 					}
-					change_religion = hinduism
-				}
-				if = {
-					limit = {
-						ROOT = { religion = buddhism }
-						has_owner_religion = no
-					}
-					change_religion = buddhism
+					change_religion = ROOT
 				}
 			}
 		}
 	}
+	
 	The_Siege_of_Ayutthaya = {
 		icon = mission_conquer_50_development
 		required_missions = { Battambang_AYU }
