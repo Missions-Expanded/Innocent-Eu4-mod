@@ -4,10 +4,13 @@ Odoyev_slot_1 = {
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 	}
 	has_country_shield = yes
-	
+
 	OKA_capital_fort = {
 		icon = mission_conquer_50_development
 		position = 1
@@ -15,7 +18,7 @@ Odoyev_slot_1 = {
 		trigger = {
 			capital_scope = {
 				fort_level = 3
-			}	
+			}
 		}
 		effect = {
 			capital_scope = {
@@ -23,62 +26,87 @@ Odoyev_slot_1 = {
 					name = OKA_defended_capital
 					duration = 7300
 				}
-			}	
-		}	
+			}
+		}
 	}
+	
 	OKA_monastery_of_holy_mother = {
 		icon = mission_european_church
 		position = 2
 		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 4116
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
 		trigger = {
+			owns = 4116
 			4116 = {
 				OR = {
 					has_building = temple
 					has_building = cathedral
 				}
-			}	
+			}
 		}
 		effect = {
 			if = { 
 				limit = { 
 					4116 = {
 						has_building = cathedral
-					}	
+					}
 				}
-				add_permanent_province_modifier = {
-					name = OKA_building_religious_stuffs
-					duration = -1
-				}	
+				4116 = {
+					add_permanent_province_modifier = {
+						name = OKA_building_religious_stuffs
+						duration = -1
+					}
+				}
 			}
-			if = { 
+			else_if = { 
 				limit = { 
 					4116 = {
 						has_building = temple
-						NOT = { has_building = cathedral }
 						can_build = cathedral
-					}	
+					}
 				}
-				OKA = { country_event = { id = odoyev_event.1 } }
-			}	
-			4116 = {
-				add_permanent_province_modifier = {
-					name = OKA_building_religious_stuffs
-					duration = 7300
+				country_event = { id = odoyev_event.1 }
+				4116 = {
+					add_permanent_province_modifier = {
+						name = OKA_building_religious_stuffs
+						duration = 7300
+					}
 				}
-			}	
+			}
+			else = {
+				4116 = {
+					add_permanent_province_modifier = {
+						name = OKA_building_religious_stuffs
+						duration = 7300
+					}
+				}
+			}
 		}
 	}
-}	
+}
+
 Odoyev_hordes_bich = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 	}
 	has_country_shield = yes
-	
+
 	OKA_align_mishar = {
 		icon = OKA_M1
 		position = 1
@@ -88,10 +116,6 @@ Odoyev_hordes_bich = {
 				limit = { exists = GOL }
 				ROOT = {
 					NOT = { is_rival = GOL }
-					has_opinion = {
-						who = GOL
-						value = 100
-					}
 				}
 				GOL = {
 					NOT = { is_rival = ROOT }
@@ -109,15 +133,14 @@ Odoyev_hordes_bich = {
 					}
 				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = UNABLE_GOL
-				if = {
-					limit = { NOT = { exists = GOL } }
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = UNABLE_GOL
 					has_country_flag = mishar_kebab
 				}
 			}
 		}
-		effect = {		
+		effect = {
 			add_trust = {
 				who = GOL
 				value = 5
@@ -126,21 +149,25 @@ Odoyev_hordes_bich = {
 			hidden_effect = {
 				set_country_flag = mishar_kebab
 			}
-			swap_non_generic_missions = yes			
+			swap_non_generic_missions = yes
 		}
 	}
 }
+
 Odoyev_hordes_bich_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 		has_country_flag = mishar_kebab
 	}
 	has_country_shield = yes
-	
+
 	OKA_ally_mishar = {
 		icon = OKA_M1
 		position = 2
@@ -148,27 +175,31 @@ Odoyev_hordes_bich_2 = {
 		trigger = {
 			alliance_with = GOL
 		}
-		effect = {		
+		effect = {
 			GOL = {
-				create_guarantee = OKA
+				create_guarantee = ROOT
 			}
-			add_country_modfier = {
+			add_country_modifier = {
 				name = OKA_dip_rep
 				duration = 3650
-			}	
+			}
 		}
 	}
-}	
+}
+
 Odoyev_russian_bich = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 	}
 	has_country_shield = yes
-	
+
 	OKA_align_russia = {
 		icon = OKA_M2
 		position = 1
@@ -178,10 +209,6 @@ Odoyev_russian_bich = {
 				limit = { exists = RUS }
 				ROOT = {
 					NOT = { is_rival = RUS }
-					has_opinion = {
-						who = RUS
-						value = 100
-					}
 				}
 				RUS = {
 					NOT = { is_rival = ROOT }
@@ -190,15 +217,19 @@ Odoyev_russian_bich = {
 						value = 100
 					}
 				}
+				custom_trigger_tooltip = {
+					tooltip = NOT_NOT_RUSSIAN
+					NOT = { 
+						has_country_flag = crimean_kebab
+						has_country_flag = mishar_kebab
+						has_country_flag = horse_waste
+					}
+				}
 			}
 			else_if = {
 				limit = { exists = MOS }
 				ROOT = {
 					NOT = { is_rival = MOS }
-					has_opinion = {
-					who = MOS
-						value = 100
-						}
 				}
 				MOS = {
 					NOT = { is_rival = ROOT }
@@ -207,29 +238,23 @@ Odoyev_russian_bich = {
 						value = 100
 					}
 				}
-			}
-			custom_trigger_tooltip = {
-			tooltip = NOT_NOT_RUSSIAN
-				NOT = { 
-					has_country_flag = crimean_kebab
-					has_country_flag = mishar_kebab
-					has_country_flag = horse_waste
+				custom_trigger_tooltip = {
+					tooltip = NOT_NOT_RUSSIAN
+					NOT = { 
+						has_country_flag = crimean_kebab
+						has_country_flag = mishar_kebab
+						has_country_flag = horse_waste
+					}
 				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = UNABLE_MOS
-				if = {
-					limit = { 
-						NOT = { 
-							exists = MOS 
-							exists = RUS
-						}
-					}	
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = UNABLE_MOS
 					has_country_flag = russian_bich
-				}	
+				}
 			}
 		}
-		effect = {		
+		effect = {
 			add_trust = {
 				who = RUS
 				value = 5
@@ -238,21 +263,25 @@ Odoyev_russian_bich = {
 			hidden_effect = {
 				set_country_flag = russian_bich
 			}
-			swap_non_generic_missions = yes			
+			swap_non_generic_missions = yes
 		}
 	}
 }
+
 Odoyev_russian_bich_2 = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 		has_country_flag = russian_bich
 	}
 	has_country_shield = yes
-	
+
 	OKA_ally_russia = {
 		icon = OKA_M2
 		position = 2
@@ -265,64 +294,59 @@ Odoyev_russian_bich_2 = {
 			else_if = {
 				limit = { exists = RUS }
 				alliance_with = RUS
-			}	
+			}
 		}
-		effect = {		
+		effect = {
 			if = {
 				limit = {
 					exists = MOS
-				}	
-				MOS = {
-					create_guarantee = OKA
 				}
-				add_country_modfier = {
+				MOS = {
+					create_guarantee = ROOT
+				}
+				add_country_modifier = {
 					name = OKA_dip_rep
 					duration = 3650
-				}				
+				}
 			}
 			else_if = {
 				limit = {
 					exists = RUS
-				}	
-				RUS = {
-					create_guarantee = OKA
 				}
-				add_country_modfier = {
+				RUS = {
+					create_guarantee = ROOT
+				}
+				add_country_modifier = {
 					name = OKA_dip_rep
 					duration = 3650
-				}				
-			}				
+				}
+			}
 		}
 	}
-}	
+}
+
 Odoyev_crimean_kebab = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 	}
 	has_country_shield = yes
-	
+
 	OKA_align_crimea = {
 		icon = OKA_M3
 		position = 1
 		required_missions = { }
 		trigger = {
-			NOT = { 
-				has_country_flag = mishar_kebab
-				has_country_flag = russian_bich
-				has_country_flag = horse_waste
-			}	
 			if = {
 				limit = { exists = CRI }
 				ROOT = {
 					NOT = { is_rival = CRI }
-					has_opinion = {
-						who = CRI
-						value = 100
-					}
 				}
 				CRI = {
 					NOT = { is_rival = ROOT }
@@ -331,28 +355,23 @@ Odoyev_crimean_kebab = {
 						value = 100
 					}
 				}
-			}
-			if = {
-				limit = { NOT = { exists = CRI } }
-				has_country_flag = crimean_kebab
-			}
-			custom_trigger_tooltip = {
-				tooltip = NOT_NOT_CRIMEAN
-				NOT = { 
-					has_country_flag = mishar_kebab
-					has_country_flag = russian_bich
-					has_country_flag = horse_waste
+				custom_trigger_tooltip = {
+					tooltip = NOT_NOT_CRIMEAN
+					NOT = { 
+						has_country_flag = mishar_kebab
+						has_country_flag = russian_bich
+						has_country_flag = horse_waste
+					}
 				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = UNABLE_CRI
-				if = {
-					limit = { NOT = { exists = CRI } }
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = UNABLE_CRI
 					has_country_flag = crimean_kebab
-				}	
+				}
 			}
 		}
-		effect = {		
+		effect = {
 			add_trust = {
 				who = CRI
 				value = 5
@@ -360,22 +379,26 @@ Odoyev_crimean_kebab = {
 			}
 			hidden_effect = {
 				set_country_flag = crimean_kebab
-			}	
+			}
 			swap_non_generic_missions = yes
 		}
 	}
 }
+
 Odoyev_crimean_kebab_2 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 		has_country_flag = crimean_kebab
 	}
 	has_country_shield = yes
-	
+
 	OKA_ally_crimea = {
 		icon = OKA_M3
 		position = 2
@@ -383,27 +406,31 @@ Odoyev_crimean_kebab_2 = {
 		trigger = {
 			alliance_with = CRI
 		}
-		effect = {		
+		effect = {
 			CRI = {
-				create_guarantee = OKA
+				create_guarantee = ROOT
 			}
-			add_country_modfier = {
-					name = OKA_dip_rep
-					duration = 3650
-				}
+			add_country_modifier = {
+				name = OKA_dip_rep
+				duration = 3650
+			}
 		}
 	}
-}	
+}
+
 Odoyev_lithuanian_horse_waste = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 	}
 	has_country_shield = yes
-	
+
 	OKA_align_lithuania = {
 		icon = OKA_M4
 		position = 1
@@ -413,10 +440,6 @@ Odoyev_lithuanian_horse_waste = {
 				limit = { exists = LIT }
 				ROOT = {
 					NOT = { is_rival = LIT }
-					has_opinion = {
-						who = LIT
-						value = 100
-					}
 				}
 				LIT = {
 					NOT = { is_rival = OKA }
@@ -425,24 +448,23 @@ Odoyev_lithuanian_horse_waste = {
 						value = 100
 					}
 				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = NOT_NOT_LITHUANIAN
-				NOT = { 
-					has_country_flag = crimean_kebab
-					has_country_flag = russian_bich
-					has_country_flag = mishar_kebab
+				custom_trigger_tooltip = {
+					tooltip = NOT_NOT_LITHUANIAN
+					NOT = { 
+						has_country_flag = crimean_kebab
+						has_country_flag = russian_bich
+						has_country_flag = mishar_kebab
+					}
 				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = UNABLE_LIT
-				if = {
-					limit = { NOT = { exists = LIT } }
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = UNABLE_LIT
 					has_country_flag = horse_waste
 				}
 			}
 		}
-		effect = {		
+		effect = {
 			add_trust = {
 				who = LIT
 				value = 5
@@ -455,16 +477,21 @@ Odoyev_lithuanian_horse_waste = {
 		}
 	}
 }
+
 Odoyev_lithuanian_horse_waste_2 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
 		tag = OKA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
 		has_country_flag = horse_waste
 	}
-	has_country_shield = yes	
+	has_country_shield = yes
+
 	OKA_ally_lithuania = {
 		icon = OKA_M4
 		position = 2
@@ -472,14 +499,14 @@ Odoyev_lithuanian_horse_waste_2 = {
 		trigger = {
 			alliance_with = LIT
 		}
-		effect = {		
+		effect = {
 			LIT = {
-				create_guarantee = OKA
+				create_guarantee = ROOT
 			}
-			add_country_modfier = {
-					name = OKA_dip_rep
-					duration = 3650
-				}
+			add_country_modifier = {
+				name = OKA_dip_rep
+				duration = 3650
+			}
 		}
-	}	
-}	
+	}
+}
