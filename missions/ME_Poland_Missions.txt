@@ -45,13 +45,6 @@ me_polish_missions_main_slot = {
 				}
 				add_permanent_claim = ROOT
 			}
-			pomerelia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
 		}
 	}
 
@@ -61,25 +54,51 @@ me_polish_missions_main_slot = {
 		completed_by = 1466.10.19
 		position = 2
 		provinces_to_highlight = {
-			OR = {
-				area = west_prussia_area
-				area = pomerelia_area
-			}
+			area = west_prussia_area
 			NOT = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		trigger = {
-			west_prussia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			pomerelia_area = {	
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+			OR = {
+				west_prussia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT	
+				}
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = support_confederation_tooltip
+						has_country_flag = supported_prussian_confederation_flag
+					}
+					exists = DNZ
+					DNZ = {
+						is_at_war = no
+						is_subject = no
+					}
+				}
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_country_flag = supported_prussian_confederation_flag
+					exists = DNZ
+					DNZ = {
+						is_subject = no
+						is_at_war = no
+						NOT = { total_development = 100 }
+					}
+				}
+				country_event = { id = flavor_teu.3 }
+				custom_tooltip = vassalize_danzig_tooltip
+			}
+			else = {
+				add_casus_belli = {
+    				target = TEU
+    				type = cb_vassalize_mission
+    				months = 12
+				}
+			}
 			add_country_modifier = {
 				name = "army_enthusiasm"
 				duration = 7300
@@ -89,12 +108,6 @@ me_polish_missions_main_slot = {
 				fire = 2
 				manuever = 3
 				siege = 2
-			}
-			
-			add_casus_belli = {
-    				target = TEU
-    				type = cb_vassalize_mission
-    				months = 12
 			}
 		}
 	}
@@ -106,7 +119,7 @@ me_polish_missions_main_slot = {
 			province_id = 43
 		}
 		trigger = {
-			is_core = 43	
+			owns_core_province = 43
 		}
 		effect = {
 			2997 = {
@@ -403,6 +416,11 @@ polish_slot_2 = {
             OR = {
                 religious_ideas = 7
                 humanist_ideas = 7
+		red_ruthenia_area = {
+			type = all
+			owned_by = ROOT
+			religion = ROOT
+		}
             }
 		}
 		effect = {

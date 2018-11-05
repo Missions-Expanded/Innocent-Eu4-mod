@@ -3,84 +3,59 @@ survival_in_region = {
 	generic = no
 	ai = yes
 	potential = {
-    OR = {
         tag = LIV
-        }
     }
 	has_country_shield = yes
 	
 	liv_wealth_of_the_order = {
 		icon = mission_war_chest
-			required_missions = { }
- 		
+		required_missions = { }
 		trigger = {
-				treasury = 200		
-			calc_true_if = {
-				all_owned_province = {
-					OR = {		
-						has_building = marketplace
-					}
-				}
-				amount = 2
-				all_owned_province = {
-					OR = {		
-						has_building = temple
-					}
-				}
-				amount = 2				
-			}
-		}	
-
-		
+			treasury = 200		
+			marketplace = 2
+			temple = 2
+		}
 		effect = {
 			capital_scope = {
 				add_base_tax = 1
 				add_base_production = 1
 			}	
-				add_country_modifier = {
+			add_country_modifier = {
 				name = "livonian_wealth"
 				duration = 5500
-				}							
-			}	
+			}							
 		}	
+	}
+	
 	liv_revive_the_military_might_of_order = {
-		icon = mission_build_up_to_force_limit 
+		icon = mission_build_up_to_force_limit
 		required_missions = { liv_wealth_of_the_order } 
 		position = 3
-		
 		trigger = {
 			army_size_percentage = 1
 			num_of_generals = 2
-			calc_true_if = {
-				all_owned_province = {
-					OR = {		
-						has_building = barracks
-					}
-				}
-				amount = 2
-			}
-		}	
-
+			barracks = 2
+		}
 		effect = {
 			add_prestige = 15
 			add_mil_power = 100
 			capital_scope = {
-			add_base_manpower = 1
+				add_base_manpower = 1
 			}
-				add_country_modifier = {
+			add_country_modifier = {
 				name = "livonian_army_reformation"
 				duration = 5500
-					}
+			}
 		}
-	}	
-		liv_conquest_of_pskov = {
+	}
+	
+	liv_conquest_of_pskov = {
 		icon = mission_cannons_firing 
 		required_missions = { liv_revive_the_military_might_of_order }
 		position = 5		
 		provinces_to_highlight = {
-			OR = {
-				area = pskov_area
-			}	
+			area = pskov_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}	
 		trigger = {
 			pskov_area = {
@@ -88,10 +63,9 @@ survival_in_region = {
 				country_or_non_sovereign_subject_holds = ROOT	
 			}
 		}	
-		
 		effect = {
 			add_prestige = 15
-				karelia_area = {
+			karelia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
@@ -103,57 +77,54 @@ survival_in_region = {
 				}
 			}
 		}
-	}	
+	}
 
-		annex_teutonic_order = {
+	annex_teutonic_order = {
 		icon = mission_alliances
 		required_missions = { liv_conquest_of_pskov }
 		position = 7	
- 		
 		trigger = {
-				OR = {
-						AND = {
-						tag = LIV
-						TEU = {	vassal_of = LIV	}
-					}
-				OR = {
-						NOT = { exists = TEU }
-			}	
-			}	
+			OR = {
+				TEU = { vassal_of = ROOT }
+				NOT = { exists = TEU }
 			}
+		}
 		effect = {
-			inherit = TEU
-					add_country_modifier = {
-					name = "united_german_order"
-					duration = -1
-						}
-					}
+			if = {
+				limit = {
+					exists = TEU
 				}
+				inherit = TEU
 			}
+			add_country_modifier = {
+				name = "united_german_order"
+				duration = -1
+			}
+		}
+	}
+}
+
 baltic_might = {
 	slot = 5  
 	generic = no 
 	ai = yes 
 	potential = {
-    OR = {
         tag = LIV
-        }
     }
 	has_country_shield = yes
 
 	livonian_teutonic_alliance = {
 		icon = mission_alliances 
 		required_missions = { } 
-		
 		trigger = {
-						alliance_with = TEU
-						TEU = {
-							has_opinion = {
-								who = ROOT
-								value = 170
-								}
-							}
-						}	
+			alliance_with = TEU
+			TEU = {
+				has_opinion = {
+					who = ROOT
+					value = 170
+				}
+			}
+		}
 		effect = { 
 			add_dip_power = 150 
 			add_country_modifier = {
@@ -161,23 +132,22 @@ baltic_might = {
 				duration = 7000
 			}
 		}
-	}	
+	}
 	
 	liv_conquest_of_samogitia = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { livonian_teutonic_alliance }
 		position = 3
 		provinces_to_highlight = {
-			OR = {
-				area = samogitia_area
-			}
+			area = samogitia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = { 
 			samogitia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT	
-		}
-	}	
+			}
+		}	
 		effect = {
 			add_mil_power = 100		
 			add_army_tradition = 1
@@ -189,8 +159,8 @@ baltic_might = {
 				add_permanent_claim = ROOT
 			}
 			add_country_modifier = {
-			name = "great_livonic_victory" 
-			duration = 18250 
+				name = "great_livonic_victory" 
+				duration = 18250 
 			} 
 		} 
 	}		
@@ -201,11 +171,18 @@ baltic_might = {
 		position = 5
 		trigger = {
 			army_size = 30
-			NOT = { LIV = {	vassal_of = TEU	}
-							}
-						}		
+			LIV = {
+				NOT = { vassal_of = TEU }
+			}
+		}
 		effect = {
-		inherit = RIG
+			if = {
+				limit = {
+					exists = RIG
+					overlord_of = RIG
+				}
+				inherit = RIG
+			}
 			add_country_modifier = {
 				name = "independant_livonic_order"
 				duration = 5475
@@ -213,7 +190,7 @@ baltic_might = {
 		}
 	}
 	
-		liv_conquer_north_baltic = {
+	liv_conquer_north_baltic = {
 		icon = mission_unite_home_region
 		required_missions = { independent_livonic_order }
 		position = 7
@@ -222,61 +199,57 @@ baltic_might = {
 				area = karelia_area
 				area = finland_area
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
  		}
 		trigger = {
 			karelia_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			finland_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			38 = {
 				add_base_production = 2
-				add_country_modifier = {
+			}
+			add_country_modifier = {
 				name = "baltic_power"
 				duration = 7800
-					}
-				}
-			}	
+			}
 		}
-	}	
+	}
+}	
 
 new_governement = {
 	slot = 3  
 	generic = no 
 	ai = yes 
 	potential = {
-    OR = {
         tag = LIV
-        }
     }
 	has_country_shield = yes
 
-		confederative_governement = {
+	confederative_governement = {
 		icon = mission_high_income
-		required_missions = { annex_teutonic_order
-						liv_conquer_north_baltic
-						}
+		required_missions = { annex_teutonic_order liv_conquer_north_baltic }
 		position = 8
- 		
 		trigger = {
-				has_institution = printing_press
-				advisor = treasurer
-				adm_tech = 15
-			}	
-				
+			has_institution = printing_press
+			advisor = treasurer
+			adm_tech = 15
+			NOT = { exists = KUR }
+		}		
 		effect = {
 		    change_tag = KUR
-			change_government = federal_republic
-
-					add_country_modifier = {
-					name = "governmental_reforms"
-					duration = -1
-						}
-					}
-				}
-}				
+			change_government = republic
+			add_government_reform = federal_republic
+			add_country_modifier = {
+				name = "governmental_reforms"
+				duration = -1
+			}
+		}
+	}
+}

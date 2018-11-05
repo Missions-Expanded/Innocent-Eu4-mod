@@ -10,17 +10,23 @@ Salzburg_missions_1 = {
 	Workshop_Built = {
 		icon = mission_early_game_buildings
 		position = 1
-
-		trigger = {
-			76 = {
-			has_building = workshop
+		provinces_to_highlight = {
+			province_id = 76
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = workshop }
 			}
 		}
-		
+		trigger = {
+			owns = 76
+			76 = {
+				has_building = workshop
+			}
+		}
 		effect = {
-		76 = {
+			76 = {
 				add_base_production = 3
-				}
+			}
 		}
 	}
 	
@@ -28,19 +34,34 @@ Salzburg_missions_1 = {
 		icon = mission_have_manufactories
 		position = 2
 		required_missions = { Workshop_Built }
-
-		trigger = {
-			76 = {
-			base_production = 10
-				}
+		provinces_to_highlight = {
+			has_dlc = "Common Sense"
+			province_id = 76
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
 		}
-		
+		trigger = {
+			owns = 76
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				76 = {
+					base_production = 10
+				}
+			}
+			else = {
+				total_base_tax = 15
+			}
+		}
 		effect = {
-		76 = {
+			76 = {
 				add_province_modifier = {
-				name = "White_Gold"
-				duration = -1
-					}
+					name = "White_Gold"
+					duration = -1
+				}
 			}
 		}
 	}
@@ -49,19 +70,25 @@ Salzburg_missions_1 = {
 		icon = mission_early_game_buildings
 		position = 3 
 		required_missions = { Trade_Goods }
-		
-		trigger = {
-			76 = {
-			has_building = wharf
+		provinces_to_highlight = {
+			province_id = 76
+			OR = {
+				NOT = { owned_by = ROOT }
+				has_no_manufactory_trigger = yes
 			}
 		}
-		
+		trigger = {
+			owns = 76
+			76 = {
+				has_manufactory_trigger = yes
+			}
+		}
 		effect = {
-		76 = {
+			76 = {
 				add_province_modifier = {
-				name = Salt_Mine_Expanded
-				duration = -1
-					}
+					name = Salt_Mine_Expanded
+					duration = -1
+				}
 			}
 		}
 	}
@@ -70,39 +97,33 @@ Salzburg_missions_1 = {
 		icon = mission_war_chest
 		position = 4 
 		required_missions = { Salt_Mines }
-		
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						trade_goods = salt
-					}
-				}
-				amount = 5
-			}
+			salt = 5
 		}
-		
 		effect = {
-		76 = {
+			76 = {
 				add_province_modifier = {
-				name = Efficient_Salt_Mines
-				duration = -1
-					}
+					name = Efficient_Salt_Mines
+					duration = -1
+				}
 			}
 		}
 	}	
 	
-
 	Salt_Empire = {
 		icon = mission_empire
 		position = 5
 		required_missions = { Salt_Studies }
-	
+		provinces_to_highlight = {
+			province_id = 76
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
+			owns = 76
 			production_leader = {
-			trade_goods = salt
+				trade_goods = salt
 			}
-					}
+		}
 		effect = {
 			76 = { 
 				add_base_tax = 2
@@ -110,34 +131,31 @@ Salzburg_missions_1 = {
 				add_base_manpower = 2
 			}
 			set_government_rank = 3	
-			
 		}
 	}
 	
-		Salt_Throne = {
+	Salt_Throne = {
 		icon = mission_alliances
 		position = 5
 		required_missions = { Salt_Empire }
-	
+		provinces_to_highlight = {
+			province_id = 76
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
+			owns = 76
 			trading_bonus = {
-			trade_goods = salt
-			value = yes
+				trade_goods = salt
+				value = yes
 			}
-					}
+		}
 		effect = {
 			76 = { 
 				add_province_modifier = {
-				name = Salt_Throne
-				duration = -1
-					}
+					name = Salt_Throne
+					duration = -1
+				}
 			}
 		}
 	}
-			
-	
-	
-	
-	
 }
-			

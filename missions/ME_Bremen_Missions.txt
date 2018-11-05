@@ -10,9 +10,17 @@ bre_buildings = {
 	bre_bremen_cathedral = {
 		icon = mission_european_church
 		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 1874
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = temple }
+			}
+		}
 		trigger = {
 			treasury = 200
 			adm_tech = 5
+			owns = 1874
 			1874 = {
 				has_building = temple
 			}
@@ -20,6 +28,9 @@ bre_buildings = {
 		effect = {
 			add_treasury = -200
 			1874 = {
+				hidden_effect = {
+					remove_building = temple
+				}
 				add_building = cathedral
 				add_base_tax = 2
 				add_base_production = 2
@@ -31,10 +42,18 @@ bre_buildings = {
 	bre_stadtwaage = {
 		icon = mission_early_game_buildings
 		required_missions = { bre_bremen_cathedral }
+		provinces_to_highlight = {
+			province_id = 1874
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = workshop }
+			}
+		}
 		trigger = {
 			treasury = 100
 			adm_power = 50
 			adm_tech = 8
+			owns = 1874
 			1874 = {
 				has_building = workshop
 			}
@@ -57,8 +76,17 @@ bre_buildings = {
 	bre_cloth_hall = {
 		icon = mission_early_game_buildings
 		required_missions = { bre_stadtwaage }
+		provinces_to_highlight = {
+			province_id = 1874
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = trade_depot }
+				NOT = { development = 30 }
+			}
+		}
 		position = 3
 		trigger = {
+			owns = 1874
 			1874 = {
 				development = 30
 				has_building = trade_depot
@@ -84,7 +112,18 @@ bre_buildings = {
 					value = 20
 				}
 			}
-			has_privateers = yes
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+					}
+				}
+				has_privateers = yes
+			}
+			else = {
+				navy_size = NOR
+			}
 			trade_income_percentage = 0.5
 		}
 		effect = {
@@ -99,12 +138,9 @@ bre_buildings = {
 					name = nor_raided_by_bremen
 					duration = 10950
 				}
-			}
-			every_province = {
-				limit = {
-					owned_by = NOR
+				every_owned_province = {
+					add_devastation = 50
 				}
-				add_devastation = 50
 			}
 		}
 	}
@@ -139,19 +175,44 @@ bre_buildings = {
 				}
 			}
 			4163 = {
-				add_devastation = 50
+				if = {
+					limit = {
+						owned_by = SWE
+					}
+					add_devastation = 50
+				}
 			}
 			3 = {
-				add_devastation  =50
+				if = {
+					limit = {
+						owned_by = SWE
+					}
+					add_devastation = 50
+				}
 			}
 			1 = {
-				add_devastation = 50
+				if = {
+					limit = {
+						owned_by = SWE
+					}
+					add_devastation = 50
+				}
 			}
 			2 = {
-				add_devastation = 50
+				if = {
+					limit = {
+						owned_by = SWE
+					}
+					add_devastation = 50
+				}
 			}
 			1930 = {
-				add_devastation = 50
+				if = {
+					limit = {
+						owned_by = SWE
+					}
+					add_devastation = 50
+				}
 			}
 		}
 	}
@@ -168,7 +229,7 @@ bre_buildings = {
 					value = 20
 				}
 			}
-			corruption = 0
+			NOT = { corruption = 1 }
 			dip_tech = 8
 			dip_power = 100
 			manpower_percentage = 0.8
@@ -260,7 +321,18 @@ bre_navy = {
 		trigger = {
 			stability = 1
 			treasury = 100
-			has_privateers = yes
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+					}
+				}
+				has_privateers = yes
+			}
+			else = {
+				navy_size = 50
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -304,12 +376,9 @@ bre_navy = {
 					duration = 10950
 				}
 				add_treasury = -50
-			}
-			every_province = {
-				limit = {
-					owned_by = HOL
+				every_owned_province = {
+					add_devastation = 50
 				}
-				add_devastation = 50
 			}
 		}
 	}
@@ -319,7 +388,18 @@ bre_navy = {
 		required_missions = { bre_loot_netherlands }
 		position = 5
 		trigger = {
-			has_privateers = yes
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+					}
+				}
+				has_privateers = yes
+			}
+			else = {
+				navy_size = FLA
+			}
 			FLA = {
 				has_spy_network_from = {
 					who = ROOT
@@ -341,12 +421,9 @@ bre_navy = {
 					duration = 10950
 				}
 				add_treasury = -50
-			}
-			every_province = {
-				limit = {
-					owned_by = FLA
+				every_owned_province = {
+					add_devastation = 50
 				}
-				add_devastation = 50
 			}
 		}
 	}
@@ -356,7 +433,18 @@ bre_navy = {
 		required_missions = { bre_loot_flanders }
 		position = 6
 		trigger = {
-			has_privateers = yes
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+					}
+				}
+				has_privateers = yes
+			}
+			else = {
+				navy_size = BUR
+			}
 			BUR = {
 				has_spy_network_from = {
 					who = ROOT
@@ -385,7 +473,12 @@ bre_navy = {
 				add_treasury = -50
 			}
 			89 = {
-				add_devastation = 50
+				if = {
+					limit = {
+						owned_by = BUR
+					}
+					add_devastation = 50
+				}
 			}
 		}
 	}
@@ -406,9 +499,13 @@ bre_army = {
 		trigger = {
 			army_size_percentage = 1
 			manpower_percentage = 0.8
-			BRE = {
+			OR = {
 				alliance_with = HSA
+				NOT = { exists = HSA }
 			}
+		}
+		effect = {
+			add_army_tradition = 10
 		}
 	}
 	
@@ -419,51 +516,51 @@ bre_army = {
 		trigger = {
 			OR = {
 				AND = {
-					VER = {
-						has_opinion = {
-						who = ROOT
+					reverse_has_opinion = {
+						who = VER
 						value = 150
 					}
+					dip_power = 150
+					treasury = 50
+					army_size = VER
 				}
-				dip_power = 150
-				treasury = 50
-				army_size = VER
-			}
-			VER = {
-				exists = no
+				NOT = { exists = VER }
 			}
 		}
-	}
-	effect = {
-		inherit = VER
-		add_dip_power = -150
-		add_treasury = -50
-		1931 = {
-			IF = {
+		effect = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					exists = VER
+				}
+				inherit = VER
+			}
+			add_dip_power = -150
+			add_treasury = -50
+			1931 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 				}
+				add_permanent_claim = ROOT
 			}
-			add_permanent_claim = ROOT
 		}
 	}
+	
 	bre_friesland = {
 		icon = mission_assemble_an_army
 		required_missions = { bre_verden }
 		position = 3
 		provinces_to_highlight = {
 			province_id = 1931
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
-			1931 = {	
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 1931
 		}
 		effect = {
 			add_country_modifier = {
@@ -488,14 +585,34 @@ bre_army = {
 			manpower_percentage = 0.6
 		}
 		effect = {
-			inherit = HAM
+			if = {
+				limit = {
+					exists = HAM
+				}
+				inherit = HAM
+			}
 			add_country_modifier = {
 				name = bre_underhanded
 				duration = 10950
 			}
-			spawn_rebels = {
-				size = 1
-				type = nationalist_rebels
+			44 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					spawn_rebels = {
+						size = 1
+						type = nationalist_rebels
+					}
+				}
+				else = {
+					tooltip = {
+						spawn_rebels = {
+							size = 1
+							type = nationalist_rebels
+						}
+					}
+				}
 			}
 			2997 = {
 				add_permanent_claim = ROOT
@@ -551,13 +668,11 @@ bre_army = {
 		icon = mission_colonial
 		required_missions = { bre_explore_caribbean }
 		position = 7
-		
 		provinces_to_highlight = {
 			colonial_region = colonial_the_carribean
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = ROOT
 		}
-		
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = bre_caribbean.tooltip
@@ -568,7 +683,6 @@ bre_army = {
 				}
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = bre_colonial_rush
@@ -582,11 +696,22 @@ bre_army = {
 		required_missions = { bre_settle_caribbean }
 		position = 8
 		trigger = {
-			484 = {
-				privateer_power = {
-					country = FROM
-					share = 35
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+					}
 				}
+				484 = {
+					privateer_power = {
+						country = FROM
+						share = 35
+					}
+				}
+			}
+			else = {
+				navy_size = 100
 			}
 			num_of_subjects = 1
 			treasury = 750
@@ -621,17 +746,22 @@ bre_more_stuff = {
 				has_opinion = {
 					who = ROOT
 					value = 100
-			}
+				}
 				has_spy_network_from = {
 					who = ROOT
 					value = 50
 				}
 			}
-				treasury = 250
+			treasury = 250
 		}
 		effect = {
 			add_treasury = -250
-			inherit = OLD
+			if = {
+				limit = {
+					exists = OLD
+				}
+				inherit = OLD
+			}
 		}
 	}
 	
@@ -658,23 +788,20 @@ bre_more_stuff = {
 			}
 		}
 		effect = {
-			inherit = LUN
+			if = {
+				limit = {
+					exists = LUN
+				}
+				inherit = LUN
+			}
 			add_corruption = 2
 			add_country_modifier = {
 				name = bre_luneburg
 				duration = 10950
 			}
-			# if = {
-				1857 = {
-					# limit = {
-						# NOT = {
-							# owned_by = ROOT
-							# is_core = ROOT
-						# }
-					# }
-					add_permanent_claim = ROOT
-				}
-			# }
+			1857 = {
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -684,28 +811,18 @@ bre_more_stuff = {
 		position = 4
 		provinces_to_highlight = {
 			province_id = 1857
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
-			1857 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 1857
 		}
 		effect = {
-			# if = {
-				46 = {
-				# limit = {
-					# NOT = {
-						# owned_by = ROOT
-						# is_core = ROOT
-					# }
-				# }
+			46 = {
 				add_permanent_claim = ROOT
-				}
-			# }
+			}
 			add_country_modifier = {
 				name = bre_lauenburg_domination
 				duration = 10950
@@ -718,36 +835,23 @@ bre_more_stuff = {
 		required_missions = { bre_saxe_lauenburg, bre_netherlands }
 		position = 5
 		provinces_to_highlight = {
-			AND = {
+			OR = {
 				province_id = 46
 				province_id = 2996
 			}
-            NOT = {
-                country_or_non_sovereign_subject_holds = ROOT
-            }
+            OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
         }
 		trigger = {
-			46 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			2996 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 46
+			owns_core_province = 2996
 		}
 		effect = {
-			# if = {
-				45 = {
-					# limit = {
-						# NOT = {
-							# owned_by = ROOT
-							# is_core = ROOT
-						# }
-					# }
-					add_permanent_claim = ROOT
-				}
-			# }
+			45 = {
+				add_permanent_claim = ROOT
+			}
 			add_country_modifier = {
 				name = bre_mecklenburg_domination
 				duration = 10950
@@ -761,15 +865,13 @@ bre_more_stuff = {
 		position = 6
 		provinces_to_highlight = {
 			province_id = 45
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
-			45 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 45
 		}
 		effect = {
 			add_country_modifier = {
@@ -842,7 +944,7 @@ bre_yet_more_stuff = {
 		}
 	}
 	
-	bre_eat_my_ass = {
+	bre_very_clean = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { bre_baltic }
 		position = 5

@@ -3,7 +3,7 @@ Hamburg_missions_1 = {
 	ai = yes
 	generic = no
 	potential = {
-			tag = HAM
+		tag = HAM
 	}
 	has_country_shield = yes
 	
@@ -20,17 +20,32 @@ Hamburg_missions_1 = {
 			add_adm_power = 50
 		}
 	}
+	
 	Hamburg_join_hansa = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Hamburg_amass_wealth }
 		position = 5
 		trigger = {
-			OR = {
-				reverse_has_opinion = {
-					who = HSA
-					value = 100
+			if = {
+				limit = {
+					has_dlc = "Mare Nostrum"
 				}
-				is_in_trade_league = HSA
+				OR = {
+					reverse_has_opinion = {
+						who = HSA
+						value = 100
+					}
+					is_in_trade_league_with = HSA
+				}
+			}
+			else = {
+				OR = {
+					reverse_has_opinion = {
+						who = HSA
+						value = 100
+					}
+					alliance_with = HSA
+				}
 			}
 		}
 		effect = {
@@ -40,6 +55,7 @@ Hamburg_missions_1 = {
 			}
 		}
 	}
+	
 	Hamburg_city = {
 		icon = mission_early_game_buildings
 		required_missions = { Hamburg_join_hansa }
@@ -57,12 +73,13 @@ Hamburg_missions_1 = {
 		}
 	}
 }
+
 Hamburg_missions_2 = {
 	slot = 2
 	ai = yes
 	generic = no
 	potential = {
-			tag = HAM
+		tag = HAM
 	}
 	has_country_shield = yes
 	
@@ -80,6 +97,7 @@ Hamburg_missions_2 = {
 			}
 		}
 	}
+	
 	Hamburg_trade_node = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Hamburg_trade_fleet }
@@ -100,13 +118,16 @@ Hamburg_missions_2 = {
 		}
 	}
 }
+
 Hamburg_missions_3 = {
 	slot = 3
 	ai = yes
 	generic = no
 	potential = {
-			tag = HAM
+		tag = HAM
 	}
+	has_country_shield = yes
+	
 	Hamburg_Army = {
 		icon = mission_assemble_an_army
 		required_missions = { Hamburg_join_hansa }
@@ -120,6 +141,7 @@ Hamburg_missions_3 = {
 			add_mil_power = 100
 		}
 	}
+	
 	Hamburg_Allies = {
 		icon = mission_assemble_an_army
 		required_missions = { Hamburg_Army }
@@ -131,27 +153,22 @@ Hamburg_missions_3 = {
 			4141 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	Hamburg_Dith = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { Hamburg_Allies }
 		position = 8
 		provinces_to_highlight = {
-			OR = {
-				province_id = 4141
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 4141
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			4141 = {
@@ -168,17 +185,14 @@ Hamburg_missions_3 = {
 			}
 		}
 	}
+	
 	Hamburg_Home_area = {
 		icon = mission_unite_home_region
 		required_missions = { Hamburg_Dith }
 		position = 9
 		provinces_to_highlight = {
-			OR = {
-				area = lower_saxony_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = lower_saxony_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			lower_saxony_area = {
@@ -196,17 +210,14 @@ Hamburg_missions_3 = {
 			}
 		}
 	}
-	Hamburg_Weser= {
+	
+	Hamburg_Weser = {
 		icon = mission_cannons_firing
-		required_missions = { Hamburg_Dith }
+		required_missions = { Hamburg_Home_area }
 		position = 10
 		provinces_to_highlight = {
-			OR = {
-				area = weser_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = weser_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			weser_area = {

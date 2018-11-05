@@ -15,11 +15,10 @@ aachen_missions_1 = {
 		icon = AAC_M4
 		required_missions = { }
 		position = 7
-		
 		trigger = { grown_by_development = 20 }
 		effect = { 
 			lower_rhineland_area = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { is_core = ROOT }
 						NOT = { owned_by = ROOT }
@@ -29,29 +28,46 @@ aachen_missions_1 = {
 			}
 		}
 	}
+	
 	aachen_lower_rheinland_ambitions_trier = {
 		icon = AAC_M5
 		required_missions = { aachen_grows }
 		position = 8
 		provinces_to_highlight = {
 			province_id = 80
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			if = {
+				limit = {
+					80 = {
+						NOT = { is_core = ROOT }
+					}
+				}
+				adm_power = 200
+			}
 			80 = {
 				owned_by = ROOT
 			}
 		}
 		effect = {
-			80 = {
-				add_core = ROOT
+			if = {
+				limit = {
+					80 = {
+						NOT = { is_core = ROOT }
+					}
+				}
 				add_adm_power = -200
+				80 = {
+					add_core = ROOT
+				}
 			}
-			
+			else = {
+				add_prestige = 10
+			}
 		}
 	}
+	
 	aachen_take_pfalz = {
 		icon = AAC_M7
 		required_missions = { aachen_lower_rheinland_ambitions_trier }
@@ -61,9 +77,7 @@ aachen_missions_1 = {
 				province_id = 78
 				province_id = 1761
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			OR = {
@@ -77,7 +91,7 @@ aachen_missions_1 = {
 		}
 		effect = {
 			palatinate_area = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { is_core = ROOT }
 						NOT = { owned_by = ROOT }
@@ -87,15 +101,14 @@ aachen_missions_1 = {
 			}
 		}
 	}
+	
 	aachen_finish_palatinate = {
 		icon = AAC_M8
 		required_missions = { aachen_take_pfalz }
 		position = 11
 		provinces_to_highlight = {
 			area = palatinate_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			palatinate_area = {
@@ -104,10 +117,22 @@ aachen_missions_1 = {
 			}
 		}
 		effect = {
-			1878 = { #aachen
-				add_base_tax = 2
-				add_base_production = 1
-				add_base_manpower = 1
+			if = {
+				limit = {
+					owns = 1878
+				}
+				1878 = { #aachen
+					add_base_tax = 2
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+			else = {
+				capital_scope = {
+					add_base_tax = 2
+					add_base_production = 1
+					add_base_manpower = 1
+				}
 			}
 		}
 	}
@@ -128,31 +153,46 @@ aachen_missions_2 = {
 		position = 8
 		provinces_to_highlight = {
 			province_id = 1760
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			if = {
+				limit = {
+					1760 = {
+						NOT = { is_core = ROOT }
+					}
+				}
+				adm_power = 200
+			}
 			1760 = {
 				owned_by = ROOT
 			}
 		}
 		effect = {
-			1760 = {
-				add_core = ROOT
+			if = {
+				limit = {
+					1760 = {
+						NOT = { is_core = ROOT }
+					}
+				}
 				add_adm_power = -200
+				1760 = {
+					add_core = ROOT
+				}
+			}
+			else = {
+				add_prestige = 10
 			}
 		}
 	}
+	
 	aachen_take_koln_area = {
 		icon = AAC_M9
 		required_missions = { aachen_lower_rheinland_ambitions_coblenz }
 		position = 9
 		provinces_to_highlight = {
 			province_id = 85
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			85 = { #koln
@@ -161,7 +201,7 @@ aachen_missions_2 = {
 		}
 		effect = {
 			north_rhine_area = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { is_core = ROOT }
 						NOT = { owned_by = ROOT }
@@ -171,15 +211,14 @@ aachen_missions_2 = {
 			}
 		}
 	}
+	
 	aachen_finish_north_rhine = {
 		icon = AAC_M10
 		required_missions = { aachen_take_koln_area }
 		position = 11
 		provinces_to_highlight = {
 			area = north_rhine_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			north_rhine_area = {
@@ -188,27 +227,42 @@ aachen_missions_2 = {
 			}
 		}
 		effect = {
-			1878 = { #aachen
-				add_base_tax = 2
-				add_base_manpower = 1
+			if = {
+				limit = {
+					owns = 1878
+				}
+				1878 = { #aachen
+					add_base_tax = 2
+					add_base_manpower = 1
+				}
+			}
+			else = {
+				capital_scope = {
+					add_base_tax = 2
+					add_base_manpower = 1
+				}
 			}
 		}
 	}
 }
-aachen_missions_3 = {
+
+aachen_missions_3_CS = {
 	slot = 3
 	generic = no
 	ai = yes
+	potential_on_load = {
+		has_dlc = "Common Sense"
+	}
 	potential = {
 		tag = AAC
+		has_dlc = "Common Sense"
 	}
-	
 	has_country_shield = yes
+	
 	aachen_coronation_capital = {
 		icon = AAC_M1	
 		required_missions = { }
 		position = 8
-		
 		trigger = {
 			emperor = {
 				has_opinion = {
@@ -217,22 +271,31 @@ aachen_missions_3 = {
 				}
 			}
 			diplomatic_reputation = 4
-			government = imperial_city
+			has_reform = free_city
 		}
 		effect = {
 			custom_tooltip = aachen_coronation_capital_effect.tooltip
 			set_global_flag = aachen_coronation_city #allows prestige for Aachen on imperial succession event to proc always for Aachen
 		}
 	}
+}
+	
+aachen_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = AAC
+	}
+	has_country_shield = yes
+	
 	aachen_take_nassau = {
 		icon = AAC_M11
 		required_missions = { aachen_lower_rheinland_ambitions_coblenz }
 		position = 9
 		provinces_to_highlight = {
 			province_id = 83
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			83 = { #nassau
@@ -248,6 +311,7 @@ aachen_missions_3 = {
 			}
 		}
 	}
+	
 	aachen_finish_hesse = {
 		icon = AAC_M12
 		required_missions = { aachen_take_nassau }
@@ -257,9 +321,7 @@ aachen_missions_3 = {
 				province_id = 81
 				province_id = 1762
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			81 = {
@@ -275,15 +337,14 @@ aachen_missions_3 = {
 			}
 		}
 	}
+	
 	aachen_conquer_frankfurt = {
 		icon = AAC_M13
 		required_missions = { aachen_finish_hesse }
 		position = 11
 		provinces_to_highlight = {
 			province_id = 1876
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			1876 = {
@@ -312,7 +373,6 @@ aachen_missions_4 = {
 		icon = AAC_M16
 		required_missions = { }
 		position = 8
-		
 		trigger = {
 			stability = 1
 			custom_trigger_tooltip = {
@@ -335,6 +395,7 @@ aachen_missions_4 = {
 			}
 		}
 	}
+	
 	aachen_electorate = {
 		icon = AAC_M15
 		required_missions = {
@@ -342,12 +403,6 @@ aachen_missions_4 = {
 			aachen_lower_rheinland_ambitions_trier
 		}
 		position = 9
-		provinces_to_highlight = {
-			owned_by = TRI
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
 		trigger = {
 			NOT = { exists = TRI }
 			OR = {
@@ -357,14 +412,14 @@ aachen_missions_4 = {
 			will_back_next_reform = yes
 		}
 		effect = {
-			IF = {
+			if = {
 				limit = { is_elector = yes }
 				add_country_modifier = {
 					name = "elector_claimant"
 					duration = 3650
 				}
 			}
-			ELSE = {
+			else = {
 				elector = yes
 			}
 		}
@@ -382,9 +437,7 @@ aachen_form_francia_mission = {
 	
 	aachen_make_francia = {
 		icon = AAC_M17
-		required_missions = {
-			
-		}
+		required_missions = { }
 		position = 6
 		trigger = {
 			hre_reform_level = 2
@@ -402,14 +455,11 @@ aachen_form_francia_mission = {
 		icon = AAC_M2
 		required_missions = { }
 		position = 7
-		
 		trigger = {
 			OR = {
-				any_province = {
-					AND = {
-						trade_goods  = cloth
-						has_building = workshop
-					}
+				any_owned_province = {
+					trade_goods  = cloth
+					has_building = workshop
 				}
 				1876 = {
 					trade_share = {
@@ -426,11 +476,11 @@ aachen_form_francia_mission = {
 			}
 		}
 	}
+	
 	aachen_dominate_cloth_trade = {
 		icon = AAC_M3
 		required_missions = { aachen_enter_cloth_trade }
 		position = 8
-		
 		trigger = {
 			OR = {
 				trading_bonus = {

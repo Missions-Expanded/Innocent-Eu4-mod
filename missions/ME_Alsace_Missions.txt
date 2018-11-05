@@ -1,4 +1,4 @@
-als_one = {
+ALS_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -9,9 +9,17 @@ als_one = {
 	
 	als_resist_foreign_invaders = {
 		icon = mission_conquer_50_development
+		provinces_to_highlight = {
+			province_id = 75
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
 		trigger = {
+			owns = 75
 			75 = {
-				has_building = fort_15th
+				fort_level = 2
 			}
 		}
 		effect = {
@@ -49,18 +57,14 @@ als_one = {
 				province_id = 188
 				province_id = 189
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			188 = {
-				owned_by = ROOT
-				is_core = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			189 = {
-				owned_by = ROOT
-				is_core = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		} 
 		effect = {
@@ -88,14 +92,11 @@ als_one = {
 		position = 5
 		provinces_to_highlight = {
 			province_id = 193
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			193 = {
-				owned_by = ROOT
-				is_core = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -107,7 +108,7 @@ als_one = {
 	}
 }
 
-als_five = {
+ALS_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -118,14 +119,28 @@ als_five = {
 	
 	als_strasbourg = {	
 		icon = mission_european_church
+		provinces_to_highlight = {
+			province_id = 75
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			treasury = 50
 			prestige = 5
 			adm_power = 50
+			owns = 75
 		}
 		effect = {
 			75 = {
-				add_building = temple
+				if = {
+					limit = {
+						NOT = { has_building = temple }
+						NOT = { has_building = cathedral }
+					}
+					add_building = temple
+				}
+				else = {
+					add_base_tax = 2
+				}
 			}
 		}
 	}
@@ -135,11 +150,9 @@ als_five = {
 		required_missions = { als_strasbourg }
 		position = 3
 		trigger = {
-			ALS = {
-				has_institution = renaissance
-			}
-			HAB = {
-				has_opinion = {
+			has_institution = renaissance
+			emperor = {
+				reverse_has_opinion = {
 					who = ROOT
 					value = 100
 				}
@@ -157,7 +170,15 @@ als_five = {
 		icon = mission_university
 		required_missions = { als_renaissance }
 		position = 5
+		provinces_to_highlight = {
+			province_id = 75
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
 		trigger = {
+			owns = 75
 			75 = {
 				has_building = university
 			}
@@ -169,69 +190,6 @@ als_five = {
 			}
 			add_adm_power = 100
 			add_army_tradition = 15
-		}
-	}
-}
-
-als_three = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		tag = ALS
-	}
-	has_country_shield = yes
-	
-	als_form_swabia = {
-		icon = mission_empire
-		required_missions = { swa_recover_from_wars }
-		position = 7
-		trigger = {
-			is_at_war = no
-			70 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			74 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			68 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			OR = {
-				1880 = {
-					owned_by = ROOT
-					is_core = ROOT
-				}
-				1868 = {
-					owned_by = ROOT
-					is_core = ROOT
-				}
-			}
-			SWB = {
-				exists = no
-			}
-		}
-		effect = {
-			change_tag = SWB
-			swap_non_generic_missions = yes
-			add_country_modifier = {
-				name = "centralization_modifier"
-				duration = 7300
-			}
-			add_prestige = 50
-			set_country_flag = formed_swabia_flag
-			if = {
-				limit = { has_custom_ideas = no }
-				country_event = { id = ideagroups.1 } #Swap Ideas
-			}
-			add_country_modifier = {
-				name = wur_united_swabia
-				duration = -1
-			}
-			add_prestige = 50
 		}
 	}
 }

@@ -1,0 +1,476 @@
+brittany_missions_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+	}
+	has_country_shield = yes
+	
+	BRI_side_with_england = {
+		icon = mission_alliances
+		position = 1
+		required_missions = { }
+		trigger = {
+			alliance_with = ENG
+			custom_trigger_tooltip = {
+				tooltip = NOT_FLAG_FRA
+				NOT = {
+					has_country_flag = brittany_france
+				}
+			}
+		}
+		effect = {		
+			set_country_flag = brittany_england
+			ENG = {
+				create_guarantee = BRI
+			}	
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+brittany_missions_england = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+		has_country_flag = brittany_england
+	}
+	has_country_shield = yes
+	
+	BRI_make_england_likey = {
+		icon = mission_noble_council
+		position = 2
+		required_missions = { BRI_side_with_england }
+		trigger = {
+			if = {
+				limit = { exists = ENG }
+				NOT = { is_rival = ENG }
+				ENG = {
+					NOT = { is_rival = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 175
+					}
+				}
+			}
+			alliance_with = ENG
+		}
+		effect = {		
+			if = {
+				limit = { 
+					has_dlc = "The Cossacks"
+				}	
+				add_trust = {
+					who = ENG
+					value = 10
+					mutual = yes
+				}	
+			}
+			else = {
+				add_dip_power = 125
+			}	
+		}
+	}
+	
+	BRI_marry_england = {
+		icon = mission_monarch_in_throne_room
+		position = 3
+		required_missions = { BRI_make_england_likey }
+		trigger = {
+			marriage_with = ENG
+			alliance_with = ENG
+		}
+		effect = {		
+			add_country_modifier = {
+				name = BRI_royal_marriages
+				duration = 7300
+			}
+		}
+	}
+	
+	BRI_call_england_into_war = {
+		icon = mission_build_up_to_force_limit
+		position = 4
+		required_missions = { BRI_marry_england }
+		trigger = {
+			any_neighbor_country = {
+				is_in_war = {
+					attackers = ROOT
+					attackers = ENG
+				}
+			}
+			alliance_with = ENG				
+		}
+		effect = {		
+			random_neighbor_country = {
+				limit = {
+					war_with = ROOT
+				}
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+					cede_province = ROOT
+				}
+			}
+		}
+	}
+	
+	BRI_use_england_for_france = {
+		icon = mission_conquer_50_development
+		position = 5
+		required_missions = { BRI_call_england_into_war }
+		trigger = {
+			FRA = {
+				is_in_war = {
+					attackers = ROOT
+					attackers = ENG
+				}
+			}			
+		}
+		effect = {		
+			FRA = {
+				if = {
+					limit = {
+						war_with = ROOT
+						any_owned_province = {
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+						}
+						cede_province = ROOT
+					}
+				}
+			}
+			FRA = {
+				if = {
+					limit = {
+						war_with = ROOT
+						war_with = ENG
+						any_owned_province = {
+							any_neighbor_province = {
+								owned_by = ENG
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							any_neighbor_province = {
+								owned_by = ENG
+							}
+						}
+						cede_province = ENG
+					}
+				}
+			}
+		}
+	}
+}
+
+brittany_missions_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+		has_country_flag = brittany_england
+	}
+	has_country_shield = yes
+	
+	BRI_force_england_into_pu = {
+		icon = BRI_M2
+		position = 4
+		required_missions = { BRI_marry_england }
+		trigger = {
+			senior_union_with = ENG
+		}
+		effect = {		
+			add_country_modifier = {
+				name = BRI_has_junior_partner
+				duration = 18250
+			}	
+		}
+	}
+}
+
+brittany_missions_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+	}
+	has_country_shield = yes
+	
+	BRI_side_with_france = {
+		icon = mission_alliances
+		position = 1
+		required_missions = { }
+		trigger = {
+			alliance_with = FRA
+			custom_trigger_tooltip = {
+				tooltip = NOT_FLAG_ENG
+				NOT = {
+					has_country_flag = brittany_england
+				}
+			}
+		}
+		effect = {		
+			set_country_flag = brittany_france
+			FRA = {
+				create_guarantee = BRI
+			}
+			swap_non_generic_missions = yes
+		}
+	}
+}
+
+brittany_missions_france = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+		has_country_flag = brittany_france
+	}
+	has_country_shield = yes
+	
+	BRI_make_france_likey = {
+		icon = mission_have_two_subjects
+		position = 2
+		required_missions = { BRI_side_with_france }
+		trigger = {
+			if = {
+				limit = { exists = FRA }
+				NOT = { is_rival = FRA }
+				FRA = {
+					NOT = { is_rival = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 175
+					}
+				}
+			}
+			alliance_with = FRA	
+		}
+		effect = {		
+			if = {
+				limit = { 
+					has_dlc = "The Cossacks"
+				}	
+				add_trust = {
+					who = FRA
+					value = 10
+					mutual = yes
+				}	
+			}
+			else = {
+				add_dip_power = 125
+			}			
+		}
+	}
+	
+	BRI_marry_france = {
+		icon = mission_empire
+		position = 3
+		required_missions = { BRI_make_france_likey }
+		trigger = {
+			marriage_with = FRA
+			alliance_with = FRA
+		}
+		effect = {		
+			add_country_modifier = {
+				name = BRI_royal_marriages
+				duration = 7300
+			}	
+		}
+	}
+	
+	BRI_call_france_into_war = {
+		icon = mission_assemble_an_army
+		position = 4
+		required_missions = { BRI_marry_france }
+		trigger = {
+			any_neighbor_country = {
+				is_in_war = {
+					attackers = ROOT
+					attackers = FRA
+				}
+			}
+			alliance_with = FRA			
+		}
+		effect = {		
+			random_neighbor_country = {
+				limit = {
+					war_with = ROOT
+				}
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+					}
+					cede_province = ROOT
+				}
+			}
+			
+		}
+	}
+	
+	BRI_use_france_for_england = {
+		icon = mission_cannons_firing
+		position = 5
+		required_missions = { BRI_call_france_into_war }
+		trigger = {
+			ENG = {
+				is_in_war = {
+					attackers = ROOT
+					attackers = FRA
+				}
+			}			
+		}
+		effect = {		
+			ENG = {
+				if = {
+					limit = {
+						war_with = ROOT
+						any_owned_province = {
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+						}
+						cede_province = ROOT
+					}
+				}
+			}
+			ENG = {
+				if = {
+					limit = {
+						war_with = ROOT
+						war_with = FRA
+						any_owned_province = {
+							any_neighbor_province = {
+								owned_by = FRA
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							any_neighbor_province = {
+								owned_by = FRA
+							}
+						}
+						cede_province = FRA
+					}
+				}
+			}
+		}
+	}
+}
+
+brittany_missions_slot_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+		has_country_flag = brittany_france
+	}
+	has_country_shield = yes
+	
+	BRI_force_france_into_pu = {
+		icon = BRI_M1
+		position = 4
+		required_missions = { BRI_marry_france }
+		trigger = {
+			senior_union_with = FRA
+		}
+		effect = {		
+			add_country_modifier = {
+				name = BRI_has_junior_partner
+				duration = 18250
+			}	
+		}
+	}
+}
+
+brittany_missions_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = BRI
+	}
+	has_country_shield = yes
+	
+	BRI_anjou = {
+		icon = BRI_M4
+		position = 1
+		required_missions = { }
+		trigger = {
+			178 = {
+				owner = {
+					is_in_war = {
+						attackers = ROOT
+						defenders = THIS
+					}
+				}
+			}	
+		}
+		effect = {		
+			178 = {
+				cede_province = ROOT
+			}
+		}
+	}
+	
+	BRI_the_norman_coast = {
+		icon = BRI_M3
+		position = 2
+		required_missions = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 178
+				province_id = 168
+				province_id = 4385
+			}	
+			OR = {
+                NOT = { owned_by = ROOT }
+                NOT = { is_core = ROOT }
+            }
+		}
+		trigger = {
+			owns_core_province = 177
+			owns_core_province = 168
+			owns_core_province = 4385
+		}
+		effect = {		
+			wessex_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}	

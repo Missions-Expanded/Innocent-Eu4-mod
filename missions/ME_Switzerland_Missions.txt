@@ -21,48 +21,68 @@ swiss_missions_1 = {
 				province_id = 1867
 				province_id = 1871
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 2
-		
 		trigger = {
 			1867 = { #vaud
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			1871 = { #wallis
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			1871 = {#wallis
-				add_building_construction = {
-					building = fort_15th
-					speed = 0.5
-					cost = 0
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.5
+						cost = 0
+					}
 				}
 				add_base_manpower = 3
 			}
 			add_prestige = 10
 		}
 	}
+	
 	swi_mission_2 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
 			swi_mission_1
 		}
 		provinces_to_highlight = {
+			province_id = 1873
 			OR = {
-				province_id = 1873
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 4 }
+				AND = {
+					has_dlc = "Common Sense"
+					OR = {
+						NOT = { development = 11 }
+						NOT = { base_manpower = 3 }
+					}
+				}
 			}
 		}
 		position = 4
-		
 		trigger = {
+			owns = 1873
 			1873 = {#grabuden
-				base_manpower = 3
-				development = 11
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_manpower = 3
+					development = 11
+				}
 				fort_level = 4
 			}
 		}
@@ -75,6 +95,7 @@ swiss_missions_1 = {
 			}
 		}
 	}
+	
 	swi_mission_3 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
@@ -86,36 +107,51 @@ swiss_missions_1 = {
 				area = switzerland_area
 				area = romandie_area
 			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 12 }
+				}
+			}
 		}
 		position = 5
-		
 		trigger = {
-			# all_owned_province = {
-				# limit = {
-					# area = switzerland_area
-					# area = romandie_area
-				# }
-				# development = 12
-			# }
-			switzerland_area = {
-				type = all
-				development = 12
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				switzerland_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					development = 12
+				}
+				romandie_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+					development = 12
+				}
 			}
-			romandie_area = {
-				type = all
-				development = 12
+			else = {
+				total_development = 100
+				switzerland_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				romandie_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {
 			switzerland_area = {
-				# type = all
 				add_province_modifier = {
 					name = swi_developing
 					duration = -1
 				}
 			}
 			romandie_area = {
-				# type = all
 				add_province_modifier = {
 					name = swi_developing
 					duration = -1
@@ -123,76 +159,81 @@ swiss_missions_1 = {
 			}
 		}
 	}
+	
 	swi_mission_4 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
 			swi_mission_3
 		}
 		provinces_to_highlight = {
-			OR = {
-				province_id = 193
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 193
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 6
-		
 		trigger = {
 			OR = {
 				BUR = { exists = no }
 				193 = {#franche-comte
-					owned_by = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 		}
 		effect = {
 			165 = {
-				add_province_modifier = {
-					name = swi_fortified_alps
-					duration = -1
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = swi_fortified_alps
+						duration = -1
+					}
 				}
 			}
 			add_mil_power = 50
 		}
 	}
+	
 	swi_mission_8 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
 			swi_mission_4
 		}
-		provinces_to_highlight = {
-			OR = {
-				owned_by = FRA
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
 		position = 6
-		
 		trigger = {
-			war_score_against = {
-				who = FRA
-				value = 15
+			OR = {
+				NOT = { exists = FRA }
+				war_score_against = {
+					who = FRA
+					value = 15
+				}
 			}
 		}
 		effect = {
 			switzerland_area = {
-				# type = all
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = swi_developing_4
 					duration = -1
 				}
 			}
 			romandie_area = {
-				# type = all
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = swi_developing_4
 					duration = -1
 				}
 			}
-			white_peace = FRA
+			if = {
+				limit = {
+					war_with = FRA
+				}
+				white_peace = FRA
+			}
 		}
 	}
 }
@@ -212,60 +253,74 @@ swiss_missions_3 = {
 			swi_mission_3
 		}
 		provinces_to_highlight = {
-			OR = {
-				province_id = 72
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 72
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 6
-		
 		trigger = {
 			72 = {#baden
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			1870 = {
-				add_building_construction = {
-					building = fort_15th
-					speed = 0.5
-					cost = 0
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					if = {
+						limit = {
+							NOT = { has_building = fort_15th }
+							NOT = { has_building = fort_16th }
+							NOT = { has_building = fort_17th }
+							NOT = { has_building = fort_18th }
+						}
+						add_building_construction = {
+							building = fort_15th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else = {
+						add_base_manpower = 2
+					}
+				}
+				else = {
+					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	swi_mission_9 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
 			swi_mission_6
 		}
 		provinces_to_highlight = {
-			OR = {
-				province_id = 1880
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 1880
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 6
-		
 		trigger = {
 			1880 = {#sundgau
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			switzerland_area = {
-				# type = all
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = swi_developing_3
 					duration = -1
 				}
 			}
 			romandie_area = {
-				# type = all
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = swi_developing_3
 					duration = -1
@@ -273,6 +328,7 @@ swiss_missions_3 = {
 			}
 		}
 	}
+	
 	swi_mission_10 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
@@ -285,32 +341,35 @@ swiss_missions_3 = {
 				area = switzerland_area
 				area = romandie_area
 			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { fort_level = 3 }
+			}
 		}
 		position = 6
-		
 		trigger = {
 			NOT = { num_of_provinces_in_states = 15 }
 			stability = 1
 			switzerland_area = {
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 				fort_level = 3				
 			}
 			romandie_area = {
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 				fort_level = 3
 			}
-			development = 300
+			total_development = 300
 		}
 		effect = {
 			switzerland_area = {
-				# type = all
 				add_province_modifier = {
 					name = swi_fortress
 					duration = -1
 				}
 			}
 			romandie_area = {
-				# type = all
 				add_province_modifier = {
 					name = swi_fortress
 					duration = -1
@@ -335,30 +394,29 @@ swiss_missions_5 = {
 			swi_mission_3
 		}
 		provinces_to_highlight = {
-			OR = {
-				province_id = 73
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 73
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 6
-		
 		trigger = {
 			73 = {#tyrol
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			switzerland_area = {
-				# type = all
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = swi_developing_2
 					duration = -1
 				}
 			}
 			romandie_area = {
-				# type = all
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = swi_developing_2
 					duration = -1
@@ -366,24 +424,20 @@ swiss_missions_5 = {
 			}
 		}
 	}
+	
 	swi_mission_7 = {
 		icon = mission_build_up_to_force_limit	
 		required_missions = {
 			swi_mission_5
 		}
 		provinces_to_highlight = {
-			OR = {
-				province_id = 104
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 104
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 6
-		
 		trigger = {
 			104 = {#milan
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
