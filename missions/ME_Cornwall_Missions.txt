@@ -12,7 +12,7 @@ Cornwall_missions_1 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			NOT = { is_subject = yes }
+			is_subject = no
 		}
 		effect = {
 			4373 = {
@@ -20,10 +20,15 @@ Cornwall_missions_1 = {
 			}
 		}
 	}
+	
 	Cornwall_Conquer = {
 		icon = mission_unite_home_region
 		required_missions = { Cornwall_Declare }
 		position = 2
+		provinces_to_highlight = {
+			province_id = 4373
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			4373 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -35,10 +40,15 @@ Cornwall_missions_1 = {
 			}
 		}
 	}
+	
 	Cornwall_Align = {
 		icon = mission_alliances
 		required_missions = { Cornwall_Conquer }
 		position = 3
+		provinces_to_highlight = {
+			area = wales_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			OR = {
 				alliance_with = WLS
@@ -52,10 +62,8 @@ Cornwall_missions_1 = {
 			4130 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -63,20 +71,26 @@ Cornwall_missions_1 = {
 			4374 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	Cornwall_Cornwall = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { Cornwall_Align }
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4130
+				province_id = 4374
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			4130 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -89,10 +103,8 @@ Cornwall_missions_1 = {
 			239 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -113,10 +125,19 @@ Cornwall_missions_1 = {
 			}
 		}
 	}
+	
 	Cornwall_England = {
 		icon = mission_conquer_50_development
 		required_missions = { Cornwall_Cornwall }
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 239
+				area = wessex_area
+				area = home_counties_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			239 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -161,13 +182,26 @@ Cornwall_missions_1 = {
 			}
 		}
 	}
+	
 	Cornwall_Celts = {
 		icon = mission_alliances
 		required_missions = { Cornwall_England }
 		position = 6
+		provinces_to_highlight = {
+			region = british_isles_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { culture = welsh }
+					NOT = { culture = irish }
+					NOT = { culture = highland_scottish }
+				}
+			}
+		}
 		trigger = {
 			british_isles_region = {
 				type = all
+				owned_by = ROOT
 				OR = {
 					culture = welsh
 					culture = irish
