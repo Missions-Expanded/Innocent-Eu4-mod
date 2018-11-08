@@ -15,38 +15,116 @@ gdansk_tree = {
 		}
 		effect = {
 			43 = {
-				add_base_manpower = 2
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_manpower = 2
+				}
+				else = {
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
+	
 	Gdansk_Join_Hansa = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Gdansk_Join_HRE }
 		trigger = {
-			OR = {
-				reverse_has_opinion = {
-					who = HSA
-					value = 80
+			if = {
+				limit = {
+					has_dlc = "Mare Nostrum"
 				}
-				is_in_trade_league_with = HSA
+				OR = {
+					reverse_has_opinion = {
+						who = HSA
+						value = 80
+					}
+					is_in_trade_league_with = HSA
+				}
+			}
+			else = {
+				OR = {
+					reverse_has_opinion = {
+						who = HSA
+						value = 80
+					}
+					alliance_with = HSA
+				}
 			}
 		}
 		effect = {
 			43 = {
-				add_base_production = 1
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 1
+				}
+				else = {
+					add_core = ROOT
+				}
 			}
 		}
 	}
+	
 	Gdansk_be_a_free_city = {
 		icon = mission_early_game_buildings
 		required_missions = { Gdansk_Join_Hansa }
 		trigger = {
-			has_reform = free_city
-			OR = {
-				43 = {
-					development = 20
+			owns = 43
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+					has_dlc = "Mare Nostrum"
 				}
-				is_in_trade_league_with = HSA
+				has_reform = free_city
+				OR = {
+					43 = {
+						development = 20
+					}
+					is_in_trade_league_with = HSA
+				}
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Common Sense"
+					NOT = { has_dlc = "Mare Nostrum" }
+				}
+				has_reform = free_city
+				OR = {
+					43 = {
+						development = 20
+					}
+					alliance_with = HSA
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { has_dlc = "Common Sense" }
+					has_dlc = "Mare Nostrum"
+				}
+				government = republic
+				is_part_of_hre = yes
+				NOT = { num_of_cities = 2 }
+				OR = {
+					is_in_trade_league_with = HSA
+					43 = {
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
+			}
+			else = {
+				government = republic
+				is_part_of_hre = yes
+				NOT = { num_of_cities = 2 }
+				OR = {
+					alliance_with = HSA
+					43 = {
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+				}
 			}
 		}
 		effect = {
@@ -55,6 +133,7 @@ gdansk_tree = {
 			}
 		}
 	}
+	
 	Gdansk_trade_fleet = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Gdansk_be_a_free_city }
@@ -62,13 +141,24 @@ gdansk_tree = {
 			num_of_light_ship = 10
 		}
 		effect = {
-			43 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
+			if = {
+				limit = {
+					43 = {
+						owned_by = ROOT
+					}
+				}
+				43 = {
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+			else = {
+				add_navy_tradition = 15
 			}
 		}
 	}
+	
 	Gdansk_control_baltic_sea = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Gdansk_trade_fleet }

@@ -1,5 +1,5 @@
-cyp_slot_3 = {
-	slot = 3
+cyp_slot_1 = {
+	slot = 1
 	generic = no
 	ai = yes
 	potential = {
@@ -7,157 +7,50 @@ cyp_slot_3 = {
 	}
 	has_country_shield = yes
 	
-	cyp_defend = {
+	cyp_greek_league = {
 		icon = mission_assemble_an_army
-		required_missions = { }
-		trigger = {
-			is_year = 1450
-			fort_15th = 1
-		}
-		effect = {
-			add_army_tradition = 10
-			add_navy_tradition = 10
-			add_dip_power = 50
-		}
-	}
-
-	cyp_last_crusade = {
-		icon = mission_assemble_an_army
-		required_missions = { cyp_defend }
-		trigger = {
-			religion = catholic
-			reverse_has_opinion = { who = PAP value = 30 }
-			NOT = { culture = greek }
-		}
-		effect = {
-		}
-	}
-
-	cyp_approve_crusade = {
-		icon = mission_assemble_an_army
-		required_missions = { cyp_last_crusade }
-		trigger = {
-			reverse_has_opinion = { who = PAP value = 80 }
-		}
-		effect = {
-			set_global_flag = deus_vult
-			palestine_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	cyprus_palestine = {
-		icon = mission_assemble_an_army
-		required_missions = { cyp_approve_crusade }
-		provinces_to_highlight = {
-			area = palestine_area
-		}
-		trigger = {
-			palestine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			aleppo_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	cyprus_antioch = {
-		icon = mission_assemble_an_army
-		required_missions = { cyprus_palestine }
-		provinces_to_highlight = {
-			area = aleppo_area
-		}
-		trigger = {
-			aleppo_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			syria_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	cyprus_deus_vult = {
-		icon = jerusalem
-		required_missions = { cyprus_antioch }
-		provinces_to_highlight = {
-			area = syria_area
-		}
-		trigger = {
-			syria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = the_deus_vult
-				duration = 7300
-			}
-		}
-	}
-}
-
-cyp_slot_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		tag = CYP
-	}
-	has_country_shield = yes
-	
-	cyp_crusading_army = {
-		icon = mission_assemble_an_army
-		required_missions = { cyp_last_crusade }
+		required_missions = { cyp_become_greek }
 		position = 3
 		trigger = {
-			army_size_percentage = 1
-			mil = 5
-			mil_power = 100
+			legitimacy_equivalent = 50
 		}
 		effect = {
-			add_country_modifier = {
-				name = crusading_army
-				duration = -1
-			}
-			add_mil_power = -100
+			change_government = republic
+			add_government_reform = greek_league_reform
 		}
 	}
-
-	cyp_crusading_navy = {
+	
+	cyp_navy = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_crusading_army }
+		required_missions = { cyp_greek_league }
 		trigger = {
 			navy_size_percentage = 1
-			mil = 5
+			DIP = 5
 			dip_power = 100
 		}
 		effect = {
 			add_country_modifier = {
-				name = crusading_navy
+				name = greek_navy
 				duration = -1
 			}
+			add_dip_power = -100
+		}
+	}
+	
+	cyp_army = {
+		icon = mission_assemble_an_army
+		required_missions = { cyp_navy }
+		trigger = {
+			army_size_percentage = 1
+			MIL = 5
+			mil_power = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = greek_army
+				duration = -1
+			}
+			add_mil_power = -100
 		}
 	}
 }
@@ -183,7 +76,7 @@ cyp_slot_2 = {
 			change_primary_culture = greek
 			add_dip_power = -50
 			320 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { is_core = ROOT }
 						NOT = { owned_by = ROOT }
@@ -199,6 +92,7 @@ cyp_slot_2 = {
 		required_missions = { cyp_become_greek }
 		provinces_to_highlight = {
 			province_id = 320
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			320 = {
@@ -207,7 +101,7 @@ cyp_slot_2 = {
 		}
 		effect = {
 			163 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { is_core = ROOT }
 						NOT = { owned_by = ROOT }
@@ -217,11 +111,13 @@ cyp_slot_2 = {
 			}
 		}
 	}
+	
 	cyp_crete = {
 		icon = aegeianArchipelago
 		required_missions = { cyp_take_rhodes }
 		provinces_to_highlight = {
-			province_id = 153
+			province_id = 163
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			163 = {
@@ -244,6 +140,7 @@ cyp_slot_2 = {
 		required_missions = { cyp_crete }
 		provinces_to_highlight = {
 			area = aegean_archipelago_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			aegean_archipelago_area = {
@@ -277,6 +174,7 @@ cyp_slot_2 = {
 				area = northern_greece_area
 				area = morea_area
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			morea_area = {
@@ -297,8 +195,8 @@ cyp_slot_2 = {
 	}
 }
 
-cyp_slot_1 = {
-	slot = 1
+cyp_slot_3 = {
+	slot = 3
 	generic = no
 	ai = yes
 	potential = {
@@ -306,50 +204,166 @@ cyp_slot_1 = {
 	}
 	has_country_shield = yes
 	
-	cyp_greek_league = {
+	cyp_defend = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_become_greek }
-		position = 3
+		required_missions = { }
 		trigger = {
-			always = yes
+			is_year = 1450
+			OR = {
+				fort_15th = 1
+				fort_16th = 1
+				fort_17th = 1
+				fort_18th = 1
+			}
 		}
 		effect = {
-			change_government = republic
-			add_government_reform = greek_league_reform
+			add_army_tradition = 10
+			add_navy_tradition = 10
+			add_dip_power = 50
+		}
+	}
+
+	cyp_last_crusade = {
+		icon = mission_assemble_an_army
+		required_missions = { cyp_defend }
+		trigger = {
+			religion = catholic
+			reverse_has_opinion = { who = PAP value = 30 }
+			NOT = { culture = greek }
+		}
+		effect = {
+			add_papal_influence = 20
+		}
+	}
+
+	cyp_approve_crusade = {
+		icon = mission_assemble_an_army
+		required_missions = { cyp_last_crusade }
+		trigger = {
+			reverse_has_opinion = { who = PAP value = 80 }
+		}
+		effect = {
+			set_global_flag = deus_vult
+			palestine_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
-	cyp_navy = {
+	cyprus_palestine = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_greek_league }
+		required_missions = { cyp_approve_crusade }
+		provinces_to_highlight = {
+			area = palestine_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			navy_size_percentage = 1
-			dip = 5
-			dip_power = 100
+			palestine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			aleppo_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	cyprus_antioch = {
+		icon = mission_assemble_an_army
+		required_missions = { cyprus_palestine }
+		provinces_to_highlight = {
+			area = aleppo_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			syria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	cyprus_deus_vult = {
+		icon = jerusalem
+		required_missions = { cyprus_antioch }
+		provinces_to_highlight = {
+			area = syria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			syria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = greek_navy
-				duration = -1
+				name = the_deus_vult
+				duration = 7300
 			}
-			add_dip_power = -100
 		}
 	}
+}
+
+cyp_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CYP
+	}
+	has_country_shield = yes
 	
-	cyp_army = {
+	cyp_crusading_army = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_navy }
+		required_missions = { cyp_last_crusade }
+		position = 3
 		trigger = {
 			army_size_percentage = 1
-			mil = 5
+			MIL = 5
 			mil_power = 100
 		}
 		effect = {
 			add_country_modifier = {
-				name = greek_army
+				name = crusading_army
 				duration = -1
 			}
 			add_mil_power = -100
+		}
+	}
+
+	cyp_crusading_navy = {
+		icon = mission_assemble_an_army
+		required_missions = { cyp_crusading_army }
+		trigger = {
+			navy_size_percentage = 1
+			mil = 5
+			dip_power = 100
+		}
+		effect = {
+			add_country_modifier = {
+				name = crusading_navy
+				duration = -1
+			}
 		}
 	}
 }
