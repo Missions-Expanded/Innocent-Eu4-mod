@@ -1,4 +1,4 @@
-cultural_centre = {
+TUS_LAN_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -9,16 +9,17 @@ cultural_centre = {
 		}
 	}
 	has_country_shield = yes
+
 	birthplace_of_renaissance_mission = {
 		icon = mission_religious
-		required_missions = {  } 
+		required_missions = {  }
 		trigger = {
 			advisor = artist
 			has_institution = renaissance
 			OR = {
 				innovativeness_ideas = 1
 				humanist_ideas = 1
-				any_province = {
+				any_owned_province = {
 					is_institution_origin = renaissance
 				}
 			}
@@ -30,32 +31,50 @@ cultural_centre = {
 				add_base_production = 1
 				add_province_modifier = {
 					name = "renaissance_centre"
-					duration = 9125	
-					}
+					duration = 9125
 				}
-			}	
-		}
-		
-	cultural_centre_of_europe_mission = {
-		icon = mission_european_church
-		required_missions = { birthplace_of_renaissance_mission }
-		trigger = {
-		prestige = 75
-		adm_tech = 6
-		}
-		effect = {
-			
-			116 = {
-				add_building = cathedral
-				add_building = university
 			}
 		}
 	}
+
+	cultural_centre_of_europe_mission = {
+		icon = mission_european_church
+		required_missions = { birthplace_of_renaissance_mission }
+		provinces_to_highlight = {
+			province_id = 116
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 116
+			prestige = 75
+			adm_tech = 6
+		}
+		effect = {
+			116 = {
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 1
+				}
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+			}
+		}
+	}
+
 	renaissance_humanism_mission = {
 		icon = mission_early_game_buildings
 		required_missions = { cultural_centre_of_europe_mission }
 		trigger = {
-			or ={
+			OR = {
 				full_idea_group = innovativeness_ideas
 				full_idea_group = humanist_ideas
 				AND = {
@@ -68,33 +87,59 @@ cultural_centre = {
 				}
 
 			}
-		}	
+		}
 		effect = {
 			add_country_modifier = {
 				name = "humanism"
 				duration = -1
 			}
 		}
-	}	
+	}
+
 	reform_science_mission = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { renaissance_humanism_mission }
 		position = 5
-		trigger = {
+		provinces_to_highlight = {
+			is_capital_of = ROOT
 			OR = {
-				AND = {
-					capital_scope = {
-						printing_press = 100
-						has_owner_culture = yes
-					}
-					has_institution = printing_press
+				has_owner_culture = no
+				NOT = { printing_press = 100 }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
 				}
-				any_province = {
-					development = 40
+				OR = {
+					AND = {
+						capital_scope = {
+							printing_press = 100
+							has_owner_culture = yes
+						}
+						has_institution = printing_press
+					}
+					any_owned_province = {
+						development = 40
+					}
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						capital_scope = {
+							printing_press = 100
+							has_owner_culture = yes
+						}
+						has_institution = printing_press
+					}
+					any_owned_province = {
+						province_has_at_least_num_of_buildings = { amount = 5 }
+					}
 				}
 			}
 			advisor = natural_scientist
-
 		}
 		effect = {
 			add_country_modifier = {
@@ -103,6 +148,7 @@ cultural_centre = {
 			}
 		}
 	}
+
 	take_tunis = {
 		icon = mission_arabian_fort
 		required_missions = { }
@@ -112,8 +158,9 @@ cultural_centre = {
 				area = tunisia_area
 				area = djerba_area
 			}
-		}		
-		trigger = {	
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
 			tunisia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -137,16 +184,17 @@ cultural_centre = {
 					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}		
+			}
 			add_country_modifier = {
 				name = "lan_new_muslim_army"
 				duration = 10950
-				}
-						341 = {
-						add_base_manpower = 1
-						}			
+			}
+			341 = {
+				add_base_manpower = 1
 			}
 		}
+	}
+
 	conquer_libya = {
 		icon = mission_non-western_soldiers
 		required_missions = { take_tunis }
@@ -156,8 +204,9 @@ cultural_centre = {
 				area = tripolitania_area
 				area = cyrenaica_area
 			}
-		}		
-		trigger = {	
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
 			tripolitania_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -169,33 +218,38 @@ cultural_centre = {
 		}
 		effect = {
 			tunisia_area = {
-				limit = { owned_by = ROOT }
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = "lan_convert_the_muslims"
 					duration = 5475
 				}
 			}
 			djerba_area = {
-				limit = { owned_by = ROOT }
+				limit = {
+					owned_by = ROOT
+				}
 				add_province_modifier = {
 					name = "lan_convert_the_muslims"
 					duration = 5475
 				}
-			}					
 			}
 		}
+	}
+
 	lan_colony_in_north_america = {
 		icon = mission_colonial
-		required_missions = { conquer_libya
-						establish_in_guinea
-						}		
+		required_missions = { conquer_libya establish_in_guinea }
 		provinces_to_highlight = {
 			colonial_region = colonial_eastern_america
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
-		
-		trigger = { 
+		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = miss_colonize_eastern_america
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -205,14 +259,13 @@ cultural_centre = {
 				}
 			}
 		}
-	
 		effect = {
 			create_conquistador = 80
 		}
 	}
-}	
-	
-oserva = {
+}
+
+TUS_LAN_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -222,13 +275,14 @@ oserva = {
 			tag = TUS
 		}
 	}
-	has_country_shield = yes		
+	has_country_shield = yes
+
 	secular_state_mission = {
 		icon = mission_alliances
 		required_missions = { reform_science_mission }
 		position = 6
 		trigger = {
-			adm = 2
+			ADM = 2
 			monthly_income = 30
 			OR = {
 				NOT = {
@@ -238,15 +292,16 @@ oserva = {
 					}
 				}
 				NOT = { dominant_religion = catholic }
-			}			
+			}
 		}
 		effect = {
 			add_country_modifier = {
 				name = "florentian_secular_state"
 				duration = 10950
-				}
 			}
 		}
+	}
+
 	establish_in_guinea = {
 		icon = mission_invade_island
 		required_missions = { take_tunis }
@@ -254,23 +309,22 @@ oserva = {
 		provinces_to_highlight = {
 			region = guinea_region
 			has_discovered = ROOT
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}		
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 5
-					region = guinea_region
-				}			
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				region = guinea_region
 			}
+		}
 		effect = {
-				add_country_modifier = {
-					name = "lan_africa"
-					duration = 5475
-				}
+			add_country_modifier = {
+				name = "lan_africa"
+				duration = 5475
 			}
-		}	
+		}
+	}
+
 	conquer_north = {
 		icon = mission_cannons_firing
 		required_missions = { claim_risorgimento }
@@ -281,9 +335,10 @@ oserva = {
 				area = lombardy_area
 				area = liguria_area
 				area = piedmont_area
-				}
-			}	
-		trigger = {	
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
 			venetia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -300,17 +355,17 @@ oserva = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-		}	
+		}
 		effect = {
 			add_country_modifier = {
 				name = "signore_del_nord"
 				duration = 10950
-				}
 			}
 		}
-	}	
+	}
+}
 
-non_farmi_perdere_tempo = {
+TUS_LAN_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -320,17 +375,16 @@ non_farmi_perdere_tempo = {
 			tag = TUS
 		}
 	}
-	has_country_shield = yes	
+	has_country_shield = yes
+
 	claim_risorgimento = {
 		icon = mission_monarch_in_throne_room
-		required_missions = { annex_papacy
-						secular_state_mission
-						}
-		position = 7				
-		trigger = {	
+		required_missions = { annex_papacy secular_state_mission }
+		position = 7
+		trigger = {
 			army_size = 40
 			num_of_generals = 2
-			mil = 3
+			MIL = 3
 		}
 		effect = {
 			lombardy_area = {
@@ -389,11 +443,11 @@ non_farmi_perdere_tempo = {
 				}
 				add_permanent_claim = ROOT
 			}
-			}
 		}
-}		
+	}
+}
 
-il_mio_potere = {
+TUS_LAN_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -403,26 +457,30 @@ il_mio_potere = {
 			tag = TUS
 		}
 	}
-	has_country_shield = yes	
+	has_country_shield = yes
+
 	annex_papacy = {
 		icon = mission_conquer_50_development
 		required_missions = { conquer_emilia_romagna }
 		position = 6
 		provinces_to_highlight = {
-			OR = {
 			province_id = 118
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
-		trigger = {	
-		owns_core_province = 118
+		trigger = {
+			owns_core_province = 118
 		}
 		effect = {
 			add_country_modifier = {
 				name = "signore_di_roma"
 				duration = 10950
-				}
 			}
 		}
+	}
+
 	conquer_south = {
 		icon = mission_cannons_firing
 		required_missions = { claim_risorgimento }
@@ -432,9 +490,10 @@ il_mio_potere = {
 				area = apulia_area
 				area = calabria_area
 				area = sicily_area
-				}
-			}	
-		trigger = {	
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
 			apulia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -447,17 +506,17 @@ il_mio_potere = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-		}	
+		}
 		effect = {
 			add_country_modifier = {
 				name = "signore_del_sud"
 				duration = 10950
-				}
 			}
 		}
-	}	
-		
-great_influence = {
+	}
+}
+
+TUS_LAN_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -467,7 +526,8 @@ great_influence = {
 			tag = TUS
 		}
 	}
-	has_country_shield = yes	
+	has_country_shield = yes
+
 	lan_leave_the_empire = {
 		icon = mission_empire
 		required_missions = { }
@@ -478,31 +538,31 @@ great_influence = {
 			117 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+
 	pacify_siena = {
 		icon = mission_have_two_subjects
 		required_missions = { lan_leave_the_empire }
 		position = 3
-			provinces_to_highlight = {
+		provinces_to_highlight = {
+			province_id = 117
 			OR = {
-			province_id = 117					
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
-		
-		trigger = { 
-			owns_core_province = 117 						
-		} 
+		trigger = {
+			owns_core_province = 117
+		}
 		effect = {
-			add_dip_power = 100		
+			add_dip_power = 100
 			2980 = {
 				add_core = ROOT
 			}
@@ -514,39 +574,36 @@ great_influence = {
 				add_permanent_claim = ROOT
 			}
 			add_country_modifier = {
-			name = "florentian_tuscany" 
-			duration = 18250 
-			} 
-		} 
+				name = "florentian_tuscany"
+				duration = 18250
+			}
+		}
 	}
+
  	conquer_emilia_romagna = {
 		icon = mission_cannons_firing
 		required_missions = { pacify_siena }
 		position = 5
-			provinces_to_highlight = {
-			OR = {
-				area = emilia_romagna_area
-			}
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
-		trigger = { 
+		trigger = {
 			emilia_romagna_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			} 
-		}	
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		effect = {
 			118 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
-		} 
+		}
 	}
-}	
+}
