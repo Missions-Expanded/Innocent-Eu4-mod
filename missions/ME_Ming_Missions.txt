@@ -1,25 +1,22 @@
 Ming_Missions_1 = {
-	
-	Slot = 1
-	Generic = no
+	slot = 1
+	generic = no
 	ai = yes
-	
 	potential = {
 		tag = MNG
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	Grand_Imperial_Army_And_Navy = {
 		icon = mission_assemble_an_army
 		required_missions = { }
 		position = 1
-		
 		trigger = {
 			army_size_percentage = 0.75
 			navy_size_percentage = 1
 			manpower_percentage = 0.5
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Legendary_Hongwu_Reforms"
@@ -32,7 +29,6 @@ Ming_Missions_1 = {
 		icon = mission_non-western_cavalry_raid
 		required_missions = { Grand_Imperial_Army_And_Navy }
 		position = 2
-		
 		trigger = {
 			OR = {
 				war_with = OIR
@@ -75,7 +71,6 @@ Ming_Missions_1 = {
 				}
 			}
 		}
-	
 		effect = {
 			ordos_area = {
 				limit = {
@@ -118,20 +113,21 @@ Ming_Missions_1 = {
 			}
 		}
 	}
-	
+
 	Eliminating_The_Horde_Threat = {
 		icon = mission_cossack_cavalry
-		required_missions = { Grand_Imperial_Army_And_Navy }
-		required_missions = { Tumu_Crisis_And_The_Ming_Mongols }
+		required_missions = { Grand_Imperial_Army_And_Navy Tumu_Crisis_And_The_Ming_Mongols }
 		position = 3
-		
+		provinces_to_highlight = {
+			province_id = 460
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			NOT = { exists = OIR }
 			NOT = { exists = CHG }
 			NOT = { exists = KAS }
-			460 = { owned_by = ROOT }
+			owns = 460
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Victory_Over_Hordes"
@@ -147,7 +143,6 @@ Ming_Missions_1 = {
 	The_Shogunate_Campaign = {
 		icon = mission_japanese_samurai
 		position = 4
-		
 		trigger = {
 			any_country = {
 				war_with = ROOT
@@ -159,68 +154,104 @@ Ming_Missions_1 = {
 			num_of_heavy_ship = 25
 			army_size = 100
 		}
-	
 		effect = {
 			japan_region = {
 				limit = {
 					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
+
 	Reenforce_The_Garrisons_With_The_Hong_Wu = {
 		icon = mission_conquer_50_development
 		position = 5
-		
+		provinces_to_highlight = {
+			OR = {
+				province_id = 702
+				province_id = 2183
+				province_id = 2170
+				province_id = 2136
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
 			advisor = fortification_expert
 			defensive_ideas = 5
 			702 = {
-				has_building = fort_15th
+				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
+			}
 			2183 = {
-				has_building = fort_15th
+				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
+			}
 			2170 = {
-				has_building = fort_15th
+				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
+			}
 			2136 = {
-				has_building = fort_15th
+				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
 				}
+			}
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Hongwu_Fortifications"
-					duration = -1
+				duration = -1
 			}
 		}
 	}
-	
+
 	Pioneers_In_The_Eastern_Artillery = {
 		icon = mission_cannons_firing
 		position = 6
-		
 		trigger = {
 			mil_tech = 7
 			num_of_artillery = 25
 			army_tradition = 80
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Pioneering_Artillery"
-					duration = 5475
+				duration = 5475
 			}
 		}
 	}
-	
+
 	Subjugate_The_Great_Four = {
 		icon = mission_emperor_of_hindusthan
 		position = 7
-		
 		trigger = {
 			OR = {
 				exists = VIJ
@@ -229,49 +260,70 @@ Ming_Missions_1 = {
 				exists = BNG
 			}
 			army_size_percentage = 1
-			Imperial_Mandate = 80	
+			is_emperor_of_china = yes
+			imperial_mandate = 80
 		}
-	
 		effect = {
-			add_casus_belli = {
+			if = {
+				limit = {
+					exists = VIJ
+					NOT = { overlord_of = VIJ }
+				}
+				add_casus_belli = {
 					target = VIJ
 					type = cb_force_tributary
 				}
-			add_casus_belli = {
+			}
+			if = {
+				limit = {
+					exists = BAH
+					NOT = { overlord_of = BAH }
+				}
+				add_casus_belli = {
 					target = BAH
 					type = cb_force_tributary
 				}
-			add_casus_belli = {
+			}
+			if = {
+				limit = {
+					exists = JNP
+					NOT = { overlord_of = JNP }
+				}
+				add_casus_belli = {
 					target = JNP
 					type = cb_force_tributary
 				}
-			add_casus_belli = {
+			}
+			if = {
+				limit = {
+					exists = BNG
+					NOT = { overlord_of = BNG }
+				}
+				add_casus_belli = {
 					target = BNG
 					type = cb_force_tributary
 				}
+			}
 		}
-	}	
+	}
 
 }
 
 Ming_Missions_2 = {
-	
-	Slot = 2
-	Generic = no
+	slot = 2
+	generic = no
 	ai = yes
-	
 	potential = {
 		tag = MNG
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	Reestablish_The_Nurgal_Regional_Military_Commision = {
 		icon = mission_fortify_rajputana
 		position = 1
-		
 		trigger = {
 			calc_true_if = {
-				amount = 2
 				OIR = { vassal_of = ROOT }
 				KHA = { vassal_of = ROOT }
 				KRC = { vassal_of = ROOT }
@@ -279,11 +331,11 @@ Ming_Missions_2 = {
 				MYR = { vassal_of = ROOT }
 				MJZ = { vassal_of = ROOT }
 				KAS = { vassal_of = ROOT }
+				amount = 2
 			}
 			advisor = statesman
 			army_size = 70
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Nurgal_Regional_Military_Commision"
@@ -296,13 +348,11 @@ Ming_Missions_2 = {
 		icon = mission_bengal_entrepot
 		required_missions = { }
 		position = 2
-		
 		trigger = {
 			advisor = trader
 			num_of_light_ship = 15
 			trade_ideas = 1
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Grand_Treasure_Fleet"
@@ -313,7 +363,7 @@ Ming_Missions_2 = {
 				fire = 4
 				manuever = 6
 				siege = 2
-				name = "Zheng_He"
+				name = "Zheng He"
 			}
 		}
 	}
@@ -322,7 +372,6 @@ Ming_Missions_2 = {
 		icon = mission_junk_boat
 		required_missions = { Construct_The_Grand_Treasure_Fleet }
 		position = 3
-		
 		trigger = {
 			has_leader_with = {
 				admiral = yes
@@ -331,9 +380,8 @@ Ming_Missions_2 = {
 				manuever = 6
 				siege = 2
 			}
-			num_of_transports = 15
+			num_of_transport = 15
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Show_Ming_Grandieur"
@@ -342,23 +390,51 @@ Ming_Missions_2 = {
 		}
 	}
 
-	
+
 	Make_Contact_With_Moluccas_Monarchs = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { }
 		position = 4
-		
-		trigger = {
-			owns = 2699
-			2699 = { colonysize = 10 }
-			747 = {
-				country_or_vassal_holds = ROOT
-			}
-			728 = {
-				country_or_vassal_holds = ROOT
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 747
+						province_id = 728
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 2699
+					OR = {
+						AND = {
+							NOT = { controlled_by = ROOT }
+							controller = {
+								NOT = { is_subject_of = ROOT }
+							}
+						}
+						NOT = { colonysize = 10 }
+					}
+				}
 			}
 		}
-	
+		trigger = {
+			2699 = {
+				OR = {
+					controlled_by = ROOT
+					controller = {
+						is_subject_of = ROOT
+					}
+				}
+				colonysize = 10
+			}
+			747 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			728 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		effect = {
 			add_country_modifier = {
 				name = "Pioneering_In_Unknown_Lands"
@@ -366,17 +442,34 @@ Ming_Missions_2 = {
 			}
 		}
 	}
-	
+
 	Tails_Of_The_People_Beyond = {
 		icon = mission_indian_stateman
 		required_missions = { Make_Contact_With_Moluccas_Monarchs }
 		position = 5
-		
-		trigger = {
-			owns = 1988
-			1988 = { colonysize = 400 }
+		provinces_to_highlight = {
+			province_id = 1988
+			OR = {
+				AND = {
+					NOT = { controlled_by = ROOT }
+					controller = {
+						NOT = { is_subject_of = ROOT }
+					}
+				}
+				NOT = { colonysize = 400 }
+			}
 		}
-	
+		trigger = {
+			1988 = {
+				colonysize = 400
+				OR = {
+					controlled_by = ROOT
+					controller = {
+						is_subject_of = ROOT
+					}
+				}
+			}
+		}
 		effect = {
 			add_country_modifier = {
 				name = "Influx_Of_Settlers"
@@ -384,23 +477,28 @@ Ming_Missions_2 = {
 			}
 		}
 	}
-	
+
 	New_Shores_And_Civilizations = {
 		icon = mission_iberian_conquistador
 		required_missions = { Tails_Of_The_People_Beyond }
 		position = 6
-		
+		provinces_to_highlight = {
+			OR = {
+				region = cascadia_region
+				region = california_region
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			OR = {
-				any_owned_province = {
-					region = cascadia
+				cascadia_region = {
+					country_or_non_sovereign_subject_holds = ROOT
 				}
-				any_owned_province = {
-					region = california
+				california_region = {
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
-		}	
-	
+		}
 		effect = {
 			add_country_modifier = {
 				name = "Multicultural_Exchanges"
@@ -413,25 +511,32 @@ Ming_Missions_2 = {
 		icon = mission_war_chest
 		required_missions = { New_Shores_And_Civilizations }
 		position = 7
-		
+		provinces_to_highlight = {
+			OR = {
+				colonial_region = colonial_alaska
+				colonial_region = colonial_california
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
 		trigger = {
 			colony = 1
 			OR = {
-				custom_trigger_tooltip = {
-					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-						value = 10
-						colonial_region = colonial_alaska
-						is_city = yes
-					}
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 10
+					colonial_region = colonial_alaska
+					is_city = yes
 				}
-				custom_trigger_tooltip = {
-					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-						value = 15
-						colonial_region = colonial_california
-						is_city = yes
-					}
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 15
+					colonial_region = colonial_california
+					is_city = yes
+				}
+			}
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Extensive_Colonialism"
@@ -442,29 +547,64 @@ Ming_Missions_2 = {
 }
 
 Ming_Missions_3 = {
-	
-	Slot = 3
-	Generic = no
+	slot = 3
+	generic = no
 	ai = yes
-	
 	potential = {
 		tag = MNG
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
 	Conclude_The_Transition = {
 		icon = mission_have_two_subjects
 		position = 1
-		
-		trigger = {
-			1816 = {
-			development = 35
-			has_building = temple
-			has_building = dock
-			has_building = marketplace
+		provinces_to_highlight = {
+			province_id = 1816
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
-	
+		trigger = {
+			owns = 1816
+			1816 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 35
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 4 }
+				}
+			}
+		}
 		effect = {
 			set_capital = 1816
 			1816 = {
@@ -481,75 +621,103 @@ Ming_Missions_3 = {
 			}
 		}
 	}
-	
+
 	Ming_Renaissance = {
 		icon = mission_empire
 		required_missions = { Conclude_The_Transition }
 		position = 2
-		
 		trigger = {
 			is_year = 1455
-			any_owned_province = { 
+			any_owned_province = {
 				renaissance = 100
 			}
-			calc_true_if = {
-				amount = 3
-				any_owned_province = {
-					development = 30 
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				calc_true_if = {
+					all_owned_province = {
+						development = 30
+					}
+					amount = 3
 				}
 			}
+			else = {
+				calc_true_if = {
+					all_owned_province = {
+						province_has_at_least_num_of_buildings = { amount = 3 }
+					}
+					amount = 3
+				}
+			}
+			is_emperor_of_china = yes
 			imperial_mandate = 65
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Spread_Of_Technological_And_Innovative_Ideas"
 				duration = 7300
 			}
 		}
-		
+
 	}
 
 	Huang_Ming_Zuxun_Preface = {
 		icon = mission_high_income
 		required_missions = { Ming_Renaissance }
 		position = 3
-		
 		trigger = {
 			advisor = treasurer
-			temple = 10
-			calc_true_if = {
-                any_owned_province = {
-                    is_prosperous = yes
-                }
-                amount = 6
-            }
+			OR = {
+				temple = 10
+				cathedral = 10
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				calc_true_if = {
+					all_owned_province = {
+						custom_trigger_tooltip = {
+							tooltip = IS_PROSPEROUS
+							is_prosperous = yes
+						}
+					}
+					amount = 6
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_owned_province = {
+						NOT = { unrest = 0 }
+						NOT = { nationalism = 1 }
+					}
+					amount = 6
+				}
+			}
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Proper_Application_Of_The_Preface"
 				duration = 7300
 			}
 		}
-		
 	}
-	
+
 	Curb_The_Power_Of_The_Eunuchs = {
 		icon = mission_alliances
 		position = 4
-		
 		trigger = {
+			is_emperor_of_china = yes
 			imperial_mandate = 60
 			NOT = {
 				estate_influence = {
-				estate = estate_church
-				influence = 50
+					estate = estate_church
+					influence = 50
 				}
 			}
 			empire_of_china_reform_level = 1
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Absolute_Imperial_Reign"
@@ -568,58 +736,63 @@ Ming_Missions_3 = {
 				duration = 7300
 			}
 		}
-		
 	}
-	
+
 	The_Legitimate_Right_To_Rule_From_Heaven = {
 		icon = mission_monarch_in_throne_room
 		position = 5
-		
 		trigger = {
+			is_emperor_of_china = yes
 			imperial_mandate = 100
 			meritocracy = 90
 			num_of_subjects = 25
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Legitimate_Mandate"
 				duration = 7300
 			}
 		}
-		
 	}
 
 	Masters_Of_The_Printing_Press = {
 		icon = mission_have_manufactories
 		position = 6
-		
 		trigger = {
-			any_owned_province = { 
+			any_owned_province = {
 				printing_press = 100
 			}
 			any_owned_province = {
-				development = 30 
 				trade_goods = paper
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 30
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 3 }
+					has_manufactory_trigger = yes
+				}
 			}
 			advisor = natural_scientist
+			is_emperor_of_china = yes
 			imperial_mandate = 65
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "New_Printing_Techniques_And_Encyclopedias"
 				duration = 7300
 			}
 		}
-		
 	}
+
 	Commemmorating_The_Passing_Of_Hong_Wu = {
 		icon = mission_manchu_warrior
 		position = 7
-		
 		trigger = {
 			is_year = 1490
+			is_emperor_of_china = yes
 			empire_of_china_reform_level = 2
 			grown_by_development = 100
 			OR = {
@@ -631,13 +804,11 @@ Ming_Missions_3 = {
 				expansion_ideas = 7
 			}
 		}
-	
 		effect = {
 			add_country_modifier = {
 				name = "Famous_Lineage_And_History"
 				duration = -1
 			}
 		}
-		
 	}
-} 
+}
