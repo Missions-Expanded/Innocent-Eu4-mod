@@ -137,10 +137,25 @@ fra_2 = {
 			}
 		}
 		effect = {
-			add_casus_belli = {
-				target = PRO
-				type = cb_restore_personal_union
-				months = 600
+			if = {
+				limit = {
+					exists = PRO
+					NOT = { overlord_of = PRO }
+				}
+				add_casus_belli = {
+					target = PRO
+					type = cb_restore_personal_union
+					months = 600
+				}
+			}
+			else = {
+				provence_area = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -149,16 +164,9 @@ fra_2 = {
 		required_missions = { fra_gascony }
 		icon = mission_monarch_in_throne_room
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					NOT = { exists = PRO }
-				}
-				area = provence_area
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			}
-			else = {
-				always = no
-			}
+			NOT = { exists = PRO }
+			area = provence_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			if = {
@@ -282,25 +290,31 @@ fra_2 = {
 			}
 			else = {
 				120 = {
-					# limit = {
-					# NOT = { owned_by = ROOT	}
-					# NOT = { is_core = ROOT	}
-					# }
-					add_permanent_claim = ROOT
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT	}
+							NOT = { is_core = ROOT	}
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 				121 = {
-					# limit = {
-					# NOT = { owned_by = ROOT	}
-					# NOT = { is_core = ROOT	}
-					# }
-					add_permanent_claim = ROOT
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT	}
+							NOT = { is_core = ROOT	}
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 				2983 = {
-					# limit = {
-					# NOT = { owned_by = ROOT	}
-					# NOT = { is_core = ROOT	}
-					# }
-					add_permanent_claim = ROOT
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT	}
+							NOT = { is_core = ROOT	}
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 				apulia_area = {
 					limit = {
@@ -325,22 +339,15 @@ fra_2 = {
 		required_missions = { fra_lombardy }
 		icon = mission_monarch_in_throne_room
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					ROOT = { NOT = { overlord_of = NAP } }
-				}
-				OR = {
-					province_id = 120
-					province_id = 121
-					province_id = 2983
-					area = apulia_area
-					area = calabria_area
-				}
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = { NOT = { overlord_of = NAP } }
+			OR = {
+				province_id = 120
+				province_id = 121
+				province_id = 2983
+				area = apulia_area
+				area = calabria_area
 			}
-			else = {
-				always = no
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			OR = {
@@ -650,11 +657,13 @@ fra_4 = {
 		}
 		effect = {
 			87 = {
-				# limit = {
-				# NOT = { owned_by = ROOT	}
-				# NOT = { is_core = ROOT	}
-				# }
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT	}
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -740,6 +749,7 @@ fra_4 = {
 		icon = mission_colonial
 		provinces_to_highlight = {
 			colonial_region = colonial_canada
+			has_discovered = ROOT
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -824,7 +834,7 @@ fra_4 = {
 		}
 		trigger = {
 			1165 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -845,6 +855,7 @@ fra_4 = {
 		icon = mission_establish_high_seas_navy
 		provinces_to_highlight = {
 			region = deccan_region
+			has_discovered = ROOT
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -1230,7 +1241,33 @@ napoleon_3 = {
 			NOT = { controlled_by = ROOT }
 		}
 		trigger = {
-			war_with = RUS
+			if = {
+				limit = {
+					exists = RUS
+				}
+				war_with = RUS
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+				}
+				war_with = MOS
+			}
+			else_if = {
+				limit = {
+					NOT = { owns = 295 }
+					295 = {
+						owner = {
+							NOT = { is_subject_of = ROOT }
+						}
+					}
+				}
+				295 = {
+					owner = {
+						war_with = ROOT
+					}
+				}
+			}
 			controls = 295
 		}
 		effect = {
