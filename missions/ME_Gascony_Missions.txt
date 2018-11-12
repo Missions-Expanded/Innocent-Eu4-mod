@@ -22,12 +22,13 @@ Gascony_missions_1 = {
 			}
 		}
 	}
+	
 	Gascony_Indepedence = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { Gascony_Army }
 		position = 6
 		trigger = {
-			NOT = { is_subject = yes }
+			is_subject = no
 		}
 		effect = {
 			add_country_modifier = {
@@ -36,13 +37,33 @@ Gascony_missions_1 = {
 			}
 		}
 	}
+	
 	Gascony_claim = {
 		icon = mission_alliances
 		required_missions = { Gascony_Indepedence }
 		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2753
+				area = poitou_area
+			}
+			NOT = { is_claim = ROOT }
+			NOT = { is_core = ROOT }
+		}
 		trigger = {
-				is_claim = 2753
-				is_claim = poitou_area
+			2753 = {
+				OR = {
+					is_claim = ROOT
+					is_core = ROOT
+				}
+			}
+			poitou_area = {
+				type = all
+				OR = {
+					is_claim = ROOT
+					is_core = ROOT
+				}
+			}
 		}
 		effect = {
 			poitou_area = {
@@ -65,10 +86,15 @@ Gascony_missions_1 = {
 			}
 		}
 	}
+	
 	Gascony_Poitou = {
 		icon = mission_cannons_firing
 		required_missions = { Gascony_claim }
 		position = 8
+		provinces_to_highlight = {
+			area = poitou_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			poitou_area = {
 				type = all
@@ -77,21 +103,55 @@ Gascony_missions_1 = {
 		}
 		effect = {
 			poitou_area = {
-				change_culture = gascon
+				change_culture = ROOT
 			}
 		}
 	}
+	
 	Gascony_Sheep = {
 		icon = mission_trade_company_region_abroad
 		required_missions = { }
 		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 175
+				province_id = 176
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 18 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 2 } }
+				}
+			}
+		}
 		trigger = {
 			175 = {
-				development = 18
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 18
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+				}
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			176 = {
-				development = 18
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 18
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+				}
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -101,28 +161,82 @@ Gascony_missions_1 = {
 			add_mil_power = 40
 		}
 	}
+	
 	Gascony_Livestock = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { }
 		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 198
+				province_id = 195
+				province_id = 180
+				province_id = 4387
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 13 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_building_of_group = { group = all all = yes } }
+				}
+			}
+		}
 		trigger = {
-			198 = {
-				development = 13
-				country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				198 = {
+					development = 13
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				195 = {
+					development = 13
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				180 = {
+					development = 13
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				4387 = {
+					development = 13
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
-			195 = {
-				development = 13
-				country_or_non_sovereign_subject_holds = ROOT
+			else = {
+				198 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				195 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				180 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				4387 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
-			180 = {
-				development = 13
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4387 = {
-				development = 13
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			
 		}
 		effect = {
 			add_dip_power = 80
@@ -131,6 +245,7 @@ Gascony_missions_1 = {
 		}
 	}
 }
+
 Gascony_missions_2 = {
 	slot = 2
 	generic = no
@@ -144,13 +259,14 @@ Gascony_missions_2 = {
 		icon = mission_have_two_subjects
 		required_missions = { Gascony_Indepedence }
 		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 173
+				province_id = 174
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			# all_province = {
-				# limit = {
-					# is_core = ROOT
-				# }
-				# country_or_non_sovereign_subject_holds = ROOT
-			# }
 			173 = {
 				owned_by = ROOT
 			}
@@ -160,17 +276,22 @@ Gascony_missions_2 = {
 		}
 		effect = {
 			196 = {
-				change_culture = gascon
+				change_culture = ROOT
 			}
 			198 = {
-				change_culture = gascon
+				change_culture = ROOT
 			}
 		}
 	}
+	
 	Gascony_Narbonne = {
 		icon = mission_conquer_50_development
 		required_missions = { Gascony_claim }
 		position = 8
+		provinces_to_highlight = {
+			province_id = 2753
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			2753 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -189,14 +310,19 @@ Gascony_missions_2 = {
 				}
 			}
 			2753 = {
-				change_culture = gascon
+				change_culture = ROOT
 			}
 		}
 	}
+	
 	Gascony_Roussilion = {
 		icon = mission_build_up_to_forcelimit
 		required_missions = { Gascony_Narbonne }
 		position = 9
+		provinces_to_highlight = {
+			province_id = 197
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			197 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -204,14 +330,24 @@ Gascony_missions_2 = {
 		}
 		effect = {
 			197 = {
-				change_culture = gascon
+				change_culture = ROOT
 			}
 		}
 	}
+	
 	Gascony_Occitania = {
 		icon = mission_cannons_firing
 		required_missions = { Gascony_Roussilion }
 		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = massif_central_area
+				area = savoy_dauphine_area
+				area = languedoc_area
+				area = provence_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			massif_central_area = {
 				type = all
@@ -240,34 +376,105 @@ Gascony_missions_2 = {
 			add_accepted_culture = occitain
 		}
 	}
+	
 	Gascony_Wine = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { }
 		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 173
+				province_id = 174
+				province_id = 194
+				province_id = 4112
+				province_id = 192
+				province_id = 2753
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 13 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_building_of_group = { group = all all = yes } }
+				}
+			}
+		}
 		trigger = {
-			173 = {
-				development = 12
-				country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				173 = {
+					development = 16
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				174 = {
+					development = 16
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				194 = {
+					development = 16
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				4112 = {
+					development = 16
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				196 = {
+					development = 16
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				2753 = {
+					development = 16
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
-			174 = {
-				development = 24
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			194 = {
-				development = 12
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4112 = {
-				development = 12
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			196 = {
-				development = 18
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2753 = {
-				development = 18
-				country_or_non_sovereign_subject_holds = ROOT
+			else = {
+				173 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				174 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				194 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				4112 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				196 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				2753 = {
+					custom_trigger_tooltip = {
+						tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ALL
+						province_has_building_of_group = { group = all all = yes }
+					}
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {

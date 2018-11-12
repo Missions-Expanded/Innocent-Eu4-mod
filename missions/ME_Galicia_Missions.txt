@@ -1,4 +1,4 @@
-Galician_missions = {
+Galician_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -11,26 +11,46 @@ Galician_missions = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { }
 		trigger = {
-			GAL = {
-				NOT = { is_subject = yes }
-			}
+			is_subject = no
 		}
 		effect = {
-			set_government_rank = 2
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			else = {
+				add_prestige = 15
+				add_legitimacy_equivalent = { value = 15 }
+			}
 		}
 	}
+	
 	Galicia_Defensive_Mentality = {
 		icon = mission_conquer_50_development
 		required_missions = { Galicia_Independence }
+		provinces_to_highlight = {
+			province_id = 206
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
-			GAL = {
-				NOT = { is_subject = yes }
-			}
 			206 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
 				country_or_non_sovereign_subject_holds = ROOT
-			}
-			206 = {
-				has_building = fort_15th
 			}
 		}
 		effect = {
@@ -42,13 +62,30 @@ Galician_missions = {
 			}
 		}
 	}
+	
 	Galicia_Placate_France = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { Galicia_Defensive_Mentality }
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			region = france_region
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			reverse_has_opinion = {
-				who = FRA
-				value = 150
+			if = {
+				limit = {
+					exists = FRA
+				}
+				reverse_has_opinion = {
+					who = FRA
+					value = 150
+				}
+			}
+			else = {
+				france_region = {
+					type = all
+					owned_by = ROOT
+				}
 			}
 		}
 		effect = {
@@ -61,11 +98,12 @@ Galician_missions = {
 			}
 		}
 	}
+	
 	Galicia_Expand = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { Galicia_Placate_France }
 		trigger = {
-		num_of_provinces_in_states = 5
+			num_of_provinces_in_states = 5
 		}
 		effect = {
 			add_prestige = 40
