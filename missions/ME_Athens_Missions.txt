@@ -1,18 +1,35 @@
-ath_1 = {
+ath_missions_1 = {
 	slot = 1
-		ai = yes
-		potential = {
-			tag = ATH
-		}
-		has_country_shield = yes
+	generic = no
+	ai = yes
+	potential = {
+		tag = ATH
+	}
+	has_country_shield = yes
 
 	ath_shooty_shooty = {
 		required_missions = { }
 		icon = mission_assemble_an_army
 		trigger = {
-			army_professionalism = 0.6
 			mil_tech = 16
 			army_tradition = 50
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.6
+			}
+			else = {
+				calc_true_if = {
+					all_owned_province = {
+						custom_trigger_tooltip = {
+							tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
+							province_has_building_of_group = { group = army all = yes }
+						}
+					}
+					amount = 15
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -25,7 +42,17 @@ ath_1 = {
 	ath_capital = {
 		required_missions = { }
 		icon = mission_early_game_buildings
+		provinces_to_highlight = {
+			province_id = 146
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { is_capital_of = ROOT }
+			}
+		}
 		trigger = {
+			owns_core_province = 146
+			capital = 146
 			grown_by_development = 75
 		}
 		effect = {
@@ -45,11 +72,58 @@ ath_1 = {
 		required_missions = { ath_old }
 		icon = mission_empire
 		position = 5
+		provinces_to_highlight = {
+			province_id = 144
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { base_manpower = 5 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					OR = {
+						AND = {
+							NOT = { has_building = barracks }
+							NOT = { has_building = training_fields }
+						}
+						AND = {
+							NOT = { has_building = regimental_camp }
+							NOT = { has_building = conscription_center }
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			144 = {
 				owned_by = ROOT
-				has_building = fort_16th
-				base_manpower = 5
+				OR = {
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_manpower = 5
+				}
+				else = {
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+					}
+					OR = {
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
+				}
 			}
 		}
 		effect = {
@@ -67,26 +141,76 @@ ath_1 = {
 	}
 }
 
-ath_2 = {
+ath_missions_2 = {
 	slot = 2
-		ai = yes
-		potential = {
-			tag = ATH
-		}
-		has_country_shield = yes
-		
+	generic = no
+	ai = yes
+	potential = {
+		tag = ATH
+	}
+	has_country_shield = yes
+	
 	ath_acropolis = {
 		required_missions = { }
 		icon = mission_invade_island
+		provinces_to_highlight = {
+			province_id = 146
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { base_manpower = 5 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					OR = {
+						AND = {
+							NOT = { has_building = barracks }
+							NOT = { has_building = training_fields }
+						}
+						AND = {
+							NOT = { has_building = regimental_camp }
+							NOT = { has_building = conscription_center }
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			146 = {
-				base_manpower = 5
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_manpower = 5
+				}
+				else = {
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+					}
+					OR = {
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
+				}
 			}
 			advisor = fortification_expert
 		}
 		effect = {
 			146 = {
-				add_building = fort_16th
+				if = {
+					limit = {
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building = fort_16th
+				}
+				else = {
+					add_base_manpower = 1
+				}
 				add_province_modifier = {
 					name = ath_acropolisa
 					duration = -1
@@ -100,12 +224,21 @@ ath_2 = {
 		icon = mission_religious
 		position = 3
 		trigger = {
-			reverse_has_opinion = {
-				who = PAP
-				value = 100
-			}
 			grown_by_development = 18
+			religion = catholic
 			papal_influence = 10
+			if = {
+				limit = {
+					exists = PAP
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+			}
+			else = {
+				is_papal_controller = yes
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -120,15 +253,29 @@ ath_2 = {
 	ath_old = {
 		required_missions = { ath_west }
 		icon = mission_empire
+		provinces_to_highlight = {
+			NOT = { exists = BUR }
+			NOT = { exists = FRA }
+			region = france_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			OR = {
 				reverse_has_opinion = {
-				who = BUR
-				value = 100
+					who = BUR
+					value = 100
 				}
 				reverse_has_opinion = {
-				who = FRA
-				value = 100
+					who = FRA
+					value = 100
+				}
+				AND = {
+					NOT = { exists = BUR }
+					NOT = { exists = FRA }
+					france_region = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
 				}
 			}
 			diplomatic_reputation = 2
@@ -145,14 +292,15 @@ ath_2 = {
 				female = no
 				name = "Guy"
 			}
-			
 			define_heir = {
 				dynasty = "la Roche"
 				age = 0
-				fixed = yes
 				adm = 4
 				dip = 4
 				mil = 6
+				max_random_adm = 4
+				max_random_dip = 4
+				max_random_mil = 6
 				claim = 95
 				female = yes
 				name = "Isabella"
@@ -167,14 +315,33 @@ ath_2 = {
 	ath_sparta = {
 		required_missions = { ath_old }
 		icon = mission_assemble_an_army
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1773
+				province_id = 145
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = barracks }
+					NOT = { has_building = training_fields }
+				}
+			}
+		}
 		trigger = {
 			1773 = {
 				owned_by = ROOT
-				has_building = barracks
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
 			}
 			145 = {
 				owned_by = ROOT
-				has_building = barracks
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
 			}
 		}
 		effect = {
@@ -188,11 +355,44 @@ ath_2 = {
 	ath_weak_army = {
 		required_missions = { ath_sparta }
 		icon = mission_build_up_to_force_limit
+		provinces_to_highlight = {
+			province_id = 147
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = barracks }
+					NOT = { has_building = training_fields }
+				}
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { base_manpower = 5 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { has_building = regimental_camp }
+					NOT = { has_building = conscription_center }
+				}
+			}
+		}
 		trigger = {
 			147 = {
 				owned_by = ROOT
-				base_manpower = 5
-				has_building = barracks
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_manpower = 5
+				}
+				else = {
+					OR = {
+						has_building = regimental_camp
+						has_building = conscription_center
+					}
+				}
 			}
 			advisor = army_reformer
 		}
@@ -202,7 +402,15 @@ ath_2 = {
 					name = ath_center
 					duration = -1
 				}
-				add_building = regimental_camp
+				if = {
+					limit = {
+						NOT = { has_building = regimental_camp }
+					}
+					add_building = regimental_camp
+				}
+				else = {
+					add_base_manpower = 1
+				}
 			}
 		}
 	}
@@ -211,14 +419,14 @@ ath_2 = {
 		required_missions = { ath_weak_army }
 		icon = mission_monarch_in_throne_room
 		trigger = {
-			legitimacy = 1
-			mil = 4
+			legitimacy_equivalent = 1
+			MIL = 4
 		}
 		effect = {
 			macedonia_area = {
 				limit = {
-					NOT = { is_core = ROOT 
-					 owned_by = ROOT }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -228,6 +436,10 @@ ath_2 = {
 	ath_blood = {
 		required_missions = { ath_alexander }
 		icon = mission_conquer_50_development
+		provinces_to_highlight = {
+			area = macedonia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			macedonia_area = {
 				type = all
@@ -237,15 +449,15 @@ ath_2 = {
 		effect = {
 			thrace_area = {
 				limit = {
-					NOT = { is_core = ROOT 
-					 owned_by = ROOT }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			aydin_area = {
 				limit = {
-					NOT = { is_core = ROOT 
-					 owned_by = ROOT }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -259,6 +471,13 @@ ath_2 = {
 	ath_grand_campaign = {
 		required_missions = { ath_blood }
 		icon = mission_have_two_subjects
+		provinces_to_highlight = {
+			OR = {
+				area = thrace_area
+				area = aydin_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			thrace_area = {
 				type = all
@@ -283,88 +502,132 @@ ath_2 = {
 	}
 }
 
-ath_3 = {
+ath_missions_3 = {
 	slot = 3
-		ai = yes
-		potential = {
-			tag = ATH
+	generic = no
+	ai = yes
+	potential = {
+		tag = ATH
+	}
+	has_country_shield = yes
+	
+	ath_long_text = {
+		required_missions = { }
+		icon = mission_cannons_firing
+		trigger = {
+			army_size_percentage = 1
+			num_of_galley = 5
+			manpower_percentage = 0.5
 		}
-		has_country_shield = yes
-		
-		ath_long_text = {
-			required_missions = { }
-			icon = mission_cannons_firing
-			trigger = {
-				army_size_percentage = 1
-				num_of_galley = 5
-				manpower_percentage = 0.5
-			}
-			effect = {
-				add_country_modifier = {
-					name = ath_more_text
-					duration = 3650
-				}
-			}
-		}
-		
-		ath_greatness = {
-			required_missions = { ath_long_text }
-			icon = mission_empire
-			trigger = {
-				is_at_war = no
-				is_subject = no
-			}
-			effect = {
-				add_country_modifier = {
-					name = ath_great
-					duration = -1
-				}
-				
-				add_country_modifier = {
-					name = ath_freedom
-					duration = 7300
-				}
+		effect = {
+			add_country_modifier = {
+				name = ath_more_text
+				duration = 3650
 			}
 		}
-		
-		ath_youwerethechosenone = {
-			position = 7
-			required_missions = { ath_senate_army }
-			icon = mission_hands_praying
-			trigger = {
-				prestige = 20
-				total_development = 25
+	}
+	
+	ath_greatness = {
+		required_missions = { ath_long_text }
+		icon = mission_empire
+		trigger = {
+			is_at_war = no
+			is_subject = no
+		}
+		effect = {
+			add_country_modifier = {
+				name = ath_great
+				duration = -1
 			}
-			effect = {
+			
+			add_country_modifier = {
+				name = ath_freedom
+				duration = 7300
+			}
+		}
+	}
+	
+	ath_youwerethechosenone = {
+		position = 7
+		required_missions = { ath_senate_army }
+		icon = mission_hands_praying
+		trigger = {
+			prestige = 20
+			total_development = 25
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = KNI
+					NOT = { overlord_of = KNI }
+				}
 				add_casus_belli = {
 					target = KNI
 					type = cb_annex
 					months = 30
 				}
-					
+			}
+			if = {
+				limit = {
+					exists = TRE
+					NOT = { overlord_of = TRE }
+				}
 				add_casus_belli = {
 					target = TRE
 					type = cb_annex
 					months = 30
 				}
-					
+			}
+			if = {
+				limit = {
+					exists = CYP
+					NOT = { overlord_of = CYP }
+				}
 				add_casus_belli = {
 					target = CYP
 					type = cb_annex
 					months = 30
 				}
-					
+			}
+			if = {
+				limit = {
+					exists = FEO
+					NOT = { overlord_of = FEO }
+				}
 				add_casus_belli = {
 					target = FEO
 					type = cb_annex
 					months = 30
 				}
 			}
+			if = {
+				limit = {
+					OR = {
+						NOT = { exists = KNI }
+						overlord_of = KNI
+					}
+					OR = {
+						NOT = { exists = TRE }
+						overlord_of = TRE
+					}
+					OR = {
+						NOT = { exists = CYP }
+						overlord_of = CYP
+					}
+					OR = {
+						NOT = { exists = FEO }
+						overlord_of = FEO
+					}
+				}
+				add_prestige = 10
+			}
 		}
 	}
+}
 
-ath_4 = {
+ath_missions_4 = {
 	slot = 4
+	generic = no
 	ai = yes
 	potential = {
 		tag = ATH
@@ -376,7 +639,23 @@ ath_4 = {
 		icon = mission_early_game_buildings
 		trigger = {
 			army_tradition = 40
-			army_professionalism = 0.2
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.2
+			}
+			else = {
+				calc_true_if = {
+					all_owned_province = {
+						custom_trigger_tooltip = {
+							tooltip = PROVINCE_HAS_BUILDING_OF_GROUP_ARMY_ALL
+							province_has_building_of_group = { group = army all = yes }
+						}
+					}
+					amount = 5
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -391,14 +670,27 @@ ath_4 = {
 		icon = mission_have_two_subjects
 		position = 3
 		trigger = {
-			reverse_has_opinion = {
-				who = MOS
-				value = 100
-				}
 			grown_by_development = 18
+			if = {
+				limit = {
+					exists = MOS
+				}
+				reverse_has_opinion = {
+					who = MOS
+					value = 100
+				}
+			}
 		}
 		effect = {
-			change_religion = orthodox
+			if = {
+				limit = {
+					NOT = { religion = orthodox }
+				}
+				change_religion = orthodox
+				capital_scope = {
+					change_religion = orthodox
+				}
+			}
 			change_government = republic
 			add_government_reform = athenian_republic
 		}
@@ -407,11 +699,50 @@ ath_4 = {
 	ath_more_trades = {
 		required_missions = { ath_storm }
 		icon = mission_dominate_home_trade_node
+		provinces_to_highlight = {
+			province_id = 146
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+				AND = {
+					has_dlc = "Common Sense"
+					OR = {
+						NOT = { development = 15 }
+						NOT = { base_production = 7 }
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					OR = {
+						NOT = { province_has_at_least_num_of_buildings = { amount = 2 } }
+						has_no_manufactory_trigger = yes
+					}
+				}
+			}
+		}
 		trigger = {
 			146 = {
-				development = 15
-				base_production = 7
-				has_building = marketplace
+				owned_by = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 15
+					base_production = 7
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+					has_manufactory_trigger = yes
+				}
 			}
 		}
 		effect = {
@@ -435,7 +766,7 @@ ath_4 = {
 		effect = {
 			add_country_modifier = {
 				name = ath_the_wall
-					duration = -1
+				duration = -1
 			}
 		}
 	}
@@ -460,6 +791,14 @@ ath_4 = {
 	ath_aegean = {
 		required_missions = { ath_senate_army }
 		icon = mission_establish_high_seas_navy
+		provinces_to_highlight = {
+			OR = {
+				province_id = 148
+				province_id = 318
+				province_id = 164
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			148 = {
 				owned_by = ROOT
@@ -487,7 +826,7 @@ ath_4 = {
 		required_missions = { ath_aegean ath_youwerethechosenone }
 		icon = mission_alliances
 		trigger = {
-			num_of_vassals = 3
+			vassal = 3
 		}
 		effect = {
 			add_country_modifier = {
@@ -502,8 +841,9 @@ ath_4 = {
 	}
 }
 
-ath_5 = {
+ath_missions_5 = {
 	slot = 5
+	generic = no
 	ai = yes
 	potential = {
 		tag = ATH
@@ -514,9 +854,24 @@ ath_5 = {
 		required_missions = { }
 		icon = mission_asian_trader
 		trigger = {
-			OR = {
-				innovative_ideas = 3
-				in_golden_age = yes
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					innovativeness_ideas = 3
+					in_golden_age = yes
+				}
+			}
+			else = {
+				OR = {
+					innovativeness_ideas = 3
+					AND = {
+						legitimacy_equivalent = 100
+						prestige = 100
+						stability = 3
+					}
+				}
 			}
 		}
 		effect = {
@@ -544,7 +899,27 @@ ath_5 = {
 				duration = 7300
 			}
 			146 = {
-				add_building = shipyard
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					if = {
+						limit = {
+							NOT = { has_building = shipyard }
+							NOT = { has_building = grand_shipyard }
+						}
+						add_building = shipyard
+					}
+					else = {
+						add_scaled_local_dip_power = 10
+					}
+				}
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
