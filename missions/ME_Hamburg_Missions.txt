@@ -25,27 +25,43 @@ Hamburg_missions_1 = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { Hamburg_amass_wealth }
 		position = 5
+		provinces_to_highlight = {
+			NOT = { exists = HSA }
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
-					has_dlc = "Mare Nostrum"
+					exists = HSA
 				}
-				OR = {
-					reverse_has_opinion = {
-						who = HSA
-						value = 100
+				if = {
+					limit = {
+						has_dlc = "Mare Nostrum"
 					}
-					is_in_trade_league_with = HSA
+					OR = {
+						reverse_has_opinion = {
+							who = HSA
+							value = 100
+						}
+						is_in_trade_league_with = HSA
+					}
+				}
+				else = {
+					OR = {
+						reverse_has_opinion = {
+							who = HSA
+							value = 100
+						}
+						alliance_with = HSA
+					}
 				}
 			}
 			else = {
-				OR = {
-					reverse_has_opinion = {
-						who = HSA
-						value = 100
-					}
-					alliance_with = HSA
-				}
+				owns_core_province = 45
 			}
 		}
 		effect = {
@@ -60,9 +76,30 @@ Hamburg_missions_1 = {
 		icon = mission_early_game_buildings
 		required_missions = { Hamburg_join_hansa }
 		position = 6
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 30 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 3 } }
+				}
+			}
+		}
 		trigger = {
 			capital_scope = {
-				development = 30
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 30
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 3 }
+				}
 			}
 		}
 		effect = {
