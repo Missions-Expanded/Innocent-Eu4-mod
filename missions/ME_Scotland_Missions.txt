@@ -112,8 +112,7 @@ scotland_trade = {
 		}
 		effect = {	
 			add_mercantilism = 3
-			add_treasury = 750
-			add_treasury = 500
+			add_treasury = 300
 			add_country_modifier = {
 				name = SCO_dominant_trade_in_the_world
 				duration = 14600
@@ -159,7 +158,7 @@ scotland_trade = {
 		}
 		effect = {	
 			add_mercantilism = 2
-			add_treasury = 800
+			add_treasury = 400
 			add_country_modifier = {
 				name = SCO_trade_africa
 				duration = -1
@@ -226,7 +225,7 @@ scotland_trade = {
 		}
 		effect = {	
 			add_mercantilism = 4
-			add_treasury = 1500
+			add_treasury = 750
 			add_country_modifier = {
 				name = SCO_trade_india
 				duration = -1
@@ -280,7 +279,7 @@ scotland_trade = {
 		}
 		effect = {
 			add_mercantilism = 2
-			add_treasury = 2000
+			add_treasury = 1000
 			add_country_modifier = {
 				name = SCO_trade_malacca
 				duration = -1
@@ -353,16 +352,20 @@ scotland_diplomacy = {
 		
 		}
 		effect = {
-			inherit = ULS
-			4121 = {
-				remove_core = ULS
-				local_unrest = -10
+			if = {
+				limit = { exists = ULS }
+				inherit = ULS
+			}	
+			release = ULS
+			create_subject = {
+				subject_type = march
+				subject = ULS
 			}
 			add_claim = 372
-				add_casus_belli = {
-                    target = TYR
-                    type = cb_vassalize_mission
-                }
+			add_casus_belli = {
+                   		 target = TYR
+                   		 type = cb_vassalize_mission
+               		 }
 		}
 	}
 	SCO_tyrone = {
@@ -388,16 +391,18 @@ scotland_diplomacy = {
 		
 		}
 		effect = {
-			inherit = TYR
 			372 = {
-				remove_core = TYR
-				local_unrest = -10
+				add_core = ULS
 			}
+			add_country_modifier = {
+				name = SCO_diplomatic_stuff
+				duration = 1875
+			}	
 			add_claim = 4380
 				add_casus_belli = {
-                    target = TRY
-                    type = cb_vassalize_mission
-                }
+                  			  target = TRY
+                   			  type = cb_vassalize_mission
+              		 }
 		}
 	}
 	SCO_tyrconnell = {
@@ -423,14 +428,13 @@ scotland_diplomacy = {
 		
 		}
 		effect = {
-			inherit = TRY
 			4380 = {
-				remove_core = TYR
-				local_unrest = -10
-			}
+				cede_province = ULS
+				add_unrest = -5
+			}	
 			connacht_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_permanent_claim = ROOT }
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
@@ -631,7 +635,6 @@ scotland_military = {
 		}
 		effect = {
 			wales_area = {
-				change_culture = welsh_celtic
 				limit = {
 					is_core = ROOT
 					owned_by = ROOT
@@ -714,12 +717,9 @@ scotland_miscellaneous = {
 			}
 		}	
 		effect = {
-			if = {
-				limit = {
-					NOT = { owns = 2819 }
-				}
+			2819 = {
 				add_colonysize = 500
-				add_core = SCO
+				add_core = ROOT
 			}
 			add_country_modifier = {
 				name = SCO_panama_modifier
