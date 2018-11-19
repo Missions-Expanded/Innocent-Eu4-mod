@@ -1,4 +1,4 @@
-Brittany_slot_1 = {
+Brittany_missions_1 = {
     slot = 1
     generic = no
     ai = yes
@@ -6,17 +6,16 @@ Brittany_slot_1 = {
         tag = BRI
     }
     has_country_shield = yes
-	
+
 	BRI_the_troops = {
 		icon = mission_assemble_an_army
 		required_missions = { }
 		position = 1
-		
-		trigger = { 
+		trigger = {
 			army_size_percentage = 1
 			NOT = { has_country_flag = breton_france }
 		}
-		effect = { 
+		effect = {
 			add_country_modifier = {
 				name = BRI_ready_men
 				duration = 3650
@@ -24,11 +23,12 @@ Brittany_slot_1 = {
 			hidden_effect = {
 				set_country_flag = BRI_celtic_unification
 				swap_non_generic_missions = yes
-			}			
+			}
 		}
-	}	
-}	
-Brittany_celtic = {
+	}
+}
+
+Brittany_missions_1_celtic = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -36,7 +36,7 @@ Brittany_celtic = {
 		tag = BRI
 		has_country_flag = BRI_celtic_unification
 	}
-	
+
 	BRI_irish_expansion = {
 		icon = mission_invade_island
 		required_missions = { }
@@ -48,11 +48,9 @@ Brittany_celtic = {
 				area = leinster_area
 				area = ulster_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
-		trigger = { 
+		trigger = {
 			munster_area = {
 				type = all
 				owned_by = ROOT
@@ -60,65 +58,104 @@ Brittany_celtic = {
 			connacht_area = {
 				type = all
 				owned_by = ROOT
-			}	
+			}
 			leinster_area = {
 				type = all
 				owned_by = ROOT
-			}		
+			}
 			ulster_area = {
 				type = all
 				owned_by = ROOT
-			}	
+			}
 		}
-		effect = { 
+		effect = {
 			add_claim = 233
 			wales_area = {
-				type = all
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_claim = ROOT
 			}
 		}
 	}
+
 	BRI_wales_cornwall = {
 		icon = mission_cannons_firing
 		required_missions = { BRI_irish_expansion }
 		position = 3
 		provinces_to_highlight = {
-			area = wales_area
-			province_id = 233
-			NOT = {
-				owned_by = ROOT
+			OR = {
+				AND = {
+					area = wales_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 233
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
 			}
 		}
-		trigger = { 
+		trigger = {
 			wales_area = {
 				type = all
 				owned_by = ROOT
 			}
-			owns_core_province = 233	
+			owns_core_province = 233
 		}
-		effect = { 
-			custom_effect_tooltip = {
-				tooltip = celtic_release_tooltip
-					wales_area = {
-						type = all
-						cede_province = WLS
+		effect = {
+			custom_tooltip = celtic_release_tooltip
+			hidden_effect = {
+				wales_area = {
+					limit = {
+						owned_by = ROOT
 					}
-					233 = {
+					cede_province = WLS
+				}
+				233 = {
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
 						cede_province = CRN
 					}
-					release = CRN
+				}
+				if = {
+					limit = {
+						CRN = {
+							OR = {
+								is_subject = no
+								is_subject_of = ROOT
+							}
+						}
+					}
 					create_subject = {
 						subject_type = vassal
 						subject = CRN
 					}
-					release = WLS
+
+				}
+				if = {
+					limit = {
+						WLS = {
+							OR = {
+								is_subject = no
+								is_subject_of = ROOT
+							}
+						}
+					}
 					create_subject = {
 						subject_type = march
 						subject = WLS
-					}	
+					}
+				}
 			}
 		}
 	}
+
 	BRI_scottish_conquests = {
 		icon = mission_unite_home_region
 		required_missions = { BRI_wales_cornwall }
@@ -128,12 +165,10 @@ Brittany_celtic = {
 				area = kingdom_of_the_isles_area
 				area = highlands_area
 				area = lowlands_area
-			}	
-			NOT = {
-				owned_by = ROOT
 			}
+			NOT = { owned_by = ROOT }
 		}
-		trigger = { 
+		trigger = {
 			kingdom_of_the_isles_area = {
 				type = all
 				owned_by = ROOT
@@ -147,66 +182,98 @@ Brittany_celtic = {
 				owned_by = ROOT
 			}
 		}
-		effect = { 
-			ROOT = {
-				all_owned_province = {
-					if = {
-						limit = { culture = scottish }
-						random_list = {
-							50 = { add_unrest = -10 }
-							50 = { ROOT = { country_event = { id = ME_Brittany.1 } } }
+		effect = {
+			random_list = {
+				50 = {
+					every_owned_province = {
+						limit = {
+							culture = scottish
 						}
+						add_unrest = -10
 					}
 				}
-			}	
+				50 = {
+					country_event = { id = ME_Brittany.1 }
+				}
+			}
 		}
 	}
+
 	BRI_galician_frontier = {
 		icon = mission_hanseatic_city
 		required_missions = { BRI_scottish_conquests }
 		position = 5
 		provinces_to_highlight = {
-			province_id = 206	
+			province_id = 206
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
-		trigger = { 
+		trigger = {
 			owns_core_province = 206
 		}
-		effect = { 
+		effect = {
 			add_country_modifier = {
 				name = BRI_unified_celts
 				duration = -1
 			}
 			if = {
-				limit = { wales_area = { country_or_non_sovereign_subject_holds = ROOT } }
+				limit = {
+					wales_area = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
 				wales_area = {
-					type = all
-					chance_culture = welsh_celtic
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					change_culture = welsh_celtic
 				}
-			}	
+			}
 			if = {
-				limit = { brittany_area = { country_or_non_sovereign_subject_holds = ROOT } }
-				brittany_area = {
-					type = all
-					chance_culture = breton_celtic
+				limit = {
+					brittany_area = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
 				}
-			}	
+				brittany_area = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					change_culture = breton_celtic
+				}
+			}
 			233 = {
-				change_culture = cornish
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					change_culture = cornish
+				}
 			}
 			4365 = {
-				chance_culture = manx
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					change_culture = manx
+				}
 			}
 			206 = {
-				change_culture = galician_celtic
-			}
-			ROOT = {
-				all_owned_province = {
-					if = {
-						limit = { culture = scottish }
-						change_culture = scottish_celtic
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
 					}
-				}	
+					change_culture = galician_celtic
+				}
 			}
-		}	
-	}	
+			every_owned_province = {
+				limit = {
+					culture = scottish
+				}
+				change_culture = scottish_celtic
+			}
+		}
+	}
 }
