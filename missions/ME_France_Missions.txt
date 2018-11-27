@@ -450,6 +450,148 @@ fra_1 = {
 			add_prestige = 40
 		}
 	}
+	fra_uni_avignon = {
+		required_missions = { fra_uni_nantes }
+		icon = mission_alliances
+		position = 19
+		trigger = {
+			202 = {
+				owned_by = ROOT
+				development = 24
+			}
+		}
+		effect = {
+			202 = {
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
+				}
+				add_building = university
+			}
+		}
+	}
+	fra_mercantilism = {
+		required_missions = {  }
+		icon = mission_dominate_home_trade_node
+		position = 24
+		trigger = {
+			mercantilism = 15
+		}
+		effect = {
+			define_advisor = {
+				type = treasurer
+				name = "Jean-Baptiste Colbert"
+				skill = 5
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.25
+			}
+		}
+	}
+	fra_economic_reforms = {
+		required_missions = { fra_mercantilism }
+		icon = mission_high_income
+		position = 25
+		trigger = {
+			treasurer = 5
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_economic_reforms_mod
+				duration = 36500
+			}
+		}
+	}
+	fra_more_mercantilism = {
+		required_missions = { fra_economic_reforms }
+		icon = mission_establish_high_seas_navy
+		position = 26
+		trigger = {
+			mercantilism = 45
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_power_of_mercantilism
+				duration = -1
+			}
+		}
+	}
+	fra_best = {
+		required_missions = { fra_vive_la }
+		icon = mission_assemble_an_army
+		position = 27
+		trigger = {
+			NOT = {
+				OR = {
+					any_country = {
+						capital_scope = {
+							continent = europe
+						}
+						army_size = FRA
+					}
+					tag = TUR
+					tag = RUS
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_spark
+				duration = 3650
+			}
+		}
+	}
+	fra_austria = {
+		required_missions = { fra_best }
+		icon = mission_vienna
+		provinces_to_highlight = {
+			province_id = 134
+			OR = {
+				AND = {
+					exists = HAB
+					HAB = { is_subject = no }
+					NOT = { controlled_by = ROOT }
+				}
+				AND = {
+					OR = {
+						NOT = { exists = HAB }
+						HAB = { is_subject = yes }
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+			}
+		}
+		trigger = {
+			134 = {
+				controlled_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = into_austria
+				duration = 7300
+			}
+		}
+	}
+	fra_berlin = {
+		required_missions = { fra_austria }
+		icon = mission_assemble_an_army
+		position = 30
+		trigger = {
+			50 = {
+				controlled_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_end
+				duration = 9125
+			}
+		}
+	}
 }
 
 fra_2 = {
@@ -603,7 +745,7 @@ fra_2 = {
 			NOT = { alliance_with = PRO }
 		}
 		effect = {
-			country_event = { id = ME_France_Events.1 }
+			country_event = { id = fra_me.1 }
 		}
 	}
 	fra_valois_united = {
@@ -656,6 +798,7 @@ fra_2 = {
 			else = {
 				navy_size = 25
 			}
+			heavy_ship_fraction = 0.33
 		}
 		effect = {
 			add_country_modifier = {
@@ -730,7 +873,52 @@ fra_2 = {
 			}
 		}
 	}
-
+	fra_saint_germain = {
+		required_missions = { }
+		icon = mission_luther_theses
+		position = 11 
+		trigger = {
+			religion = catholic
+			custom_trigger_tooltip = {
+				tooltip = fra_protestant
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 10
+					OR = {
+						religion = protestant
+						religion = reformed
+						religion = anglican
+					}
+					is_city = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_edict_of_germain
+				duration = 18250
+			}
+		}
+	}
+	fra_nantes = {
+		required_missions = { fra_saint_germain }
+		icon = mission_alliances
+		position = 12
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = fra_tooltip.4
+				OR = {
+					has_country_flag = FRA_wars_of_religion_ended 
+					has_country_flag = had_religious_turmoil 
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_edict_of_nantes
+				duration = 18250
+			}
+		}
+	}
 
 	fra_balearic_islands = {
 		required_missions = { fra_kingdom_of_aragon }
@@ -781,15 +969,124 @@ fra_2 = {
 			}
 		}
 	}
+	fra_uni_nantes = {
+		required_missions = { fra_uni_nantes }
+		icon = mission_early_modern_university
+		position = 18
+		trigger = {
+			brittany_area = {
+				type = all
+				owned_by = ROOT
+			}
+			172 = {
+				development = 20
+				has_building = temple
+				has_building = marketplace
+			}
+		}
+		effect = {
+			172 = {
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
+				}
+				add_building = university
+			}
+			change_innovativeness = 2
+		}
+	}
+	fra_uni_aix = {
+		required_missions = { fra_uni_nantes }
+		icon = mission_early_modern_university
+		position = 19
+		trigger = {
+			201 = {
+				owned_by = ROOT
+				development = 38
+			}
+		}
+		effect = {
+			201 = {
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
+				}
+				add_building = university
+			}
+			change_innovativeness = 3
+		}
+	}
+	fra_uni_paris = {
+		required_missions = { fra_uni_aix fra_mousson fra_uni_avignon }
+		icon = mission_hanseatic_city
+		position = 19
+		trigger = {
+			183 = {
+				owned_by = ROOT
+				development = 40
+			}
+		}
+		effect = {
+			183 = {
+				add_province_modifier = {
+					name = fra_grand_university
+					duration = -1
+				}
+				add_building = university
+			}
+			change_innovativeness = 5
+		}
+	}
 	fra_morocco = {
 		required_missions = { fra_algiers }
 		icon = mission_mosque
 		position = 21
 		provinces_to_highlight = {
+			OR = {
+				area = marrekesh_area
+				area = northern_morocco_area
+				area = sus_area
+				area = tafilalt_area
+				area = southern_morocco_area
+				area = western_morocco_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			marrekesh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_morocco_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sus_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tafilalt_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			southern_morocco_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			western_morocco_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			NOT = { exists = MOR }
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_destroyed_berber
+				duration = 3650
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 		}
 	}
 	fra_mexico = {
@@ -797,10 +1094,141 @@ fra_2 = {
 		icon = mission_colonial
 		position = 23
 		provinces_to_highlight = {
+			colonial_region = colonial_mexico
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				is_city = yes
+				colonial_region = colonial_mexico
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_influx_of_gold
+				duration = 7300
+			}
+		}
+	}
+	fra_crop_rotation = {
+		required_missions = {  }
+		icon = mission_advance_to_the_dnieper
+		position = 24
+		trigger = {
+			adm = 6
+			treasury = 500
+		}
+		effect = {
+			add_treasury = -500
+			add_country_modifier = {
+				name = fra_crops
+				duration = -1
+			}
+		}
+	}
+	fra_markets_of_rouen = {
+		required_missions = { }
+		icon = mission_asian_trader
+		position = 25
+		trigger = {
+			167 = {
+				owned_by = ROOT
+				has_building = marketplace
+			}
+		}
+		effect = {
+			167 = {
+				add_center_of_trade_level = 1
+			}
+			
+		}
+	}
+	fra_manufactories = {
+		required_missions = { fra_economic_reforms }
+		icon = mission_have_manufactories
+		position = 26
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "proto_industrialization"
+				duration = 9125
+			}
+			add_years_of_income = 1.5
+		}
+	}
+	fra_spain = {
+		required_missions = { fra_vive_la }
+		icon = mission_cannons_firing
+		position = 27
+		provinces_to_highlight = {
+		}
+		trigger = {
+			#limonenplz
+		}
+		effect = {
+			#limonenplz
+		}
+	}
+	fra_moscow = {
+		required_missions = { fra_berlin fra_warsaw fra_spain }
+		icon = russia_invasion
+		position = 31
+		provinces_to_highlight = {
+			province_id = 295
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = RUS
+				}
+				war_with = RUS
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+				}
+				war_with = MOS
+			}
+			else_if = {
+				limit = {
+					NOT = { owns = 295 }
+					295 = {
+						owner = {
+							NOT = { is_subject_of = ROOT }
+						}
+					}
+				}
+				295 = {
+					owner = {
+						war_with = ROOT
+					}
+				}
+			}
+			controls = 295
+		}
+		effect = {
+			add_country_modifier = {
+				name = kill_russia
+				duration = 7300
+			}
 		}
 	}
 
@@ -816,6 +1244,31 @@ fra_3 = {
 	}
 	has_country_shield = yes
 
+	Fra_hegemon = {
+		icon = mission_empire
+		required_missions = {}
+		position = 1
+		trigger  = {
+			custom_trigger_tooltip = {
+				NOT = {
+					any_country = {
+						capital_scope = {
+							continent = europe
+						}
+						army_size = ROOT
+						development = ROOT
+					}
+				}
+				tooltip = fra_tooltip.3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_hegemon
+				duration = -1
+			}
+		}
+	}
 	fra_capture_calais = {
 		required_missions = { fra_maine }
 		icon = mission_galleys_in_port
@@ -1093,35 +1546,112 @@ fra_3 = {
 	}
 	fra_renaissance_ideas = {
 		required_missions = { fra_renaissance }
-		icon = mission_alliance
+		icon = mission_early_modern_university
 		position = 13
-		provinces_to_highlight = {
-		}
 		trigger = {
+			is_at_war = no
+			monthly_income = 70
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_scientific_golden_age
+				duration = 9125
+			}
+			change_innovativeness = 5
 		}
 	}
 	fra_modernized_bureaucracy = {
 		required_missions = { fra_renaissance_ideas fra_first_reforms }
 		icon = mission_alliances
 		position = 14
-		provinces_to_highlight = {
-		}
 		trigger = {
+			stability = 2
+			NOT = {
+				estate_influence = {
+					influence = 80
+					estate = estate_church
+				}
+			}
+			NOT = {
+				estate_influence = {
+					influence = 80
+					estate = estate_nobles
+				}
+			}
+			estate_loyalty = {
+				loyalty = 60
+				estate = estate_church
+			}
+			estate_loyalty = {
+				loyalty = 60
+				estate = estate_nobles
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_early_modern
+				duration = 7300
+			}
 		}
 	}
 	fra_triple_henry = {
 		required_missions = { fra_new_religion }
 		icon = mission_monarch_in_throne_room
 		position = 17
-		provinces_to_highlight = {
-		}
 		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				religion = anglican
+				has_country_modifier = counter_reformation
+			}
 		}
 		effect = {
+			186 = {
+				spawn_rebels = {
+					type = protestant_rebels
+					size = 3
+				}
+			}
+			add_papal_influence = 25
+			add_church_power = 50
+			define_advisor = {
+				type = inquisitor
+				name = "Henry Guise"
+				skill = 1
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+		}
+	}
+	fra_mousson = {
+		required_missions = { fra_uni_nantes }
+		icon = mission_early_game_buildings
+		position = 19
+		trigger = {
+			189 = {
+				owned_by = ROOT
+				development = 24
+				has_building = fort_15th
+			}
+		}
+		effect = {
+			189 = {
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
+				}
+				add_building = university
+			}
+			define_advisor = {
+				type = fortification_expert
+				name = "Sebastien de Vauban"
+				skill = 3
+				culture = burgundian
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
 		}
 	}
 	fra_algiers = {
@@ -1129,10 +1659,105 @@ fra_3 = {
 		icon = mission_mosque
 		position = 20
 		provinces_to_highlight = {
+			OR = {
+				area = hautes_plaines_area
+				area = kabylia_area
+				area = north_saharan_area
+				area = algiers_area
+				area = ouled_nail_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			hautes_plaines_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kabylia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_saharan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			algiers_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ouled_nail_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_colony_in_africa
+				duration = 9125
+			}
+			tunisia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			djerba_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tripolitania_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			western_morocco_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			southern_morocco_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			marrekesh_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sus_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tafilalt_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_morocco_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	fra_tunis = {
@@ -1140,10 +1765,36 @@ fra_3 = {
 		icon = mission_hands_praying
 		position = 21
 		provinces_to_highlight = {
+			OR = {
+				area = tunisia_area
+				area = tripolitania_area
+				area = djerba_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			tunisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tripolitania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			djerba_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			NOT = { exists = TUN }
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_destroyed_berber
+				duration = 3650
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 		}
 	}
 	fra_caribbean = {
@@ -1151,10 +1802,25 @@ fra_3 = {
 		icon = mission_invade_island
 		position = 22
 		provinces_to_highlight = {
+			colonial_region = colonial_caribbean
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				is_city = yes
+				colonial_region = colonial_caribbean
+			}
 		}
 		effect = {
+			1516 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 15
+					key = fra_trade_modifier_2
+				}
+			}
 		}
 	}
 	fra_louisiana = {
@@ -1162,10 +1828,52 @@ fra_3 = {
 		icon = mission_early_game_buildings
 		position = 23
 		provinces_to_highlight = {
+			colonial_region = colonial_louisiana
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				is_city = yes
+				colonial_region = colonial_louisiana
+			}
+			893 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
 		}
 		effect = {
+			893 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = fra_french_center
+					duration = -1
+				}
+			}
+		}
+	}
+	fra_thirteen = {
+		required_missions = { fra_lawrence }
+		icon = mission_settlers_north_america
+		position = 24
+		provinces_to_highlight = {
+			colonial_region = colonial_america
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				is_city = yes
+				colonial_region = colonial_america
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_tax
+				duration = 9125
+			}
 		}
 	}
 	fra_plata = {
@@ -1173,13 +1881,81 @@ fra_3 = {
 		icon = mission_colonial
 		position = 25
 		provinces_to_highlight = {
+			colonial_region = colonial_la_plata
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				is_city = yes
+				colonial_region = colonial_la_plata
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_la_plata
+				duration = 9125
+			}
 		}
 	}
-
+	fra_vive_la = {
+		required_missions = { }
+		icon = napoleon_1
+		position = 26
+		trigger = {
+			current_age = age_of_revolutions
+			is_revolution_target = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = napoleon_bonaparte
+				duration = -1
+			}
+		}
+	}
+	fra_cairo = {
+		required_missions = { fra_vive_la }
+		icon = mission_mosque
+		position = 27
+		provinces_to_highlight = {
+			province_id = 361
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			controls = 361
+		}
+		effect = {
+			egypt_region = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	fra_egypt = {
+		required_missions = { fra_cairo }
+		icon = mission_non-western_cavalry_raid
+		position = 28
+		provinces_to_highlight = {
+			region = egypt_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			egypt_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = egypt_fra
+				duration = 7300
+			}
+		}
+	}
 }
 
 fra_4 = {
@@ -1267,7 +2043,7 @@ fra_4 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_France_Events.2 }
+			country_event = { id = fra_me.2 }
 		}
 	}
 	fra_lorraine = {
@@ -1409,7 +2185,7 @@ fra_4 = {
 	}
 	fra_rhein = {
 		required_missions = { fra_alsace }
-		icon = mission_galleys_in_port
+		icon = mission_advance_to_the_dnieper
 		position = 7
 		provinces_to_highlight = {
 			OR = {
@@ -1475,7 +2251,7 @@ fra_4 = {
 	}
 	fra_swiss = {
 		required_missions = { fra_rhein }
-		icon = mission_conquer_50_development
+		icon = mission_landsknecht_soldier
 		position = 8
 		provinces_to_highlight = {
 			OR = {
@@ -1503,7 +2279,7 @@ fra_4 = {
 	}
 	fra_piedmont = {
 		required_missions = { fra_nice }
-		icon = mission_monarch_in_throne_room
+		icon = mission_italian_condottiere
 		position = 9
 		provinces_to_highlight = {
 			area = piedmont_area
@@ -1562,66 +2338,155 @@ fra_4 = {
 		required_missions = { }
 		icon = mission_alliances
 		position = 12
-		provinces_to_highlight = {
-		}
 		trigger = {
+			artist = 1
+			has_institution = renaissance
+			stability = 1
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_renaissance_flame
+				duration = 7300
+			}
 		}
 	}
 	fra_first_reforms = {
 		required_missions = { fra_renaissance }
-		icon = mission_alliances
+		icon = mission_early_modern_university
 		position = 13
-		provinces_to_highlight = {
-		}
 		trigger = {
+			adm = 4
+			prestige = 40
+			NOT = {
+				estate_influence = {
+					estate = estate_church
+					influence = 60
+				}
+			}
+			NOT = {
+				estate_influence = {
+					estate = estate_burghers
+					influence = 50
+				}
+			}
 		}
 		effect = {
+			add_adm_power = 75
+			add_country_modifier = {
+				name = fra_early_bureaucrats
+				duration = 9125
+			}
 		}
 	}
 	fra_modern_empire  = {
 		required_missions = { fra_modernized_bureaucracy fra_centralized_army }
 		icon = mission_empire
 		position = 15
-		provinces_to_highlight = {
-		}
 		trigger = {
+			monthly_income = 120
+			government_rank = 3
+			army_size = 150
+			OR = {
+				current_age = age_of_absolutism
+				current_age = age_of_revolutions
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_age_of_empires
+				duration = -1
+			}
+			add_country_modifier = {
+				name = fra_aggresive_integration
+				duration = 9125
+			}
 		}
 	}
 	fra_new_religion = {
 		required_missions = { }
-		icon = mission_religious
+		icon = mission_luther_theses
 		position = 16
-		provinces_to_highlight = {
-		}
 		trigger = {
+			religion = catholic
+			OR = {
+				disaster = french_wars_of_religion 
+				disaster = religious_turmoil 
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_religion_wars
+				duration = 7300
+			}
 		}
 	}
 	fra_beyond_the_crisis = {
 		required_missions = { fra_triple_henry fra_the_huguenots }
 		icon = mission_hands_praying
 		position = 18
-		provinces_to_highlight = {
-		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = fra_tooltip.4
+				OR = {
+					has_country_flag = FRA_wars_of_religion_ended 
+					has_country_flag = had_religious_turmoil 
+				}
+			}
 		}
 		effect = {
+			add_stability = 2
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 		}
 	}
 	fra_explore = {
 		required_missions = { }
 		icon = mission_establish_high_seas_navy
 		position = 19
-		provinces_to_highlight = {
-		}
 		trigger = {
+			num_of_explorers = 1
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_exploring
+				duration = 3650
+			}
+			north_saharan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hautes_plaines_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			algiers_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kabylia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ouled_nail_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	fra_foothold = {
@@ -1631,30 +2496,76 @@ fra_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				south_america = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				north_america = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
+			random_owned_province = {
+				limit = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = fra_first
+					duration = 7300
+				}
+			}
+		}
+	}
+	fra_quebec = {
+		required_missions = { fra_foothold }
+		icon = mission_rb_conquer_the_isles
+		position = 22
+		provinces_to_highlight = {
+			province_id = 994
+		}
+		trigger = {
+			994 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+			}
+		}
+		effect = {
+			994 = {
+				change_culture = ROOT
+				add_province_modifier = {
+					name = fra_french_center
+					duration = -1
+				}
+			}
 		}
 	}
 	fra_lawrence = {
-		required_missions = { fra_foothold }
+		required_missions = { fra_quebec }
 		icon = mission_colonial
-		position = 22
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
-		}
-	}
-	fra_thirteen = {
-		required_missions = { fra_lawrence }
-		icon = mission_early_game_buildings
 		position = 23
 		provinces_to_highlight = {
+			region = canada_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				is_city = yes
+				region = canada_region
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_settlers
+				duration = 9125
+			}
 		}
 	}
 	fra_brazil = {
@@ -1662,10 +2573,21 @@ fra_4 = {
 		icon = mission_have_manufactories
 		position = 24
 		provinces_to_highlight = {
+			colonial_region = colonial_brazil
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				is_city = yes
+				colonial_region = colonial_brazil
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_brazil_modifier
+				duration = 9125
+			}
 		}
 	}
 	fra_india = {
@@ -1673,12 +2595,258 @@ fra_4 = {
 		icon = mission_unite_home_region
 		position = 25
 		provinces_to_highlight = {
+			OR = {
+				region = coromandel_region
+				region = deccan_region
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 40
+				is_city = yes
+				OR = {
+					region = coromandel_region
+					region = deccan_region
+				}
+			}
 		}
 		effect = {
+			coromandel_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			deccan_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bengal_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
+	fra_india_conquered = {
+		required_missions = { fra_india }
+		icon = mission_a_million_elephants
+		position = 26
+		provinces_to_highlight = {
+			OR = {
+				region = bengal_region
+				region = deccan_region
+				region = coromandel_region
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			bengal_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			coromandel_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_conquest_of_india
+				duration = -1
+			}
+		}
+	}
+	fra_batavian = {
+		required_missions = { fra_vive_la }
+		icon = mission_netherlands
+		position = 27
+		provinces_to_highlight = {
+			OR = {
+				area = frisia_area
+				area = netherlands_area
+				area = holland_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			frisia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			netherlands_area = {
+				type = all
+				owned_by = ROOT
+			}
+			holland_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = fra_me.6 }
+			add_country_modifier = {
+				name = batavian_republic
+				duration = -1
+			}
+		}
+	}
+
+	napoleon_italy = {
+		required_missions = { fra_batavian }
+		icon = mission_italy
+		position = 28
+		provinces_to_highlight = {
+			OR = {
+				area = emilia_romagna_area
+				area = lombardy_area
+				area = venetia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = fra_me.4 }
+		}
+	}
+	fra_confederation = {
+		required_missions = { napoleon_italy }
+		position = 29
+		icon = mission_germany
+		provinces_to_highlight = {
+			OR = {
+				area = lower_rhineland_area
+				area = upper_rhineland_area
+				area = palatinate_area
+				area = hesse_area
+				area = westphalia_area
+				area = thuringia_area
+				area = franconia_area
+				area = lower_swabia_area
+				area = upper_swabia_area
+				area = lower_bavaria_area
+				area = upper_bavaria_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			lower_rhineland_area = {
+				type = all
+				owned_by = ROOT
+			}
+			upper_rhineland_area = {
+				type = all
+				owned_by = ROOT
+			}
+			palatinate_area = {
+				type = all
+				owned_by = ROOT
+			}
+			hesse_area = {
+				type = all
+				owned_by = ROOT
+			}
+			westphalia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			thuringia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			franconia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			lower_swabia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			upper_swabia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			lower_bavaria_area = {
+				type = all
+				owned_by = ROOT
+			}
+			upper_bavaria_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = fra_me.5 }
+			add_country_modifier = {
+				name = rhine_confederation
+				duration = -1
+			}
+		}
+	}
+	fra_warsaw = {
+		required_missions = { fra_confederation }
+		icon = mission_poland
+		position = 30
+		provinces_to_highlight = {
+			OR = {
+				area = wielkopolska_area
+				area = malopolska_area
+				area = mazovia_area
+				area = west_prussia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			wielkopolska_area = {
+				type = all
+				owned_by = ROOT
+			}
+			malopolska_area = {
+				type = all
+				owned_by = ROOT
+			}
+			mazovia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			west_prussia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = fra_me.7 }
+			add_country_modifier = {
+				name = warsaw
+				duration = -1
+			}
+		}
+	}
+	
 }
 
 fra_5 = {
@@ -2115,33 +3283,59 @@ fra_5 = {
 		required_missions = { fra_renaissance }
 		icon = mission_alliances
 		position = 13
-		provinces_to_highlight = {
-		}
 		trigger = {
+			treasurer = 1
+			NOT = { average_autonomy = 20 }
+			monthly_income = 60
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_leap
+				duration = 7300
+			}
 		}
 	}
 	fra_centralized_army = {
 		required_missions = { fra_first_reforms fra_centralization }
 		icon = mission_assemble_an_army
 		position = 14
-		provinces_to_highlight = {
-		}
 		trigger = {
+			army_reformer = 1
+			mil = 4
+			OR = {
+				army_tradition = 60
+				army_professionalism = 25
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_state_army
+				duration = 9125
+			}
 		}
 	}
 	fra_the_huguenots = {
 		required_missions = { fra_new_religion }
 		icon = mission_european_church
 		position = 17
-		provinces_to_highlight = {
-		}
 		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				religion = anglican
+				has_country_modifier = counter_reformation
+			}
+			has_rebel_faction = zealot_rebels
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_war_crimes
+				duration = 1825
+			}
+			add_country_modifier = {
+				name = fra_religious_push
+				duration = 3650
+			}
 		}
 	}
 
@@ -2152,8 +3346,24 @@ fra_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			1469 = {
+				discovered_by = ROOT
+			}
+			1460 = {
+				discovered_by = ROOT
+			}
+			1457 = {
+				discovered_by = ROOT
+			}
+			1340 = {
+				discovered_by = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_global
+				duration = -1 
+			}
 		}
 	}
 	fra_ivory = {
@@ -2161,10 +3371,37 @@ fra_5 = {
 		icon = mission_colonial
 		position = 23
 		provinces_to_highlight = {
+			OR = {
+				area = sao_tome_area
+				area = gulf_of_guinea_area
+				area = west_africa_coast_area
+				area = benin_area
+				area = guinea_coast_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+				is_city = yes
+				OR = {
+					area = sao_tome_area
+					area = gulf_of_guinea_area
+					area = west_africa_coast_area
+					area = benin_area
+					area = guinea_coast_area
+				}
+			}
 		}
 		effect = {
+			1466 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 15
+					key = fra_trade_modifier_1
+				}
+			}
 		}
 	}
 	fra_cape = {
@@ -2174,8 +3411,15 @@ fra_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			1460 = {
+				is_strongest_trade_power = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = fra_cape_secured
+				duration = 9125
+			}
 		}
 	}
 	fra_malacca = {
@@ -2185,53 +3429,114 @@ fra_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			1361 = {
+				is_strongest_trade_power = ROOT
+			}
+			1357 = {
+				is_strongest_trade_power = ROOT
+			}
 		}
 		effect = {
+			add_naval_tradition = 20
+			add_country_modifier = {
+				name = fra_tradition
+				duration = 9125
+			}
 		}
 	}
-}
-
-fra_5_AoW = {
-	slot = 5
-	generic = no
-	ai = yes
-	potential_on_load = {
-		has_dlc = "Art of War"
+	fra_spice_trade = {
+		required_missions = { fra_malacca }
+		icon = mission_south_indian_trade
+		position = 26
+		provinces_to_highlight = {
+		}
+		trigger = {
+			1361 = {
+				is_strongest_trade_power = ROOT
+			}
+			1357 = {
+				is_strongest_trade_power = ROOT
+			}
+			1460 = {
+				is_strongest_trade_power = ROOT
+			}
+			1466 = {
+				is_strongest_trade_power = ROOT
+			}
+			1276 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "Castile_spice_trade"
+				duration = -1
+			}
+		}
 	}
-	potential = {
-		tag = FRA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_dlc = "Art of War"
+	fra_continental_thingy = {
+		required_missions = { fra_vive_la }
+		icon = continental_thingy
+		position = 27
+		trigger = {
+			adm = 5
+			num_of_subjects = 3
+			num_of_allies = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = continental_thingy
+				duration = -1
+			}
+		}
 	}
-	has_country_shield = yes
-
-
-}
-
-fra_5_2 = {
-	slot = 5
-	generic = no
-	ai = yes
-	potential = {
-		tag = FRA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	fra_grand_army = {
+		required_missions = { fra_continental_thingy }
+		icon = grand_armee
+		trigger = {
+			mil = 5
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = grand_armee
+				duration = -1
+			}
+		}
 	}
-	has_country_shield = yes
-	
 
-
-
-}
-
-fra_centrulization = {
-	slot = 1
-	generic = no
-	ai = yes
-	potential = {
-		tag = FRA
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	fra_arty = {
+		required_missions = { fra_grand_army }
+		icon = french_arty
+		trigger = {
+			mil_power = 200
+			mil = 4
+			num_of_artillery = 80
+		}
+		effect = {
+			add_mil_power = -200
+			add_country_modifier = {
+				name = fra_arty
+				duration = -1
+			}
+		}
 	}
-	has_country_shield = yes
 
+	fra_generals = {
+		required_missions = { fra_arty }
+		icon = french_generals
+		trigger = {
+			army_tradition = 20
+			mil = 5
+			total_development = 700
+		}
+		effect = {
+			add_army_tradition = -20
+			add_country_modifier = {
+				name = fra_generals
+				duration = -1
+			}
+		}
+	}
 }
 
