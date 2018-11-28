@@ -87,7 +87,22 @@ FRA_missions_1 = {
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = fra_me_breton_acceptance
-				accepted_culture = breton
+				OR = {
+					accepted_culture = breton
+					AND = {
+						culture_group = french
+						OR = {
+							AND = {
+								has_dlc = "Common Sense"
+								government_rank = 3
+							}
+							AND = {
+								NOT = { has_dlc = "Common Sense" }
+								total_development = 1000
+							}
+						}
+					}						
+				}
 			}
 		}
 		effect = {
@@ -900,9 +915,9 @@ FRA_missions_2 = {
 		position = 8
 		required_missions = { Fra_naval_dominance }
 		trigger = {
-			navy_size = 1
+			navy_size = 10
 			custom_trigger_tooltip = {
-				tooltip = fra_tooltip.2
+				tooltip = FRA_HAS_BIGGEST_NAVY_IN_EUROPE
 				NOT = {
 					any_country = {
 						capital_scope = {
@@ -970,16 +985,12 @@ FRA_missions_2 = {
 		position = 11
 		trigger = {
 			religion = catholic
-			custom_trigger_tooltip = {
-				tooltip = fra_protestant
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 10
-					OR = {
-						religion = protestant
-						religion = reformed
-						religion = anglican
-					}
-					is_city = yes
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				OR = {
+					religion = protestant
+					religion = reformed
+					religion = anglican
 				}
 			}
 		}
@@ -997,7 +1008,7 @@ FRA_missions_2 = {
 		position = 12
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = fra_tooltip.4
+				tooltip = FRA_HAD_RELIGIOUS_DISASTER
 				OR = {
 					has_country_flag = FRA_wars_of_religion_ended
 					has_country_flag = had_religious_turmoil
@@ -1063,7 +1074,7 @@ FRA_missions_2 = {
 	}
 
 	fra_uni_nantes = {
-		required_missions = { fra_uni_nantes }
+		required_missions = { }
 		icon = mission_early_modern_university
 		position = 18
 		provinces_to_highlight = {
@@ -1528,8 +1539,10 @@ FRA_missions_3 = {
 		required_missions = {}
 		position = 1
 		trigger = {
+			total_development = 150
+			army_size = 40
 			custom_trigger_tooltip = {
-				tooltip = fra_tooltip.3
+				tooltip = FRA_HAS_HEGEMONY_IN_EUROPE
 				NOT = {
 					any_country = {
 						capital_scope = {
@@ -2164,7 +2177,7 @@ FRA_missions_3 = {
 		icon = mission_invade_island
 		position = 22
 		provinces_to_highlight = {
-			colonial_region = colonial_caribbean
+			colonial_region = colonial_the_caribbean
 			has_discovered = ROOT
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -2174,7 +2187,7 @@ FRA_missions_3 = {
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 5
-				colonial_region = colonial_caribbean
+				colonial_region = colonial_the_caribbean
 				is_city = yes
 			}
 		}
@@ -2416,17 +2429,20 @@ FRA_missions_4 = {
 		icon = mission_empire
 		position = 4
 		trigger = {
-			custom_trigger_tooltip = {
-				custom_tooltip = me_fra_destroy_HRE
+			OR = {
 				emperor = {
-					is_in_war = {
-						attacker_leader = ROOT
-						defender_leader = THIS
-					}
-					capital_scope = {
-						controlled_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = me_fra_destroy_HRE
+						is_in_war = {
+							attacker_leader = ROOT
+							defender_leader = THIS
+						}
+						capital_scope = {
+							controlled_by = ROOT
+						}
 					}
 				}
+				NOT = { hre_size = 1 }
 			}
 		}
 		effect = {
@@ -2816,7 +2832,7 @@ FRA_missions_4 = {
 		position = 18
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = fra_tooltip.4
+				tooltip = FRA_HAD_RELIGIOUS_DISASTER
 				OR = {
 					has_country_flag = FRA_wars_of_religion_ended
 					has_country_flag = had_religious_turmoil
@@ -3831,7 +3847,7 @@ FRA_missions_5 = {
 				religion = anglican
 				has_country_modifier = counter_reformation
 			}
-			has_rebel_faction = zealot_rebels
+			has_spawned_rebels = zealot_rebels
 		}
 		effect = {
 			add_country_modifier = {
