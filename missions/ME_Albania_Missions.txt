@@ -6,262 +6,96 @@ Albania_missions_1 = {
 		tag = ALB
 	}
 	has_country_shield = yes
-
-	Albania_full_strength = {
-		icon = mission_assemble_an_army
-		required_missions = { }
-		position = 1
-		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.75
-		}
-		effect = {
-			add_country_modifier = {
-				name = "alb_searching_for_allies"
-				duration = 7300
-			}
-			add_yearly_manpower = 3
-		}
-	}
 	
-	Albania_allies = {
-		icon = mission_alliances
-		required_missions = { Albania_full_strength }
+	Albania_sea_route = {
+		icon = mission_galleys_in_port
 		position = 2
-		trigger = {
-			num_of_allies = 2
-		}
-		effect = {
-			every_ally = {
-				add_trust = {
-    				who = ROOT
-   					value = 25
-    				mutual = yes
-				}
-			}
-		}
-	}
-	
-	Albania_athlete = {
-		icon = mission_hands_praying
-		required_missions = { }
-		position = 3
-		trigger = {
-			religious_unity = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = "athlete_christi"
-				duration = -1
-			}
-		}
-	}
-	
-	Albanian_culture = {
-		icon = mission_european_church
-		required_missions = { }
-		position = 4
-		trigger = {
-			albania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				culture = albanian
-			}
-		}
-		effect = {
-			albania_area = {
-				add_province_modifier = {
-					name = "Albanian_culture"
-					duration = -1
-				}
-			}
-		}	
-	}
-	
-	Albania_overtake_ottomans = {
-		icon = mission_assemble_an_army
-		required_missions = { }
-		position = 5
-		trigger = {
-			if = {
-				limit = {
-					exists = TUR
-				}
-				army_size = TUR
-			}
-			else = {
-				army_size = 30
-			}
-		}
-		effect = {
-			add_prestige = 50
-			add_mil_power = 200
-		}
-	}
-	
-	Albania_Vlore = {
-		icon = mission_unite_home_region
-		required_missions = { }
+		required_missions = { Albania_army_of_the_mountains }
 		provinces_to_highlight = {
-			province_id = 143
-			NOT = { controlled_by = ROOT }
+			province_id = 4174
 		}
-		position = 6
 		trigger = {
-			controls = 143
+			4174 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_building = marketplace
+			}
+			num_of_light_ship = 4
 		}
 		effect = {
-			143 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						owner = { ai = yes }
-					}
-					cede_province = ROOT
-				}
-				else = {
-					add_core = ROOT
-				}
+		`	4174 = {
+				add_center_of_trade_level = 1
 			}
-			macedonia_area = {
+			rascia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			northern_greece_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	Albania_rascia = {
-		icon = montenegro
-		required_missions = { Albania_Unity }
-		position = 8
+	Albania_flourishing_economy = {
+		icon = mission_high_income
+		position = 4
+		required_missions = { Albania_sea_route }
 		provinces_to_highlight = {
 			area = rascia_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			1766 = {
+				development = 10
+			}
 			rascia_area = {
-				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				type = all
 			}
 		}
 		effect = {
-			serbia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
+			add_country_modifier = {
+				name = alb_economic_resurgence
+				duration = 7300
+			}
+			137 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
+			}
+		}
+	}
+	Albania_trade_in_ragusa = {
+		icon = mission_dominate_home_trade_node
+		position = 5
+		required_missions = { Albania_flourishing_economy }
+		provinces_to_highlight = {
+			province_id = 137
+		}
+		trigger = {
+			137 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 18
+			}
+		}
+		effect = {
+			137 = {
+				add_center_of_trade_level = 1
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = alb_fall_of_ragasu
+				}
 			}
 		}
 	}
 	
-	Albania_serbia = {
-		icon = serbia
-		required_missions = { Albania_rascia }
-		position = 9
-		provinces_to_highlight = {
-			area = serbia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			serbia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			bosnia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Albania_bosnia = {
-		icon = bosnia
-		required_missions = { Albania_serbia }
-		position = 10
-		provinces_to_highlight = {
-			area = bosnia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			bosnia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			croatia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Albania_croatia = {
-		icon = croatia
-		required_missions = { Albania_bosnia }
-		position = 11
-		provinces_to_highlight = {
-			area = croatia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			croatia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			east_adriatic_coast_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Albania_coast = {
-		icon = dalmatia
-		required_missions = { Albania_croatia }
-		position = 12
-		provinces_to_highlight = {
-			area = east_adriatic_coast_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			east_adriatic_coast_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_dip_power = 50
-			add_adm_power = 50
-			add_mil_power = 50
-		}
-	}
 }
-
 Albania_missions_2 = {
 	slot = 2
 	ai = yes
@@ -270,104 +104,110 @@ Albania_missions_2 = {
 		tag = ALB
 	}
 	has_country_shield = yes
-
-	Albania_Unity = {
-		icon = albania
-		required_missions = { Albania_Durres Albania_Vlore }
-		position = 7
+	
+	Albania_army_of_the_mountains = {
+		icon = mission_assemble_an_army
+		position = 1
+		required_missions = { }
 		provinces_to_highlight = {
-			area = albania_area
+		}
+		trigger = {
+			army_size_percentage = 1
+			num_of_general = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = alb_mountaineers
+				duration = 3650
+			}
+		}
+	}
+	Albania_black_eagle = {
+		icon = mission_build_up_to_force_limit
+		position = 2
+		required_missions = { Albania_army_of_the_mountains }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size = 20
+			army_professionalism = 0.25
+		}
+		effect = {
+			add_country_modifier = {
+				name = alb_black_eagle
+				duration = -1
+			}
+		}
+	}
+	Albania_ancestral_mountains = {
+		icon = mission_monarch_in_throne_room
+		position = 3
+		required_missions = { Albania_offensive }
+		provinces_to_highlight = {
+			province_id = 143
+		}
+		trigger = {
+			143 = {
+				owned_by = ROOT
+			}
+			capital_scope = {
+				base_manpower = 5
+			}
+		}
+		effect = {
+			143 = {
+				add_building = fort_15th
+			}
+			add_country_modifier = {
+				name = alb_forts
+				duration = 18250
+			}
+		}
+	}
+	Albania_unite_the_balkans = {
+		icon = mission_unite_home_region
+		position = 5
+		required_missions = { Albania_flourishing_economy Albania_macedonia }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size = 25
+			monthly_income = 30
+		}
+		effect = {
+			balkan_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_prestige = 20
+		}
+	}
+	Albania_empire = {
+		icon = mission_empire
+		position = 6
+		required_missions = { Albania_unite_the_balkans }
+		provinces_to_highlight = {
+			region = balkan_region
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			albania_area = {
+			balkan_region = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = "albania_powah"
-				duration = 7300
+				name = alb_triumph
+				duration = 18250
 			}
-			albania_area = {
-				limit = {
-					is_core = TUR
-					NOT = { owned_by = TUR }
-				}
-				remove_core = TUR
-			}
-		}
-	}
-	
-	Albania_Macedonia = {
-		icon = macedonia
-		required_missions = { Albania_Unity }
-		position = 8
-		provinces_to_highlight = {
-			area = macedonia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			macedonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			thrace_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Albania_Thracia = {
-		icon = thrace
-		required_missions = { Albania_Macedonia }
-		position = 9
-		provinces_to_highlight = {
-			area = thrace_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			thrace_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			bulgaria_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	Albania_bulgaria = {
-		icon = bulgaria
-		required_missions = { Albania_Thracia }
-		position = 8
-		provinces_to_highlight = {
-			area = bulgaria_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			bulgaria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_dip_power = 50
-			add_adm_power = 50
-			add_mil_power = 50
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_army_tradition = 25
 		}
 	}
 }
@@ -380,109 +220,175 @@ Albania_missions_3 = {
 		tag = ALB
 	}
 	has_country_shield = yes
-
-	Albania_Durres = {
+	
+	Albania_offensive = {
+		icon = mission_non-western_soldiers
+		position = 2
+		required_missions = { Albania_army_of_the_mountains }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			war_with = TUR
+		}
+		effect = {
+			add_country_modifier = {
+				name = albania_great_balkan_war
+				duration = 5475
+			}
+			add_yearly_manpower = 1
+			macedonia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	Albania_save_our_people = {
 		icon = mission_unite_home_region
-		required_missions = { }
+		position = 3
+		required_missions = { Albania_offensive }
 		provinces_to_highlight = {
-			province_id = 4174
-			NOT = { controlled_by = ROOT }
+			province_id = 143
 		}
-		position = 6
 		trigger = {
-			controls = 4174
+			143 = {
+				controlled_by = ROOT
+			}
 		}
 		effect = {
-			4174 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						owner = { ai = yes }
-					}
-					cede_province = ROOT
-				}
-				else = {
-					add_core = ROOT
-				}
+			143 = {
+				infantry = ROOT
+				infantry = ROOT
 			}
-			rascia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = albania_support
+				duration = 1825
 			}
 		}
 	}
-	
-	Albania_Northern_greece = {
-		icon = northgreece
-		required_missions = { Albania_Unity }
-		position = 8
+	Albania_macedonia = {
+		icon = mission_cannons_firing
+		position = 4
+		required_missions = { Albania_save_our_people }
 		provinces_to_highlight = {
-			area = northern_greece_area
+			area = macedonia_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			northern_greece_area = {
+			macedonia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			morea_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_years_of_income = 1
+			148 = {
+				add_base_tax = 1
+				add_base_manpower = 1
+				add_base_production = 1
 			}
-		}
-	}
-	
-	Albania_Greece_West = {
-		icon = morea
-		required_missions = { Albania_Northern_greece }
-		position = 9
-		provinces_to_highlight = {
-			area = morea_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			morea_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			3001 = {
+				add_base_tax = 1
+				add_base_manpower = 1
+				add_base_production = 1
 			}
-		}
-		effect = {
-			aegean_archipelago_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				}
-				add_permanent_claim = ROOT
+			1853 = {
+				add_base_tax = 1
+				add_base_manpower = 1
+				add_base_production = 1
 			}
-		}
-	}
-	
-	Albania_Greece_East = {
-		icon = aegeianArchipelago
-		required_missions = { Albania_Greece_West }
-		position = 10
-		provinces_to_highlight = {
-			area = aegean_archipelago_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			aegean_archipelago_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_dip_power = 50
-			add_mil_power = 50
-			add_adm_power = 50
 		}
 	}
 }
+
+Albania_missions_4 = {
+	slot = 4
+	ai = yes
+	generic = no
+	potential = {
+		tag = ALB
+	}
+	has_country_shield = yes
+	Albania_byzantine_legacy = {
+		icon = mission_empire
+		position = 1
+		required_missions = { }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = { 
+				NOT = {
+					exists = BYZ
+				}
+				NOT = {
+					reverse_has_opinion = {
+						who = BYZ
+						value = -50
+					}
+				}
+			}
+			4175 = {
+				development = 10
+			}
+		}
+		effect = {
+			change_innovativeness = 10
+			add_country_modifier = {
+				name = alb_decay
+				duration = 5475
+			}
+		}
+	}
+	Albania_troubled_times = {
+		icon = mission_have_two_subjects
+		position = 3
+		required_missions = { Albania_byzantine_legacy }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			num_of_allies = 2
+			NOT = { exists = BYZ }
+		}
+		effect = {
+			thrace_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = alb_bastion
+				duration = 7300
+			}
+		}
+	}
+	Albania_rise_of_constantinople = {
+		icon = mission_cannons_firing
+		position = 5
+		required_missions = { Albania_troubled_times }
+		provinces_to_highlight = {
+			province_id = 151
+		}
+		trigger = {
+			151 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			151 = {
+				add_core = ROOT
+				change_culture = albanian
+				change_province_name = "Skenderpolis"
+				rename_capital = "Skenderpolis"
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 1
+			}
+			set_capital = 151
+		}
+	}
+}
+
