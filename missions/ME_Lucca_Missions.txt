@@ -292,6 +292,14 @@ lucca_missions_slot_2 = {
 		icon = mission_have_two_subjects
 		position = 6
 		required_missions = { lucca_conquer_western_italy }
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			183 = {
+				owned_by = ROOT
+			}
+			region = france_region
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			NOT = { has_country_modifier = lucca_turned_to_them_modifier }
 			if = {
@@ -433,6 +441,14 @@ lucca_missions_slot_2 = {
 		icon = mission_alliances
 		position = 7
 		required_missions = { lucca_turn_towards_france }
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			183 = {
+				owned_by = ROOT
+			}
+			region = france_region
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -574,15 +590,8 @@ lucca_missions_slot_2 = {
 		position = 8
 		required_missions = { }
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					NOT = { exists = PAP }
-				}
-				province_id = 118
-			}
-			else = {
-				always = no
-			}
+			NOT = { exists = PAP }
+			province_id = 118
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -674,27 +683,13 @@ lucca_missions_slot_3 = {
 		trigger = {
 			NOT = { mission_completed = lucca_become_merchant_republic }
 			NOT = { legitimacy_equivalent = 50 }
-			if = {
-				limit = {
-					has_dlc = "The Cossacks"
-				}
-				estate_influence = {
-					estate = estate_nobles
-					influence = 60
-				}
-				estate_loyalty = {
-					estate = estate_nobles
-					loyalty = 40
-				}
+			estate_influence = {
+				estate = estate_nobles
+				influence = 60
 			}
-			else = {
-				OR = {
-					AND = {
-						current_age = age_of_absolutism
-						NOT = { legitimacy_equivalent = 34 }
-					}
-					has_spawned_rebels = noble_rebels
-				}
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 40
 			}
 			NOT = { government = monarchy }
 			NOT = { has_reform = merchants_reform }
@@ -893,11 +888,27 @@ lucca_missions_slot_4 = {
 		icon = mission_have_two_subjects
 		position = 6
 		required_missions = { lucca_conquer_western_italy }
+		provinces_to_highlight = {
+			NOT = {
+				any_country = {
+					NOT = { tag = ROOT }
+					is_emperor = yes
+				}
+			}
+			NOT = { exists = HAB }
+			NOT = { exists = GER }
+			OR = {
+				region = north_german_region
+				region = south_german_region
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			NOT = { has_country_modifier = lucca_turned_to_them_modifier }
 			if = {
 				limit = {
 					any_country = {
+						NOT = { tag = ROOT }
 						is_emperor = yes
 					}
 				}
@@ -932,6 +943,7 @@ lucca_missions_slot_4 = {
 			}
 			else = {
 				OR = {
+					is_emperor = yes
 					north_german_region = {
 						type = all
 						owned_by = ROOT
@@ -959,6 +971,7 @@ lucca_missions_slot_4 = {
 			if = {
 				limit = {
 					any_country = {
+						NOT = { tag = ROOT }
 						is_emperor = yes
 					}
 				}
@@ -1030,6 +1043,32 @@ lucca_missions_slot_4 = {
 						}
 					}
 				}
+				random_country = {
+					limit = {
+						capital_scope = {
+							OR = {
+								region = north_german_region
+								region = south_german_region
+							}
+						}
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					add_opinion = {
+						who = ROOT
+						modifier = lucca_turned_to_us
+					}
+					reverse_add_opinion = {
+						who = ROOT
+						modifier = lucca_turned_to_them
+					}
+					add_country_modifier = {
+						name = lucca_turned_to_us_modifier
+						duration = 365
+					}
+				}
 			}
 			else = {
 				add_prestige = 10
@@ -1045,10 +1084,26 @@ lucca_missions_slot_4 = {
 		icon = mission_alliances
 		position = 7
 		required_missions = { lucca_turn_towards_emperor }
+		provinces_to_highlight = {
+			NOT = {
+				any_country = {
+					NOT = { tag = ROOT }
+					is_emperor = yes
+				}
+			}
+			NOT = { exists = HAB }
+			NOT = { exists = GER }
+			OR = {
+				region = north_german_region
+				region = south_german_region
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			if = {
 				limit = {
 					any_country = {
+						NOT = { tag = ROOT }
 						is_emperor = yes
 					}
 				}

@@ -1,4 +1,4 @@
-survival_in_region = {
+LIV_missions_1 = {
 	slot = 1 
 	generic = no
 	ai = yes
@@ -11,9 +11,16 @@ survival_in_region = {
 		icon = mission_war_chest
 		required_missions = { }
 		trigger = {
-			treasury = 200		
-			marketplace = 2
-			temple = 2
+			treasury = 200
+			OR = {
+				marketplace = 2
+				trade_depot = 2
+				stock_exchange = 2
+			}
+			OR = {
+				temple = 2
+				cathedral = 2
+			}
 		}
 		effect = {
 			capital_scope = {
@@ -34,7 +41,10 @@ survival_in_region = {
 		trigger = {
 			army_size_percentage = 1
 			num_of_generals = 2
-			barracks = 2
+			OR = {
+				barracks = 2
+				training_fields = 2
+			}
 		}
 		effect = {
 			add_prestige = 15
@@ -85,11 +95,11 @@ survival_in_region = {
 		position = 7	
 		trigger = {
 			OR = {
-				TEU = { vassal_of = ROOT }
+				overlord_of = TEU
 				NOT = { exists = TEU }
 			}		
 		}
-			effect = {
+		effect = {
 			add_country_modifier = {
 				name = "united_german_order"
 				duration = -1
@@ -98,7 +108,38 @@ survival_in_region = {
 	}
 }
 
-baltic_might = {
+LIV_missions_3 = {
+	slot = 3  
+	generic = no 
+	ai = yes 
+	potential = {
+        tag = LIV
+    }
+	has_country_shield = yes
+
+	confederative_governement = {
+		icon = mission_high_income
+		required_missions = { annex_teutonic_order liv_conquer_north_baltic }
+		position = 8
+		trigger = {
+			has_institution = printing_press
+			advisor = treasurer
+			adm_tech = 15
+			NOT = { exists = KUR }
+		}		
+		effect = {
+		    change_tag = KUR
+			change_government = republic
+			add_government_reform = federal_republic
+			add_country_modifier = {
+				name = "governmental_reforms"
+				duration = -1
+			}
+		}
+	}
+}
+
+LIV_missions_5 = {
 	slot = 5  
 	generic = no 
 	ai = yes 
@@ -109,13 +150,29 @@ baltic_might = {
 
 	livonian_teutonic_alliance = {
 		icon = mission_alliances 
-		required_missions = { } 
+		required_missions = { }
+		provinces_to_highlight = {
+			NOT = { exists = TEU }
+			is_core = TEU
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			alliance_with = TEU
-			TEU = {
-				has_opinion = {
-					who = ROOT
+			if = {
+				limit = {
+					exists = TEU
+				}
+				alliance_with = TEU
+				reverse_has_opinion = {
+					who = TEU
 					value = 170
+				}
+			}
+			else = {
+				all_province = {
+					OR = {
+						owned_by = ROOT
+						NOT = { is_core = TEU }
+					}
 				}
 			}
 		}
@@ -143,7 +200,7 @@ baltic_might = {
 			}
 		}	
 		effect = {
-			add_mil_power = 100		
+			add_mil_power = 100
 			add_army_tradition = 1
 			finland_area = {
 				limit = {
@@ -165,9 +222,7 @@ baltic_might = {
 		position = 5
 		trigger = {
 			army_size = 30
-			LIV = {
-				NOT = { vassal_of = TEU }
-			}
+			is_subject = no
 		}
 		effect = {
 			add_country_modifier = {
@@ -205,37 +260,6 @@ baltic_might = {
 			add_country_modifier = {
 				name = "baltic_power"
 				duration = 7300
-			}
-		}
-	}
-}	
-
-new_governement = {
-	slot = 3  
-	generic = no 
-	ai = yes 
-	potential = {
-        tag = LIV
-    }
-	has_country_shield = yes
-
-	confederative_governement = {
-		icon = mission_high_income
-		required_missions = { annex_teutonic_order liv_conquer_north_baltic }
-		position = 8
-		trigger = {
-			has_institution = printing_press
-			advisor = treasurer
-			adm_tech = 15
-			NOT = { exists = KUR }
-		}		
-		effect = {
-		    change_tag = KUR
-			change_government = republic
-			add_government_reform = federal_republic
-			add_country_modifier = {
-				name = "governmental_reforms"
-				duration = -1
 			}
 		}
 	}
