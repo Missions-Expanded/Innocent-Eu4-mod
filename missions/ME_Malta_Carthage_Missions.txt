@@ -1,4 +1,4 @@
-malta_missions_first_slot = {
+JAI_CTH_missions_slot_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -14,9 +14,30 @@ malta_missions_first_slot = {
 		icon = mission_jai_independent
 		position = 1
 		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 20 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 2 } }
+				}
+			}
+		}
 		trigger = {
 			capital_scope = {
-				development = 20
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 20
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+				}
 			}
 		}
 		effect = {
@@ -36,17 +57,13 @@ malta_missions_first_slot = {
 		position = 2
 		required_missions = { jai_independent }
 		provinces_to_highlight = {
-			OR = {
-				area = sicily_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = sicily_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			sicily_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -58,9 +75,17 @@ malta_missions_first_slot = {
 		icon = mission_jai_valleta 
 		position = 3
 		required_missions = { jai_expand }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_building = shipyard }
+			NOT = { has_building = grand_shipyard }
+		}
 		trigger = {
 			capital_scope = {
-				has_building = shipyard
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
 			}
 		}
 		effect = {
@@ -71,30 +96,42 @@ malta_missions_first_slot = {
 	jai_carthage = {
 		icon = mission_jai_carthage 
 		position = 4
-		#required_missions = { jai_valleta }
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 341
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
+			is_subject = no
 			owns_core_province = 341
-			NOT = { exists = PON }	
-			NOT = { is_vassal = yes }
+			NOT = { exists = CTH }	
 		}
 		effect = {
 			341 = {
-				hidden_effect = {
-					move_capital_effect = yes
-					change_province_name = "Carthage"
-					rename_capital = "Carthage"
-				}
+				move_capital_effect = yes
+				change_province_name = "Carthage"
+				rename_capital = "Carthage"
 			}
 			change_tag = CTH
 			swap_non_generic_missions = yes
 			tunisia_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			1247 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			if = {
 				limit = { has_custom_ideas = no }
@@ -106,14 +143,12 @@ malta_missions_first_slot = {
 	}
 }
 
-carthage_missions_first_slot = {
+CTH_missions_slot_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			tag = CTH
-		}
+		tag = CTH
 	}
 	has_country_shield = yes
 	
@@ -122,12 +157,8 @@ carthage_missions_first_slot = {
 		position = 5
 		required_missions = { }
 		provinces_to_highlight = {
-			OR = {
-				area = tunisia_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = tunisia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			tunisia_area = {
@@ -151,22 +182,16 @@ carthage_missions_first_slot = {
 				add_permanent_claim = ROOT
 			}
 			2455 = {
-				hidden_effect = {
-					change_province_name = "Utica"
-					rename_capital = "Utica"
-				}
+				change_province_name = "Utica"
+				rename_capital = "Utica"
 			}
 			2473 = {
-				hidden_effect = {
-					change_province_name = "Hadrumentum"
-					rename_capital = "Hadrumentum"
-				}
+				change_province_name = "Hadrumentum"
+				rename_capital = "Hadrumentum"
 			}
 			2454 = {
-				hidden_effect = {
-					change_province_name = "Zama"
-					rename_capital = "Zama"
-				}
+				change_province_name = "Zama"
+				rename_capital = "Zama"
 			}
 		}
 
@@ -181,9 +206,7 @@ carthage_missions_first_slot = {
 				area = djerba_area
 				area = tripolitania_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			djerba_area = {
@@ -211,11 +234,9 @@ carthage_missions_first_slot = {
 				add_permanent_claim = ROOT
 			}
 			2451 = {
-				hidden_effect = {
-					change_province_name = "Lepcis"
-					rename_capital = "Lepcis"
-					add_base_tax = 1
-				}
+				change_province_name = "Lepcis"
+				rename_capital = "Lepcis"
+				add_base_tax = 1
 			}
 		}
 	}
@@ -229,9 +250,7 @@ carthage_missions_first_slot = {
 				area = kabylia_area 
 				area = algiers_area 
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			kabylia_area = {
@@ -259,11 +278,9 @@ carthage_missions_first_slot = {
 				add_permanent_claim = ROOT
 			}
 			338 = {
-				hidden_effect = {
-					change_province_name = "Iol"
-					rename_capital = "Iol"
-					add_base_tax = 1
-				}
+				change_province_name = "Iol"
+				rename_capital = "Iol"
+				add_base_tax = 1
 			}
 		}
 	}
@@ -277,9 +294,7 @@ carthage_missions_first_slot = {
 				area = upper_andalucia_area 
 				area = lower_andalucia_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			upper_andalucia_area = {
@@ -311,14 +326,13 @@ carthage_missions_first_slot = {
 				duration = -1
 			}
 			1749 = {
-				hidden_effect = {
-					change_province_name = "Agadir"
-					rename_capital = "Agadir"
-					add_base_tax = 1
-				}
+				change_province_name = "Agadir"
+				rename_capital = "Agadir"
+				add_base_tax = 1
 			}
 		}
 	}
+	
 	cth_cartago = {
 		icon = mission_cth_cartago
 		position = 9
@@ -328,9 +342,7 @@ carthage_missions_first_slot = {
 				area = toledo_area 
 				area = valencia_area 
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			toledo_area = {
@@ -343,13 +355,16 @@ carthage_missions_first_slot = {
 			}
 		}
 		effect = {
-			set_government_rank = 3
-			221 = {
-				hidden_effect = {
-					change_province_name = "Qart Hadasht"
-					rename_capital = "Qart Hadasht"
-					add_base_tax = 1
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
 				}
+				set_government_rank = 3
+			}
+			221 = {
+				change_province_name = "Qart Hadasht"
+				rename_capital = "Qart Hadasht"
+				add_base_tax = 1
 			}
 		}
 	}

@@ -6,7 +6,7 @@ Magdeburg_slot_1 = {
 		tag = MAG
 	}
 	has_country_shield = yes
-	
+
 	MAG_rally_the_men = {
 		icon = mission_assemble_an_army
 		required_missions = { }
@@ -19,7 +19,15 @@ Magdeburg_slot_1 = {
 				name = MAG_army_preparation
 				duration = 1875
 			}
-			add_claim = 58
+			58 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 }
@@ -29,14 +37,14 @@ Magdeburg_slot_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = MAG	
+		tag = MAG
 	}
 	has_country_shield = yes
-	
+
 	MAG_conquest_of_anhalt = {
 		icon = mission_conquer_50_development
 		required_missions = {
-			MAG_rally_the_men 
+			MAG_rally_the_men
 			MAG_find_alliances
 		}
 		position = 2
@@ -46,24 +54,53 @@ Magdeburg_slot_2 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-		}	
+		}
 		trigger = {
 			owns_core_province = 58
 		}
 		effect = {
-			SAX = {
-				every_owned_province = {
-					limit = {
-						any_neighbor_province = {
-							owned_by = ROOT
-						}
-					}
-					add_claim = ROOT
+			if = {
+				limit = {
+					exists = SAX
 				}
-			}	
+				SAX = {
+					every_owned_province = {
+						limit = {
+							NOT = { is_core = ROOT }
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			else = {
+				lower_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				northern_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				south_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
-	
+
 	MAG_saxon_frontier = {
 		icon = mission_imperial
 		required_missions = { MAG_conquest_of_anhalt }
@@ -71,12 +108,12 @@ Magdeburg_slot_2 = {
 		provinces_to_highlight = {
 			is_core = SAX
 			NOT = { owned_by = ROOT }
-		}	
+		}
 		trigger = {
 			all_province = {
 				OR = {
-					NOT = { is_core = SAX }
 					owned_by = ROOT
+					NOT = { is_core = SAX }
 				}
 			}
 			NOT = { exists = SAX }
@@ -84,6 +121,7 @@ Magdeburg_slot_2 = {
 		effect = {
 			if = {
 				limit = {
+					is_elector = no
 					NOT = { num_of_electors = 7 }
 				}
 				elector = yes
@@ -95,7 +133,9 @@ Magdeburg_slot_2 = {
 						NOT = { is_core = ROOT }
 					}
 				}
-				add_claim = 50
+				50 = {
+					add_permanent_claim = ROOT
+				}
 			}
 			else = {
 				add_prestige = 10
@@ -109,13 +149,13 @@ Magdeburg_slot_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = MAG	
+		tag = MAG
 	}
 	has_country_shield = yes
-	
+
 	MAG_find_alliances = {
 		icon = mission_alliances
-		required_missions = {  }
+		required_missions = { }
 		position = 1
 		trigger = {
 			num_of_diplomatic_relations = 2
@@ -127,28 +167,28 @@ Magdeburg_slot_3 = {
 			}
 		}
 	}
-	
+
 	MAG_replace_the_emperor = {
 		icon = mission_noble_council
 		required_missions = { MAG_saxon_frontier }
 		position = 4
 		trigger = {
-			is_emperor = no	
+			is_emperor = no
+			is_elector = yes
 			emperor = {
 				ROOT = {
 					NOT = { preferred_emperor = PREV }
 				}
 			}
-			is_elector = yes	
 		}
 		effect = {
 			add_prestige = 15
 			emperor = {
 				add_opinion = {
-					who = PREV
+					who = ROOT
 					modifier = elector_stopped_voting_for_us
 				}
-			}	
+			}
 		}
 	}
 }
@@ -158,14 +198,24 @@ Magdeburg_slot_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		tag = MAG	
+		tag = MAG
 	}
 	has_country_shield = yes
-	
+
 	MAG_rush_b_cyka_blyat = {
 		icon = mission_hanseatic_city
 		required_missions = { }
 		position = 4
+		provinces_to_highlight = {
+			province_id = 50
+			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { controlled_by = ROOT }
+				owner = {
+					NOT = { war_with = ROOT }
+				}
+			}
+		}
 		trigger = {
 			50 = {
 				OR = {
@@ -194,7 +244,7 @@ Magdeburg_slot_4 = {
 				else = {
 					add_base_manpower = 2
 				}
-			}	
+			}
 		}
 	}
-}			
+}
