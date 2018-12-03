@@ -1,4 +1,4 @@
-milan_mission_group = {
+MLO_LOM_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -40,7 +40,7 @@ milan_mission_group = {
 			}
 			101 = {				# Genoa
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_genoa_conquered
@@ -76,7 +76,7 @@ milan_mission_group = {
 			}
 			101 = {				# Genoa
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_firenze_conquered
@@ -88,19 +88,6 @@ milan_mission_group = {
 			}
 		}
 	}
-}
-	
-lombard_mission_group = {
-	slot = 1
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = MLO
-			tag = LOM
-		}
-	}
-	has_country_shield = yes
 	
 	milan_conquer_sardinia = {
 		icon = mission_invade_island
@@ -186,7 +173,7 @@ lombard_mission_group = {
 		effect = {
 			341 = {				# Tunisia
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 20
 					key = milan_tunisia_conquered
@@ -245,7 +232,7 @@ lombard_mission_group = {
 		effect = {
 			341 = {				# Tunisia
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 9125
 					power = 20
 					key = milan_libya_conquered
@@ -253,7 +240,7 @@ lombard_mission_group = {
 			}
 			358 = {				# Alexandria
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 9125
 					power = 20
 					key = milan_libya_conquered
@@ -310,6 +297,13 @@ lombard_mission_group = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { milan_conquer_egypt }
 		position = 13
+		provinces_to_highlight = {
+			province_id = 4316
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_great_project = suez_canal }
+			}
+		}
 		trigger = {
 			4316 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -330,7 +324,7 @@ lombard_mission_group = {
 	}
 }
 
-milan_mission_group_2 = {
+MLO_LOM_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -369,7 +363,7 @@ milan_mission_group_2 = {
 				duration = 5475
 			}
 			1871 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -378,7 +372,7 @@ milan_mission_group_2 = {
 				add_permanent_claim = ROOT
 			}
 			1867 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -408,7 +402,7 @@ milan_mission_group_2 = {
 		}
 		effect = {
 			1247 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -441,6 +435,10 @@ milan_mission_group_2 = {
 		trigger = {
 			OR = {
 				AND = {
+					OR = {
+						government = monarchy
+						legitimacy_equivalent = 100
+					}
 					venetia_area = {
 						type = all
 						country_or_non_sovereign_subject_holds = ROOT
@@ -465,7 +463,6 @@ milan_mission_group_2 = {
 						type = all
 						country_or_non_sovereign_subject_holds = ROOT
 					}
-					government = monarchy
 				}
 				tag = ITA
 			}
@@ -473,15 +470,17 @@ milan_mission_group_2 = {
 		effect = {
 			set_government_rank = 2
 			add_prestige = 25
-			add_legitimacy = 15
+			add_legitimacy_equivalent = { value = 15 }
 			add_adm_power = 25
 			add_dip_power = 25
 			add_mil_power = 25
-			swap_non_generic_missions = yes
 			if = {
 				limit = {
-					NOT = { tag = ITA }
+					tag = ITA
 				}
+				swap_non_generic_missions = yes
+			}
+			else = {
 				every_owned_province = {
 					limit = {
 						is_part_of_hre = yes
@@ -489,26 +488,18 @@ milan_mission_group_2 = {
 					set_in_empire = no
 				}
 				change_tag = LOM
-				country_event = { id = ideagroups.1 }
+				if = {
+					limit = {
+						has_custom_ideas = no
+					}
+					country_event = { id = ideagroups.1 }
+				}
 				hidden_effect = {
 					complete_mission = milan_the_kingdom_of_lombardy
 				}
 			}
 		}
 	}
-}
-
-lombard_mission_group_2 = {
-	slot = 2
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = MLO
-			tag = LOM
-		}
-	}
-	has_country_shield = yes
 	
 	milan_conquer_central_italy = {
 		icon = mission_european_church
@@ -612,12 +603,26 @@ lombard_mission_group_2 = {
 			}
 		}
 		effect = {
-			set_government_rank = 3
+			if = {
+				limit = {
+					is_part_of_hre = no
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			else_if = {
+				limit = {
+					is_part_of_hre = yes
+					is_elector = yes
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
 			add_adm_power = 50
 			add_dip_power = 50
 			add_mil_power = 50
 			add_prestige = 25
-			add_legitimacy = 25
+			add_legitimacy_equivalent = { value = 25 }
 			add_country_modifier = {
 				name = "milan_empire_of_italia"
 				duration = 9125
@@ -626,7 +631,7 @@ lombard_mission_group_2 = {
 	}
 }
 
-milan_mission_group_3 = {
+MLO_LOM_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -679,7 +684,7 @@ milan_mission_group_3 = {
 		effect = {
 			112 = {				# Venice
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_venetia_conquered
@@ -693,7 +698,7 @@ milan_mission_group_3 = {
 				add_permanent_claim = ROOT
 			}
 			130 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -703,19 +708,6 @@ milan_mission_group_3 = {
 			}
 		}
 	}
-}
-
-lombard_mission_group_3 = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = MLO
-			tag = LOM
-		}
-	}
-	has_country_shield = yes
 	
 	milan_conquer_trent = {
 		icon = mission_conquer_50_development
@@ -734,7 +726,7 @@ lombard_mission_group_3 = {
 			110 = {				# Wien
 				change_culture = venetian
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 20
 					key = milan_trent_conquered
@@ -768,8 +760,24 @@ lombard_mission_group_3 = {
 			navy_size = 50
 			num_of_heavy_ship = 10
 			num_of_ports = 20
-			navy_size = TUR
-			navy_size = SPA
+			if = {
+				limit = {
+					exists = TUR
+				}
+				navy_size = TUR
+			}
+			if = {
+				limit = {
+					exists = SPA
+				}
+				navy_size = SPA
+			}
+			else_if = {
+				limit = {
+					exists = CAS
+				}
+				navy_size = CAS
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -784,13 +792,17 @@ lombard_mission_group_3 = {
 		required_missions = { milan_port_in_india }
 		provinces_to_highlight = {
 			superregion = east_indies_superregion
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
 		position = 12
 		trigger = {
 			east_indies_superregion = {
-				type = any
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 		}
 		effect = {
@@ -806,7 +818,11 @@ lombard_mission_group_3 = {
 		required_missions = { milan_colonize_east_indies }
 		provinces_to_highlight = {
 			superregion = east_indies_superregion
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
 		position = 13
 		trigger = {
@@ -825,7 +841,7 @@ lombard_mission_group_3 = {
 	}
 }
 
-milan_mission_group_4 = {
+MLO_LOM_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -861,7 +877,7 @@ milan_mission_group_4 = {
 		effect = {
 			113 = {				# Venice
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_ferrara_conquered
@@ -910,7 +926,7 @@ milan_mission_group_4 = {
 		effect = {
 			205 = {				# Genoa
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_savoy_conquered
@@ -970,19 +986,6 @@ milan_mission_group_4 = {
 			}
 		}
 	}
-}
-
-lombard_mission_group_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = MLO
-			tag = LOM
-		}
-	}
-	has_country_shield = yes
 	
 	milan_lords_of_the_western_balkans = {
 		icon = mission_have_two_subjects
@@ -1104,7 +1107,7 @@ lombard_mission_group_4 = {
 			}
 			148 = {				# Ragusa
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_greece_liberated
@@ -1121,10 +1124,14 @@ lombard_mission_group_4 = {
 		}
 		provinces_to_highlight = {
 			region = balkan_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = catholic }
+			}
 		}
 		position = 8
 		trigger = {
+			religion = catholic
 			balkan_region = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -1205,6 +1212,17 @@ lombard_mission_group_4 = {
 		icon = mission_trade_company_region_abroad
 		required_missions = { }
 		position = 10
+		provinces_to_highlight = {
+			OR = {
+				continent = north_america
+				continent = south_america
+			}
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 5
@@ -1297,13 +1315,18 @@ lombard_mission_group_4 = {
 		required_missions = { milan_port_in_india }
 		provinces_to_highlight = {
 			superregion = india_superregion
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
 		position = 12
 		trigger = {
 			india_superregion = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 		}
 		effect = {
@@ -1315,12 +1338,12 @@ lombard_mission_group_4 = {
 			add_dip_power = 50
 			add_mil_power = 50
 			add_prestige = 25
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 		}
 	}
 }
 
-milan_mission_group_5 = {
+MLO_LOM_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -1337,6 +1360,10 @@ milan_mission_group_5 = {
 		required_missions = { }
 		provinces_to_highlight = {
 			province_id = 109
+			OR = {
+				NOT = { owned_by = MAN }
+				NOT = { is_core = MAN }
+			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 1
@@ -1351,6 +1378,7 @@ milan_mission_group_5 = {
 						}
 						was_player = no
 						NOT = { num_of_cities = 2 }
+						owns_core_province = 109
 					}
 					ROOT = {
 						army_strength = {
@@ -1363,7 +1391,7 @@ milan_mission_group_5 = {
 					dip_power = 50
 				}
 				109 = {
-						country_or_non_sovereign_subject_holds = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 		}
@@ -1374,14 +1402,11 @@ milan_mission_group_5 = {
 						owns_core_province = 109
 					}
 				}
-				add_core = 109
-				MAN = {
-					109 = {
-						cede_province = ROOT
-					}
+				add_casus_belli = {
+					target = MAN
+					type = cb_vassalize_mission
+					months = 24
 				}
-				add_adm_power = -50
-				add_dip_power = -50
 			}
 			emilia_romagna_area = {
 				limit = {
@@ -1405,7 +1430,7 @@ milan_mission_group_5 = {
 				add_permanent_claim = ROOT
 			}
 			101 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1414,7 +1439,7 @@ milan_mission_group_5 = {
 				add_permanent_claim = ROOT
 			}
 			106 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1446,7 +1471,7 @@ milan_mission_group_5 = {
 		}
 		effect = {
 			205 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1456,19 +1481,6 @@ milan_mission_group_5 = {
 			}
 		}
 	}
-}
-
-lombard_mission_group_5 = {
-	slot = 5
-	generic = no
-	ai = yes
-	potential = {
-		OR = {
-			tag = MLO
-			tag = LOM
-		}
-	}
-	has_country_shield = yes
 	
 	milan_italianize_romandie = {
 		icon = mission_have_two_subjects
@@ -1478,14 +1490,19 @@ lombard_mission_group_5 = {
 				province_id = 1871
 				province_id = 1867
 			}
-			NOT = { culture_group = latin }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { culture_group = latin }
+			}
 		}
 		position = 4
 		trigger = {
 			1871 = {
+				owned_by = ROOT
 				culture_group = latin
 			}
 			1867 = {
+				owned_by = ROOT
 				culture_group = latin
 			}
 		}
@@ -1509,19 +1526,30 @@ lombard_mission_group_5 = {
 		icon = mission_early_game_buildings
 		required_missions = { }
 		position = 5
-		trigger = {
-			104 = {
-				has_building = university
-			}
-			calc_true_if = {
-				all_owned_province = {
-					has_building = university
-				}
-				amount = 5
+		provinces_to_highlight = {
+			province_id = 104
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
 			}
 		}
+		trigger = {
+			104 = {
+				owned_by = ROOT
+				has_building = university
+			}
+			university = 5
+		}
 		effect = {
-			change_innovativeness = 10
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				change_innovativeness = 10
+			}
+			else = {
+				add_adm_power = 50
+			}
 			add_country_modifier = {
 				name = "milan_has_universities"
 				duration = 9125
@@ -1586,7 +1614,7 @@ lombard_mission_group_5 = {
 			}
 			151 = {				# Constantinople
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_thrace_liberated
@@ -1630,7 +1658,7 @@ lombard_mission_group_5 = {
 		effect = {
 			833 = {				# Cape of Good Hope
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_gateway_to_india
@@ -1665,7 +1693,7 @@ lombard_mission_group_5 = {
 				add_permanent_claim = ROOT
 			}
 			2778 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1674,7 +1702,7 @@ lombard_mission_group_5 = {
 				add_permanent_claim = ROOT
 			}
 			1207 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1683,7 +1711,7 @@ lombard_mission_group_5 = {
 				add_permanent_claim = ROOT
 			}
 			2779 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1739,7 +1767,7 @@ lombard_mission_group_5 = {
 		}
 		effect = {
 			1208 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1748,7 +1776,7 @@ lombard_mission_group_5 = {
 				add_permanent_claim = ROOT
 			}
 			1210 = {
-				IF = {
+				if = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
@@ -1877,7 +1905,7 @@ lombard_mission_group_5 = {
 		effect = {
 			1212 = {				# Gulf of Aden
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_ethiopia_conquered
@@ -1885,7 +1913,7 @@ lombard_mission_group_5 = {
 			}
 			1224 = {				# Ethiopia
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 25
 					key = milan_ethiopia_conquered
