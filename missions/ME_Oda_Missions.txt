@@ -1,120 +1,161 @@
-oda_slot_2 = {
-slot = 2
-generic = no
-ai = yes
-potential = {
-         tag = ODA
+ODA_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
 	}
 	has_country_shield = yes
-	
-    oda_castles = {
-	icon = mission_japanese_fort
-	required_missions = { }
-	has_country_shield = yes
-	
-	    trigger = { 
-		    1030 = { has_building = fort_15th }
-		}
-		
-		effect = {
-	        1030 = {
-			    add_province_modifier = {
-				    name = "oda_castle_mod"
-					duration = -1
-		        }
-			}
-		}
-	}
-	
-	oda_secure_mino = {
-	icon = mission_assemble_an_army
-	required_missions = { oda_start }
-	has_country_shield = yes
-	    provinces_to_highlight = {
-		    province_id = 1835
-		}
-	    trigger = {
-		    1835 = {
-			country_or_non_sovereign_subject_holds = ROOT
-		    }
-		}
-		effect = {
-		    add_legitimacy = 10
-			add_prestige = 5
-			add_adm_power = 50
-			1030 = {
-			    add_base_manpower = 3
-			    }
-		    }
-	    }
-		
-	oda_imag = {
-	    icon = mission_japanese_fort
-		required_missions = { oda_consolidate }
-		position = 4
+
+	oda_castles = {
+		icon = mission_japanese_fort
+		required_missions = { }
 		provinces_to_highlight = {
-		        province_id = 1839
+			province_id = 1030
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 			}
+		}
 		trigger = {
-		    1839 = {
-			country_or_non_sovereign_subject_holds = ROOT
-		    }
+			1030 = {
+				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
 		}
 		effect = {
-		    add_prestige = 5
-			add_country_modifier = {
-			        name = "oda_rivals_crushed"
-					duration = 9125
-			}
-		}
-	}
-	
-	oda_overlords = {
-	    icon = mission_alliances
-		required_missions = { oda_imag }
-		position = 5
-		trigger = { 
-		    OR = {
-			is_in_war = {
-			        attackers = ROOT
-					defenders = SBA
-			}
-			NOT = { exists = SBA }
-		    }
-		}
-		effect = {
-		    if = { 
-			    limit = {
-				exists = SBA
-			}
-			    add_country_modifier = {
-			            name = "oda_overthrow"
-					    duration = 9125
-			}
-			    add_permanent_claim = 1023
-			    add_permanent_claim = 1025
-			    else = {
-				add_prestige = 5
+			1030 = {
+				add_province_modifier = {
+					name = "oda_castle_mod"
+					duration = -1
 				}
 			}
 		}
 	}
-		
+
+	oda_secure_mino = {
+		icon = mission_assemble_an_army
+		required_missions = { oda_start }
+		has_country_shield = yes
+		provinces_to_highlight = {
+			province_id = 1835
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1835 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 10 }
+			add_prestige = 5
+			add_adm_power = 50
+			1030 = {
+				add_base_manpower = 3
+			}
+		}
+	}
+
+	oda_imag = {
+		icon = mission_japanese_fort
+		required_missions = { oda_consolidate }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 1839
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			1839 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 5
+			add_country_modifier = {
+				name = "oda_rivals_crushed"
+				duration = 9125
+			}
+		}
+	}
+
+	oda_overlords = {
+		icon = mission_alliances
+		required_missions = { oda_imag }
+		position = 5
+		trigger = {
+			OR = {
+				is_in_war = {
+					attackers = ROOT
+					defenders = SBA
+				}
+				NOT = { exists = SBA }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = SBA
+				}
+				add_country_modifier = {
+					name = "oda_overthrow"
+					duration = 9125
+				}
+			}
+			1023 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1025 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
 	oda_victory = {
-	    icon = mission_monarch_in_throne_room
+		icon = mission_monarch_in_throne_room
 		required_missions = { oda_overlords }
 		provinces_to_highlight = {
-		    province_id = 1023 
-		    }
+			province_id = 1023
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 6
 		trigger = {
-		    1023 = {
-			country_or_non_sovereign_subject_holds = ROOT
-		    }
+			1023 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			NOT = { exists = SBA }
 		}
 		effect = {
-		    add_permanent_claim = 4185
+			4185 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 			kinai_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -124,65 +165,67 @@ potential = {
 			}
 		}
 	}
-	
+
 	oda_kyoto = {
-	    icon = mission_asian_trader
-		required_missions = { oda_victory
-		                    oda_useugi }
-		provinces_to_highlight = { 
-		    province_id = 1020
-			}
+		icon = mission_asian_trader
+		required_missions = { oda_victory oda_useugi }
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+		}
 		position = 7
 		trigger = {
-		    1020 = {
-			        owned_by = ROOT
-		    }
+			1020 = {
+				owned_by = ROOT
+			}
 		}
 		effect = {
-		    add_country_modifier = {
-			    name = "oda_shogun"
+			add_country_modifier = {
+				name = "oda_shogun"
 				duration = -1
 			}
 		}
 	}
-	
+
 	oda_tradition = {
-	    icon = mission_buddhist_monk_praying
+		icon = mission_buddhist_monk_praying
 		required_missions = { oda_kyoto }
 		position = 8
 		trigger = {
-		    stability = 3
-			legitimacy = 100
+			stability = 3
+			legitimacy_equivalent = 100
 		}
 		effect = {
-		    add_country_modifier = {
-			    name = "oda_broken"
+			add_country_modifier = {
+				name = "oda_broken"
 				duration = -1
 			}
 		}
 	}
-	
+
 	oda_alaska = {
-	    icon = mission_colonial
+		icon = mission_colonial
 		required_missions = { oda_colony }
 		position = 10
 		trigger = {
-		     colonial_alaska = { has_discovered = ROOT }
+			colonial_alaska = {
+				has_discovered = ROOT
+			}
 		}
 		effect = {
-		    add_country_modifier = {
-			    name = "oda_col_two"
+			add_country_modifier = {
+				name = "oda_col_two"
 				duration = 9125
 			}
 		}
 	}
-	
+
 	oda_forwards = {
-	    icon = mission_dominate_home_trade_node
+		icon = mission_dominate_home_trade_node
 		required_missions = { oda_alaska }
 		position = 11
 		trigger = {
-		    is_year = 1525
+			is_year = 1525
 			home_trade_node = {
 				trade_share = {
 					country = ROOT
@@ -191,44 +234,41 @@ potential = {
 			}
 		}
 		effect = {
-		    1030 = {
-			    add_province_modifier = {
-				    name = staple_port
+			capital_scope = {
+				add_province_modifier = {
+					name = staple_port
 					duration = -1
 				}
 				add_institution_embracement = {
-		        value = 70
-				which = new_world_i
+					value = 70
+					which = new_world_i
 				}
 			}
 		}
-	}   
-
+	}
 }
 
-oda_slot_3 = {
-slot = 3
-generic = no
-ai = yes
-potential = {
-        tag = ODA
+ODA_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
 	}
 	has_country_shield = yes
-	
+
 	oda_start = {
-	icon = mission_cannons_firing
-	required_missions = { }
-	has_country_shield = yes
-	    trigger = {
-		    army_size_percentage = 1
+		icon = mission_cannons_firing
+		required_missions = { }
+		has_country_shield = yes
+		trigger = {
+			army_size_percentage = 1
 		}
-	    effect = {
-		
-		    add_country_modifier = {
-		            name = "thriving_arms_industry"
-					duration = 9125
-				}
-			
+		effect = {
+			add_country_modifier = {
+				name = "thriving_arms_industry"
+				duration = 9125
+			}
 			chubu_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -236,348 +276,450 @@ potential = {
 				}
 				add_permanent_claim = ROOT
 			}
-		    
-			add_permanent_claim = 4360
+			4360 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
-	
+
 	oda_mikawa = {
-	icon = mission_japanese_fort
-	required_missions = { oda_start }
-	provinces_to_highlight = {
-	        province_id = 4360
+		icon = mission_japanese_fort
+		required_missions = { oda_start }
+		provinces_to_highlight = {
+			province_id = 4360
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-	    trigger = {
-		    4360 = {
-			country_or_non_sovereign_subject_holds = ROOT
-		    }
+		trigger = {
+			4360 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-		add_prestige = 10
-		add_army_tradition = 15
-		add_dip_power = 50
-		1030 = {
-			    add_base_production = 2
-			    }
+			add_prestige = 10
+			add_army_tradition = 15
+			add_dip_power = 50
+			1030 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 2
+				}
+			}
 		}
 	}
-	
+
 	oda_consolidate = {
-	icon = mission_buddhist_monk_praying
-	required_missions = { oda_ise
-	                    oda_mikawa
-						oda_secure_mino
-						}
-	    trigger = {
-		    is_year = 1452 
+		icon = mission_buddhist_monk_praying
+		required_missions = { oda_ise oda_mikawa oda_secure_mino }
+		trigger = {
+			is_year = 1452
 		}
 		effect = {
-		add_country_modifier = {
-		    name = "oda_art"
-			duration = 9125
-		}
-		eastern_chubu_area = {
-		        limit = {
+			add_country_modifier = {
+				name = "oda_art"
+				duration = 9125
+			}
+			eastern_chubu_area = {
+				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-		add_permanent_claim = 1832
-		add_permanent_claim = 4187
+			1832 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 2
+				}
+			}
+			4187 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_production = 2
+				}
+			}
 		}
 	}
-	
+
 	oda_relations = {
-	    icon = mission_establish_high_seas_navy
+		icon = mission_establish_high_seas_navy
 		required_missions = { oda_consolidate }
 		position = 5
 		trigger = {
-		    is_year = 1464
+			is_year = 1464
 		}
 		effect = {
-		1030 = {
-		add_institution_embracement = {
-		        value = 65
-				which = renaissance
+			capital_scope = {
+				add_institution_embracement = {
+					value = 65
+					which = renaissance
 				}
-		add_province_modifier = {
-		    name = "oda_open"
-			duration = -1
+				add_province_modifier = {
+					name = "oda_open"
+					duration = -1
+				}
 			}
 		}
-		}
 	}
-	
+
 	oda_core = {
-	icon = mission_build_up_to_force_limit
-	required_missions = { oda_victory
-                        oda_useugi
-						}
-	position = 7
-	provinces_to_highlight = { OR = {
-	                        province_id = 1029
-							province_id = 4188
-							}
-						}
+		icon = mission_build_up_to_force_limit
+		required_missions = { oda_victory oda_useugi }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1029
+				province_id = 4188
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-		        1029 = {
+			1029 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-		        4188 = {
+			4188 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-		        eastern_chubu_area = {
-				    limit = {
-					    owned_by = ROOT
-						}
-					add_province_modifier = {
-					    name = "oda_mountain_trained"
-						duration = 9125
-					}
+			eastern_chubu_area = {
+				limit = {
+					owned_by = ROOT
 				}
+				add_province_modifier = {
+					name = "oda_mountain_trained"
+					duration = 9125
+				}
+			}
 		}
 	}
-	
+
 	oda_colony = {
-	    icon = mission_establish_high_seas_navy
+		icon = mission_establish_high_seas_navy
 		required_missions = { }
 		position = 9
 		trigger = {
-		    has_idea_group = exploration_ideas 
+			has_idea_group = exploration_ideas
 		}
 		effect = {
-		    add_country_modifier = {
-			    name = "oda_col_mod_one"
+			add_country_modifier = {
+				name = "oda_col_mod_one"
 				duration = -1
 			}
-			1032 = { cede_province = ROOT }
 		}
 	}
-	
+
 	oda_taiwan = {
-	    icon = mission_dominate_home_trade_node
+		icon = mission_dominate_home_trade_node
 		required_missions = { oda_colony }
 		position = 10
+		provinces_to_highlight = {
+			area = taiwan_area
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-		    num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					area = taiwan_area
-				}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				area = taiwan_area
+			}
 		}
 		effect = {
-		    add_country_modifier = {
-			    name = "oda_col_two"
+			add_country_modifier = {
+				name = "oda_col_two"
 				duration = 9125
 			}
 		}
 	}
-	
-	oda_phil = { 
-	    icon = mission_colonial
+
+	oda_phil = {
+		icon = mission_colonial
 		required_missions = { oda_taiwan }
 		position = 11
-		trigger = { 
-            	num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					region = moluccas_region
-				}
+		provinces_to_highlight = {
+			region = moluccas_region
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-        effect = {		
-	        add_country_modifier = {
-			    name = "oda_col_two"
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				region = moluccas_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "oda_col_two"
 				duration = 9125
 			}
 			add_country_modifier = {
-			    name = "oda_fleet"
+				name = "oda_fleet"
 				duration = -1
 			}
 		}
 	}
-	
+
 	oda_cali = {
-	    icon = mission_establish_high_seas_navy
+		icon = mission_establish_high_seas_navy
 		position = 12
 		required_missions = { oda_phil }
-        trigger = { 
-            	num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 3
-					colonial_region = colonial_california
-				}
+		provinces_to_highlight = {
+			colonial_region = colonial_california
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
-        effect = {		
-	        add_country_modifier = {
-			    name = "oda_col_two"
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+				colonial_region = colonial_california
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "oda_col_two"
 				duration = 9125
 			}
 		}
 	}
-	
+
 	oda_mex = {
-	    icon = mission_dominate_home_trade_node
+		icon = mission_dominate_home_trade_node
 		required_missions = { oda_cali }
 		position = 13
-		trigger = { 
-            	num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 5
-					colonial_region = colonial_mexico
-				}
+		provinces_to_highlight = {
+			colonial_region = colonial_mexico
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
-        effect = {		
-	        add_country_modifier = {
-			    name = "oda_col_two"
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_mexico
+				is_city = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "oda_col_two"
 				duration = 9125
 			}
 		}
 	}
 }
 
-	
-oda_slot_4 = {
-slot = 4
-generic = no
-ai = yes
-potential = {
-        tag = ODA
+ODA_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = ODA
 	}
 	has_country_shield = yes
-	
+
 	oda_nobunobu = {
-	icon = mission_asian_trader
-	required_missions = { }
-	
-	trigger = {
-	    is_year = 1551
-		NOT = { ADM = 5 }
-		NOT = { DIP = 5 }
-	    NOT = { MIL = 5 }
+		icon = mission_asian_trader
+		required_missions = { }
+		trigger = {
+			is_year = 1551
+			NOT = { ADM = 5 }
+			NOT = { DIP = 5 }
+			NOT = { MIL = 5 }
 		}
-	effect = {
-	    define_ruler = {
-			name = "Nobunaga"
-			dynasty = "Oda"
-			culture = togoku
-			age = 19
-			fixed = yes
-			adm = 5
-			dip = 5
-			mil = 6
-			female = no
-		}
-		if = {
-			limit = {
-				has_dlc = "Rights of Man" 
+		effect = {
+			define_ruler = {
+				name = "Nobunaga"
+				dynasty = "Oda"
+				culture = togoku
+				age = 19
+				fixed = yes
+				adm = 5
+				dip = 5
+				mil = 6
+				female = no
 			}
-			hidden_effect = { add_ruler_personality = conqueror_personality }
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				hidden_effect = {
+					add_ruler_personality = conqueror_personality
+				}
+			}
 		}
 	}
-	}
-	
+
 	oda_ise = {
-	icon = mission_cannons_firing
-	required_missions = { oda_start }
-	provinces_to_highlight = {
-	    province_id = 4359
-	}
-	    trigger = { 
-	            4359 = {
-			    country_or_non_sovereign_subject_holds = ROOT
-		    }
+		icon = mission_cannons_firing
+		required_missions = { oda_start }
+		provinces_to_highlight = {
+			province_id = 4359
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-	    effect = {
-	    add_prestige = 10
-		add_mil_power = 50
-		    1030 = {
-			    add_base_tax = 2
-			    }
+		trigger = {
+			4359 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 10
+			add_mil_power = 50
+			1030 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_tax = 2
+				}
+			}
 		}
 	}
-	
+
 	oda_tsut = {
-	    icon = mission_buddhist_monk_praying
+		icon = mission_buddhist_monk_praying
 		required_missions = { oda_consolidate }
 		provinces_to_highlight = {
-		    province_id = 1832
-			}
+			province_id = 1832
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 4
-		trigger = { 
-	            1832 = {
-			    country_or_non_sovereign_subject_holds = ROOT
-		    }
+		trigger = {
+			1832 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-		    add_prestige = 5
-			add_permanent_claim = 1837
-			add_permanent_claim = 4187
-			1030 = {
-			    add_province_modifier = {
-				    name = "oda_growth"
+			add_prestige = 5
+			1837 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4187 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			capital_scope = {
+				add_province_modifier = {
+					name = "oda_growth"
 					duration = -1
-		        }
+				}
 			}
 		}
 	}
-	
+
 	oda_hatake = {
-	    icon = mission_japanese_fort
+		icon = mission_japanese_fort
 		required_missions = { oda_tsut }
-		provinces_to_highlight = { OR = {
-		                    province_id = 1837
-							province_id = 4187
-		                    }
-				}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1837
+				province_id = 4187
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 5
 		trigger = {
-		    1837 = {
-			country_or_non_sovereign_subject_holds = ROOT
-		    }
+			1837 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			4187 = {
-			country_or_non_sovereign_subject_holds = ROOT
-		    }
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			NOT = { exists = HTK }
 		}
-		effect = { 
-		    add_army_tradition = 10
+		effect = {
+			add_army_tradition = 10
 			add_prestige = 10
-			add_permanent_claim = 1024
-			add_permanent_claim = 1843
-			add_permanent_claim = 1028
+			1024 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1843 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1028 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
-	
+
 	oda_useugi = {
-	    icon = mission_cannons_firing
+		icon = mission_cannons_firing
 		required_missions = { oda_hatake }
-		provinces_to_highlight = { OR = {
-		                    province_id = 1024
-							province_id = 1843
-							province_id = 1028
-		                    }
-				}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1024
+				province_id = 1843
+				province_id = 1028
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 6
 		trigger = {
-		    1024 = {
-			    country_or_non_sovereign_subject_holds = ROOT
-		    }
+			1024 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			1843 = {
-			    country_or_non_sovereign_subject_holds = ROOT
-		    }
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			1028 = {
-			    country_or_non_sovereign_subject_holds = ROOT
-		    }
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-		    thohoku_area = {
-		        limit = {
+			thohoku_area = {
+				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			 eastern_kanto_area = {
-			     limit = {
+			eastern_kanto_area = {
+				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
 				}
@@ -585,30 +727,31 @@ potential = {
 			}
 		}
 	}
-	
+
 	oda_north = {
-	    icon = mission_build_up_to_force_limit
-		required_missions = { oda_victory 
-		                    oda_useugi }
-		provinces_to_highlight = { OR = {
-				            area = eastern_kanto_area
-							area = thohoku_area
-		                   }
-						}
+		icon = mission_build_up_to_force_limit
+		required_missions = { oda_victory oda_useugi }
+		provinces_to_highlight = {
+			OR = {
+				area = eastern_kanto_area
+				area = thohoku_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 7
 		trigger = {
-		    eastern_kanto_area = {
+			eastern_kanto_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-		    thohoku_area = {
+			thohoku_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-		    hokkaido_area = {
-		        limit = {
+			hokkaido_area = {
+				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
 				}
@@ -621,7 +764,7 @@ potential = {
 				}
 				add_permanent_claim = ROOT
 			}
-		    shikoku_area = {
+			shikoku_area = {
 				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
@@ -635,35 +778,61 @@ potential = {
 				}
 				add_permanent_claim = ROOT
 			}
-		    northern_kyushu = {
+			northern_kyushu = {
 				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			add_permanent_claim = 1012
-			add_permanent_claim = 4180
-			add_permanent_claim = 4181
+			1012 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4180 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4181 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
-	
+
 	oda_southwest = {
-	    icon = mission_assemble_an_army
+		icon = mission_assemble_an_army
 		required_missions = {oda_north}
-		provinces_to_highlight = { OR = {
-		                        area = northern_kyushu
-								area = sanindo_area
-								area = shikoku_area
-								area = saigoku_area
-								province_id = 1012
-								province_id = 4180
-								province_id = 4181
-								}
-							}
+		provinces_to_highlight = {
+			OR = {
+				area = northern_kyushu
+				area = sanindo_area
+				area = shikoku_area
+				area = saigoku_area
+				province_id = 1012
+				province_id = 4180
+				province_id = 4181
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 8
-		trigger = { 
-		    northern_kyushu = {
+		trigger = {
+			northern_kyushu = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
@@ -671,7 +840,7 @@ potential = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-		    shikoku_area = {
+			shikoku_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
@@ -681,66 +850,77 @@ potential = {
 			}
 		}
 		effect = {
-		    if = {
+			change_government = monarchy
+			add_government_reform = autocracy_reform
+			if = {
 				limit = {
-					has_dlc = "Dharma"
+					NOT = { government_rank = 2 }
 				}
-				add_government_reform = autocracy_reform
+				set_government_rank = 3
 			}
-		    set_government_rank = 3
-			add_permanent_claim = 1015
+			1015 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
+		}
 	}
-	
+
 	oda_outer = {
-	    icon = mission_establish_high_seas_navy
+		icon = mission_establish_high_seas_navy
 		required_missions = { oda_southwest }
-		provinces_to_highlight = { OR = {
-		                            area = hokkaido_area
-									province_id = 1015
-								}
-							}
+		provinces_to_highlight = {
+			OR = {
+				area = hokkaido_area
+				province_id = 1015
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 9
 		trigger = {
-		    hokkaido_area = {
+			hokkaido_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			1015 = {
-			    country_or_non_sovereign_subject_holds = ROOT
-		    }
-		}
-		effect = {
-		    1015 = {
-			    change_religion = ROOT
-			}
-			hokkaido_area = {
-				change_culture = japanese
-				change_religion = ROOT
-			}
-		}
-	}
-	
-	oda_korea = {
-	    icon = mission_build_up_to_force_limit
-		required_missions = { }
-		position = 11
-		provinces_to_highlight = {
-		                    region = korea_region
-							}
-		trigger = {
-		    korea_region = {
-		        type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-		    korea_region = {
-			    change_culture = ROOT
+			1015 = {
+				change_religion = ROOT
+			}
+			hokkaido_area = {
+				change_culture = ROOT
+				change_religion = ROOT
+			}
+		}
+	}
+
+	oda_korea = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { }
+		position = 11
+		provinces_to_highlight = {
+			region = korea_region
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			korea_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			korea_region = {
+				change_culture = ROOT
 				change_religion = ROOT
 			}
 		}
 	}
 }
-	
-	
