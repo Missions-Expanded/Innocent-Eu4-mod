@@ -1,5 +1,4 @@
-nav_conquest = {
-
+NAV_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -14,21 +13,29 @@ nav_conquest = {
 		trigger = {
 			if = {
 				limit = {
-					exists = CAS
-					exists = ARA
-					exists = FRA
+					OR = {
+						exists = CAS
+						exists = SPA
+						exists = ARA
+						exists = FRA
+					}
 				}
 				OR = {
 					alliance_with = CAS
+					alliance_with = SPA
 					alliance_with = ARA
 					alliance_with = FRA
-					}
 				}
 			}
+			else = {
+				num_of_allies = 2
+			}
+		}
 		effect = {
 			add_manpower = 5
 		}
-		}
+	}
+	
 	prepare_conquest = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { choose_alliance }
@@ -39,25 +46,38 @@ nav_conquest = {
 			num_of_generals = 1
 		}
 		effect = {
-			209 = { 
-				add_permanent_claim = ROOT
+			209 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			173 = { 
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
+	
 	united_basque_country = {
 		icon = mission_unite_home_region
 		required_missions = { prepare_conquest }
 		position = 5
-		
 		provinces_to_highlight = {
 			OR = {
 				province_id = 173
 				province_id = 209
-				}
-				}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			173 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -73,4 +93,4 @@ nav_conquest = {
 			}
 		}
 	}
-	}
+}
