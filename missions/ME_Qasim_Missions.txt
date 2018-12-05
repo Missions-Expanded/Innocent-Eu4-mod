@@ -22,21 +22,20 @@ Qasim_missions_1 = {
 			}
 		}
 	}
+	
 	Qasim_Independence = {
 		icon = mission_have_two_subjects
 		required_missions = { Qasim_Army }
 		position = 6
 		trigger = {
-			NOT = { is_subject = yes }
+			is_subject = no
 		}
 		effect = {
 			307 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -44,20 +43,26 @@ Qasim_missions_1 = {
 			1754 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	Qasim_Muscovy_Chunk = {
 		icon = mission_assemble_an_army
 		required_missions = { Qasim_Independence }
 		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 307
+				province_id = 1754
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			307 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -72,24 +77,22 @@ Qasim_missions_1 = {
 			add_mil_power = 50
 		}
 	}
+	
 	Qasim_Sunni_Ally = {
 		icon = mission_assemble_an_army
 		required_missions = { Qasim_Muscovy_Chunk }
 		position = 8
 		trigger = {
-			any_country = {
+			any_ally = {
 				dominant_religion = sunni
-				alliance_with = ROOT 
 			}
 		}
 		effect = {
 			301 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -97,10 +100,8 @@ Qasim_missions_1 = {
 			300 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -108,20 +109,27 @@ Qasim_missions_1 = {
 			4255 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	Qasim_Ryazan = {
 		icon = mission_unite_home_region
 		required_missions = { Qasim_Sunni_Ally }
 		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 301
+				province_id = 300
+				province_id = 4255
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			301 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -150,15 +158,25 @@ Qasim_missions_1 = {
 			}
 		}
 	}
+	
 	Qasim_Moskva = {
 		icon = mission_cannons_firing
 		required_missions = { Qasim_Ryazan }
 		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = vladimir_area
+				area = moscow_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			301 = {
+			vladimir_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			300 = {
+			moscow_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -166,20 +184,23 @@ Qasim_missions_1 = {
 			302 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+	
 	Qasim_Betray = {
 		icon = mission_non-western_cavalry_raid
 		required_missions = { Qasim_Moskva }
 		position = 11
+		provinces_to_highlight = {
+			province_id = 302
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			302 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -213,6 +234,14 @@ Qasim_missions_1 = {
 		icon = mission_conquer_50_development
 		required_missions = { Qasim_Betray }
 		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = saratov_area
+				area = samara_area
+				area = tambov_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			saratov_area = {
 				type = all

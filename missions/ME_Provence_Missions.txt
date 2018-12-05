@@ -12,25 +12,34 @@ PRO_missions_1 = {
 		required_missions = { }
 		position = 8
 		provinces_to_highlight = {
-			OR = {
-				province_id = 202
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 202
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			202 = {
 				owned_by = ROOT
 			}
 		}
-		
 		effect = {
-			add_casus_belli = {
-				target = NAP
-				type = cb_restore_personal_union 
-				months = 180
+			if = {
+				limit = {
+					exists = NAP
+					NOT = { overlord_of = NAP }
+				}
+				add_casus_belli = {
+					target = NAP
+					type = cb_restore_personal_union 
+					months = 180
+				}
+			}
+			else = {
+				naples_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -40,30 +49,48 @@ PRO_missions_1 = {
 		required_missions = { PRO_avignon }
 		position = 10
 		provinces_to_highlight = {
-			OR = {
-				owned_by = NAP
+			ROOT = {
+				NOT = { overlord_of = NAP }
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = naples_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
-			NAP = {
-				is_subject_of = ROOT
-				is_subject_of_type = personal_union
+			OR = {
+				overlord_of = NAP
+				AND = {
+					NOT = { exists = NAP }
+					naples_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = pro_strong_reign
 				duration = 18250
 			}
-			add_casus_belli = {
-				target = ARA
-				type = cb_restore_personal_union 
-				months = 180
+			if = {
+				limit = {
+					exists = ARA
+					NOT = { overlord_of = ARA }
+				}
+				add_casus_belli = {
+					target = ARA
+					type = cb_restore_personal_union 
+					months = 180
+				}
+			}
+			else = {
+				aragon_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -73,21 +100,24 @@ PRO_missions_1 = {
 		required_missions = { PRO_naples }
 		position = 12
 		provinces_to_highlight = {
-			OR = {
-				owned_by = ARA
+			ROOT = {
+				NOT = { overlord_of = ARA }
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = naples_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
-			ARA = {
-				is_subject_of = ROOT
-				is_subject_of_type = personal_union
+			OR = {
+				overlord_of = ARA
+				AND = {
+					NOT = { exists = ARA }
+					aragon_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = pro_strong_reign
@@ -114,7 +144,6 @@ PRO_missions_2 = {
 		icon = mission_have_two_subjects
 		required_missions = { }
 		position = 9
-		
 		trigger = {
 			alliance_with = FRA
 			marriage_with = FRA
@@ -127,7 +156,6 @@ PRO_missions_2 = {
 				NOT = { has_country_flag = pro_ties_with_hre }
 			}
 		}
-		
 		effect = {
 			set_country_flag = pro_ties_with_france
 			add_historical_friend = FRA
@@ -137,16 +165,18 @@ PRO_missions_2 = {
 			}
 		}
 	}
+	
 	PRO_france_claim = {
 		icon = mission_empire
 		required_missions = { PRO_france_friend }
 		position = 11
-
 		trigger = {
+			exists = FRA
 			FRA = {
-				NOT = { development = 500 }
+				NOT = { total_development = 500 }
 			}
-			dip = FRA
+			DIP = FRA
+			total_development = FRA
 			custom_trigger_tooltip = {
 				tooltip = pro_french_friends.toolip
 				had_country_flag = {
@@ -155,7 +185,6 @@ PRO_missions_2 = {
 				}
 			}
 		}
-		
 		effect = {
 			add_casus_belli = {
 				target = FRA
@@ -179,22 +208,15 @@ PRO_missions_3 = {
 		icon = mission_have_two_subjects
 		required_missions = { }
 		position = 8
-		provinces_to_highlight = {
-			OR = {
-				owned_by = PRO
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		
 		trigger = {
-			reverse_has_opinion = {
-				who = LOR
-				value = 200
+			OR = {
+				reverse_has_opinion = {
+					who = LOR
+					value = 200
+				}
+				NOT = { exists = LOR }
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = pro_integrate_lor
@@ -209,22 +231,17 @@ PRO_missions_3 = {
 		position  = 10
 		provinces_to_highlight = {
 			OR = {
-				owned_by = PRO
+				province_id = 188
+				province_id = 189
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
-		
 		trigger = {
-			188 = {
-				is_core = ROOT
-				owned_by = ROOT
-			}
-			189 = {
-				is_core = ROOT
-				owned_by = ROOT
-			}
+			owns_core_province = 188
+			owns_core_province = 189
 			NOT = { exists = LOR }
 		}
 		
@@ -251,11 +268,15 @@ PRO_missions_4 = {
 		icon = mission_have_two_subjects
 		required_missions = { }
 		position = 9
-		
 		trigger = {
-			reverse_has_opinion = {
-				who = emperor
-				value = 150
+			OR = {
+				emperor = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+				is_emperor = yes
 			}
 			NOT = { marriage_with = FRA }
 			custom_trigger_tooltip = {
@@ -263,14 +284,23 @@ PRO_missions_4 = {
 				NOT = { has_country_flag = pro_ties_with_france }
 			}
 		}
-		
 		effect = {
 			capital_scope = {
-				set_in_empire = yes
+				if = {
+					limit = {
+						is_part_of_hre = no
+					}
+					set_in_empire = yes
+				}
 			}
-			add_opinion = {
-				who = emperor
-				modifier = pro_joined_empire
+			if = {
+				limit = {
+					is_emperor = no
+				}
+				add_opinion = {
+					who = emperor
+					modifier = pro_joined_empire
+				}
 			}
 			add_country_modifier = {
 				name = pro_big_friend_ties
@@ -285,20 +315,23 @@ PRO_missions_4 = {
 		icon = mission_empire
 		required_missions = { PRO_hre_friend }
 		position = 11
-		
 		trigger = {
 			OR = {
 				AND = {
 					NOT = { num_of_electors = 7 }
-					development = 350
+					total_development = 350
 					is_great_power = yes
 				}
 				is_elector = yes
 			}
 		}
-		
 		effect = {
-			elector = yes
+			if = {
+				limit = {
+					is_elector = no
+				}
+				elector = yes
+			}
 			add_dip_power = 400
 		}
 	}
@@ -317,14 +350,42 @@ PRO_missions_5 = {
 		icon = mission_european_church
 		required_missions = { }
 		position = 8
-		
-		trigger = {
-			201 = {
-				has_building = temple
-				development = 26
+		provinces_to_highlight = {
+			province_id = 201
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 26 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 2 } }
+				}
 			}
 		}
-		
+		trigger = {
+			201 = {
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 26
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+				}
+			}
+		}
 		effect = {
 			add_country_modifier = {
 				name = pro_churches_mod
@@ -337,13 +398,10 @@ PRO_missions_5 = {
 		icon = mission_trade_company_region_abroad
 		required_missions = { PRO_churches }
 		position = 10
-		
 		trigger = {
-			has_idea_group = religious_ideas
-			has_idea = divine_supremacy
+			religious_ideas = 3
 			stability = 1
 		}
-		
 		effect = {
 			palestine_area = {
 				limit = {
@@ -360,21 +418,15 @@ PRO_missions_5 = {
 		required_missions = { PRO_holyland }
 		position = 12
 		provinces_to_highlight = {
-			OR = {
-				area = palestine_area
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			area = palestine_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		
 		trigger = {
 			palestine_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
 		effect = {
 			add_country_modifier = {
 				name = pro_eternal_crusade
