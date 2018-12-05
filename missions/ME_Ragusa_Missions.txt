@@ -11,9 +11,32 @@ ragusa_missions_slot_1 = {
 		icon = mission_have_manufactories
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			province_id = 137
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { development = 25 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { province_has_at_least_num_of_buildings = { amount = 2 } }
+				}
+			}
+		}
 		trigger = {
 			137 = {
-				development = 25
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					development = 25
+				}
+				else = {
+					province_has_at_least_num_of_buildings = { amount = 2 }
+				}
 			}
 		}
 		effect = {
@@ -61,7 +84,11 @@ ragusa_missions_slot_1 = {
 		required_missions = { ragusa_increase_trade }
 		position = 4
 		trigger = {
-			marketplace = 4
+			OR = {
+				marketplace = 4
+				trade_depot = 4
+				stock_exchange = 4
+			}
 		}
 		effect = {
 			add_treasury = 50
@@ -77,6 +104,17 @@ ragusa_missions_slot_1 = {
 		icon = mission_sea_battles
 		required_missions = { ragusa_build_marketplaces }
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = east_adriatic_coast_area
+				area = carinthia_area
+				area = venetia_area
+				area = emilia_romagna_area
+				area = central_italy_area
+				area = apulia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			east_adriatic_coast_area = {
 				type = all
@@ -171,9 +209,12 @@ ragusa_missions_slot_3 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			is_in_war = {
-				attacker_leader = ROOT
-				defender_leader = VEN
+			OR = {
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = VEN
+				}
+				NOT = { exists = VEN }
 			}
 		}
 		effect = {
@@ -189,6 +230,10 @@ ragusa_missions_slot_3 = {
 		icon = mission_assemble_an_army
 		required_missions = { ragusa_attack_venice }
 		position = 2
+		provinces_to_highlight = {
+			province_id = 136
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			owns = 136
 		}
@@ -196,11 +241,24 @@ ragusa_missions_slot_3 = {
 			add_adm_power = 50
 			add_dip_power = 50
 			add_mil_power = 50
-			add_core = 136
-			add_casus_belli = {
-				target = VEN
-				type = cb_vassalize_mission
-				months = 120
+			136 = {
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			if = {
+				limit = {
+					exists = VEN
+					NOT = { overlord_of = VEN }
+				}
+				add_casus_belli = {
+					target = VEN
+					type = cb_vassalize_mission
+					months = 120
+				}
 			}
 		}
 	}
@@ -209,9 +267,23 @@ ragusa_missions_slot_3 = {
 		icon = mission_have_two_subjects
 		required_missions = { ragusa_take_dalmatia }
 		position = 3
+		provinces_to_highlight = {
+			NOT = { exists = VEN }
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			VEN = {
-				vassal_of = ROOT
+			if = {
+				limit = {
+					exists = VEN
+				}
+				overlord_of = VEN
+			}
+			else = {
+				venetia_area = {
+					type = all
+					owned_by = ROOT
+				}
 			}
 		}
 		effect = {
@@ -238,10 +310,17 @@ ragusa_missions_slot_4 = {
 		icon = mission_unite_home_region
 		required_missions = { }
 		position = 1
-		trigger = {
-			NOT = {
-				exists = BOS
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1831
+				province_id = 3002
+				province_id = 140
+				province_id = 1828
 			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { exists = BOS }
 			owns = 1831
 			owns = 3002
 			owns = 140
@@ -262,6 +341,15 @@ ragusa_missions_slot_4 = {
 		icon = mission_galleys_in_port
 		required_missions = { }
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 213
+				province_id = 220
+				province_id = 221
+				province_id = 223
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			owns = 213
 			owns = 220
@@ -281,7 +369,7 @@ ragusa_missions_slot_4 = {
 		required_missions = { ragusa_spanish_ports ragusa_foot_in_italy }
 		position = 6
 		trigger = {
-			num_of_colonies = 2
+			colony = 2
 		}
 		effect = {
 			add_country_modifier = {
@@ -366,7 +454,11 @@ ragusa_missions_slot_5 = {
 			}
 		}
 		effect = {
-			vassalize = FER
+			add_casus_belli = {
+				target = FER
+				type = cb_vassalize_mission
+				months = 120
+			}
 		}
 	}
 	
@@ -374,6 +466,10 @@ ragusa_missions_slot_5 = {
 		icon = mission_unite_home_region
 		required_missions = { ragusa_vassalize_ferrara }
 		position = 5
+		provinces_to_highlight = {
+			province_id = 113
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			owns = 113
 		}
@@ -382,4 +478,3 @@ ragusa_missions_slot_5 = {
 		}
 	}
 }
-	
