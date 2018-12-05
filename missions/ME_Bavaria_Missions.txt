@@ -458,7 +458,7 @@ bavarian_missions_3 = {
 			is_papal_controller = yes
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 			add_country_modifier = {
 				name = bavaria_become_papal_controller_modifier
 				duration = 3650
@@ -627,17 +627,12 @@ bavarian_missions_3 = {
 		required_missions = { }
 		position = 14
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					ROOT = { NOT = { senior_union_with = BRA } }
-				}
-				OR = {
-					area = mittelmark_area
-					area = neumark_area
-				}
+			ROOT = {
+				NOT = { senior_union_with = BRA }
 			}
-			else = {
-				always = no
+			OR = {
+				area = mittelmark_area
+				area = neumark_area
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
@@ -817,7 +812,7 @@ bavarian_missions_4 = {
 		}
 		effect = {
 			add_papal_influence = 15
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 			add_country_modifier = {
 				name = bavaria_join_catholic_league_modifier
 				duration = 7300
@@ -878,8 +873,8 @@ bavarian_missions_4 = {
 				area = lower_bavaria_area
 			}
 			OR = {
-				NOT = { religion = catholic }
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = catholic }
 			}
 		}
 		trigger = {
@@ -909,14 +904,17 @@ bavarian_missions_4 = {
 		position = 11
 		trigger = {
 			total_development = 700
-			NOT = {
-				any_country = {
-					capital_scope = {
-						region = south_german_region
-					}
-					OR = {
-						total_development = ROOT
-						army_size = ROOT
+			custom_trigger_tooltip = {
+				tooltip = BAV_NO_SOUTH_GERMAN_COUNTRY_HAS_MORE_ARMY_OR_DEV
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = south_german_region
+						}
+						OR = {
+							total_development = ROOT
+							army_size = ROOT
+						}
 					}
 				}
 			}
@@ -1002,15 +1000,23 @@ bavarian_missions_5 = {
 		provinces_to_highlight = {
 			province_id = 65
 			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 				AND = {
 					NOT = { has_building = fort_15th }
 					NOT = { has_building = fort_16th }
 					NOT = { has_building = fort_17th }
 					NOT = { has_building = fort_18th }
 				}
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-				NOT = { base_manpower = 5 }
+				AND = {
+					has_dlc = "Common Sense"
+					NOT = { base_manpower = 5 }
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { has_building = barracks }
+					NOT = { has_building = training_fields }
+				}
 			}
 		}
 		trigger = {
@@ -1022,7 +1028,18 @@ bavarian_missions_5 = {
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-				base_manpower = 5
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
+					base_manpower = 5
+				}
+				else = {
+					OR = {
+						has_building = barracks
+						has_building = training_fields
+					}
+				}
 			}
 		}
 		effect = {
@@ -1042,7 +1059,10 @@ bavarian_missions_5 = {
 		required_missions = { bavaria_fortify_munich }
 		position = 2
 		trigger = {
-			temple = 10
+			OR = {
+				temple = 10
+				cathedral = 10
+			}
 		}
 		effect = {
 			add_years_of_income = 1
@@ -1060,17 +1080,13 @@ bavarian_missions_5 = {
 		provinces_to_highlight = {
 			province_id = 65
 			OR = {
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
-					}
+				AND = {
+					has_dlc = "Common Sense"
 					NOT = { development = 25 }
 				}
-				else = {
-					AND = {
-						NOT = { development = 25 }
-						num_free_building_slots = 1
-					}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					num_free_building_slots = 1
 				}
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
@@ -1078,22 +1094,17 @@ bavarian_missions_5 = {
 		}
 		trigger = {
 			owns_core_province = 65
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				65 = {
+			65 = {
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+					}
 					development = 25
 				}
-			}
-			else = {
-				65 = {
-					OR = {
-						development = 25
-						custom_trigger_tooltip = {
-							tooltip = LESS_THAN_1_FREE_BUILDING_SLOT_BAV
-							NOT = { num_free_building_slots = 1 }
-						}
+				else = {
+					custom_trigger_tooltip = {
+						tooltip = LESS_THAN_1_FREE_BUILDING_SLOT_BAV
+						NOT = { num_free_building_slots = 1 }
 					}
 				}
 			}
@@ -1252,7 +1263,7 @@ bavarian_missions_5 = {
 			}
 		}
 		effect = {
-			add_legitimacy = 20
+			add_legitimacy_equivalent = { value = 20 }
 			add_country_modifier = {
 				name = bavaria_unite_wittelsbach_modifier
 				duration = 7300
@@ -1320,7 +1331,7 @@ bavarian_missions_5 = {
 			}
 		}
 		effect = {
-			add_legitimacy = 5
+			add_legitimacy_equivalent = { value = 5 }
 			add_country_modifier = {
 				name = bavaria_have_high_absolutism_modifier
 				duration = 7300
