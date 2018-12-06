@@ -113,7 +113,7 @@ Saxe_Lauenburg_missions_1 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			46= {
+			46 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2996 = {
@@ -220,13 +220,21 @@ Saxe_Lauenburg_missions_5 = {
 			province_id = 1857
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = marketplace }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
 		trigger = {
 			owns = 1857
 			1857 = {
-				has_building = marketplace
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		effect = {
@@ -264,7 +272,10 @@ Saxe_Lauenburg_missions_5 = {
 						add_base_tax = 2
 					}
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
 					add_permanent_claim = ROOT
 				}
 			}
@@ -279,21 +290,13 @@ Saxe_Lauenburg_missions_5 = {
 			province_id = 1857
 			OR = {
 				NOT = { is_capital_of = ROOT }
-				AND = {
-					has_dlc = "Common Sense"
-					NOT = { development = 20 }
-				}
+				NOT = { development = 20 }
 			}
 		}
 		trigger = {
 			capital = 1857
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				1857 = {
-					development = 20
-				}
+			1857 = {
+				development = 20
 			}
 		}
 		effect = {
