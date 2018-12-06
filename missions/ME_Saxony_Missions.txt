@@ -828,34 +828,22 @@ saxony_missions_slot_4 = {
 		required_missions = { saxony_statue_in_restraint_of_appeals }
 		provinces_to_highlight = {
 			province_id = 59
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 25 }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
 		}
 		trigger = {
 			59 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
-					}
-					development = 25
-				}
-				else = {
-					OR = {
-						has_building = temple
-						has_building = cathedral
-					}
-					OR = {
-						has_building = courthouse
-						has_building = town_hall
-					}
-					OR = {
-						has_building = workshop
-						has_building = counting_house
-					}
-					custom_trigger_tooltip = {
-						tooltip = LESS_THAN_1_FREE_BUILDING_SLOT_SAX
-						NOT = { num_free_building_slots = 1 }
-					}
+				development = 25
+				OR = {
+					has_building = temple
+					has_building = cathedral
 				}
 			}
 		}
@@ -942,10 +930,13 @@ saxony_missions_slot_4 = {
 	}
 }
 
-saxony_missions_slot_4_aow = {
+saxony_missions_slot_4_AoW = {
 	slot = 4
 	generic = no
 	ai = yes
+	potential_on_load = {
+		has_dlc = "Art of War"
+	}
 	potential = {
 		tag = SAX
 		has_dlc = "Art of War"
@@ -975,7 +966,7 @@ saxony_missions_slot_4_aow = {
 		}
 		effect = {
 			add_prestige = 20
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 			add_church_power = 30
 			add_fervor = 30
 			add_country_modifier = {
@@ -1002,10 +993,13 @@ saxony_missions_slot_4_aow = {
 	}
 }
 
-saxony_missions_slot_4_no_aow = {
+saxony_missions_slot_4_no_AoW = {
 	slot = 4
 	generic = no
 	ai = yes
+	potential_on_load = {
+		NOT = { has_dlc = "Art of War" }
+	}
 	potential = {
 		tag = SAX
 		NOT = { has_dlc = "Art of War" }
@@ -1272,17 +1266,10 @@ saxony_missions_slot_5 = {
 		position = 3
 		required_missions = { saxony_become_kingdom }
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					NOT = { exists = PLC }
-					NOT = { exists = POL }
-				}
-				area = silesia_area
-				NOT = { owned_by = ROOT }
-			}
-			else = {
-				always = no
-			}
+			NOT = { exists = PLC }
+			NOT = { exists = POL }
+			area = silesia_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			ADM = 4
@@ -1345,9 +1332,9 @@ saxony_missions_slot_5 = {
 					exists = PLC
 				}
 				add_casus_belli = {
+					target = PLC
 					type = cb_restore_personal_union
 					months = 240
-					target = PLC
 				}
 			}
 			else_if = {
@@ -1355,9 +1342,9 @@ saxony_missions_slot_5 = {
 					exists = POL
 				}
 				add_casus_belli = {
+					target = POL
 					type = cb_restore_personal_union
 					months = 240
-					target = POL
 				}
 			}
 			else = {
@@ -1365,6 +1352,7 @@ saxony_missions_slot_5 = {
 					limit = {
 						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 					}
 					add_claim = ROOT
 				}
@@ -1372,6 +1360,7 @@ saxony_missions_slot_5 = {
 					limit = {
 						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 					}
 					add_claim = ROOT
 				}
@@ -1384,23 +1373,24 @@ saxony_missions_slot_5 = {
 		position = 4
 		required_missions = { saxony_polish_claims }
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					NOT = { exists = PLC }
-					NOT = { exists = POL }
-				}
-				OR = {
-					area = wielkopolska_area
-					area = kuyavia_area
-				}
-				NOT = { owned_by = ROOT }
+			NOT = { exists = PLC }
+			NOT = { exists = POL }
+			OR = {
+				area = wielkopolska_area
+				area = kuyavia_area
 			}
-			else = {
-				always = no
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			NOT = { has_country_modifier = loyal_subjects }
+			if = {
+				limit = {
+					OR = {
+						exists = POL
+						exists = PLC
+					}
+				}
+				NOT = { has_country_modifier = loyal_subjects }
+			}
 			if = {
 				limit = {
 					exists = PLC
@@ -1683,14 +1673,13 @@ saxony_missions_slot_5 = {
 		required_missions = { saxony_conquer_lower_swabia_and_upper_rhineland saxony_conquer_upper_bavaria }
 		provinces_to_highlight = {
 			province_id = 188
-			NOT = { owned_by = ROOT }
-			NOT = { is_core = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
 		trigger = {
-			188 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 188
 		}
 		effect = {
 			add_prestige = 15

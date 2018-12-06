@@ -1,16 +1,16 @@
 sicily_mission_1 = {
 	slot = 1
 	generic = no
-		ai = yes
+	ai = yes
 	has_country_shield = yes
 	potential = {
 		OR = {
-		tag = SIC
-		tag = TTS
+			tag = SIC
+			tag = TTS
 		}
 	}
-	
-	gather_strength = { 
+
+	gather_strength = {
 		icon = mission_assemble_an_army
 		required_missions = { }
 		trigger = {
@@ -23,337 +23,433 @@ sicily_mission_1 = {
 			add_mil_power = 100
 			add_manpower = 5
 			add_country_modifier = {
-			    name = "army_enthusiasm"
-			    duration = 7300	
+				name = "army_enthusiasm"
+				duration = 7300
 			}
-			add_liberty_desire = 40
+			if = {
+				limit = {
+					is_subject = yes
+				}
+				add_liberty_desire = 40
+			}
 		}
-	}		
-	
+	}
+
 	sic_req_ind = {
 		icon = mission_religious
 		position = 2
 		required_missions = { gather_strength }
-		provinces_to_highlight = {
-			province_id = 125
-			province_id = 124
-			province_id = 2982
-			province_id = 126
-			}
 		trigger = {
-		    OR = {
-			    ROOT = {
-				ai = NO
-				OR = {
-					years_in_union_under = {
-							who = ARA
-							years = 1
-							}
-					years_in_vassalage_under = {
-							who = ARA
-							years = 1
-							}
+			is_subject = no
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			capital_scope = {
+				area = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
 						}
+						add_permanent_claim = ROOT
 					}
-				is_subject = NO
 				}
 			}
-		effect = {
-			break_union = ARA
-			set_government_rank = 2
-			124 = { cede_province = SIC add_core = SIC remove_core = ARA }
-			125 = { cede_province = SIC add_core = SIC remove_core = ARA }
-			126 = { cede_province = SIC add_core = SIC remove_core = ARA }
-			2982 = { cede_province = SIC add_core = SIC remove_core = ARA }					
 		}
 	}
-	
+
 	req_sard = {
-	    icon = mission_monarch_in_throne_room
+		icon = mission_monarch_in_throne_room
 		position = 3
 		required_missions = { sic_req_ind }
-		provinces_to_highlight = { OR = {
-			            province_id = 127
-			            province_id = 2986
-					    }
-	                }
-			trigger = {
-				treasury = 200
-				army_size_percentage = 1
-				navy_size_percentage = 1
-				num_of_allies = 3
-			    OR = {
-				    alliance_with = ENG
-				    alliance_with = TUR
-				    alliance_with = FRA
-				    alliance_with = CAS
-				    alliance_with = HAB
-			    }
+		trigger = {
+			army_size_percentage = 1
+			navy_size_percentage = 1
+			num_of_allies = 3
+			if = {
+				limit = {
+					OR = {
+						exists = ENG
+						exists = GBR
+						exists = TUR
+						exists = FRA
+						exists = CAS
+						exists = SPA
+						exists = HAB
+					}
+				}
+				OR = {
+					alliance_with = ENG
+					alliance_with = GBR
+					alliance_with = TUR
+					alliance_with = FRA
+					alliance_with = CAS
+					alliance_with = SPA
+					alliance_with = HAB
+				}
 			}
-			effect = {
-				127 = { cede_province = SAR }
-				2986 = { cede_province = SAR }
-				vassalize = SAR
-				calabria_area = {
-				    limit = {
-					NOT = { is_core = ROOT }
+		}
+		effect = {
+			calabria_area = {
+				limit = {
 					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			    }
-				add_treasury = 150
 			}
+		}
 	}
-	
+
 	foothold_naples = {
-	    icon = mission_conquer_50_development
+		icon = mission_conquer_50_development
 		position = 4
 		required_missions = { req_sard }
-		provinces_to_highlight = { area = calabria_area }
-			trigger = {
-			    calabria_area = {
-				    type = all
-					owned_by = ROOT
+		provinces_to_highlight = {
+			area = calabria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			calabria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			apulia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			2983 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
-			effect = {
-			    apulia_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				    }
+			121 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
 					add_permanent_claim = ROOT
-			    }
-				add_permanent_claim = 2983
-				add_permanent_claim = 121
-				add_permanent_claim = 120
-			    add_country_modifier = {
-			        name = "sic_foot"
-				    duration = 5475
-			    }
-		    }
+				}
+			}
+			120 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = "sic_foot"
+				duration = 5475
+			}
 		}
-		
+	}
+
 	take_napoli = {
-	    icon = mission_unite_home_region
+		icon = mission_unite_home_region
 		position = 5
 		required_missions = { foothold_naples }
-		provinces_to_highlight = { OR = {
-		        area = apulia_area
+		provinces_to_highlight = {
+			OR = {
+				area = apulia_area
 				province_id = 2983
 				province_id = 121
 				province_id = 120
-				}
 			}
-			trigger = {
-			    calabria_area = {
-				    type = all
-					owned_by = ROOT
-				}
-				121 = { owned_by = ROOT }
-				120 = { owned_by = ROOT }
-				2983 = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			calabria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
-			effect = {
+			121 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			120 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2983 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
 			add_country_modifier = {
-			    name = "sic_nap"
+				name = "sic_nap"
 				duration = 9125
 			}
 			add_treasury = 100
+		}
+	}
+
+	celebrate_uni = {
+		icon = mission_empire
+		position = 6
+		required_missions = { take_napoli }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 123
+				province_id = 2984
+				province_id = 1934
+				province_id = 122
+				province_id = 1933
+				province_id = 2983
+				province_id = 2985
+				province_id = 121
+				province_id = 120
+				province_id = 124
+				province_id = 125
+				province_id = 126
+				province_id = 2982
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT  { is_core = ROOT }
 			}
 		}
-		
-	celebrate_uni = {
-	icon = mission_empire
-	position = 6
-	required_missions = { take_napoli }
-	    trigger = {
-		    NOT = { exists = TSC }
-			legitimacy = 100
+		trigger = {
+			NOT = { exists = TTS }
+			legitimacy_equivalent = 100
 			treasury = 200
 			stability = 2
-			AND = {
-			    owns_core_province = 123
-				owns_core_province = 2984
-				owns_core_province = 1934
-				owns_core_province = 122
-				owns_core_province = 1933
-				owns_core_province = 2983
-				owns_core_province = 2985
-				owns_core_province = 121 
-				owns_core_province = 120
-				owns_core_province = 124
-				owns_core_province = 125
-				owns_core_province = 126
-				owns_core_province = 2982
-				}
-			}
-		effect = { 
-		    change_tag = TTS
-		    121 = {
-			    move_capital_effect = yes
+			owns_core_province = 123
+			owns_core_province = 2984
+			owns_core_province = 1934
+			owns_core_province = 122
+			owns_core_province = 1933
+			owns_core_province = 2983
+			owns_core_province = 2985
+			owns_core_province = 121
+			owns_core_province = 120
+			owns_core_province = 124
+			owns_core_province = 125
+			owns_core_province = 126
+			owns_core_province = 2982
+		}
+		effect = {
+			change_tag = TTS
+			121 = {
+				move_capital_effect = yes
 				change_culture = ROOT
 				add_base_manpower = 3
 				add_base_tax = 3
 				add_base_production = 3
-				add_permanent_province_modifier = {
-				    name = center_of_trade_modifier
-					duration = -1
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
 				}
 			}
-			set_government_rank = 3
-		    add_prestige = 25
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			add_prestige = 25
 			add_country_modifier = {
 				name = "centralization_modifier"
 				duration = 7300
 			}
-		    djerba_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
+			djerba_area = {
+				limit = {
 					NOT = { owned_by = ROOT }
-				    }
-					add_permanent_claim = ROOT
-			    }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 			tunisia_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
+				limit = {
 					NOT = { owned_by = ROOT }
-				    }
-					add_permanent_claim = ROOT
-			    }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 			tripolitania_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
+				limit = {
 					NOT = { owned_by = ROOT }
-				    }
-					add_permanent_claim = ROOT
-			    }
-			country_event = { id = ideagroups.1 }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					has_custom_ideas = no
+				}
+				country_event = { id = ideagroups.1 }
+			}
 		}
 	}
-	
+
 	sic_africa = {
-	    icon = mission_cannons_firing
+		icon = mission_cannons_firing
 		position = 7
 		required_missions = { celebrate_uni }
-		provinces_to_highlight = { OR = {
-		                        area = djerba_area
-								area = tunisia_area
-								area = tripolitania_area
-								}
-							}
-			trigger = {
-			    djerba_area = {
-				    type = all
-					owned_by = ROOT
-				}
-				tunisia_area = {
-				    type = all
-					owned_by = ROOT
-				}
-				tripolitania_area = {
-				    type = all
-					owned_by = ROOT
-				}
+		provinces_to_highlight = {
+			OR = {
+				area = djerba_area
+				area = tunisia_area
+				area = tripolitania_area
 			}
-			effect = {
-			    djerba_area = {
-				    change_culture = ROOT
-				    change_religion = ROOT
-				}
-				tunisia_area = {
-				    change_culture = ROOT
-				    change_religion = ROOT
-				}
-				tripolitania_area = {
-				    change_culture = ROOT
-				    change_religion = ROOT
-				}
-			    aegean_archipelago_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				    }
-					add_permanent_claim = ROOT
-			    }
-			    northern_greece_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				    }
-					add_permanent_claim = ROOT
-			    }
-			    morea_area = {
-			        limit = {
-					NOT = { is_core = ROOT }
-					NOT = { owned_by = ROOT }
-				    }
-					add_permanent_claim = ROOT
-			    }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			djerba_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tunisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tripolitania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
+		effect = {
+			djerba_area = {
+				change_culture = ROOT
+				change_religion = ROOT
+			}
+			tunisia_area = {
+				change_culture = ROOT
+				change_religion = ROOT
+			}
+			tripolitania_area = {
+				change_culture = ROOT
+				change_religion = ROOT
+			}
+			aegean_archipelago_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_greece_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
 	sic_greece = {
-	    icon = mission_early_game_buildings
+		icon = mission_early_game_buildings
 		position = 8
 		required_missions = { sic_africa }
-		provinces_to_highlight = { OR = {
-		                    area = morea_area
-							area = northern_greece_area
-							area = aegean_archipelago_area
-							}
-						}
-			trigger = {
-			    djerba_area = {
-				    type = all
-					owned_by = ROOT
-				}
-				tunisia_area = {
-				    type = all
-					owned_by = ROOT
-				}
-				tripolitania_area = {
-				    type = all
-					owned_by = ROOT
-				}
+		provinces_to_highlight = {
+			OR = {
+				area = morea_area
+				area = northern_greece_area
+				area = aegean_archipelago_area
 			}
-			effect = {
-			    add_permanent_claim = 1247
-				add_permanent_claim = 333
-				add_permanent_claim = 321
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			djerba_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tunisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tripolitania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		
+		effect = {
+			1247 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			333 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			321 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
 	sic_med = {
-	    icon = mission_invade_island
+		icon = mission_invade_island
 		position = 9
 		required_missions = {sic_greece}
-		provinces_to_highlight = { OR = {
-		        province_id = 1247
-			    province_id = 333
-			    province_id = 321
-			    }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1247
+				province_id = 333
+				province_id = 321
 			}
-			trigger = {
-			    1247 = {owned_by = ROOT}
-		        333 = {owned_by = ROOT}
-				321 = {owned_by = ROOT}
-			}
-			effect = {
-			    add_country_modifier = {
-				    name = "sic_med_uni"
-					duration = -1
-				}
-			    add_prestige = 25
-				add_legitimacy = 50
-				add_stability = 1
-				add_treasury = 300
-			}
+			NOT = { owned_by = ROOT }
 		}
-    }
-				
-		
-				
-	
-	
-	
+		trigger = {
+			owns = 1247
+			owns = 333
+			owns = 321
+		}
+		effect = {
+			add_country_modifier = {
+				name = "sic_med_uni"
+				duration = -1
+			}
+			add_prestige = 25
+			add_legitimacy_equivalent = { value = 25 }
+			add_stability = 1
+			add_treasury = 300
+		}
+	}
+}

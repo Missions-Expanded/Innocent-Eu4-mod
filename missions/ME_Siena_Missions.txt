@@ -1,19 +1,20 @@
-siena_missions_first_slot = {
+siena_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			tag = SIE
-		}
+		tag = SIE
 	}
 	has_country_shield = yes
 	
-	# a mission before this. alliance/pu with LIT OR Lit is dead
 	sie_development = {
 		icon = mission_sie_development
 		position = 1
 		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { development = 30 }
+		}
 		trigger = {
 			capital_scope = {
 				development = 30
@@ -33,7 +34,7 @@ siena_missions_first_slot = {
 			has_institution = renaissance
 		}
 		effect = {
-			add_republican_tradition = 10
+			add_legitimacy_equivalent = { value = 10 }
 		}
 	}
 	
@@ -42,10 +43,17 @@ siena_missions_first_slot = {
 		position = 3
 		required_missions = { sie_republic }
 		trigger = {
-			reverse_has_opinion = {
-				who = PAP
-				value = 100
-			}			
+			religion = catholic
+			OR = {
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
+				AND = {
+					NOT = { exists = PAP }
+					is_papal_controller = yes
+				}
+			}
 		}
 		effect = {
 			add_papal_influence = 25
@@ -63,7 +71,6 @@ siena_missions_first_slot = {
 			capital_scope = {
 				add_base_tax = 3
 			}
-			
 		}
 	}
 	
@@ -84,10 +91,15 @@ siena_missions_first_slot = {
 			}
 		}
 	}
+	
 	sie_tuscany = {
 		icon = mission_unite_home_region
 		position = 6
 		required_missions = { sie_ambition }
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			tuscany_area = {
 				type = all
