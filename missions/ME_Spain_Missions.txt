@@ -32,19 +32,16 @@ SPA_missions_1 = {
 		icon = mission_spain_crusade
 		required_missions = { spain_prepare_the_reconquista }
 		position = 2
-		
 		provinces_to_highlight = {
 			area = upper_andalucia_area
 			NOT = { owned_by = ROOT }
 		}
-		
 		trigger = {
 			upper_andalucia_area = {
 				type = all
 				owned_by = ROOT
 			}
 		}
-		
 		effect = {
 			add_prestige = 10
 			add_adm_power = 50
@@ -105,7 +102,7 @@ SPA_missions_1 = {
 			}
 		}
 		effect = {
-			add_legitimacy = 15
+			add_legitimacy_equivalent = { value = 15 }
 			# Portugal
 			beieras_area = {
 				limit = {
@@ -372,14 +369,12 @@ SPA_missions_1 = {
 				limit = {
 					has_no_manufactory_trigger = yes
 				}
-				custom_tooltip = BUILD_MATCHING_MANUFACTORY_IN_THIS_PROVINCE_SPA
 				build_possible_manufactory_in_province = yes
 			}
 			west_africa_coast_area = {
 				limit = {
 					has_no_manufactory_trigger = yes
 				}
-				custom_tooltip = BUILD_MATCHING_MANUFACTORY_IN_THIS_PROVINCE_SPA
 				build_possible_manufactory_in_province = yes
 			}
 			if = {
@@ -983,6 +978,27 @@ SPA_missions_2 = {
 		icon = mission_spain_knight
 		required_missions = { }
 		position = 11
+		provinces_to_highlight = {
+			area = ile_de_france_area
+			OR = {
+				AND = {
+					NOT = { controlled_by = ROOT }
+					controller = {
+						NOT = { is_subject_of = ROOT }
+						NOT = { alliance_with = ROOT }
+					}
+				}
+				AND = {
+					NOT = { exists = FRA }
+					NOT = { exists = BRI }
+					NOT = { exists = BUR }
+					ROOT = {
+						owns = 183
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
 		trigger = {
 			OR = {
 				mission_completed = spain_conquer_atlantic_islands
@@ -1162,7 +1178,13 @@ SPA_missions_2 = {
 					has_dlc = "Rights of Man"
 				}
 				is_great_power = yes
-				NOT = { great_power_rank = FRA }
+				OR = {
+					NOT = { exists = FRA }
+					FRA = {
+						is_great_power = no
+					}
+					NOT = { great_power_rank = FRA }
+				}
 			}
 			else = {
 				OR = {
@@ -1184,6 +1206,14 @@ SPA_missions_2 = {
 		icon = mission_spain_subject
 		required_missions = { spain_better_than_france }
 		position = 14
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			ROOT = {
+				owns = 183
+			}
+			region = france_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -1655,7 +1685,7 @@ SPA_missions_3 = {
 		}
 		effect = {
 			add_prestige = 50
-			add_legitimacy = 20
+			add_legitimacy_equivalent = { value = 20 }
 			country_event = { id = ME_Spain_Events.5 }
 		}
 	}
@@ -2040,6 +2070,11 @@ SPA_missions_4 = {
 		icon = mission_spain_the_habsburg_realm
 		required_missions = { spain_become_emperor }
 		position = 10
+		provinces_to_highlight = {
+			NOT = { exists = HAB }
+			is_core = HAB
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			dynasty = "von Habsburg"
 			if = {
@@ -2068,11 +2103,11 @@ SPA_missions_4 = {
 				}
 				else = {
 					senior_union_with = HAB
-					legitimacy = 100
+					legitimacy_equivalent = 100
 				}
 			}
 			else = {
-				legitimacy = 100
+				legitimacy_equivalent = 100
 				HAB = {
 					all_core_province = {
 						owned_by = ROOT
@@ -2118,19 +2153,16 @@ SPA_missions_4 = {
 		required_missions = { spain_the_habsburg_realm }
 		position = 11
 		provinces_to_highlight = {
-			OR = {
-				AND = {
-					NOT = { overlord_of = HAB }
-					OR = {
-						area = tirol_area
-						area = austria_proper_area
-						area = inner_austria_area
-						area = carinthia_area
-					}
-					NOT = { owned_by = ROOT }
-				}
-				always = no
+			ROOT = {
+				NOT = { overlord_of = HAB }
 			}
+			OR = {
+				area = tirol_area
+				area = austria_proper_area
+				area = inner_austria_area
+				area = carinthia_area
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			OR = {
@@ -2166,7 +2198,7 @@ SPA_missions_4 = {
 		}
 		effect = {
 			add_prestige = 20
-			add_legitimacy = 15
+			add_legitimacy_equivalent = { value = 15 }
 			flanders_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -2324,6 +2356,7 @@ SPA_missions_4 = {
 					limit = {
 						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 					}
 					add_claim = ROOT
 				}
@@ -2333,6 +2366,7 @@ SPA_missions_4 = {
 					limit = {
 						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
 					}
 					add_claim = ROOT
 				}
@@ -2363,6 +2397,7 @@ SPA_missions_4 = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 				}
 				add_claim = ROOT
 			}
@@ -2370,6 +2405,7 @@ SPA_missions_4 = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 				}
 				add_claim = ROOT
 			}
@@ -2377,6 +2413,7 @@ SPA_missions_4 = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 				}
 				add_claim = ROOT
 			}
@@ -2384,6 +2421,7 @@ SPA_missions_4 = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
 				}
 				add_claim = ROOT
 			}
@@ -2452,7 +2490,10 @@ SPA_missions_4 = {
 		required_missions = { }
 		position = 17
 		trigger = {
-			temple = 10
+			OR = {
+				temple = 10
+				cathedral = 10
+			}
 		}
 		effect = {
 			add_years_of_income = 1
@@ -2528,6 +2569,14 @@ SPA_missions_4 = {
 		icon = mission_spain_soldier
 		position = 20
 		required_missions = { spain_the_last_crusade }
+		provinces_to_highlight = {
+			province_id = 379
+			has_discovered = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { religion = catholic }
+			}
+		}
 		trigger = {
 			religion = catholic
 			owns = 379
@@ -2699,14 +2748,7 @@ SPA_missions_5 = {
 				OR = {
 					colonial_brazil = {
 						type = all
-						NOT = {
-							OR = {
-								owned_by = POR
-								owner = {
-									is_subject_of = POR
-								}
-							}
-						}
+						NOT = { country_or_non_sovereign_subject_holds = POR }
 					}
 					mission_completed = spain_conquer_atlantic_islands
 				}
@@ -2727,7 +2769,15 @@ SPA_missions_5 = {
 		position = 6
 		provinces_to_highlight = {
 			colonial_region = colonial_peru
-			trade_goods = gold
+			OR = {
+				trade_goods = gold
+				AND = {
+					colonial_peru = {
+						type = all
+						NOT = { trade_goods = gold }
+					}
+				}
+			}
 			has_discovered = ROOT
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -2741,8 +2791,8 @@ SPA_missions_5 = {
 				colonial_peru = {
 					type = all
 					OR = {
-						trade_goods = gold
-						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { trade_goods = gold }
+						country_or_non_sovereign_subject_holds = ROOT
 					}
 				}
 			}
@@ -2851,6 +2901,10 @@ SPA_missions_5 = {
 		icon = mission_spain_hre_icon
 		required_missions = { spain_become_emperor }
 		position = 10
+		provinces_to_highlight = {
+			owned_by = ROOT
+			is_part_of_hre = no
+		}
 		trigger = {
 			is_part_of_hre = yes
 			num_of_owned_provinces_with = {
@@ -2905,7 +2959,6 @@ SPA_missions_5 = {
 				name = spain_catholic_spanish_lands_modifier
 				duration = 5475
 			}
-			
 			custom_tooltip = SPA_OWNED_HRE_PROVINCE_GET_SPANISH_LANDS_MODIFIER
 			hidden_effect = {
 				every_owned_province = {
@@ -3043,6 +3096,11 @@ SPA_missions_5 = {
 		icon = mission_spain_inquisition
 		required_missions = { spain_catholic_electors }
 		position = 17
+		provinces_to_highlight = {
+			is_part_of_hre = yes
+			NOT = { religion = catholic }
+			is_reformation_center = yes
+		}
 		trigger = {
 			religion = catholic
 			all_province = {
@@ -3066,6 +3124,10 @@ SPA_missions_5 = {
 		icon = mission_spain_hre_icon
 		required_missions = { spain_spanish_inquisition }
 		position = 18
+		provinces_to_highlight = {
+			is_part_of_hre = yes
+			NOT = { religion = catholic }
+		}
 		trigger = {
 			religion = catholic
 			all_province = {
@@ -3090,6 +3152,10 @@ SPA_missions_5 = {
 		icon = mission_spain_catholic_iberia
 		required_missions = { spain_catholic_hre }
 		position = 18
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = catholic }
+		}
 		trigger = {
 			religion = catholic
 			all_owned_province = {
@@ -3098,7 +3164,7 @@ SPA_missions_5 = {
 		}
 		effect = {
 			add_prestige = 20
-			add_legitimacy = 20
+			add_legitimacy_equivalent = { value = 20 }
 			add_country_modifier = {
 				name = spain_catholic_empire_modifier
 				duration = 5475
