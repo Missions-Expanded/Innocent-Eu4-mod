@@ -45,27 +45,23 @@ Ulm_missions_1 = {
 			province_id = 1872
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				AND = {
-					has_dlc = "Common Sense"
-					NOT = { development = 20 }
-				}
+				has_dlc = "Common Sense"
 			}
 		}
 		trigger = {
 			1872 = {
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
-					}
-					development = 20
-				}
 				country_or_non_sovereign_subject_holds = ROOT
+				development = 20
 			}
 		}
 		effect = {
 			every_neighbor_country = {
+				limit = {
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
 				reverse_add_casus_belli = {
-					target = PREV
+					target = ROOT
 					type = cb_vassalize_mission
 					months = 120
 				}
@@ -179,55 +175,25 @@ Ulm_missions_2 = {
 			}
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				AND = {
-					has_dlc = "Common Sense"
-					NOT = { base_production = 10 }
-				}
-				AND = {
-					NOT = { has_dlc = "Common Sense" }
-					has_no_manufactory_trigger = yes
-				}
+				NOT = { base_production = 10 }
 			}
 		}
 		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				68 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					base_production = 10
-				}
-				69 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					base_production = 10
-				}
-				1872 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					base_production = 10
-				}
-				1868 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					base_production = 10
-				}
+			68 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
 			}
-			else = {
-				68 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_manufactory_trigger = yes
-				}
-				69 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_manufactory_trigger = yes
-				}
-				1872 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_manufactory_trigger = yes
-				}
-				1868 = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_manufactory_trigger = yes
-				}
+			69 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			1872 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
+			}
+			1868 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 10
 			}
 		}
 		effect = {
@@ -254,7 +220,10 @@ Ulm_missions_2 = {
 					}
 					add_base_production = 1
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
 					add_permanent_claim = ROOT
 				}
 			}
@@ -265,7 +234,10 @@ Ulm_missions_2 = {
 					}
 					add_base_production = 1
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
 					add_permanent_claim = ROOT
 				}
 			}
@@ -276,7 +248,10 @@ Ulm_missions_2 = {
 					}
 					add_base_production = 1
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
 					add_permanent_claim = ROOT
 				}
 			}
@@ -301,18 +276,32 @@ Ulm_missions_3 = {
 			province_id = 1872
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = temple }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 			}
 		}
 		trigger = {
 			owns = 1872
 			1872 = {
-				has_building = temple
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
 		effect = {
 			1872 = {
-				add_building = cathedral
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 2
+				}
 			}
 		}
 	}
