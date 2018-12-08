@@ -1,4 +1,4 @@
-wes_one = {
+WES_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -43,13 +43,48 @@ wes_one = {
 		required_missions = { wes_jews }
 		position = 3
 		trigger = {
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			adm_power = 100
 			prestige = 50
 		}
 		effect = {
-			change_government = monarchy
-			add_government_reform = english_monarchy
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				if = {
+					limit = {
+						NOT = { has_reform = parliamentary_reform }
+					}
+					add_government_reform = parliamentary_reform
+				}
+				else = {
+					add_legitimacy_equivalent = { value = 10 }
+					every_owned_province = {
+						add_local_autonomy = -10
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						government = monarchy
+					}
+					set_legacy_government = constitutional_monarchy
+				}
+				else_if = {
+					limit = {
+						government = republic
+					}
+					set_legacy_government = constitutional_republic
+				}
+				else = {
+					add_legitimacy_equivalent = { value = 10 }
+					every_owned_province = {
+						add_local_autonomy = -10
+					}
+				}
+			}
 		}
 	}
 	
@@ -75,9 +110,10 @@ wes_one = {
 		position = 5
 		trigger = {
 			if = {
-				limit = { has_dlc = "Rule Britannia"
-					furnace = 5
+				limit = {
+					has_dlc = "Rule Britannia"
 				}
+				furnace = 5
 			}
 			else = {
 				num_of_owned_manufactory_trigger = { amount = 5 }
@@ -94,7 +130,7 @@ wes_one = {
 	}
 }
 
-wes_two = {
+WES_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -107,38 +143,33 @@ wes_two = {
 		icon = mission_conquer_5_states
 		required_missions = { wes_conquer_north_rhine }
 		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 59
+				province_id = 62
+				province_id = 61
+				province_id = 63
+				province_id = 2965
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
-			59 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			62 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			61 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			63 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			2965 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 59
+			owns_core_province = 62
+			owns_core_province = 61
+			owns_core_province = 63
+			owns_core_province = 2965
 		}
 		effect = {
 			weser_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-			add_permanent_claim = ROOT
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -147,6 +178,13 @@ wes_two = {
 		icon = mission_galleys_in_port
 		required_missions = { wes_conquer_saxony }
 		position = 3
+		provinces_to_highlight = {
+			area = weser_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			weser_area = {
 				type = all
@@ -200,23 +238,23 @@ wes_two = {
 		icon = mission_cannons_firing
 		required_missions = { wes_conquer_weser }
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 53
+				province_id = 1857
+				province_id = 46
+				province_id = 2996
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
-			53 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			1857 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			46 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			2996 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 53
+			owns_core_province = 1857
+			owns_core_province = 46
+			owns_core_province = 2996
 		}
 		effect = {
 			add_country_modifier = {
@@ -227,7 +265,7 @@ wes_two = {
 	}
 }
 	
-wes_three = {
+WES_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -238,6 +276,13 @@ wes_three = {
 	
 	wes_conquer_north_rhine = {
 		icon = mission_cannons_firing
+		provinces_to_highlight = {
+			area = north_rhine_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			north_rhine_area = {
 				type = all
@@ -247,33 +292,24 @@ wes_three = {
 		}
 		effect = {
 			franconia_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			upper_rhineland_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			lower_rhineland_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			59 = {
@@ -328,6 +364,16 @@ wes_three = {
 		icon = mission_unite_home_region
 		position = 2
 		required_missions = { wes_conquer_north_rhine }
+		provinces_to_highlight = {
+			OR = {
+				area = upper_rhineland_area
+				area = lower_rhineland_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			upper_rhineland_area = {
 				type = all
@@ -346,13 +392,10 @@ wes_three = {
 				duration = 18250
 			}
 			palatinate_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 		}
@@ -362,6 +405,13 @@ wes_three = {
 		icon = mission_assemble_an_army
 		position = 3
 		required_missions = { wes_conquer_rhineland }
+		provinces_to_highlight = {
+			area = palatinate_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			palatinate_area = {
 				type = all
@@ -378,7 +428,7 @@ wes_three = {
 	}
 }
 
-wes_four = {
+WES_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -391,6 +441,13 @@ wes_four = {
 		icon = mission_conquer_50_development
 		required_missions = { wes_conquer_north_rhine }
 		position = 2
+		provinces_to_highlight = {
+			area = franconia_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			franconia_area = {
 				type = all
@@ -402,23 +459,17 @@ wes_four = {
 			add_legitimacy_equivalent = { value = 10 }
 			add_adm_power = 10
 			upper_swabia_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			lower_swabia_area = {
-				# if = {
-					limit = {
-						# type = all
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				# }
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 		}
@@ -428,6 +479,16 @@ wes_four = {
 		icon = mission_cannons_firing
 		position = 3
 		required_missions = { wes_conquer_franconia }
+		provinces_to_highlight = {
+			OR = {
+				area = upper_swabia_area
+				area = lower_swabia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			upper_swabia_area = {
 				type = all
@@ -495,27 +556,25 @@ wes_four = {
 		icon = mission_unite_home_region
 		position = 4
 		required_missions = { wes_conquer_swabia }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 64
+				province_id = 2956
+				province_id = 2957
+				province_id = 2955
+				province_id = 65
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
-			64 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			2956 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			2957 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			2955 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			65 = {
-				owned_by = ROOT
-				is_core = ROOT
-			}
+			owns_core_province = 64
+			owns_core_province = 2956
+			owns_core_province = 2957
+			owns_core_province = 2955
+			owns_core_province = 65
 		}
 		effect = {
 			add_country_modifier = {
