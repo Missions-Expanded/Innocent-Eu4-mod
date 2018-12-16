@@ -1,4 +1,4 @@
-bre_buildings = {
+BRE_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -14,7 +14,10 @@ bre_buildings = {
 			province_id = 1874
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = temple }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 			}
 		}
 		trigger = {
@@ -22,16 +25,25 @@ bre_buildings = {
 			adm_tech = 5
 			owns = 1874
 			1874 = {
-				has_building = temple
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
 		effect = {
 			add_treasury = -200
 			1874 = {
-				hidden_effect = {
-					remove_building = temple
+				if = {
+					limit = {
+						has_building = temple
+						NOT = { has_building = cathedral }
+					}
+					hidden_effect = {
+						remove_building = temple
+					}
+					add_building = cathedral
 				}
-				add_building = cathedral
 				add_base_tax = 2
 				add_base_production = 2
 				add_base_manpower = 2
@@ -46,7 +58,10 @@ bre_buildings = {
 			province_id = 1874
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = workshop }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
 			}
 		}
 		trigger = {
@@ -55,7 +70,10 @@ bre_buildings = {
 			adm_tech = 8
 			owns = 1874
 			1874 = {
-				has_building = workshop
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
 			}
 		}
 		effect = {
@@ -80,31 +98,22 @@ bre_buildings = {
 			province_id = 1874
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = trade_depot }
 				AND = {
-					has_dlc = "Common Sense"
-					NOT = { development = 30 }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
 				}
-				AND = {
-					NOT = { has_dlc = "Common Sense" }
-					NOT = { province_has_at_least_num_of_buildings = { amount = 3 } }
-				}
+				NOT = { development = 30 }
 			}
 		}
 		position = 3
 		trigger = {
 			owns = 1874
 			1874 = {
-				has_building = trade_depot
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
-					}
-					development = 30
+				OR = {
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
-				else = {
-					province_has_at_least_num_of_buildings = { amount = 3 }
-				}
+				development = 30
 			}
 		}
 		effect = {
@@ -132,6 +141,7 @@ bre_buildings = {
 					OR = {
 						has_dlc = "Wealth of Nations"
 						has_dlc = "El Dorado"
+						has_dlc = "Golden Century"
 					}
 				}
 				has_privateers = yes
@@ -305,7 +315,7 @@ bre_buildings = {
 	}
 }
 
-bre_navy = {
+BRE_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -341,6 +351,7 @@ bre_navy = {
 					OR = {
 						has_dlc = "Wealth of Nations"
 						has_dlc = "El Dorado"
+						has_dlc = "Golden Century"
 					}
 				}
 				has_privateers = yes
@@ -379,11 +390,11 @@ bre_navy = {
 				duration = 10950
 			}
 			define_admiral = {
-					shock = 4
-					fire = 3
-					manuever = 4
-					siege = 4
-					name = "Grote Gherd"
+				shock = 4
+				fire = 3
+				manuever = 4
+				siege = 4
+				name = "Grote Gherd"
 			}	
 			HOL = {
 				add_country_modifier = {
@@ -408,6 +419,7 @@ bre_navy = {
 					OR = {
 						has_dlc = "Wealth of Nations"
 						has_dlc = "El Dorado"
+						has_dlc = "Golden Century"
 					}
 				}
 				has_privateers = yes
@@ -453,6 +465,7 @@ bre_navy = {
 					OR = {
 						has_dlc = "Wealth of Nations"
 						has_dlc = "El Dorado"
+						has_dlc = "Golden Century"
 					}
 				}
 				has_privateers = yes
@@ -499,7 +512,7 @@ bre_navy = {
 	}
 }
 
-bre_army = {
+BRE_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -557,8 +570,8 @@ bre_army = {
 						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
 					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -600,12 +613,6 @@ bre_army = {
 			manpower_percentage = 0.6
 		}
 		effect = {
-			if = {
-				limit = {
-					exists = HAM
-				}
-				inherit = HAM
-			}
 			add_country_modifier = {
 				name = bre_underhanded
 				duration = 10950
@@ -630,7 +637,13 @@ bre_army = {
 				}
 			}
 			2997 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -743,7 +756,7 @@ bre_army = {
 	}	
 }
 	
-bre_more_stuff = {
+BRE_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -771,11 +784,10 @@ bre_more_stuff = {
 		}
 		effect = {
 			add_treasury = -250
-			if = {
-				limit = {
-					exists = OLD
-				}
-				inherit = OLD
+			add_casus_belli = {
+				target = OLD
+				type = cb_annex
+				months = 60
 			}
 		}
 	}
@@ -803,19 +815,19 @@ bre_more_stuff = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					exists = LUN
-				}
-				inherit = LUN
-			}
 			add_corruption = 2
 			add_country_modifier = {
 				name = bre_luneburg
 				duration = 10950
 			}
 			1857 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -836,7 +848,13 @@ bre_more_stuff = {
 		}
 		effect = {
 			46 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			add_country_modifier = {
 				name = bre_lauenburg_domination
@@ -865,7 +883,13 @@ bre_more_stuff = {
 		}
 		effect = {
 			45 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			add_country_modifier = {
 				name = bre_mecklenburg_domination
@@ -897,7 +921,7 @@ bre_more_stuff = {
 	}
 }
 
-bre_yet_more_stuff = {
+BRE_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -968,7 +992,11 @@ bre_yet_more_stuff = {
 				trade_goods = cloth
 				value = yes
 			}
-			marketplace = 3
+			OR = {
+				marketplace = 3
+				trade_depot = 3
+				stock_exchange = 3
+			}
 		}
 		effect = {
 			1874 = {
