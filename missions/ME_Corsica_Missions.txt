@@ -30,6 +30,7 @@ corsica_missions_slot_1 = {
 					limit = {
 						NOT = { owned_by = ROOT	}
 						NOT = { is_core = ROOT	}
+						NOT = { is_permanent_claim = ROOT	}
 					}
 					add_claim = ROOT
 				}
@@ -42,26 +43,18 @@ corsica_missions_slot_1 = {
 		position = 3
 		required_missions = { corsica_revenge_against_genua }
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					NOT = { overlord_of = GEN }
-				}
-				area = liguria_area
+			ROOT = {
+				NOT = { overlord_of = GEN }
 			}
-			else = {
-				always = no
-			}
+			area = liguria_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			OR = {
+				overlord_of = GEN
 				liguria_area = {
 					type = all
 					country_or_non_sovereign_subject_holds = ROOT
-				}
-				AND = {
-					exists = GEN
-					overlord_of = GEN
 				}
 			}
 		}
@@ -163,11 +156,11 @@ corsica_missions_slot_1 = {
 		required_missions = { corsica_conquer_mediterranean_islands }
 		provinces_to_highlight = {
 			OR = {
-				area = naples_area
+				province_id = 121
+				province_id = 2983
 				area = calabria_area
 				area = apulia_area
 			}
-			NOT = { province_id = 118 }
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -264,7 +257,6 @@ corsica_missions_slot_1 = {
 			OR = {
 				area = lombardy_area
 				area = emilia_romagna_area
-				province_id = 118
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -304,7 +296,6 @@ corsica_missions_slot_1 = {
 			OR = {
 				area = carinthia_area
 				area = venetia_area
-				province_id = 118
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -325,19 +316,12 @@ corsica_missions_slot_1 = {
 				name = corsica_italy_conquest
 				duration = 10950
 			}
-			if = {
+			east_adriatic_coast_area = {
 				limit = {
-					east_adriatic_coast_area = {
-						NOT = { is_permanent_claim = ROOT }
-					}
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
 				}
-				east_adriatic_coast_area = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -357,23 +341,13 @@ corsica_missions_slot_2 = {
 		position = 8
 		required_missions = { corsica_conquer_central_italy }
 		provinces_to_highlight = {
-			if = {
-				limit = {
-					NOT = { exists = PAP }
-				}
-				province_id = 118
-			}
-			else = {
-				always = no
-			}
+			NOT = { exists = PAP }
+			province_id = 118
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			OR = {
-				AND = {
-					exists = PAP
-					overlord_of = PAP
-				}
+				overlord_of = PAP
 				AND = {
 					NOT = { exists = PAP }
 					118 = { country_or_non_sovereign_subject_holds = ROOT }
@@ -543,14 +517,12 @@ corsica_missions_slot_3 = {
 						}
 					}
 				}
-				any_country = {
-					NOT = { tag = ROOT }
+				any_ally = {
 					NOT = { tag = FRA }
 					NOT = { owns = 183 }
 					capital_scope = {
 						region = british_isles_region
 					}
-					alliance_with = ROOT
 				}
 			}
 			else = {
@@ -572,6 +544,23 @@ corsica_missions_slot_3 = {
 		icon = mission_build_up_to_force_limit
 		position = 5
 		required_missions = { corsica_ally_england }
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			183 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			NOT = {
+				any_country = {
+					NOT = { tag = ROOT }
+					NOT = { owns = 183 }
+					capital_scope = {
+						region = france_region
+					}
+				}
+			}
+			region = france_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -581,9 +570,8 @@ corsica_missions_slot_3 = {
 			}
 			else_if = {
 				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						owns = 183
+					183 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 					}
 				}
 				183 = {
@@ -603,7 +591,9 @@ corsica_missions_slot_3 = {
 					}
 				}
 				any_country = {
-					NOT = { tag = ROOT }
+					hidden_trigger = {
+						NOT = { tag = ROOT }
+					}
 					NOT = { owns = 183 }
 					capital_scope = {
 						region = france_region
@@ -722,19 +712,12 @@ corsica_missions_slot_3 = {
 				name = corsica_greek_islands_conquest
 				duration = 10950
 			}
-			if = {
+			east_adriatic_coast_area = {
 				limit = {
-					east_adriatic_coast_area = {
-						NOT = { is_permanent_claim = ROOT }
-					}
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
 				}
-				east_adriatic_coast_area = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -832,6 +815,23 @@ corsica_missions_slot_4 = {
 		icon = mission_assemble_an_army
 		position = 6
 		required_missions = { corsica_protect_against_france corsica_greatest_mediterranean_power }
+		provinces_to_highlight = {
+			NOT = { exists = FRA }
+			183 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			NOT = {
+				any_country = {
+					NOT = { tag = ROOT }
+					NOT = { owns = 183 }
+					capital_scope = {
+						region = france_region
+					}
+				}
+			}
+			region = france_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -847,9 +847,8 @@ corsica_missions_slot_4 = {
 			}
 			else_if = {
 				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						owns = 183
+					183 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 					}
 				}
 				183 = {
@@ -877,7 +876,9 @@ corsica_missions_slot_4 = {
 					}
 				}
 				any_country = {
-					NOT = { tag = ROOT }
+					hidden_trigger = {
+						NOT = { tag = ROOT }
+					}
 					NOT = { owns = 183 }
 					capital_scope = {
 						region = france_region
