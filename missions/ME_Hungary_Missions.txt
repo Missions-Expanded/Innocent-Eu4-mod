@@ -192,8 +192,7 @@ HUN_missions_slot_1 = {
 		position = 7
 		trigger = {
 			religion = catholic
-			religious_unity = 0.7
-			NOT = { current_age = age_of_discovery }
+			NOT = { religious_unity = 0.7 }
 		}
 		effect = {
 			add_country_modifier = {
@@ -207,15 +206,30 @@ HUN_missions_slot_1 = {
 		icon = me_mission_one_country_one_faith
 		required_missions = { hungary_a_question_of_faith }
 		position = 8
-		provinces_to_highlight = {
-			owned_by = ROOT
-			has_owner_religion = no
-		}
 		trigger = {
 			NOT = { mission_completed = hungary_a_new_dawn }
 			religion = catholic
-			all_owned_province = {
-				has_owner_religion = yes
+			OR = {
+				is_papal_controller = yes
+				is_defender_of_faith = yes
+				AND = {
+					exists = PAP
+					reverse_has_opinion = {
+						who = PAP
+						value = 50
+					}
+				}
+				AND = {
+					NOT = { exists = PAP }
+					is_papal_controller = no
+					any_country = {
+						is_papal_controller = yes
+						has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
 			}
 		}
 		effect = {
@@ -539,10 +553,41 @@ HUN_missions_slot_2 = {
 		position = 8
 		trigger = {
 			NOT = { mission_completed = hungary_reinforce_catholicism }
-			religion = orthodox
+			is_papal_controller = no
+			is_defender_of_faith = no
+			OR = {
+				dominant_religion = orthodox
+				AND = {
+					exists = PAP
+					NOT = {
+						reverse_has_opinion = {
+							who = PAP
+							value = -50
+						}
+					}
+				}
+				AND = {
+					NOT = { exists = PAP }
+					any_country = {
+						is_papal_controller = yes
+						NOT = {
+							has_opinion = {
+								who = ROOT
+								value = -50
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
 			add_prestige = -50
+			change_religion = orthodox
+			hidden_effect = {
+				capital_scope = {
+					change_religion = orthodox
+				}
+			}
 			add_country_modifier = {
 				name = hungary_a_new_dawn_modifier_1
 				duration = 5475
