@@ -1,4 +1,4 @@
-me_aragonese_missions_1 = {
+ARA_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -8,7 +8,7 @@ me_aragonese_missions_1 = {
 	}
 	has_country_shield = yes
 
-	vassalize_navarra = {
+	vassalize_navarra_ME = {
 		icon = me_mission_spain_subject
 		required_missions = { }
 		position = 1
@@ -54,8 +54,8 @@ me_aragonese_missions_1 = {
 	}
 	
 	ara_crown_of_castile = {
-		icon = mission_assemble_an_army
-		required_missions = { vassalize_navarra }
+		icon = me_mission_aragon_crowns_of_iberia
+		required_missions = { vassalize_navarra_ME }
 		position = 3
 		provinces_to_highlight = {
 			OR = {
@@ -89,13 +89,12 @@ me_aragonese_missions_1 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Aragon.1 }
 			add_prestige = 25
 			iberia_region = {
 				limit = {
 					NOT = { religion = catholic }
-					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -125,16 +124,16 @@ me_aragonese_missions_1 = {
 				}
 				AND = {
 					alentejo_area = {
-						country_or_non_sovereign_subject_holds = ROOT
 						type = all
+						country_or_non_sovereign_subject_holds = ROOT
 					}
 					beieras_area = {
-						country_or_non_sovereign_subject_holds = ROOT
 						type = all
+						country_or_non_sovereign_subject_holds = ROOT
 					}
 					macaronesia_area = {
-						country_or_non_sovereign_subject_holds = ROOT
 						type = all
+						country_or_non_sovereign_subject_holds = ROOT
 					}
 				}
 			}
@@ -146,6 +145,7 @@ me_aragonese_missions_1 = {
 			}
 		}
 	}
+	
 	ara_new_laws = {
 		icon = mission_asian_trader
 		position = 11
@@ -153,7 +153,6 @@ me_aragonese_missions_1 = {
 		trigger = {
 			1297 = {
 				has_merchant = ROOT
-				
 			}
 			trade_efficiency = 0.3
 		}
@@ -164,6 +163,7 @@ me_aragonese_missions_1 = {
 			}
 		}
 	}
+	
 	ara_expand_the_archive = {
 		icon = mission_early_modern_university
 		position = 12
@@ -187,15 +187,22 @@ me_aragonese_missions_1 = {
 			}
 		}
 	}
+	
 	ara_meet_the_demand = {
 		icon = mission_have_manufactories
 		position = 13
 		required_missions = { ara_expand_the_archive }
 		provinces_to_highlight = {
 			province_id = 4549
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 6 }
+				NOT = { development = 18 }
+			}
 		}
 		trigger = {
 			4549 = {
+				owned_by = ROOT
 				base_production = 6
 				development = 18
 			}
@@ -207,13 +214,41 @@ me_aragonese_missions_1 = {
 			}
 		}
 	}
+	
 	ara_aragon_prospers = {
 		icon = mission_dominate_home_trade_node
 		position = 14
 		required_missions = { }
+		provinces_to_highlight = {
+			area = aragon_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { development = 15 }
+				}
+			}
+		}
 		trigger = {
 			aragon_area = {
-				is_prosperous = yes
+				type = all
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					development = 15
+				}
 			}
 		}
 		effect = {
@@ -222,16 +257,60 @@ me_aragonese_missions_1 = {
 			add_mil_power = 50
 		}
 	}
+	
 	ara_catalonia_prospers = {
 		icon = mission_alliances
 		position = 15
 		required_missions = { ara_aragon_prospers }
+		provinces_to_highlight = {
+			OR = {
+				area = catalonia_area
+				area = valencia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_prosperous = no
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { development = 15 }
+				}
+			}
+		}
 		trigger = {
 			catalonia_area = {
-				is_prosperous = yes
+				type = all
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					development = 15
+				}
 			}
 			valencia_area = {
-				is_prosperous = yes
+				type = all
+				owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				else = {
+					development = 15
+				}
 			}
 		}
 		effect = {
@@ -241,18 +320,17 @@ me_aragonese_missions_1 = {
 			}
 		}
 	}
+	
 	ara_america_trade = {
 		icon = mission_dominate_home_trade_node
 		position = 17
 		required_missions = { ara_open_up_ports }
 		trigger = {
-			any_country = {
-				limit = {
-					capital_scope = {
-						OR = {
-							continent = north_america
-							continent = south_america
-						}
+			any_known_country = {
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
 					}
 				}
 				has_opinion = {
@@ -270,7 +348,7 @@ me_aragonese_missions_1 = {
 	}
 }
 
-me_aragonese_missions_2 = {
+ARA_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -279,9 +357,10 @@ me_aragonese_missions_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
+	
 	ara_bordeaux = {
 		icon = mission_assemble_an_army
-		required_missions = { ara_intervene_in_languedoc vassalize_navarra }
+		required_missions = { ara_intervene_in_languedoc vassalize_navarra_ME }
 		position = 2
 		provinces_to_highlight = {
 			area = pyrenees_area
@@ -289,8 +368,8 @@ me_aragonese_missions_2 = {
 		}
 		trigger = {
 			pyrenees_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -303,7 +382,6 @@ me_aragonese_missions_2 = {
 					duration = -1
 				}
 			}
-			custom_tooltip = ara_tooltip.1
 		}
 	}
 
@@ -328,6 +406,7 @@ me_aragonese_missions_2 = {
 			}
 		}
 	}
+	
 	ara_continue_the_reconquista = {
 		icon = mission_cannons_firing
 		required_missions = { ara_kabylia ara_finish_the_reconquista }
@@ -394,6 +473,7 @@ me_aragonese_missions_2 = {
 			}
 		}
 	}
+	
 	ara_morocco = {
 		icon = mission_unite_home_region
 		required_missions = { ara_continue_the_reconquista }
@@ -431,6 +511,10 @@ me_aragonese_missions_2 = {
 			}
 		}
 		effect = {
+			add_legitimacy_equivalent = { value = 20 }
+			add_mil_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 			tafilalt_area = {
 				add_province_modifier = {
 					name = ara_new_administration
@@ -481,12 +565,9 @@ me_aragonese_missions_2 = {
 					duration = 7300
 				}
 			}
-			add_legitimacy_equivalent = 20
-			add_mil_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
 		}
 	}
+	
 	ara_syria = {
 		icon = mission_non-western_soldiers
 		required_missions = { ara_egypt }
@@ -523,6 +604,7 @@ me_aragonese_missions_2 = {
 			add_mil_power = 50
 		}
 	}
+	
 	ara_thassalocracy = {
 		icon = mission_establish_high_seas_navy
 		position = 12
@@ -541,15 +623,22 @@ me_aragonese_missions_2 = {
 			}
 		}
 	}
+	
 	ara_bronze_demand = {
 		icon = mission_early_game_buildings
 		position = 14
 		required_missions = { }
 		provinces_to_highlight = {
 			province_id = 2986
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 7 }
+				NOT = { development = 20 }
+			}
 		}
 		trigger = {
 			2986 = {
+				owned_by = ROOT
 				base_production = 7
 				development = 20
 			}
@@ -561,14 +650,24 @@ me_aragonese_missions_2 = {
 			}
 		}
 	}
+	
 	ara_iron_demand = {
 		icon = mission_have_manufactories
 		position = 15
 		required_missions = { ara_bronze_demand }
+		provinces_to_highlight = {
+			province_id = 214
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 8 }
+				NOT = { development = 24 }
+			}
+		}
 		trigger = {
 			214 = {
-				development = 24
+				owned_by = ROOT
 				base_production = 8
+				development = 24
 			}
 		}
 		effect = {
@@ -578,12 +677,16 @@ me_aragonese_missions_2 = {
 			}
 		}
 	}
+	
 	ara_open_up_ports = {
 		icon = mission_galleys_in_port
 		position = 16
 		required_missions = { }
 		trigger = {
-			#at least 5 provinces that have state_edict the trade one
+			num_of_owned_provinces_with = {
+				value = 5
+				has_state_edict = edict_protect_trade
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -593,7 +696,8 @@ me_aragonese_missions_2 = {
 		}
 	}
 }
-me_aragonese_missions_3 = {
+
+ARA_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -613,8 +717,8 @@ me_aragonese_missions_3 = {
 		}
 		trigger = {
 			languedoc_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -641,9 +745,10 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_champagne = {
 		icon = mission_dominate_home_trade_node
-		required_missions = { ara_intervene_in_languedoc ara_provence_2 ara_bordeaux }
+		required_missions = { ara_intervene_in_languedoc ara_provence ara_bordeaux }
 		position = 3
 		trigger = {
 			186 = {
@@ -660,6 +765,7 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_kabylia = {
 		icon = mission_sea_battles
 		required_missions = { ara_mediterranean_power }
@@ -704,6 +810,7 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_tlemcen = {
 		icon = mission_bedouins
 		required_missions = { ara_kabylia }
@@ -761,6 +868,7 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_djerid = {
 		icon = mission_bedouins
 		required_missions = { ara_tlemcen ara_tripolitania }
@@ -836,12 +944,13 @@ me_aragonese_missions_3 = {
 			set_country_flag = ara_he_did_it_absolute_madlad
 		}
 	}
+	
 	ara_egypt = {
 		icon = mission_arabian_fort
 		required_missions = { ara_cyrenaica }
 		position = 8
 		provinces_to_highlight = {
-			area = egypt_region
+			region = egypt_region
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -878,8 +987,9 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_north_italy = {
-		icon = mission_build_up_to_force_limit
+		icon = mission_assemble_an_army
 		required_missions = { ara_central_italy }
 		position = 11
 		provinces_to_highlight = {
@@ -894,24 +1004,24 @@ me_aragonese_missions_3 = {
 		}
 		trigger = {
 			liguria_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			piedmont_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			lombardy_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			emilia_romagna_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			venetia_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -921,6 +1031,7 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_dalmatia = {
 		icon = mission_invade_island
 		required_missions = { ara_albania ara_north_italy }
@@ -934,12 +1045,12 @@ me_aragonese_missions_3 = {
 		}
 		trigger = {
 			rascia_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			east_adriatic_coast_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -949,6 +1060,7 @@ me_aragonese_missions_3 = {
 			}
 		}
 	}
+	
 	ara_anatolia = {
 		icon = mission_unite_home_region
 		required_missions = { ara_turkish_coast }
@@ -959,8 +1071,8 @@ me_aragonese_missions_3 = {
 		}
 		trigger = {
 			anatolia_region = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -968,15 +1080,16 @@ me_aragonese_missions_3 = {
 			add_dip_power = 100
 			add_mil_power = 100
 			add_prestige = 25
-			add_legitimacy_equivalent = 25
+			add_legitimacy_equivalent = { value = 25 }
 		}
 	}
+	
 	ara_ivory_trade = {
 		icon = mission_trade_company_region_abroad
 		position = 17
 		required_missions = { ara_open_up_ports }
 		trigger = {
-		`	1466 = {
+			1466 = {
 				trade_share = {
 					country = ROOT
 					share = 5
@@ -1003,7 +1116,7 @@ me_aragonese_missions_3 = {
 	}
 }
 
-me_aragonese_missions_4 = {
+ARA_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -1013,7 +1126,7 @@ me_aragonese_missions_4 = {
 	}
 	has_country_shield = yes
 
-	ara_provence_2 = {
+	ara_provence = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { ara_intervene_in_languedoc }
 		position = 2
@@ -1026,12 +1139,12 @@ me_aragonese_missions_4 = {
 		}
 		trigger = {
 			provence_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			savoy_dauphine_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1053,6 +1166,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_mediterranean_power = {
 		icon = mission_galleys_in_port
 		required_missions = { }
@@ -1068,7 +1182,7 @@ me_aragonese_missions_4 = {
 			random_owned_province = {
 				limit = {
 					has_port = yes
-					NOT = { has_country_modifier = ara_strategic_harbor }
+					NOT = { has_province_modifier = ara_strategic_harbor }
 				}
 				add_province_modifier = {
 					name = ara_strategic_harbor
@@ -1078,7 +1192,7 @@ me_aragonese_missions_4 = {
 			random_owned_province = {
 				limit = {
 					has_port = yes
-					NOT = { has_country_modifier = ara_strategic_harbor }
+					NOT = { has_province_modifier = ara_strategic_harbor }
 				}
 				add_province_modifier = {
 					name = ara_strategic_harbor
@@ -1108,6 +1222,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_tunisia = {
 		icon = mission_non-western_soldiers
 		required_missions = { ara_mediterranean_power }
@@ -1151,6 +1266,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_tripolitania = {
 		icon = mission_arabian_fort
 		required_missions = { ara_tunisia }
@@ -1188,6 +1304,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_cyrenaica = {
 		icon = mission_non-western_soldiers
 		required_missions = { ara_tripolitania }
@@ -1218,6 +1335,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_central_italy = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { ara_integrate_naples_or_smth }
@@ -1231,12 +1349,12 @@ me_aragonese_missions_4 = {
 		}
 		trigger = {
 			central_italy_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			tuscany_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1281,6 +1399,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_albania = {
 		icon = mission_have_two_subjects
 		required_missions = { ara_greece }
@@ -1291,8 +1410,8 @@ me_aragonese_missions_4 = {
 		}
 		trigger = {
 			albania_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1315,6 +1434,7 @@ me_aragonese_missions_4 = {
 			add_mil_power = 50
 		}
 	}
+	
 	ara_turkish_coast = {
 		icon = mission_invade_island
 		required_missions = { ara_macedonia }
@@ -1328,12 +1448,12 @@ me_aragonese_missions_4 = {
 		}
 		trigger = {
 			aydin_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			hudavendigar_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1354,12 +1474,17 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_build_marketplaces = {
 		icon = mission_early_game_buildings
 		required_missions = { }
 		position = 16
 		trigger = {
-			marketplace = 5
+			OR = {
+				marketplace = 5
+				trade_depot = 5
+				stock_exchange = 5
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -1368,6 +1493,7 @@ me_aragonese_missions_4 = {
 			}
 		}
 	}
+	
 	ara_build_stock_exchanges = {
 		icon = mission_dominate_home_trade_node
 		required_missions = { ara_build_marketplaces }
@@ -1384,7 +1510,7 @@ me_aragonese_missions_4 = {
 	}
 }
 
-me_aragonese_missions_5 = {
+ARA_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -1393,35 +1519,26 @@ me_aragonese_missions_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
+	
 	ara_dominant_fleet = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { ara_mediterranean_power }
 		position = 5
 		trigger = {
-			NOT = {
-				TUR = {
-					navy_size = ROOT
-				}
+			TUR = {
+				NOT = { navy_size = ROOT }
 			}
-			NOT = {
-				GEN = {
-					navy_size = ROOT
-				}
+			GEN = {
+				NOT = { navy_size = ROOT }
 			}
-			NOT = {
-				VEN = {
-					navy_size = ROOT
-				}
+			VEN = {
+				NOT = { navy_size = ROOT }
 			}
-			NOT = {
-				TUN = {
-					navy_size = ROOT
-				}
+			TUN = {
+				NOT = { navy_size = ROOT }
 			}
-			NOT = {
-				MAM = {
-					navy_size = ROOT
-				}
+			MAM = {
+				NOT = { navy_size = ROOT }
 			}
 		}
 		effect = {
@@ -1431,6 +1548,7 @@ me_aragonese_missions_5 = {
 			}
 		}
 	}
+	
 	ara_integrate_naples_or_smth = {
 		icon = mission_have_two_subjects
 		required_missions = { ara_dominant_fleet }
@@ -1443,9 +1561,7 @@ me_aragonese_missions_5 = {
 				province_id = 120
 				province_id = 2983
 			}
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			OR = {
@@ -1462,21 +1578,36 @@ me_aragonese_missions_5 = {
 					owns = 120
 					owns = 2983
 				}
-				NAP = {
-					NOT = { liberty_desire = 5 }
+				AND = {
+					overlord_of = NAP
+					NAP = {
+						NOT = { liberty_desire = 5 }
+					}
 				}
 			}
 		}
 		effect = {
-			add_casus_belli = {
-				target = PAP
-				type = cb_annex
-				months = 120
+			if = {
+				limit = {
+					exists = PAP
+					NOT = { overlord_of = PAP }
+				}
+				add_casus_belli = {
+					target = PAP
+					type = cb_annex
+					months = 120
+				}
 			}
-			add_casus_belli = {
-				target = LAN
-				type = cb_annex
-				months = 120
+			if = {
+				limit = {
+					exists = LAN
+					NOT = { overlord_of = LAN }
+				}
+				add_casus_belli = {
+					target = LAN
+					type = cb_annex
+					months = 120
+				}
 			}
 			central_italy_area = {
 				limit = {
@@ -1508,6 +1639,7 @@ me_aragonese_missions_5 = {
 			}
 		}
 	}
+	
 	ara_greece = {
 		icon = mission_unite_home_region
 		required_missions = { ara_integrate_naples_or_smth }
@@ -1521,12 +1653,12 @@ me_aragonese_missions_5 = {
 		}
 		trigger = {
 			northern_greece_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			morea_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1557,6 +1689,7 @@ me_aragonese_missions_5 = {
 			}
 		}
 	}
+	
 	ara_macedonia = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { ara_greece }
@@ -1570,12 +1703,12 @@ me_aragonese_missions_5 = {
 		}
 		trigger = {
 			macedonia_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			thrace_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1599,17 +1732,24 @@ me_aragonese_missions_5 = {
 			}
 		}
 	}
+	
 	ara_build_workshops = {
 		icon = mission_colonial
 		required_missions = { }
 		position = 16
 		trigger = {
-			workshop = 10
+			OR = {
+				workshop = 10
+				counting_house = 10
+			}
 		}
 		effect = {
 			every_owned_province = {
 				limit = {
-					has_building = workshop
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
 				}
 				add_province_modifier = {
 					name = ara_production
@@ -1618,6 +1758,7 @@ me_aragonese_missions_5 = {
 			}
 		}
 	}
+	
 	ara_early_industrialization = {
 		icon = mission_have_manufactories
 		required_missions = { ara_build_workshops }
