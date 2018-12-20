@@ -18,9 +18,8 @@ HSA_HNS_missions_1 = {
 	has_country_shield = yes
 
 	lbk_bergen = { #Elevate Bergen Kontor
-		icon = mission_war_chest
-		required_missions = {
-		}
+		icon = me_mission_gather_allies
+		required_missions = { }
 		provinces_to_highlight = {
 			province_id = 23
 			NOT = { controlled_by = ROOT }
@@ -47,7 +46,7 @@ HSA_HNS_missions_1 = {
 	}
 
 	lbk_novgorod = { #renew Novogord charter
-		icon = mission_war_chest
+		icon = mission_hanseatic_city
 		required_missions = {
 			lbk_bergen
 		}
@@ -83,7 +82,7 @@ HSA_HNS_missions_1 = {
 	}
 
 	lbk_dutch = { #restore dutch kontor
-		icon = mission_war_chest
+		icon = mission_galleys_in_port
 		required_missions = {
 			lbk_novgorod
 		}
@@ -135,9 +134,8 @@ HSA_HNS_missions_2 = {
 	has_country_shield = yes
 
 	lbk_trade_leader = { #hansa privleges renewed
-		icon = mission_war_chest
-		required_missions = {
-		}
+		icon = mission_dominate_home_trade_node
+		required_missions = { }
 		position = 1
 		trigger = {
 			if = {
@@ -162,15 +160,33 @@ HSA_HNS_missions_2 = {
 				name = lbk_renewed
 				duration = -1
 			}
-			light_ship = 45
-			light_ship = 45
-			light_ship = 45
-			light_ship = 45
+			if = {
+				limit = {
+					owns = 45
+				}
+				45 = {
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						has_port = yes
+					}
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+				}
+			}
 		}
 	}
 
 	lbk_london = { #london Kontor
-		icon = mission_war_chest
+		icon = mission_establish_high_seas_navy
 		required_missions = {
 			lbk_trade_leader
 			lbk_bergen
@@ -241,7 +257,7 @@ HNS_missions_2 = {
 	has_country_shield = yes
 
 	lbk_iberia = { #iberia Kontor
-		icon = mission_war_chest
+		icon = me_mission_spain_navy
 		required_missions = {
 			lbk_london
 		}
@@ -317,13 +333,11 @@ HSA_HNS_missions_2_2 = {
 	has_country_shield = yes
 
 	lbk_france = { #negotiate perpetual peace
-		icon = mission_war_chest
+		icon = me_mission_france_white_flag
 		required_missions = {
 			end_sound_toll_ME
 		}
-
 		position = 5
-
 		trigger = {
 			OR = {
 				FRA = {
@@ -343,7 +357,13 @@ HSA_HNS_missions_2_2 = {
 			hidden_effect = {
 				set_country_flag = lbk_fra_friends
 			}
-			add_historical_friend = FRA
+			if = {
+				limit = {
+					NOT = { is_rival = FRA }
+					NOT = { is_enemy = FRA }
+				}
+				add_historical_friend = FRA
+			}
 			add_country_modifier = {
 				name = lbk_perpetual_peace
 				duration = 7300
@@ -368,7 +388,7 @@ HSA_HNS_missions_3 = {
 	has_country_shield = yes
 
 	lbk_asserted_power = { #assert power
-		icon = mission_war_chest
+		icon = me_mission_imperial
 		required_missions = {
 			lbk_trade_leader
 		}
@@ -486,26 +506,22 @@ HSA_HNS_missions_3 = {
 	}
 
 	lbk_hansetag = { #build Hansehalle
-		icon = mission_war_chest
+		icon = mission_have_manufactories
 		required_missions = {
 			end_sound_toll_ME
 		}
 		position = 6
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				capital_scope = {
-					has_building = courthouse
-					development = 25
-				}
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { has_building = courthouse }
+				NOT = { development = 25 }
 			}
-			else = {
-				grown_by_development = 20
-				capital_scope = {
-					has_building = courthouse
-				}
+		}
+		trigger = {
+			capital_scope = {
+				has_building = courthouse
+				development = 25
 			}
 		}
 		effect = {
@@ -544,9 +560,8 @@ HSA_HNS_missions_4 = {
 	has_country_shield = yes
 
 	lbk_construct_gate = { #Burgtor
-		icon = mission_war_chest
-		required_missions = {
-		}
+		icon = mission_golden_century
+		required_missions = { }
 		position = 1
 		trigger = {
 			army_size_percentage = 1.0
@@ -573,7 +588,7 @@ HSA_HNS_missions_4 = {
 	}
 
 	lbk_construct_gate_2 = {
-		icon = mission_war_chest
+		icon = me_mission_medieval_fort
 		required_missions = {
 			lbk_construct_gate
 		}
@@ -588,15 +603,7 @@ HSA_HNS_missions_4 = {
 					NOT = { has_building = fort_17th }
 					NOT = { has_building = fort_18th }
 				}
-				AND = {
-					has_dlc = "Common Sense"
-					NOT = { base_manpower = 6 }
-				}
-				AND = {
-					NOT = { has_dlc = "Common Sense" }
-					NOT = { has_building = workshop }
-					NOT = { has_building = counting_house }
-				}
+				NOT = { base_manpower = 6 }
 			}
 		}
 		trigger = { #Holstentor
@@ -610,18 +617,7 @@ HSA_HNS_missions_4 = {
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-				if = {
-					limit = {
-						has_dlc = "Common Sense"
-					}
-					base_manpower = 6
-				}
-				else = {
-					OR = {
-						has_building = workshop
-						has_building = counting_house
-					}
-				}
+				base_manpower = 6
 			}
 		}
 		effect = {
@@ -636,7 +632,7 @@ HSA_HNS_missions_4 = {
 	}
 
 	lbk_project_embargo = { #embargo
-		icon = mission_war_chest
+		icon = mission_assemble_an_army
 		required_missions = {
 			end_sound_toll_ME
 			lbk_expand_legaue
@@ -675,9 +671,8 @@ HSA_HNS_missions_5 = {
 	has_country_shield = yes
 
 	lbk_revoke_rights = {
-		icon = mission_war_chest
-		required_missions = {
-		}
+		icon = mission_have_two_subjects
+		required_missions = { }
 		position = 1
 		trigger = {
 			if = {
@@ -727,7 +722,7 @@ HSA_HNS_missions_5 = {
 	}
 
 	lbk_expand_legaue = {
-		icon = mission_war_chest
+		icon = me_mission_conquer
 		required_missions = {
 			lbk_revoke_rights
 		}
@@ -779,8 +774,8 @@ HSA_HNS_missions_5 = {
 		}
 	}
 
-	lbk_baltic_exapnsion = {
-		icon = mission_war_chest
+	lbk_baltic_expansion = {
+		icon = mission_conquer_50_development
 		required_missions = {
 			lbk_expand_legaue
 		}
@@ -825,9 +820,9 @@ HSA_HNS_missions_5 = {
 	}
 
 	lbk_baltic_consolidation = {
-		icon = mission_war_chest
+		icon = mission_monarch_in_throne_room
 		required_missions = {
-			lbk_baltic_exapnsion
+			lbk_baltic_expansion
 		}
 		position = 7
 		provinces_to_highlight = {
@@ -966,7 +961,7 @@ HNS_missions_1_WoN_Dharma = {
 	has_country_shield = yes
 	
 	lbk_west_africa = { #african companies
-		icon = mission_war_chest
+		icon = mission_african_trade_post
 		required_missions = {
 			lbk_portugal
 		}
@@ -1040,7 +1035,7 @@ HNS_missions_1_WoN_Dharma = {
 	}
 
 	lbk_west_india = { #Western Indian Ocean Trade
-		icon = mission_war_chest
+		icon = mission_indian_trade_company
 		required_missions = {
 			lbk_west_africa
 		}
@@ -1077,7 +1072,7 @@ HNS_missions_1_WoN_Dharma = {
 	}
 
 	lbk_east_india = { #Eastern Indian Ocean Trade
-		icon = mission_war_chest
+		icon = mission_trade_in_gold_coast
 		required_missions = {
 			lbk_west_india
 		}
@@ -1130,7 +1125,7 @@ HNS_missions_2_2 = {
 	has_country_shield = yes
 
 	lbk_france_trade = { #french trade agreement
-		icon = mission_war_chest
+		icon = mission_trade_with_cathay
 		required_missions = {
 			lbk_france
 		}
@@ -1169,7 +1164,7 @@ HNS_missions_2_2 = {
 	}
 
 	lbk_medi = { #mediterranean markets
-		icon = mission_war_chest
+		icon = mission_establish_high_seas_navy
 		required_missions = {
 			lbk_france_trade
 		}
@@ -1277,7 +1272,7 @@ HNS_missions_2_2 = {
 	}
 
 	lbk_black_sea = { #
-		icon = mission_war_chest
+		icon = mission_restore_trade_superiority
 		required_missions = {
 			lbk_medi
 		}
@@ -1363,7 +1358,7 @@ HNS_missions_3_MN = {
 	has_country_shield = yes
 
 	lbk_annex = { #invite members
-		icon = mission_war_chest
+		icon = mission_have_two_subjects
 		required_missions = {
 			lbk_hansetag
 		}
@@ -1404,7 +1399,7 @@ HNS_missions_3 = {
 	has_country_shield = yes
 
 	lbk_medi_control = { #mediterranean control
-		icon = mission_war_chest
+		icon = mission_assemble_an_army
 		required_missions = {
 			lbk_medi
 		}
@@ -1561,7 +1556,7 @@ HNS_missions_3 = {
 	}
 
 	lbk_mare_nostrum = { #mediterranean control
-		icon = mission_war_chest
+		icon = mission_early_game_buildings
 		required_missions = {
 			lbk_medi_control
 		}
@@ -1617,9 +1612,9 @@ HNS_missions_4 = {
 	has_country_shield = yes
 
 	lbk_north_sea = { #north sea expansion
-		icon = mission_war_chest
+		icon = mission_galleys_in_port
 		required_missions = {
-			lbk_baltic_exapnsion
+			lbk_baltic_expansion
 		}
 		position = 7
 		trigger = {
@@ -1680,7 +1675,7 @@ HNS_missions_4 = {
 	}
 
 	lbk_north_atlantic = { #north atlantic
-		icon = mission_war_chest
+		icon = me_mission_spain_navy
 		required_missions = {
 			lbk_north_sea
 		}
@@ -1727,7 +1722,18 @@ HNS_missions_4 = {
 		}
 		effect = {
 			371 = {
-				center_of_trade = 2
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
 			}
 			add_country_modifier = {
 				name = lbk_north_sea_ventures
@@ -1737,7 +1743,7 @@ HNS_missions_4 = {
 	}
 
 	lbk_colonize_carribean = { #carribean
-		icon = mission_war_chest
+		icon = mission_colonize_the_caribbean
 		required_missions = {
 			lbk_north_atlantic
 		}
@@ -1784,7 +1790,7 @@ HNS_missions_5 = {
 	has_country_shield = yes
 
 	lbk_white_sea = { #white sea expansion
-		icon = mission_war_chest
+		icon = mission_protect_white_sea_trade
 		required_missions = {
 			lbk_north_sea
 		}
@@ -1829,7 +1835,7 @@ HNS_missions_5 = {
 	}
 
 	lbk_colonize_north_america = { #north america
-		icon = mission_war_chest
+		icon = me_mission_spain_colonial
 		required_missions = {
 			lbk_north_atlantic
 		}
