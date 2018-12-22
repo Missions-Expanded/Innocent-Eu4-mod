@@ -7,491 +7,170 @@ VEN_missions_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-
-	venice_control_renaissance_origin = {
-		icon = mission_conquer_50_development
-		required_missions = { }
+	
+	venice_port_of_barcelona = {
+		icon = mission_raid_christian_trade
+		required_missions = { venice_venetian_navy }
+		position = 2
 		provinces_to_highlight = {
-			is_institution_origin = renaissance
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			is_institution_enabled = renaissance
-			any_owned_province = {
-				is_institution_origin = renaissance
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_controls_renaissance
-				duration = 7300
-			}
-		}
-	}
-
-	venice_conquer_albania = {
-		icon = mission_conquer_5_states
-		required_missions = { venice_a_sizable_navy_and_army }
-		position = 3
-		provinces_to_highlight = {
-			area = albania_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			albania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			albania_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			northern_greece_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			morea_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_conquer_western_greece = {
-		icon = mission_early_game_buildings
-		required_missions = { venice_conquer_albania }
-		position = 4
-		provinces_to_highlight = {
+			province_id = 213
 			OR = {
-				area = northern_greece_area
-				area = morea_area
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				local_autonomy = 20
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			northern_greece_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			morea_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			owns_core_province = 213
+			213 = {
+				NOT = { local_autonomy = 20 }
 			}
 		}
 		effect = {
-			northern_greece_area = {
+			add_legitimacy_equivalent = { value = 3 }
+			213 = {
 				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+					name = venice_venetian_trade_practices_modifier
+					duration = 7300
 				}
 			}
-			morea_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
+		}
+	}
+	
+	venice_a_republican_army = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 4
+		trigger = {
+			army_size_percentage = 1
+			army_size = 20
+			manpower_percentage = 0.5
+		}
+		effect = {
+			add_army_tradition = 15
+			create_general = {
+				tradition = 80
 			}
-			macedonia_area = {
+			lombardy_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			149 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			emilia_romagna_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-
-	venice_conquer_eastern_greece = {
-		icon = mission_galleys_in_port
-		required_missions = { venice_conquer_western_greece }
+	
+	venice_house_of_visconti = {
+		icon = mission_empire
+		required_missions = { venice_a_republican_army }
 		position = 5
 		provinces_to_highlight = {
-			OR = {
-				area = macedonia_area
-				province_id = 149
-			}
+			area = lombardy_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			macedonia_area = {
+			lombardy_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			149 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			macedonia_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
+			add_years_of_income = 0.33
+			add_country_modifier = {
+				name = venice_house_of_visconti_modifier
+				duration = 9125
 			}
-			149 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+			piedmont_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-			}
-			151 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
-
-	venice_conquer_constantinople = {
-		icon = mission_invade_island
-		required_missions = { venice_conquer_eastern_greece }
+	
+	venice_mountains_of_piedmont = {
+		icon = me_mission_snowy_cannons
+		required_missions = { venice_house_of_visconti }
 		position = 6
 		provinces_to_highlight = {
-			province_id = 151
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			151 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			151 = {
-				add_province_modifier = {
-					name = ven_constantinople_conquered
-					duration = 7300
-				}
-				add_base_manpower = -1
-				add_base_production = -1
-				add_base_tax = -1
-				add_devastation = 20
-			}
-			capital_scope = {
-				add_province_modifier = {
-					name = ven_venice_looted_constantinople
-					duration = 7300
-				}
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
-				add_prosperity = 100
-			}
-			crimea_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			thrace_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			aegean_archipelago_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_secure_greece = {
-		icon = mission_sea_battles
-		required_missions = { venice_conquer_constantinople }
-		position = 7
-		provinces_to_highlight = {
 			OR = {
-				area = thrace_area
-				area = aegean_archipelago_area
+				AND = {
+					area = piedmont_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					OR = {
+						province_id = 103
+						province_id = 1875
+					}
+					NOT = { fort_level = 2 }
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			thrace_area = {
+			piedmont_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			aegean_archipelago_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			103 = {
+				fort_level = 2
+			}
+			1875 = {
+				fort_level = 2
 			}
 		}
 		effect = {
-			aydin_area = {
+			add_country_modifier = {
+				name = venice_mountains_of_piedmont_modifier
+				duration = 7300
+			}
+			103 = {
 				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+					name = venice_mountains_of_piedmont_province_modifier
+					duration = 10950
 				}
 			}
-			hudavendigar_area = {
+			1875 = {
 				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+					name = venice_mountains_of_piedmont_province_modifier
+					duration = 10950
 				}
 			}
 		}
 	}
-
-	venice_conquer_anatolian_coast = {
+	
+	venice_reign_in_italy = {
 		icon = mission_unite_home_region
-		required_missions = { venice_secure_greece }
-		position = 8
-		provinces_to_highlight = {
-			OR = {
-				area = aydin_area
-				area = hudavendigar_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+		required_missions = { venice_mountains_of_piedmont venice_against_the_de_medici venice_deeper_in_italy venice_wonders_of_napoli }
+		position = 7
 		trigger = {
-			aydin_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			hudavendigar_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			thrace_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			aegean_archipelago_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			capital_scope = {
-				add_base_manpower = 1
-				add_base_tax = 1
-				add_base_production = 1
-			}
-		}
-	}
-
-	venice_control_black_sea_trade = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { }
-		position = 9
-		trigger = {
-			1322 = {
-				trade_share = {
-					country = ROOT
-					share = 51
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_control_of_crimea
-				duration = 7300
-			}
-		}
-	}
-
-	ven_make_venice_a_huge_city = {
-		icon = mission_conquer_50_development
-		required_missions = { }
-		position = 10
-		provinces_to_highlight = {
-			province_id = 112
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { development = 40 }
-			}
-		}
-		trigger = {
-			112 = {
-				owned_by = ROOT
-				development = 40
-			}
-		}
-		effect = {
-			112 = {
-				add_province_modifier = {
-					name = ven_venice_developed
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ven_make_venice_a_grand_port = {
-		icon = mission_galleys_in_port
-		required_missions = { ven_make_venice_a_huge_city }
-		position = 11
-		provinces_to_highlight = {
-			province_id = 112
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { has_building = drydock }
-				NOT = { has_building = grand_shipyard }
-			}
-		}
-		trigger = {
-			112 = {
-				owned_by = ROOT
-				has_building = drydock
-				has_building = grand_shipyard
-			}
-		}
-		effect = {
-			112 = {
-				add_province_modifier = {
-					name = ven_venice_a_grand_port
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ven_discover_new_world = {
-		icon = mission_establish_high_seas_navy
-		required_missions = { }
-		position = 12
-		trigger = {
-			OR = {
-				south_america = {
-					has_discovered = ROOT
-				}
-				north_america = {
-					has_discovered = ROOT
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonial_excitement
-				duration = 7300
-			}
-		}
-	}
-
-	ven_colonize_caribbean = {
-		icon = mission_colonial
-		required_missions = { ven_discover_new_world }
-		position = 13
-		provinces_to_highlight = {
-			colonial_region = colonial_the_carribean
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_the_carribean
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-
-	ven_colonize_eastern_america = {
-		icon = mission_colonial
-		required_missions = { ven_colonize_caribbean }
-		position = 14
-		provinces_to_highlight = {
-			colonial_region = colonial_eastern_america
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_eastern_america
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-
-	venice_major_producer_of_glass = {
-		icon = mission_asian_trader
-		required_missions = { }
-		position = 15
-		trigger = {
-			glass = 5
-		}
-		effect = {
-			every_owned_province = {
+			prestige = 50
+			if = {
 				limit = {
-					trade_goods = glass
+					has_dlc = "Rights of Man"
 				}
-				add_province_modifier = {
-					name = venetian_glass_production
-					duration = 7300
-				}
+				is_great_power = yes
 			}
-		}
-	}
-
-	venice_largest_producer_of_glass = {
-		icon = mission_war_chest
-		position = 16
-		required_missions = { }
-		trigger = {
-			production_leader = {
-				trade_goods = glass
+			else = {
+				legitimacy_equivalent = 100
+				total_development = 200
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = {
-					trade_goods = glass
-				}
-				add_province_modifier = {
-					name = venetian_glass_dominance
-					duration = -1
-				}
+			add_prestige = 10
+			add_country_modifier = {
+				name = venice_reign_in_italy_modifier
+				duration = 9125
 			}
 		}
 	}
@@ -506,575 +185,78 @@ VEN_missions_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-
-	venice_a_sizable_navy_and_army = {
-		icon = mission_establish_high_seas_navy
-		required_missions = { }
+	
+	venice_a_rival_port = {
+		icon = mission_disrupt_portuguese_trade
+		required_missions = { venice_venetian_navy }
 		position = 2
+		provinces_to_highlight = {
+			province_id = 101
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				local_autonomy = 20
+			}
+		}
 		trigger = {
-			army_size_percentage = 1
-			navy_size_percentage = 1
+			owns_core_province = 101
+			101 = {
+				NOT = { local_autonomy = 20 }
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = ven_ready_to_fight
-				duration = 7300
+				name = venice_a_rival_port_modifier
+				duration = 9125
 			}
+			101 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+		}
+	}
+	
+	venice_a_second_home = {
+		icon = me_mission_venice_city_and_port
+		required_missions = { venice_port_of_barcelona venice_a_rival_port venice_taming_genoa }
+		position = 3
+		trigger = {
+			101 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_mercantilism = 5
 			if = {
 				limit = {
-					NOT = { alliance_with = HAB }
+					government = monarchy
 				}
-				110 = {
-					if = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-				}
-				1769 = {
-					if = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-				}
-				albania_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				east_adriatic_coast_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				138 = {
-					if = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-				}
+				add_legitimacy = 10
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 3 }
+			}
+			add_country_modifier = {
+				name = venice_genoan_monopoly_modifier
+				duration = 7300
 			}
 		}
 	}
-
-	venice_secure_austrian_border = {
-		icon = mission_assemble_an_army
-		required_missions = { venice_a_sizable_navy_and_army }
-		position = 3
-		provinces_to_highlight = {
-			OR = {
-				province_id = 110
-				province_id = 1769
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			110 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			1769 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			num_of_allies = 2
-		}
-		effect = {
-			lombardy_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_into_lombardy = {
-		icon = mission_build_up_to_force_limit
-		required_missions = { venice_secure_austrian_border }
-		position = 4
-		provinces_to_highlight = {
-			area = lombardy_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			lombardy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			lombardy_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
-				}
-			}
-			piedmont_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			emilia_romagna_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_conquer_piedmont = {
-		icon = mission_cossack_cavalry
-		required_missions = { venice_into_lombardy }
+	
+	venice_emilia_romagna = {
+		icon = mission_cannons_firing
+		required_missions = { venice_a_republican_army }
 		position = 5
-		provinces_to_highlight = {
-			area = piedmont_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			piedmont_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			piedmont_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
-				}
-			}
-		}
-	}
-
-	venice_conquer_genoa = {
-		icon = mission_empire
-		required_missions = { venice_conquer_emilia_romagna }
-		position = 6
-		provinces_to_highlight = {
-			area = liguria_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			liguria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_genoa_subdued
-				duration = 10950
-			}
-			liguria_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
-				}
-			}
-		}
-	}
-
-	venice_conquer_crimea = {
-		icon = mission_galleys_in_port
-		required_missions = { venice_conquer_constantinople }
-		position = 7
-		provinces_to_highlight = {
-			area = crimea_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			crimea_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			crimea_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			azov_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_conquer_azov = {
-		icon = mission_have_two_subjects
-		required_missions = { venice_conquer_crimea }
-		position = 8
-		provinces_to_highlight = {
-			area = azov_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			azov_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			azov_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-		}
-	}
-
-	venice_conquer_alexandria = {
-		icon = mission_invade_island
-		required_missions = { venice_dominate_balkan_and_anatolian_trade }
-		provinces_to_highlight = {
-			area = delta_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			delta_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			delta_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-		}
-	}
-
-	venice_control_egyptian_trade = {
-		icon = mission_high_income
-		required_missions = { venice_conquer_alexandria }
-		trigger = {
-			112 = {
-				trade_share = {
-					country = ROOT
-					share = 75
-				}
-			}
-			137 = {
-				trade_share = {
-					country = ROOT
-					share = 51
-				}
-			}
-			151 = {
-				trade_share = {
-					country = ROOT
-					share = 51
-				}
-			}
-			358 = {
-				trade_share = {
-					country = ROOT
-					share = 51
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_control_of_egyptian_trade
-				duration = 7300
-			}
-		}
-	}
-
-	ven_university_of_venice = {
-		icon = mission_early_game_buildings
-		required_missions = { ven_make_venice_a_huge_city }
-		provinces_to_highlight = {
-			province_id = 112
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { has_building = university }
-			}
-		}
-		trigger = {
-			112 = {
-				owned_by = ROOT
-				has_building = university
-			}
-		}
-		effect = {
-			112 = {
-				add_province_modifier = {
-					name = ven_university_of_venice_ven
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ven_start_to_industrialize_venice = {
-		icon = mission_have_manufactories
-		required_missions = { ven_university_of_venice }
-		provinces_to_highlight = {
-			province_id = 112
-			OR = {
-				NOT = { owned_by = ROOT }
-				has_no_manufactory_trigger = yes
-			}
-		}
-		trigger = {
-			112 = {
-				owned_by = ROOT
-				has_manufactory_trigger = yes
-			}
-		}
-		effect = {
-			112 = {
-				add_province_modifier = {
-					name = ven_venice_proto_industrialization
-					duration = -1
-				}
-			}
-		}
-	}
-
-	ven_colonize_colombia = {
-		icon = mission_colonial
-		required_missions = { ven_discover_new_world }
-		provinces_to_highlight = {
-			colonial_region = colonial_colombia
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_colombia
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-
-	ven_colonize_peru = {
-		icon = mission_colonial
-		required_missions = { ven_colonize_colombia }
-		provinces_to_highlight = {
-			colonial_region = colonial_peru
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_peru
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-
-	ven_major_colonial_power = {
-		icon = mission_colonial
-		required_missions = { ven_colonize_eastern_america ven_colonize_peru ven_colonize_la_plata ven_colonize_australia }
-		provinces_to_highlight = {
-			OR = {
-				continent = north_america
-				continent = south_america
-			}
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				OR = {
-					continent = north_america
-					continent = south_america
-				}
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-}
-
-VEN_missions_3 = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		tag = VEN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	venice_a_true_naval_tradition = {
-		icon = mission_galleys_in_port
-		required_missions = { }
-		position = 1
-		trigger = {
-			navy_tradition = 80
-			OR = {
-				num_of_admirals = 2
-				num_of_explorers = 2
-				AND = {
-					num_of_admirals = 1
-					num_of_explorers = 1
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_venice_a_naval_tradition
-				duration = -1
-			}
-		}
-	}
-
-	venice_conquer_adriatic_coast = {
-		icon = mission_sea_battles
-		required_missions = { venice_a_sizable_navy_and_army }
-		position = 3
-		provinces_to_highlight = {
-			OR = {
-				area = east_adriatic_coast_area
-				province_id = 138
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			east_adriatic_coast_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			138 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			east_adriatic_coast_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			138 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			croatia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_a_buffer_state_in_croatia = {
-		icon = mission_unite_home_region
-		required_missions = { venice_conquer_adriatic_coast }
-		provinces_to_highlight = {
-			area = croatia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			croatia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			OR = {
-				NOT = { exists = CRO }
-				overlord_of = CRO
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					exists = CRO
-				}
-				CRO = {
-					add_country_modifier = {
-						name = ven_buffer_state
-						duration = -1
-					}
-				}
-			}
-			serbia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			bosnia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			rascia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_conquer_emilia_romagna = {
-		icon = mission_monarch_in_throne_room
-		required_missions = { venice_into_lombardy }
-		position = 4
 		provinces_to_highlight = {
 			area = emilia_romagna_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -1086,18 +268,36 @@ VEN_missions_3 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					government = monarchy
+				}
+				add_legitimacy = 10
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 3 }
+			}
 			emilia_romagna_area = {
 				add_province_modifier = {
-					name = ven_italians_integrated
+					name = venice_venetian_trade_practices_modifier
 					duration = 7300
 				}
-			}
-			liguria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				if = {
+					limit = {
+						is_state = yes
+					}
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						add_prosperity = 50
+					}
+					else = {
+						add_base_tax = 1
+						add_base_production = 1
+						add_base_manpower = 1
+					}
 				}
-				add_permanent_claim = ROOT
 			}
 			tuscany_area = {
 				limit = {
@@ -1113,13 +313,20 @@ VEN_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			naples_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
-
-	venice_conquer_tuscany = {
-		icon = mission_cannons_firing
-		required_missions = { venice_conquer_emilia_romagna }
-		position = 5
+	
+	venice_against_the_de_medici = {
+		icon = me_mission_conquer
+		required_missions = { venice_emilia_romagna }
+		position = 6
 		provinces_to_highlight = {
 			area = tuscany_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -1131,207 +338,288 @@ VEN_missions_3 = {
 			}
 		}
 		effect = {
-			tuscany_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
-				}
+			add_mercantilism = 2
+			117 = {
+				build_possible_manufactory_in_province = yes
+			}
+			115 = {
+				build_possible_manufactory_in_province = yes
+			}
+			2980 = {
+				build_possible_manufactory_in_province = yes
 			}
 		}
 	}
-
-	venice_dominate_local_trade = {
-		icon = mission_trade_company_region_abroad
-		required_missions = { }
-		position = 6
+	
+	venice_venetian_merchant_fleet = {
+		icon = me_mission_venice_navy
+		required_missions = { venice_prelude_of_the_arsenal }
+		position = 8
 		trigger = {
-			112 = {
-				trade_share = {
-					country = ROOT
-					share = 75
+			num_of_light_ship = 20
+			OR = {
+				AND = {
+					exists = MAM
+					num_of_light_ship = MAM
 				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_controlling_local_trade
-				duration = 7300
-			}
-		}
-	}
-
-	venice_dominate_balkan_and_anatolian_trade = {
-		icon = mission_trade_company_region_abroad
-		position = 7
-		required_missions = { }
-		trigger = {
-			112 = {
-				trade_share = {
-					country = ROOT
-					share = 75
+				AND = {
+					exists = ARA
+					num_of_light_ship = ARA
+				}
+				AND = {
+					exists = GEN
+					num_of_light_ship = GEN
+				}
+				AND = {
+					exists = TUR
+					num_of_light_ship = TUR
+				}
+				AND = {
+					NOT = { exists = MAM }
+					NOT = { exists = ARA }
+					NOT = { exists = GEN }
+					NOT = { exists = TUR }
 				}
 			}
 			137 = {
 				trade_share = {
 					country = ROOT
-					share = 51
+					share = 10
 				}
 			}
-			151 = {
+			358 = {
 				trade_share = {
 					country = ROOT
-					share = 51
+					share = 10
 				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = ven_controlling_balkan_trade
-				duration = 7300
+				name = venice_venetian_merchant_fleet_modifier
+				duration = 9125
 			}
 		}
 	}
+}
 
-	venice_major_glass_trader = {
-		icon = mission_war_chest
-		required_missions = { }
-		position = 8
-		trigger = {
-			trading_bonus = {
-				trade_goods = glass
-				value = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_major_glass_trader
-				duration = 7300
-			}
-		}
+VEN_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = VEN
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
-
-	venice_dominate_glass_trade = {
-		icon = mission_war_chest
-		required_missions = { venice_major_glass_trader }
-		position = 9
-		trigger = {
-			trading_part = {
-				trade_goods = glass
-				value = 0.51
-			}
-		}
-		effect = {
-			change_price = {
-				trade_goods = glass
-				key = glass_monopoly
-				value = 0.25
-				duration = -1
-			}
-		}
-	}
-
-	ven_somethin_somethin_st_marks_basilica = {
-		icon = mission_european_church
-		required_missions = { ven_make_venice_a_huge_city }
-		position = 10
+	has_country_shield = yes
+	
+	venice_taming_genoa = {
+		icon = mission_assemble_an_army
+		required_missions = { venice_venetian_navy }
+		position = 2
 		provinces_to_highlight = {
-			province_id = 112
+			OR = {
+				province_id = 220
+				province_id = 2988
+			}
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = cathedral }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
-			112 = {
-				owned_by = ROOT
-				has_building = cathedral
-			}
+			owns_core_province = 220
+			owns_core_province = 2988
 		}
 		effect = {
-			112 = {
+			add_mercantilism = 2
+			220 = {
 				add_province_modifier = {
-					name = ven_st_marks_basilica
-					duration = -1
+					name = venice_venetian_trade_practices_modifier
+					duration = 7300
+				}
+			}
+			2988 = {
+				add_province_modifier = {
+					name = venice_venetian_trade_practices_modifier
+					duration = 7300
 				}
 			}
 		}
 	}
-
-	venice_take_taiwan = {
-		icon = mission_invade_island
-		required_missions = { ven_a_base_in_india }
-		position = 11
+	
+	venice_mare_hadriaticum = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { venice_prelude_to_bosporus }
+		position = 3
+		trigger = {
+			137 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 3 }
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = venice_genoan_monopoly_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	venice_mare_nostrum = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { venice_a_second_home venice_mare_hadriaticum venice_last_roman_bastion venice_the_delta }
+		position = 4
+		trigger = {
+			137 = {
+				is_strongest_trade_power = ROOT
+			}
+			151 = {
+				is_strongest_trade_power = ROOT
+			}
+			112 = {
+				is_strongest_trade_power = ROOT
+			}
+			101 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_mercantilism = 10
+			add_country_modifier = {
+				name = venice_mare_nostrum_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	venice_deeper_in_italy = {
+		icon = me_mission_france_italy
+		required_missions = { venice_emilia_romagna }
+		position = 6
 		provinces_to_highlight = {
-			area = taiwan_area
-			has_discovered = ROOT
+			area = central_italy_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			taiwan_area = {
+			central_italy_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = ven_chinese_trade
-				duration = 7300
+			add_years_of_income = 1
+			if = {
+				limit = {
+					government = monarchy
+				}
+				add_legitimacy = 15
 			}
-			668 = {
+			else = {
+				add_legitimacy_equivalent = { value = 5 }
+			}
+			add_country_modifier = {
+				name = venice_deeper_in_italy_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	venice_prelude_of_the_arsenal = {
+		icon = me_mission_venice_ship_in_port
+		required_missions = { }
+		position = 7
+		trigger = {
+			navy_size_percentage = 1
+			num_of_galley = 10
+			sailors_percentage = 0.4
+		}
+		effect = {
+			add_navy_tradition = 25
+			112 = {
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+						owned_by = ROOT
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
 					}
-					add_permanent_claim = ROOT
+					add_building = shipyard
+				}
+			}
+			1774 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = shipyard
+				}
+			}
+			108 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = shipyard
 				}
 			}
 		}
 	}
-
-	venice_a_base_in_china = {
-		icon = mission_buddhist_monk_praying
-		required_missions = { venice_take_taiwan }
-		position = 12
-		provinces_to_highlight = {
-			province_id = 668
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+	
+	venice_wooden_walls_of_venice = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { venice_prelude_of_the_arsenal }
+		position = 8
 		trigger = {
-			668 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			num_of_galley = 20
+			OR = {
+				AND = {
+					exists = MAM
+					num_of_galley = MAM
+				}
+				AND = {
+					exists = ARA
+					num_of_galley = ARA
+				}
+				AND = {
+					exists = GEN
+					num_of_galley = GEN
+				}
+				AND = {
+					NOT = { exists = MAM }
+					NOT = { exists = ARA }
+					NOT = { exists = GEN }
+				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = ven_chinese_trade
-				duration = 7300
+				name = venice_wooden_walls_of_venice_modifier_1
+				duration = -1
+			}
+			add_country_modifier = {
+				name = venice_wooden_walls_of_venice_modifier_2
+				duration = 10950
 			}
 		}
 	}
-
-	ven_colonize_la_plata = {
-		icon = mission_colonial
-		required_missions = { ven_colonize_colombia }
-		provinces_to_highlight = {
-			colonial_region = colonial_la_plata
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
+	
+	venice_mediterranean_admirality = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { venice_venetian_merchant_fleet venice_wooden_walls_of_venice venice_expaning_the_arsenal }
+		position = 9
 		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_la_plata
-				is_city = yes
-			}
+			num_of_admirals = 4
+			navy_size = 100
 		}
 		effect = {
 			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
+				name = venice_mediterranean_admirality_modifier
+				duration = 18250
 			}
 		}
 	}
@@ -1347,179 +635,21 @@ VEN_missions_4 = {
 	}
 	has_country_shield = yes
 
-	venice_integrate_naxos_and_corfu = {
-		icon = mission_alliances
+	venice_venetian_navy = {
+		icon = mission_establish_high_seas_navy
 		required_missions = { }
-		provinces_to_highlight = {
-			OR = {
-				province_id = 142
-				province_id = 164
-			}
-			NOT = { owned_by = ROOT }
-		}
+		position = 1
 		trigger = {
-			142 = {
-				owned_by = ROOT
-			}
-			164 = {
-				owned_by = ROOT
-			}
+			navy_size_percentage = 1
+			num_of_galley = 12
+			num_of_admirals = 1
 		}
 		effect = {
 			add_country_modifier = {
-				name = ven_integrated_vassals
-				duration = 3650
-			}
-			321 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-
-	venice_conquer_cyprus = {
-		icon = mission_invade_island
-		required_missions = { venice_integrate_naxos_and_corfu }
-		provinces_to_highlight = {
-			province_id = 321
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			321 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			321 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			320 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2348 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-
-	venice_take_rhodes_and_chios = {
-		icon = mission_invade_island
-		required_missions = { venice_conquer_cyprus }
-		provinces_to_highlight = {
-			OR = {
-				province_id = 320
-				province_id = 2348
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			320 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			2348 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			320 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			2348 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-		}
-	}
-
-	venice_expand_our_buffer_state = {
-		icon = mission_unite_home_region
-		required_missions = { venice_conquer_adriatic_coast }
-		provinces_to_highlight = {
-			OR = {
-				area = croatia_area
-				area = bosnia_area
-				area = rascia_area
-				area = croatia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			serbia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			bosnia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			rascia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			croatia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			OR = {
-				NOT = { exists = CRO }
-				overlord_of = CRO
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_croatian_buffer_state
+				name = venice_venetian_navy_modifier
 				duration = 7300
 			}
-		}
-	}
-
-	venice_conquer_central_italy = {
-		icon = mission_unite_home_region
-		position = 5
-		required_missions = { venice_into_lombardy }
-		provinces_to_highlight = {
-			area = central_italy_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			central_italy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			central_italy_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
-				}
-			}
-			118 = {
+			220 = {
 				if = {
 					limit = {
 						NOT = { owned_by = ROOT }
@@ -1528,356 +658,263 @@ VEN_missions_4 = {
 					add_permanent_claim = ROOT
 				}
 			}
+			101 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			catalonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
-
-	venice_conquer_rome = {
-		icon = mission_religious
-		required_missions = { venice_conquer_emilia_romagna }
+	
+	venice_prelude_to_bosporus = {
+		icon = mission_conquer_50_development
+		required_missions = { venice_venetian_navy }
+		position = 2
+		trigger = {
+			num_of_light_ship = 12
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+						has_dlc = "Golden Century"
+					}
+				}	
+				151 = {
+					privateer_power = {
+						country = ROOT
+						share = 10
+					}
+				}
+			}
+			else = {
+				OR = {
+					trade_embargoing = TUR
+					NOT = { exists = TUR }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				add_spy_network_in = {
+					who = TUR
+					value = 100
+				}
+			}
+			add_country_modifier = {
+				name = venice_prelude_to_bosporus_modifier
+				duration = 3650
+			}
+			137 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1826 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			151 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			delta_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	venice_last_roman_bastion = {
+		icon = me_mission_venice_crush_byzantium
+		required_missions = { venice_prelude_to_bosporus }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 151
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				local_autonomy = 20
+			}
+		}
+		trigger = {
+			owns_core_province = 151
+			151 = {
+				NOT = { local_autonomy = 20 }
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			custom_tooltip = VEN_GETS_MODIFIER_FOR_HOLDING_CONSTANTINOPLE
+		}
+	}
+	
+	venice_developing_trade = {
+		icon = mission_dominate_home_trade_node
+		required_missions = { venice_develop_venezia }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 4174
+						province_id = 130
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { development = 10 }
+						AND = {
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
+						}
+					}
+				}
+				AND = {
+					province_id = 108
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { development = 25 }
+						AND = {
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			owns = 4174
+			owns = 108
+			owns = 130
+			4174 = {
+				development = 10
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			108 = {
+				development = 25
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			130 = {
+				development = 10
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 2
+			add_mercantilism = 5
+		}
+	}
+	
+	venice_wonders_of_napoli = {
+		icon = mission_golden_century
+		required_missions = { venice_emilia_romagna }
 		position = 6
 		provinces_to_highlight = {
-			province_id = 118
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			118 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_rome_conquered
-				duration = 3650
-			}
-			118 = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
-				}
-			}
-			apulia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			calabria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			naples_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	venice_conquer_southern_italy = {
-		icon = mission_sea_battles
-		position = 7
-		required_missions = { venice_conquer_rome }
-		provinces_to_highlight = {
+			province_id = 121
 			OR = {
-				area = apulia_area
-				area = calabria_area
-				area = naples_area
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { development = 30 }
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			apulia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			calabria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			naples_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			owns_core_province = 121
+			121 = {
+				development = 30
 			}
 		}
 		effect = {
-			apulia_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
+			121 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
 				}
-			}
-			calabria_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
 				}
-			}
-			naples_area = {
-				add_province_modifier = {
-					name = ven_italians_integrated
-					duration = 7300
+				if = {
+					limit = {
+						NOT = { has_building = town_hall }
+					}
+					add_building = town_hall
 				}
-			}
-			sicily_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				else = {
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
 				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
 	
-	venice_enhance_naval_infastructure = {
-		icon = mission_war_chest
-		required_missions = { venice_build_trade_infastructure }
+	venice_expaning_the_arsenal = {
+		icon = me_mission_venice_city
+		required_missions = { venice_prelude_of_the_arsenal }
 		position = 8
 		trigger = {
-			drydock = 20
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_naval_infastructure
-				duration = -1
-			}
-		}
-	}
-	
-	ven_a_base_in_western_africa = {
-		icon = mission_galleys_in_port
-		position = 9
-		required_missions = { }
-		provinces_to_highlight = {
-			region = guinea_region
-			has_discovered = ROOT
+			navy_size = 40
 			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
+				shipyard = 5
+				grand_shipyard = 5
 			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 1
-				region = guinea_region
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-	
-	ven_route_to_india = {
-		icon = mission_colonial
-		position = 10
-		required_missions = { ven_a_base_in_western_africa }
-		provinces_to_highlight = {
 			OR = {
-				region = south_africa_region
-				region = east_africa_region
-				region = horn_of_africa_region
-			}
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			OR = {
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					region = south_africa_region
-					is_city = yes
-				}
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					region = east_africa_region
-					is_city = yes
-				}
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					region = horn_of_africa_region
-					is_city = yes
-				}
+				dock = 5
+				drydock = 5
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = ven_indian_excitement
-				duration = 7300
-			}
-			535 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	ven_a_base_in_india = {
-		icon = mission_colonial
-		position = 11
-		required_missions = { ven_route_to_india }
-		provinces_to_highlight = {
-			province_id = 535
-			has_discovered = ROOT
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			535 = {
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_indian_trade
-				duration = 10950
-			}
-			624 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			taiwan_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-					is_city = yes
-				}
-				add_permanent_claim = ROOT
-			}
-			lanka_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	ven_a_base_in_indonesia = {
-		icon = mission_colonial
-		position = 12
-		required_missions = { ven_a_base_in_india }
-		provinces_to_highlight = {
-			province_id = 624
-			has_discovered = ROOT
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			624 = {
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_indonesian_trade
-				duration = 10950
-			}
-		}
-	}
-	
-	ven_colonize_phillipines = {
-		icon = mission_colonial
-		position = 13
-		required_missions = { ven_a_base_in_indonesia }
-		provinces_to_highlight = {
-			region = moluccas_region
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 3
-				region = moluccas_region
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_filipino_trade
-				duration = 10950
-			}
-		}
-	}
-	
-	ven_colonize_australia = {
-		icon = mission_colonial
-		position = 14
-		required_missions = { ven_colonize_phillipines }
-		provinces_to_highlight = {
-			colonial_region = colonial_australia
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
-		}
-		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_australia
-				is_city = yes
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_colonization_boom
-				duration = 7300
-			}
-		}
-	}
-	
-	venice_build_shipbuilding_infastructure = {
-		icon = mission_galleys_in_port
-		position = 15
-		required_missions = { }
-		trigger = {
-			OR = {
-				shipyard = 10
-				grand_shipyard = 10
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_shipyards_built
-				duration = 7300
-			}
-		}
-	}
-	
-	venice_expand_shipbuilding_infastructure = {
-		icon = mission_war_chest
-		position = 16
-		required_missions = { venice_build_shipbuilding_infastructure }
-		trigger = {
-			grand_shipyard = 20
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_shipbuilding
+				name = venice_expaning_the_arsenal_modifier
 				duration = -1
 			}
 		}
@@ -1894,394 +931,202 @@ VEN_missions_5 = {
 	}
 	has_country_shield = yes
 	
-	ven_the_worlds_greatest_navy = {
-		icon = mission_establish_high_seas_navy
-		position = 1
-		required_missions = { }
-		trigger = {
-			heavy_ship_fraction = 0.1
-			navy_size = 200
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_naval_supremacy
-				duration = -1
-			}
-		}
-	}
-	
-	venice_a_base_in_malta = {
-		icon = mission_great_wall
-		position = 2
-		required_missions = { venice_integrate_naxos_and_corfu }
-		provinces_to_highlight = {
-			province_id = 126
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			126 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			126 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			sicily_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	venice_conquer_sicily = {
-		icon = mission_cannons_firing
-		required_missions = { venice_a_base_in_malta }
+	venice_the_delta = {
+		icon = me_mission_venice_crush_mamluks
+		required_missions = { venice_prelude_to_bosporus }
 		position = 3
 		provinces_to_highlight = {
-			area = sicily_area
+			area = delta_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			sicily_area = {
+			delta_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			sicily_area = {
+			delta_area = {
 				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+					name = venice_venetian_trade_practices_modifier
+					duration = 7300
 				}
 			}
-			corsica_sardinia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			358 = {
+				change_trade_goods = glass
+				change_price = {
+					trade_goods = glass
+					key = venice_the_delta_price_modifier
+					value = 0.1
+					duration = -1
 				}
-				add_permanent_claim = ROOT
-			}
-			tunisia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
 	
-	venice_conquer_corsica_and_sardinia = {
-		icon = mission_assemble_an_army
+	venice_develop_venezia = {
+		icon = mission_conquer_50_development
+		required_missions = { }
 		position = 4
-		required_missions = { venice_conquer_sicily }
 		provinces_to_highlight = {
-			area = corsica_sardinia_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			province_id = 112
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
 		}
 		trigger = {
-			corsica_sardinia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			num_of_light_ship = 15
+			monthly_income = 25
+			capital = 112
+			112 = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		effect = {
-			corsica_sardinia_area = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
-				}
-			}
-			333 = {
+			add_years_of_income = 0.33
+			112 = {
+				add_base_production = 3
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+						NOT = { has_building = trade_depot }
+						NOT = { has_building = stock_exchange }
 					}
-					add_permanent_claim = ROOT
+					add_building = trade_depot
+				}
+				else = {
+					add_scaled_local_dip_power = 10
 				}
 			}
 		}
 	}
 	
-	venice_conquer_baleares = {
-		icon = mission_war_chest
+	venice_la_serenissima = {
+		icon = me_mission_venice_navy
+		required_missions = { venice_develop_venezia }
 		position = 5
-		required_missions = { venice_conquer_corsica_and_sardinia }
 		provinces_to_highlight = {
-			province_id = 333
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			333 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			333 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+			OR = {
+				AND = {
+					area = venetia_area
+					OR = {
+						NOT = { owned_by = ROOT }
+						is_state = no
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							is_prosperous = no
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							NOT = { development = 15 }
+						}
+					}
+				}
+				AND = {
+					province_id = 112
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { development = 30 }
+					}
 				}
 			}
-			226 = {
+		}
+		trigger = {
+			owns = 112
+			112 = {
+				development = 30
+			}
+			venetia_area = {
+				type = all
+				owned_by = ROOT
+				is_state = yes
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+						has_dlc = "Mandate of Heaven"
 					}
-					add_permanent_claim = ROOT
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
 				}
-			}
-		}
-	}
-	
-	venice_conquer_gibraltar = {
-		icon = mission_galleys_in_port
-		position = 6
-		required_missions = { venice_conquer_baleares }
-		provinces_to_highlight = {
-			province_id = 226
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			226 = {
-				country_or_non_sovereign_subject_holds = ROOT
+				else = {
+					development = 15
+				}
 			}
 		}
 		effect = {
-			226 = {
-				add_province_modifier = {
-					name = ven_venitian_integration
-					duration = 3650
+			112 = {
+				if = {
+					limit = {
+						NOT = { has_building = stock_exchange }
+					}
+					add_building = stock_exchange
 				}
+			}
+			venetia_area = {
 				add_province_modifier = {
-					name = ven_venitian_gibraltar_trade
-					duration = 10950
+					name = venice_la_serenissima_modifier
+					duration = 7300
 				}
 			}
 		}
 	}
 	
-	venice_build_trade_infastructure = {
+	venice_glass_of_venice = {
 		icon = mission_trade_company_region_abroad
-		position = 7
-		required_missions = { }
+		required_missions = { venice_la_serenissima }
+		position = 6
 		trigger = {
-			OR = {
-				marketplace = 10
-				trade_depot = 10
-				stock_exchange = 10
+			num_of_owned_provinces_with = {
+				value = 2
+				trade_goods = glass
+				development = 30
 			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_trade_infastructure_built
-				duration = 7300
-			}
-		}
-	}
-	
-	venice_enhance_trade_infastructure = {
-		icon = mission_war_chest
-		position = 8
-		required_missions = { venice_build_trade_infastructure }
-		trigger = {
-			trade_depot = 20
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_trade_infastructure_built
-				duration = 7300
-			}
-		}
-	}
-	
-	venice_further_upgrade_trade_infastructure = {
-		icon = mission_war_chest
-		position = 9
-		required_missions = { venice_enhance_trade_infastructure }
-		trigger = {
-			stock_exchange = 40
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_finest_trade_infastructure
-				duration = 7300
-			}
-			add_country_modifier = {
-				name = ven_trade_infastructure_built
-				duration = 7300
-			}
-		}
-	}
-	
-	venice_take_ceylon = {
-		icon = mission_war_chest
-		position = 12
-		required_missions = { ven_a_base_in_india }
-		provinces_to_highlight = {
-			area = lanka_area
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			lanka_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = ven_indian_trade
-				duration = 10950
-			}
-		}
-	}
-	
-	ven_base_in_madagascar = {
-		icon = mission_colonial
-		position = 14
-		required_missions = { ven_colonize_phillipines }
-		provinces_to_highlight = {
-			OR = {
-				area = madagascar_highlands_area
-				area = southern_madagascar
-				area = betsimasaraka_area
-				area = sakalava_area
-			}
-			has_discovered = ROOT
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			OR = {
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					area = madagascar_highlands_area
-				}
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					area = southern_madagascar
-				}
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					area = betsimasaraka_area
-				}
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 1
-					area = sakalava_area
-				}
-			}
-		}
-		effect = {
-			madagascar_highlands_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			southern_madagascar = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			sakalava_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			betsimasaraka_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	venice_dominate_several_trading_sectors = {
-		icon = mission_war_chest
-		position = 15
-		required_missions = { }
-		trigger = {
-			num_of_trading_bonuses = 7
 		}
 		effect = {
 			add_years_of_income = 1
-			add_mercantilism = 2
-			change_dip = 1
-			capital_scope = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
+			every_owned_province = {
+				limit = {
+					trade_goods = glass
+				}
+				add_province_modifier = {
+					name = venice_glass_of_venice_modifier
+					duration = 9125
+				}
 			}
 		}
 	}
 	
-	venice_build_naval_infastructure = {
-		icon = mission_war_chest
-		required_missions = { }
-		position = 16
+	venice_masters_of_glass = {
+		icon = me_mission_venice_people_talking
+		required_missions = { venice_glass_of_venice }
+		position = 7
 		trigger = {
-			OR = {
-				dock = 10
-				drydock = 10
+			production_leader = {
+				trade_goods = glass
 			}
 		}
 		effect = {
+			add_years_of_income = 2
 			add_country_modifier = {
-				name = ven_docks_built
-				duration = 7300
-			}
-		}
-	}
-}
-
-VEN_missions_5_WoH_Dharma = {
-	slot = 5
-	generic = no
-	ai = yes
-	potential_on_load = {
-		OR = {
-			has_dlc = "Wealth of Nations"
-			has_dlc = "Dharma"
-		}
-	}
-	potential = {
-		tag = VEN
-		OR = {
-			has_dlc = "Wealth of Nations"
-			has_dlc = "Dharma"
-		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
-	venice_powerful_trade_companies = {
-		icon = mission_war_chest
-		required_missions = { }
-		position = 17
-		trigger = {
-			num_of_strong_trade_companies = 3
-		}
-		effect = {
-			add_years_of_income = 0.5
-			add_country_modifier = {
-				name = ven_eastern_wealth
-				duration = -1
+				name = venice_masters_of_glass_modifier
+				duration = 5475
 			}
 		}
 	}
