@@ -1,4 +1,4 @@
-Great_missions_1 = {
+GOL_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -106,8 +106,13 @@ Great_missions_1 = {
 		effect = {
 			285 = {
 				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
                     limit = {
-						province_has_center_of_trade_of_level = 1
 						NOT = { province_has_center_of_trade_of_level = 3  }
 					}
                     add_center_of_trade_level = 2
@@ -122,7 +127,7 @@ Great_missions_1 = {
 	}
 }
 
-Great_missions_2 = {
+GOL_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -196,7 +201,7 @@ Great_missions_2 = {
 	}
 }
 
-Great_missions_3 = {
+GOL_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -280,6 +285,7 @@ Great_missions_3 = {
 				every_province = {
 					limit = {
 						owned_by = NOG
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -291,6 +297,7 @@ Great_missions_3 = {
 				every_province = {
 					limit = {
 						owned_by = SHY
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -302,6 +309,7 @@ Great_missions_3 = {
 				every_province = {
 					limit = {
 						owned_by = KAZ
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -392,7 +400,7 @@ Great_missions_3 = {
 	}
 }
 
-Great_missions_4 = {
+GOL_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -515,7 +523,7 @@ Great_missions_4 = {
 	}
 }
 
-Great_missions_5 = {
+GOL_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -557,7 +565,12 @@ Great_missions_5 = {
 				}
 			}
 			1778 = {
-				add_core = ROOT
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
 			}
 		}
 	}
@@ -587,9 +600,46 @@ Great_missions_5 = {
 		required_missions = { End_Qasim_Occupation }
 		position = 3
 		provinces_to_highlight = {
-			NOT = { exists = MOS }
-			province_id = 295
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				AND = {
+					exists = RUS
+					is_capital_of = RUS
+					NOT = { controlled_by = ROOT }
+					controller = {
+						NOT = {
+							OR = {
+								is_subject_of = ROOT
+								alliance_with = ROOT
+								overlord = {
+									alliance_with = ROOT
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					exists = MOS
+					is_capital_of = MOS
+					NOT = { controlled_by = ROOT }
+					controller = {
+						NOT = {
+							OR = {
+								is_subject_of = ROOT
+								alliance_with = ROOT
+								overlord = {
+									alliance_with = ROOT
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { exists = RUS }
+					NOT = { exists = MOS }
+					province_id = 295
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -683,8 +733,8 @@ Great_missions_5 = {
 			}
 			russia_region = {
 				limit = {
-					NOT = { is_core = ROOT }
 					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -739,36 +789,20 @@ Great_missions_5 = {
 		}
 		effect = {
 			295 = {
-				add_core = ROOT
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
 				if = {
 					limit = {
 						base_tax = 6
 					}
 					add_base_tax = -5
 				}
-				else_if = {
-					limit = {
-						base_tax = 5
-					}
-					add_base_tax = -4
-				}
-				else_if = {
-					limit = {
-						base_tax = 4
-					}
-					add_base_tax = -3
-				}
-				else_if = {
-					limit = {
-						base_tax = 3
-					}
-					add_base_tax = -2
-				}
-				else_if = {
-					limit = {
-						base_tax = 2
-					}
-					add_base_tax = -1
+				else = {
+					set_base_tax = 1
 				}
 				if = {
 					limit = {
@@ -776,29 +810,8 @@ Great_missions_5 = {
 					}
 					add_base_production = -5
 				}
-				else_if = {
-					limit = {
-						base_production = 5
-					}
-					add_base_production = -4
-				}
-				else_if = {
-					limit = {
-						base_production = 4
-					}
-					add_base_production = -3
-				}
-				else_if = {
-					limit = {
-						base_production = 3
-					}
-					add_base_production = -2
-				}
-				else_if = {
-					limit = {
-						base_production = 2
-					}
-					add_base_production = -1
+				else = {
+					set_base_production = 1
 				}
 				if = {
 					limit = {
@@ -806,105 +819,44 @@ Great_missions_5 = {
 					}
 					add_base_manpower = -5
 				}
-				else_if = {
-					limit = {
-						base_manpower = 5
-					}
-					add_base_manpower = -4
-				}
-				else_if = {
-					limit = {
-						base_manpower = 4
-					}
-					add_base_manpower = -3
-				}
-				else_if = {
-					limit = {
-						base_manpower = 3
-					}
-					add_base_manpower = -2
-				}
-				else_if = {
-					limit = {
-						base_manpower = 2
-					}
-					add_base_manpower = -1
+				else = {
+					set_base_manpower = 1
 				}
 				change_culture = ROOT
 			}	
 			310 = { 
-				add_core = ROOT
 				if = {
 					limit = {
-						base_tax = 5
+						NOT = { is_core = ROOT }
 					}
-					add_base_tax = -4
-				}
-				else_if = {
-					limit = {
-						base_tax = 4
-					}
-					add_base_tax = -3
-				}
-				else_if = {
-					limit = {
-						base_tax = 3
-					}
-					add_base_tax = -2
-				}
-				else_if = {
-					limit = {
-						base_tax = 2
-					}
-					add_base_tax = -1
+					add_core = ROOT
 				}
 				if = {
 					limit = {
-						base_production = 5
+						base_tax = 6
 					}
-					add_base_production = -4
+					add_base_tax = -5
 				}
-				else_if = {
-					limit = {
-						base_production = 4
-					}
-					add_base_production = -3
-				}
-				else_if = {
-					limit = {
-						base_production = 3
-					}
-					add_base_production = -2
-				}
-				else_if = {
-					limit = {
-						base_production = 2
-					}
-					add_base_production = -1
+				else = {
+					set_base_tax = 1
 				}
 				if = {
 					limit = {
-						base_manpower = 5
+						base_production = 6
 					}
-					add_base_manpower = -4
+					add_base_production = -5
 				}
-				else_if = {
-					limit = {
-						base_manpower = 4
-					}
-					add_base_manpower = -3
+				else = {
+					set_base_production = 1
 				}
-				else_if = {
+				if = {
 					limit = {
-						base_manpower = 3
+						base_manpower = 6
 					}
-					add_base_manpower = -2
+					add_base_manpower = -5
 				}
-				else_if = {
-					limit = {
-						base_manpower = 2
-					}
-					add_base_manpower = -1
+				else = {
+					set_base_manpower = 1
 				}
 				change_culture = ROOT
 			}
