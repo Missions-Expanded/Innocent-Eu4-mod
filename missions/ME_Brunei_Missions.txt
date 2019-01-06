@@ -917,32 +917,61 @@ BEI_missions_5 = {
 		icon = mission_junk_boat
 		position = 1
 		required_missions = { }
+		provinces_to_highlight = {
+			NOT = { exists = KUT }
+			area = kutai_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			KUT = {
-				OR = {
-					has_opinion_modifier = {
-						who = ROOT
-						modifier = insulted
+			if = {
+				limit = {
+					exists = KUT
+				}
+				KUT = {
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
 					}
-					has_opinion_modifier = {
-						who = ROOT
-						modifier = scornfully_insulted
-					}
+				}
+			}
+			else = {
+				kutai_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 		}
 		effect = {
-			kutai_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					exists = KUT
 				}
-				add_permanent_claim = ROOT
+				kutai_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				if = {
+					limit = {
+						NOT = { overlord_of = KUT }
+					}
+					add_casus_belli = {
+						target = KUT
+						type = cb_annex
+						months = 240
+					}
+				}
 			}
-			add_casus_belli = {
-				target = KUT
-				type = cb_annex
-				months = 240
+			else = {
+				add_prestige = 20
 			}
 		}
 	}
