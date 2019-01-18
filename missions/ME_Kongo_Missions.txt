@@ -6,37 +6,46 @@ KON_missions_1 = {
 		tag = KON
 	}
 	has_country_shield = yes
-	
+
 	KON_force_limit = {
 		icon = mission_african_soldier
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-		}
 		trigger = {
 			army_size_percentage = 0.8
 		}
 		effect = {
-			LOA = {
+			if = {
+				limit = {
+					exists = LOA
+					overlord_of = LOA
+				}
 				1169 = {
 					if = {
 						limit = {
-							NOT = {
-								is_permanent_claim = LOA
-								is_core = LOA
-							}
+							NOT = { owned_by = LOA }
+							NOT = { is_core = LOA }
 						}
 						add_permanent_claim = LOA
+					}
+				}
+			}
+			else = {
+				1169 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
 					}
 				}
 			}
 			4086 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -44,10 +53,8 @@ KON_missions_1 = {
 			4088 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -55,10 +62,8 @@ KON_missions_1 = {
 			4085 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -66,10 +71,8 @@ KON_missions_1 = {
 			4087 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -77,10 +80,8 @@ KON_missions_1 = {
 			4089 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -91,6 +92,7 @@ KON_missions_1 = {
 			}
 		}
 	}
+
 	KON_Tyo = {
 		icon = mission_have_two_subjects
 		required_missions = { KON_force_limit }
@@ -107,6 +109,8 @@ KON_missions_1 = {
 		effect = {
 			if = {
 				limit = {
+					exists = LOA
+					overlord_of = LOA
 					1169 = {
 						owned_by = LOA
 					}
@@ -115,29 +119,29 @@ KON_missions_1 = {
 					name = KON_annexation_cost
 					duration = 5475
 				}
-				add_prestige = 10
 			}
-			else = {
-				add_prestige = 10
-			}
+			add_prestige = 10
 		}
 	}
+
 	KON_Loango = {
 		icon = mission_african_soldier
 		required_missions = { KON_Tyo }
 		position = 3
 		provinces_to_highlight = {
-			owned_by = LOA
+			OR = {
+				province_id = 4078
+				province_id = 1166
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			NOT = {
-				exists = LOA
-			}
+			NOT = { exists = LOA }
 			4078 = {
-				country_or_non_sovereign_subject_holds = ROOT
+				owned_by = ROOT
 			}
 			1166 = {
-				country_or_non_sovereign_subject_holds = ROOT
+				owned_by = ROOT
 			}
 		}
 		effect = {
@@ -149,33 +153,33 @@ KON_missions_1 = {
 			add_yearly_manpower = 1
 		}
 	}
+
 	KON_Benin = {
 		icon = mission_african_soldier
 		required_missions = { KON_Loango }
 		position = 5
 		provinces_to_highlight = {
 			area = gulf_of_guinea_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-				is_city = yes
-			}
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			gulf_of_guinea_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			guinea_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	KON_of_arts = {
 		icon = mission_african_soldier
 		required_missions = { KON_cultural_revolution }
@@ -190,17 +194,34 @@ KON_missions_1 = {
 			}
 		}
 	}
+
 	KON_modern_government = {
 		icon = mission_african_soldier
 		required_missions = { KON_of_arts }
 		position = 15
 		trigger = {
-			OR = {
-				has_reform = parliamentary_reform
-				has_reform = royal_decree_reform
-				has_reform = aristocratic_court_reform
-				has_reform = general_estates_reform
-				has_reform = states_general_reform
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				OR = {
+					has_reform = parliamentary_reform
+					has_reform = royal_decree_reform
+					has_reform = aristocratic_court_reform
+					has_reform = general_estates_reform
+					has_reform = states_general_reform
+				}
+			}
+			else = {
+				OR = {
+					has_reform = administrative_monarchy
+					has_reform = constitutional_monarchy
+					has_reform = enlightened_despotism
+					has_reform = administrative_republic
+					has_reform = constitutional_republic
+					has_reform = bureaucratic_despotism
+					has_parliament = yes
+				}
 			}
 		}
 		effect = {
@@ -210,6 +231,7 @@ KON_missions_1 = {
 			}
 		}
 	}
+
 	KON_enlightment = {
 		icon = mission_african_soldier
 		required_missions = { KON_modern_government }
@@ -225,6 +247,7 @@ KON_missions_1 = {
 		}
 	}
 }
+
 KON_missions_2 = {
 	slot = 2
 	generic = no
@@ -233,7 +256,7 @@ KON_missions_2 = {
 		tag = KON
 	}
 	has_country_shield = yes
-	
+
 	KON_Kalundwe = {
 		icon = mission_alliances
 		required_missions = { KON_Lunda }
@@ -265,10 +288,8 @@ KON_missions_2 = {
 			4097 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -276,10 +297,8 @@ KON_missions_2 = {
 			4099 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -287,10 +306,8 @@ KON_missions_2 = {
 			4105 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -298,10 +315,8 @@ KON_missions_2 = {
 			4103 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -309,10 +324,8 @@ KON_missions_2 = {
 			4100 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -320,10 +333,8 @@ KON_missions_2 = {
 			4101 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -331,10 +342,8 @@ KON_missions_2 = {
 			4107 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -342,16 +351,15 @@ KON_missions_2 = {
 			4098 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+
 	KON_Great_Lakes = {
 		icon = mission_advance_to_the_dnieper
 		required_missions = { KON_colony }
@@ -368,40 +376,40 @@ KON_missions_2 = {
 			is_empty = no
 		}
 		trigger = {
-			mozambique_area = {
+			buzinza_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
-			mozambique_area = {
+			buha_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
-			mozambique_area = {
+			bunyoro_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
-			mozambique_area = {
+			rwanda_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
-			mozambique_area = {
+			uganda_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
 		}
 		effect = {
@@ -415,22 +423,27 @@ KON_missions_2 = {
 			}
 		}
 	}
+
 	KON_Portuguese_missionaries = {
 		icon = mission_african_soldier
 		required_missions = { KON_encounter }
 		position = 11
 		trigger = {
 			OR = {
-				POR = {
-					has_opinion_modifier = {
-						who = ROOT
-						modifier = missionaries_accepted
-					}
+				AND = {
+					is_year = 1600
+					is_subject = no
 				}
 				POR = {
-					has_opinion_modifier = {
-						who = ROOT
-						modifier = missionaries_rebuffed
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = missionaries_accepted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = missionaries_rebuffed
+						}
 					}
 				}
 			}
@@ -450,15 +463,7 @@ KON_missions_2 = {
 					duration = 7300
 				}
 			}
-			if = {
-				limit = {
-					POR = {
-						has_opinion_modifier = {
-							who = ROOT
-							modifier = missionaries_rebuffed
-						}
-					}
-				}
+			else = {
 				add_country_modifier = {
 					name = KON_religious_zeal
 					duration = -1
@@ -466,6 +471,7 @@ KON_missions_2 = {
 			}
 		}
 	}
+
 	KON_cultural_revolution = {
 		icon = mission_african_soldier
 		required_missions = { KON_build }
@@ -474,21 +480,51 @@ KON_missions_2 = {
 			artist = 1
 		}
 		effect = {
-			every_owned_province = {
+			if = {
 				limit = {
-					culture = mbundu
+					any_owned_province = {
+						culture = mbundu
+					}
 				}
-				add_province_modifier = {
-					name = kon_conversion
-					duration = 9125
+				every_owned_province = {
+					limit = {
+						culture = mbundu
+					}
+					add_province_modifier = {
+						name = kon_conversion
+						duration = 9125
+					}
 				}
+			}
+			else = {
+				add_prestige = 10
 			}
 		}
 	}
+
 	KON_assimilate_mbundu = {
 		icon = mission_african_soldier
 		required_missions = { KON_cultural_revolution }
 		position = 14
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 798
+						province_id = 1171
+						province_id = 2948
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { culture = kongolese }
+					}
+				}
+				AND = {
+					owned_by = ROOT
+					culture = mbundu
+				}
+			}
+		}
 		trigger = {
 			NOT = {
 				any_owned_province = {
@@ -496,18 +532,74 @@ KON_missions_2 = {
 				}
 			}
 			798 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 			1171 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 			2948 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 		}
 		effect = {
-			every_owned_province = {
+			if = {
 				limit = {
+					any_owned_province = {
+						OR = {
+							culture = yaka
+							culture = chokwe
+							culture = lunda
+							culture = kuba
+							culture = mbangala
+						}
+					}
+				}
+				every_owned_province = {
+					limit = {
+						OR = {
+							culture = yaka
+							culture = chokwe
+							culture = lunda
+							culture = kuba
+							culture = mbangala
+						}
+					}
+					add_province_modifier = {
+						name = kon_conversion
+						duration = 9125
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
+			}
+		}
+	}
+
+	KON_assimilate_central_cultures = {
+		icon = mission_african_soldier
+		required_missions = { KON_assimilate_mbundu }
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 4095
+						province_id = 4092
+						province_id = 4082
+						province_id = 4085
+						province_id = 4089
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { culture = kongolese }
+					}
+				}
+				AND = {
+					owned_by = ROOT
 					OR = {
 						culture = yaka
 						culture = chokwe
@@ -516,17 +608,8 @@ KON_missions_2 = {
 						culture = mbangala
 					}
 				}
-				add_province_modifier = {
-					name = kon_conversion
-					duration = 9125
-				}
 			}
 		}
-	}
-	KON_assimilate_central_cultures = {
-		icon = mission_african_soldier
-		required_missions = { KON_assimilate_mbundu }
-		position = 15
 		trigger = {
 			NOT = {
 				any_owned_province = {
@@ -540,34 +623,50 @@ KON_missions_2 = {
 				}
 			}
 			4095 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 			4092 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 			4082 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 			4085 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 			4089 = {
+				owned_by = ROOT
 				culture = kongolese
 			}
 		}
 		effect = {
-			every_owned_province = {
+			if = {
 				limit = {
-					culture = luba
+					any_owned_province = {
+						culture = luba
+					}
 				}
-				add_province_modifier = {
-					name = kon_conversion
-					duration = 9125
+				every_owned_province = {
+					limit = {
+						culture = luba
+					}
+					add_province_modifier = {
+						name = kon_conversion
+						duration = 9125
+					}
 				}
+			}
+			else = {
+				add_prestige = 10
 			}
 		}
 	}
 }
+
 KON_missions_3 = {
 	slot = 3
 	generic = no
@@ -576,7 +675,7 @@ KON_missions_3 = {
 		tag = KON
 	}
 	has_country_shield = yes
-	
+
 	KON_Kuba = {
 		icon = mission_unite_home_region
 		required_missions = { }
@@ -596,7 +695,7 @@ KON_missions_3 = {
 			4086 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			4089 = { 
+			4089 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -615,7 +714,7 @@ KON_missions_3 = {
 			}
 		}
 	}
-	
+
 	KON_Yaka = {
 		icon = mission_african_soldier
 		required_missions = { KON_Kuba }
@@ -673,7 +772,7 @@ KON_missions_3 = {
 			}
 		}
 	}
-	
+
 	KON_Lunda = {
 		icon = mission_empire
 		required_missions = { KON_Yaka }
@@ -693,7 +792,7 @@ KON_missions_3 = {
 			4092 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			4093 = { 
+			4093 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -713,10 +812,8 @@ KON_missions_3 = {
 			4094 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -724,10 +821,8 @@ KON_missions_3 = {
 			4095 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -735,10 +830,8 @@ KON_missions_3 = {
 			4090 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -746,16 +839,15 @@ KON_missions_3 = {
 			4096 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+
 	KON_Western_Frontier = {
 		icon = mission_unite_home_region
 		required_missions = { KON_Kalundwe KON_chokwe }
@@ -801,19 +893,47 @@ KON_missions_3 = {
 		}
 		effect = {
 			4077 = {
-				add_siberian_construction = 400
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 400
+				}
+				else_if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				else_if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
 			}
 		}
 	}
+
 	KON_colony = {
 		icon = mission_colonial
 		required_missions = { KON_Western_Frontier }
 		position = 7
 		provinces_to_highlight = {
 			province_id = 4077
-			NOT = { 
-				is_city = yes
-				country_or_non_sovereign_subject_holds = ROOT
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
 			}
 		}
 		trigger = {
@@ -826,10 +946,8 @@ KON_missions_3 = {
 			4044 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -837,10 +955,8 @@ KON_missions_3 = {
 			4045 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -848,10 +964,8 @@ KON_missions_3 = {
 			4047 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -859,10 +973,8 @@ KON_missions_3 = {
 			4048 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -870,10 +982,8 @@ KON_missions_3 = {
 			4037 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -881,10 +991,8 @@ KON_missions_3 = {
 			4040 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -892,10 +1000,8 @@ KON_missions_3 = {
 			4039 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -903,45 +1009,46 @@ KON_missions_3 = {
 			rwanda_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			buha_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			uganda_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			bunyoro_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			buzinza_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	KON_mutapa = {
 		icon = mission_african_soldier
 		required_missions = { KON_Tumbuka }
@@ -975,13 +1082,26 @@ KON_missions_3 = {
 			}
 		}
 	}
+
 	KON_encounter = {
 		icon = mission_african_soldier
 		required_missions = { }
 		position = 10
+		provinces_to_highlight = {
+			area = coastal_kongo
+			NOT = { owned_by = ROOT }
+			NOT = {
+				coastal_kongo = {
+					owned_by = ROOT
+				}
+			}
+		}
 		trigger = {
 			europe = {
 				has_discovered = ROOT
+			}
+			coastal_kongo = {
+				owned_by = ROOT
 			}
 		}
 		effect = {
@@ -989,25 +1109,48 @@ KON_missions_3 = {
 				limit = {
 					area = coastal_kongo
 				}
-				add_institution_embracement = {
-					which = feudalism
-					value = 90
-				}
+				add_next_institution_embracement = 90
 			}
 		}
 	}
+
 	KON_build = {
 		icon = mission_african_soldier
 		required_missions = { KON_Portuguese_missionaries KON_adopt_feudalism }
 		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1169
+				province_id = 798
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
 			1169 = {
-				has_building = fort_15th
 				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
 			}
 			798 = {
-				has_building = fort_15th
 				owned_by = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
 			}
 		}
 		effect = {
@@ -1017,8 +1160,15 @@ KON_missions_3 = {
 					duration = 36500
 				}
 			}
+			798 = {
+				add_province_modifier = {
+					name = kon_attrition
+					duration = 36500
+				}
+			}
 		}
 	}
+
 	KON_colonialism = {
 		icon = mission_african_soldier
 		required_missions = { KON_build }
@@ -1026,7 +1176,7 @@ KON_missions_3 = {
 		trigger = {
 			exploration_ideas = 3
 			brazil_region = {
-				has_discovered = ROOT 
+				has_discovered = ROOT
 			}
 		}
 		effect = {
@@ -1036,19 +1186,29 @@ KON_missions_3 = {
 			}
 		}
 	}
+
 	KON_build_up_coast = {
 		icon = mission_african_soldier
 		required_missions = { KON_colonialism }
 		position = 14
 		provinces_to_highlight = {
 			area = coastal_kongo
-			NOT = { has_building = shipyard }
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+			}
 		}
 		trigger = {
 			coastal_kongo = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				has_building = shipyard
+				owned_by = ROOT
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
 			}
 		}
 		effect = {
@@ -1063,6 +1223,7 @@ KON_missions_3 = {
 			}
 		}
 	}
+
 	KON_colonies = {
 		icon = mission_african_soldier
 		required_missions = { KON_build_up_coast }
@@ -1077,12 +1238,14 @@ KON_missions_3 = {
 			}
 		}
 	}
+
 	KON_modern_empire = {
-		icon = mission_shiny_crown
+		icon = me_mission_shiny_crown
 		required_missions = { KON_modern_government KON_colonies KON_build_buildings KON_assimilate_central_cultures KON_flourishing_kongo }
 		position = 16
 		trigger = {
-			development = 1500
+			is_subject = no
+			total_development = 1500
 		}
 		effect = {
 			add_country_modifier = {
@@ -1092,6 +1255,7 @@ KON_missions_3 = {
 		}
 	}
 }
+
 KON_missions_4 = {
 	slot = 4
 	generic = no
@@ -1100,7 +1264,7 @@ KON_missions_4 = {
 		tag = KON
 	}
 	has_country_shield = yes
-	
+
 	KON_chokwe = {
 		icon = mission_alliances
 		required_missions = { KON_Lunda KON_integrate_vassal }
@@ -1123,6 +1287,8 @@ KON_missions_4 = {
 		effect = {
 			if = {
 				limit = {
+					exists = LOA
+					overlord_of = LOA
 					4094 = {
 						owned_by = LOA
 					}
@@ -1143,6 +1309,8 @@ KON_missions_4 = {
 			}
 			if = {
 				limit = {
+					exists = LOA
+					overlord_of = LOA
 					4095 = {
 						owned_by = LOA
 					}
@@ -1164,10 +1332,8 @@ KON_missions_4 = {
 			4097 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1175,10 +1341,8 @@ KON_missions_4 = {
 			4099 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1186,10 +1350,8 @@ KON_missions_4 = {
 			4105 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1197,10 +1359,8 @@ KON_missions_4 = {
 			4103 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1208,10 +1368,8 @@ KON_missions_4 = {
 			4100 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1219,10 +1377,8 @@ KON_missions_4 = {
 			4101 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1230,10 +1386,8 @@ KON_missions_4 = {
 			4107 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1241,16 +1395,15 @@ KON_missions_4 = {
 			4098 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+
 	KON_Tumbuka = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { KON_colony }
@@ -1294,54 +1447,52 @@ KON_missions_4 = {
 			mozambique_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			quelimane_area = {
 				limit = {
 					is_city = yes
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			zimbabwe_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			butua_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			lower_zambezi_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			central_swahili_coast_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			4038 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -1349,20 +1500,26 @@ KON_missions_4 = {
 			4034 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+
 	KON_adopt_feudalism = {
 		icon = mission_african_soldier
 		required_missions = { KON_encounter }
 		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 798
+				province_id = 1169
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			has_institution = feudalism
 			798 = {
@@ -1374,17 +1531,33 @@ KON_missions_4 = {
 		}
 		effect = {
 			798 = {
-				add_building_construction = {
-					building = fort_15th
-					speed = 1
-					cost = 0
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_manpower = 2
 				}
 			}
 			1169 = {
-				add_building_construction = {
-					building = fort_15th
-					speed = 1
-					cost = 0
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_base_manpower = 2
 				}
 			}
 			add_country_modifier = {
@@ -1393,6 +1566,7 @@ KON_missions_4 = {
 			}
 		}
 	}
+
 	KON_westernization = {
 		icon = mission_african_soldier
 		required_missions = { KON_build }
@@ -1407,17 +1581,19 @@ KON_missions_4 = {
 			}
 		}
 	}
+
 	KON_westernization_of_society = {
 		icon = mission_african_soldier
 		required_missions = { KON_westernization }
 		position = 14
-		trigger = {
-			NOT = {
-				any_province = {
-					culture = ROOT
-					devastation = 0.01
-				}
+		provinces_to_highlight = {
+			culture = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				devastation = 0.01
 			}
+		}
+		trigger = {
 			NOT = { corruption = 0.01 }
 			is_bankrupt = no
 			OR = {
@@ -1429,21 +1605,48 @@ KON_missions_4 = {
 				full_idea_group = innovative_ideas
 				full_idea_group = trade_ideas
 			}
+			custom_trigger_tooltip = {
+				tooltip = KON_ALL_OWN_CULTURE_PROVS_OWNED_AND_NO_DEVASTATION
+				NOT = {
+					any_province = {
+						culture = ROOT
+						OR = {
+							devastation = 0.01
+							NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			add_prestige = 10
 			custom_tooltip = kon_westernization_mechanic_enabled
 			set_country_flag = kon_westernization_mechanic_enabled_flag
 		}
 	}
+
 	KON_flourishing_kongo = {
 		icon = mission_african_soldier
 		required_missions = { KON_westernization_of_society }
 		position = 15
+		provinces_to_highlight = {
+			culture = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 10 }
+			}
+		}
 		trigger = {
-			NOT = {
-				any_province = {
-					culture = ROOT
-					NOT = { development = 10 }
+			custom_trigger_tooltip = {
+				tooltip = KON_ALL_OWN_CULTURE_PROVS_OWNED_AND_10_DEV
+				NOT = {
+					any_province = {
+						culture = ROOT
+						OR = {
+							NOT = { country_or_non_sovereign_subject_holds = ROOT }
+							NOT = { development = 10 }
+						}
+					}
 				}
 			}
 		}
@@ -1454,6 +1657,7 @@ KON_missions_4 = {
 		}
 	}
 }
+
 KON_missions_5 = {
 	slot = 5
 	generic = no
@@ -1462,59 +1666,120 @@ KON_missions_5 = {
 		tag = KON
 	}
 	has_country_shield = yes
-	
+
 	KON_Ndongo_relations = {
 		icon = mission_alliances
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			NOT = { exists = NDO }
+			OR = {
+				province_id = 2948
+				province_id = 1171
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
-			reverse_has_opinion = {
-				who = NDO
-				value = 100
+			OR = {
+				AND = {
+					overlord_of = NDO
+					reverse_has_opinion = {
+						who = NDO
+						value = 100
+					}
+				}
+				AND = {
+					NOT = { exists = NDO }
+					owns_core_province = 2948
+					owns_core_province = 1171
+				}
 			}
 		}
 		effect = {
-			NDO = {
+			if = {
+				limit = {
+					exists = NDO
+					overlord_of = NDO
+				}
 				4082 = {
 					if = {
 						limit = {
-							NOT = {
-								is_permanent_claim = NDO
-								is_core = NDO
-							}
+							NOT = { owned_by = NDO }
+							NOT = { is_core = NDO }
 						}
 						add_permanent_claim = NDO
 					}
 				}
 			}
-			NDO = {
+			else = {
+				4082 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = NDO
+					overlord_of = NDO
+				}
 				4083 = {
 					if = {
 						limit = {
-							NOT = {
-								is_permanent_claim = NDO
-								is_core = NDO
-							}
+							NOT = { owned_by = NDO }
+							NOT = { is_core = NDO }
 						}
 						add_permanent_claim = NDO
 					}
 				}
 			}
-			NDO = {
+			else = {
+				4083 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					exists = NDO
+					overlord_of = NDO
+				}
 				4084 = {
 					if = {
 						limit = {
-							NOT = {
-								is_permanent_claim = NDO
-								is_core = NDO
-							}
+							NOT = { owned_by = NDO }
+							NOT = { is_core = NDO }
 						}
 						add_permanent_claim = NDO
+					}
+				}
+			}
+			else = {
+				4084 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
 					}
 				}
 			}
 		}
 	}
+
 	KON_expand_vassal = {
 		icon = mission_unite_home_region
 		required_missions = { KON_Ndongo_relations }
@@ -1541,27 +1806,27 @@ KON_missions_5 = {
 		effect = {
 			if = {
 				limit = {
+					exists = NDO
+					overlord_of = NDO
 					4082 = {
-						owned_by = LOA
+						owned_by = NDO
 					}
 					4083 = {
-						owned_by = LOA
+						owned_by = NDO
 					}
 					4084 = {
-						owned_by = LOA
+						owned_by = NDO
 					}
 				}
 				add_country_modifier = {
 					name = KON_annexation_cost_2
 					duration = 5475
 				}
-				add_prestige = 10
 			}
-			else = {
-				add_prestige = 10
-			}
+			add_prestige = 10
 		}
 	}
+
 	KON_integrate_vassal = {
 		icon = mission_have_two_subjects
 		required_missions = { KON_expand_vassal }
@@ -1574,13 +1839,13 @@ KON_missions_5 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			NOT = { exists = NDO }
 			1171 = {
 				owned_by = ROOT
 			}
 			2948 = {
 				owned_by = ROOT
 			}
-			NOT = { exists = NDO }
 		}
 		effect = {
 			add_country_modifier = {
@@ -1590,6 +1855,7 @@ KON_missions_5 = {
 			add_yearly_manpower = 1
 		}
 	}
+
 	KON_Kilwa = {
 		icon = mission_arabian_fort
 		required_missions = { KON_Tumbuka }
@@ -1602,30 +1868,31 @@ KON_missions_5 = {
 				province_id = 4038
 				province_id = 4034
 			}
+			has_discovered = ROOT
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			is_city = yes
+			is_empty = no
 		}
 		trigger = {
 			central_swahili_coast_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
 			quelimane_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
 			mozambique_area = {
+				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					is_city = no
+					is_empty = yes
 				}
-				type = all
 			}
 			4038 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -1641,17 +1908,19 @@ KON_missions_5 = {
 			}
 		}
 	}
+
 	KON_abolish_slavery = {
 		icon = mission_african_soldier
 		required_missions = { KON_westernization }
 		position = 14
+		provinces_to_highlight = {
+			region = kongo_region
+			trade_goods = slaves
+		}
 		trigger = {
-			NOT = {
-				any_province = {
-					NOT = { owned_by = ROOT }
-					trade_good = slaves
-					region = kongo_region
-				}
+			kongo_region = {
+				type = all
+				NOT = { trade_goods = slaves }
 			}
 		}
 		effect = {
@@ -1660,7 +1929,6 @@ KON_missions_5 = {
 					trade_goods = slaves
 				}
 				change_trade_goods = unknown
-				remove_building = tradecompany
 				if = {
 					limit = { has_province_modifier = slave_entrepot }
 					remove_province_modifier = slave_entrepot
@@ -1672,13 +1940,20 @@ KON_missions_5 = {
 			}
 		}
 	}
+
 	KON_build_buildings = {
 		icon = mission_african_soldier
 		required_missions = { KON_westernization_of_society }
 		position = 15
 		trigger = {
-			temple = 5
-			workshop = 5
+			OR = {
+				temple = 5
+				cathedral = 5
+			}
+			OR = {
+				workshop = 5
+				counting_house = 5
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -1687,6 +1962,7 @@ KON_missions_5 = {
 			}
 		}
 	}
+
 	KON_early_industrialization = {
 		icon = mission_have_manufactories
 		required_missions = { KON_build_buildings }
@@ -1717,4 +1993,3 @@ KON_missions_5 = {
 		}
 	}
 }
-	
