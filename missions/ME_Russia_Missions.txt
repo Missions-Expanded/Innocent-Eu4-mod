@@ -1,4 +1,4 @@
-me_RUS_missions_1 = {
+﻿me_RUS_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -10,67 +10,32 @@ me_RUS_missions_1 = {
 	}
 	has_country_shield = yes
 	
-	russia_navy = {
-		icon = mission_conquer_riga
-		required_missions = { russia_centralize }
+	russia_increase_westernization = {
+		required_missions = { russia_reform_realm }
 		position = 6
-		provinces_to_highlight = {
-			province_id = 33
-			NOT = { owned_by = ROOT }
-		}
 		trigger = {
-			owns = 33
-			num_of_ports = 10
-			DIP = 3
+			any_known_country = {
+				technology_group = western
+				has_opinion = {
+					who = ROOT
+					value = 150
+				}
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = russia_navy
-				duration = -1
-			}
-		}
-	}
-	
-	russia_army = {
-		required_missions = { russia_navy }
-		icon = mission_recruit_streltsy
-		trigger = {
-			army_size = 150
-			manpower_percentage = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = russian_army
-				duration = -1
-			}
-			finland_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			bothnia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			4151 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
+			custom_tooltip = modify_rus_peter.tooltip
+			hidden_effect = {
+				remove_country_modifier = Rus_peter
+				add_country_modifier = {
+					name = rus_peter_2
+					duration = -1
 				}
 			}
 		}
 	}
 	
 	russia_sweden = {
-		required_missions = { russia_army }
+		required_missions = { russia_increase_westernization }
 		icon = mission_conquer_finland
 		provinces_to_highlight = {
 			OR = {
@@ -210,6 +175,70 @@ me_RUS_missions_1 = {
 				name = ruthenia_rus
 				duration = 7300
 			}
+			azov_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			yedisan_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			zaporizhia_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			crimea_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+		
+	russia_crimea = {
+		required_missions = { russia_ruthenia }
+		icon = mission_cossack_cavalry
+		provinces_to_highlight = {
+			OR = {
+				area = azov_area
+				area = crimea_area
+				area = yedisan_area
+				area = zaporizhia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			azov_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			crimea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			yedisan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			zaporizhia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Russia_Events.7 }
 			samogitia_area = {
 				limit = {
 					NOT = { owned_by = ROOT	}
@@ -228,7 +257,7 @@ me_RUS_missions_1 = {
 	}
 	
 	russia_vilnius = {
-		required_missions = { russia_ruthenia }
+		required_missions = { russia_crimea }
 		icon = mission_amur_acquisition
 		provinces_to_highlight = {
 			OR = {
@@ -333,39 +362,61 @@ me_RUS_missions_1 = {
 		}
 	}
 }
-	
-me_RUS_missions_2 = {
-	slot = 2
+
+me_RUS_missions_1mod = {
+	slot = 1
 	generic = no
 	ai = yes
 	potential = {
 		tag = RUS
-		NOT = { has_country_modifier = rus_isolation }
-		NOT = { has_country_modifier = Rus_peter }
+		has_country_modifier = foreign_auxilaries
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
-	russia_not_isolationist = {
-		icon = me_mission_russia_westernization
-		required_missions = { russia_centralize }
-		position = 6
+	russia_maintain_tradition = {
+		required_missions = { }
+		position = 15
 		trigger = {
-			NOT = { has_country_modifier = rus_isolation }
-			NOT = { has_country_modifier = Rus_peter }
-			DIP = 3
+			mil = 3
+			army_size = 50
+			advisor = army_reformer
 		}
 		effect = {
-			add_country_modifier = {
-				name = Rus_peter
-				duration = -1
+			hidden_effect = {
+				remove_country_modifier = foreign_auxilaries
+				add_country_modifier = {
+					name = foreign_auxilaries2
+					duration = -1
+				}
 			}
-			swap_non_generic_missions = yes		
+			custom_tooltip = modify_auxilaries1.tooltip
 		}
 	}
+	
+	russia_root_out_bad_modifiers = {
+		required_missions = { russia_maintain_tradition }
+		trigger = {
+			stability = 3
+			mil = 3
+			army_professionalism = 40
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = foreign_auxilaries2
+				add_country_modifier = {
+					name = foreign_auxilaries3
+					duration = -1
+				}
+			}
+			custom_tooltip = modify_auxilaries2.tooltip
+		}
+	}	
 }
 
-me_RUS_missions_2_2 = {
+
+
+me_RUS_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -380,7 +431,7 @@ me_RUS_missions_2_2 = {
 	has_country_shield = yes
 
 	russia_kazan = {
-		required_missions = { russia_centralize }
+		required_missions = { russia_reform_realm }
 		icon = mission_break_the_tatar_yoke
 		position = 6
 		provinces_to_highlight = {
@@ -500,6 +551,7 @@ me_RUS_missions_2_2 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			country_event = { id = ME_Russia_Events.6 }
 		}
 	}
 
@@ -543,6 +595,98 @@ me_RUS_missions_2_2 = {
 				name = Russia_push_east
 				duration = 7300
 			}
+			2434 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+			}
+			480 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+			}
+			1064 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+			}
+			1068 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+			}
+			1070 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+			}
+			1069 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								controlled_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+			}
+			1073 = {
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 500
+				}
+			}
 		}
 	}
 
@@ -560,10 +704,19 @@ me_RUS_missions_2_2 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = Russia_push_east
-				duration = 7300
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_modifier = Russia_push_east
+					}
+					remove_country_modifier = Russia_push_east	
+					add_country_modifier = {
+						name = russia_push_east_2
+						duration = 7300
+					}
+				}
 			}
+			custom_tooltip = modify_push_east.tooltip
 		}
 	}
 
@@ -686,93 +839,56 @@ me_RUS_missions_2_3 = {
 				name = alaska
 				duration = -1
 			}
-			azov_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+		}
+	}
+}
+
+me_RUS_missions_2mod = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = exotic_ships
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_root_out_western_ships1 = {
+		position = 15
+		required_missions = { }
+		trigger = {
+			advisor = naval_reformer
+			navy_size = 50
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = exotic_ships
+				add_country_modifier = {
+					name = exotic_ships2
+					duration = -1
 				}
-				add_permanent_claim = ROOT
 			}
-			yedisan_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			zaporizhia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			crimea_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
+			custom_tooltip = modify_ships1.tooltip
 		}
 	}
 	
-	russia_crimea = {
-		required_missions = { russia_alaska }
-		icon = mission_cossack_cavalry
-		provinces_to_highlight = {
-			OR = {
-				area = azov_area
-				area = crimea_area
-				area = yedisan_area
-				area = zaporizhia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+	russia_root_out_western_ships2 = {
+		required_missions = { russia_root_out_western_ships1 }
 		trigger = {
-			azov_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			crimea_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			yedisan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			zaporizhia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			capital = 33
+			advisor = naval_reformer
+			dip = 3
 		}
 		effect = {
-			crimea_region = {
-				add_province_modifier = {
-					name = steppes_russia
-					duration = 7300
+			hidden_effect = {
+				remove_country_modifier = exotic_ships2
+				add_country_modifier = {
+					name = exotic_ships3
+					duration = -1
 				}
 			}
-		}
-	}
-
-	russia_westernization = {
-		required_missions = { russia_crimea russia_warsaw }
-		icon = mission_conquer_romania
-		trigger = {
-			DIP = 4
-			any_country = {
-				NOT = { tech_difference = 1 }
-			}
-		}
-		effect = {
-			change_technology_group = western
-			change_unit_type = western
-			add_country_modifier = {
-				name = rus_westernized
-				duration = -1
-			}
+			custom_tooltip = modify_ships2.tooltip
 		}
 	}
 }
@@ -798,13 +914,16 @@ me_RUS_missions_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			russia_region = {
-				type = all
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					province_id = 30
-					province_id = 4243
-					province_id = 275
+			custom_trigger_tooltip = {
+				tooltip = MEconquer_russia.tooltip
+				russia_region = {
+					type = all
+					OR = {
+						country_or_non_sovereign_subject_holds = ROOT
+						province_id = 30
+						province_id = 4243
+						province_id = 275
+					}
 				}
 			}
 		}
@@ -813,108 +932,203 @@ me_RUS_missions_3 = {
 				name = rus_united
 				duration = 7300
 			}
+			custom_tooltip = MEunlock_reform_events.tooltip
+			set_country_flag = reform_realm
 		}
 	}
 	
-	russia_centralize = {
+	russia_reform_realm = {
 		required_missions = { russia_russia }
 		icon = mission_consolidate_the_state
 		position = 5
 		trigger = {
-			NOT = { average_home_autonomy = 20 }
+			custom_trigger_tooltip = {
+				tooltip = MErussian_reforms.tooltip
+				has_country_flag = reforms_done
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = centralization
-				duration = 7300
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { check_variable = { westernization_vs_isolation = 0 } }
+					}
+					add_country_modifier = {
+						name = Rus_peter
+						duration = -1
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = rus_isolation
+						duration = -1
+					}
+				}
+				swap_non_generic_missions = yes
 			}
-			every_owned_province = {
-				add_local_autonomy = -10
+			custom_tooltip = MEexplaining.tooltip
+		}
+	}	
+}
+
+me_RUS_missions_3mod = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = brought_western_administrators
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_root_out_western_admin = {
+		position = 15
+		required_missions = { }
+		trigger = {
+			average_home_autonomy = 25
+			adm = 3
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = brought_western_administrators
+				add_country_modifier = {
+					name = brought_western_administrators2
+					duration = -1
+				}
 			}
+			custom_tooltip = modify_west_adm1.tooltip
 		}
 	}
 	
-	russia_no_corruption = {
-		required_missions = { russia_centralize }
-		icon = mission_restore_kiev
-		position = 7
+	russia_root_out_western_admin2 = {
+		required_missions = { russia_root_out_western_admin }
 		trigger = {
-			NOT = { corruption = 0.01 }
+			capital = 33
+			master_of_mint = 3
+			NOT = { 
+				corruption = 1
+			}
+			adm = 3
 		}
 		effect = {
-			add_country_modifier = {
-				name = rus_nocorruption
-				duration = 7300
+			hidden_effect = {
+				remove_country_modifier = brought_western_administrators2
+				add_country_modifier = {
+					name = brought_western_administrators3
+					duration = -1
+				}
 			}
+			custom_tooltip = modify_west_adm2.tooltip
 		}
 	}
-	
-	russia_supremacy = {
-		required_missions = { russia_no_corruption }
-		icon = me_mission_russia_revolution
-		position = 9
-		trigger = {
-			all_neighbor_country = {
-				NOT = { army_size = ROOT }
-			}
+}
+
+me_RUS_missions_3mod = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		OR = {
+			has_country_modifier = rus_peter_2
+			has_country_modifier = Rus_peter
 		}
-		effect = {
-			add_country_modifier = {
-				name = russia_supremacy
-				duration = 7300
-			}
-		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
+	has_country_shield = yes
 	
-	russia_revolution = {
-		required_missions = { russia_supremacy }
-		icon = me_mission_russia_revolution
-		position = 11
+	russia_westernize = {
+		position = 18
+		required_missions = { }
 		trigger = {
-			current_age = age_of_revolutions
-			is_revolution_target = yes
+			if = {
+				limit = {
+					has_country_modifier = foreign_auxilaries3
+				}
+				mission_completed = russia_root_out_bad_modifiers
+			}
+			if = {
+				limit = {
+					has_country_modifier = exotic_ships3
+				}
+				mission_completed = russia_root_out_western_ships2
+			}
+			if = {
+				limit = {
+					has_country_modifier = brought_western_administrators3
+				}
+				mission_completed = russia_root_out_western_admin2
+			}
+			if = {
+				limit = {
+					has_country_modifier = free_trade3
+				}
+				mission_completed = russia_root_out_free_trade2
+			}
+			if = {
+				limit = {
+					has_country_modifier = western_diplomacy3
+				}
+				mission_completed = russia_root_out_western_diplomacy2
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = october_revolution
-				duration = -1
+			remove_country_modifier = Rus_peter
+			remove_country_modifier = rus_peter_2
+			if = {
+				limit = {
+					calc_true_if = {
+						has_country_modifier = foreign_auxilaries3
+						has_country_modifier = exotic_ships3
+						has_country_modifier = brought_western_administrators3
+						has_country_modifier = free_trade3
+						has_country_modifier = western_diplomacy3
+						amount = 3
+					}
+				}
+				add_country_modifier = {
+					name = western_russia1
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_country_modifier = foreign_auxilaries3
+						has_country_modifier = exotic_ships3
+						has_country_modifier = brought_western_administrators3
+						has_country_modifier = free_trade3
+						has_country_modifier = western_diplomacy3
+						amount = 4
+					}
+				}
+				add_country_modifier = {
+					name = western_russia2
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						has_country_modifier = foreign_auxilaries3
+						has_country_modifier = exotic_ships3
+						has_country_modifier = brought_western_administrators3
+						has_country_modifier = free_trade3
+						has_country_modifier = western_diplomacy3
+						amount = 5
+					}
+				}
+				add_country_modifier = {
+					name = western_russia3
+					duration = -1
+				}
 			}
 		}
 	}
 }
 	
 me_RUS_missions_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		tag = RUS
-		NOT = { has_country_modifier = Rus_peter }
-		NOT = { has_country_modifier = rus_isolation }
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
-	russia_isolationist = {
-		required_missions = { russia_centralize }
-		icon = me_mission_russia_ivan_the_terrible
-		position = 6
-		trigger = {
-			NOT = { has_country_modifier = Rus_peter }
-			ADM = 3
-		}
-		effect = {
-			add_country_modifier = {
-				name = rus_isolation
-				duration = -1
-			}
-			swap_non_generic_missions = yes
-		}
-	}
-}
-	
-	
-me_RUS_missions_4_1 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -1162,6 +1376,64 @@ me_RUS_missions_4_2 = {
 		}
 	}
 }
+
+me_RUS_missions_4mod = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = free_trade
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_root_out_free_trade = {
+		position = 15
+		required_missions = { }
+		trigger = {
+			advisor = trader
+			33 = {
+				has_most_province_trade_power = ROOT
+			}
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = free_trade
+				add_country_modifier = {
+					name = free_trade2
+					duration = -1
+				}
+			}
+			custom_tooltip = modify_free_trade1.tooltip
+		}
+	}
+	
+	russia_root_out_free_trade2 = {
+		required_missions = { russia_root_out_free_trade }
+		trigger = {
+			capital = 33
+			33 = {
+				has_most_province_trade_power = ROOT
+			}
+			
+			custom_trigger_tooltip = {
+				tooltip = completed_gnw.tooltip
+				has_country_flag = great_northern_war
+			}
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = free_trade2
+				add_country_modifier = {
+					name = free_trade3
+					duration = -1
+				}
+			}
+			custom_tooltip = modify_free_trade2.tooltip
+		}
+	}
+}
 	
 me_RUS_missions_5 = {
 	slot = 5
@@ -1383,6 +1655,72 @@ me_RUS_missions_5 = {
 				name = russia_first 
 				duration = -1
 			}
+		}
+	}
+}
+
+me_RUS_missions_5mod = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = western_diplomacy
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_root_out_western_diplomacy = {
+		position = 15
+		required_missions = { }
+		trigger = {
+			advisor = diplomat
+			any_known_country = {
+				technology_group = western
+				has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = western_diplomacy
+				add_country_modifier = {
+					name = western_diplomacy2
+					duration = -1
+				}
+			}
+			custom_tooltip = modify_west_dip1.tooltip
+		}
+	}
+	
+	russia_root_out_western_diplomacy2 = {
+		required_missions = { russia_root_out_western_diplomacy }
+		trigger = {
+			capital = 33
+			any_known_country = {
+				technology_group = western
+				has_opinion = {
+					who = ROOT
+					value = 150
+				}
+			}
+			dip = 3
+			custom_trigger_tooltip = {
+				tooltip = completed_gnw.tooltip
+				has_country_flag = great_northern_war
+			}
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = western_diplomacy2
+				add_country_modifier = {
+					name = western_diplomacy3
+					duration = -1
+				}
+			}
+			custom_tooltip = modify_west_dip2.tooltip
 		}
 	}
 }
