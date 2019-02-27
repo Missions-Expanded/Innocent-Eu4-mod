@@ -453,7 +453,7 @@ me_RUS_missions_1_3 = {
 		required_missions = { russia_national_army_1 }
 		trigger = {
 			all_known_country = {
-				NOT = {	army_size = ROOT }
+				NOT = { army_size = ROOT }
 			}		
 		}
 		effect = {
@@ -1963,10 +1963,8 @@ me_RUS_missions_5_3 = {
 		trigger = {
 			vassal = 3
 			any_known_country = {
-				limit = {
-					vassal_of = ROOT
-				}
-				NOT = { liberty_desire = 0.5 }
+				vassal_of = ROOT
+				NOT = { liberty_desire = 50 }
 			}
 		}
 		effect = {
@@ -1989,17 +1987,26 @@ russia_great_northern_war_incident2 = {
 	generic = no
 	ai = yes
 	potential = {
-		has_country_flag = rus_gnw
 		tag = RUS
+		has_country_flag = rus_gnw
 	}
-	has_country_flag = yes
+	has_country_shield = yes
 	
 	rus_gnw_navy = {
 		position = 27
 		required_missions = { rus_gnw_1 }
 		trigger = {
-			navy_size = SWE
-			sailors = SWE
+			if = {
+				limit = {
+					exists = SWE
+				}
+				navy_size = SWE
+				sailors = SWE
+			}
+			else = {
+				navy_size = 50
+				sailors = 3000
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -2015,18 +2022,39 @@ russia_great_northern_war_incident3 = {
 	generic = no
 	ai = yes
 	potential = {
-		has_country_flag = rus_gnw
 		tag = RUS
+		has_country_flag = rus_gnw
 	}
-	has_country_flag = yes
+	has_country_shield = yes
 	
 	rus_gnw_1 = {
 		position = 25
 		required_missions = { }
 		trigger = {
-			OR = {
+			if = {
+				limit = {
+					exists = SWE
+					exists = DAN
+				}
+				OR = {
+					prestige = SWE
+					prestige = DAN
+				}
+			}
+			else_if = {
+				limit = {
+					exists = SWE
+				}
 				prestige = SWE
+			}
+			else_if = {
+				limit = {
+					exists = DAN
+				}
 				prestige = DAN
+			}
+			else = {
+				prestige = 50
 			}
 		}
 		effect = {
@@ -2036,6 +2064,10 @@ russia_great_northern_war_incident3 = {
 	
 	rus_gnw_2 = {
 		required_missions = { rus_gnw_1 }
+		provinces_to_highlight = {
+			province_id = 30
+			NOT = { controlled_by = ROOT }
+		}
 		trigger = {
 			30 = {
 				controlled_by = ROOT
@@ -2043,33 +2075,106 @@ russia_great_northern_war_incident3 = {
 		}
 		effect = {
 			30 = {
-				cede_province = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+				else_if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
 			}
 		}
 	}
 	
 	rus_gnw_3 = {
 		required_missions = { rus_gnw_2 rus_gnw_navy }
+		provinces_to_highlight = {
+			OR = {
+				area = finland_area
+				area = bothnia_area
+			}
+			NOT = { controlled_by = ROOT }
+		}
 		trigger = {
 			finland_area = {
 				controlled_by = ROOT
 			}
-			ostrobothnia_area = {
+			bothnia_area = {
 				controlled_by = ROOT
 			}
-			war_score_against = {
-				target = SWE
-				war_score = 70
+			OR = {
+				war_score_against = {
+					target = SWE
+					war_score = 70
+				}
+				AND = {
+					NOT = { exists = SWE }
+					finland_area = {
+						owner = {
+							NOT = {
+								war_score_against = {
+									target = ROOT
+									war_score = -69
+								}
+							}
+						}
+					}
+					bothnia_area = {
+						owner = {
+							NOT = {
+								war_score_against = {
+									target = ROOT
+									war_score = -69
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 		effect = {
 			finland_area = {
-				cede_province = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+				else_if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
 			}
-			ostrobothnia_area = {
-				cede_province = ROOT
+			bothnia_area = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+				else_if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
 			}
-			white_peace = SWE
 			set_country_flag = great_northern_war
 			add_country_modifier = {
 				name = victors_of_gnw
@@ -2084,20 +2189,18 @@ russia_great_northern_war_incident5 = {
 	generic = no
 	ai = yes
 	potential = {
-		has_country_flag = rus_gnw
 		tag = RUS
+		has_country_flag = rus_gnw
 	}
-	has_country_flag = yes
+	has_country_shield = yes
 	
 	rus_gnw_allies = {
 		required_missions = { rus_gnw_1 }
 		position = 27
 		trigger = {
 			all_known_country = {
-				limit = {
-					is_rival = SWE
-					NOT = { is_rival = ROOT }
-				}
+				is_rival = SWE
+				NOT = { is_rival = ROOT }
 				has_opinion = {
 					who = ROOT
 					value = 125
@@ -2109,6 +2212,10 @@ russia_great_northern_war_incident5 = {
 				limit = {
 					is_rival = SWE
 					NOT = { is_rival = ROOT }
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
 				}
 				country_event = { id = ME_Russia_Events.8 }
 			}
