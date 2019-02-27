@@ -453,7 +453,7 @@ me_RUS_missions_1_3 = {
 		required_missions = { russia_national_army_1 }
 		trigger = {
 			all_known_country = {
-				NOT = { army_size = ROOT }
+				NOT = {	army_size = ROOT }
 			}		
 		}
 		effect = {
@@ -1963,8 +1963,10 @@ me_RUS_missions_5_3 = {
 		trigger = {
 			vassal = 3
 			any_known_country = {
-				vassal_of = ROOT
-				NOT = { liberty_desire = 50 }
+				limit = {
+					vassal_of = ROOT
+				}
+				NOT = { liberty_desire = 0.5 }
 			}
 		}
 		effect = {
@@ -1973,10 +1975,142 @@ me_RUS_missions_5_3 = {
 			every_known_country = {
 				limit = {
 					vassal_of = ROOT
-					NOT = { tag = ROOT }
 				}
 				add_years_of_income = 2
 				add_yearly_manpower = 2
+			}
+		}
+	}
+}
+
+
+russia_great_northern_war_incident2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = rus_gnw
+		tag = RUS
+	}
+	has_country_flag = yes
+	
+	rus_gnw_navy = {
+		position = 27
+		required_missions = { rus_gnw_1 }
+		trigger = {
+			navy_size = SWE
+			sailors = SWE
+		}
+		effect = {
+			add_country_modifier = {
+				name = rus_baltic_fleet
+				duration = 7300
+			}
+		}
+	}
+}
+
+russia_great_northern_war_incident3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = rus_gnw
+		tag = RUS
+	}
+	has_country_flag = yes
+	
+	rus_gnw_1 = {
+		position = 25
+		required_missions = { }
+		trigger = {
+			OR = {
+				prestige = SWE
+				prestige = DAN
+			}
+		}
+		effect = {
+			add_manpower = 5
+		}
+	}
+	
+	rus_gnw_2 = {
+		required_missions = { rus_gnw_1 }
+		trigger = {
+			30 = {
+				controlled_by = ROOT
+			}
+		}
+		effect = {
+			30 = {
+				cede_province = ROOT
+			}
+		}
+	}
+	
+	rus_gnw_3 = {
+		required_missions = { rus_gnw_2 rus_gnw_navy }
+		trigger = {
+			finland_area = {
+				controlled_by = ROOT
+			}
+			ostrobothnia_area = {
+				controlled_by = ROOT
+			}
+			war_score_against = {
+				target = SWE
+				war_score = 70
+			}
+		}
+		effect = {
+			finland_area = {
+				cede_province = ROOT
+			}
+			ostrobothnia_area = {
+				cede_province = ROOT
+			}
+			white_peace = SWE
+			set_country_flag = great_northern_war
+			add_country_modifier = {
+				name = victors_of_gnw
+				duration = 7300
+			}
+		}
+	}
+}
+
+russia_great_northern_war_incident5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = rus_gnw
+		tag = RUS
+	}
+	has_country_flag = yes
+	
+	rus_gnw_allies = {
+		required_missions = { rus_gnw_1 }
+		position = 27
+		trigger = {
+			all_known_country = {
+				limit = {
+					is_rival = SWE
+					NOT = { is_rival = ROOT }
+				}
+				has_opinion = {
+					who = ROOT
+					value = 125
+				}
+			}
+		}
+		effect = {
+			every_known_country = {
+				limit = {
+					is_rival = SWE
+					NOT = { is_rival = ROOT }
+				}
+				country_event = { id = ME_Russia_Events.8 }
 			}
 		}
 	}
