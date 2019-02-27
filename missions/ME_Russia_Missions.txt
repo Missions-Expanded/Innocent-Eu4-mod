@@ -422,6 +422,52 @@ me_RUS_missions_1_2 = {
 	}	
 }
 
+me_RUS_missions_1_3 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = national_army
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_national_army_1 = {
+		required_missions = { }
+		position = 15
+		trigger = {
+			army_size = 70
+			has_global_modifier_value = {
+				which = land_morale
+				value = 0.2
+			}
+		}
+		effect = {
+			add_army_tradition = 30
+			add_manpower = 4
+		}
+	}
+	
+	russia_national_army_2 = {
+		required_missions = { russia_national_army_1 }
+		trigger = {
+			all_known_country = {
+				NOT = {
+					army_size = ROOT
+				}
+			}		
+		}
+		effect = {
+			add_country_modifier = {
+				name = rus_national_pride
+				duration = 7300
+			}
+			add_prestige = 50
+		}
+	}
+}
+
 me_RUS_missions_2 = {
 	slot = 2
 	generic = no
@@ -899,6 +945,29 @@ me_RUS_missions_2_3 = {
 	}
 }
 
+me_RUS_missions_2_4 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = local_sailors
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_local_sailors_1 = {
+		required_missions = { }
+		position = 15
+		trigger = {
+			navy_size_percentage = 0.9
+		}
+		effect = {
+			add_sailors = 1000
+		}
+	}
+}
+
 me_RUS_missions_3 = {
 	slot = 3
 	generic = no
@@ -1034,6 +1103,54 @@ me_RUS_missions_3_3 = {
 	ai = yes
 	potential = {
 		tag = RUS
+		has_country_modifier = used_local_nobles
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_used_local_nobles_1 = {
+		position = 15
+		required_missions = { }
+		trigger = {
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 65
+			}
+			
+			estate_influence = {
+				estate = estate_nobles
+				influence = 80
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = empowered_nobles_rus
+				duration = -1
+			}
+		}
+	}
+	
+	russia_used_local_nobles_2 = {
+		required_missions = { russia_used_local_nobles_1 }
+		trigger = {
+			has_country_flag = decision_complete_noble_control
+		}
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 100
+			}
+			add_manpower = 10
+		}
+	}
+}
+
+me_RUS_missions_3_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
 		OR = {
 			has_country_modifier = rus_peter_2
 			has_country_modifier = Rus_peter
@@ -1155,6 +1272,114 @@ me_RUS_missions_3_3 = {
 					}
 				}
 				custom_tooltip = modify_westernization3.tooltip
+			}
+		}
+	}
+}
+
+me_RUS_missions_3_4 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = rus_isolation
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_grand_isolation = {
+		position = 18
+		required_missions = { }
+		trigger = {
+			if = {
+				limit = {
+					has_country_modifier = national_army
+				}
+				mission_completed = russia_national_army_1
+			}
+			if = {
+				limit = {
+						has_country_modifier = local_sailors
+				}
+				mission_completed = russia_local_sailors_1
+			}
+			if = {
+				limit = {
+						has_country_modifier = used_local_nobles
+				}
+				mission_completed = russia_used_local_nobles_1
+			}
+			if = {
+				limit = {
+						has_country_modifier = banned_foreign_traders
+				}
+				mission_completed = russia_banned_foreign_traders_1
+			}
+			if = {
+				limit = {
+						has_country_modifier = isolationist_diplomacy
+				}
+				mission_completed = russia_isolationist_diplomacy_1
+			}
+		}
+		effect = {
+			hidden_effect = {
+				remove_country_modifier = rus_isolation
+			}
+			if = {
+				limit = {
+					has_country_modifier = national_army
+					has_country_modifier = local_sailors
+					has_country_modifier = used_local_nobles
+					has_country_modifier = banned_foreign_traders
+					has_country_modifier = isolationist_diplomacy
+				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = grand_isolation3
+						duration = -1
+					}
+				}
+				custom_tooltip = modify_isolation1.tooltip
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						has_country_modifier = national_army
+						has_country_modifier = local_sailors
+						has_country_modifier = used_local_nobles
+						has_country_modifier = banned_foreign_traders
+						has_country_modifier = isolationist_diplomacy
+						amount = 4
+					}
+				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = grand_isolation2
+						duration = -1
+					}
+				}
+				custom_tooltip = modify_isolation2.tooltip
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						has_country_modifier = foreign_auxilaries3
+						has_country_modifier = exotic_ships3
+						has_country_modifier = brought_western_administrators3
+						has_country_modifier = free_trade3
+						has_country_modifier = western_diplomacy3
+						amount = 3
+					}
+				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = grand_isolation1
+						duration = -1
+					}
+				}
+				custom_tooltip = modify_isolation3.tooltip
 			}
 		}
 	}
@@ -1409,63 +1634,28 @@ me_RUS_missions_4_2 = {
 	}
 }
 
-me_RUS_missions_4_3 = {
+me_RUS_missions_4_4 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		tag = RUS
-		has_country_modifier = free_trade
+		has_country_modifier = banned_foreign_traders
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
-	russia_root_out_free_trade = {
+	russia_banned_foreign_traders_1 = {
 		position = 15
 		required_missions = { }
 		trigger = {
-			advisor = trader
-			33 = {
-				has_most_province_trade_power = ROOT
-			}
+			mercantilism = 30
 		}
 		effect = {
-			hidden_effect = {
-				remove_country_modifier = free_trade
-				add_country_modifier = {
-					name = free_trade2
-					duration = -1
-				}
+			add_country_modifier = {
+				name = rus_our_trade
+				duration = 7300
 			}
-			custom_tooltip = modify_free_trade1.tooltip
-		}
-	}
-	
-	russia_root_out_free_trade2 = {
-		required_missions = { russia_root_out_free_trade }
-		provinces_to_highlight = {
-			province_id = 33
-			NOT = { is_capital_of = ROOT }
-		}
-		trigger = {
-			capital = 33
-			33 = {
-				has_most_province_trade_power = ROOT
-			}
-			custom_trigger_tooltip = {
-				tooltip = completed_gnw.tooltip
-				has_country_flag = great_northern_war
-			}
-		}
-		effect = {
-			hidden_effect = {
-				remove_country_modifier = free_trade2
-				add_country_modifier = {
-					name = free_trade3
-					duration = -1
-				}
-			}
-			custom_tooltip = modify_free_trade2.tooltip
 		}
 	}
 }
@@ -1755,6 +1945,42 @@ me_RUS_missions_5_2 = {
 				}
 			}
 			custom_tooltip = modify_west_dip2.tooltip
+		}
+	}
+}
+
+me_RUS_missions_5_3 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = RUS
+		has_country_modifier = isolationist_diplomacy
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	russia_isolationist_diplomacy_1 = {
+		position = 15
+		required_missions = { }
+		trigger = {
+			num_of_vassals = 3
+			any_known_country = {
+				limit = {
+					vassal_of = ROOT
+				}
+				NOT = { liberty_desire = 0.5 }
+			}
+		}
+		effect = {
+			every_known_country = {
+				limit = {
+					vassal_of = ROOT
+					tag = ROOT
+				}
+				add_years_of_income = 2
+				add_yearly_manpower = 2
+			}
 		}
 	}
 }
