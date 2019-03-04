@@ -359,32 +359,178 @@ country_event = {
 	
 	is_triggered_only = yes
 	
+	immediate = {
+		hidden_effect = {
+			# Calculate province manpower
+			set_variable = { which = this_local_manpower_var value = 0 }
+			set_variable = { which = this_global_manpower_var value = 0 }
+			every_owned_province = {
+				export_to_variable = {
+					which = this_local_manpower_modifier_var
+					value = modifier:local_manpower_modifier
+				}
+				export_to_variable = {
+					which = this_global_manpower_modifier_var
+					value = modifier:global_manpower_modifier
+					who = ROOT
+				}
+				change_variable = { which = this_local_manpower_modifier_var which = this_global_manpower_modifier_var }
+				export_to_variable = {
+					which = this_local_manpower_var
+					value = trigger_value:base_manpower
+				}
+				multiply_variable = { which = this_local_manpower_var value = 250 }
+				multiply_variable = { which = this_local_manpower_var which = this_local_manpower_modifier_var }
+				if = {
+					limit = {
+						NOT = { has_estate = estate_cossacks }
+						NOT = { has_estate = estate_nobles }
+						NOT = { has_estate = estate_nomadic_tribes }
+						NOT = { has_estate = estate_maratha }
+						NOT = { has_estate = estate_rajput }
+					}
+					export_to_variable = {
+						which = this_local_autonomy_var
+						value = trigger_value:local_autonomy
+					}
+					divide_variable = { which = this_local_autonomy_var value = -100 }
+					change_variable = { which = this_local_autonomy_var value = 1 }
+					multiply_variable = { which = this_local_manpower_var which = this_local_autonomy_var }
+				}
+				divide_variable = { which = this_local_manpower_var value = 1000 }
+				multiply_variable = { which = this_local_manpower_var value = 1000 }
+				ROOT = {
+					change_variable = { which = this_local_manpower_var which = PREV }
+				}
+			}
+			change_variable = { which = this_global_manpower_var which = this_local_manpower_var }
+			divide_variable = { which = this_global_manpower_var value = 1000 }
+			multiply_variable = { which = this_global_manpower_var value = 1000 }
+			# Calculate yearly manpower
+			export_to_variable = {
+				which = this_manpower_recovery_speed_var
+				value = modifier:manpower_recovery_speed
+			}
+			change_variable = { which = this_manpower_recovery_speed_var value = 1 }
+			multiply_variable = { which = this_global_manpower_var which = this_manpower_recovery_speed_var }
+			export_to_variable = {
+				which = this_max_manpower_var
+				value = modifier:global_manpower
+			}
+			multiply_variable = { which = this_max_manpower_var value = 1000 }
+			change_variable = { which = this_global_manpower_var which = this_max_manpower_var }
+			divide_variable = { which = this_global_manpower_var value = 10 }
+			divide_variable = { which = this_global_manpower_var value = 1000 }
+			multiply_variable = { which = this_global_manpower_var value = 1000 }
+			# Export current amount of manpower:
+			export_to_variable = {
+				which = this_current_manpower
+				value = trigger_value:manpower
+			}
+			multiply_variable = { this_current_manpower = 1000 }
+		}
+	}
+	
 	option = {
 		name = ME_Russia_Events.8.a
 		
-		ai_chance = { factor = 0.75 }
+		trigger = {
+			treasury = 300
+		}
 		
-		RUS = {
+		ai_chance = { factor = 0.45 }
+		
+		add_treasury = -300
+		FROM = {
 			add_treasury = 300
 		}
-		add_treasury = -300
 	}
 	
 	option = {
 		name = ME_Russia_Events.8.b
 		
-		ai_chance = { factor = 0.75 }
-		
-		RUS = {
-			add_manpower = 10
+		trigger = {
+			check_variable = { which = this_current_manpower which = this_global_manpower_var }
 		}
-		add_manpower = -10
+		
+		ai_chance = { factor = 0.45 }
+		
+		add_yearly_manpower = -1
+		FROM = {
+			custom_tooltip = RUS_THIS_GAINS_ONE_YEAR_OF_OUR_MANPOWER
+		}
+		hidden_effect = {
+			divide_variable = { this_global_manpower_var = 1000 }
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 100000 }
+				}
+				FROM = { add_manpower = 100000 }
+				change_variable = { this_global_manpower_var = -100000 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 10000 }
+				}
+				FROM = { add_manpower = 10000 }
+				change_variable = { this_global_manpower_var = -10000 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 1000 }
+				}
+				FROM = { add_manpower = 1000 }
+				change_variable = { this_global_manpower_var = -1000 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 100 }
+				}
+				FROM = { add_manpower = 100 }
+				change_variable = { this_global_manpower_var = -100 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 10 }
+				}
+				FROM = { add_manpower = 10 }
+				change_variable = { this_global_manpower_var = -10 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 1 }
+				}
+				FROM = { add_manpower = 1 }
+				change_variable = { this_global_manpower_var = -1 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 0.1 }
+				}
+				FROM = { add_manpower = 0.1 }
+				change_variable = { this_global_manpower_var = -0.1 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 0.01 }
+				}
+				FROM = { add_manpower = 0.01 }
+				change_variable = { this_global_manpower_var = -0.01 }
+			}
+			while = {
+				limit = {
+					check_variable = { this_global_manpower_var = 0.001 }
+				}
+				FROM = { add_manpower = 0.001 }
+				change_variable = { this_global_manpower_var = -0.001 }
+			}
+		}
 	}
 	
 	option = {
 		name = ME_Russia_Events.8.c
 		
-		ai_chance = { factor = 0.25 }
+		ai_chance = { factor = 0.10 }
 	}
 }
 
@@ -398,32 +544,29 @@ country_event = {
 	option = {
 		name = ME_Russia_Events.9.a
 		
-		ai_chance = { factor = 1 }
+		ai_chance = { factor = 100 }
 		
 		finland_area = {
 			limit = {
 				owned_by = ROOT
 			}
-			cede_province = RUS
+			cede_province = FROM
 		}
-		
 		bothnia_area = {
 			limit = {
 				owned_by = ROOT
 			}
-			cede_province = RUS
+			cede_province = FROM
 		}
 		30 = {
 			if = {
 				limit = {
 					owned_by = ROOT
 				}
-				cede_province = RUS
+				cede_province = FROM
 			}
 		}
-		SWE = {
-			remove_country_modifier = ME_gnw_swe
-		}
+		remove_country_modifier = ME_gnw_swe
 	}
 	
 	option = {
@@ -447,6 +590,13 @@ country_event = {
 		
 		ai_chance = { factor = 0 }
 		
+		hidden_effect = {
+			add_casus_belli = {
+				target = SWE
+				type = cb_annex
+				months = 1
+			}
+		}
 		declare_war_with_cb = {
 			who = SWE
 			casus_belli = cb_annex
@@ -466,6 +616,7 @@ country_event = {
 		name = ME_Russia_Events.10.b
 
 		ai_chance = { factor = 1 }
+		
 		set_country_flag = great_northern_war
 	}
 }
