@@ -4,8 +4,6 @@
 	ai = yes
 	potential = {
 		tag = RUS
-		NOT = { has_country_modifier = rus_isolation }
-		has_country_modifier = Rus_peter
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -14,22 +12,12 @@
 		required_missions = { russia_reform_realm }
 		position = 6
 		trigger = {
-			any_known_country = {
-				technology_group = western
-				has_opinion = {
-					who = ROOT
-					value = 150
-				}
-			}
+			army_size_percentage = 0.9
 		}
 		effect = {
-			custom_tooltip = modify_rus_peter.tooltip
-			hidden_effect = {
-				remove_country_modifier = Rus_peter
-				add_country_modifier = {
-					name = rus_peter_2
-					duration = -1
-				}
+			add_country_modifier = {
+				name = rus_prepare_expansion
+				duration = 7300
 			}
 		}
 	}
@@ -46,16 +34,9 @@
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			finland_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			bothnia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4151 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			reverse_has_opinion = {
+				who = SWE
+				value = -100
 			}
 		}
 		effect = {
@@ -80,10 +61,7 @@
 				}
 				add_permanent_claim = ROOT
 			}
-			add_country_modifier = {
-				name = russia_great_northern_war
-				duration = 7300
-			}
+			country_event = { id = ME_Russia_Events.10 }
 		}
 	}
 	
@@ -472,10 +450,6 @@ me_RUS_missions_2 = {
 	ai = yes
 	potential = {
 		tag = RUS
-		OR = {
-			has_country_modifier = Rus_peter
-			has_country_modifier = rus_isolation
-		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -822,8 +796,6 @@ me_RUS_missions_2_2 = {
 	ai = yes
 	potential = {
 		tag = RUS
-		NOT = { has_country_modifier = rus_isolation }
-		has_country_modifier = Rus_peter
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -1041,7 +1013,27 @@ me_RUS_missions_3 = {
 			}
 			custom_tooltip = MEexplaining.tooltip
 		}
-	}	
+	}
+
+	russia_uber_alles = {
+		required_missions = { russia_warsaw russia_orthodox russia_first }
+		position = 16
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MEisolationvswesternization.tooltip
+				OR = {
+					mission_completed = russia_grand_isolation
+					mission_completed = russia_westernize
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_mother_russia
+				duration = 18250
+			}
+		}
+	}
 }
 
 me_RUS_missions_3_2 = {
@@ -1388,17 +1380,13 @@ me_RUS_missions_4 = {
 	ai = yes
 	potential = {
 		tag = RUS
-		OR = {
-			has_country_modifier = Rus_peter
-			has_country_modifier = rus_isolation
-		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
 	russia_start_development = {
 		icon = mission_state_manufactories
-		required_missions = { russia_centralize }
+		required_missions = { russia_reform_realm }
 		position = 6
 		trigger = {
 			NOT = {
@@ -1551,8 +1539,6 @@ me_RUS_missions_4_2 = {
 	ai = yes
 	potential = {
 		tag = RUS
-		NOT = { has_country_modifier = Rus_peter }
-		has_country_modifier = rus_isolation
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -1663,15 +1649,13 @@ me_RUS_missions_5 = {
 	ai = yes
 	potential = {
 		tag = RUS
-		NOT = { has_country_modifier = Rus_peter }
-		has_country_modifier = rus_isolation
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
 	russia_workshops = {
 		icon = mission_state_manufactories
-		required_missions = { russia_centralize }
+		required_missions = { russia_reform_realm }
 		position = 6
 		trigger = {
 			OR = {
@@ -1859,21 +1843,6 @@ me_RUS_missions_5 = {
 			}
 		}
 	}
-	
-	russia_best = {
-		required_missions = { russia_first russia_orthodox }
-		icon = mission_the_third_rome
-		trigger = {
-			ADM = 5
-			NOT = { average_autonomy_above_min = 5 }
-		}
-		effect = {
-			add_country_modifier = {
-				name = russia_first 
-				duration = -1
-			}
-		}
-	}
 }
 
 me_RUS_missions_5_2 = {
@@ -1993,7 +1962,7 @@ russia_great_northern_war_incident2 = {
 	has_country_shield = yes
 	
 	rus_gnw_navy = {
-		position = 27
+		position = 26
 		required_missions = { rus_gnw_1 }
 		trigger = {
 			if = {
@@ -2176,7 +2145,7 @@ russia_great_northern_war_incident3 = {
 				}
 			}
 			country_event = { id = ME_Russia_Events.9 }
-			set_country_flag = great_northern_war
+			set_country_flag = victors_of_gnw_flag
 			clr_country_flag = rus_gnw
 			swap_non_generic_missions = yes
 			add_country_modifier = {
@@ -2199,7 +2168,7 @@ russia_great_northern_war_incident5 = {
 	
 	rus_gnw_allies = {
 		required_missions = { rus_gnw_1 }
-		position = 27
+		position = 26
 		trigger = {
 			all_known_country = {
 				is_rival = SWE
