@@ -1,0 +1,1508 @@
+######
+#Created by claivin for Missions Expanded
+######
+
+namespace = ME_TUR_Events
+
+country_event = { #Return of the Sultan
+	id = ME_TUR_Events.1
+	title = ME_TUR_Events.1.t
+	desc = ME_TUR_Events.1.d
+	#include picture of Murad
+	picture = SHIP_SAILING_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	option = { #lead
+		name = ME_TUR_Events.1.a
+		ai_chance  = { factor = 85 }
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 10
+		}
+		define_general = {
+			name = "Murad II"
+			fire = 4
+			shock = 5
+			manuever = 5
+			siege = 2
+			age = 39
+		}
+	}
+	
+	option = { #rule
+		name = ME_TUR_Events.1.b
+		ai_chance  = { factor = 10 }
+		define_ruler = {
+			name = "Murad II"
+			dynasty = ROOT
+			adm = 2
+			dip = 6
+			mil = 6
+			male = yes
+			age = 39
+			claim = 100
+			fixed = yes
+		}
+		add_ruler_personality = inspiring_leader_personality
+		define_ruler_to_general = {
+			fire = 4
+			shock = 5
+			manuever = 5
+			siege = 2
+		}
+		# add_country_modifier = {
+			# name = tur_murad
+			# duration = 9125
+		# }
+		define_heir = {
+			name = "Mehmed II Fatih"
+			dynasty = ROOT
+			adm = 6
+			dip = 4
+			mil = 6
+			male = yes
+			age = 13
+			claim = 100
+		}
+	}
+	
+	option = { #rest
+		name = ME_TUR_Events.1.c
+		ai_chance  = { factor = 5 }
+		define_advisor = {
+			name = "Mehmed II"
+			type = artist
+			culture = ROOT
+			religion = ROOT
+			skill = 1
+			cost_multiplier = 0.1
+		}
+	}
+}
+
+country_event = { #Fall of Constantinople
+	id = ME_TUR_Events.2
+	title = ME_TUR_Events.2.t
+	desc = ME_TUR_Events.2.d
+	#include picture of 
+	picture = SHIP_SAILING_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	major = yes
+	
+	option = { #No quarter
+		name = ME_TUR_Events.2.a
+		ai_chance  = { factor = 90 }
+		BYZ = {
+			every_subject_country = {
+				country_event = { #annexation of Athens
+					id = ME_TUR_Events.3
+				}
+			}
+			every_owned_province = {
+				cede_province = ROOT
+			}
+		}
+	}
+	
+	option = { #show the pretenders mercy
+		name = ME_TUR_Events.2.b
+		ai_chance  = { factor = 10 }
+		BYZ = {
+			every_subject_country = {
+				country_event = { #annexation of Athens
+					id = ME_TUR_Events.3
+				}
+			}
+			every_owned_province = {
+				limit = {
+					NOT = { province_id = 145 } #morea
+				}
+				cede_province = ROOT
+			}
+		}
+		145 = {
+			add_core = MOE
+			cede_province = MOE
+		}
+		create_subject = {
+			subject_type = vassal
+			subject = MOE
+		}
+	}
+	
+	option = { #make our own
+		name = ME_TUR_Events.2.c
+		ai_chance  = { factor = 0 }
+		create_subject = {
+			subject_type = vassal
+			subject = BYZ
+		}
+		BYZ = {
+			every_subject_country = {
+				country_event = { #annexation of Athens by Byzantium
+					id = ME_TUR_Events.4
+				}
+			}
+			every_core_province = {
+				limit = {
+					NOT = { owned_by = BYZ }
+				}
+				remove_core = BYZ
+			}
+			add_country_modifier = {
+				name = tur_subject_of_sultan
+				duration = -1
+			}
+		}
+		capital_scope = {
+			add_base_tax = 4
+			add_base_production = 4
+			add_base_manpower = 4
+			change_religion = ROOT
+			change_culture = ROOT
+			center_of_trade = 1
+		}
+		add_stability = 1
+		set_government_rank = 3
+		custom_tooltip = tur_disables_move_capital_to_constantinople
+	}
+}
+
+country_event = { #Annexation of Athens
+	id = ME_TUR_Events.3
+	title = ME_TUR_Events.3.t
+	desc = ME_TUR_Events.3.d
+	picture = SHIP_SAILING_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	option = { #annexed by ottos
+		name = ME_TUR_Events.2.a
+		ai_chance  = { factor = 100 }
+		every_owned_province = {
+			cede_province = TUR
+		}
+	}
+	
+	option = { #refuse annexation
+		name = ME_TUR_Events.2.b
+		ai_chance  = { factor = 0 }
+		add_prestige = 10
+	}
+}
+
+country_event = { #Annexation of Athens (byz)
+	id = ME_TUR_Events.4
+	title = ME_TUR_Events.4.t
+	desc = ME_TUR_Events.4.d
+	picture = SHIP_SAILING_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	option = { #annexed by byz
+		name = ME_TUR_Events.4.a
+		ai_chance  = { factor = 100 }
+		every_owned_province = {
+			cede_province = BYZ
+		}
+	}
+	
+	option = { #refuse annexation
+		name = ME_TUR_Events.4.b
+		ai_chance  = { factor = 0 }
+		add_prestige = 10
+	}
+}
+
+country_event = { #Legacy of Skanderbeg
+	id = ME_TUR_Events.5
+	title = ME_TUR_Events.5.t
+	desc = ME_TUR_Events.5.d
+	picture = SHIP_SAILING_eventPicture
+	#skanderbeg
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	option = { #honor him
+		name = ME_TUR_Events.5.a
+		ai_chance  = { factor = 50 }
+		every_owned_province = {
+			limit = {
+				culture = albanian
+			}
+			add_province_modifier = {
+				name = tur_honored_skanderbeg
+				duration = -1
+			}
+		}
+		add_prestige = 10
+	}
+	
+	option = { #condemn him
+		name = ME_TUR_Events.5.b
+		ai_chance  = { factor = 50 }
+		add_country_modifier = {
+			name = tur_condemened_skanderbeg
+			duration = 9125
+		}
+	}
+}
+
+country_event = { #displacement of Karaman
+	id = ME_TUR_Events.6
+	title = ME_TUR_Events.6.t
+	desc = ME_TUR_Events.6.d
+	picture = SHIP_SAILING_eventPicture
+	#karaman
+
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	option = { #resettlement
+		name = ME_TUR_Events.6.a
+		ai_chance  = { factor = 50 }
+		karaman_area = {
+			add_nationalism = -10
+			add_base_tax = -1
+			add_base_production = -1
+			add_base_manpower = -1
+		}
+		bulgaria_area = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+	}
+	
+	option = { #do not resettle
+		name = ME_TUR_Events.6.b
+		ai_chance  = { factor = 50 }
+		add_country_modifier = {
+			name = tur_karaman_horses
+			duration = 10950
+		}
+	}
+}
+
+# country_event = { #annexation of the mamluks
+	# id = ME_TUR_Events.7
+	# title = ME_TUR_Events.7.t
+	# desc = ME_TUR_Events.7.d
+	# picture = #karaman
+
+	# fire_only_once = yes
+	# is_triggered_only = yes
+	
+	# option = { #annex them
+		# name = ME_TUR_Events.7.a
+		# ai_chance  = { factor = 100 }
+		# trigger = {
+			# MAM = {
+				# ai = yes
+			# }
+		# }
+		# every_neighbor_country = {
+			# reverse_add_opinion = {
+				# who = ROOT
+				# modifier = aggressive_expansion
+			# }
+		# }
+		# hidden_effect = {
+			# #flag enables mamluk estate and switches out conquest of egypt missions for reining in mamluk estate
+			# set_country_flag = TUR_mamluks_annexed
+			# MAM = {
+				# every_owned_province = {
+					# add_territorial_core = ROOT
+					# cede_province = ROOT
+					# add_permanent_province_modifier = {
+						# name = mamluk_rule_95
+						# duration = -1
+					# }
+				# }
+			# }
+		# }
+		# tooltip = {
+			# egypt_region = {
+				# add_territorial_core = ROOT
+				# cede_province = ROOT
+				# add_permanent_province_modifier = {
+					# name = mamluk_rule_95
+					# duration = -1
+					# desc = mamluk_rule_duration_tooltip
+				# }
+			# }
+		# }
+		# custom_tooltip = tur_annex_mamluks
+		# custom_tooltip = enables_mamluk_estate
+		# swap_non_generic_missions = yes
+	# }
+	
+	# option = { #vassalize
+		# name = ME_TUR_Events.7.b
+		# ai_chance  = { factor = 0 }
+		# vassalize = MAM
+		# MAM = {
+			# add_liberty_desire = -10
+		# }
+	# }
+	
+	# option = { #CLAIMS
+		# name = ME_TUR_Events.7.c
+		# ai_chance  = { factor = 0 }
+		# MAM = {
+			# every_owned_province = {
+				# limit = {
+					# NOT = { is_core = ROOT }
+					# NOT = { is_permanent_claim = ROOT }
+				# }
+				# add_permanent_claim = ROOT
+			# }
+		# }
+	# }
+# }
+
+country_event = { #powerful mamluk estates
+	id = ME_TUR_Events.8
+	title = ME_TUR_Events.8.t
+	desc = ME_TUR_Events.8.d
+	picture = SHIP_SAILING_eventPicture
+	
+	trigger = {
+		tag = TUR
+		any_owned_province = {
+			is_core = MAM
+			NOT = { has_mamluk_autonomy_modifier = yes }
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1 
+	}
+	
+	#autonomy corresponds to 100-MEP*x
+	#whenever var is changed, also update provinces with scripted effect
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = powerful_mamluk_estates_event_proc }
+				}
+				set_variable = {
+					which = mamlukEstateProgress
+					value = 1
+				}
+				set_variable = {
+					which = mamlukBribeCount
+					value = 0
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.8.a
+		if = {
+			limit = {
+				NOT = { has_country_flag = powerful_mamluk_estates_event_proc }
+			}
+			set_country_flag = powerful_mamluk_estates_event_proc
+			custom_tooltip = enables_mamluk_estate
+		}
+		set_current_mamluk_autonomy = yes
+	}
+}
+
+#event procs to remove autonomy modifiers for non-turks
+country_event = { #dissolution of mamluk estates
+	id = ME_TUR_Events.9
+	title = ME_TUR_Events.9.t
+	desc = ME_TUR_Events.9.d
+	picture = SHIP_SAILING_eventPicture
+	
+	trigger = {
+		NOT = { tag = TUR }
+		any_owned_province = {
+			has_mamluk_autonomy_modifier = yes
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1 
+	}
+	
+	option = {
+		name = ME_TUR_Events.9.a
+		remove_mamluk_autonomy = yes
+	}
+}
+
+country_event = { #liberation of syria
+	id = ME_TUR_Events.10
+	title = ME_TUR_Events.10.t
+	desc = ME_TUR_Events.10.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		hidden_effect = {
+			change_variable = {
+				which = mamlukEstateProgress
+				value = 1 #subtracts 5 autonomy floor
+			}
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.10.a
+		hidden_effect = {
+			set_current_mamluk_autonomy = yes
+		}
+		custom_tooltip = mamluk_autonomy_downgraded_by_5
+		every_owned_province = {
+			limit = {
+				culture = al_suryah_arabic
+			}
+			remove_core = MAM
+		}
+	}
+}
+
+country_event = { #capitulation of mamluks
+	id = ME_TUR_Events.11
+	title = ME_TUR_Events.11.t
+	desc = ME_TUR_Events.11.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		hidden_effect = {
+			change_variable = {
+				which = mamlukEstateProgress
+				value = 2 #subtracts 10 autonomy floor
+			}
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.11.a
+		hidden_effect = {
+			set_current_mamluk_autonomy = yes
+		}
+		custom_tooltip = mamluk_autonomy_downgraded_by_10
+	}
+}
+
+country_event = { #conquest of Jerusalem
+	id = ME_TUR_Events.12
+	title = ME_TUR_Events.12.t
+	desc = ME_TUR_Events.12.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #tolerate all religions
+		name = ME_TUR_Events.12.a
+		ai_chance  = { factor = 100 }
+		379 = {
+			change_trade_goods = cloth
+			add_province_modifier = {
+				name = tur_jerusalem_textiles
+				duration = -1
+			}
+			add_base_tax = 1
+			add_base_production = 4
+			add_base_manpower = 1
+		}
+	}
+	
+	option = { #expel the dhimmi
+		name = ME_TUR_Events.12.b
+		ai_chance  = { factor = 0 }
+		add_estate_loyalty = {
+			estate = estate_dhimmi
+			loyalty = -15
+		}
+		379 = {
+			add_base_tax = -1
+			add_base_production = -1
+			add_base_manpower = -1
+			add_province_modifier = {
+				name = tur_expelled_jerusalem
+				duration = -1
+			}
+		}
+		add_country_modifier = {
+			name = tur_expelled_jerusalem_national
+			duration = -1
+		}
+	}
+}
+
+country_event = { #capture of Rhodes
+	id = ME_TUR_Events.13
+	title = ME_TUR_Events.13.t
+	desc = ME_TUR_Events.13.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #they fought valiantly
+		name = ME_TUR_Events.13.a
+		ai_chance  = { factor = 50 }
+		every_neighbor_country = {
+			limit = {
+				religion_group = christian
+			}
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = tur_spared_knights
+			}
+		}
+		PAP = {
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = tur_spared_knights
+			}
+		}
+		add_country_modifier = {
+			name = TUR_spared_knights_modifier
+			duration  = 3650
+		}
+		add_prestige = 10
+	}
+	
+	option = { #no quarter
+		name = ME_TUR_Events.13.b
+		ai_chance  = { factor = 50 }
+		every_neighbor_country = {
+			limit = {
+				religion_group = christian
+			}
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = tur_killed_knights
+			}
+		}
+		PAP = {
+			reverse_add_opinion = {
+				who = ROOT
+				modifier = tur_killed_knights
+			}
+		}
+		320 = {
+			remove_core = KNI
+			remove_building = fort_15th
+			remove_building = fort_16th
+			remove_building = fort_17th
+			remove_building = fort_18th
+			add_base_manpower = -1
+		}
+		add_mil_power = 100
+	}
+}
+
+country_event = { #capture of Cyprus
+	id = ME_TUR_Events.14
+	title = ME_TUR_Events.14.t
+	desc = ME_TUR_Events.14.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #allow the Church to administrate
+		name = ME_TUR_Events.14.a
+		ai_chance  = { factor = 100 }
+		trigger = {
+			321 = {
+				religion = orthodox
+			}
+		}
+		321 = {
+			add_province_modifier = {
+				name = TUR_orthodox_cyrpus
+				duration = -1
+			}
+			add_nationalism = -5
+			add_territorial_core = ROOT
+		}
+	}
+	
+	option = { #we shall appoint our own adminstrators
+		name = ME_TUR_Events.14.b
+		ai_chance  = { factor = 0 }
+		321 = {
+			add_base_manpower = 2
+		}
+		add_country_modifier = {
+			name = TUR_banished_tribes
+			duration = 7300
+		}
+	}
+}
+
+country_event = { #bribery of the Mamluks
+	id = ME_TUR_Events.15
+	title = ME_TUR_Events.15.t
+	desc = ME_TUR_Events.15.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		hidden_effect = {
+			change_variable = {
+				which = mamlukEstateProgress
+				value = 1 #subtracts 5 autonomy floor
+			}
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.15.a
+		hidden_effect = {
+			set_current_mamluk_autonomy = yes
+		}
+		custom_tooltip = mamluk_autonomy_downgraded_by_5
+	}
+}
+
+country_event = { #capture of tunis
+	id = ME_TUR_Events.16
+	title = ME_TUR_Events.16.t
+	desc = ME_TUR_Events.16.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = ME_TUR_Events.16.a
+		emperor = {
+			every_ally = {
+				form_coalition_against = ROOT
+			}
+			form_coalition_against = ROOT
+		}
+		1297 = { #geona trade hegemon
+			strongest_trade_power = {
+				limit = {
+					is_subject = no
+				}
+				form_coalition_against = ROOT
+				hidden_effect = {
+					save_global_event_target_as = genoa_trade_leader_coalition
+				}
+			}
+		}
+		1293 = { #sevilla trade hegemon
+			strongest_trade_power = {
+				limit = {
+					is_subject = no
+				}
+				form_coalition_against = ROOT
+				hidden_effect = {
+					save_global_event_target_as = sevilla_trade_leader_coalition
+				}
+			}
+		}
+		emperor = {
+			declare_war_with_cb = {
+				who = ROOT
+				casus_belli = cb_super_badboy
+			}
+		}
+		set_country_flag = opt_in_tunis
+		custom_tooltip = opt_in_quest_capture_of_tunis
+		custom_tooltip = opt_in_quest_explanation
+		swap_non_generic_missions = yes
+	}
+	
+	option = {
+		name = ME_TUR_Events.16.b
+		add_truce_with = emperor
+		add_country_modifier = {
+			name = TUR_tunis_diplo
+			duration = 3650
+		}
+		add_prestige = -25
+	}
+}
+
+country_event = { #defeat of the expedition
+	id = ME_TUR_Events.17
+	title = ME_TUR_Events.17.t
+	desc = ME_TUR_Events.17.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		clear_global_event_target = genoa_trade_leader_coalition
+		clear_global_event_target = sevilla_trade_leader_coalition
+		clr_country_flag = opt_in_tunis
+	}
+	
+	option = {
+		name = ME_TUR_Events.17.a
+		tunisia_area = {
+			add_core = ROOT
+		}
+		341 = {
+			add_center_of_trade_level = 1
+		}
+		swap_non_generic_missions = yes
+	}
+}
+
+country_event = { #failure to complete tunis coalition
+	id = ME_TUR_Events.18
+	title = ME_TUR_Events.18.t
+	desc = ME_TUR_Events.18.d
+	picture = SHIP_SAILING_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		OR = {
+			had_country_flag = {
+				flag = opt_in_tunis
+				days = 3650
+			}
+			AND = {
+				NOT = {
+					is_in_war = {
+						defender_leader = ROOT
+						casus_belli = cb_super_badboy
+					}
+				}
+				has_country_flag = opt_in_tunis
+			}
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		clear_global_event_target = genoa_trade_leader_coalition
+		clear_global_event_target = sevilla_trade_leader_coalition
+		clr_country_flag = opt_in_tunis
+	}
+	
+	option = {
+		name = ME_TUR_Events.18.a
+		add_stability = -2
+		add_country_modifier = {
+			name = TUR_failed_tunis_expedition
+			duration = 3650
+		}
+		341 = {
+			cede_province = emperor
+			add_territorial_core = emperor
+		}
+		swap_non_generic_missions = yes
+	}
+}
+
+country_event = { #Alliance with Morrocco
+	id = ME_TUR_Events.19
+	title = ME_TUR_Events.19.t
+	desc = ME_TUR_Events.19.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		set_country_flag = TUR_allied_MOR
+	}
+	
+	option = {
+		name = ME_TUR_Events.19.a
+		swap_non_generic_missions = yes
+		add_historical_friend = MOR
+		MOR = {
+			every_owned_province = {
+				remove_claim = ROOT
+			}
+		}
+	}
+}
+
+country_event = { #Invasion of Morrocco (Same as second option of alliance with moroccco)
+	id = ME_TUR_Events.20
+	title = ME_TUR_Events.20.t
+	desc = ME_TUR_Events.20.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		set_country_flag = TUR_invaded_MOR
+	}
+	
+	option = {
+		name = ME_TUR_Events.20.a
+		swap_non_generic_missions = yes
+		IF = {
+			limit = {
+				SPA = {
+					ai = yes
+					exists = yes
+				}
+				CAS = {
+					exists = no
+				}
+				MOR = {
+					exists = yes
+				}
+			}
+			SPA = {
+				add_historical_rival = TUR
+				create_guarantee = MOR
+			}
+		}
+		IF = {
+			limit = {
+				CAS = {
+					ai = yes
+					exists = yes
+					is_subject = no
+				}
+				SPA = {
+					exists = no
+				}
+				MOR = {
+					exists = yes
+				}
+			}
+			CAS = {
+				add_historical_rival = TUR
+				create_guarantee = MOR
+			}
+		}
+		IF = {
+			limit = {
+				ARA = {
+					ai = yes
+					exists = yes
+					is_subject = no
+				}
+				CAS = {
+					exists = no
+				}
+				MOR = {
+					exists = yes
+				}
+			}
+			ARA = {
+				add_historical_rival = TUR
+				create_guarantee = MOR
+			}
+		}
+		tafilalt_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		northern_morocco_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		marrekesh_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		western_morocco_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		southern_morocco_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		sus_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+
+country_event = { #Occupation of Tlemcen
+	id = ME_TUR_Events.21
+	title = ME_TUR_Events.21.t
+	desc = ME_TUR_Events.21.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = ME_TUR_Events.21.a
+		338 = { #mitdja
+			add_center_of_trade_level = 1
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.21.b
+		341 = { #tunis
+			add_center_of_trade_level = 1
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.21.c
+		336 = {
+			add_province_modifier = {
+				name = TUR_rebuilding_tlemcen
+				duration = 9125
+			}
+			add_base_production = 1
+		}
+	}
+}
+
+country_event = { #Morocco, an Ottoman state?
+	id = ME_TUR_Events.22
+	title = ME_TUR_Events.22.t
+	desc = ME_TUR_Events.22.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = ME_TUR_Events.22.a
+		MOR = {
+			country_event = {
+				id = ME_TUR_Events.23
+				days = 10
+			}
+		}
+		IF = { 
+			limit = {
+				MOR = {
+					ai = yes
+				}
+			}
+			tooltip = {
+				random_list = {
+					30 = {
+						create_subject = {
+							subject_type = vassal
+							subject = MOR
+						}
+					}
+					10 = {
+						TUR = {
+							create_union = MOR
+						}
+					}
+					60 = {
+						add_prestige = -5
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Morocco, an Ottoman state? moroccan end
+	id = ME_TUR_Events.23
+	title = ME_TUR_Events.23.t
+	desc = ME_TUR_Events.23.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = ME_TUR_Events.23.a
+		ai_chance = { factor = 30 }
+		TUR = {
+			create_subject = {
+				subject_type = vassal
+				subject = MOR
+			}
+		}
+	}	
+	
+	option = {
+		name = ME_TUR_Events.23.b
+		ai_chance = { factor = 10 }
+		TUR = {
+			create_union = MOR
+		}
+	}
+	
+	option = {
+		name = ME_TUR_Events.23.c
+		ai_chance = { factor = 60 }
+		TUR = {
+			add_prestige = -5
+		}
+	}
+}
+
+country_event = { #the persian threat
+	id = ME_TUR_Events.24
+	title = ME_TUR_Events.24.t
+	desc = ME_TUR_Events.24.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_country = {
+				limit = {
+					capital_scope = {
+						OR = {
+							region = persia_region
+							region = khorasan_region
+						}
+					}
+					NOT = {
+						any_country = {
+							capital_scope = {
+								OR = {
+									region = persia_region
+									region = khorasan_region
+								}
+							}
+							total_development = PREV
+						}
+					}
+				}
+				save_global_event_target_as = TUR_persian_power
+			}
+		}
+	}
+	
+	option = { #to war!
+		name = ME_TUR_Events.24.a
+		ai_chance = { factor = 0 }
+		TUR = {
+			declare_war_with_cb = {
+				who = event_target:TUR_persian_power
+				casus_belli = cb_humiliate
+			}
+		}
+		event_target:TUR_persian_power = {
+			add_country_modifier = {
+				name = TUR_persian_defense
+				duration = 2555
+			}
+		}
+		set_country_flag = TUR_opt_in_persia
+		custom_tooltip = opt_in_quest_persia
+		custom_tooltip = opt_in_quest_explanation
+		swap_non_generic_missions = yes
+	}	
+	
+	option = { #step down
+		name = ME_TUR_Events.24.b
+		ai_chance = { factor = 100 }
+		add_prestige = -15
+		add_opinion = {
+			who = event_target:TUR_persian_power
+			modifier = TUR_peace_of_constantinople
+		}
+	}
+}
+
+country_event = { #janissary rule in tripoli
+	id = ME_TUR_Events.25
+	title = ME_TUR_Events.25.t
+	desc = ME_TUR_Events.25.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	immediate = {
+		set_country_flag = TUR_opt_in_persia
+	}
+	
+	option = { #create the tripoli vassal
+		name = ME_TUR_Events.25.a
+		ai_chance = { factor = 0 }
+		tripolitania_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = TRP
+			add_core = TRP
+		}
+		djerba_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = TRP
+			add_core = TRP
+		}
+		create_subject = {
+			subject_type = vassal
+			subject = TRP
+		}
+		IF = {
+			limit = {
+				has_dlc = "Cradle of Civilization"
+			}
+			add_country_modifier = {
+				name = TUR_tripoli_jan
+				duration = -1
+			}
+		}
+		ELSE = {
+			add_country_modifier = {
+				name = TUR_tripoli_jan_no_coc
+				duration = 9125
+			}
+		}
+	}
+	
+	option = { #administrate directly
+		name = ME_TUR_Events.25.b
+		ai_chance = { factor = 100 }
+		354 = {
+			add_base_production = 1
+		}
+		2954 = {
+			add_base_production = 1
+			add_province_modifier = {
+				name = TUR_djerba
+				duration = -1
+			}
+		}
+	}
+}
+
+
+country_event = { #Sharifate of Mecca
+	id = ME_TUR_Events.26
+	title = ME_TUR_Events.26.t
+	desc = ME_TUR_Events.26.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #make vassal
+		name = ME_TUR_Events.26.a
+		ai_chance = { factor = 100 }
+		medina_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = MCC
+			add_core = MCC
+		}
+		mecca_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = MCC
+			add_core = MCC
+		}
+		MCC = {
+			change_government = monarchy
+			add_government_reform = feudal_theocracy
+			adopt_reform_progress = ROOT
+		}
+		create_subject = {
+			who = MCC
+			subject_type = vassal
+		}
+		arabia_region = {
+			limit = {
+				NOT = { is_core = MCC }
+				NOT = { is_permanent_claim = MCC }
+			}
+			add_permanent_claim = MCC
+		}
+		arabia_region = {
+			remove_claim = ROOT
+		}
+		add_country_modifier = {
+			name = TUR_mecca_subj
+			duration = -1
+		}
+		add_piety = 0.5
+	}
+	
+	option = { #dual gov
+		name = ME_TUR_Events.26.b
+		ai_chance = { factor = 0 }
+		medina_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = MCC
+			add_core = MCC
+		}
+		mecca_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = MCC
+			add_core = MCC
+		}
+		MCC = {
+			change_government = monarchy
+			add_government_reform = iqta
+			adopt_reform_progress = ROOT
+			# hidden_effect = {
+				# change_religion = ROOT
+				# change_primary_culture = hejazi_culture
+			# }
+		}
+		create_subject = {
+			who = MCC
+			subject_type = vassal
+		}
+		arabia_region = {
+			limit = {
+				NOT = { is_core = MCC }
+				NOT = { is_permanent_claim = MCC }
+			}
+			add_permanent_claim = MCC
+		}
+		arabia_region = {
+			remove_claim = ROOT
+		}
+		add_country_modifier = {
+			name = TUR_dual_mecca
+			duration = -1
+		}
+		
+		add_piety = -0.25
+	}
+	
+	option = { #keep for self
+		name = ME_TUR_Events.26.c
+		ai_chance = { factor = 0 }
+		arabia_region = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { is_permanent_claim = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		add_piety = -0.5
+	}
+}
+
+country_event = { #principality of upper hungary
+	id = ME_TUR_Events.27
+	title = ME_TUR_Events.27.t
+	desc = ME_TUR_Events.27.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #establish the principality of upper hungary
+		name = ME_TUR_Events.27.a
+		ai_chance = { factor = 100 }
+		slovak_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = HUN
+			add_core = HUN
+			add_province_modifier = {
+				name = TUR_hun_subject_provinces
+				duration = -1
+			}
+		}
+		create_subject = {
+			who = HUN
+			subject_type = vassal
+		}
+		HUN = {
+			add_country_modifier = {
+				name = TUR_hun_subject
+				duration = -1
+			}
+		}
+	}
+	
+	option = { #create a slovak vassal state
+		name = ME_TUR_Events.27.b
+		ai_chance = { factor = 0 }
+		slovak_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = SLO
+			add_core = SLO
+		}
+		create_subject = {
+			who = SLO
+			subject_type = vassal
+		}
+		SLO = {
+			add_country_modifier = {
+				name = TUR_slo_subject
+				duration = -1
+			}
+			add_country_modifier = {
+				name = TUR_slo_nation
+				duration = 18250
+			}
+		}
+	}
+	
+	option = { #administrate directly
+		name = ME_TUR_Events.27.c
+		ai_chance = { factor = 0 }
+		4236 = {
+			add_province_modifier = {
+				name = TUR_slovak_mines
+				duration = 9125
+			}
+		}
+		154 = {
+			add_province_modifier = {
+				name = TUR_slovak_mines
+				duration = 9125
+			}
+		}
+		1318 = {
+			add_province_modifier = {
+				name = TUR_slovak_mines
+				duration = 9125
+			}
+		}
+	}
+}
+
+country_event = { #Right Bank Ukraine
+	id = ME_TUR_Events.28
+	title = ME_TUR_Events.28.t
+	desc = ME_TUR_Events.28.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #Create the Hetmante
+		name = ME_TUR_Events.28.a
+		ai_chance = { factor = 100 }
+		yedisan_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = ZAZ
+			add_core = ZAZ
+		}
+		zaporizhia_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = ZAZ
+			add_core = ZAZ
+		}
+		podolia_volhynia_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			cede_province = ZAZ
+			add_core = ZAZ
+		}
+		create_subject = {
+			who = ZAZ
+			subject_type = vassal
+		}
+		ZAZ = {
+			add_country_modifier = {
+				name = TUR_zaz_overlord
+				duration = -1
+			}
+		}
+	}
+	
+	option = { #nothing
+		name = ME_TUR_Events.28.a
+		ai_chance = { factor = 0 }
+		add_prestige = 25
+	}
+}
+
+country_event = { #Expansion of Janissaries
+	id = ME_TUR_Events.29
+	title = ME_TUR_Events.29.t
+	desc = ME_TUR_Events.29.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #Expand vanguard
+		name = ME_TUR_Events.29.a
+		ai_chance = { factor = 33 }
+		add_country_modifier = {
+			name = TUR_expand_janissaries_vanguard
+			duration = -1
+		}
+		add_army_professionalism = 0.05
+	}
+	
+	option = { #Expand Garrison
+		name = ME_TUR_Events.29.b
+		ai_chance = { factor = 33 }
+		add_country_modifier = {
+			name = 
+			duration = -1
+		}
+		add_army_professionalism = 0.05
+	}
+	
+	option = { #Expand civil responsibilites
+		name = ME_TUR_Events.29.b
+		ai_chance = { factor = 33 }
+		add_country_modifier = {
+			name = TUR_expand_janissaries_civil
+			duration = -1
+		}
+		add_army_professionalism = 0.05
+	}
+}
