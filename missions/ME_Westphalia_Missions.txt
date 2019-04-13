@@ -6,125 +6,110 @@ WES_missions_1 = {
 		tag = WES
 	}
 	has_country_shield = yes
-	
-	wes_tolerance = {
-		icon = mission_religious
-		trigger = {
-			dip_tech = 12
-			prestige = 30
-		}
-		effect = {
-			add_country_modifier = {
-				name = wes_tolerant_society
-				duration = -1
-			}
-		}
-	}
-	
-	wes_jews = {
-		icon = mission_religious
-		required_missions = { wes_tolerance }
+	wes_rhineland = {
+		icon = mission_advance_to_the_dnieper
+		required_missions = { wes_not_just_name }
 		position = 2
-		trigger = {
-			dip_tech = 14
-			dip_power = 150
+		provinces_to_highlight = {
+			OR = {
+				area = lower_rhineland_area
+				area = north_rhine_area
+				area = hesse_area
+				area = palatinate_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		effect = {
-			add_dip_power = -150
-			add_country_modifier = {
-				name = wes_jewish_enclave
-				duration = -1
+		trigger = {
+			lower_rhineland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_rhine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			hesse_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			palatinate_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-	}
-	
-	wes_parliament = {
-		icon = mission_monarch_in_throne_room
-		required_missions = { wes_jews }
-		position = 3
-		trigger = {
-			legitimacy_equivalent = 100
-			adm_power = 100
-			prestige = 50
-		}
 		effect = {
-			if = {
+			lower_swabia_area = {
 				limit = {
-					has_dlc = "Dharma"
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				if = {
-					limit = {
-						NOT = { has_reform = parliamentary_reform }
-					}
-					add_government_reform = parliamentary_reform
-				}
-				else = {
-					add_legitimacy_equivalent = { value = 10 }
-					every_owned_province = {
-						add_local_autonomy = -10
-					}
-				}
+				add_permanent_claim = ROOT
 			}
-			else = {
-				if = {
-					limit = {
-						government = monarchy
-					}
-					set_legacy_government = constitutional_monarchy
+			upper_swabia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				else_if = {
-					limit = {
-						government = republic
-					}
-					set_legacy_government = constitutional_republic
+				add_permanent_claim = ROOT
+			}
+			upper_rhineland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				else = {
-					add_legitimacy_equivalent = { value = 10 }
-					every_owned_province = {
-						add_local_autonomy = -10
-					}
-				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "wes_rhenish_trade"
+				duration = 18250
 			}
 		}
 	}
-	
-	wes_constitution = {
-		icon = mission_alliances
-		required_missions = { wes_parliament }
+	wes_swabia = {
+		icon = mission_cannons_firing
+		required_missions = { wes_rhineland }
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = lower_swabia_area
+				area = upper_swabia_area
+				area = upper_rhineland_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			adm_tech = 20
-			adm_power = 300
+			lower_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_rhineland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+
 		}
 		effect = {
-			add_country_modifier = {
-				name = wes_westphalian_constitution
-				duration = -1
-			}
-		}
-	}
-	
-	wes_industrial = {
-		icon = mission_have_manufactories
-		required_missions = { wes_constitution }
-		position = 5
-		trigger = {
-			if = {
+			upper_bavaria_area = {
 				limit = {
-					has_dlc = "Rule Britannia"
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				furnace = 5
+				add_permanent_claim = ROOT
 			}
-			else = {
-				num_of_owned_manufactory_trigger = { amount = 5 }
+			lower_bavaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
-			adm_tech = 25	
-		}	
-		effect = {
-			add_prestige = 50
 			add_country_modifier = {
-				name = wes_industrial_revolution
-				duration = -1
+				name = wes_south_germany
+				duration = 9125
 			}
 		}
 	}
@@ -138,33 +123,85 @@ WES_missions_2 = {
 		tag = WES
 	}
 	has_country_shield = yes
-	
-	wes_conquer_saxony = {
-		icon = mission_conquer_5_states
-		required_missions = { wes_conquer_north_rhine }
-		position = 2
+	wes_not_just_name = {
+		icon = mission_unite_home_region
+		required_missions = { }
+		position = 1
 		provinces_to_highlight = {
-			OR = {
-				province_id = 59
-				province_id = 62
-				province_id = 61
-				province_id = 63
-				province_id = 2965
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
+			area = westphalia_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			owns_core_province = 59
-			owns_core_province = 62
-			owns_core_province = 61
-			owns_core_province = 63
-			owns_core_province = 2965
+			westphalia_area = {
+				type = all
+				owned_by = ROOT
+			}
 		}
 		effect = {
-			weser_area = {
+			south_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			thuringia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mittelmark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vorpommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			neumark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_rhineland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_rhine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hesse_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			palatinate_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
@@ -173,93 +210,87 @@ WES_missions_2 = {
 			}
 		}
 	}
-	
-	wes_conquer_weser = {
-		icon = mission_galleys_in_port
-		required_missions = { wes_conquer_saxony }
-		position = 3
+	wes_culture = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { wes_not_just_name }
+		position = 2
 		provinces_to_highlight = {
-			area = weser_area
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
+			culture = westphalian
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			weser_area = {
-				type = all
-				owned_by = ROOT
-				is_core = ROOT
+			custom_trigger_tooltip = {
+				tooltip = wes_tooltip_1
+				NOT = {
+					any_country = {
+						NOT = { tag = ROOT }
+						any_owned_province = {
+							culture = westphalian
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_adm_power = 100
-			add_prestige = 5
-			53 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			every_owned_province = {
+				limit = {
+					culture = westphalian
 				}
-			}
-			1857 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			46 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2996 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+				add_province_modiier = {
+					name = wes_united_culture
+					duration = -1
 				}
 			}
 		}
 	}
-	
-	wes_conquer_lower_saxony = {
-		icon = mission_cannons_firing
-		required_missions = { wes_conquer_weser }
-		position = 4
+	wes_north_german_confederation = {
+		icon = mission_monarch_in_throne-room
+		required_missions = { wes_culture wes_saxony wes_rhineland}
+		position = 3
 		provinces_to_highlight = {
-			OR = {
-				province_id = 53
-				province_id = 1857
-				province_id = 46
-				province_id = 2996
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
+			region = north_german_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			owns_core_province = 53
-			owns_core_province = 1857
-			owns_core_province = 46
-			owns_core_province = 2996
+			north_german_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			set_country_flag = can_form_NGC
+			custom_tooltip = wes_tooltip_2
+			add_country_modifier = {
+				name = wes_north_german_hegemon
+				duration = 9125
+			}
+		}
+	}
+	wes_bavaria = {
+		icon = mission_unite_home_region
+		required_missions = { wes_franconia wes_swabia }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = upper_bavaria_area
+				area = lower_bavaria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			upper_bavaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lower_bavaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = wes_north_germany
-				duration = 10950
+				name = wes_germany_unified
+				duration = -1
 			}
 		}
 	}
@@ -274,20 +305,45 @@ WES_missions_3 = {
 	}
 	has_country_shield = yes
 	
-	wes_conquer_north_rhine = {
-		icon = mission_cannons_firing
+	wes_saxony = {
+		icon = mission_landsknecht_soldier
+		required_missions = { wes_not_just_name }
+		position = 2
 		provinces_to_highlight = {
-			area = north_rhine_area
 			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				area = south_saxony_area
+				area = northern_saxony_area
+				area = thuringia_area
+				area = neumark_area
+				area = mittelmark_area
+				area = vorpommern_area
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			north_rhine_area = {
+			south_saxony_area = {
 				type = all
-				owned_by = ROOT
-				is_core = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_saxony_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			thuringia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			neumark_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			mittelmark_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			vorpommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -298,132 +354,45 @@ WES_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			upper_rhineland_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			lower_rhineland_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			59 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			62 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			61 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			63 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2965 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}	
-	}
-	
-	wes_conquer_rhineland = {
-		icon = mission_unite_home_region
-		position = 2
-		required_missions = { wes_conquer_north_rhine }
-		provinces_to_highlight = {
-			OR = {
-				area = upper_rhineland_area
-				area = lower_rhineland_area
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			upper_rhineland_area = {
-				type = all
-				owned_by = ROOT
-				is_core = ROOT
-			}
-			lower_rhineland_area = {
-				type = all
-				owned_by = ROOT
-				is_core = ROOT
-			}
-		}
-		effect = {
 			add_country_modifier = {
-				name = wes_rhenish_trade
+				name = "wes_north_germany"
 				duration = 18250
 			}
-			palatinate_area = {
+		}
+		
+	}
+	wes_franconia = {
+		icon = mission_conquer_50_development
+		required_missions = { wes_saxony }
+		position = 4
+		provinces_to_highlight = {
+			area = franconia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			franconia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+
+		}
+		effect = {
+			upper_bavaria_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-		}
-	}
-	
-	wes_conquer_palatinate = {
-		icon = mission_assemble_an_army
-		position = 3
-		required_missions = { wes_conquer_rhineland }
-		provinces_to_highlight = {
-			area = palatinate_area
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+			lower_bavaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
-		}
-		trigger = {
-			palatinate_area = {
-				type = all
-				owned_by = ROOT
-				is_core = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = wes_west_germany
-				duration = 10950
-			}
+			add_legitimacy = 25
+			add_prestige = 25
 		}
 	}
 }
