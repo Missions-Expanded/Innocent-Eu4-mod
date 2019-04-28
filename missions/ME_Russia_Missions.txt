@@ -26,11 +26,55 @@
 	russia_sweden = {
 		required_missions = { russia_prepare_for_war }
 		icon = mission_conquer_finland
+		provinces_to_highlight = {
+			area = finland_area
+			NOT = { owned_by = ROOT }
+			OR = {
+				finland_area = {
+					owned_by = ROOT
+				}
+				calc_true_if = {
+					all_country = {
+						any_owned_province = {
+							area = finland_area
+						}
+					}
+					amount = 2
+				}
+			}
+		}
 		trigger = {
-			NOT = {
-				reverse_has_opinion = {
-					who = SWE
-					value = -100
+			if = {
+				limit = {
+					OR = {
+						finland_area = {
+							owned_by = ROOT
+						}
+						calc_true_if = {
+							all_country = {
+								any_owned_province = {
+									area = finland_area
+								}
+							}
+							amount = 2
+						}
+					}
+				}
+				finland_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			else = {
+				finland_area = {
+					owner = {
+						NOT = {
+							has_opinion = {
+								who = ROOT
+								value = -50
+							}
+						}
+					}
 				}
 			}
 		}
@@ -56,7 +100,24 @@
 				}
 				add_permanent_claim = ROOT
 			}
-			country_event = { id = ME_Russia_Events.10 }
+			if = {
+				limit = {
+					finland_area = {
+						owner = {
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
+					}
+				}
+				country_event = { id = ME_Russia_Events.10 }
+			}
+			else = {
+				set_country_flag = great_northern_war
+			}
 		}
 	}
 	
