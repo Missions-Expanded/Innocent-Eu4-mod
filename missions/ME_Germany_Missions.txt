@@ -7,6 +7,84 @@ GER_missions_1 = {
 	}
 	has_country_shield = yes
 	
+	germany_deutsch_kamerun = {
+		required_missions = { germany_our_place_in_the_sun }
+		icon = mission_west_african_ports
+		position = 2
+		provinces_to_highlight = {
+			area = gulf_of_guinea_area
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			gulf_of_guinea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			gulf_of_guinea_area = {
+				add_base_tax = 1
+			}
+			1466 = {
+				add_trade_modifier = {
+					who = ROOT
+					power = 15
+					duration = 7300
+					key = germany_deutsch_kamerun_trade_modifier
+				}
+			}
+		}
+	}
+	
+	germany_deutsch_suedwestafrika = {
+		required_missions = { germany_deutsch_kamerun }
+		icon = mission_into_africa
+		position = 3
+		provinces_to_highlight = {
+			area = angola_namibia_area
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			angola_namibia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			angola_namibia_area = {
+				add_province_modifier = {
+					name = germany_deutsch_suedwestafrika_province_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	
+	germany_deutsch_ostafrika = {
+		required_missions = { germany_deutsch_suedwestafrika germany_control_australian_trade }
+		icon = mission_african_soldier
+		position = 4
+		provinces_to_highlight = {
+			area = central_swahili_coast_area
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			central_swahili_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = germany_deutsch_ostafrika_modifier
+				duration = -1
+			}
+		}
+	}
+	
 	germany_reintegrating_the_french = {
 		required_missions = { germany_feast_in_paris }
 		icon = me_mission_france_white_flag
@@ -56,6 +134,81 @@ GER_missions_2 = {
 		tag = GER
 	}
 	has_country_shield = yes
+	
+	germany_our_place_in_the_sun = {
+		required_missions = { }
+		icon = me_mission_portugal_central_africa
+		position = 1
+		trigger = {
+			num_of_colonists = 1
+			OR = {
+				angola_namibia_area = {
+					has_discovered = ROOT
+				}
+				gulf_of_guinea_area = {
+					has_discovered = ROOT
+				}
+				central_swahili_coast_area = {
+					has_discovered = ROOT
+				}
+				papua_area = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = germany_our_place_in_the_sun_modifier
+				duration = 7300
+			}
+		}
+	}
+	
+	germany_kaiser_wilhelms_land = {
+		required_missions = { germany_our_place_in_the_sun }
+		icon = me_mission_germany_kaiser_wilhelms_land
+		position = 2
+		provinces_to_highlight = {
+			area = papua_area
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			papua_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			papua_area = {
+				add_province_modifier = {
+					name = germany_kaiser_wilhelms_land_province_modifier
+					duration = 5475
+				}
+			}
+		}
+	}
+	
+	germany_control_australian_trade = {
+		required_missions = { germany_kaiser_wilhelms_land }
+		icon = mission_arabian_sea_trade
+		position = 3
+		trigger = {
+			num_of_light_ship = 25
+			1411 = {
+				trade_share = {
+					country = ROOT
+					share = 35
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = germany_control_australian_trade_modifier
+				duration = -1
+			}
+		}
+	}
 	
 	germany_fields_of_verdun = {
 		required_missions = { germany_plundering_the_polders }
@@ -478,7 +631,7 @@ GER_missions_3 = {
 	
 	germany_revenge_for_fontenoy = {
 		required_missions = { germany_fields_of_verdun }
-		icon = mission_cannons_firing
+		icon = mission_rule_italy
 		position = 5
 		provinces_to_highlight = {
 			OR = {
@@ -842,15 +995,30 @@ GER_missions_4 = {
 				if = {
 					limit = {
 						has_dlc = "Golden Century"
-						has_flagship = no
 					}
-					random_owned_province = {
+					if = {
 						limit = {
-							has_port = yes
+							has_flagship = no
 						}
-						create_flagship = {	
-							name = "Bismarck"
-							type = heavy_ship
+						random_owned_province = {
+							limit = {
+								has_port = yes
+							}
+							create_flagship = {	
+								name = "Bismarck"
+								type = heavy_ship
+							}
+						}
+					}
+					else = {
+						random_owned_province = {
+							limit = {
+								has_port = yes
+							}
+							create_named_ship = {
+								name = "Bismarck"
+								type = heavy_ship
+							}
 						}
 					}
 				}
@@ -859,10 +1027,7 @@ GER_missions_4 = {
 						limit = {
 							has_port = yes
 						}
-						create_named_ship = {
-							name = "Bismarck"
-							type = heavy_ship
-						}
+						heavy_ship = ROOT
 					}
 				}
 			}
