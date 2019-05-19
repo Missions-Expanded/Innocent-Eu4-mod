@@ -10,6 +10,7 @@ RHN_missions_1 = {
 		tag = RHN
 	}
 	has_country_shield = yes
+	
 	RHN_franconia = {
         icon = mission_eastern_european_city
         required_missions = { RHN_Strengthen_the_reserves }
@@ -20,8 +21,8 @@ RHN_missions_1 = {
 		}
         trigger = {
 			franconia_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -47,6 +48,7 @@ RHN_missions_1 = {
 			}
 		}
 	}
+	
 	RHN_bavaria = {
         icon = me_mission_bavaria_coat
         required_missions = { RHN_franconia RHN_swabia }
@@ -75,11 +77,17 @@ RHN_missions_1 = {
 			}
 		}
 	}
+	
 	RHN_aachen = {
         icon = mission_early_modern_university
         required_missions = { }
         position = 7
+		provinces_to_highlight = {
+			province_id = 1878
+			NOT = { owned_by = ROOT }
+		}
         trigger = {
+			owns = 1878
 			variable_arithmetic_trigger = {
 				custom_tooltip = 1878_HAS_MORE_DEV_THAN_1876
 				export_to_variable = {
@@ -104,12 +112,21 @@ RHN_missions_1 = {
 			}
 		}
 	}
+	
 	RHN_the_guard_on_rhine = {
         icon = mission_advance_to_the_dnieper
         required_missions = { RHN_aachen }
         position = 8
         trigger = {
-			army_size = FRA
+			if = {
+				limit = {
+					exists = FRA
+				}
+				army_size = FRA
+			}
+			else = {
+				army_size = 30
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -118,6 +135,7 @@ RHN_missions_1 = {
 			}
 		}
 	}
+	
 	RHN_league_war = {
         icon = mission_landsknecht_soldier
         required_missions = { }
@@ -135,7 +153,6 @@ RHN_missions_1 = {
 			}
 		}
 	}
-	
 }
 
 RHN_missions_2 = {
@@ -161,6 +178,7 @@ RHN_missions_2 = {
 			}
         }
     }
+	
 	RHN_rhine_south = {
         icon = mission_advance_to_the_dnieper
         required_missions = { RHN_Strengthen_the_reserves }
@@ -193,11 +211,12 @@ RHN_missions_2 = {
 			75 = {
 				add_province_modifier = {
 					name = RHN_Elsass_protection
-					duration = -1s
+					duration = -1
 				}
 			}
 		}
 	}
+	
 	RHN_swabia = {
         icon = mission_landsknecht_soldier
         required_missions = { RHN_rhine_south }
@@ -237,6 +256,7 @@ RHN_missions_2 = {
 			}
 		}
 	}
+	
 	RHN_switzerland = {
         icon = mission_cannons_firing
         required_missions = { RHN_swabia }
@@ -258,6 +278,7 @@ RHN_missions_2 = {
 			}
 		}
 	}
+	
 	RHN_emperor = {
         icon = me_mission_shiny_crown_hre
         required_missions = { }
@@ -281,6 +302,7 @@ RHN_missions_2 = {
 			}
 		}
 	}
+	
 	RHN_make_francia = {
         icon = me_mission_francia_flag
         required_missions = { RHN_the_guard_on_rhine RHN_emperor }
@@ -306,16 +328,61 @@ RHN_missions_3 = {
 		tag = RHN
 	}
 	has_country_shield = yes
+	
 	RHN_Unite_Rhineland = {
         icon = mission_unite_home_region
         required_missions = { }
         position = 1
 		provinces_to_highlight = {
 			OR = {
-				area = hesse_area
-				area = north_rhine_area
-				area = lower_rhineland_area
-				area = palatinate_area
+				AND = {
+					area = hesse_area
+					north_rhine_area = {
+						NOT = { owned_by = ROOT }
+					}
+					lower_rhineland_area = {
+						NOT = { owned_by = ROOT }
+					}
+					palatinate_area = {
+						NOT = { owned_by = ROOT }
+					}
+				}
+				AND = {
+					area = north_rhine_area
+					hesse_area = {
+						NOT = { owned_by = ROOT }
+					}
+					lower_rhineland_area = {
+						NOT = { owned_by = ROOT }
+					}
+					palatinate_area = {
+						NOT = { owned_by = ROOT }
+					}
+				}
+				AND = {
+					area = lower_rhineland_area
+					hesse_area = {
+						NOT = { owned_by = ROOT }
+					}
+					north_rhine_area = {
+						NOT = { owned_by = ROOT }
+					}
+					palatinate_area = {
+						NOT = { owned_by = ROOT }
+					}
+				}
+				AND = {
+					area = palatinate_area
+					hesse_area = {
+						NOT = { owned_by = ROOT }
+					}
+					north_rhine_area = {
+						NOT = { owned_by = ROOT }
+					}
+					lower_rhineland_area = {
+						NOT = { owned_by = ROOT }
+					}
+				}
 			}
 			NOT = { owned_by = ROOT }
 		}
@@ -346,7 +413,6 @@ RHN_missions_3 = {
 			}
         }
     }
-	
 	
 	RHN_Strengthen_the_reserves = {
         icon = mission_build_up_to_force_limit
@@ -441,6 +507,7 @@ RHN_missions_3 = {
 			}
         }
     }
+	
 	RHN_rhine_north = {
         icon = mission_advance_to_the_dnieper
         required_missions = { RHN_Strengthen_the_reserves RHN_rhine_south }
@@ -485,6 +552,7 @@ RHN_missions_3 = {
 			}
 		}
 	}
+	
 	RHN_rhenish_fleet = {
         icon = mission_establish_high_seas_navy
         required_missions = { RHN_rhine_north RHN_weser }
@@ -500,14 +568,20 @@ RHN_missions_3 = {
 			}
 		}
 	}
+	
 	RHN_Coal_Aachen = {
         icon = me_mission_industrial_factory_worker
         required_missions = { RHN_Coal }
         position = 9
 		provinces_to_highlight = {
 			province_id = 1878
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { trade_goods = coal }
+			}
 		}
         trigger = {
+			owns = 1878
 			1878 = {
 				trade_goods = coal
 			}
@@ -521,19 +595,28 @@ RHN_missions_3 = {
 			}
 		}
 	}
+	
 	RHN_Coal_Both = {
         icon = me_mission_industrial_smoking_chimney
         required_missions = { RHN_Coal_westfalen RHN_Coal_Aachen }
         position = 10
 		provinces_to_highlight = {
-			province_id = 1878
-			province_id = 82
+			OR = {
+				province_id = 1878
+				province_id = 82
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
 		}
         trigger = {
 			1878 = {
+				owned_by = ROOT
 				base_production = 10
 			}
 			82 = {
+				owned_by = ROOT
 				base_production = 10
 			}
 		}
@@ -543,12 +626,22 @@ RHN_missions_3 = {
 				duration = -1
 			}
 		}
-		
 	}
+	
 	RHN_iron_industry_in_valley = {
         icon = me_mission_industrial_iron_melting
         required_missions = { RHN_resource_supply }
         position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 80
+				province_id = 1760
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 24 }
+			}
+		}
         trigger = {
 			80 = {
 				owned_by = ROOT
@@ -578,6 +671,7 @@ RHN_missions_4 = {
 		tag = RHN
 	}
 	has_country_shield = yes
+	
 	RHN_Stabilize = {
         icon = mission_high_income
         required_missions = { }
@@ -592,6 +686,7 @@ RHN_missions_4 = {
 			}
         }
     }
+	
 	RHN_westphalia = {
         icon = mission_monarch_in_throne_room
         required_missions = { RHN_Strengthen_the_reserves }
@@ -622,6 +717,7 @@ RHN_missions_4 = {
 			}
 		}
 	}
+	
 	RHN_weser = {
         icon = mission_sea_battles
         required_missions = { RHN_rhine_north RHN_westphalia }
@@ -653,6 +749,7 @@ RHN_missions_4 = {
 			}
 		}
 	}
+	
 	RHN_workshops = {
         icon = mission_early_game_buildings
         required_missions = { }
@@ -670,16 +767,25 @@ RHN_missions_4 = {
 			}
 		}
 	}
+	
 	RHN_Coal = {
         icon = me_mission_industrial_smoking_chimney
         required_missions = { RHN_workshops RHN_early_industrialization }
         position = 8
         trigger = {
-			OR = {
-				development = 20
-				ROOT = { innovativeness = 20 }
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					total_development = 20
+					innovativeness = 20
+				}
 			}
-			ROOT = { has_institution = enlightenment }
+			else = {
+				total_development = 20
+			}
+			has_institution = enlightenment
 		}
 		effect = {
 			add_country_modifier = {
@@ -688,14 +794,20 @@ RHN_missions_4 = {
 			}
 		}
 	}
+	
 	RHN_Coal_westfalen = {
         icon = mission_rb_build_furnaces
         required_missions = { RHN_Coal }
         position = 9
 		provinces_to_highlight = {
 			province_id = 82
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { trade_goods = coal }
+			}
 		}
         trigger = {
+			owns = 82
 			82 = {
 				trade_goods = coal
 			}
@@ -709,6 +821,7 @@ RHN_missions_4 = {
 			}
 		}
 	}
+	
 	RHN_resource_supply = {
         icon = me_mission_industrial_foundry_workers
         required_missions = { RHN_new_processing_techniques }
@@ -717,9 +830,7 @@ RHN_missions_4 = {
 			OR = {
 				copper = 1
 				any_country = {
-					any_owned_province = {
-						trade_goods = copper
-					}
+					copper = 1
 					reverse_has_opinion = {
 						who = ROOT
 						value = 100
@@ -729,9 +840,7 @@ RHN_missions_4 = {
 			OR = {
 				iron = 1
 				any_country = {
-					any_owned_province = {
-						trade_goods = iron
-					}
+					iron = 1
 					reverse_has_opinion = {
 						who = ROOT
 						value = 100
@@ -746,10 +855,18 @@ RHN_missions_4 = {
 			}
 		}
 	}
+	
 	RHN_hessen_copper_supply = {
         icon = me_mission_industrial_salt_mine
         required_missions = { RHN_resource_supply }
         position = 11
+		provinces_to_highlight = {
+			province_id = 81
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 24 }
+			}
+		}
         trigger = {
 			81 = {
 				owned_by = ROOT
@@ -772,6 +889,7 @@ RHN_missions_5 = {
 		tag = RHN
 	}
 	has_country_shield = yes
+	
 	RHN_saxony = {
         icon = mission_have_two_subjects
         required_missions = { RHN_Strengthen_the_reserves }
@@ -831,6 +949,7 @@ RHN_missions_5 = {
 			}
 		}
 	}
+	
 	RHN_baltic = {
         icon = mission_galleys_in_port
         required_missions = { RHN_saxony }
@@ -868,6 +987,7 @@ RHN_missions_5 = {
 			}
 		}
 	}
+	
 	RHN_early_industrialization = {
         icon = mission_have_manufactories
         required_missions = { }
@@ -897,15 +1017,27 @@ RHN_missions_5 = {
 			add_years_of_income = 1.5
 		}
 	}
+	
 	RHN_new_processing_techniques = {
         icon = me_mission_industrial_iron_making
         required_missions = { RHN_early_industrialization }
         position = 9
         trigger = {
-			OR = {
-				innovativeness = 10
-				full_idea_group = economic_ideas
-				full_idea_group = innovative_ideas
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					innovativeness = 10
+					full_idea_group = economic_ideas
+					full_idea_group = innovative_ideas
+				}
+			}
+			else = {
+				OR = {
+					full_idea_group = economic_ideas
+					full_idea_group = innovative_ideas
+				}
 			}
 		}
 		effect = {
@@ -915,6 +1047,7 @@ RHN_missions_5 = {
 			}
 		}
 	}
+	
 	RHN_blast_furnace = {
         icon = mission_rb_build_furnaces
         required_missions = { RHN_new_processing_techniques }
