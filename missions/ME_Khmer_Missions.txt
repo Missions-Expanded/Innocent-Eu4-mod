@@ -1,4 +1,4 @@
-khm_one = {
+KHM_missions_1 = {
 	slot = 1
 	generic = no 
 	ai = yes
@@ -11,41 +11,33 @@ khm_one = {
 		icon = mission_rice_field
 		required_missions = { khm_conquer_champa }
 		position = 3
+		provinces_to_highlight = {
+			area = champa_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 12 }
+				AND = {
+					province_id = 606
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+			}
+		}
 		trigger = {
+			champa_area = {
+				type = all
+				owned_by = ROOT
+				development = 12
+			}
 			606 = {
-				development = 12
-				has_building = workshop
-			}
-			607 = {
-				development = 12
-			}
-			2374 = {
-				development = 12
-			}
-			2375 = {
-				development = 12
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
 			}
 		}
 		effect = {
-			606 = {
-				add_province_modifier = {
-					name = khm_champa_rice_modifier
-					duration = 5475
-				}
-			}
-			607 = {
-				add_province_modifier = {
-					name = khm_champa_rice_modifier
-					duration = 5475
-				}
-			}
-			2374 = {
-				add_province_modifier = {
-					name = khm_champa_rice_modifier
-					duration = 5475
-				}
-			}
-			2375 = {
+			champa_area = {
 				add_province_modifier = {
 					name = khm_champa_rice_modifier
 					duration = 5475
@@ -55,11 +47,14 @@ khm_one = {
 	}
 	
 	khm_barays = {
-		icon = mission_me_barays
+		icon = me_mission_khmer_barays
 		required_missions = { khm_champa_rice }
 		position = 4
 		trigger = {
-			workshop = 5
+			OR = {
+				workshop = 5
+				counting_house = 5
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -70,7 +65,7 @@ khm_one = {
 	}
 }
 
-khm_two = {
+KHM_missions_2 = {
 	slot = 2
 	generic = no 
 	ai = yes
@@ -90,16 +85,11 @@ khm_two = {
 				duration = 7300
 			}
 			champa_area = {
-				if = {
-					limit = {
-						NOT = {
-							type = all
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -108,17 +98,13 @@ khm_two = {
 		icon = mission_a_million_rice_fields
 		required_missions = { khm_end_the_decline }
 		position = 2
+		provinces_to_highlight = {
+			area = champa_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			606 = {
-				owned_by = ROOT
-			}
-			607 = {
-				owned_by = ROOT
-			}
-			2374 = {
-				owned_by = ROOT
-			}
-			2375 = {
+			champa_area = {
+				type = all
 				owned_by = ROOT
 			}
 		}
@@ -143,29 +129,20 @@ khm_two = {
 		icon = me_mission_annam_rekindle_fires
 		required_missions = { khm_conquer_champa }
 		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = vietnam_area
+				area = red_river_delta_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			610 = {
+			vietnam_area = {
+				type = all
 				owned_by = ROOT
 			}
-			613 = {
-				owned_by = ROOT
-			}
-			616 = {
-				owned_by = ROOT
-			}
-			1016 = {
-				owned_by = ROOT
-			}
-			1022 = {
-				owned_by = ROOT
-			}
-			2371 = {
-				owned_by = ROOT
-			}
-			2372 = {
-				owned_by = ROOT
-			}
-			2373 = {
+			red_river_delta_area = {
+				type = all
 				owned_by = ROOT
 			}
 		}
@@ -195,16 +172,19 @@ khm_two = {
 		}
 		effect = {
 			add_prestige = 10
-			MNG = {
-				country_event = {
-					id = me_khm_events.1
+			if = {
+				limit = {
+					exists = MNG
+				}
+				MNG = {
+					country_event = { id = me_khm_events.1 }
 				}
 			}
 		}
 	}
 }
 
-khm_three = {
+KHM_missions_3 = {
 	slot = 3
 	generic = no 
 	ai = yes
@@ -216,11 +196,19 @@ khm_three = {
 	khm_ballista_elephants = {
 		icon = mission_conquer_siam
 		trigger = {
-			mil = 4
-			fortification_expert = 1
+			MIL = 4
+			advisor = fortification_expert
 		}
 		effect = {
-			change_mil = 1
+			if = {
+				limit = {
+					NOT = { MIL = 6 }
+				}
+				change_mil = 1
+			}
+			else = {
+				add_mil_power = 50
+			}
 			add_country_modifier = {
 				name = khm_ballista_elephant_modifier
 				duration = -1
@@ -232,6 +220,11 @@ khm_three = {
 		icon = mission_alliances
 		required_missions = { khm_renew_angkor }
 		position = 2
+		provinces_to_highlight = {
+			province_id = 600
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = AYU }
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -268,58 +261,67 @@ khm_three = {
 		icon = mission_restore_pagodas
 		required_missions = { khm_scorn_siam }
 		position = 3
+		provinces_to_highlight = {
+			province_id = 600
+			NOT = { controlled_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			600 = {
-				controlled_by = ROOT
+				OR = {
+					controlled_by = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {
 			600 = {
 				add_core = ROOT
-				add_base_tax = -1
-				add_base_production = -1
-				add_base_manpower = -1
-			}
-			591 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						base_tax = 2
 					}
-					add_permanent_claim = ROOT
+					add_base_tax = -1
 				}
-			}
-			592 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						base_production = 2
 					}
-					add_permanent_claim = ROOT
+					add_base_production = -1
 				}
-			}
-			603 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						base_manpower = 2
 					}
-					add_permanent_claim = ROOT
+					add_base_manpower = -1
 				}
+			}
+			north_tenasserim_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_thai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tenasserim_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 			612 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -327,43 +329,8 @@ khm_three = {
 			2379 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2387 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2388 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2404 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -371,54 +338,8 @@ khm_three = {
 			601 = {
 				if = {
 					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2389 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			593 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2390 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2391 = {
-				if = {
-					limit = {
-						NOT = {
-							owned_by = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -430,47 +351,37 @@ khm_three = {
 		icon = mission_rice_field
 		required_missions = { khm_occupy_ayutthaya }
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = north_tenasserim_area
+				area = central_thai_area
+				area = tenasserim_area
+				province_id = 612
+				province_id = 2379
+				province_id = 601
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			600 = {
-				owned_by = ROOT
-			} 
-			591 = {
+			north_tenasserim_area = {
+				type = all
 				owned_by = ROOT
 			}
-			592 = {
+			central_thai_area = {
+				type = all
 				owned_by = ROOT
 			}
-			603 = {
+			tenasserim_area = {
+				type = all
 				owned_by = ROOT
 			}
 			612 = {
 				owned_by = ROOT
-			}
-			2379 = {
-				owned_by = ROOT
-			}
-			2387 = {
-				owned_by = ROOT
-			}
-			2388 = {
-				owned_by = ROOT
-			}
-			2404 = {
-				owned_by = ROOT
-			}
+			} 
 			601 = {
 				owned_by = ROOT
 			}
-			2389 = {
-				owned_by = ROOT
-			}
-			593 = {
-				owned_by = ROOT
-			}
-			2390 = {
-				owned_by = ROOT
-			}
-			2391 = {
+			2379 = {
 				owned_by = ROOT
 			}
 		}
@@ -494,21 +405,24 @@ khm_three = {
 		position = 5
 		trigger = {
 			stability = 3
-			war_exhaustion = 0
+			NOT = { war_exhaustion = 1 }
 			all_owned_province = {
-				NOT = {
-					separatism = 1
-				}
+				NOT = { nationalism = 1 }
 			}
 		}
 		effect = {
-			set_government_rank = 3
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
 			add_prestige = 50
 		}
 	}
 }
 
-khm_four = {
+KHM_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -519,27 +433,59 @@ khm_four = {
 	
 	khm_renew_angkor = {
 		icon = mission_restore_pagodas
+		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 609
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 18 }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
 			609 = {
-				has_building = fort_15th
+				owned_by = ROOT
 				development = 18
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
 			}
 		}
 		effect = {
 			add_prestige = 20
-			country_event = {
-				id = me_khm_events.2
-			}
+			country_event = { id = me_khm_events.2 }
 		}
 	}
 	
 	khm_new_wat = {
-		icon = mission_me_wat
+		icon = me_mission_khmer_wat
 		required_missions = { khm_renew_angkor }
 		position = 2
+		provinces_to_highlight = {
+			province_id = 609
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
+				}
+			}
+		}
 		trigger = {
-			609 = {	
-				has_building = workshop
+			609 = {
+				owned_by = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
 			}
 			treasury = 500
 			manpower = 7.5
@@ -560,38 +506,25 @@ khm_four = {
 		icon = mission_cannons_firing
 		required_missions = { khm_occupy_ayutthaya }
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = south_laos_area
+				area = north_laos_area
+				area = khorat_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			608 = {
+			south_laos_area = {
+				type = all
 				owned_by = ROOT
 			}
-			611 = {
+			north_laos_area = {
+				type = all
 				owned_by = ROOT
 			}
-			614 = { 
-				owned_by = ROOT
-			}
-			615 = {
-				owned_by = ROOT
-			}
-			1844 = {
-				owned_by = ROOT
-			}
-			2381 = {
-				owned_by = ROOT
-			}
-			2382 = {
-				owned_by = ROOT
-			}
-			2383 = {
-				owned_by = ROOT
-			}
-			2384 = {
-				owned_by = ROOT
-			}
-			2385 = {
-				owned_by = ROOT
-			}
-			2386 = {
+			khorat_area = {
+				type = all
 				owned_by = ROOT
 			}
 		}
