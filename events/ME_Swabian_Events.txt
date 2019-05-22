@@ -1,0 +1,668 @@
+namespace = ME_Swabian_Events
+
+country_event = {
+	id = ME_Swabian_Events.1 #Hohenstaufen
+	title = ME_Swabian_Events.1.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.1.d
+
+	fire_only_once = yes
+	
+	trigger = {
+		government = monarchy
+		tag = SWB 
+		religion = catholic
+	}
+	mean_time_to_happen = {
+		months = 120
+	}
+	
+	option = {
+		name = ME_Swabian_Events.1.a
+		
+		set_country_flag = SWB_Barbarossa
+		custom_tooltip = SWB_Barbarossa_tooltip
+		hidden_effect = {
+			swap_non_generic_missions = yes
+		}
+		add_country_modifier = {
+			name = SWB_Barbarossa_legacy
+			duration = 36500
+		}
+		add_legitimacy = -50
+		every_owned_province = {
+			add_unrest = 10
+		}
+		set_dynasty = "Hohenstaufen"
+		ai_chance = { factor = 0 } 
+	}
+	option = {
+		name = ME_Swabian_Events.1.b
+		add_prestige = 5
+		ai_chance = { factor = 100 } 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.2 #reform center
+	title = ME_Swabian_Events.2.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.2.d
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = ME_Swabian_Events.2.a #in capital
+		trigger = {
+			capital_scope = {
+				religion = catholic
+			}
+		}
+		capital_scope = {
+			add_reform_center = catholic
+		}
+		ai_chance = { factor = 20 } 
+	}
+	option = {
+		name = ME_Swabian_Events.2.b
+		hidden_effect = {
+			random_province = {
+				limit = {
+					is_part_of_hre = yes
+					religion = catholic
+					any_neighbor_province = {
+						OR = {
+							religion = protestant
+							religion = reformed
+							religion = anglican
+						}
+					}
+				}
+				add_reform_center = catholic
+			}
+		}
+		custom_tooltip = SWB_tooltip_for_reform_center
+		ai_chance = { factor = 20 } 
+	}
+	option = {
+		name = ME_Swabian_Events.2.c #Primas Germaniae
+		
+		random_country = {
+			limit = {
+				has_country_modifier = primas_germaniae
+			}
+			capital_scope = {
+				add_reform_center = catholic
+			}
+		}
+		ai_chance = { factor = 20 } 
+	}
+	option = {
+		name = ME_Swabian_Events.2.e #Legatus Natus
+		
+		random_country = {
+			limit = {
+				has_country_modifier = legatus_natus
+			}
+			capital_scope = {
+				add_reform_center = catholic
+			}
+		}
+		ai_chance = { factor = 20 } 
+	}
+	option = {
+		name = ME_Swabian_Events.2.f #Pope
+		
+		trigger = {
+			exists = PAP
+			PAP = {
+				capital_scope = {
+					religion = catholic
+				}
+			}
+		}
+		PAP = {
+			capital_scope = {
+				add_reform_center = catholic
+			}
+		}
+		ai_chance = { factor = 20 } 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.3 #Invitation
+	title = ME_Swabian_Events.3.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.3.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.3.a #accept
+		every_owned_province = {
+			set_in_empire = yes
+		}
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { their_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { their_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Swabian_Events.3.b #refuse
+		add_prestige = 5
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				NOT = { num_of_cities = 2 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { num_of_cities = 5 }
+			}
+		} 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.4 #Demand N.Italy
+	title = ME_Swabian_Events.4.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.4.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.4.a #accept
+		every_owned_province = {
+			limit = {
+				OR = {
+					area = lombardy_area
+					area = venetia_area
+					area = piedmont_area
+					area = liguria_area
+					area = tuscany_area
+					area = emilia_romagna_area
+				}
+			}
+			set_in_empire = yes
+		}
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { their_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { their_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Swabian_Events.4.b #refuse
+		add_prestige = 5
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				NOT = { num_of_cities = 2 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { num_of_cities = 5 }
+			}
+		} 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.5 #Demand S.Italy
+	title = ME_Swabian_Events.5.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.5.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.5.a #accept
+		every_owned_province = {
+			limit = {
+				OR = {
+					area = corsica_sardinia_area
+					area = sicily_area
+					area = naples_area
+					area = calabria_area
+					area = apulia_area
+					area = central_italy_area
+				}
+			}
+			set_in_empire = yes
+		}
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { their_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { their_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Swabian_Events.5.b #refuse
+		add_prestige = 5
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				NOT = { num_of_cities = 2 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { num_of_cities = 5 }
+			}
+		} 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.6 #Demand L.Countries
+	title = ME_Swabian_Events.6.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.6.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.6.a #accept
+		every_owned_province = {
+			limit = {
+				region = low_countries_region
+			}
+			set_in_empire = yes
+		}
+
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { their_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { their_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Swabian_Events.6.b #refuse
+		add_prestige = 5
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				NOT = { num_of_cities = 2 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { num_of_cities = 5 }
+			}
+		} 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.7 #Demand France
+	title = ME_Swabian_Events.7.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.7.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.7.a #accept
+		every_owned_province = {
+			limit = {
+				region = france_region
+			}
+			set_in_empire = yes
+		}
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { our_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { our_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+			modifier = {
+				factor = 0.1
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_cities
+						value = trigger_value:num_of_cities
+					}
+					export_to_variable = {
+						which = their_cities
+						value = trigger_value:num_of_cities
+						who = FROM
+					}
+					multiply_variable = { their_cities = 3 }
+					check_variable = { their_cities = our_cities }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = our_army
+						value = trigger_value:army_size
+					}
+					export_to_variable = {
+						which = their_army
+						value = trigger_value:army_size
+						who = FROM
+					}
+					multiply_variable = { their_army = 3 }
+					check_variable = { their_army = our_army }
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Swabian_Events.7.b #refuse
+		add_prestige = 5
+		ai_chance = {
+			factor = 100
+			modifier = {
+				factor = 0.2
+				NOT = { num_of_cities = 2 }
+			}
+			modifier = {
+				factor = 0.5
+				NOT = { num_of_cities = 5 }
+			}
+		} 
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.8 #N.Italy back in Emperor's Grip
+	title = ME_Swabian_Events.8.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.8.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.8.a
+		add_country_modifier = {
+			name = SWB_Huge_step
+			duration = -1
+		}
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.9 #L.Countries back in Emperor's Grip
+	title = ME_Swabian_Events.9.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.9.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.9.a
+		add_country_modifier = {
+			name = SWB_Herd_protected_by_emperor
+			duration = -1
+		}
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.10 #France back in Emperor's Grip
+	title = ME_Swabian_Events.10.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.10.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.10.a
+		add_country_modifier = {
+			name = SWB_france_modifier
+			duration = -1
+		}
+	}
+}
+country_event = {
+	id = ME_Swabian_Events.11 #Italy back in Emperor's Grip
+	title = ME_Swabian_Events.11.t
+	picture = HRE_eventPicture
+	desc = ME_Swabian_Events.11.d
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Swabian_Events.11.a
+		add_country_modifier = {
+			name = SWB_centralization
+			duration = -1
+		}
+	}
+}
+	
