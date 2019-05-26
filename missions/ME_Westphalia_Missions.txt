@@ -6,6 +6,7 @@ WES_missions_1 = {
 		tag = WES
 	}
 	has_country_shield = yes
+	
 	wes_rhineland = {
 		icon = mission_advance_to_the_dnieper
 		required_missions = { wes_not_just_name }
@@ -65,6 +66,7 @@ WES_missions_1 = {
 			}
 		}
 	}
+	
 	wes_swabia = {
 		icon = mission_cannons_firing
 		required_missions = { wes_rhineland }
@@ -113,6 +115,7 @@ WES_missions_1 = {
 			}
 		}
 	}
+	
 	wes_early_industrialization = {
 		icon = mission_have_manufactories
 		required_missions = { wes_early_game_buildings }
@@ -152,6 +155,7 @@ WES_missions_2 = {
 		tag = WES
 	}
 	has_country_shield = yes
+	
 	wes_not_just_name = {
 		icon = mission_unite_home_region
 		required_missions = { }
@@ -239,12 +243,13 @@ WES_missions_2 = {
 			}
 		}
 	}
+	
 	wes_culture = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { wes_not_just_name }
 		position = 2
 		provinces_to_highlight = {
-			culture = westphalian
+			culture = hannoverian
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -254,7 +259,7 @@ WES_missions_2 = {
 					any_country = {
 						NOT = { tag = ROOT }
 						any_owned_province = {
-							culture = westphalian
+							culture = hannoverian
 						}
 					}
 				}
@@ -263,15 +268,16 @@ WES_missions_2 = {
 		effect = {
 			every_owned_province = {
 				limit = {
-					culture = westphalian
+					culture = hannoverian
 				}
-				add_province_modiier = {
+				add_province_modifier = {
 					name = wes_united_culture
 					duration = -1
 				}
 			}
 		}
 	}
+	
 	wes_north_german_confederation = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { wes_culture wes_saxony wes_rhineland}
@@ -295,6 +301,7 @@ WES_missions_2 = {
 			}
 		}
 	}
+	
 	wes_bavaria = {
 		icon = mission_unite_home_region
 		required_missions = { wes_franconia wes_swabia }
@@ -323,20 +330,19 @@ WES_missions_2 = {
 			}
 		}
 	}
+	
 	wes_early_game_buildings = {
 		icon = mission_early_game_buildings
 		required_missions = { }
 		position = 6
 		trigger = {
-			AND = {
-				OR = {
-					temple = 5
-					great_temple = 5
-				}
-				OR = {
-					workshop = 5
-					counting_house = 5
-				}
+			OR = {
+				temple = 5
+				cathedral = 5
+			}
+			OR = {
+				workshop = 5
+				counting_house = 5
 			}
 		}
 		effect = {
@@ -346,6 +352,7 @@ WES_missions_2 = {
 			}
 		}
 	}
+	
 	wes_education_for_our_nation = {
 		icon = mission_early_modern_university
 		required_missions = { wes_early_game_buildings }
@@ -425,8 +432,8 @@ WES_missions_3 = {
 				duration = 18250
 			}
 		}
-		
 	}
+	
 	wes_franconia = {
 		icon = mission_conquer_50_development
 		required_missions = { wes_saxony }
@@ -440,7 +447,6 @@ WES_missions_3 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-
 		}
 		effect = {
 			upper_bavaria_area = {
@@ -457,10 +463,25 @@ WES_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			add_legitimacy = 25
+			add_legitimacy_equivalent = { value = 25 }
 			add_prestige = 25
 		}
 	}
+}
+
+WES_missions_3_RB = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential_on_load = {
+		has_dlc = "Rule Britannia"
+	}
+	potential = {
+		tag = WES
+		has_dlc = "Rule Britannia"
+	}
+	has_country_shield = yes
+	
 	wes_furnace = {
 		icon = mission_rb_build_furnaces
 		required_missions = { wes_early_game_buildings }
@@ -492,7 +513,7 @@ WES_missions_4 = {
 		required_missions = { wes_ties_with_france }
 		trigger = {
 			OR = {
-				humanist_ideas = 7
+				full_idea_group = humanist_ideas
 				has_country_modifier = "tolerant_society"
 				ruler_has_personality = tolerant_personality
 				num_of_owned_provinces_with = {
@@ -511,6 +532,7 @@ WES_missions_4 = {
 			}
 		}
 	}
+	
 	wes_jews = {
 		icon = mission_hands_praying
 		required_missions = { wes_tolerance wes_constitution }
@@ -526,8 +548,8 @@ WES_missions_4 = {
 			}
 		}
 	}
-	
 }
+
 WES_missions_5 = {
 	slot = 5
 	generic = no
@@ -541,6 +563,15 @@ WES_missions_5 = {
 		icon = me_mission_voltaire
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			region = france_region
+			NOT = { owned_by = ROOT }
+			NOT = { exists = FRA }
+			france_region = {
+				type = all
+				NOT = { owned_by = ROOT }
+			}
+		}
 		trigger = {
 			OR = {
 				reverse_has_opinion = {
@@ -548,11 +579,17 @@ WES_missions_5 = {
 					value = 150
 				}
 				alliance_with = FRA
+				AND = {
+					NOT = { exists = FRA }
+					france_region = {
+						owned_by = ROOT
+					}
+				}
 			}
 		}
 		effect = {
 			define_advisor = {
-				type = philospher
+				type = philosopher
 				skill = 3
 				culture = cosmopolitan_french
 				religion = catholic
@@ -564,13 +601,14 @@ WES_missions_5 = {
 			}
 		}
 	}
+	
 	wes_constitution = {
 		icon = mission_alliances
 		position = 3
 		required_missions = { wes_tolerance wes_ties_with_france }
 		trigger = {
 			OR = {
-				philospher = 3
+				philosopher = 3
 				has_institution = enlightenment
 			}
 			adm_power = 200
@@ -583,13 +621,14 @@ WES_missions_5 = {
 			}
 		}
 	}
+	
 	wes_parliament = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { wes_jews wes_constitution }
 		position = 5
 		trigger = {
 			OR = {
-				philospher = 3
+				philosopher = 3
 				has_institution = enlightenment
 			}
 			legitimacy_equivalent = 100
@@ -598,6 +637,7 @@ WES_missions_5 = {
 			country_event = { id = ME_Westphalian_Events.6 }
 		}
 	}
+	
 	wes_adopt_enlightened_administration = {
 		icon = mission_alliances
 		required_missions = { wes_parliament }
