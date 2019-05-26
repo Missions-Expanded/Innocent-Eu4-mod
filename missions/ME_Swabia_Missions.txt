@@ -1218,6 +1218,7 @@ SWB_BRB_missions_5 = {
 		}
     }
 }
+
 SWB_CON_missions_1 = {
 	slot = 1
 	generic = no
@@ -1232,45 +1233,120 @@ SWB_CON_missions_1 = {
         icon = mission_eastern_european_city
         required_missions = { }
         position = 1
+		provinces_to_highlight = {
+			province_id = 1872
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 6 }
+			}
+		}
 		trigger = {
 			1872 = {
+				owned_by = ROOT
 				base_manpower = 6
 			}
 		}
         effect = {
 			1872 = {
-				add_building_construction = {
-					building = fort_16th
-					speed = 0.5
-					cost = 0
+				if = {
+					limit = {
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+						NOT = { has_construction = missionary }
+						NOT = { has_construction = culture }
+						NOT = { has_construction = core }
+						NOT = { has_construction = building }
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					add_building_construction = {
+						building = fort_16th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else = {
+					add_base_manpower = 2
 				}
 			}
 		}
     }
+	
 	SWB_found_augsburg_stock_exchange = {
         icon = mission_asian_trader
         required_missions = { SWB_ulmer_stadtmauer }
         position = 3
+		provinces_to_highlight = {
+			province_id = 1868
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 21 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
 		trigger = {
 			1868 = {
+				owned_by = ROOT
 				development = 21
-				has_building = marketplace
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
         effect = {
 			1868 = {
-				add_building = stock_exchange
+				if = {
+					limit = {
+						NOT = { has_building = stock_exchange }
+					}
+					if = {
+						limit = {
+							has_building = marketplace
+						}
+						remove_building = marketplace
+					}
+					if = {
+						limit = {
+							has_building = trade_depot
+						}
+						remove_building = trade_depot
+					}
+					add_building = stock_exchange
+				}
+				else = {
+					add_base_production = 1
+				}
 			}
 			add_prestige = 25
 		}
     }
+	
 	SWB_Memmingen_Press = {
         icon = mission_early_modern_university
         required_missions = { SWB_found_augsburg_stock_exchange }
         position = 4
+		provinces_to_highlight = {
+			province_id = 68
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { printing_press = 100 }
+			}
+		}
 		trigger = {
 			68 = {
-				has_institution = printing_press
+				owned_by = ROOT
+				printing_press = 100
 			}
 		}
         effect = {
@@ -1282,14 +1358,34 @@ SWB_CON_missions_1 = {
 			}
 		}
     }
+	
 	SWB_Fortify_Alsace = {
         icon = mission_conquer_50_development
         required_missions = {  }
         position = 6
+		provinces_to_highlight = {
+			province_id = 75
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 6 }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
 			75 = {
-				has_building = fort_15th
+				owned_by = ROOT
 				base_manpower = 6
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
 			}
 		}
         effect = {
@@ -1302,6 +1398,7 @@ SWB_CON_missions_1 = {
 		}
     }
 }
+
 SWB_CON_missions_2 = {
 	slot = 2
 	generic = no
@@ -1316,14 +1413,30 @@ SWB_CON_missions_2 = {
         icon = mission_early_modern_university
         required_missions = { SWB_ulmer_stadtmauer SWB_Poor }
         position = 2
+		provinces_to_highlight = {
+			province_id = 72
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 18 }
+			}
+		}
 		trigger = {
 			72 = {
+				owned_by = ROOT
 				development = 18
 			}
 		}
         effect = {
 			72 = {
-				add_building = university
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+				}
 				add_province_modifier = {
 					name = fra_university
 					duration = -1
@@ -1336,9 +1449,17 @@ SWB_CON_missions_2 = {
         icon = mission_european_church
         required_missions = { SWB_found_augsburg_stock_exchange }
         position = 4
+		provinces_to_highlight = {
+			province_id = 75
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { printing_press = 100 }
+			}
+		}
 		trigger = {
 			75 = {
-				has_institution = printing_press
+				owned_by = ROOT
+				printing_press = 100
 			}
 		}
         effect = {
@@ -1350,14 +1471,34 @@ SWB_CON_missions_2 = {
 			}
 		}
     }
+	
 	SWB_Fortify_Ulm = {
         icon = mission_eastern_european_city
         required_missions = { }
         position = 5
+		provinces_to_highlight = {
+			province_id = 1872
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 6 }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
 			1872 = {
-				has_building = fort_15th
+				owned_by = ROOT
 				base_manpower = 6
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
 			}
 		}
         effect = {
@@ -1369,6 +1510,7 @@ SWB_CON_missions_2 = {
 			}
 		}
     }
+	
 	SWB_Safety_of_people = {
         icon = mission_market_place_with_asian_traders
         required_missions = { SWB_Fortify_Ulm SWB_Fortify_Alsace }
@@ -1394,6 +1536,7 @@ SWB_CON_missions_2 = {
 		}
     }
 }
+
 SWB_CON_missions_3 = {
 	slot = 3
 	generic = no
@@ -1408,36 +1551,58 @@ SWB_CON_missions_3 = {
         icon = mission_early_game_buildings
         required_missions = { }
         position = 1
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				devastation = 0.1
+				local_autonomy_above_min = 0.1
+			}
+		}
 		trigger = {
-			NOT = { 
-				any_owned_province = {
-					devastation = 0.1
-					local_autonomy_above_min = 0.1
-				}
+			all_owned_province = {
+				NOT = { devastation = 0.1 }
+				NOT = { local_autonomy_above_min = 0.1 }
 			}
 		}
         effect = {
-			every_owned_province = {
+			if = {
 				limit = {
-					culture = swabian
-					NOT = { development = 10 }
+					any_owned_province = {
+						culture = swabian
+						NOT = { development = 10 }
+					}
 				}
-				add_province_modifier = {
-					name = SWB_helping_develop
-					duration = 9125
+				every_owned_province = {
+					limit = {
+						culture = swabian
+						NOT = { development = 10 }
+					}
+					add_province_modifier = {
+						name = SWB_helping_develop
+						duration = 9125
+					}
 				}
+			}
+			else = {
+				add_prestige = 10
 			}
 		}
     }
+	
 	SWB_Poor_regions = {
         icon = mission_have_manufactories
         required_missions = { SWB_Poor }
         position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = swabian
+			NOT = { development = 12 }
+		}
 		trigger = {
-			NOT = {
-				any_owned_province = {
-					NOT = { development = 12 }
-					culture = swabian
+			all_owned_province = {
+				OR = {
+					NOT = { culture = swabian }
+					development = 12
 				}
 			}
 		}
@@ -1448,6 +1613,7 @@ SWB_CON_missions_3 = {
 			}
 		}
     }
+	
 	SWB_Stability = {
         icon = mission_high_income
         required_missions = { SWB_Poor_regions SWB_Rathaus }
@@ -1460,6 +1626,7 @@ SWB_CON_missions_3 = {
 			custom_tooltip = SWB_flourishing_tooltip
 		}
     }
+	
 	SWB_Confederation_mission = {
         icon = mission_alliances
         required_missions = { SWB_Stability SWB_Safety_of_people SWB_League }
@@ -1476,10 +1643,15 @@ SWB_CON_missions_3 = {
 					NOT = { government = confederation }
 				}
 				change_government = confederation
+				add_government_reform = trade_confederation_reform
+			}
+			else = {
+				add_years_of_income = 1
 			}
 		}
     }
 }
+
 SWB_CON_missions_4 = {
 	slot = 4
 	generic = no
@@ -1495,7 +1667,7 @@ SWB_CON_missions_4 = {
         required_missions = { SWB_Poor SWB_Republican }
         position = 2
 		trigger = {
-			adm = 6
+			ADM = 6
 			adm_power = 100
 		}
         effect = {
@@ -1506,12 +1678,21 @@ SWB_CON_missions_4 = {
 			}
 		}
     }
+	
 	SWB_Baden = {
         icon = mission_early_game_buildings
         required_missions = { SWB_Poor_regions }
         position = 4
+		provinces_to_highlight = {
+			province_id = 74
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 24 }
+			}
+		}
 		trigger = {
 			74 = {
+				owned_by = ROOT
 				development = 24
 			}
 		}
@@ -1524,15 +1705,21 @@ SWB_CON_missions_4 = {
 			}
 		}
     }
+	
 	SWB_League = {
         icon = mission_have_two_subjects
         required_missions = { SWB_25 }
         position = 7
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = swabian
+			unrest = 1
+		}
 		trigger = {
-			NOT = { 
-				any_owned_province = {
-					culture = swabian
-					NOT = { unrest = 0 }
+			all_owned_province = {
+				OR = {
+					NOT = { culture = swabian }
+					NOT = { unrest = 1 }
 				}
 			}
 		}
@@ -1544,6 +1731,7 @@ SWB_CON_missions_4 = {
 		}
     }
 }
+
 SWB_CON_missions_5 = {
 	slot = 5
 	generic = no
@@ -1560,9 +1748,9 @@ SWB_CON_missions_5 = {
         position = 1
 		trigger = {
 			republican_tradition = 100
-			adm = 3
-			dip = 3
-			mil = 3
+			ADM = 3
+			DIP = 3
+			MIL = 3
 		}
         effect = {
 			add_country_modifier = {
@@ -1571,10 +1759,17 @@ SWB_CON_missions_5 = {
 			}
 		}
     }
+	
 	SWB_Rathaus = {
         icon = mission_hanseatic_city
         required_missions = { SWB_Republican }
         position = 4
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_building = courthouse }
+			NOT = { has_building = town_hall }
+			NOT = { development = 18 }
+		}
 		trigger = {
 			all_owned_province = {
 				OR = {
@@ -1585,6 +1780,9 @@ SWB_CON_missions_5 = {
 			}
 		}
         effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 			every_owned_province = {
 				limit = {
 					has_building = courthouse
@@ -1592,20 +1790,23 @@ SWB_CON_missions_5 = {
 				remove_building = courthouse
 				add_building = town_hall
 			}
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
 		}
     }
+	
 	SWB_25 = {
         icon = mission_eastern_european_city
         required_missions = { SWB_Rathaus }
         position = 6
+		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = swabian
+			NOT = { development = 25 }
+		}
 		trigger = {
-			NOT = {
-				all_owned_province = {
-					NOT = { development = 25 }
-					culture = swabian
+			all_owned_province = {
+				OR = {
+					NOT = { culture = swabian }
+					development = 25
 				}
 			}
 		}
