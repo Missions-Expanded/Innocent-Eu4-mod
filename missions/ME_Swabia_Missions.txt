@@ -5,6 +5,7 @@ SWB_missions_2 = {
 	potential = {
 		tag = SWB
 		NOT = { has_country_flag = SWB_Barbarossa }
+		NOT = { has_country_flag = SWB_Confederation }
 	}
 	has_country_shield = yes
 	
@@ -153,6 +154,7 @@ SWB_missions_3 = {
 	potential = {
 		tag = SWB
 		NOT = { has_country_flag = SWB_Barbarossa }
+		NOT = { has_country_flag = SWB_Confederation }
 	}
 	has_country_shield = yes
 	
@@ -315,6 +317,7 @@ SWB_missions_4 = {
 	potential = {
 		tag = SWB
 		NOT = { has_country_flag = SWB_Barbarossa }
+		NOT = { has_country_flag = SWB_Confederation }
 	}
 	has_country_shield = yes
 	
@@ -1211,6 +1214,405 @@ SWB_BRB_missions_5 = {
 			}
 			else = {
 				add_prestige = 20
+			}
+		}
+    }
+}
+SWB_CON_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWB
+		has_country_flag = SWB_Confederation
+	}
+	has_country_shield = yes
+	
+	SWB_ulmer_stadtmauer = {
+        icon = mission_eastern_european_city
+        required_missions = { }
+        position = 1
+		trigger = {
+			1872 = {
+				base_manpower = 6
+			}
+		}
+        effect = {
+			1872 = {
+				add_building_construction = {
+					building = fort_16th
+					speed = 0.5
+					cost = 0
+				}
+			}
+		}
+    }
+	SWB_found_augsburg_stock_exchange = {
+        icon = mission_asian_trader
+        required_missions = { SWB_ulmer_stadtmauer }
+        position = 3
+		trigger = {
+			1868 = {
+				development = 21
+				has_building = marketplace
+			}
+		}
+        effect = {
+			1868 = {
+				add_building = stock_exchange
+			}
+			add_prestige = 25
+		}
+    }
+	SWB_Memmingen_Press = {
+        icon = mission_early_modern_university
+        required_missions = { SWB_found_augsburg_stock_exchange }
+        position = 4
+		trigger = {
+			68 = {
+				has_institution = printing_press
+			}
+		}
+        effect = {
+			68 = {
+				add_province_modifier = {
+					name = SWB_Important_Press
+					duration = -1
+				}
+			}
+		}
+    }
+	SWB_Fortify_Alsace = {
+        icon = mission_conquer_50_development
+        required_missions = {  }
+        position = 6
+		trigger = {
+			75 = {
+				has_building = fort_15th
+				base_manpower = 6
+			}
+		}
+        effect = {
+			75 = {
+				add_province_modifier = {
+					name = SWB_Fortification
+					duration = -1
+				}
+			}
+		}
+    }
+}
+SWB_CON_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWB
+		has_country_flag = SWB_Confederation
+	}
+	has_country_shield = yes
+	
+	SWB_Freiburg_Uni = {
+        icon = mission_early_modern_university
+        required_missions = { SWB_ulmer_stadtmauer SWB_Poor }
+        position = 2
+		trigger = {
+			72 = {
+				development = 18
+			}
+		}
+        effect = {
+			72 = {
+				add_building = university
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
+				}
+			}
+		}
+    }
+	
+	SWB_Strasbourg_Press = {
+        icon = mission_european_church
+        required_missions = { SWB_found_augsburg_stock_exchange }
+        position = 4
+		trigger = {
+			75 = {
+				has_institution = printing_press
+			}
+		}
+        effect = {
+			75 = {
+				add_province_modifier = {
+					name = SWB_Important_Press
+					duration = -1
+				}
+			}
+		}
+    }
+	SWB_Fortify_Ulm = {
+        icon = mission_eastern_european_city
+        required_missions = { }
+        position = 5
+		trigger = {
+			1872 = {
+				has_building = fort_15th
+				base_manpower = 6
+			}
+		}
+        effect = {
+			1872 = {
+				add_province_modifier = {
+					name = SWB_Fortification
+					duration = -1
+				}
+			}
+		}
+    }
+	SWB_Safety_of_people = {
+        icon = mission_market_place_with_asian_traders
+        required_missions = { SWB_Fortify_Ulm SWB_Fortify_Alsace }
+        position = 7
+		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+					}
+				}
+				amount = 3
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = SWB_Safe_people
+				duration = -1
+			}
+		}
+    }
+}
+SWB_CON_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWB
+		has_country_flag = SWB_Confederation
+	}
+	has_country_shield = yes
+	
+	SWB_Poor = {
+        icon = mission_early_game_buildings
+        required_missions = { }
+        position = 1
+		trigger = {
+			NOT = { 
+				any_owned_province = {
+					devastation = 0.1
+					local_autonomy_above_min = 0.1
+				}
+			}
+		}
+        effect = {
+			every_owned_province = {
+				limit = {
+					culture = swabian
+					NOT = { development = 10 }
+				}
+				add_province_modifier = {
+					name = SWB_helping_develop
+					duration = 9125
+				}
+			}
+		}
+    }
+	SWB_Poor_regions = {
+        icon = mission_have_manufactories
+        required_missions = { SWB_Poor }
+        position = 3
+		trigger = {
+			NOT = {
+				any_owned_province = {
+					NOT = { development = 12 }
+					culture = swabian
+				}
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = SWB_Investing
+				duration = -1
+			}
+		}
+    }
+	SWB_Stability = {
+        icon = mission_high_income
+        required_missions = { SWB_Poor_regions SWB_Rathaus }
+        position = 5
+		trigger = {
+			stability = 3
+		}
+        effect = {
+			set_country_flag = SWB_flourishing
+			custom_tooltip = SWB_flourishing_tooltip
+		}
+    }
+	SWB_Confederation_mission = {
+        icon = mission_alliances
+        required_missions = { SWB_Stability SWB_Safety_of_people SWB_League }
+        position = 8
+		trigger = {
+			republican_tradition = 100
+			NOT = { average_autonomy_above_min = 5 }
+			NOT = { corruption = 0.01 }
+			NOT = { average_unrest = 1 }
+		}
+        effect = {
+			if = {
+				limit = {
+					NOT = { government = confederation }
+				}
+				change_government = confederation
+			}
+		}
+    }
+}
+SWB_CON_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWB
+		has_country_flag = SWB_Confederation
+	}
+	has_country_shield = yes
+	
+	SWB_12_articles = {
+        icon = mission_colonial
+        required_missions = { SWB_Poor SWB_Republican }
+        position = 2
+		trigger = {
+			adm = 6
+			adm_power = 100
+		}
+        effect = {
+			add_adm_power = -100
+			add_country_modifier = {
+				name = SWB_12_articles_modifier
+				duration = -1
+			}
+		}
+    }
+	SWB_Baden = {
+        icon = mission_early_game_buildings
+        required_missions = { SWB_Poor_regions }
+        position = 4
+		trigger = {
+			74 = {
+				development = 24
+			}
+		}
+        effect = {
+			74 = {
+				add_province_modifier = {
+					name = SWB_Spa
+					duration = -1
+				}
+			}
+		}
+    }
+	SWB_League = {
+        icon = mission_have_two_subjects
+        required_missions = { SWB_25 }
+        position = 7
+		trigger = {
+			NOT = { 
+				any_owned_province = {
+					culture = swabian
+					NOT = { unrest = 0 }
+				}
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = SWB_Swabian_League
+				duration = -1
+			}
+		}
+    }
+}
+SWB_CON_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = SWB
+		has_country_flag = SWB_Confederation
+	}
+	has_country_shield = yes
+	
+	SWB_Republican = {
+        icon = mission_alliances
+        required_missions = { }
+        position = 1
+		trigger = {
+			republican_tradition = 100
+			adm = 3
+			dip = 3
+			mil = 3
+		}
+        effect = {
+			add_country_modifier = {
+				name = SWB_Swabian_Tradition
+				duration = -1
+			}
+		}
+    }
+	SWB_Rathaus = {
+        icon = mission_hanseatic_city
+        required_missions = { SWB_Republican }
+        position = 4
+		trigger = {
+			all_owned_province = {
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+					development = 18
+				}
+			}
+		}
+        effect = {
+			every_owned_province = {
+				limit = {
+					has_building = courthouse
+				}
+				remove_building = courthouse
+				add_building = town_hall
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+		}
+    }
+	SWB_25 = {
+        icon = mission_eastern_european_city
+        required_missions = { SWB_Rathaus }
+        position = 6
+		trigger = {
+			NOT = {
+				all_owned_province = {
+					NOT = { development = 25 }
+					culture = swabian
+				}
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = SWB_Prospering_cities
+				duration = -1
 			}
 		}
     }
