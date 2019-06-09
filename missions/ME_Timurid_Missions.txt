@@ -14,6 +14,16 @@ TIM_missions_1 = {
 		}
 		icon = me_mission_ottomans_persian_war
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = al_jazira_area
+				area = north_kurdistan_area
+				area = armenia_area
+				area = erzurum_area
+				area = samtskhe_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			al_jazira_area = {
 				type = all
@@ -58,6 +68,11 @@ TIM_missions_1 = {
 		}
 		icon = mission_impaled_soldies
 		position = 6
+		provinces_to_highlight = {
+			region = anatolia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			is_island = no
+		}
 		trigger = {
 			anatolia_region = {
 				type = all
@@ -81,6 +96,10 @@ TIM_missions_1 = {
 		}
 		icon = mission_hands_praying
 		position = 8
+		provinces_to_highlight = {
+			region = persia_region
+			NOT = { religion = shiite }
+		}
 		trigger = {
 			persia_region = {
 				type = all
@@ -99,7 +118,7 @@ TIM_missions_1 = {
 				}
 			}
 			else = {
-				add_piety = -0.01
+				add_piety = -0.1
 				add_ruler_modifier = {
 					name = zealot_ruler2
 					duration = -1
@@ -107,7 +126,9 @@ TIM_missions_1 = {
 			}
 			if = {
 				limit = {
+					has_dlc = "Rights of Man"
 					ruler_has_personality = sinner_personality
+					NOT = { ruler_has_personality = zealot_personality }
 				}
 				remove_ruler_personality = sinner_personality
 				add_ruler_personality = zealot_personality
@@ -115,7 +136,6 @@ TIM_missions_1 = {
 		}
 	}
 }
-				
 
 TIM_missions_2 = {
 	slot = 2
@@ -139,6 +159,7 @@ TIM_missions_2 = {
 		}
 		effect = {
 			add_prestige = 15
+			add_legitimacy_equivalent = { value = 10 }
 		}
 	}
 	
@@ -148,6 +169,13 @@ TIM_missions_2 = {
 		}
 		icon = mission_non-western_cavalry_raid
 		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = shirvan_area
+				area = tabarestan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			shirvan_area = {
 				type = all
@@ -159,6 +187,10 @@ TIM_missions_2 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = secured_flanks
+				duration = 5475
+			}
 			iraq_arabi_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -225,10 +257,6 @@ TIM_missions_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			add_country_modifier = {
-				name = secured_flanks
-				duration = 5475
-			}
 		}
 	}
 	
@@ -238,6 +266,19 @@ TIM_missions_2 = {
 		}
 		icon = mission_non-western_soldiers
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = iraq_arabi_area
+				area = shahrizor_area
+				area = tabriz_area
+				province_id = 2312
+				province_id = 2311
+				province_id = 411
+				province_id = 2309
+				province_id = 2314
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			iraq_arabi_area = {
 				type = all
@@ -268,6 +309,11 @@ TIM_missions_2 = {
 			}
 		}
 		effect = {
+			410 = {
+				add_base_manpower = 1
+				add_base_production = 1
+				add_base_tax = 1
+			}
 			basra_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -326,11 +372,6 @@ TIM_missions_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			410 = {
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
-			}
 		}
 	}
 	
@@ -340,6 +381,10 @@ TIM_missions_2 = {
 		}
 		icon = me_mission_african_ship
 		position = 5
+		provinces_to_highlight = {
+			province_id = 2999
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			2999 = {
 				owned_by = ROOT
@@ -363,9 +408,11 @@ TIM_missions_2 = {
 		position = 7
 		trigger = {
 			calc_true_if = {
-				OR = {
-					has_building = temple
-					has_building = cathedral
+				all_owned_province = {
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
 				}
 				amount = 15
 			}
@@ -407,139 +454,154 @@ TIM_missions_2 = {
 					loyalty = 60
 				}
 			}
-			NOT = {	ruler_has_personality = obsessive_perfectionist_personality }
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				NOT = {	ruler_has_personality = obsessive_perfectionist_personality }
+			}
 		}
 		effect = {
-			random_owned_province = {
+			if = {
 				limit = {
-					region = persia_region
+					persia_region = {
+						owned_by = ROOT
+					}
 				}
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_base_manpower = 1
+					add_base_production = 1
+					add_base_tax = 1
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_base_manpower = 1
+					add_base_production = 1
+					add_base_tax = 1
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_base_manpower = 1
+					add_base_production = 1
+					add_base_tax = 1
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_base_manpower = 1
+					add_base_production = 1
+					add_base_tax = 1
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_base_manpower = 1
+					add_base_production = 1
+					add_base_tax = 1
+				}
+				
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
+				random_owned_province = {
+					limit = {
+						region = persia_region
+					}
+					add_province_modifier = {
+						name = rebuilding_persia_modifier
+						duration = 5475
+					}
+				}
 			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_base_manpower = 1
-				add_base_production = 1
-				add_base_tax = 1
-			}
-			
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
-			}
-			random_owned_province = {
-				limit = {
-					region = persia_region
-				}
-				add_province_modifier = {
-					name = rebuilding_persia_modifier
-					duration = 5475
-				}
+			else = {
+				add_prestige = 20
 			}
 		}
 	}
@@ -562,6 +624,45 @@ TIM_missions_3 = {
 		}
 		icon = mission_cannons_firing
 		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = farsistan_area
+				area = persian_gulf_coast
+				area = kerman_area
+				area = isfahan_area
+				area = iraq_e_ajam_area
+				area = azerbaijan_area
+				area = mashhad_area
+				area = birjand_area
+				area = sistan_area
+				area = herat_area
+				area = ghor_area
+				area = kabulistan_area
+				area = balkh_area
+				area = transoxiana_area
+				area = termez_area
+				area = merv_area
+				province_id = 431
+				province_id = 4327
+				province_id = 2217
+				province_id = 4342
+				province_id = 413
+				province_id = 414
+				province_id = 2210
+				province_id = 458
+				province_id = 1967
+				province_id = 457
+				province_id = 2356
+				province_id = 437
+				province_id = 438
+				province_id = 2349
+				province_id = 2214
+				province_id = 441
+				province_id = 2362
+				province_id = 1973
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			farsistan_area = {
 				type = all
@@ -772,6 +873,13 @@ TIM_missions_3 = {
 		}
 		icon = mission_arabian_fort
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = basra_area
+				area = khuzestan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			basra_area = {
 				type = all
@@ -795,6 +903,13 @@ TIM_missions_3 = {
 		required_missions = { }
 		icon = mission_early_game_buildings
 		position = 6
+		provinces_to_highlight = {
+			province_id = 454
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 1
+			}
+		}
 		trigger = {
 			454 = {
 				owned_by = ROOT
@@ -802,7 +917,20 @@ TIM_missions_3 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Timurid_Events.1 }
+			if = {
+				limit = {
+					NOT = { capital = 454 }
+				}
+				country_event = { id = ME_Timurid_Events.1 }
+			}
+			else = {
+				add_stability_or_adm_power = 1
+				454 = {
+					add_base_manpower = 1
+					add_base_production = 1
+					add_base_tax = 1
+				}
+			}
 		}
 	}
 	
@@ -813,7 +941,7 @@ TIM_missions_3 = {
 		icon = mission_indian_soldier_elephant
 		position = 7
 		trigger = {
-			mil = 3
+			MIL = 3
 			num_of_cavalry = 25
 			has_regency = no
 		}
@@ -837,7 +965,7 @@ TIM_missions_3 = {
 		position = 8
 		trigger = {
 			calc_true_if = {
-				any_owned_province = {
+				all_owned_province = {
 					development = 30
 					OR = {
 						has_building = temple
@@ -874,28 +1002,37 @@ TIM_missions_4 = {
 		required_missions = { }
 		icon = mission_unite_home_region
 		position = 1
-		trigger = {
+		provinces_to_highlight = {
 			OR = {
-				AND = {
+				area = iraq_e_ajam_area
+				area = azerbaijan_area
+				province_id = 414
+				province_id = 2210
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { exists = QOM }
+		}
+		trigger = {
+			if = {
+				limit = {
 					exists = QOM
-					offensive_war_with = QOM
 				}
-				AND = {
-					NOT = { exists = QOM }
-					iraq_e_ajam_area = {
-						type = all
-						owned_by = ROOT
-					}
-					azerbaijan_area = {
-						type = all
-						owned_by = ROOT
-					}
-					414 = {
-						owned_by = ROOT
-					}
-					2210 = {
-						owned_by = ROOT
-					}
+				offensive_war_with = QOM
+			}
+			else = {
+				iraq_e_ajam_area = {
+					type = all
+					owned_by = ROOT
+				}
+				azerbaijan_area = {
+					type = all
+					owned_by = ROOT
+				}
+				414 = {
+					owned_by = ROOT
+				}
+				2210 = {
+					owned_by = ROOT
 				}
 			}
 		}
@@ -925,6 +1062,13 @@ TIM_missions_4 = {
 		}
 		icon = mission_assemble_an_army
 		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = makran_area
+				area = kalat_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			makran_area = {
 				type = all
@@ -950,6 +1094,14 @@ TIM_missions_4 = {
 		}
 		icon = mission_conquer_50_development
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = lahore_area
+				area = sirhind_area
+				area = upper_doab_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			lahore_area = {
 				type = all
@@ -981,15 +1133,30 @@ TIM_missions_4 = {
 		}
 		icon = mission_early_game_buildings
 		position = 7
+		provinces_to_highlight = {
+			province_id = 454
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
+		}
 		trigger = {
 			454 = {
 				owned_by = ROOT
 				development = 30
 			}
-			OR = {
-				adm = 3
-				ruler_has_personality = scholar_personality
-				ruler_has_personality = architectural_visionary_personality
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				OR = {
+					ADM = 3
+					ruler_has_personality = scholar_personality
+					ruler_has_personality = architectural_visionary_personality
+				}
+			}
+			else = {
+				ADM = 3
 			}
 		}
 		effect = {
@@ -1021,6 +1188,34 @@ TIM_missions_5 = {
 		}
 		icon = mission_mosque
 		position = 7
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 454
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							NOT = { has_building = temple }
+							NOT = { has_building = cathedral }
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven"
+							NOT = { has_building = workshop }
+							NOT = { has_building = counting_house }
+						}
+					}
+				}
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					area = herat_area
+					OR = {
+						NOT = { owned_by = ROOT }
+						is_state = no
+						is_prosperous = no
+					}
+				}
+			}
+		}
 		trigger = {
 			446 = {
 				owned_by = ROOT
@@ -1036,6 +1231,7 @@ TIM_missions_5 = {
 				herat_area = {
 					type = all
 					owned_by = ROOT
+					is_state = yes
 					custom_trigger_tooltip = {
 						tooltip = IS_PROSPEROUS
 						is_prosperous = yes
