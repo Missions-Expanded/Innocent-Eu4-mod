@@ -35,18 +35,23 @@ ANS_missions_1 = {
 				junior_union_with = ROOT
 				NOT = { liberty_desire = 50 }
 			}
-			emperor = {
-				has_opinion = {
-					value = 100
-					who = ROOT
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						value = 100
+						who = ROOT
+					}
 				}
 			}
-			
 		}
 		effect = {
 			if = {
 				limit = {
 					is_elector = no
+					BRA = {
+						is_elector = yes
+					}
 				}
 				elector = yes
 				BRA = {
@@ -66,10 +71,7 @@ ANS_missions_1 = {
 		required_missions = { ans_become_elector }
 		position = 5
 		provinces_to_highlight = {
-			OR = {
-				owned_by = BRA
-				area = mittelmark_area
-			}
+			area = mittelmark_area
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
@@ -77,10 +79,10 @@ ANS_missions_1 = {
 			legitimacy_equivalent = 100
 			total_development = 100
 			mittelmark_area = {
-				owned_by = ROOT
 				type = all
+				owned_by = ROOT
 			}
-			NOT = { exists = ROOT }
+			NOT = { exists = BRA }
 		}
 		effect = {
 			add_accepted_culture = prussian
@@ -92,6 +94,7 @@ ANS_missions_1 = {
 		}
 	}
 }
+
 ANS_missions_5 = {
 	slot = 5
 	generic = no
@@ -100,13 +103,19 @@ ANS_missions_5 = {
 		tag = ANS
 	}
 	has_country_shield = yes
+	
 	ans_margraves_palace = {
 		icon = mission_monarch_in_throne_room
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			province_id = 71
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			years_of_income = 2.0
 			treasury = 100
+			owns = 71
 			71 = {
 				renaissance = 100
 			}
@@ -121,6 +130,7 @@ ANS_missions_5 = {
 			}
 		}
 	}
+	
 	ans_duke_of_Franconia = {
 		icon = mission_have_two_subjects
 		required_missions = { ans_margraves_palace }
@@ -137,10 +147,13 @@ ANS_missions_5 = {
 			is_elector = yes
 			legitimacy_equivalent = 100
 			prestige = 50
-			emperor = {
-				has_opinion = {
-					value = 100
-					who = ROOT
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						value = 100
+						who = ROOT
+					}
 				}
 			}
 		}
@@ -151,18 +164,38 @@ ANS_missions_5 = {
 			}
 		}
 	}
+	
 	ans_Ansbach_porcelain = {
 		icon = mission_have_manufactories
 		required_missions = { ans_duke_of_Franconia }
 		position = 5
+		provinces_to_highlight = {
+			province_id = 61
+			NOT = { owned_by = ROOT }
+			owner = {
+				NOT = {
+					has_opinion = {
+						value = 100
+						who = ROOT
+					}
+				}
+			}
+		}
 		trigger = {
 			adm_tech = 24
-			has_global_flag = europeans_in_china_happened
-			any_country = {
-				owns = 61
-				has_opinion = {
-					value = 100
-					who = ROOT
+			custom_trigger_tooltip = {
+				tooltip = europeans_in_china_happened_tt
+				has_global_flag = europeans_in_china_happened
+			}
+			61 = {
+				OR = {
+					owned_by = ROOT
+					owner = {
+						has_opinion = {
+							value = 100
+							who = ROOT
+						}
+					}
 				}
 			}
 		}

@@ -95,15 +95,42 @@ WBG_missions_5 = {
 	wbg_munster = {
 		icon = mission_european_church
 		position = 1
+		provinces_to_highlight = {
+			province_id = 79
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
+		}
 		trigger = {
 			79 = {
-				has_building = temple
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
 		effect = {
 			79 = {
-				remove_building = temple
-				add_building = cathedral
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+				}
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+				else = {
+					add_base_tax = 2
+				}
 			}
 		}
 	}
@@ -113,7 +140,7 @@ WBG_missions_5 = {
 		required_missions = { wbg_munster }
 		position = 3
 		trigger = {
-			has_country_modifier = "primas_germaniae"
+			has_country_modifier = primas_germaniae
 		}
 		effect = {
 			add_prestige = 25
@@ -127,7 +154,7 @@ WBG_missions_5 = {
 		required_missions = { wbg_primas_germaniae }
 		position = 5
 		trigger = {
-			has_country_modifier = "legatus_natus"
+			has_country_modifier = legatus_natus
 		}
 		effect = {
 			add_papal_influence = 50
