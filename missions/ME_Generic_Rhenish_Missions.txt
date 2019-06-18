@@ -63,7 +63,6 @@ generic_rhenish_missions_1 = {
 			NOT = { average_autonomy_above_min = 25 }
 		}
 		effect = {
-			
 			add_country_modifier = {
 				name = rhn_generic_centralization
 				duration = 9125
@@ -122,12 +121,15 @@ generic_rhenish_missions_1 = {
 		required_missions = { rhn_generic_allies }
 		position = 4
 		trigger = {
-			emperor = {
-				has_opinion = {
-					who = ROOT
-					value = 100
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
 				}
-			}	
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -194,10 +196,8 @@ generic_rhenish_missions_2 = {
 		position = 3
 		trigger = {
 			manpower_percentage = 0.6
-			NOT = {
-				any_owned_province = {
-					devastation = 0.01
-				}
+			all_owned_province = {
+				NOT = { devastation = 0.01 }
 			}
 			NOT = { war_exhaustion = 0.5 }
 		}
@@ -258,6 +258,18 @@ generic_rhenish_missions_2 = {
 		effect = {
 			add_stability = 1
 			every_owned_province = {
+				limit = {
+					is_state = yes
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_prosperity = 50
+				}
+				else = {
+					add_base_tax = 1
+				}
 				add_prosperity = 50
 			}
 		}
@@ -290,8 +302,10 @@ generic_rhenish_missions_3 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			any_owned_province = {
-				has_building = marketplace
+			OR = {
+				marketplace = 1
+				trade_depot = 1
+				stock_exchange = 1
 			}
 		}
 		effect = {
@@ -310,8 +324,9 @@ generic_rhenish_missions_3 = {
 		required_missions = { rhn_generic_treasury rhn_generic_marketplace rhn_generic_church }
 		position = 2
 		trigger = {
-			any_owned_province = {
-				has_building = workshop
+			OR = {
+				workshop = 1
+				counting_house = 1
 			}
 		}
 		effect = {
@@ -326,17 +341,15 @@ generic_rhenish_missions_3 = {
 		required_missions = { rhn_generic_workshop }
 		position = 4
 		trigger = {
-			any_owned_province = {
-				OR = {
-					has_building = mills
-					has_building = farm_estate
-					has_building = tradecompany
-					has_building = plantations
-					has_building = textile
-					has_building = weapons
-					has_building = wharf
-					has_building = furnace
-				}
+			OR = {
+				mills = 1
+				farm_estate = 1
+				tradecompany = 1
+				plantations = 1
+				textile = 1
+				weapons = 1
+				wharf = 1
+				furnace = 1
 			}
 		}
 		effect = {
@@ -373,8 +386,9 @@ generic_rhenish_missions_4 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			any_owned_province = {
-				has_building = temple
+			OR = {
+				temple = 1
+				cathedral = 1
 			}
 		}
 		effect = {
@@ -399,7 +413,7 @@ generic_rhenish_missions_4 = {
 			}
 		}
 		effect = {
-			add_country_modifier ={
+			add_country_modifier = {
 				name = RHN_generic_faith
 				duration = 9125
 			}
@@ -501,8 +515,22 @@ generic_rhenish_missions_5 = {
 			all_owned_province = {
 				printing_press = 100
 			}
-			capital_scope = {
-				has_state_edict = edict_religion_enforced
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				capital_scope = {
+					has_state_edict = edict_religion_enforced
+				}
+			}
+			else = {
+				capital_scope = {
+					development = 15
+					OR = {
+						has_building = courthouse
+						has_building = town_hall
+					}
+				}
 			}
 		}
 		effect = {
