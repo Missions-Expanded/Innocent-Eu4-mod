@@ -283,45 +283,8 @@ BYZ_missions_1 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					prestige = 100
-				}
-				add_country_modifier = {
-					name = byzantium_pax_hispaniola_modifier_1
-					duration = -1
-				}
-			}
-			else_if = {
-				limit = {
-					prestige = 75
-				}
-				add_country_modifier = {
-					name = byzantium_pax_hispaniola_modifier_2
-					duration = -1
-				}
-			}
-			else_if = {
-				limit = {
-					prestige = 50
-				}
-				add_country_modifier = {
-					name = byzantium_pax_hispaniola_modifier_3
-					duration = -1
-				}
-			}
-			else_if = {
-				limit = {
-					prestige = 25
-				}
-				add_country_modifier = {
-					name = byzantium_pax_hispaniola_modifier_4
-					duration = -1
-				}
-			}
-			else = {
-				add_prestige = 10
-			}
+			custom_tooltip = ENABLE_BYZANTIUM_PAX_HISPANIOLA_MODIFIER
+			set_country_flag = enable_byzantium_pax_hispaniola_modifier
 		}
 	}
 }
@@ -370,17 +333,15 @@ BYZ_missions_2 = {
 			}
 			aydin_area = {
 				limit = {
-					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
-				add_permanent_claim = ROOT
+				add_core = ROOT
 			}
 			hudavendigar_area = {
 				limit = {
-					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
-				add_permanent_claim = ROOT
+				add_core = ROOT
 			}
 		}
 	}
@@ -860,6 +821,36 @@ BYZ_missions_3 = {
 					name = byzantium_expand_the_thedosian_walls_province_modifier
 					duration = -1
 				}
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building = fort_15th
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_16th }
+					}
+					remove_building = fort_15th
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_17th }
+					}
+					remove_building = fort_16th
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_18th }
+					}
+					remove_building = fort_17th
+					add_building = fort_18th
+				}
+				else = {
+					add_base_manpower = 2
+				}
 			}
 		}
 	}
@@ -1045,45 +1036,117 @@ BYZ_missions_4 = {
 		provinces_to_highlight = {
 			OR = {
 				AND = {
-					province_id = 164
-					NOT = { is_capital_of = NAX }
+					exists = NAX
+					exists = KNI
+					OR = {
+						AND = {
+							province_id = 164
+							NOT = { is_capital_of = NAX }
+						}
+						AND = {
+							province_id = 320
+							NOT = { is_capital_of = KNI }
+						}
+						AND = {
+							province_id = 2348
+							owned_by = ROOT
+						}
+					}
 				}
 				AND = {
-					province_id = 320
-					NOT = { is_capital_of = KNI }
+					NOT = { exists = NAX }
+					NOT = { exists = KNI }
+					OR = {
+						AND = {
+							province_id = 164
+							OR = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+						}
+						AND = {
+							province_id = 320
+							OR = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+						}
+						AND = {
+							province_id = 2348
+							OR = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+						}
+					}
 				}
 			}
 		}
 		trigger = {
 			treasury = 250
-			exists = NAX
-			NAX = {
-				is_subject = no
-				capital = 164
-			}
-			exists = KNI
-			KNI = {
-				is_subject = no
-				capital = 320
+			OR = {
+				AND = {
+					NOT = { owns = 2348 }
+					exists = NAX
+					NAX = {
+						is_subject = no
+						capital = 164
+					}
+					exists = KNI
+					KNI = {
+						is_subject = no
+						capital = 320
+					}
+				}
+				AND = {
+					owns_core_province = 164
+					owns_core_province = 320
+					owns_core_province = 2348
+					NOT = { exists = NAX }
+					NOT = { exists = KNI }
+				}
 			}
 		}
 		effect = {
-			NAX = {
-				country_event = { id = ME_Byzantium_Events.5 }
-			}
-			2348 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { owned_by = NAX }
-					}
-					owner = {
-						country_event = { id = ME_Byzantium_Events.5 }
+			if = {
+				limit = {
+					owns_core_province = 164
+					owns_core_province = 320
+					owns_core_province = 2348
+					NOT = { exists = NAX }
+					NOT = { exists = KNI }
+				}
+				add_country_modifier = {
+					name = byzantium_archipelago_ex_machina_modifier
+					duration = 7300
+				}
+				151 = {
+					add_trade_modifier = {
+						who = ROOT
+						power = 25
+						duration = 7300
+						key = byzantium_archipelago_ex_machina_trade_modifier
 					}
 				}
 			}
-			KNI = {
-				country_event = { id = ME_Byzantium_Events.6 }
+			else = {
+				NAX = {
+					country_event = { id = ME_Byzantium_Events.5 }
+				}
+				2348 = {
+					if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { owned_by = NAX }
+						}
+						owner = {
+							country_event = { id = ME_Byzantium_Events.5 }
+						}
+					}
+				}
+				KNI = {
+					country_event = { id = ME_Byzantium_Events.6 }
+				}
 			}
 		}
 	}
@@ -1296,17 +1359,18 @@ BYZ_missions_5 = {
 				name = byzantium_tame_the_black_army_modifier
 				duration = -1
 			}
-			every_province = {
-				limit = {
-					OR = {
-						owned_by = HAB
-						owned_by = HUN
+			custom_tooltip = BYZ_GAIN_CLAIMS_ON_HAB_AND_HUN_PROVS
+			hidden_effect = {
+				every_province = {
+					limit = {
+						OR = {
+							owned_by = HAB
+							owned_by = HUN
+						}
+						NOT = { is_core = ROOT }
 					}
-					NOT = { is_core = ROOT }
-					NOT = { is_claim = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					add_permanent_claim = ROOT
 				}
-				add_claim = ROOT
 			}
 		}
 	}
@@ -1375,20 +1439,25 @@ BYZ_missions_5 = {
 		position = 8
 		provinces_to_highlight = {
 			region = italy_region
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				local_autonomy_above_min = 1
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			italy_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				NOT = { local_autonomy_above_min = 1 }
+				owned_by = ROOT
 			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = byzantium_annhilation_of_italy_modifier
+				duration = 7300
+			}
+			italy_region = {
+				add_province_modifier = {
+					name = byzantium_annhilation_of_italy_province_modifier
+					duration = 18250
+				}
+			}
 		}
 	}
 }
