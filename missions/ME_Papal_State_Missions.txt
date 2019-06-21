@@ -7,92 +7,62 @@ PAP_missions_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-
 	Reintegrate_Ferrara = {
-		icon = mission_unite_home_region
-		position = 1
-		required_missions = { }
+		icon = mission_european_church
+		position = 2
+		required_missions = { Defend_the_holy_see }
 		provinces_to_highlight = {
 			OR = {
-				province_id = 106
-				province_id = 113
+				AND = {
+					province_id = 106
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 113
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { has_building = temple }
+				}
 			}
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			owns = 106
-			owns = 113
-		}
-		effect = {
 			106 = {
-				if = {
-					limit = {
-						NOT = { is_core = ROOT }
-					}
-					add_core = ROOT
-				}
-				else = {
-					add_base_tax = 1
-				}
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			113 = {
-				if = {
-					limit = {
-						NOT = { is_core = ROOT }
-					}
-					add_core = ROOT
-				}
-				else = {
-					add_base_tax = 1
+				country_or_non_sovereign_subject_holds = ROOT
+				has_building = temple
+			}
+		}
+		effect = {
+			113 = {
+				add_province_modifier = {
+					name = PAP_church_of_san_pietro
+					duration = 5475
 				}
 			}
-			add_prestige = 15
 		}
 	}
 
 	Secure_the_Po_Delta = {
 		icon = mission_build_up_to_force_limit
 		position = 3
-		required_missions = { Reintegrate_Ferrara integrate_urbino }
+		required_missions = { Reintegrate_Ferrara }
 		provinces_to_highlight = {
-			OR = {
-				area = lombardy_area
-				area = emilia_romagna_area
-			}
+			area = emilia_romagna_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			lombardy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 			emilia_romagna_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_adm_power = 150
+			add_adm_power = 100
 			add_country_modifier = {
 				name = "Abundant_Resources"
-				duration = 5475
-			}
-			venetia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			if = {
-				limit = {
-					exists = VEN
-					NOT = { overlord_of = VEN }
-				}
-				add_casus_belli = {
-					target = VEN
-					type = cb_vassalize_mission
-				}
+				duration = 9125
 			}
 		}
 	}
@@ -112,84 +82,115 @@ PAP_missions_1 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					overlord_of = VEN
-				}
-				VEN = {
-					add_liberty_desire = -25
+			add_country_modifier = {
+				name = PAP_venetian_trade
+				duration = 5475
+			}
+			358 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 15
+					key = PAP_venetian_trade
 				}
 			}
-			add_mercantilism = 5
+			112 = {
+				add_building = mills
+			}
 		}
 	}
 
 	Kingdom_of_God = {
 		icon = mission_empire
-		position = 5
-		required_missions = { Align_The_Most_serene_republic Genoese_Fleets }
+		position = 6
+		required_missions = { }
+		trigger = {
+			has_country_modifier = kingdom_of_god
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAP_eternal_sea #GET IT?
+				duration = -1
+			}
+		}
+	}
+	PAP_Naples = {
+		icon = mission_unite_home_region
+		position = 7
+		required_missions = { Kingdom_of_God }
 		provinces_to_highlight = {
 			OR = {
-				area = naples_area
 				area = apulia_area
+				area = naples_area
 				area = calabria_area
-				area = central_italy_area
+				area = sicily_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			unrest = 0.01
 		}
 		trigger = {
 			apulia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 0.01 }
 			}
 			naples_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 0.01 }
 			}
 			calabria_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 0.01 }
 			}
-			central_italy_area = {
+			sicily_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { unrest = 0.01 }
 			}
+			treasury = 500
 		}
 		effect = {
 			italy_region = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					country_or_non_sovereign_subject_holds = ROOT
 				}
-				add_permanent_claim = ROOT
+				add_province_modifier = {
+					name = PAP_dominance
+					duration = 9125
+				}
 			}
-			italy_region = {
-				add_permanent_province_modifier = {
-					name = "Kingdom_of_God_modifier"
+			add_treasury = -500
+			121 = {
+				add_center_of_trade_level = 1
+			}
+		}
+	}
+	PAP_Italian_Great_power = {
+		icon = mission_empire
+		position = 8
+		required_missions = { PAP_Naples }
+		trigger = {
+			is_great_power = yes
+		}
+		effect = {
+			add_adm_power = 75
+			add_dip_power = 75
+			add_mil_power = 75
+			hidden_effect = {
+				add_country_modifier = {
+					name = PAP_Great_power
 					duration = -1
 				}
 			}
+			custom_tooltip = PAP_tooltip_4
 		}
 	}
 
-	Holy_Curia = {
-		icon = mission_religious
-		position = 5
-		required_missions = { Kingdom_of_God }
-		trigger = {
-			papacy_active = no
-			has_country_modifier = kingdom_of_god
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Eternal_Holy_See"
-				duration = -1
-			}
-		}
-	}
 }
 
-PAP_missions_2 = {
+PAP_missions_2_1 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -199,57 +200,26 @@ PAP_missions_2 = {
 	}
 	has_country_shield = yes
 
-	Clerical_Expansion = {
-		icon = mission_early_game_buildings
+	Defend_the_holy_see = {
+		icon = mission_assemble_an_army
 		position = 1
 		required_missions = { }
-		provinces_to_highlight = {
-			province_id = 118
+		trigger = {
 			OR = {
-				NOT = { owned_by = ROOT }
 				AND = {
-					NOT = { has_building = temple }
-					NOT = { has_building = cathedral }
+					army_size = 16
+					num_of_galley = 10
 				}
-				NOT = { development = 30 }
-			}
-		}
-		trigger = {
-			118 = {
-				owned_by = ROOT
-				OR = {
-					has_building = temple
-					has_building = cathedral
+				emperor = {
+					alliance_with = ROOT
 				}
-				development = 30
 			}
+			num_of_allies = 2
 		}
 		effect = {
-			add_years_of_income = 0.5
-			118 = {
-				add_province_modifier = {
-					name = "New_Church"
-					duration = 5475
-				}
+			create_general = {
+				tradition = 50
 			}
-		}
-	}
-
-	integrate_urbino = {
-		icon = mission_alliances
-		position = 2
-		required_missions = { }
-		provinces_to_highlight = {
-			province_id = 2977
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 2977 # urbino
-		}
-		effect = {
 			lombardy_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -264,37 +234,253 @@ PAP_missions_2 = {
 				}
 				add_permanent_claim = ROOT
 			}
-		}
-	}
-	
-	Florentine_Question = {
-		icon = mission_religious
-		position = 3
-		required_missions = { }
-		trigger = {
-			exists = LAN
-			LAN = {
-				is_excommunicated = yes
-			}
-		}
-		effect = {
 			tuscany_area = {
 				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
+			venetia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			piedmont_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			liguria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = PAP_tooltip_1
+			if = {
+				limit = {
+					AND = {
+						army_size = 16
+						num_of_galley = 10
+					}
+				}
+				set_country_flag = PAP_against_emperor
+			}
+			else = {
+				set_country_flag = PAP_with_emperor
+				emperor = {
+					add_historical_friend = ROOT
+				}
+				add_historical_friend = emperor
+			}
+			swap_non_generic_missions = yes
+		}
+	}
+}
+PAP_missions_2_no_emperor = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = PAP_against_emperor
+	}
+	has_country_shield = yes
+	
+	PAP_undo_diploma = {
+		icon = me_mission_crown_hre
+		position = 2
+		required_missions = { Defend_the_holy_see }
+		trigger = {
+			dip = 3
+			OR = {
+				emperor = {
+					is_rival = ROOT
+				}
+				NOT = {
+					has_opinion = {
+						who = ROOT
+						value = 0
+					}
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
 			add_country_modifier = {
-				name = "Crushing_Excommunicated_Scourge"
-				duration = 1825
+				name = PAP_defying_the_emperor
+				duration = 7300
 			}
 		}
 	}
-
-	Light_Of_Constantinople = {
-		icon = mission_assemble_an_army
+	PAP_into_empire = {
+		icon = mission_cannons_firing
+		position = 3
+		required_missions = { PAP_undo_diploma }
+		trigger = {
+			calc_true_if = {
+				all_province = {
+					is_part_of_hre = yes
+					NOT = {
+						region = italy_region
+					}
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAP_Liberation
+				duration = 7300
+			}
+		}
+	}
+}
+PAP_missions_2_emperor = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = PAP_with_emperor
+	}
+	has_country_shield = yes
+	
+	PAP_do_the_diploma_again = {
+		icon = me_mission_crown_hre
+		position = 2
+		required_missions = { Defend_the_holy_see }
+		trigger = {
+			dip = 3
+			emperor = {
+				has_opinion = {
+					who = ROOT
+					value = 150
+				}
+			}
+			emperor = {
+				alliance_with = ROOT
+			}
+		}
+		effect = {
+			every_owned_province = {
+				set_in_empire = yes
+			}
+			if = {
+				limit = {
+					NOT = {
+						num_of_electors = 7
+					}
+				}
+				elector = ROOT
+			}
+		}
+	}
+	PAP_into_empire = {
+		icon = mission_cannons_firing
+		position = 3
+		required_missions = { PAP_do_the_diploma_again }
+		trigger = {
+			calc_true_if = {
+				all_province = {
+					is_part_of_hre = yes
+					NOT = {
+						region = italy_region
+					}
+				}
+				amount = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PAP_Liberation
+				duration = 7300
+			}
+		}
+	}
+}
+PAP_missions_2_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	PAP_Lombardy = {
+		icon = mission_italian_condottiere
 		position = 4
+		required_missions = { Secure_the_Po_Delta }
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			change_innovativeness = 5
+			add_ruler_modifier = {
+				name = PAP_surge
+				duration = -1
+			}
+			118 = {
+				add_province_modifier = {
+					name = PAP_Renaissance_Hub
+					duration = 10950
+				}
+			}
+			104 = {
+				add_province_modifier = {
+					name = PAP_Renaissance_Hub
+					duration = 10950
+				}
+			}
+		}
+	}
+	Kingdom_Of_Many = {
+		icon = mission_european_church
+		position = 5
+		required_missions = { PAP_Lombardy Align_The_Most_serene_republic PAP_Piedmont }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = PAP_tooltip_2
+				accepted_culture = romagnan
+			}
+			custom_trigger_tooltip = {
+				tooltip = PAP_tooltip_3
+				accepted_culture = tuscan 
+			}
+			NOT = {
+				any_province = {
+					OR = {
+						culture = tuscan
+						culture = romagnan
+					}
+					unrest = 0.01
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Papal_State_Events.2 }
+			add_prestige = 10
+		}
+	}
+	Light_Of_Constantinople = {
+		icon = mission_pf_cross
+		position = 6
 		required_missions = { }
 		provinces_to_highlight = {
 			province_id = 151
@@ -325,21 +511,58 @@ PAP_missions_2 = {
 					duration = 9125
 				}
 			}
+			palestine_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	Jerusalem = {
+		icon = mission_egyptian_mamluk_soldier
+		position = 7
+		required_missions = { Light_Of_Constantinople }
+		provinces_to_highlight = {
+			area = palestine_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			palestine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = ROOT
+			}
+		}
+		effect = {
+			add_prestige = 20
+			country_event = { id = ME_Papal_State_Events.5 }
 		}
 	}
 
-	Kingdom_Of_Many = {
-		icon = mission_european_church
-		position = 6
-		required_missions = { Kingdom_of_God }
+	PAP_unlimited_power = {
+		icon = mission_monarch_in_throne_room
+		position = 8
+		required_missions = { PAP_Naples }
 		trigger = {
-			num_accepted_cultures = 4
-			has_country_modifier = kingdom_of_god
+			OR = {
+				current_age = age_of_absolutism
+				current_age = age_of_revolutions
+			}
+			religious_ideas = 7
+			total_development = 700
+			religious_unity = 1
 		}
 		effect = {
-			country_event = { id = ME_Papal_State_Events.2 }
+			add_country_modifier = {
+				name = Absolute_Unlimited_Power
+				duration = -1
+			}
 		}
 	}
+	
 }
 
 PAP_missions_3 = {
@@ -352,65 +575,11 @@ PAP_missions_3 = {
 	}
 	has_country_shield = yes
 
-	Defend_the_holy_see = {
-		icon = mission_assemble_an_army
-		position = 1
-		required_missions = { }
-		trigger = {
-			army_size = 16
-			num_of_galley = 10
-		}
-		effect = {
-			117 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT	}
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			add_country_modifier = {
-				name = "A_New_Campaign"
-				duration = 1825
-			}
-		}
-	}
-
-	Protect_Sienna = {
-		icon = mission_build_up_to_force_limit
-		position = 2
-		required_missions = { Defend_the_holy_see }
-		provinces_to_highlight = {
-			province_id = 117
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			117 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			tuscany_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			117 = {
-				add_province_modifier = {
-					name = "Sienese_Glass"
-					duration = 9125
-				}
-			}
-		}
-	}
 
 	Tuskan_Raiders = {
 		icon = mission_have_two_subjects
-		position = 3
-		required_missions = { Protect_Sienna }
+		position = 2
+		required_missions = { Defend_the_holy_see }
 		provinces_to_highlight = {
 			area = tuscany_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -422,26 +591,20 @@ PAP_missions_3 = {
 			}
 		}
 		effect = {
-			liguria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
 			add_country_modifier = {
 				name = "Tuscan_Navy_Techniques"
-				duration = 5475
+				duration = 9125
 			}
+			add_corruption = -2
 			add_stability = 1
-			add_adm_power = 150
-			add_prestige = 15
 		}
 	}
 
+	
+
 	Genoese_Fleets = {
 		icon = mission_establish_high_seas_navy
-		position = 4
+		position = 3
 		required_missions = { Tuskan_Raiders }
 		provinces_to_highlight = {
 			area = liguria_area
@@ -454,16 +617,319 @@ PAP_missions_3 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = "Genoese_Fleets"
-				duration = 9125
+			101 = {
+				add_center_of_trade_level = 1
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 10
+					key = PAP_presence_in_genoa
+				}
 			}
+		}
+	}
+	PAP_Piedmont = {
+		icon = mission_build_up_to_force_limit
+		position = 4
+		required_missions = { Genoese_Fleets }
+		provinces_to_highlight = {
+			area = piedmont_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			103 = {
+				if = {
+					limit = {
+						has_building = fort_15th
+					}
+					add_building_construction = {
+						building = fort_16th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				if = {
+					limit = {
+						has_building = fort_16th
+					}
+					add_building_construction = {
+						building = fort_17th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				if = {
+					limit = {
+						has_building = fort_17th
+					}
+					add_building_construction = {
+						building = fort_18th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				if = {
+					limit = {
+						has_building = fort_18th
+					}
+					add_mil_power = 200
+				}
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				add_province_modifier = {
+					name = PAP_Piedmont_Defense
+					duration = -1
+				}
+			}
+		}
+	}
+	PAP_A_fearsome_pope = {
+		icon = mission_cannons_firing
+		position = 5
+		required_missions = { Solidify_the_church }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.2
+			}
+			else = {
+				army_tradition = 50
+			}
+			army_size = 30s
+		}
+		effect = {
+			country_event = { id = ME_Papal_State_Events.4 }
 		}
 	}
 }
 
-PAP_missions_4_AoW = {
+PAP_missions_4 = {
 	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	integrate_urbino = {
+		icon = mission_alliances
+		position = 2
+		required_missions = { Defend_the_holy_see PAP_improve_relation }
+		provinces_to_highlight = {
+			province_id = 2977
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			owns_core_province = 2977 # urbino
+		}
+		effect = {
+			
+		}
+	}
+	Protect_Sienna = {
+		icon = mission_build_up_to_force_limit
+		position = 3
+		required_missions = { Tuskan_Raiders }
+		provinces_to_highlight = {
+			province_id = 117
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		trigger = {
+			117 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			117 = {
+				add_province_modifier = {
+					name = "Sienese_Glass"
+					duration = 9125
+				}
+			}
+		}
+	}
+	Solidify_the_church = {
+		icon = mission_european_church
+		position = 4
+		required_missions = { }
+		trigger = {
+			OR = {
+				current_age = age_of_discovery
+				current_age = age_of_reformation
+			}
+			is_defender_of_faith = yes
+			any_country = {
+				is_crusade_target = yes
+				war_with = ROOT
+			}
+		}
+		effect = {
+			add_devotion = 10
+			add_country_modifier = {
+				name = PAP_holy_war
+				duration = 3650
+			}
+		}
+	}
+	PAP_A_threat_from_within = {
+		icon = mission_luther_theses
+		position = 5
+		required_missions = { Solidify_the_church }
+		trigger = {
+			current_age = age_of_reformation
+			is_religion_enabled = protestant
+		}
+		effect = {
+			hidden_effect = {
+				add_country_modifier = {
+					name = "Re_Reformation"
+					duration = -1
+				}
+			}
+			custom_tooltip = PAP_tooltip_5
+		}
+	}
+	Purge_the_heretics = {
+		icon = mission_assemble_an_army
+		position = 6
+		required_missions = { PAP_A_threat_from_within }
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = obj_force_converted_tooltip
+					has_country_flag = force_converted
+				}
+				check_variable = { which = num_converted_religion value = 5 }
+			}
+		}
+		effect = {
+			define_advisor = {
+				type = inquisitor
+				name = "Diego Ramírez de Guzmánh"
+				skill = 3
+				culture = castilan
+				religion = catholic
+				cost_multiplier = 0.25
+			}
+			if = {
+				limit = {
+					NOT = { devotion = 100 }
+				}
+				add_devotion = 10
+			}
+			else = {
+				add_stability_or_adm_power = yes
+			}
+		}
+	}
+	
+	
+}
+
+PAP_missions_5 = {
+
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	PAP_improve_relation = {
+		icon = mission_alliances
+		position = 1
+		required_missions = { }
+		trigger = {
+			reverse_has_opinion = {
+				who = URB
+				value = 100
+			}
+		}
+		effect = {
+			add_dip_power = 25
+		}
+	}
+	Clerical_Expansion = {
+		icon = mission_early_game_buildings
+		position = 3
+		required_missions = { Tuskan_Raiders }
+		provinces_to_highlight = {
+			province_id = 118
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				NOT = { development = 30 }
+			}
+		}
+		trigger = {
+			118 = {
+				owned_by = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				development = 30
+			}
+		}
+		effect = {
+			add_treasury = -150
+			118 = {
+				add_province_modifier = {
+					name = "New_Church"
+					duration = -1
+				}
+			}
+		}
+	}
+	
+}
+PAP_missions_5_AoW = {
+	slot = 5
 	generic = no
 	ai = yes
 	potential_on_load = {
@@ -478,7 +944,7 @@ PAP_missions_4_AoW = {
 
 	The_League_Wars = {
 		icon = mission_cannons_firing
-		position = 1
+		position = 4
 		required_missions = { }
 		trigger = {
 			in_league = catholic
@@ -493,7 +959,7 @@ PAP_missions_4_AoW = {
 
 	Attack_Of_The_Protestants = {
 		icon = mission_assemble_an_army
-		position = 2
+		position = 6
 		required_missions = { The_League_Wars }
 		trigger = {
 			hre_religion_locked = yes
@@ -503,146 +969,6 @@ PAP_missions_4_AoW = {
 			add_country_modifier = {
 				name = "Military_Menace"
 				duration = -1
-			}
-		}
-	}
-}
-
-PAP_missions_4 = {
-	slot = 4
-	generic = no
-	ai = yes
-	potential = {
-		tag = PAP
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	Unlimited_Power = {
-		icon = mission_monarch_in_throne_room
-		position = 3
-		required_missions = { }
-		trigger = {
-			religious_ideas = 7
-			total_development = 700
-			religious_unity = 1
-			current_age = age_of_absolutism
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Absolute_Unlimited_Power"
-				duration = -1
-			}
-		}
-	}
-
-	Last_Stand = {
-		icon = mission_hands_praying
-		position = 4
-		required_missions = { }
-		trigger = {
-			current_age = age_of_reformation
-			hre_size = 1
-			is_emperor = no
-			emperor = {
-				war_with = ROOT
-			}
-		}
-		effect = {
-			country_event = { id = ME_Papal_State_Events.1 }
-		}
-	}
-}
-
-PAP_missions_5 = {
-	slot = 5
-	generic = no
-	ai = yes
-	potential = {
-		tag = PAP
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-
-	Solidify_the_church = {
-		icon = mission_european_church
-		position = 1
-		required_missions = { }
-		trigger = {
-			current_age = age_of_discovery
-			is_defender_of_faith = yes
-		}
-		effect = {
-			define_advisor = {
-				name = "Girolamo Savonarola"
-				type = inquisitor
-				culture = romagnan
-				religion = catholic
-				skill = 2
-				cost_multiplier = 0.25
-			}
-		}
-	}
-
-	Defend_the_church = {
-		icon = mission_landsknecht_soldier
-		position = 2
-		required_missions = { Solidify_the_church }
-		trigger = {
-			current_age = age_of_reformation
-			is_defender_of_faith = yes
-			religious_unity = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Re_Reformation"
-				duration = -1
-			}
-		}
-	}
-
-	Purge_the_heretics = {
-		icon = mission_assemble_an_army
-		position = 3
-		required_missions = { Defend_the_church }
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = obj_force_converted_tooltip
-				has_country_flag = force_converted
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Purge_Heretics"
-				duration = -1
-			}
-		}
-	}
-	
-	Jerusalem = {
-		icon = mission_unite_home_region
-		position = 4
-		required_missions = { }
-		provinces_to_highlight = {
-			area = palestine_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			palestine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "Return_Of_The_Catholics"
-				duration = 9125
-			}
-			379 = {
-				add_permanent_province_modifier = {
-					name = "Zealot_Forts"
-					duration = -1
-				}
 			}
 		}
 	}
