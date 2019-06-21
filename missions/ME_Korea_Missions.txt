@@ -128,6 +128,7 @@ KOR_missions_1 = {
 			}
 		}
 	}
+	
 	KOR_gyeongju_hyanggyo = {
 		icon = mission_early_modern_university
 		required_missions = { KOR_jeonju_hyanggyo }
@@ -144,8 +145,13 @@ KOR_missions_1 = {
 			}
 		}
 		effect = {
-			2745 = { 
-				add_building = university
+			2745 = {
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
 			}
 			eastern_korea_area = {
 				add_province_modifier = {
@@ -184,6 +190,7 @@ KOR_missions_1 = {
 			add_stability = 1
 		}
 	}
+	
 	KOR_reinforce = {
 		icon = mission_great_wall
 		required_missions = { KOR_five_palaces }
@@ -404,7 +411,12 @@ KOR_missions_2 = {
 		}
 		effect = {
 			737 = { 
-				add_building = university
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
 			}
 			south_korea_area = {
 				add_province_modifier = {
@@ -414,6 +426,7 @@ KOR_missions_2 = {
 			}
 		}
 	}
+	
 	KOR_Southern_Korea = {
 		icon = mission_market_place_with_asian_traders
 		required_missions = { KOR_jeonju_hyanggyo KOR_Western_Korea }
@@ -441,6 +454,7 @@ KOR_missions_2 = {
 			}
 		}
 	}
+	
 	KOR_five_palaces = {
 		icon = mission_japanese_fort
 		required_missions = { }
@@ -492,7 +506,6 @@ KOR_missions_2 = {
 			}
 		}
 	}
-	
 	
 	KOR_adopt_chinese_administration = {
 		icon = mission_asian_trader
@@ -763,6 +776,7 @@ KOR_missions_3 = {
 			}
 		}
 	}
+	
 	KOR_buryatia = {
 		icon = mission_war_chest
 		required_missions = { KOR_defeat_korchin KOR_Yeren }
@@ -786,6 +800,7 @@ KOR_missions_3 = {
 			}
 		}
 	}
+	
 	KOR_Seoul_temple = {
 		icon = mission_buddhist_monk_praying
 		required_missions = { }
@@ -793,13 +808,19 @@ KOR_missions_3 = {
 		provinces_to_highlight = {
 			province_id = 735
 			OR = {
-				NOT = { has_building = temple }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			}
 		}
 		trigger = {
 			735 = {
-				has_building = temple
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -814,9 +835,9 @@ KOR_missions_3 = {
 					duration = 9125
 				}
 			}
-
 		}
 	}
+	
 	KOR_Western_Korea = {
 		icon = mission_colonial
 		required_missions = { KOR_Seoul_temple }
@@ -849,6 +870,7 @@ KOR_missions_3 = {
 			}
 		}
 	}
+	
 	KOR_Pyeongyang = {
 		icon = mission_market_place_with_asian_traders
 		required_missions = { KOR_Western_Korea }
@@ -887,6 +909,7 @@ KOR_missions_3 = {
 			}
 		}
 	}
+	
 	KOR_pyongan = {
 		icon = mission_early_modern_university
 		required_missions = { KOR_Pyeongyang }
@@ -914,7 +937,6 @@ KOR_missions_3 = {
 			}
 		}
 	}
-	
 	
 	KOR_Found_new_dynasty = {
 		icon = mission_empire
@@ -971,10 +993,31 @@ KOR_missions_3 = {
 			NOT = { imperial_mandate = 5 }
 		}
 		effect = {
-			MNG = {
-				add_country_modifier = {
-					name = MNG_Emperor_of_china_in_name
-					duration = 9125
+			if = {
+				limit = {
+					exists = MNG
+				}
+				MNG = {
+					add_country_modifier = {
+						name = MNG_Emperor_of_china_in_name
+						duration = 9125
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				random_country = {
+					limit = {
+						is_emperor_of_china = yes
+					}
+					add_country_modifier = {
+						name = MNG_Emperor_of_china_in_name
+						duration = 9125
+					}
 				}
 			}
 		}
@@ -1789,6 +1832,7 @@ KOR_missions_5 = {
 			add_years_of_income = 1.5
 		}
 	}
+	
 	KOR_gyeongju = {
 		icon = mission_asian_trader
 		required_missions = { }
@@ -1825,6 +1869,7 @@ KOR_missions_5 = {
 			}
 		}
 	}
+	
 	KOR_world_port = {
 		icon = mission_trade_with_cathay
 		required_missions = { KOR_gyeongju KOR_Hanseong_entrepot }
