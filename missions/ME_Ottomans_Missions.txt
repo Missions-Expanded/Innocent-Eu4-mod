@@ -1,19 +1,6 @@
 ######
 #Created by claivin for Missions Expanded
 ######
-#testttttt
-# Ottoman_Tunis_Incident_1 = {
-	# slot = 1
-	# ai = yes
-	# generic = no
-	# potential = {
-		# tag = TUR
-		# has_country_flag = opt_in_tunis
-	# }
-	# has_country_shield = yes
-	
-
-# }
 
 Ottoman_Tunis_Incident_1 = {
 	slot = 1
@@ -41,9 +28,14 @@ Ottoman_Tunis_Incident_1 = {
 				who = emperor
 				value = 50
 			}
-			event_target:genoa_trade_leader_coalition = {
-				capital_scope = {
+			OR = {
+				101 = { #geona
 					controlled_by = ROOT
+				}
+				101 = {
+					owner = {
+						NOT = { war_with = ROOT }
+					}
 				}
 			}
 		}
@@ -198,9 +190,14 @@ Ottoman_Tunis_Incident_5 = {
 				who = emperor
 				value = 50
 			}
-			event_target:sevilla_trade_leader_coalition = {
-				capital_scope = {
+			OR = {
+				224 = { #sevilla
 					controlled_by = ROOT
+				}
+				224 = {
+					owner = {
+						NOT = { war_with = ROOT }
+					}
 				}
 			}
 		}
@@ -209,30 +206,295 @@ Ottoman_Tunis_Incident_5 = {
 		}
 	}
 }
-
-# Ottoman_Tunis_Incident_5 = {
-	# slot = 1
-	# ai = yes
-	# generic = no
-	# potential = {
-		# tag = TUR
-		# has_country_flag = opt_in_tunis
-	# }
-	# has_country_shield = yes
+#############################################
+#############################################
+#############################################
+Ottoman_Persia_Incident_3 = {
+	slot = 3
+	ai = yes
+	generic = no
+	potential = {
+		tag = TUR
+		has_country_flag = TUR_opt_in_persia
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
 	
-	# TUR_ = {
-		# icon = me_mission_ottomans_balkan_domination
-		# required_missions = { }
-		# position = 1
-		# trigger = {
-			
-		# }
-		# effect = {
-			
-		# }
-	# }
-# }
-
+	TUR_persia_incident_1 = {
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = { }
+		provinces_to_highlight = {
+			owned_by = event_target:TUR_persian_power
+			NOT = { controlled_by = ROOT }
+		}
+		position = 1
+		trigger = {
+			war_score_against = {
+				who = event_target:TUR_persian_power
+				value = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TUR_persia_incident_reward_1
+				duration = 1825
+			}
+		}
+	}
+	
+	TUR_persia_incident_2 = {
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_persia_incident_1
+		}
+		position = 2
+		provinces_to_highlight = {
+			owned_by = event_target:TUR_persian_power
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			war_score_against = {
+				who = event_target:TUR_persian_power
+				value = 40
+			}
+		}
+		effect = {
+			add_war_exhaustion = -0.5
+		}
+	}
+	
+	TUR_persia_incident_3 = {
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_persia_incident_2
+		}
+		position = 3
+		provinces_to_highlight = {
+			owned_by = event_target:TUR_persian_power
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			war_score_against = {
+				who = event_target:TUR_persian_power
+				value = 60
+			}
+		}
+		effect = {
+			add_mil_power = 15
+		}
+	}
+	
+	TUR_persia_incident_4 = {
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_persia_incident_3
+		}
+		position = 4
+		provinces_to_highlight = {
+			owned_by = event_target:TUR_persian_power
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			war_score_against = {
+				who = event_target:TUR_persian_power
+				value = 80
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 30
+			}
+			else = {
+				add_mil_power = 15
+			}
+		}
+	}
+	
+	TUR_persia_incident_5 = {
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_persia_incident_4
+		}
+		position = 5
+		provinces_to_highlight = {
+			owned_by = event_target:TUR_persian_power
+			NOT = { controlled_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				war_score_against = {
+					who = event_target:TUR_persian_power
+					value = 99
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.41 }
+		}
+	}
+}
+#############################################
+#############################################
+#############################################
+Ottoman_Christian_Incident_2 = {
+	slot = 2
+	ai = yes
+	generic = no
+	potential = {
+		tag = TUR
+		has_country_flag = TUR_opt_in_christian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	TUR_christian_incident_2 = {#gain favor with the clergy
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = { }
+		provinces_to_highlight = {
+		}
+		position = 1
+		trigger = {
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 70
+			}
+			stability = 1
+		}
+		effect = {
+			add_adm_power = 15
+		}
+	}
+}
+Ottoman_Christian_Incident_3 = {
+	slot = 3
+	ai = yes
+	generic = no
+	potential = {
+		tag = TUR
+		has_country_flag = TUR_opt_in_christian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	TUR_christian_incident_1 = {#squash the Rebellion
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_christian_incident_2
+			TUR_christian_incident_3
+		}
+		provinces_to_highlight = {
+			region = anatolia_region
+			is_core = ROOT
+			NOT = { owned_by = ROOT }
+		}
+		position = 2
+		trigger = {
+			anatolia_region = {
+				type = all
+				OR = {
+					AND = { 
+						is_core = ROOT
+						owned_by = ROOT
+					}
+					NOT = { is_core = ROOT }
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 15
+		}
+	}
+	TUR_christian_incident_4 = {#kingdom of the Turks
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_christian_incident_1
+		}
+		provinces_to_highlight = {
+			culture = turkish
+			NOT = { owned_by = ROOT }
+		}
+		position = 3
+		trigger = {
+			anatolia_region = {
+				type = all
+				OR = {
+					AND = {
+						culture = turkish
+						owned_by = ROOT
+					}
+					NOT = { culture = turkish }
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 40
+			country_event = { id = ME_TUR_Events.46 }
+		}
+	}
+	TUR_christian_incident_5 = {#kingdom of the Turks
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {
+			TUR_christian_incident_4
+		}
+		provinces_to_highlight = {}
+		position = 4
+		trigger = {
+			stability = 3
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.45 }
+		}
+	}
+}
+Ottoman_Christian_Incident_4 = {
+	slot = 4
+	ai = yes
+	generic = no
+	potential = {
+		tag = TUR
+		has_country_flag = TUR_opt_in_christian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	TUR_christian_incident_3 = {#increase legitimacy
+		icon = me_mission_ottomans_balkan_domination
+		required_missions = {}
+		provinces_to_highlight = { }
+		position = 1
+		trigger = {
+			calc_true_if = {
+				amount = 4
+				legitimacy = 100
+				num_of_royal_marriages = 4
+				diplomatic_reputation = 2
+				alliance_with = PAP
+				papal_influence = 50
+				num_of_unions = 1
+				custom_trigger_tooltip = {
+					tooltip = TUR_convert_5_provinces_tooltip
+					check_variable = { which = num_converted_religion value = 5 }
+				}
+				estate_influence = {
+					estate = estate_church
+					influence = 75
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = TUR_sought_legitimacy
+				duration = 3650
+			}
+		}
+	}
+}
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_1 = {
 	slot = 1
 	ai = yes
@@ -240,6 +502,8 @@ Ottoman_Missions_1 = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -573,8 +837,70 @@ Ottoman_Missions_1 = {
 			country_event = { id = ME_TUR_Events.28 }
 		}
 	}
+	
+	TUR_islamic_scholars = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
+		required_missions = {}
+		provinces_to_highlight = {
+			is_capital = yes
+		}
+		position = 15
+		trigger = {
+			OR = {
+				full_idea_group = innovativeness_ideas
+				capital_scope = {
+					AND = {
+						province_has_center_of_trade_of_level = 2
+						has_building = marketplace
+					}
+				}
+				AND = {
+					adm_tech = 14
+					dip_tech = 14
+					mil_tech = 14
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.32 } #taqi al-din
+		}
+	}
+	
+	TUR_amasaya_hospital = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
+		required_missions = {
+			TUR_islamic_scholars
+		}
+		provinces_to_highlight = {
+			province_id = 1846
+		}
+		position = 16
+		trigger = {
+			OR = {
+				full_idea_group = innovativeness_ideas
+				1846 = {
+					total_development = 15
+					OR = {
+						has_building = workshop
+						has_building = courthouse
+					}
+				}
+			}
+		}
+		effect = {
+			1846 = {
+				add_province_modifier = {
+					name = TUR_amasaya_hospital_modifier
+					duration = -1
+				}
+			}
+			country_event = { id = ME_TUR_Events.47 } #Serafeddin Sabuncuoglu
+		}
+	}
 }
-
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_2 = {
 	slot = 2
 	ai = yes
@@ -582,6 +908,8 @@ Ottoman_Missions_2 = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -724,6 +1052,7 @@ Ottoman_Missions_2 = {
 		}
 		position = 5
 		trigger = {
+			navy_size_percentage = 1.0
 			320 = {
 				owned_by = ROOT
 			}
@@ -1007,8 +1336,94 @@ Ottoman_Missions_2 = {
 			}
 		}
 	}
+	TUR_dhimmi = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
+		required_missions = {}
+		provinces_to_highlight = {}
+		position = 14
+		trigger = {
+			stability = 2
+			estate_influence = {
+				estate = estate_dhimmi
+				influence = 50
+			}
+			estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 60
+			}
+		}
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 10
+			}
+			add_adm_power = 50
+		}
+	}
+	TUR_estates = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
+		required_missions = {
+			TUR_dhimmi
+		}
+		provinces_to_highlight = {}
+		position = 15
+		trigger = {
+			mission_completed = TUR_egypt
+			stability = 2
+			estate_influence = {
+				estate = estate_church
+				influence = 50
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 65
+			}
+			estate_influence = {
+				estate = estate_nobles
+				influence = 50
+			}
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 65
+			}
+			estate_influence = {
+				estate = estate_burghers
+				influence = 50
+			}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 65
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.36 }
+		}
+	}
+	TUR_medrasas = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
+		required_missions = {
+			TUR_amasaya_hospital
+			TUR_estates
+			TUR_indian_ocean_domination
+		}
+		provinces_to_highlight = {}
+		position = 17
+		trigger = {
+			university = 15
+			temple = 5
+			IF = {
+				limit = { has_dlc = "Rule Britannia"}
+				innovativeness = 25
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.49 }
+		}
+	}
 }
-
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_3 = {
 	slot = 3
 	ai = yes
@@ -1016,6 +1431,8 @@ Ottoman_Missions_3 = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -1506,69 +1923,158 @@ Ottoman_Missions_3 = {
 			}
 		}
 	}
-	
-	TUR_expand_janissaries = {
-		icon = me_mission_ottomans_end_of_albanian_revolt
+	TUR_piri_reis = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
 		required_missions = {}
-		position = 13
-		trigger = {
-			manpower = 100
-			num_of_owned_provinces_with = {
-				value = 10
-				NOT = { religion_group = muslim }
-				OR = {
-					has_building = barracks
-					has_building = regimental_camp
-				}
-				base_manpower = 5
-			}
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				janissary_percentage = 0.30
-			}
-		}
-		effect = {
-			country_event = { id = ME_TUR_Events.29 }
-		}
-	}
-	
-	TUR_bektashi = {
-		icon = me_mission_ottomans_end_of_albanian_revolt
-		required_missions = {
-			TUR_expand_janissaries
-		}
-		position = 14
+		provinces_to_highlight = {}
+		position = 15
 		trigger = {
 			OR = {
-				full_idea_group = humanist_ideas
-				full_idea_group = religious_ideas
+				full_idea_group = exploration_ideas
+				full_idea_group = expansion_ideas
+				AND = {
+					1297 = {
+						privateer_power = {
+							country = ROOT
+							share = 10
+						}
+					}
+					1308 = {
+						privateer_power = {
+							country = ROOT
+							share = 10
+						}
+					}
+					341 = {
+						privateer_power = {
+							country = ROOT
+							share = 10
+						}
+					}
+					358 = {
+						privateer_power = {
+							country = ROOT
+							share = 10
+						}
+					}
+				}
 			}
-			num_of_owned_provinces_with = {
-				value = 15
-				NOT = { religion_group = muslim }
-				has_building = temple
-			}
-			janissary_percentage = 0.2
 		}
 		effect = {
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
+			country_event = { id = ME_TUR_Events.33 } #piri reis
+			2331 = { #jeddah
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
 				}
-				custom_tooltip = TUR_unlocks_bektashi_tooltip
+				add_permanent_claim = ROOT
 			}
-			else = {
-				add_country_modifier = {
-					name = TUR_bektashi_modifier
-					duration  = -1
+			4279 = { #zabid
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
 				}
+				add_permanent_claim = ROOT
 			}
+			388 = { #aden
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			1212 = { #zeila
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			4283 = { #sihir
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			400 = { #masqat
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			2999 = { #hormuz
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			394 = { #haasa
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			408 = { #basrah
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_indian_ocean_domination = {
+		icon = me_mission_ottomans_banks_of_the_ukraine
+		required_missions = {
+			TUR_piri_reis
+		}
+		provinces_to_highlight = {}
+		position = 16
+		trigger = {
+			owns_or_non_sovereign_subject_of = 2331
+			owns_or_non_sovereign_subject_of = 4279
+			owns_or_non_sovereign_subject_of = 388
+			owns_or_non_sovereign_subject_of = 1212
+			owns_or_non_sovereign_subject_of = 4283
+			owns_or_non_sovereign_subject_of = 400
+			owns_or_non_sovereign_subject_of = 2999
+			owns_or_non_sovereign_subject_of = 394
+			owns_or_non_sovereign_subject_of = 408
+			num_of_heavy_ship = 10
+			1350 = {
+				heavy_ships_in_province = 10
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.48 } #sultanate of aceh
 		}
 	}
 }
-
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_4 = {
 	slot = 4
 	ai = yes
@@ -1576,6 +2082,8 @@ Ottoman_Missions_4 = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -1654,6 +2162,7 @@ Ottoman_Missions_4 = {
 		}
 		position = 5
 		trigger = {
+			navy_size_percentage = 1.0
 			321 = {
 				owned_by = ROOT
 			}
@@ -1928,7 +2437,9 @@ Ottoman_Missions_4 = {
 		}
 	}
 }
-
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_ally_morocco = {
 	slot = 4
 	ai = yes
@@ -1936,6 +2447,8 @@ Ottoman_Missions_ally_morocco = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = TUR_allied_MOR
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -1958,7 +2471,7 @@ Ottoman_Missions_ally_morocco = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			NOT = { country_or_non_sovereign_subject_holds = MOR }
 		}
-		position = 10
+		position = 13
 		trigger = {
 			tafilalt_area = {
 				type = all
@@ -2016,7 +2529,9 @@ Ottoman_Missions_ally_morocco = {
 		}
 	}
 }
-
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_enemy_morocco = {
 	slot = 4
 	ai = yes
@@ -2024,6 +2539,8 @@ Ottoman_Missions_enemy_morocco = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = TUR_invaded_MOR
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -2045,7 +2562,7 @@ Ottoman_Missions_enemy_morocco = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		position = 10
+		position = 13
 		trigger = {
 			tafilalt_area = {
 				type = all
@@ -2080,7 +2597,143 @@ Ottoman_Missions_enemy_morocco = {
 		}
 	}
 }
-
+#############################################
+#############################################
+#############################################
+Ottoman_Missions_4_contd = {
+	slot = 4
+	ai = yes
+	generic = no
+	potential = {
+		tag = TUR
+		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	TUR_expand_janissaries = {
+		icon = me_mission_ottomans_end_of_albanian_revolt
+		required_missions = {}
+		position = 14
+		trigger = {
+			manpower = 100
+			num_of_owned_provinces_with = {
+				value = 10
+				NOT = { religion_group = muslim }
+				OR = {
+					has_building = barracks
+					has_building = regimental_camp
+				}
+				base_manpower = 5
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				janissary_percentage = 0.30
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.29 }
+		}
+	}
+	
+	TUR_bektashi = {
+		icon = me_mission_ottomans_end_of_albanian_revolt
+		required_missions = {
+			TUR_expand_janissaries
+			TUR_dhimmi
+		}
+		position = 15
+		trigger = {
+			OR = {
+				full_idea_group = humanist_ideas
+				full_idea_group = religious_ideas
+			}
+			num_of_owned_provinces_with = {
+				value = 15
+				NOT = { religion_group = muslim }
+				has_building = temple
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				janissary_percentage = 0.30
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.31 }
+		}
+	}
+	
+	TUR_yerliyya = {
+		icon = me_mission_ottomans_end_of_albanian_revolt
+		required_missions = {
+			TUR_bektashi
+		}
+		position = 16
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				development = 30
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+				OR = {
+					has_building = regimental_camp
+					has_building = conscription_center
+				}
+				fort_level = 1
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				janissary_percentage = 0.35
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.34 }
+		}
+	}
+	
+	TUR_band = {
+		icon = me_mission_ottomans_end_of_albanian_revolt
+		required_missions = {
+			TUR_yerliyya
+		}
+		position = 17
+		trigger = {
+			OR = {
+				current_age = age_of_revolutions
+				current_age = age_of_absolutism
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				splendor = 400
+			}
+			else = {
+				mil_power = 300
+			}
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				janissary_percentage = 0.40
+			}
+		}
+		effect = {
+			country_event = { id = ME_TUR_Events.35 }
+		}
+	}
+}
+#############################################
+#############################################
+#############################################
 Ottoman_Missions_5 = {
 	slot = 5
 	ai = yes
@@ -2088,6 +2741,8 @@ Ottoman_Missions_5 = {
 	potential = {
 		tag = TUR
 		NOT = { has_country_flag = opt_in_tunis }
+		NOT = { has_country_flag = TUR_opt_in_persia }
+		NOT = { has_country_flag = TUR_opt_in_christian }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -2591,3 +3246,99 @@ Ottoman_Missions_5 = {
 		}
 	}
 }
+#not used yet
+#############################################
+#############################################
+#############################################
+# Christian_Ottoman_Missions_1 = {
+	# slot = 1
+	# ai = yes
+	# generic = no
+	# potential = {
+		# tag = TUR
+		# NOT = { has_country_flag = opt_in_tunis }
+		# NOT = { has_country_flag = TUR_opt_in_persia }
+		# NOT = { has_country_flag = TUR_opt_in_christian }
+		# has_country_flag = TUR_christian_missions
+		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	# }
+	# has_country_shield = yes
+	
+	
+# }
+# #############################################
+# #############################################
+# #############################################
+# Christian_Ottoman_Missions_2 = {
+	# slot = 2
+	# ai = yes
+	# generic = no
+	# potential = {
+		# tag = TUR
+		# NOT = { has_country_flag = opt_in_tunis }
+		# NOT = { has_country_flag = TUR_opt_in_persia }
+		# NOT = { has_country_flag = TUR_opt_in_christian }
+		# has_country_flag = TUR_christian_missions
+		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	# }
+	# has_country_shield = yes
+	
+	
+# }
+# #############################################
+# #############################################
+# #############################################
+# Christian_Ottoman_Missions_3 = {
+	# slot = 3
+	# ai = yes
+	# generic = no
+	# potential = {
+		# tag = TUR
+		# NOT = { has_country_flag = opt_in_tunis }
+		# NOT = { has_country_flag = TUR_opt_in_persia }
+		# NOT = { has_country_flag = TUR_opt_in_christian }
+		# has_country_flag = TUR_christian_missions
+		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	# }
+	# has_country_shield = yes
+	
+	
+# }
+# #############################################
+# #############################################
+# #############################################
+# Christian_Ottoman_Missions_4 = {
+	# slot = 4
+	# ai = yes
+	# generic = no
+	# potential = {
+		# tag = TUR
+		# NOT = { has_country_flag = opt_in_tunis }
+		# NOT = { has_country_flag = TUR_opt_in_persia }
+		# NOT = { has_country_flag = TUR_opt_in_christian }
+		# has_country_flag = TUR_christian_missions
+		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	# }
+	# has_country_shield = yes
+	
+	
+# }
+# #############################################
+# #############################################
+# #############################################
+# Christian_Ottoman_Missions_5 = {
+	# slot = 5
+	# ai = yes
+	# generic = no
+	# potential = {
+		# tag = TUR
+		# NOT = { has_country_flag = opt_in_tunis }
+		# NOT = { has_country_flag = TUR_opt_in_persia }
+		# NOT = { has_country_flag = TUR_opt_in_christian }
+		# has_country_flag = TUR_christian_missions
+		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	# }
+	# has_country_shield = yes
+	
+	
+# }
