@@ -513,20 +513,55 @@ Ottoman_Missions_1 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			OR = {
-				AND = {
+			IF = {
+				limit = {
+					HUN = { is_subject = no }
+				}
+				OR = {
 					is_rival = HUN
+					is_enemy = HUN
+				}
+				OR = {
 					reverse_has_opinion_modifier = {
 						who = HUN
 						modifier = insulted
+					}
+					reverse_has_opinion_modifier = {
+						who = HUN
+						modifier = scornfully_insulted
 					}
 				}
-				AND = {
-					is_enemy = HUN
-					reverse_has_opinion_modifier = {
-						who = HUN
-						modifier = insulted
+			}
+			ELSE_IF = {
+				limit = {
+					HUN = { is_subject = yes }
+				}
+				HUN = {
+					overlord = {
+						OR = {
+							is_rival = ROOT
+							is_enemy = ROOT
+						}
+						OR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+						}
 					}
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					NOT = { exists = HUN }
+				}
+				thrace_area = {
+					type = all
+					is_core = ROOT
 				}
 			}
 		}
