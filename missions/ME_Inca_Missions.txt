@@ -40,13 +40,26 @@ inca_missions_1 = {
 		effect = {
 			quito_area = {
 				add_nationalism = -3
-			}
-			antisuyu_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
 				}
-				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					antisuyu_area = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+				}
+				antisuyu_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -68,20 +81,42 @@ inca_missions_1 = {
 		effect = {
 			antisuyu_area = {
 				add_nationalism = -3
-			}
-			upper_peru = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
 				}
-				add_permanent_claim = ROOT
 			}
-			potosi_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					upper_peru = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
 				}
-				add_permanent_claim = ROOT
+				upper_peru = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					potosi_area = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+				}
+				potosi_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -108,6 +143,20 @@ inca_missions_1 = {
 			}
 		}
 		effect = {
+			upper_peru = {
+				add_nationalism = -3
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
+				}
+			}
+			potosi_area = {
+				add_nationalism = -3
+				add_province_modifier = {
+					name = inca_conquer_incan_lands_province_modifier
+					duration = 5475
+				}
+			}
 			794 = {
 				if = {
 					limit = {
@@ -235,25 +284,42 @@ inca_missions_1 = {
 				owned_by = ROOT
 			}
 			any_owned_province = {
-				any_core_country = {
+				OR = {
 					custom_trigger_tooltip = {
-						tooltip = EXISTS
-						exists = yes
-					}
-					OR = {
-						custom_trigger_tooltip = {
-							tooltip = THIS_CAPITAL_IS_IN_EUROPE
-							capital_scope = {
-								continent = europe
+						tooltip = INC_ANY_CORE_COUNTRY_IS_EUROPEAN_OR_CN
+						any_core_country = {
+							exists = yes
+							OR = {
+								capital_scope = {
+									continent = europe
+								}
+								AND = {
+									is_colonial_nation = yes
+									overlord = {
+										capital_scope = {
+											continent = europe
+										}
+									}
+								}
 							}
 						}
-						AND = {
-							is_colonial_nation = yes
-							overlord = {
-								custom_trigger_tooltip = {
-									tooltip = THIS_CAPITAL_IS_IN_EUROPE
-									capital_scope = {
-										continent = europe
+					}
+					custom_trigger_tooltip = {
+						tooltip = INC_PREVIOUS_OWNER_IS_EUROPEAN_OR_CN
+						any_country = {
+							PREV = {
+								previous_owner = PREV
+							}
+							OR = {
+								capital_scope = {
+									continent = europe
+								}
+								AND = {
+									is_colonial_nation = yes
+									overlord = {
+										capital_scope = {
+											continent = europe
+										}
 									}
 								}
 							}
@@ -591,12 +657,45 @@ inca_missions_2 = {
 				name = inca_the_incan_cores_modifier
 				duration = 5475
 			}
-			quito_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					quito_area = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
 				}
-				add_permanent_claim = ROOT
+				quito_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2002 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								is_colony = yes
+								owned_by = ROOT
+							}
+						}
+					}
+					add_siberian_construction = 200
+					change_native_ferocity = -10
+					change_native_hostileness = -10
+				}
+				else_if = {
+					limit = {
+						is_city = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -1408,30 +1507,6 @@ inca_missions_3 = {
 					duration = 3650
 				}
 			}
-			2002 = {
-				if = {
-					limit = {
-						OR = {
-							is_empty = yes
-							AND = {
-								is_colony = yes
-								owned_by = ROOT
-							}
-						}
-					}
-					add_siberian_construction = 200
-					change_native_ferocity = -10
-					change_native_hostileness = -10
-				}
-				else_if = {
-					limit = {
-						is_city = yes
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
 		}
 	}
 	
@@ -2108,6 +2183,65 @@ inca_missions_4 = {
 				key = inca_secure_the_northern_chilenean_coast_price
 				value = 0.1
 				duration = 3650
+			}
+		}
+	}
+	
+	inca_all_roads_lead_to_cusco = {
+		icon = me_mission_hungary_road
+		required_missions = { inca_the_rule_of_the_sun inca_secure_the_northern_chilenean_coast }
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_capital_of = ROOT
+					OR = {
+						NOT = { development = 30 }
+						NOT = { continent = south_america }
+					}
+				}
+				AND = {
+					continent = south_america
+					is_sea = no
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 1 }
+						NOT = { development = 5 }
+						unrest = 1
+					}
+				}
+			}
+			has_discovered = ROOT
+		}
+		trigger = {
+			capital_scope = {
+				development = 30
+				continent = south_america
+			}
+			south_america = {
+				type = all
+				OR = {
+					AND = {
+						owned_by = ROOT
+						num_of_times_improved = 1
+						development = 5
+						NOT = { unrest = 1 }
+					}
+					is_sea = yes
+				}
+			}
+		}
+		effect = {
+			add_prestige = 20
+			south_america = {
+				limit = {
+					is_sea = no
+					NOT = { has_province_modifier = inca_roads_province_modifier }
+				}
+				add_province_modifier = {
+					name = inca_roads_province_modifier
+					duration = -1
+				}
 			}
 		}
 	}
