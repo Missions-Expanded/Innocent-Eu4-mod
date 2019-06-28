@@ -1,0 +1,212 @@
+estate_east_india_company = {
+	icon = 3
+	
+	color = { 255 147 0 }
+	
+	# Is estate kept in control of province on conquest?
+	keep_on_conquest = no
+	
+	# Estate will always be removed when conquered by a different religion than previous owner
+	always_remove_on_religious_conquest = yes
+	
+	# If true, country will get estate
+	trigger = {
+		has_country_flag = enable_ned_hol_voc_estate
+	}
+	
+	# If true, province can be granted to estate
+	province_trigger = {
+		development = 10
+		OR = {
+			region = south_africa_region
+			region = indonesia_region
+			region = guinea_region
+		}
+	}
+
+	# Is used to weigh importance compared to other estates
+	start_territory_weight = 25
+	
+	# Min autonomy in estate provinces
+	min_autonomy = 20
+	
+	# Estate cancels out the following multiplicative local autonomy effects:
+	autonomy_does_not_affect = local_production_efficiency
+	autonomy_does_not_affect = local_manpower_modifier
+
+	# These scale with loyalty & power
+	country_modifier_happy = {
+		global_ship_trade_power = 0.2
+	}
+	country_modifier_neutral = {
+		trade_steering = 0.2
+	}
+	country_modifier_angry = {
+		global_ship_trade_power = -0.2
+		trade_steering = -0.2
+	}
+	
+	# These do not scale, but only applied in provinces owned by the estate
+	province_modifier_happy = {
+		province_trade_power_value = 5
+	}
+	province_modifier_neutral = {
+		trade_goods_size = 0.5
+	}	
+	province_modifier_angry = {
+		trade_goods_size = 0.5
+		local_unrest = 5
+	}	
+	
+	# Influence modifiers
+	base_influence = 10
+	
+	# For province assignment
+	ai_grant_province = {
+		factor = 1
+	}
+	
+	# Does the AI want to give any extra territory beyond the minimum?
+	ai_territory_modifier = {
+		trigger = {
+			always = yes
+		}	
+		value = 0		
+	}		
+	
+	# Special interactions
+	interaction = {
+		name = "PATRONIZE_THE_VOC"
+		icon = 6
+		
+		years_between_use = 20
+		
+		potential = {
+			always = yes
+		}
+		trigger = {
+			mercantilism = 1
+			prestige = 0
+		}
+		effect = {
+			add_prestige = -5
+			add_mercantilism = -1
+			add_estate_influence_modifier = {
+				estate = estate_east_india_company
+				desc = EST_VAL_PATRONIZE_THE_VOC
+				influence = 10
+				duration = 7300
+			}
+			add_estate_loyalty = {
+				estate = estate_east_india_company
+				loyalty = 15
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_loyalty = {
+					estate = estate_east_india_company
+					loyalty = 40
+				}
+			}		
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_east_india_company
+					influence = 70
+				}
+			}			
+		}		
+	}
+	
+	interaction = {
+		name = "FUND_THE_VOC"
+		icon = 7
+		
+		years_between_use = 20
+		
+		potential = {
+			always = yes
+		}
+		trigger = {
+			years_of_income = 1
+		}
+		effect = {
+			add_years_of_income = -1
+			add_estate_influence_modifier = {
+				estate = estate_east_india_company
+				desc = EST_VAL_FUND_THE_VOC
+				influence = 10
+				duration = 7300
+			}
+			every_owned_province = {
+				limit = {
+					has_estate = estate_east_india_company
+				}
+				add_province_modifier = {
+					name = estate_east_india_company_fund_the_voc
+					duration = 7300
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+				
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_east_india_company
+					influence = 70
+				}
+			}			
+		}		
+	}
+	
+	interaction = {
+		name = "RECRUIT_FROM_THE_COMPANY"
+		icon = 12
+		
+		years_between_use = 20
+		
+		potential = {
+			always = yes
+		}
+		trigger = {
+			NOT = {
+				estate_influence = {
+					estate = estate_east_india_company
+					influence = 80
+				}
+			}
+		}
+		effect = {
+			add_navy_tradition = 10
+			add_yearly_manpower = 0.5
+			add_yearly_sailors = 1
+			add_estate_influence_modifier = {
+				estate = estate_east_india_company
+				desc = EST_VAL_RECRUIT_FROM_THE_COMPANY
+				influence = 20
+				duration = 7300
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_east_india_company
+					influence = 70
+				}
+			}
+			modifier = {
+				factor = 0
+				manpower_percentage = 0.8
+			}
+		}		
+	}
+}
