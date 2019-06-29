@@ -1,36 +1,24 @@
 namespace = ME_England_Events
 
 country_event = {
-	id = ME_England_Events.1
+	id = ME_England_Events.1 #Maine Reclaimed
 	title = ME_England_Events.1.t
-	picture = BORDER_TENSION_eventPicture
+	picture = CITY_VIEW_eventPicture
 	desc = ME_England_Events.1.d
 
-	hidden = yes
-	fire_only_once = yes
-	
-	immediate = {
-		hidden_effect = {
-			wales_area = {
-				add_province_modifier = {
-					name = england_wales_lords
-					duration = -1
-				}
-			}
-		}
-	}
+	is_triggered_only = yes
 	
 	option = {
 		name = ME_England_Events.1.a
-		
-		ai_chance = { factor = 100 }
+		add_yearly_manpower = 0.5
+		ai_chance = { factor = 100 } 
 	}
 }
 
-country_event = {
+country_event = { #A new Order
 	id = ME_England_Events.2
 	title = ME_England_Events.2.t
-	picture = BORDER_TENSION_eventPicture
+	picture = COURT_eventPicture
 	desc = ME_England_Events.2.d
 
 	fire_only_once = yes
@@ -40,35 +28,32 @@ country_event = {
 		name = ME_England_Events.2.a
 		
 		ai_chance = {
-			factor = 0.5
+			factor = 1
 		}
 		
-		wales_area = {
-			add_province_modifier = {
-				name = england_me_wales_looted
-				duration = 9125
+		poitou_area = {
+			limit = {
+				owned_by = FRA
 			}
+			cede_province = ROOT
 		}
-		add_years_of_income = 0.5
+		pyrenees_area = {
+			limit = {
+				owned_by = FRA
+			}
+			cede_province = ROOT
+		}
+		set_country_flag = ENG_Angevin_Missions
+		swap_non_generic_missions = yes
+		
 	}
-	
 	option = {
 		name = ME_England_Events.2.b
 		
 		ai_chance = {
-			factor = 0.5
+			factor = 0
 		}
 		
-		capital_scope = {
-			spawn_rebels = {
-				type = noble_rebels
-				size = 2
-			}
-		}
-		add_country_modifier = {
-			name = england_me_tax
-			duration = 3650
-		}
 	}
 }
 
@@ -87,6 +72,24 @@ country_event = {
 		ai_chance = {
 			factor = 0.25
 		}
+		if = {
+			limit = {
+				manpower_percentage = 0.1
+			}
+			add_yearly_manpower = -1
+		}
+		else = {
+			add_country_modifier = {
+				name = ENG_sent_in_the_troops
+				duration = 3650
+			}
+		}
+		every_owned_province = {
+			limit = {
+				is_core = FRA
+			}
+			add_nationalism = -5
+		}
 	}
 	
 	option = {
@@ -96,33 +99,6 @@ country_event = {
 			factor = 0.75
 		}
 		
-		define_ruler = {
-			name = "Margaret"
-			dynasty = "d'Anjou"
-			culture = cosmopolitan_french
-			fixed = yes
-			adm = 3
-			dip = 4
-			mil = 3
-			female = yes
-		}
-		remove_consort = yes
-		add_country_modifier = {
-			name = me_eng_foreign_queen
-			duration = 5475
-		}
-		add_estate_loyalty = {
-			estate = estate_nobles
-			loyalty = -15
-		}
-		add_estate_loyalty = {
-			estate = estate_church
-			loyalty = -15
-		}
-		add_estate_loyalty = {
-			estate = estate_burghers
-			loyalty = -15
-		}
 	}
 }
 
@@ -132,46 +108,293 @@ country_event = {
 	picture = BORDER_TENSION_eventPicture
 	desc = ME_England_Events.4.d
 
-	fire_only_once = yes
-	
-	trigger = {
-		mission_completed = England_war_of_roses
-		has_country_flag = had_war_of_the_roses
-		is_year = 1461
-		NOT = { is_year = 1485 }
-	}
-	
+	hidden = yes
 	mean_time_to_happen = {
-		months = 12
+		months = 120
+		modifier = {
+			factor = 0.9
+			OR = {
+				accepted_culture = cosmopolitan_french 
+				accepted_culture = gascon 
+				accepted_culture = normand 
+				accepted_culture = aquitaine 
+				accepted_culture = burgundian 
+				accepted_culture = occitain 
+				accepted_culture = wallonian 
+			}
+		}
+		modifier = {
+			factor = 0.9
+			calc_true_if = {
+				accepted_culture = cosmopolitan_french 
+				accepted_culture = gascon 
+				accepted_culture = normand 
+				accepted_culture = aquitaine 
+				accepted_culture = burgundian 
+				accepted_culture = occitain 
+				accepted_culture = wallonian 
+				amount = 2
+			}
+		}
+		modifier = {
+			factor = 0.9
+			calc_true_if = {
+				accepted_culture = cosmopolitan_french 
+				accepted_culture = gascon 
+				accepted_culture = normand 
+				accepted_culture = aquitaine 
+				accepted_culture = burgundian 
+				accepted_culture = occitain 
+				accepted_culture = wallonian 
+				amount = 3
+			}
+		}
 	}
 	
 	option = {
 		name = ME_England_Events.4.a
 		
 		ai_chance = {
-			factor = 0.25
+			factor = 1
 		}
+		
+		change_variable = {            
+			which = ENG_Culture
+			value = 1
+		}
+
+	}
+}
+country_event = {
+	id = ME_England_Events.5
+	title = ME_England_Events.5.t
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 1
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 2
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.1
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 2
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 3
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.2
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 3
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 4
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.3
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 4
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 5
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.4
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 5
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 6
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.5
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 6
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 7
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.6
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 7
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 8
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.7
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 8
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 9
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.8
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 9
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 10
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.9
+	}
+	desc = {
+		trigger = {
+			check_variable = {
+				which = ENG_Culture
+				value = 10
+			}
+			NOT = {
+				check_variable = {
+					which = ENG_Culture
+					value = 11
+				}
+			}
+		}
+		desc = ME_England_Events.5.d.10
+	}
+	picture = IMPORTANT_STATUE_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_England_Events.5.a
+		
+		ai_chance = {
+			factor = 1
+		}
+		
+
+	}
+}
+country_event = {
+	id = ME_England_Events.6
+	title = ME_England_Events.6.t
+	picture = BORDER_TENSION_eventPicture
+	desc = ME_England_Events.6.d
+
+	trigger = {
+		check_variable = {
+			which = ENG_Culture
+			value = 11
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
 	}
 	
 	option = {
-		name = ME_England_Events.4.b
+		name = ME_England_Events.6.a
 		
 		ai_chance = {
-			factor = 0.75
+			factor = 1
 		}
+		hidden_effect = {
+			every_province = {
+				limit = {
+					culture = english
+				}
+				change_culture = anglois
+			}
+			change_primary_culture = anglois
+			set_ruler_culture = anglois
+			if = {
+				limit = {
+					has_heir = yes
+				}
+				set_heir_culture = anglois
+			}
+		}
+
+	}
+}
+country_event = {
+	id = ME_England_Events.7
+	title = ME_England_Events.7.t
+	picture = BORDER_TENSION_eventPicture
+	desc = ME_England_Events.7.d
+
+	trigger = {
+		check_variable = {
+			which = ENG_Culture
+			value = 11
+		}
+	}
+	mean_time_to_happen = {
+		months = 1
+	}
+	
+	option = {
+		name = ME_England_Events.7.a
 		
-		define_ruler = {
-			name = "Edward IV"
-			dynasty = ROOT
-			culture = ROOT
-			religion = ROOT
-			adm = 4
-			dip = 5
-			mil = 6
-			fixed = yes
-			male = yes
-			age = 19
-			claim = 100
+		ai_chance = {
+			factor = 1
 		}
+		trigger = {
+			
+
 	}
 }
