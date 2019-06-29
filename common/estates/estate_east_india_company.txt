@@ -59,7 +59,23 @@ estate_east_india_company = {
 	}	
 	
 	# Influence modifiers
-	base_influence = 10
+	base_influence = 20
+	
+	influence_modifier = {
+		desc = EST_VAL_IS_REPUBLIC
+		trigger = {
+			government = republic
+		}	
+		influence = 5
+	}
+	
+	influence_modifier = {
+		desc = EST_VAL_HIGH_TRADE_INCOME
+		trigger = {
+			trade_income_percentage = 0.4
+		}	
+		influence = 5
+	}
 	
 	# For province assignment
 	ai_grant_province = {
@@ -82,7 +98,7 @@ estate_east_india_company = {
 		years_between_use = 20
 		
 		potential = {
-			always = yes
+			NOT = { has_disaster = estate_east_india_company_disaster }
 		}
 		trigger = {
 			mercantilism = 1
@@ -129,7 +145,7 @@ estate_east_india_company = {
 		years_between_use = 20
 		
 		potential = {
-			always = yes
+			NOT = { has_disaster = estate_east_india_company_disaster }
 		}
 		trigger = {
 			years_of_income = 1
@@ -172,7 +188,7 @@ estate_east_india_company = {
 		years_between_use = 20
 		
 		potential = {
-			always = yes
+			NOT = { has_disaster = estate_east_india_company_disaster }
 		}
 		trigger = {
 			NOT = {
@@ -208,5 +224,658 @@ estate_east_india_company = {
 				manpower_percentage = 0.8
 			}
 		}		
+	}
+	
+	interaction = {
+		name = "COMMISSION_A_FLEET"
+		icon = 17
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_east_india_company_disaster }
+		}
+		trigger = {
+			any_owned_province = {
+				has_estate = estate_east_india_company
+				has_port = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_estate = estate_east_india_company
+						has_port = yes
+					}
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+				}
+			}
+			else_if = {
+				limit = {
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 50
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_estate = estate_east_india_company
+						has_port = yes
+					}
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = {
+						has_estate = estate_east_india_company
+						has_port = yes
+					}
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+					light_ship = ROOT
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_east_india_company
+				desc = EST_VAL_COMMISSION_A_FLEET
+				influence = 10
+				duration = 10950
+			}
+			add_estate_loyalty = {
+				estate = estate_east_india_company
+				loyalty = -10
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			
+			modifier = {
+				factor = 0
+				NOT = {
+					estate_loyalty = {
+						estate = estate_east_india_company
+						loyalty = 50
+					}
+				}
+			}		
+			modifier = {
+				factor = 0
+				estate_influence = {
+					estate = estate_east_india_company
+					influence = 70
+				}
+			}
+			modifier = {
+				factor = 0
+				navy_size_percentage = 1
+			}
+		}	
+	}
+	
+	interaction = {
+		name = "RECRUIT_MERCANTILE_EXPERT"
+		icon = 10
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_east_india_company_disaster }
+		}
+		
+		trigger = {
+			estate_influence = {
+				estate = estate_east_india_company
+				influence = 40
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						has_estate = estate_east_india_company
+					}
+					save_event_target_as = estate_east_india_company_province
+				}
+			}
+			if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_east_india_company_province
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 3
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 2
+					cost_multiplier = 0.5
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 2
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 2
+					cost_multiplier = 0.75
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 2
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_east_india_company_province
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 2
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = trader
+					skill = 2
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_east_india_company
+				desc = EST_VAL_RECRUIT_MERCANTILE_EXPERT
+				influence = 15
+				duration = 10950
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	interaction = {
+		name = "RECRUIT_NAVAL_REFORMER"
+		icon = 5
+		
+		years_between_use = 30
+		
+		potential = {
+			NOT = { has_disaster = estate_east_india_company_disaster }
+		}
+		
+		trigger = {
+			estate_influence = {
+				estate = estate_east_india_company
+				influence = 40
+			}
+		}
+		
+		effect = {
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						has_estate = estate_east_india_company
+					}
+					save_event_target_as = estate_east_india_company_province
+				}
+			}
+			if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					has_saved_event_target = estate_east_india_company_province
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+				}
+			}
+			else_if = {
+				limit = {
+					monthly_income = 25
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 3
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+					cost_multiplier = 0.5
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 80
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+					cost_multiplier = 0.5
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_east_india_company_province
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+					cost_multiplier = 0.75
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+					
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					estate_influence = {
+						estate = estate_east_india_company
+						influence = 60
+					}
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 80
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+					cost_multiplier = 0.75
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					has_saved_event_target = estate_east_india_company_province
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+					culture = event_target:estate_east_india_company_province
+					religion = event_target:estate_east_india_company_province
+					location = event_target:estate_east_india_company_province
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { monthly_income = 25 }
+					NOT = { has_saved_event_target = estate_east_india_company_province }
+					NOT = {
+						estate_influence = {
+							estate = estate_east_india_company
+							influence = 60
+						}
+					}
+				}
+				define_advisor = {
+					type = naval_reformer
+					skill = 2
+				}
+			}
+			add_estate_influence_modifier = {
+				estate = estate_east_india_company
+				desc = EST_VAL_RECRUIT_NAVAL_REFORMER
+				influence = 15
+				duration = 10950
+			}
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
 	}
 }
