@@ -1,0 +1,304 @@
+ENG_GBR_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ENG
+			tag = GBR
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = ENG_Angevin_Missions }
+	}
+	has_country_shield  = yes
+	
+	ENG_Reclaim_Maine = {
+        icon = mission_conquer_50_development
+        required_missions = { ENG_Hundred_Years_war }
+        position = 2
+		provinces_to_highlight = {
+			province_id =  177
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			177 = {
+				controlled_by = ROOT
+			}
+		}
+        effect = {
+			country_event = { id = ME_England_Events.1 }
+        }
+    }
+	ENG_Angevin_Possesions = {
+        icon = mission_cannons_firing
+        required_missions = { ENG_Reclaim_Maine }
+        position = 3
+		provinces_to_highlight = {
+			province_id =  178
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			178 = {
+				controlled_by = ROOT
+			}
+		}
+        effect = {
+			add_army_tradition = 10
+        }
+    }
+	ENG_Poitou = {
+        icon = mission_conquer_50_development
+        required_missions = { ENG_Angevin_Possesions }
+        position = 4
+		provinces_to_highlight = {
+			province_id =  180
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			180 = {
+				controlled_by = ROOT
+			}
+		}
+        effect = {
+			180 = {
+				add_province_modifier = {
+					name = ENG_defense
+					duration = 1825
+				}
+			}
+        }
+    }
+}
+
+ENG_GBR_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ENG
+			tag = GBR
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = ENG_Angevin_Missions }
+	}
+	has_country_shield  = yes
+
+	ENG_Hundred_Years_war = {
+        icon = me_mission_france_100_years_war
+        required_missions = { }
+        position = 1
+        trigger = {
+			is_in_war = {
+				attacker_leader = ROOT
+				defender_leader = FRA
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = eng_longbowmen
+				duration = 1825
+			}
+			set_country_flag = ENG_engaged_France
+        }
+    }
+	ENG_Scotland = {
+        icon = mission_rb_conquer_scotland
+        required_missions = { ENG_Hundred_Years_war }
+        position = 3
+		provinces_to_highlight = {
+			province_id =  248
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			OR = {
+				AND = {
+					is_in_war = {
+						attacker_leader = ROOT
+						defender_leader = FRA
+					}
+					NOT = {
+						is_in_war = {
+							attacker_leader = ROOT
+							defender_leader = FRA
+							defenders = SCO
+						}
+					}
+				}
+				248 = {
+					controlled_by = ROOT
+				}
+			}
+		}
+        effect = {
+			british_isles_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = ENG_safe
+					duration = 1825
+				}
+			}
+        }
+    }
+	ENG_Path_to_victory = {
+        icon = mission_monarch_in_throne_room
+        required_missions = { ENG_Scotland ENG_Regional_control ENG_Poitou }
+        position = 5
+        trigger = {
+			is_in_war = {
+				attacker_leader = ROOT
+				defender_leader = FRA
+				war_score = 40
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = ENG_path_to_victoria
+				duration = 1825
+			}
+        }
+    }
+	ENG_Enforce_the_Union = {
+        icon = mission_rb_angevin_kingdom
+        required_missions = { ENG_Path_to_victory }
+        position = 6
+        trigger = {
+			FRA = {
+				junior_union_with = ENG
+			}
+		}
+        effect = {
+			country_event = { id = ME_England_Events.2 } #New Order
+			
+        }
+    }
+}
+
+ENG_GBR_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ENG
+			tag = GBR
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = ENG_Angevin_Missions }
+	}
+	has_country_shield  = yes
+	ENG_Chartres = {
+        icon = mission_assemble_an_army
+        required_missions = { ENG_Hundred_Years_war }
+        position = 2
+		provinces_to_highlight = {
+			province_id =  4388
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			4388 = {
+				controlled_by = ROOT
+			}
+		}
+        effect = {
+			add_army_tradition = 10
+        }
+    }
+	ENG_Paris = {
+        icon = mission_build_up_to_force_limit
+        required_missions = { ENG_Chartres }
+        position = 3
+		provinces_to_highlight = {
+			province_id =  183
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			183 = {
+				controlled_by = ROOT
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = ENG_looting
+				duration = 1825
+			}
+        }
+    }
+	ENG_Regional_control = {
+        icon = mission_unite_home_region
+        required_missions = { ENG_Paris }
+        position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = ile_de_france_area
+				province_id = 186
+				province_id = 4390
+				province_id = 179
+				province_id = 184
+				province_id = 4389
+			}
+			NOT = { controlled_by = ROOT }
+		}
+        trigger = {
+			ile_de_france_area = {
+				type = all
+				controlled_by = ROOT
+			}
+			186 = {
+				controlled_by = ROOT
+			}
+			4390 = {
+				controlled_by = ROOT
+			}
+			179 = {
+				controlled_by = ROOT
+			}
+			184 = {
+				controlled_by = ROOT
+			}
+			4389 = {
+				controlled_by = ROOT
+			}
+		}
+        effect = {
+			add_country_modifier = {
+				name = ENG_looting
+				duration = 1825
+			}
+        }
+    }
+}
+
+ENG_GBR_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ENG
+			tag = GBR
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = ENG_Angevin_Missions }
+	}
+	has_country_shield  = yes
+
+}
+
+ENG_GBR_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			tag = ENG
+			tag = GBR
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = ENG_Angevin_Missions }
+	}
+	has_country_shield  = yes
+	
+}
