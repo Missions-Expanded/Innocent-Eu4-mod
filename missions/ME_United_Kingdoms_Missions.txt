@@ -1,16 +1,19 @@
-UKS_missions_1 = {
+ENG_UKS_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
 		OR = {
-			tag = ENG
+			AND = {
+				tag = ENG
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				has_country_flag = ENG_Angevin_Missions
+			}
 			tag = UKS
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_country_flag = ENG_Angevin_Missions
 	}
 	has_country_shield  = yes
+	
 	UKS_Integrate_French_Concessions = {
         icon = mission_monarch_in_throne_room
         required_missions = { }
@@ -20,38 +23,39 @@ UKS_missions_1 = {
 				area = poitou_area
 				area = pyrenees_area
 			}
-			NOT = {
-				is_core = ROOT
-				owned_by = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
         trigger = {
 			poitou_area = {
-				is_core = ROOT
-				owned_by = ROOT
 				type = all
+				owned_by = ROOT
+				is_core = ROOT
 			}
 			pyrenees_area = {
-				is_core = ROOT
-				owned_by = ROOT
 				type = all
+				owned_by = ROOT
+				is_core = ROOT
 			}
 		}
         effect = {
-			country_event = { id = ME_England_Events.3 }
+			country_event = { id = ME_United_Kingdoms_Events.1 }
 			add_country_modifier = {
-				name = ENG_promote_cultrue
+				name = UKS_promote_culture
 				duration = 9125
 			}
 			brittany_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
         }
     }
+	
 	UKS_quell_down = {
         icon = mission_conquer_50_development
         required_missions = { UKS_Integrate_French_Concessions }
@@ -61,44 +65,57 @@ UKS_missions_1 = {
 				area = poitou_area
 				area = pyrenees_area
 			}
-			NOT = {
-				OR = {
-					is_core = ROOT
-					owned_by = ROOT
-					NOT = { nationalism = 1 }
-				}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				nationalism = 1
 			}
 		}
         trigger = {
 			poitou_area = {
-				is_core = ROOT
-				owned_by = ROOT
-				NOT = {	nationalism = 1 }
 				type = all
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = {	nationalism = 1 }
 			}
 			pyrenees_area = {
-				is_core = ROOT
-				owned_by = ROOT
-				NOT = {	nationalism = 1 }
 				type = all
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = {	nationalism = 1 }
 			}
 		}
         effect = {
+			custom_tooltip = England_tooltip.4
 			pyrenees_area = {
+				limit = {
+					is_core = FRA
+				}
 				remove_core = FRA
 			}
 			poitou_area = {
+				limit = {
+					is_core = FRA
+				}
 				remove_core = FRA
 			}
 			normandy_area = {
+				limit = {
+					is_core = FRA
+				}
 				remove_core = FRA
 			}
 			177 = {
-				remove_core = FRA
+				if = {
+					limit = {
+						is_core = FRA
+					}
+					remove_core = FRA
+				}
 			}
-			custom_tooltip = England_tooltip.4
         }
     }
+	
 	UKS_our_possessions = {
         icon = mission_colonial
         required_missions = { UKS_quell_down }
@@ -110,57 +127,72 @@ UKS_missions_1 = {
 				area = normandy_area
 				province_id = 177
 			}
-			NOT = {
-				is_core = ROOT
-				owned_by = ROOT
-				num_of_times_improved = 5
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { num_of_times_improved = 5 }
+			}
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 5
+						OR = {
+							area = normandy_area
+							area = pyrenees_area
+							area = poitou_area
+							province_id = 177
+						}
+						num_of_times_improved = 5
+					}
+				}
 			}
 		}
         trigger = {
-			calc_true_if = {
-				AND = {
-					OR = {
-						area = normandy_area
-						area = pyrenees_area
-						area = poitou_area
-						province_id = 177
-					}
-					num_of_times_improved = 5
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				OR = {
+					area = normandy_area
+					area = pyrenees_area
+					area = poitou_area
+					province_id = 177
 				}
-				amount = 5
+				num_of_times_improved = 5
 			}
 		}
         effect = {
 			custom_tooltip = England_tooltip.5
         }
     }
+	
 	UKS_Palace = {
         icon = me_mission_united_kingdoms_palace
         required_missions = { UKS_our_possessions }
         position = 7
         trigger = {
-			any_province = {
-				has_building = ENG_Palace
-			}
+			UKS_Palace = 1
 		}
         effect = {
-			country_event = { id = ME_England_Events.8 }
+			country_event = { id = ME_United_Kingdoms_Events.6 }
         }
     }
 }
-UKS_missions_2 = {
+
+ENG_UKS_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		OR = {
-			tag = ENG
+			AND = {
+				tag = ENG
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				has_country_flag = ENG_Angevin_Missions
+			}
 			tag = UKS
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_country_flag = ENG_Angevin_Missions
 	}
 	has_country_shield  = yes
+	
 	UKS_brittany = {
         icon = mission_rb_conquer_brittany
         required_missions = { UKS_Integrate_French_Concessions UKS_recover_england }
@@ -176,34 +208,29 @@ UKS_missions_2 = {
 			}
 		}
         effect = {
-			country_event = { id = ME_England_Events.9 }
+			country_event = { id = ME_United_Kingdoms_Events.7 }
 			178 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
         }
     }
+	
 	UKS_anjou = {
         icon = mission_rb_angevin_kingdom
         required_missions = { UKS_brittany }
         position = 3
 		provinces_to_highlight = {
 			province_id = 178
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
         trigger = {
-			178 = {
-				owned_by = ROOT
-			}
+			owns = 178
 		}
         effect = {
 			178 = {
@@ -211,17 +238,15 @@ UKS_missions_2 = {
 				add_base_production = 1
 				add_base_manpower = 1
 				add_province_modifier = {
-					name = ENG_summer_residence
+					name = UKS_summer_residence
 					duration = 36500
 				}
 			}
 			88 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -229,23 +254,22 @@ UKS_missions_2 = {
 			89 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 			provence_area = {
 				limit = {
-					NOT = { is_core = FRA }
-					NOT = { is_permanent_claim = FRA }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = FRA
 			}
         }
     }
+	
 	UKS_extend_possessions = {
         icon = mission_unite_home_region
         required_missions = { UKS_anjou UKS_quell_down }
@@ -255,82 +279,76 @@ UKS_missions_2 = {
 				province_id = 89
 				province_id = 88
 			}
-			NOT = {
-				is_core = ROOT
-				owned_by = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
         trigger = {
-			89 = {
-				is_core = ROOT
-				owned_by = ROOT
-			}
-			88 = {
-				is_core = ROOT
-				owned_by = ROOT
-			}
+			owns_core_province = 89
+			owns_core_province = 88
 		}
         effect = {
 			add_years_of_income = 0.25
-			if = {
-				limit = {
-					87 = {
-						NOT = { center_of_trade = 2 }
+			87 = {	
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
 					}
+					center_of_trade = 1
 				}
-				87 = {
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
 					add_center_of_trade_level = 1
 				}
-			}
-			else = {
-				add_base_tax = 1
+				else = {
+					add_base_tax = 1
+				}
 			}
 			holland_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			flanders_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			wallonia_area = {
 				limit = {
-					NOT = { is_core = FRA }
-					NOT = { is_permanent_claim = FRA }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				add_permanent_claim = FRA
+				add_permanent_claim = ROOT
 			}
 			181 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = FRA
-							is_core = FRA
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
-					add_permanent_claim = FRA
+					add_permanent_claim = ROOT
 				}
 			}
 			1743 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = FRA
-							is_core = FRA
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
-					add_permanent_claim = FRA
+					add_permanent_claim = ROOT
 				}
 			}
-			
         }
     }
+	
 	UKS_Flanders = {
         icon = me_mission_netherlands_polders
         required_missions = { UKS_Burgundy UKS_extend_possessions }
@@ -340,143 +358,185 @@ UKS_missions_2 = {
 				area = flanders_area
 				area = holland_area
 			}
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
         trigger = {
 			flanders_area = {
-				owned_by = ROOT
 				type = all
+				owned_by = ROOT
 			}
 			holland_area = {
-				owned_by = ROOT
 				type = all
+				owned_by = ROOT
 			}
 		}
         effect = {
+			add_country_modifier = {
+				name = UKS_monopolized_the_channel
+				duration = 9125
+			}
 			netherlands_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			frisia_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			add_country_modifier = {
-				name = ENG_monopolized_the_channel
-				duration = 9125
 			}
         }
     }
 }
-UKS_missions_3 = {
+
+ENG_UKS_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
 		OR = {
-			tag = ENG
+			AND = {
+				tag = ENG
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				has_country_flag = ENG_Angevin_Missions
+			}
 			tag = UKS
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_country_flag = ENG_Angevin_Missions
 	}
 	has_country_shield  = yes
+	
 	UKS_recover_england = {
         icon = mission_alliances
         required_missions = { }
         position = 1
+		provinces_to_highlight = {
+			region = british_isles_region
+			owned_by = ROOT
+			devastation = 1
+		}
         trigger = {
 			NOT = { war_exhaustion = 2 }
-			NOT = {
-				any_owned_province = {
-					region = britain_region
-					devastation = 1
+			british_isles_region = {
+				type = all
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { devastation = 1 }
 				}
 			}
 		}
         effect = {
 			add_country_modifier = {
-				name = ENG_Recovery_of_population
+				name = UKS_Recovery_of_population
 				duration = 9125
 			}
         }
     }
+	
 	UKS_the_isles = {
         icon = me_mission_united_kingdoms_terra_brittanica
         required_missions = { UKS_recover_england }
         position = 3
 		provinces_to_highlight = {
-			region = britain_region
-			NOT = {
-				OR = {
-					country_or_non_sovereign_subject_holds = ROOT
-					any_ally = {
-						country_or_non_sovereign_subject_holds = PREV
-					}
-				}
+			region = british_isles_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			owner = {
+				NOT = { alliance_with = ROOT }
 			}
 		}
         trigger = {
-			britain_region = {
+			british_isles_region = {
 				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					any_ally = {
-						country_or_non_sovereign_subject_holds = PREV
+					owner = {
+						alliance_with = ROOT
 					}
 				}
 			}
 		}
         effect = {
-			britain_region = {
+			if = {
 				limit = {
-					culture = english
+					british_isles_region = {
+						culture = ROOT
+						is_state = yes
+					}
 				}
-				add_prosperity = 25
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					british_isles_region = {
+						limit = {
+							culture = ROOT
+							is_state = yes
+						}
+						add_prosperity = 25
+					}
+				}
+				else = {
+					british_isles_region = {
+						limit = {
+							culture = ROOT
+							is_state = yes
+						}
+						add_base_tax = 2
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
 			}
         }
     }
+	
 	UKS_Provence  = {
         icon = mission_monarch_in_throne_room
         required_missions = { UKS_anjou }
         position = 4
 		provinces_to_highlight = {
 			area = provence_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
         trigger = {
 			provence_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
         effect = {
-			bourgogne_area = {
-				limit = {
-					NOT = { is_core = FRA }
-					NOT = { is_permanent_claim = FRA }
-				}
-				add_permanent_claim = FRA
-			}
 			add_country_modifier = {
-				name = ENG_last_valois_defeated
+				name = UKS_last_valois_defeated
 				duration = 9125
 			}
+			bourgogne_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 			201 = {
-				add_building = grand_shipyard
+				if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
+					if = {
+						limit = {
+							has_building = shipyard
+						}
+						remove_building = shipyard
+					}
+					add_building = grand_shipyard
+				}
 			}
         }
     }
+	
 	UKS_Burgundy  = {
         icon = me_mission_united_kingdoms_burgundy
         required_missions = { UKS_Provence UKS_extend_possessions }
@@ -487,14 +547,12 @@ UKS_missions_3 = {
 				province_id = 181
 				province_id = 1743
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
         trigger = {
 			bourgogne_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			181 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -505,73 +563,67 @@ UKS_missions_3 = {
 		}
         effect = {
 			add_country_modifier = {
-				name = ENG_Burgundy_Defeated
+				name = UKS_Burgundy_Defeated
 				duration = 9125
 			}
         }
     }
+	
 	UKS_Lorraine = {
         icon = me_mission_united_kingdoms_lorraine
         required_missions = { UKS_Burgundy }
         position = 6
 		provinces_to_highlight = {
 			area = lorraine_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
         trigger = {
 			lorraine_area = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
         effect = {
 			lorraine_area = {
 				add_province_modifier = {
-					name = ENG_Lorraine_subjugated
+					name = UKS_Lorraine_subjugated
 					duration = 9125
 				}
 			}
         }
     }
+	
 	UKS_low_countries = {
         icon = me_mission_netherlands_reclaiming_land
         required_missions = { UKS_Lorraine UKS_Flanders }
         position = 7
 		provinces_to_highlight = {
 			region = low_countries_region
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
         trigger = {
 			low_countries_region = {
-				country_or_non_sovereign_subject_holds = ROOT
 				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
         effect = {
 			add_country_modifier = {
-				name = ENG_custodian
+				name = UKS_custodian
 				duration = -1
 			}
         }
     }
+	
 	UKS_union = {
         icon = me_mission_shiny_crown
         required_missions = { UKS_low_countries UKS_Palace UKS_develop_french_lands }
         position = 8
         trigger = {
-			NOT = {
-				FRA = {
-					num_of_cities = 45
-				}
-			}
-			NOT = {
-				FRA = {
-					liberty_desire = 10
-				}
+			overlord_of = FRA
+			FRA = {
+				NOT = { num_of_cities = 45 }
+				NOT = { liberty_desire = 10 }
 			}
 			reverse_has_opinion = {
 				who = FRA
@@ -584,52 +636,51 @@ UKS_missions_3 = {
 			set_government_rank = 3
 			catalonia_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
         }
     }
 }
-UKS_missions_4 = {
+
+ENG_UKS_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		OR = {
-			tag = ENG
+			AND = {
+				tag = ENG
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				has_country_flag = ENG_Angevin_Missions
+			}
 			tag = UKS
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_country_flag = ENG_Angevin_Missions
 	}
 	has_country_shield  = yes
+	
 	UKS_recover_france = {
         icon = mission_rb_control_electors
         required_missions = { UKS_recover_england UKS_loyalty_of_france }
         position = 2
 		provinces_to_highlight = {
 			owned_by = FRA
-			devastation = 0.01
+			devastation = 1
 		}
         trigger = {
-			NOT = {
-				FRA = {
-					num_of_loans = 1
-				}
-			}
-			NOT = {
-				FRA = {
-					war_exhaustion = 0.5
-				}
+			overlord_of = FRA
+			FRA = {
+				NOT = { num_of_loans = 1 }
+				NOT = { war_exhaustion = 0.5 }
 			}
 			custom_trigger_tooltip = {
 				tooltip = England_tooltip.1
-				NOT = {
-					FRA = {
+				FRA = {
+					NOT = {
 						any_owned_province = {
-							devastation = 0.01
+							devastation = 1
 						}
 					}
 				}
@@ -637,7 +688,7 @@ UKS_missions_4 = {
 		}
         effect = {
 			add_country_modifier = {
-				name = ENG_Recovery_of_population
+				name = UKS_Recovery_of_population
 				duration = 9125
 			}
 			FRA = {
@@ -645,6 +696,7 @@ UKS_missions_4 = {
 			}
         }
     }
+	
 	UKS_bromance = {
         icon = mission_monarch_in_throne_room
         required_missions = { UKS_cultures_of_France UKS_recover_france }
@@ -662,15 +714,14 @@ UKS_missions_4 = {
 			custom_tooltip = England_tooltip.6
         }
     }
+	
 	UKS_Savoyard = {
         icon = me_mission_united_kingdoms_savoy
         required_missions = { UKS_bromance UKS_Burgundy }
         position = 6
 		provinces_to_highlight = {
 			province_id = 205
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
         trigger = {
 			205 = {
@@ -690,26 +741,30 @@ UKS_missions_4 = {
 			add_prestige = 10
         }
     }
-	
 }
-UKS_missions_5 = {
+
+ENG_UKS_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
 		OR = {
-			tag = ENG
+			AND = {
+				tag = ENG
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+				has_country_flag = ENG_Angevin_Missions
+			}
 			tag = UKS
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_country_flag = ENG_Angevin_Missions
 	}
 	has_country_shield  = yes
+	
 	UKS_loyalty_of_france = {
         icon = mission_have_two_subjects
         required_missions = { }
         position = 1
         trigger = {
+			overlord_of = FRA
 			FRA = {
 				NOT = { liberty_desire = 50 }
 			}
@@ -720,11 +775,12 @@ UKS_missions_5 = {
 		}
         effect = {
 			add_country_modifier = {
-				name = ENG_anglo_french_coop
+				name = UKS_anglo_french_coop
 				duration = 9125
 			}
         }
     }
+	
 	UKS_cultures_of_France = {
         icon = mission_alliances
         required_missions = { UKS_loyalty_of_france }
@@ -751,35 +807,45 @@ UKS_missions_5 = {
 			}
         }
     }
+	
 	UKS_develop_france = {
         icon = mission_colonial
         required_missions = { UKS_bromance }
         position = 5
 		provinces_to_highlight = {
 			OR = {
-				FRA = {
-					capital_scope = {
-						NOT = { development = 30 }
-					}
+				AND = {
+					is_capital_of = FRA
+					NOT = { development = 30 }
 				}
 				AND = {
 					owned_by = FRA
 					NOT = { num_of_times_improved = 5 }
+					FRA = {
+						NOT = {
+							calc_true_if = {
+								all_owned_province = {
+									num_of_times_improved = 5
+								}
+								amount = 5
+							}
+						}
+					}
 				}
 			}
 		}
         trigger = {
+			overlord_of = FRA
 			FRA = {
 				capital_scope = {
 					development = 30
 				}
-			}
-			calc_true_if = {
-				AND = {
-					owned_by = FRA
-					num_of_times_improved = 5
+				calc_true_if = {
+					all_owned_province = {
+						num_of_times_improved = 5
+					}
+					amount = 5
 				}
-				amount = 5
 			}
 		}
         effect = {
@@ -825,56 +891,53 @@ UKS_missions_5 = {
 			}
         }
     }
+	
 	UKS_develop_french_lands = { #religious now ok?
         icon = mission_rb_control_state_religion
         required_missions = { UKS_develop_france }
         position = 7
 		provinces_to_highlight = {
 			owned_by = FRA
-			NOT = {
-				religion = ROOT
-				NOT = {
-					has_province_modifier = religious_zeal_at_conv 
-				}
-			}
+			NOT = { religion = ROOT }
+			NOT = { has_province_modifier = religious_zeal_at_conv }
 		}
         trigger = {
+			overlord_of = FRA
 			FRA = {
+				religious_unity = 0.7
+				religion = ROOT
 				all_owned_province = {
 					OR = {
 						religion = ROOT
 						has_province_modifier = religious_zeal_at_conv 
 					}
 				}
-				religious_unity = 0.7
-				religion = ROOT
 			}
 		}
         effect = {
-			ENG = {
-				add_country_modifier = {
-					name = ENG_striving_for_religious_unity
-					duration = 9125
-				}
+			add_country_modifier = {
+				name = UKS_striving_for_religious_unity
+				duration = 9125
 			}
 			FRA = {
 				add_country_modifier = {
-					name = ENG_striving_for_religious_unity_2
+					name = UKS_striving_for_religious_unity_2
 					duration = 9125
 				}
 			}
         }
     }
 }
-UKS_formable_missions_1 = {
+
+UKS_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
 		tag = UKS
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield  = yes
+	
 	UKS_uaval_power = {
         icon = mission_establish_high_seas_navy
         required_missions = { }
@@ -892,20 +955,32 @@ UKS_formable_missions_1 = {
 			}
         }
     }
+	
 	UKS_brest_arsenal = {
         icon = me_mission_venice_small_ship_in_port
         required_missions = { UKS_uaval_power }
         position = 10
 		provinces_to_highlight = {
 			province_id = 170
-			NOT = { has_building = dock }
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
+			}
 		}
         trigger = {
 			170 = {
-				has_building = dock
+				owned_by = ROOT
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
 			}
 		}
         effect = {
+			add_navy_tradition = 10
 			170 = {
 				add_province_modifier = {
 					name = UKS_naval_port
@@ -918,9 +993,9 @@ UKS_formable_missions_1 = {
 					amount = 3
 				}
 			}
-			add_navy_tradition = 10
         }
     }
+	
 	UKS_Catalonia = {
         icon = mission_unite_home_region
         required_missions = { }
@@ -936,21 +1011,22 @@ UKS_formable_missions_1 = {
 			}
 		}
         effect = {
-			country_event = { id = ME_England_Events.14 }
+			country_event = { id = ME_United_Kingdoms_Events.12 }
         }
     }
+	
 	UKS_overpower = {
         icon = mission_assemble_an_army
         required_missions = { UKS_Catalonia }
         position = 15
         trigger = {
-			NOT = {
-				any_country = {
-					is_part_of_hre = yes
-					army_size = UKS
+			army_size = 80
+			all_country = {
+				OR = {
+					NOT = { is_part_of_hre = yes }
+					NOT = { army_size = ROOT }
 				}
 			}
-			army_size = 80
 		}
         effect = {
 			add_country_modifier = {
@@ -959,6 +1035,7 @@ UKS_formable_missions_1 = {
 			}
         }
     }
+	
 	UKS_elector_support = {
         icon = mission_rb_control_electors
         required_missions = { UKS_overpower }
@@ -983,6 +1060,7 @@ UKS_formable_missions_1 = {
 			}
 		}
     }
+	
 	UKS_the_emperor = {
         icon = me_mission_shiny_crown_hre
         required_missions = { UKS_elector_support }
@@ -997,67 +1075,92 @@ UKS_formable_missions_1 = {
 			}
         }
     }
+	
 	UKS_quebec = {
         icon = mission_colonial
         required_missions = { UKS_Canada }
         position = 18
 		provinces_to_highlight = {
 			province_id = 994
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			NOT = { has_building = marketplace }
-			NOT = { development = 12 }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
 		}
         trigger = {
 			994 = {
-				has_building = marketplace
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 				development = 12
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
         effect = {
 			994 = {
-				add_country_modifier = {
-					name = UKS_local
-					duration = -1
-				}
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
 				change_culture = cosmopolitan_french
+				add_province_modifier = {
+					name = UKS_local
+					duration = -1
+				}
 			}
         }
     }
+	
 	UKS_toronto = {
         icon = mission_early_game_buildings
         required_missions = { UKS_quebec }
         position = 19
 		provinces_to_highlight = {
-			province_id = 994
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			NOT = { has_building = temple }
-			NOT = { development = 12 }
-			NOT = { religion = ROOT }
+			province_id = 2670
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+				NOT = { development = 12 }
+				NOT = { religion = ROOT }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
 		}
         trigger = {
-			994 = {
-				has_building = temple
+			2670 = {
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 				development = 12
 				religion = ROOT
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
         effect = {
 			2670 = {
-				add_country_modifier = {
-					name = UKS_local
-					duration = -1
-				}
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
+				add_province_modifier = {
+					name = UKS_local
+					duration = -1
+				}
 			}
         }
     }
+	
 	UKS_inner_canada = {
         icon = mission_settlers_north_america
         required_missions = { UKS_toronto UKS_louisianian_colony }
@@ -1069,24 +1172,31 @@ UKS_formable_missions_1 = {
 				area = assiniboia_area
 				area = upper_missouri_area
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
 			red_river_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 			saskatchewan_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 			assiniboia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 			upper_missouri_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 		}
         effect = {
@@ -1097,13 +1207,13 @@ UKS_formable_missions_1 = {
         }
     }
 }
-UKS_formable_missions_2 = {
+
+UKS_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		tag = UKS
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield  = yes
 	
@@ -1116,17 +1226,32 @@ UKS_formable_missions_2 = {
 				province_id = 4373
 				province_id = 234
 			}
-			NOT = { has_building = shipyard }
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+			}
 		}
         trigger = {
 			4373 = {
-				has_building = shipyard
+				owned_by = ROOT
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
 			}
 			234 = {
-				has_building = shipyard
+				owned_by = ROOT
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
 			}
 		}
        effect = {
+			add_sailors = 10
 			4373 = {
 				add_province_modifier = {
 					name = UKS_naval_port
@@ -1139,33 +1264,50 @@ UKS_formable_missions_2 = {
 					duration = -1
 				}
 			}
-			add_sailors = 10
         }
     }
+	
 	UKS_major_cherbourg = {
         icon = me_mission_venice_ship_in_port
         required_missions = { UKS_wessex_ports UKS_brest_arsenal }
         position = 11
         provinces_to_highlight = {
 			province_id = 4385
-			NOT = { development = 20 }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+			}
 		}
         trigger = {
 			4385 = {
+				owned_by = ROOT
 				development = 20
 			}
 		}
         effect = {
 			4385 = {
+				if = {
+					limit = {
+						NOT = { has_building = shipyard }
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = shipyard
+				}
+				if = {
+					limit = {
+						NOT = { has_building = dock }
+						NOT = { has_building = drydock }
+					}
+					add_building = dock
+				}
 				add_province_modifier = {
 					name = UKS_naval_port
 					duration = -1
 				}
-				add_building = shipyard
-				add_building = dock
 			}
         }
     }
+	
 	UKS_challange_italians = {
         icon = me_mission_modern_army
         required_missions = { UKS_Catalonia }
@@ -1173,6 +1315,7 @@ UKS_formable_missions_2 = {
 		provinces_to_highlight = {
 			region = italy_region
 			NOT = { is_claim = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
         trigger = {
 			OR = {
@@ -1183,28 +1326,28 @@ UKS_formable_missions_2 = {
 					}
 					amount = 5
 				}
-			}
-			italy_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				italy_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
         effect = {
 			if = {
 				limit = {
-					NOT = { 
-						italy_region = {
-							type = all
-							country_or_non_sovereign_subject_holds = ROOT
-						}
+					italy_region = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
 					}
 				}
-				else = {
-					country_event = { id = ME_England_Events.16 }
-				}
+				# ???
+			}
+			else = {
+				country_event = { id = ME_United_Kingdoms_Events.14 }
 			}
         }
     }
+	
 	UKS_naples = {
         icon = mission_build_up_to_force_limit
         required_missions = { UKS_challange_italians }
@@ -1245,26 +1388,25 @@ UKS_formable_missions_2 = {
 			}
 			sicily_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			corsica_sardinia_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
         }
     }
+	
 	UKS_destroy_hre = {
         icon = mission_cannons_firing
         required_missions = { UKS_overpower }
         position = 16
-		provinces_to_highlight = {
-		}
         trigger = {
 			NOT = { hre_size = 1 }
 			NOT = { exists = HLR }
@@ -1276,21 +1418,23 @@ UKS_formable_missions_2 = {
 			}
         }
     }
+	
 	UKS_Canada = {
         icon = mission_rb_colonise_canada
         required_missions = { UKS_colonization }
         position = 17
 		provinces_to_highlight = {
 			colonial_region = colonial_canada
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					colonial_region = colonial_canada
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				amount = 10
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				colonial_region = colonial_canada
+				is_city = yes
 			}
 		}
         effect = {
@@ -1310,118 +1454,166 @@ UKS_formable_missions_2 = {
 			}
         }
     }
+	
 	UKS_Nieuw_amsterdam = {
         icon = mission_rb_the_thirteen_colonies
         required_missions = { UKS_Canada }
         position = 18
 		provinces_to_highlight = {
 			province_id = 965
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			NOT = { has_building = marketplace }
-			NOT = { development = 12 }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
 		}
         trigger = {
 			965 = {
-				has_building = marketplace
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 				development = 12
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
         effect = {
 			965 = {
-				add_country_modifier = {
-					name = UKS_local
-					duration = -1
-				}
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
 				change_culture = dutch
+				add_province_modifier = {
+					name = UKS_local
+					duration = -1
+				}
 			}
         }
     }
+	
 	UKS_Boston = {
         icon = mission_early_game_buildings
         required_missions = { UKS_Nieuw_amsterdam }
         position = 19
 		provinces_to_highlight = {
 			province_id = 968
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			NOT = { has_building = shipyard }
-			NOT = { development = 12 }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+			}
 		}
         trigger = {
 			968 = {
-				has_building = shipyard
+				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 				development = 12
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
 			}
 		}
         effect = {
 			968 = {
-				add_country_modifier = {
-					name = UKS_local
-					duration = -1
-				}
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
 				if = {
 					limit = {
-						primary_culture = english
+						ROOT = {
+							primary_culture = english
+						}
 					}
-					change_culture = english
+					if = {
+						limit = {
+							NOT = { culture = english }
+						}
+						change_culture = english
+					}
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { culture = anglois }
+					}
 					change_culture = anglois
+				}
+				add_province_modifier = {
+					name = UKS_local
+					duration = -1
 				}
 			}
         }
     }
+	
 	UKS_found_new_orleans = {
         icon = mission_rb_hanseatic_east
         required_missions = { UKS_colonize_caribbean }
         position = 20
 		provinces_to_highlight = {
 			province_id = 993
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-			NOT = { has_building = temple }
-			NOT = { development = 12 }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+			}
 		}
         trigger = {
 			993 = {
-				has_building = temple
-				development = 12
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
+				development = 12
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
         effect = {
 			993 = {
-				add_country_modifier = {
-					name = UKS_local
-					duration = -1
-				}
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
 				change_culture = cosmopolitan_french
+				add_province_modifier = {
+					name = UKS_local
+					duration = -1
+				}
 			}
         }
     }
+	
 	UKS_louisianian_colony = {
         icon = mission_advance_to_the_dnieper
         required_missions = { UKS_found_new_orleans }
         position = 21
 		provinces_to_highlight = {
 			colonial_region = colonial_louisiana
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					colonial_region = colonial_louisiana
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				amount = 5
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_louisiana
+				is_city = yes
 			}
 		}
         effect = {
@@ -1436,7 +1628,8 @@ UKS_formable_missions_2 = {
         }
     }
 }
-UKS_formable_missions_3 = {
+
+UKS_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -1453,15 +1646,50 @@ UKS_formable_missions_3 = {
 		provinces_to_highlight = {
 			region = france_region
 			owned_by = ROOT
-			has_seat_in_parliament = no
+			OR = {
+				AND = {
+					has_dlc = "Common Sense"
+					has_seat_in_parliament = no
+					ROOT = {
+						NOT = {
+							num_of_owned_provinces_with = {
+							value = 15
+							region = france_region
+							has_seat_in_parliament = yes
+						}
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Common Sense" }
+					NOT = { num_of_times_improved = 3 }
+					ROOT = {
+						NOT = {
+							num_of_owned_provinces_with = {
+							value = 15
+							region = france_region
+							num_of_times_improved = 3
+						}
+					}
+				}
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_owned_province = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				num_of_owned_provinces_with = {
+					value = 15
 					region = france_region
 					has_seat_in_parliament = yes
 				}
-				amount = 15
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 15
+					region = france_region
+					num_of_times_improved = 3
+				}
 			}
 		}
         effect = {
@@ -1469,7 +1697,13 @@ UKS_formable_missions_3 = {
 				limit = {
 					region = france_region
 				}
-				back_current_issue = yes
+				if = {
+					limit = {
+						has_dlc = "Common Sense"
+						is_backing_current_issue = no
+					}
+					back_current_issue = yes
+				}
 				add_province_modifier = {
 					name = UKS_taxation_with_representation
 					duration = 5475
@@ -1477,25 +1711,48 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_develop_13 = {
         icon = mission_colonial
         required_missions = { UKS_taxation }
         position = 11
+		provinces_to_highlight = {
+			OR = {
+				region = british_isles_region
+				region = france_region
+			}
+			owned_by = ROOT
+			NOT = { development = 13 }
+		}
         trigger = {
-			NOT = {
-				any_owned_province = {
-					OR = {
-						region = british_isles_region
-						region = france_region
-					}
-					NOT = { development = 13 }
+			british_isles_region = {
+				type = all
+				OR = {
+					NOT = { owned_by = ROOT }
+					development = 13
+				}
+			}
+			france_region = {
+				type = all
+				OR = {
+					NOT = { owned_by = ROOT }
+					development = 13
 				}
 			}
 		}
         effect = {
-			every_owned_province = {
+			british_isles_region = {
 				limit = {
-					region = british_isles_region
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = UKS_prosperity
+					duration = -1
+				}
+			}
+			france_region = {
+				limit = {
+					owned_by = ROOT
 				}
 				add_province_modifier = {
 					name = UKS_prosperity
@@ -1504,6 +1761,7 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_oxbridge = {
         icon = mission_rb_renovate_oxbridge
         required_missions = { }
@@ -1513,22 +1771,25 @@ UKS_formable_missions_3 = {
 				province_id = 237
 				province_id = 4370
 			}
-			NOT = {
-				OR = {
-					has_building = university
-					development = 15
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = university }
+					NOT = { development = 15 }
 				}
 			}
 			
 		}
         trigger = {
 			237 = {
+				owned_by = ROOT
 				OR = {
 					has_building = university
 					devastation = 15
 				}
 			}
 			4370 = {
+				owned_by = ROOT
 				OR = {
 					has_building = university
 					devastation = 15
@@ -1536,12 +1797,8 @@ UKS_formable_missions_3 = {
 			}
 		}
         effect = {
-			country_event = { id = ME_England_Events.15 }
+			country_event = { id = ME_United_Kingdoms_Events.13 }
 			4370 = {
-				add_province_modifier = {
-					name = fra_university
-					duration = -1
-				}
 				if = {
 					limit = {
 						NOT = { has_building = university }
@@ -1550,13 +1807,13 @@ UKS_formable_missions_3 = {
 				}
 				else = {
 					add_base_tax = 1
+				}
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
 				}
 			}
 			237 = {
-				add_province_modifier = {
-					name = fra_university
-					duration = -1
-				}
 				if = {
 					limit = {
 						NOT = { has_building = university }
@@ -1565,27 +1822,29 @@ UKS_formable_missions_3 = {
 				}
 				else = {
 					add_base_tax = 1
+				}
+				add_province_modifier = {
+					name = fra_university
+					duration = -1
 				}
 			}
         }
     }
+	
 	UKS_land_of_unis = {
         icon = mission_early_modern_university
         required_missions = { UKS_oxbridge }
         position = 13
 		provinces_to_highlight = {
 			region = france_region
-			NOT = {
-				has_building = university
-			}
+			owned_by = ROOT
+			NOT = { has_building = university }
 		}
         trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					region = france_region
-					has_building = university
-				}
-				amount = 5
+			num_of_owned_provinces_with = {
+				value = 5
+				region = france_region
+				has_building = university
 			}
 		}
         effect = {
@@ -1605,6 +1864,7 @@ UKS_formable_missions_3 = {
 				limit = {
 					region = france_region
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -1615,6 +1875,7 @@ UKS_formable_missions_3 = {
 				limit = {
 					region = france_region
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -1625,6 +1886,7 @@ UKS_formable_missions_3 = {
 				limit = {
 					region = france_region
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -1635,6 +1897,7 @@ UKS_formable_missions_3 = {
 				limit = {
 					region = france_region
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -1645,6 +1908,7 @@ UKS_formable_missions_3 = {
 				limit = {
 					region = france_region
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -1653,6 +1917,7 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_Lombardy = {
         icon = mission_cannons_firing
         required_missions = { UKS_challange_italians }
@@ -1689,20 +1954,21 @@ UKS_formable_missions_3 = {
 			}
 			tuscany_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			liguria_area = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
         }
     }
+	
 	UKS_genoa = {
         icon = me_mission_venice_small_ship_in_port
         required_missions = { UKS_Lombardy }
@@ -1731,6 +1997,7 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_colonization = {
         icon = mission_establish_high_seas_navy
         required_missions = { }
@@ -1752,29 +2019,31 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_colonize_caribbean = {
         icon = mission_found_havana
         required_missions = { UKS_colonization }
         position = 19
 		provinces_to_highlight = {
-			colonial_region = colonial_the_carribean 
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			colonial_region = colonial_the_carribean
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					colonial_region = colonial_the_carribean 
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				amount = 7
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 7
+				colonial_region = colonial_the_carribean 
+				is_city = yes
 			}
 		}
         effect = {
 			random_subject_country = {
 				limit = {
-					is_colonial_nation  = yes
+					is_colonial_nation = yes
 					capital_scope = {
-						colonial_region = colonial_the_caribbean
+						colonial_region = colonial_the_carribean
 					}
 				}
 				add_country_modifier = {
@@ -1784,27 +2053,30 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_contest_brazil = {
         icon = mission_iberian_conquistador
         required_missions = { UKS_colonize_caribbean }
         position = 20
 		provinces_to_highlight = {
 			colonial_region = colonial_brazil 
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					colonial_region = colonial_brazil
-					country_or_non_sovereign_subject_holds = ROOT
-					OR = {
-						trade_goods = coffee
-						trade_goods = sugar
-						trade_goods = tobacco
-						trade_goods = tea
-						trade_goods = cocoa
-						trade_goods = cotton
-					}	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_brazil
+				is_city = yes
+				OR = {
+					trade_goods = coffee
+					trade_goods = sugar
+					trade_goods = tobacco
+					trade_goods = tea
+					trade_goods = cocoa
+					trade_goods = cotton
 				}
 				amount = 5
 			}
@@ -1892,6 +2164,7 @@ UKS_formable_missions_3 = {
 			}
         }
     }
+	
 	UKS_spices = {
         icon = mission_high_income
         required_missions = { UKS_east_african }
@@ -1922,28 +2195,32 @@ UKS_formable_missions_3 = {
 				duration = 9125
 			}
 			1090 = {
-				limit = {
-					is_empty = yes
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 400
 				}
-				add_siberian_construction = 400
 			}
         }
     }
+	
 	UKS_down_under = {
         icon = mission_colonial
         required_missions = { UKS_spices }
         position = 23
 		provinces_to_highlight = {
 			colonial_region = colonial_australia
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					colonial_region = colonial_australia
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				amount = 5
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				colonial_region = colonial_australia
+				is_city = yes
 			}
 		}
         effect = {
@@ -1954,6 +2231,7 @@ UKS_formable_missions_3 = {
         }
     }
 }
+
 UKS_formable_missions_4 = {
 	slot = 4
 	generic = no
@@ -1981,51 +2259,60 @@ UKS_formable_missions_4 = {
 				province_id = 185
 				province_id = 4390
 			}
-			NOT = {
-				AND = {
-					num_of_times_improved = 1
-					development = 15
-				}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				NOT = { num_of_times_improved = 1 }
 			}
 		}
         trigger = {
 			201 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			202 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4391 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			203 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1877 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			192 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			183 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4392 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			185 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4390 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
@@ -2078,6 +2365,7 @@ UKS_formable_missions_4 = {
 			}
         }
     }
+	
 	UKS_via_gallica = {
         icon = me_mission_road_city
         required_missions = { UKS_revitalize }
@@ -2123,144 +2411,175 @@ UKS_formable_missions_4 = {
 				province_id = 188
 				
 			}
-			NOT = {
-				AND = {
-					num_of_times_improved = 1
-					development = 15
-				}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				NOT = { num_of_times_improved = 1 }
 			}
 		}
         trigger = {
 			#Paris-Provence
 			201 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			202 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4391 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			203 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1877 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			192 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			183 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4392 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			185 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4390 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#Provence-Bordeaux
 			200 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			2753 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			196 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			175 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			174 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#West Coast
 			4111 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4386 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			172 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			171 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			170 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			178 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			177 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4385 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4389 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			184 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#provence-calais
 			4388 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			167 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			89 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			87 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#rest
 			186 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			187 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			188 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
@@ -2459,6 +2778,7 @@ UKS_formable_missions_4 = {
 			}
         }
     }
+	
 	UKS_via_catalunya = {
         icon = me_mission_road_village
         required_missions = { UKS_via_gallica }
@@ -2485,78 +2805,93 @@ UKS_formable_missions_4 = {
 				province_id = 93
 				province_id = 2974
 			}
-			NOT = {
-				AND = {
-					num_of_times_improved = 1
-					development = 15
-				}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				NOT = { num_of_times_improved = 1 }
 			}
 		}
         trigger = {
 			#coast
 			90 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1865 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1744 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			96 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4383 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			97 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			98 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			99 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4381 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4382 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1931 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#2 provs
 			91 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1743 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#rest
 			94 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			93 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			2974 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
@@ -2663,23 +2998,30 @@ UKS_formable_missions_4 = {
 			}
         }
     }
+	
 	UKS_dutch_unis = {
         icon = me_mission_generic_old_university
         required_missions = { UKS_oxbridge }
         position = 13
         provinces_to_highlight = {
+			owned_by = ROOT
 			culture = dutch
-			NOT = {
-				has_building = university
+			NOT = { has_building = university }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						culture = dutch
+						has_building = university
+					}
+				}
 			}
 		}
         trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					culture = dutch
-					has_building = university
-				}
-				amount = 3
+			num_of_owned_provinces_with = {
+				value = 3
+				culture = dutch
+				has_building = university
 			}
 		}
         effect = {
@@ -2699,6 +3041,7 @@ UKS_formable_missions_4 = {
 				limit = {
 					culture = dutch
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -2709,6 +3052,7 @@ UKS_formable_missions_4 = {
 				limit = {
 					culture = dutch
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -2719,6 +3063,7 @@ UKS_formable_missions_4 = {
 				limit = {
 					culture = dutch
 					has_building = university
+					NOT = { has_province_modifier = fra_university }
 				}
 				add_province_modifier = {
 					name = fra_university
@@ -2727,13 +3072,21 @@ UKS_formable_missions_4 = {
 			}
         }
     }
+	
 	UKS_merchants_of_marseille = {
         icon = mission_asian_trader
         required_missions = { UKS_genoese_trade }
         position = 15
 		provinces_to_highlight = {
 			province_id = 201
-			NOT = { has_building = marketplace }
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
 		}
         trigger = {
 			1297 = {
@@ -2746,31 +3099,49 @@ UKS_formable_missions_4 = {
 			}
 			light_ship_fraction = 0.25
 			201 = {
-				has_building = marketplace
+				owned_by = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
         effect = {
-			201 = {
-				add_center_of_trade_level = 1
-			}
 			add_years_of_income = 0.5
+			201 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
         }
     }
+	
 	UKS_ivory_coast = {
         icon = mission_dominate_home_trade_node
         required_missions = { UKS_colonization }
         position = 17
 		provinces_to_highlight = {
 			region = guinea_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					region = guinea_region 
-					country_or_non_sovereign_subject_holds = ROOT
-				}
-				amount = 5
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				region = guinea_region 
+				is_city = yes
 			}	
 		}
         effect = {
@@ -2784,32 +3155,37 @@ UKS_formable_missions_4 = {
 				}
 				sahel_region = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 				niger_region = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
         }
     }
+	
 	UKS_cape = {
         icon = mission_colonial
         required_missions = { UKS_ivory_coast }
         position = 18
 		provinces_to_highlight = {
 			province_id = 1177
-			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+				is_city = no
+			}
 		}
         trigger = {
 			1777 = {
 				country_or_non_sovereign_subject_holds = ROOT
+				is_city = yes
 			}
 			1460 = {
 				trade_share = {
@@ -2819,17 +3195,18 @@ UKS_formable_missions_4 = {
 			}
 		}
         effect = {
+			add_country_modifier = {
+				name = UKS_quest_for_the_spices
+				duration = 9125
+			}
 			1177 = {
 				add_base_manpower = 1
 				add_base_production = 1
 				add_base_tax = 1
 			}
-			add_country_modifier = {
-				name = UKS_quest_for_the_spices
-				duration = 9125
-			}
         }
     }
+	
 	UKS_east_african = {
         icon = mission_african_soldier
         required_missions = { UKS_cape }
@@ -2843,8 +3220,10 @@ UKS_formable_missions_4 = {
 			}
 		}
         effect = {
+			add_mercantilism = 2
 			indonesia_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 					NOT = { is_permanent_claim = ROOT }
 				}
@@ -2852,6 +3231,7 @@ UKS_formable_missions_4 = {
 			}
 			malaya_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 					NOT = { is_permanent_claim = ROOT }
 				}
@@ -2859,14 +3239,15 @@ UKS_formable_missions_4 = {
 			}
 			moluccas_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 					NOT = { is_permanent_claim = ROOT }
 				}
 				add_claim = ROOT
 			}
-			add_mercantilism = 2
         }
     }
+	
 	UKS_indochina = {
         icon = mission_asian_trader
         required_missions = { UKS_india UKS_spices}
@@ -2876,43 +3257,45 @@ UKS_formable_missions_4 = {
 				region = burma_region
 				region = indo_china_region
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					OR = {
-						region = burma_region
-						region = indo_china_region
-					}
-					country_or_non_sovereign_subject_holds = ROOT
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				OR = {
+					region = burma_region
+					region = indo_china_region
 				}
-				amount = 10
+				is_city = yes
 			}
 		}
         effect = {
+			add_country_modifier = {
+				name = UKS_trade_company_in_indochina
+				duration = -1
+			}
 			burma_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			indo_china_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			add_country_modifier = {
-				name = UKS_trade_company_in_indochina
-				duration = -1
 			}
         }
     }
 }
-UKS_formable_missions_5 = {
+
+UKS_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -2968,47 +3351,6 @@ UKS_formable_missions_5 = {
 			}
 			if = {
 				limit = {
-					NOT = {
-						estate_influence = {
-							estate = estate_burghers
-							influence = 50
-						}	
-					}
-				}
-				add_years_of_income = 0.25
-			}
-			if = {
-				limit = {
-					estate_influence = {
-						estate = estate_burghers
-						influence = 50
-					}
-					NOT = {
-						estate_influence = {
-							estate = estate_burghers
-							influence = 75
-						}	
-					}
-				}
-				add_years_of_income = 0.5
-			}
-			if = {
-				limit = {
-					estate_influence = {
-						estate = estate_burghers
-						influence = 75
-					}
-					NOT = {
-						estate_influence = {
-							estate = estate_burghers
-							influence = 100
-						}	
-					}
-				}
-				add_years_of_income = 0.75
-			}
-			if = {
-				limit = {
 					estate_influence = {
 						estate = estate_burghers
 						influence = 100
@@ -3016,8 +3358,30 @@ UKS_formable_missions_5 = {
 				}
 				add_years_of_income = 1
 			}
+			else_if = {
+				limit = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 75
+					}
+				}
+				add_years_of_income = 0.75
+			}
+			else_if = {
+				limit = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 50
+					}
+				}
+				add_years_of_income = 0.5
+			}
+			else = {
+				add_years_of_income = 0.25
+			}
         }
     }
+	
 	UKS_monopolize_the_channel = {
         icon = mission_rb_monopolize_the_channel
         required_missions = { UKS_english_cot }
@@ -3032,7 +3396,7 @@ UKS_formable_missions_5 = {
 		}
         effect = {
 			1269 = {
-				all_trade_node_member_province = {
+				every_trade_node_member_province = {
 					limit = {
 						owned_by = ROOT
 					}
@@ -3044,13 +3408,35 @@ UKS_formable_missions_5 = {
 			}
         }
     }
+	
 	UKS_expand_production_sector = {
         icon = mission_have_manufactories
         required_missions = { UKS_monopolize_the_channel }
         position = 11
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1269
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = {
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+			}
+		}
         trigger = {
 			1269 = {
 				all_trade_node_member_province = {
+					country_or_non_sovereign_subject_holds = ROOT
 					OR = {
 						has_building = mills
 						has_building = farm_estate
@@ -3065,13 +3451,14 @@ UKS_formable_missions_5 = {
 			}
 		}
         effect = {
+			add_years_of_income = 1.5
 			add_country_modifier = {
 				name = "proto_industrialization"
 				duration = 9125
 			}
-			add_years_of_income = 1.5
         }
     }
+	
 	UKS_via_gallica_expanded = {
         icon = me_mission_road_city
         required_missions = { UKS_via_gallica }
@@ -3096,73 +3483,87 @@ UKS_formable_missions_5 = {
 				province_id = 245
 				province_id = 4372
 			}
-			NOT = {
-				AND = {
-					num_of_times_improved = 1
-					development = 15
-				}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+				NOT = { num_of_times_improved = 1 }
 			}
 		}
         trigger = {
 			#London-Wales
 			236 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			235 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			237 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			239 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			241 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			234 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4366 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4130 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4373 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			#rest
 			243 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			245 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4370 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1861 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			4372 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
 			1743 = {
+				owned_by = ROOT
 				development = 15
 				num_of_times_improved = 1
 			}
@@ -3268,13 +3669,13 @@ UKS_formable_missions_5 = {
         required_missions = { }
         position = 14
         trigger = {
+			num_of_light_ship = 20
 			1297 = {
 				trade_share = {
 					who = ROOT
 					share = 25
 				}
 			}
-			num_of_light_ship = 20
 		}
         effect = {
 			add_country_modifier = {
@@ -3283,36 +3684,54 @@ UKS_formable_missions_5 = {
 			}
         }
     }
+	
 	UKS_toulon = {
         icon = mission_galleys_in_port
         required_missions = { UKS_genoese_trade }
         position = 15
         provinces_to_highlight = {
 			province_id = 201
-			NOT = { has_building = shipyard }
-			NOT = { has_building = dock }
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
+			}
 		}
         trigger = {
 			galley_fraction = 0.1
 			201 = {
-				has_building = dock
-				has_building = shipyard
+				owned_by = ROOT
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
 			}
 		}
         effect = {
+			add_navy_tradition = 5
+			add_country_modifier = {
+				name = UKS_mediterranean_navy
+				duration = -1
+			}
 			201 = {
 				add_province_modifier = {
 					name = UKS_naval_port
 					duration = -1
 				}
 			}
-			add_country_modifier = {
-				name = UKS_mediterranean_navy
-				duration = -1
-			}
-			add_navy_tradition = 5
         }
     }
+	
 	UKS_denounce = {
         icon = mission_pirate_havens
         required_missions = { }
@@ -3337,13 +3756,14 @@ UKS_formable_missions_5 = {
         effect = {
 			maghreb_region = {
 				limit = {
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
         }
     }
+	
 	UKS_curb = {
         icon = mission_conquer_tunis
         required_missions = { UKS_denounce }
@@ -3359,29 +3779,30 @@ UKS_formable_missions_5 = {
 			}
 		}
         effect = {
+			add_navy_tradition = 10
+			custom_tooltip = England_tooltip.14
 			if = {
 				limit = {
 					mission_completed = UKS_ivory_coast
 				}
 				sahel_region = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 				niger_region = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
-			add_navy_tradition = 10
-			custom_tooltip = England_tooltip.14
         }
     }
+	
 	UKS_west_africa = {
         icon = mission_west_african_ports
         required_missions = { UKS_curb UKS_ivory_coast }
@@ -3404,58 +3825,91 @@ UKS_formable_missions_5 = {
 			}
 		}
         effect = {
+			add_years_of_income = 0.5
 			add_country_modifier = {
 				name = "wealth_of_africa_modifier"
 				duration = 9125
 			}
-			add_years_of_income = 0.5
         }
     }
+	
 	UKS_india = {
         icon = mission_trade_company_region_abroad
         required_missions = { UKS_east_african }
         position = 22
 		provinces_to_highlight = {
-			superregion = india_superregion
+			OR = {
+				region = bengal_region
+				region = deccan_region
+				region = hindusthan_region
+				region = west_india_region
+				region = coromandel_region
+			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
 		}
         trigger = {
-			calc_true_if = {
-				all_province = {
-					superregion = india_superregion
-					country_or_non_sovereign_subject_holds = ROOT
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				OR = {
+					region = bengal_region
+					region = deccan_region
+					region = hindusthan_region
+					region = west_india_region
+					region = coromandel_region
 				}
-				amount = 5
 			}
 		}
         effect = {
+			add_mercantilism = 2
 			add_country_modifier = {
 				name = UKS_trade_company
 				duration = -1
 			}
-			add_mercantilism = 2
         }
     }
+	
 	UKS_full_india = {
         icon = mission_rb_take_indian_coast
         required_missions = { UKS_india }
         position = 23
 		provinces_to_highlight = {
-			superregion = india_superregion
+			OR = {
+				region = bengal_region
+				region = deccan_region
+				region = hindusthan_region
+				region = west_india_region
+				region = coromandel_region
+			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
 		}
         trigger = {
-			india_superregion = {
+			bengal_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			hindusthan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_india_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			coromandel_region = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
         effect = {
+			add_years_of_income = 5
 			add_country_modifier = {
 				name = UKS_indian_support
 				duration = -1
 			}
-			add_years_of_income = 5
         }
     }
 }
