@@ -14,7 +14,7 @@ generic_madagascar_missions_1 = {
 	has_country_shield = yes
 
 	madagascar_statebuilding = {
-		icon = mission_monarch_in_throne_room
+		icon = mission_empire
 		required_missions = { }
 		position = 1
 		trigger = {
@@ -30,7 +30,7 @@ generic_madagascar_missions_1 = {
 	}
 
 	madagascar_leadership = {
-		icon = mission_monarch_in_throne_room
+		icon = mission_have_two_subjects
 		required_missions = { madagascar_statebuilding }
 		position = 2
 		trigger = {
@@ -73,7 +73,7 @@ generic_madagascar_missions_1 = {
 	}
 
 	madagascar_rebirth = {
-		icon = mission_monarch_in_throne_room
+		icon = me_mission_renaissance
 		required_missions = { madagascar_leadership }
 		position = 3
 		trigger = {
@@ -104,7 +104,7 @@ generic_madagascar_missions_2 = {
 	has_country_shield = yes
 	
 	madagascar_west = {
-		icon = missions_assemble_an_army
+		icon = mission_west_african_ports
 		required_missions = { madagascar_tides }
 		position = 2
 		provinces_to_highlight = {
@@ -141,8 +141,74 @@ generic_madagascar_missions_3 = {
 	}
 	has_country_shield = yes
 	
+	madagascar_tides = {
+		icon = mission_assemble_an_army
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = "generic_madagascar_ready_modifier"
+				duration = 5475
+			}
+		}
+	}
+
+	madagascar_highlands = {
+		icon = mission_conquer_50_development
+		required_missions = { madagascar_tides }
+		position = 2
+		provinces_to_highlight = {
+           	area = madagascar_highlands_area
+            NOT = { country_or_non_sovereign_subject_holds = ROOT }
+        }
+		trigger = {
+			madagascar_highlands_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			southern_madagascar = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = "generic_madagascar_defense_modifier"
+				duration = 9125
+			}
+		}
+	}
+
+	madagascar_south = {
+		icon = mission_african_soldier
+		required_missions = { madagascar_highlands }
+		position = 3
+		provinces_to_highlight = {
+			area = southern_madagascar
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			southern_madagascar = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "generic_madagascar_culture_modifier"
+				duration = 7300
+			}
+		}
+	}
+	
 	madagascar_europe = {
-		icon = missions_assemble_an_army
+		icon = mission_cannons_firing
 		required_missions = { madagascar_south madagascar_rebirth madagascar_swahili }
 		position = 4
 		provinces_to_highlight = {
@@ -181,72 +247,6 @@ generic_madagascar_missions_3 = {
 			}
 		}
 	}
-
-	madagascar_tides = {
-		icon = mission_assemble_an_army
-		required_missions = { }
-		position = 1
-		trigger = {
-			army_size_percentage = 1
-		}
-		effect = {
-			add_country_modifier = {
-				name = "generic_madagascar_ready_modifier"
-				duration = 5475
-			}
-		}
-	}
-
-	madagascar_highlands = {
-		icon = missions_assemble_an_army
-		required_missions = { madagascar_tides }
-		position = 2
-		provinces_to_highlight = {
-           	area = madagascar_highlands_area
-            NOT = { country_or_non_sovereign_subject_holds = ROOT }
-        }
-		trigger = {
-			madagascar_highlands_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			southern_madagascar = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			add_country_modifier = {
-				name = "generic_madagascar_defense_modifier"
-				duration = 9125
-			}
-		}
-	}
-
-	madagascar_south = {
-		icon = missions_assemble_an_army
-		required_missions = { madagascar_highlands }
-		position = 3
-		provinces_to_highlight = {
-			area = southern_madagascar
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			southern_madagascar = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "generic_madagascar_culture_modifier"
-				duration = 7300
-			}
-		}
-	}
 }
 
 generic_madagascar_missions_4 = {
@@ -265,7 +265,7 @@ generic_madagascar_missions_4 = {
 	has_country_shield = yes
 	
 	madagascar_north = {
-		icon = missions_assemble_an_army
+		icon = me_mission_portugal_central_africa
 		required_missions = { madagascar_tides }
 		position = 2
 		provinces_to_highlight = {
@@ -316,7 +316,7 @@ generic_madagascar_missions_5 = {
 	has_country_shield = yes
 	
 	madagascar_faith = {
-		icon = missions_monarch_in_throne_room
+		icon = mission_hands_praying
 		required_missions = { }
 		position = 1
 		trigger = {
@@ -331,12 +331,20 @@ generic_madagascar_missions_5 = {
 			}
 			else = {
 				religion = shamanism
-				OR = {
-					has_adopted_cult = enkai_cult
-					has_adopted_cult = waaq_cult
-					has_adopted_cult = zanahary_cult
-				}
 				religious_unity = 1
+				if = {
+					limit = {
+						has_dlc = "Rights of Man"
+					}
+					OR = {
+						has_adopted_cult = enkai_cult
+						has_adopted_cult = waaq_cult
+						has_adopted_cult = zanahary_cult
+					}
+				}
+				else = {
+					stability = 1
+				}
 			}
 		}
 		effect = {
@@ -348,7 +356,7 @@ generic_madagascar_missions_5 = {
 	}
 
 	madagascar_zeal = {
-		icon = missions_assemble_an_army
+		icon = mission_colonial
 		required_missions = { madagascar_faith }
 		position = 2
 		trigger = {
@@ -372,7 +380,7 @@ generic_madagascar_missions_5 = {
 	}
 
 	madagascar_swahili = {
-		icon = missions_assemble_an_army
+		icon = mission_african_trade_post
 		required_missions = { madagascar_zeal }
 		position = 3
 		trigger = {
