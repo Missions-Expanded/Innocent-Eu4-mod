@@ -17,14 +17,15 @@ mongolia_missions_1 = {
 				province_id = 454
 				province_id = 4344
 			}
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
-
 		trigger = {
 			owns_core_province = 454
 			owns_core_province = 4344
 		}
-
 		effect = {
 			# LEMON HELP WE NEED AN EVENT
 		}
@@ -44,7 +45,15 @@ mongolia_missions_2 = {
 		icon = mission_chinese_general_riding
 		position = 5
 		required_missions = { kha_unite_chagatai }
-
+		provinces_to_highlight = {
+			OR = {
+				area = ishim_area
+				area = balchasj_area
+				area = syr_darya_area
+				area = kyzylkum_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			ishim_area = {
 				type = all
@@ -63,42 +72,41 @@ mongolia_missions_2 = {
 				owned_by = ROOT
 			}
 		}
-
 		effect = {
 			kazakhstan_area = {
-				add_permanent_claim = ROOT
 				limit = {
         			NOT = { owned_by = ROOT }
         			NOT = { is_core = ROOT }
     			}
+				add_permanent_claim = ROOT
 			}
 			nogai_area = {
-				add_permanent_claim = ROOT
 				limit = {
         			NOT = { owned_by = ROOT }
         			NOT = { is_core = ROOT }
     			}
+				add_permanent_claim = ROOT
 			}
 			lower_yik_area = {
-				add_permanent_claim = ROOT
 				limit = {
         			NOT = { owned_by = ROOT }
         			NOT = { is_core = ROOT }
     			}
+				add_permanent_claim = ROOT
 			}
 			bashkiria_area = {
-				add_permanent_claim = ROOT
 				limit = {
         			NOT = { owned_by = ROOT }
         			NOT = { is_core = ROOT }
     			}
+				add_permanent_claim = ROOT
 			}
 			transoxiana_area = {
-				add_permanent_claim = ROOT
 				limit = {
         			NOT = { owned_by = ROOT }
         			NOT = { is_core = ROOT }
     			}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -107,7 +115,14 @@ mongolia_missions_2 = {
 		icon = mission_assemble_an_army
 		position = 6
 		required_missions = { kha_uzbek }
-
+		provinces_to_highlight = {
+			OR = {
+				area = lower_yik_area
+				area = nogai_area
+				area = kazakhstan_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			lower_yik_area = {
 				type = all
@@ -122,40 +137,47 @@ mongolia_missions_2 = {
 				owned_by = ROOT
 			}
 		}
-
-		event = {
+		effect = {
+			if = {
+				limit = {
+					exists = GOL
+					GOL = {
+						is_free_or_tributary_trigger = yes
+					}
+				}
+				add_casus_belli = {
+					target = GOL
+					type = cb_vassalize_mission
+					months = 600
+				}
+			}
 			saratov_area = {
-				add_permanent_claim = ROOT
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 			astrakhan_area = {
-				add_permanent_claim = ROOT
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 			lower_don_area = {
-				add_permanent_claim = ROOT
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 			tambov_area = {
-				add_permanent_claim = ROOT
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
-			}
-			add_casus_belli = {
-				target = GOL
-				type = cb_vassalize_mission
-				months = 600
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -164,12 +186,28 @@ mongolia_missions_2 = {
 		icon = mission_eastern_european_city
 		position = 7
 		required_missions = { kha_nogai }
-
+		provinces_to_highlight = {
+			OR = {
+				area = astrakhan_area
+				area = tambov_area
+			}
+			NOT = { owned_by = ROOT }
+			GOL = {
+				OR = {
+					exists = no
+					NOT = { is_subject_of = ROOT }
+					is_subject_of_type = tributary_state
+				}
+			}
+		}
 		trigger = {
 			OR = {
-				GOL = { is_subject = yes }
-				GOL = { exists = no }
+				GOL = {
+					is_subject_of = ROOT
+					NOT = { is_subject_of_type = tributary_state }
+				}
 				AND = {
+					NOT = { exists = GOL }
 					astrakhan_area = {
 						type = all
 						owned_by = ROOT
@@ -181,22 +219,33 @@ mongolia_missions_2 = {
 				}
 			}
 		}
-
 		effect = {
-			add_legitimacy_equivalent = 20
 			add_prestige = 20
+			add_legitimacy_equivalent = { value = 20 }
 			russia_region = {
-				add_permanent_claim = ROOT
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 			284 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			2411 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -206,17 +255,21 @@ mongolia_missions_2 = {
 		position = 8
 		required_missions = { kha_mongol_people }
 		provinces_to_highlight = {
-			province_id = 284
-			province_id = 2411
+			OR = {
+				province_id = 284
+				province_id = 2411
+			}
+			NOT = { owned_by = ROOT }
 		}
-
 		trigger = {
-			284 = { owned_by = ROOT }
-			2411 = { owned_by = ROOT }
+			owns = 284
+			owns = 2411
 		}
-
 		effect = {
 			crimea_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 				add_nationalism -20
 			}
 		}
@@ -236,36 +289,70 @@ mongolia_missions_3 = {
 		icon = mission_assemble_an_army
 		position = 1
 		required_missions = { }
-
 		trigger = {
 			army_size_percentage = 1
 		}
-
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_independence"
-				duraiton = 5475
+				name = mongolia_independence
+				duration = 5475
 			}
 			uliastai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			tannu_uriankhai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			north_zungaria = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
 				add_permanent_claim = ROOT
 			}
 			709 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			2191 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			2193 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			4206 = {
-				add_permanent_claim = ROOT
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -274,20 +361,21 @@ mongolia_missions_3 = {
 		icon = mission_non-western_cavalry_raid
 		position = 2
 		required_missions = { kha_prepare }
-
 		trigger = {
 			OR = {
-				offensive_war_with = OIR
 				AND = {
-					NOT = { is_at_war = KHA }
+					is_at_war = no
 					is_subject = no
+				}
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = OIR
 				}
 			}
 		}
-
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_desire"
+				name = mongolia_desire
 				duration = 1825
 			}
 		}
@@ -299,21 +387,41 @@ mongolia_missions_3 = {
 		required_missions = { kha_independence }
 		provinces_to_highlight = {
 			OR = {
-				area = central_mongolia_area
-				area = ordos_area
-				area = uliastai_area
-				province_id = 709
-				province_id = 2191
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-
-		trigger = {
-			OR = {
-				CHG = {
-					is_subject_of = ROOT
+				AND = {
+					OR = {
+						province_id = 709
+						province_id = 2191
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
 				}
 				AND = {
+					OR = {
+						area = central_mongolia_area
+						area = ordos_area
+						area = uliastai_area
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
+			OIR = {
+				OR = {
+					exists = no
+					NOT = { is_subject_of = ROOT }
+					is_subject_of_type = tributary_state
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				OIR = {
+					is_subject_of = ROOT
+					NOT = { is_subject_of_type = tributary_state }
+				}
+				AND = {
+					NOT = { exists = OIR }
 					owns_core_province = 709
 					owns_core_province = 2191
 					central_mongolia_area = {
@@ -331,18 +439,26 @@ mongolia_missions_3 = {
 				}
 			}
 		}
-
 		effect = {
-			add_casus_belli = {
-				target = CHG
-				type = cb_vassalize_mission
-				months = 600
-			}
-			add_accepted_culture = oirats
-			add_country_modifier = {
-				name = "mongolia_overcoming"
+			if = {
+				limit = {
+					exists = CHG
+					CHG = {
+						is_free_or_tributary_trigger = yes
+					}
+				}
+				add_casus_belli = {
+					target = CHG
+					type = cb_vassalize_mission
+					months = 600
+				}
 			}
 			add_legitimacy_equivalent = { value = 15 }
+			add_country_modifier = {
+				name = mongolia_overcoming
+				duration = -1
+			}
+			add_accepted_culture = oirats
 		}
 	}
 
@@ -350,16 +466,38 @@ mongolia_missions_3 = {
 		icon = mission_pf_map_table
 		position = 4
 		required_missions = { kha_past }
-
-		trigger = {
-			NOT = { exists = CHG }
-		}
-
-		effect = {
-			add_accepted_culture = uyghur
-			add_country_modifier = {
-				name = "mongolia_among_the_great_khans"
+		provinces_to_highlight = {
+			area = zungaria_area
+			NOT = { owned_by = ROOT }
+			CHG = {
+				OR = {
+					exists = no
+					NOT = { is_subject_of = ROOT }
+					is_subject_of_type = tributary_state
+				}
 			}
+		}
+		trigger = {
+			OR = {
+				CHG = {
+					is_subject_of = ROOT
+					NOT = { is_subject_of_type = tributary_state }
+				}
+				AND = {
+					NOT = { exists = CHG }
+					zungaria_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = mongolia_among_the_great_khans
+				duration = -1
+			}
+			add_accepted_culture = uyghur
 			west_siberia_region = {
 				limit = {
         			NOT = { owned_by = ROOT }
@@ -451,9 +589,8 @@ mongolia_missions_3 = {
 				area = amdo_area
 				area = shanshan_area
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { owned_by = ROOT }
 		}
-
 		trigger = {
 			kashgaria_area = {
 				type = all
@@ -472,36 +609,38 @@ mongolia_missions_3 = {
 				owned_by = ROOT
 			}
 		}
-
 		effect = {
-			add_country_modifier = {
-				name = "mongolia_united_administration"
-			}
 			# NEEDS EVENT LEMON
+			add_country_modifier = {
+				name = mongolia_united_administration
+				duration = -1
+			}
 		}
 	}
 
 	kha_yuan = {
 		icon = mission_empire
 		position = 6
-		required missions = { kha_yarkand_and_yogir kha_seize_empire }
-
+		required_missions = { kha_yarkand_and_yogir kha_seize_empire }
 		trigger = {
-			OR = {
-				horde_unity = 90
-				meritocracy = 90
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				is_emperor_of_china = yes
 			}
+			legitimacy_equivalent = 90
 		}
-
 		effect = {
 			add_adm_power = 75
 			add_dip_power = 75
 			add_mil_power = 75
 			set_dynasty = "Yuan"
-			add_country_modifier = {
-				name = "mongolia_yuan_restored"
-			}
 			# lemon we need an event here
+			add_country_modifier = {
+				name = mongolia_yuan_restored
+				duration = -1
+			}
 		}
 	}
 }
@@ -521,14 +660,11 @@ mongolia_missions_4 = {
 		required_missions = { kha_independence }
 		provinces_to_highlight = {
 			province_id = 1816
+			NOT = { owned_by = ROOT }
 		}
-
 		trigger = {
-			1816 = {
-				owned_by = ROOT
-			}
+			owns = 1816
 		}
-
 		effect = {
 			north_china_region = {
 				limit = {
@@ -552,19 +688,21 @@ mongolia_missions_4 = {
 		position = 3
 		required_missions = { kha_beijing }
 		provinces_to_highlight = {
-			limit = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				province_id = 2171
+				province_id = 688
 			}
-			province_id = 2171
-			province_id = 688
+			NOT = { owned_by = ROOT }
 		}
-
 		trigger = {
-			2171 = { owned_by = ROOT }
-			688 = { owned_by = ROOT }
+			owns = 2171
+			owns = 688
 		}
-
 		effect = {
+			add_country_modifier = {
+				name = mongolia_long_river
+				duration = -1
+			}
 			south_china_region = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -579,48 +717,55 @@ mongolia_missions_4 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			add_country_modifier = {
-				name = "mongolia_long_river"
-			}
 		}
 	}
 
 	kha_seize_empire = {
 		icon = mission_japanese_fort
 		position = 5
-
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2139
+				province_id = 2140
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			if = {
 				limit = {
-					has_dlc = "Mandate of Heaven"
+					has_dlc = Mandate of Heaven
 				}
 				is_emperor_of_china = yes
 			}
-			else = {
-				2139 = { owned_by = ROOT }
-				2140 = { owned_by = ROOT }
-			}
+			owns = 2139
+			owns = 2140
 		}
-
 		effect = {
-			random_country = {
+			# LEMON WE NEED THE QUFU EVENT
+			if = {
 				limit = {
-					has_country_modifier = lost_mandate_of_heaven
+					any_country = {
+						has_country_modifier = lost_mandate_of_heaven
+					}
 				}
-				every_neighbor_country = {
-					reverse_add_opinion = {
-						who = PREV
-						modifier = sabatoged_reputation
+				random_country = {
+					limit = {
+						has_country_modifier = lost_mandate_of_heaven
+					}
+					every_neighbor_country = {
+						reverse_add_opinion = {
+							who = PREV
+							modifier = mongolia_opinion_lost_mandate
+						}
 					}
 				}
 			}
 			every_neighbor_country = {
 				reverse_add_opinion = {
 					who = ROOT
-					modifier = in_same_trade_league
+					modifier = mongolia_opinion_new_rising_empire
 				}
 			}
-			# LEMON WE NEED THE QUFU EVENT
 		}
 	}
 
@@ -633,17 +778,19 @@ mongolia_missions_4 = {
 				province_id = 1033
 				province_id = 33
 			}
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
-
 		trigger = {
 			owns_core_province = 1033
 			owns_core_province = 33
 		}
-
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_hemispheres"
+				name = mongolia_hemispheres
+				duration = -1
 			}
 		}
 	}
@@ -662,29 +809,30 @@ mongolia_missions_4 = {
 				province_id = 4253
 				province_id = 1956
 			}
-			NOT = { owned_by = ROOT }
-		}
-
-		trigger = {
-			AND = {
-				owns_core_province = 301
-				owns_core_province = 1778
-				owns_core_province = 1956
-				owns_core_province = 308
-				owns_core_province = 294
-				owns_core_province = 4254
-				owns_core_province = 1956
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
-
+		trigger = {
+			owns_core_province = 301
+			owns_core_province = 1778
+			owns_core_province = 1956
+			owns_core_province = 308
+			owns_core_province = 294
+			owns_core_province = 4254
+			owns_core_province = 1956
+		}
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_conquered_russia"
+				name = mongolia_conquered_russia
+				duration = -1
 			}
 			russia_region = {
-				add_province_modifier = {
-					name = "mongolia_razed_russia"
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
 				}
+				add_devastation = 100
 			}
 		}
 	}
@@ -704,19 +852,28 @@ mongolia_missions_5 = {
 		position = 3		
 		required_missions = { kha_independence }
 		provinces_to_highlight = {
-			area = eastern_mongolia
-			area = heilongjiang_area
-			limit = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				area = eastern_mongolia
+				area = heilongjiang_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			eastern_mongolia = {
+				type = all
+				owned_by = ROOT
+			}
+			heilongjiang_area = {
+				type = all
+				owned_by = ROOT
 			}
 		}
-
-		trigger = {
-			eastern_mongolia = { owned_by = ROOT }
-			heilongjiang_area = { owned_by = ROOT }
-		}
-
 		effect = {
+			add_country_modifier = {
+				name = mongolia_neighbors
+				duration = -1
+			}
+			add_accepted_culture = chahar
 			central_heilongjiang_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -731,10 +888,6 @@ mongolia_missions_5 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			add_country_modifier = {
-				name = "mongolia_neighbors"
-			}
-			add_accepted_culture = chahar
 		}
 	}
 
@@ -742,21 +895,82 @@ mongolia_missions_5 = {
 		icon = mission_unite_home_region
 		position = 4
 		required_missions = { kha_korchin }
-		# LEMON I DON'T KNOW WHAT TO PUT HERE
+		provinces_to_highlight = {
+			OR = {
+				area = central_heilongjiang_area
+				area = east_heilongjiang_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			central_heilongjiang_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			east_heilongjiang_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				random_country = {
+					limit = {
+						is_emperor_of_china = yes
+					}
+					add_mandate = -10
+					add_country_modifier = {
+						name = mongolia_rising_mongol_threat
+						duration = 9125
+					}
+				}
+			}
+			hebei_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_hebei_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			korea_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
 	}
 
 	kha_steppe_life = {
 		icon = mission_non-western_cavalry_raid
 		position = 5
 		required_missions = { }
-
 		trigger = {
-			num_of_cavalry > 20
+			num_of_cavalry = 20
 		}
-
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_elite_cavalry"
+				name = mongolia_elite_cavalry
 				duration = 7300
 			}
 		}
@@ -766,27 +980,15 @@ mongolia_missions_5 = {
 		icon = mission_hands_praying
 		position = 5
 		required_missions = { kha_steppe_life }
-
 		trigger = {
 			any_owned_province = {
 				religion = tengri
 			}
 			any_owned_province = {
-				OR = {
-					religion = catholic
-					religion = protestant
-					religion = reformed
-					religion = orthodox
-					religion = coptic
-					religion = anglican
-				}
+				religion_group = christian
 			}
 			any_owned_province = {
-				OR = {
-					religion = sunni
-					religion = shia
-					religion = ibadi
-				}
+				religion_group = muslim
 			}
 			any_owned_province = {
 				religion = animist
@@ -795,10 +997,10 @@ mongolia_missions_5 = {
 				religion = vajrayana
 			}
 		}
-
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_benign_neglect"
+				name = mongolia_benign_neglect
+				duration = -1
 			}
 		}
 	}
@@ -807,19 +1009,22 @@ mongolia_missions_5 = {
 		icon = mission_unite_home_region
 		position = 6
 		required_missions = { kha_neglect }
-
+		provinces_to_highlight = {
+			religion = tengri
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			every_province = {
-				limit = {
-					religion = tengri
+			all_province
+				OR = {
+					owned_by = ROOT
+					NOT = { religion = tengri }
 				}
-				owned_by = ROOT
 			}
 		}
-
 		effect = {
 			add_country_modifier = {
-				name = "mongolia_united_tengri"
+				name = mongolia_united_tengri
+				duration = -1
 			}
 			every_owned_province = {
 				limit = {
