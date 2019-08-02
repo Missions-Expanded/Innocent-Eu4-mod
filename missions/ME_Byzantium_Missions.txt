@@ -1465,16 +1465,50 @@ BYZ_missions_5 = {
 		icon = me_mission_army
 		required_missions = { byzantium_into_the_balkans }
 		position = 4
-		trigger = {
-			war_with = HAB
-			war_score_against = {
-				who = HAB
-				value = 75
+		provinces_to_highlight = {
+			OR = {
+				is_core = HAB
+				is_core = HUN
 			}
-			war_with = HUN
-			war_score_against = {
-				who = HUN
-				value = 75
+			NOT = { owned_by = ROOT }
+			NOT = { exists = HAB }
+			NOT = { exists = HUN }
+		}
+		trigger = {
+			if = {
+				limit = {
+					OR = {
+						exists = HAB
+						exists = HUN
+					}
+				}
+				OR = {
+					AND = {
+						war_with = HAB
+						war_score_against = {
+							who = HAB
+							value = 75
+						}
+					}
+					AND = {
+						war_with = HUN
+						war_score_against = {
+							who = HUN
+							value = 75
+						}
+					}
+				}
+			}
+			else = {
+				all_province = {
+					OR = {
+						owned_by = ROOT
+						AND = {
+							NOT = { is_core = HAB }
+							NOT = { is_core = HUN }
+						}
+					}
+				}
 			}
 		}
 		effect = {
@@ -1482,17 +1516,34 @@ BYZ_missions_5 = {
 				name = byzantium_tame_the_black_army_modifier
 				duration = -1
 			}
-			custom_tooltip = BYZ_GAIN_CLAIMS_ON_HAB_AND_HUN_PROVS
-			hidden_effect = {
-				every_province = {
-					limit = {
-						OR = {
-							owned_by = HAB
-							owned_by = HUN
-						}
-						NOT = { is_core = ROOT }
+			if = {
+				limit = {
+					OR = {
+						exists = HAB
+						exists = HUN
 					}
-					add_permanent_claim = ROOT
+				}
+				custom_tooltip = BYZ_GAIN_CLAIMS_ON_HAB_AND_HUN_PROVS
+				hidden_effect = {
+					every_province = {
+						limit = {
+							OR = {
+								owned_by = HAB
+								owned_by = HUN
+							}
+							owner = {
+								war_with = ROOT
+								ROOT = {
+									war_score_against = {
+										who = PREV
+										value = 75
+									}
+								}
+							}
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 			}
 		}
