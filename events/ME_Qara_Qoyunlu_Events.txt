@@ -7,12 +7,14 @@ country_event = {
 	picture = COUNTRY_COLLAPSE_eventPicture
 
 	fire_only_once = yes
+	
 	trigger = {
+		tag = QAR
 		411 = {
 			owned_by = ROOT
 		}
-		tag = QAR
 	}
+	
 	mean_time_to_happen = {
 		months = 12
 	}
@@ -33,35 +35,42 @@ country_event = {
 		set_country_flag = QAR_alvand_rebelling
 	}
 }
+
 country_event = {
 	id = ME_Qara_Qoyunlu_Events.2 #Flight of Alvand Mirza
 	title = ME_Qara_Qoyunlu_Events.2.t
 	desc = ME_Qara_Qoyunlu_Events.2.d
 	picture = BATTLE_eventPicture
 
-	immediate = {
-		AKK = {
-			country_event = { id = ME_Qara_Qoyunlu_Events.3 }
-		}
-		clr_country_flag = QAR_alvand_rebelling
-	}
 	fire_only_once = yes
+	
 	trigger = {
 		has_country_flag = QAR_alvand_rebelling
+		exists = AKK
 		NOT = { num_of_rebel_armies = 1 }
 		NOT = { num_of_rebel_controlled_provinces = 1 }
 	}
+	
 	mean_time_to_happen = {
 		months = 1
+	}
+	
+	immediate = {
+		hidden_effect = {
+			AKK = {
+				country_event = { id = ME_Qara_Qoyunlu_Events.3 }
+			}
+			clr_country_flag = QAR_alvand_rebelling
+		}
 	}
 	
 	option = {
 		name = ME_Qara_Qoyunlu_Events.2.a
 		
 		ai_chance = { factor = 100 }
-	
 	}
 }
+
 country_event = {
 	id = ME_Qara_Qoyunlu_Events.3 #Alvand Mirza arrives
 	title = ME_Qara_Qoyunlu_Events.3.t
@@ -69,13 +78,13 @@ country_event = {
 	picture = DIPLOMACY_eventPicture
 
 	fire_only_once = yes
-	
 	is_triggered_only = yes
 	
 	option = {
 		name = ME_Qara_Qoyunlu_Events.3.a
 		
 		ai_chance = { factor = 100 }
+		
 		add_adm_power = 10
 		add_spy_network_in = {
 			who = QAR
@@ -91,6 +100,7 @@ country_event = {
 		set_country_flag = QAR_alvand_in_akk
 	}
 }
+
 country_event = {
 	id = ME_Qara_Qoyunlu_Events.4 #anger of Qara
 	title = ME_Qara_Qoyunlu_Events.4.t
@@ -98,18 +108,13 @@ country_event = {
 	picture = BATTLE_eventPicture
 
 	fire_only_once = yes
-	immediate = {
-		QAR = {
-			country_event = { id = ME_Qara_Qoyunlu_Events.5 }
-		}
-		kill_leader = "Alvand Mirza"
-		KHO = {
-			country_event = { id = ME_Qara_Qoyunlu_Events.6 }
-		}
-		clr_country_flag = QAR_alvand_in_akk
-	}
+	
 	trigger = {
 		has_country_flag = QAR_alvand_in_akk
+		is_in_war = {
+			participants = AKK
+			participants = QAR
+		}
 		NOT = {
 			is_in_war = {
 				participants = AKK
@@ -117,9 +122,28 @@ country_event = {
 				war_score = -40
 			}
 		}
-		is_in_war = {
-			participants = AKK
-			participants = QAR
+	}
+	
+	immediate = {
+		hidden_effect = {
+			QAR = {
+				country_event = { id = ME_Qara_Qoyunlu_Events.5 }
+			}
+			if = {
+				limit = {
+					exists = KHO
+				}
+				KHO = {
+					country_event = { id = ME_Qara_Qoyunlu_Events.6 }
+				}
+			}
+			if = {
+				limit = {
+					has_leader = "Alvand Mirza"
+				}
+				kill_leader = { type = "Alvand Mirza" }
+			}
+			clr_country_flag = QAR_alvand_in_akk
 		}
 	}
 	
@@ -129,6 +153,7 @@ country_event = {
 		ai_chance = { factor = 100 }
 	}
 }
+
 country_event = {
 	id = ME_Qara_Qoyunlu_Events.5 #Alvand Mirza flees once again
 	title = ME_Qara_Qoyunlu_Events.5.t
@@ -136,7 +161,6 @@ country_event = {
 	picture = SPY_eventPicture
 
 	fire_only_once = yes
-	
 	is_triggered_only = yes
 	
 	option = {
@@ -145,6 +169,7 @@ country_event = {
 		ai_chance = { factor = 100 }
 	}
 }
+
 country_event = {
 	id = ME_Qara_Qoyunlu_Events.6 #Alvand Mirza in Khorasan
 	title = ME_Qara_Qoyunlu_Events.6.t
@@ -152,19 +177,19 @@ country_event = {
 	picture = COURT_eventPicture
 
 	fire_only_once = yes
-	
-	immediate = {
-		set_country_flag = QAR_alvand_in_khorasan
-	}
-	
 	is_triggered_only = yes
 	
-	
+	immediate = {
+		hidden_effect = {
+			set_country_flag = QAR_alvand_in_khorasan
+		}
+	}
 	
 	option = {
 		name = ME_Qara_Qoyunlu_Events.6.a
 		
 		ai_chance = { factor = 100 }
+		
 		add_adm_power = 10
 		define_general = {
 			shock = 2
