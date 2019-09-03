@@ -15,19 +15,19 @@ MNG_missions_1 = {
 		icon = me_mission_ming_question_of_guidance
 		position = 3
 		trigger = {
+			is_monarch_leader = yes
 			any_country = {
 				has_reform = steppe_horde
 				war_with = ROOT
 			}
-			is_monarch_leader = yes
 		}
 		effect = {
-			country_event = { id = ME_Ming_Event.3 }
+			country_event = { id = ME_Ming_Events.3 }
 		}
 	}
 }
 
-MNG_missions_11 = {
+MNG_missions_1_2 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -47,7 +47,10 @@ MNG_missions_11 = {
 		trigger = {
 			is_at_war = no
 			NOT = { num_of_rebel_controlled_provinces = 1 }
-			has_country_flag = ME_MNG_PRETENDERS
+			custom_trigger_tooltip = {
+				tooltip = ME_MNG_PRETENDERS_TT
+				has_country_flag = ME_MNG_PRETENDERS
+			}
 		}
 		effect = {
 			add_stability_or_adm_power = yes
@@ -59,7 +62,7 @@ MNG_missions_11 = {
 	}
 }
 
-MNG_missions_1_1 = {
+MNG_missions_1_3 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -78,11 +81,20 @@ MNG_missions_1_1 = {
 		position = 4
 		trigger = {
 			NOT = { exists = JNG }
-			has_country_flag = ME_MNG_HEADLESS_EMPIRE
+			custom_trigger_tooltip = {
+				tooltip = ME_MNG_HEADLESS_EMPIRE_TT
+				has_country_flag = ME_MNG_HEADLESS_EMPIRE
+			}
 		}
 		effect = {
 			change_mil = 2
-			add_mandate = 10
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = yes
+				}
+				add_mandate = 10
+			}
 			add_country_modifier = {
 				name = MNG_reunited_empire
 				duration = 7300
@@ -91,7 +103,7 @@ MNG_missions_1_1 = {
 	}
 }
 	
-MNG_missions_1_2 = {
+MNG_missions_1_4 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -101,14 +113,34 @@ MNG_missions_1_2 = {
 	}
 	
 	has_country_shield = yes	
+	
 	MNG_renovate_the_great_wall = {
 		required_missions = {
 			MNG_imperial_public_reforms
 		}
 		icon = mission_great_wall
 		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4223
+				province_id = 702
+				province_id = 2136
+				province_id = 2112
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 0.01
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
 		trigger = {
 			4223 = {
+				owned_by = ROOT
 				OR = {
 					has_building = fort_15th
 					has_building = fort_16th
@@ -118,6 +150,7 @@ MNG_missions_1_2 = {
 				NOT = { devastation = 0.01 }
 			}
 			702 = {
+				owned_by = ROOT
 				OR = {
 					has_building = fort_15th
 					has_building = fort_16th
@@ -127,6 +160,7 @@ MNG_missions_1_2 = {
 				NOT = { devastation = 0.01 }
 			}
 			2136 = {
+				owned_by = ROOT
 				OR = {
 					has_building = fort_15th
 					has_building = fort_16th
@@ -136,6 +170,7 @@ MNG_missions_1_2 = {
 				NOT = { devastation = 0.01 }
 			}
 			2112 = {
+				owned_by = ROOT
 				OR = {
 					has_building = fort_15th
 					has_building = fort_16th
@@ -156,11 +191,24 @@ MNG_missions_1_2 = {
 					}
 					NOT = { devastation = 0.01 }
 				}
+				if = {
+					limit = {
+						is_state = yes
+					}
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						add_prosperity = 100
+					}
+					else = {
+						add_base_tax = 1
+					}
+				}
 				add_province_modifier = {
 					name = MNG_great_wall_expansion
 					duration = 9125
 				}
-				add_prosperity = 100
 			}
 		}
 	}
@@ -172,12 +220,20 @@ MNG_missions_1_2 = {
 		icon = me_mission_ming_inward_harmonization
 		position = 7
 		trigger = {
+			is_year = 1500
 			is_at_war = no
-			OR = {
-				has_harmonized_with = animism
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					has_harmonized_with = animism
+					humanist_ideas = 7
+				}
+			}
+			else = {
 				humanist_ideas = 7
 			}
-			is_year = 1500
 		}
 		effect = {
 			add_country_modifier = {
@@ -199,11 +255,34 @@ MNG_missions_1_2 = {
 		icon = me_mission_ming_conclude_the_transition
 		position = 8
 		provinces_to_highlight = {
+			province_id = 1816
 			OR = {
-				province_id = 1821
-				province_id = 1816
+				NOT = { owned_by = ROOT }
+				NOT = { development = 35 }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = nanjing_development
+						value = development
+						who = 1821
+					}
+					export_to_variable = {
+						which = beijing_development
+						value = development
+						who = 1816
+					}
+					NOT = { check_variable = { which = beijing_development which = nanjing_development } }
+				}
 			}
-			NOT = { controlled_by = ROOT }
 		}
 		trigger = {
 			1816 = {
@@ -215,9 +294,9 @@ MNG_missions_1_2 = {
 				}
 				OR = {
 					has_building = dock
+					has_building = drydock
 					has_building = shipyard
 					has_building = grand_shipyard
-					has_building = drydock
 				}
 				OR = {
 					has_building = marketplace
@@ -233,7 +312,7 @@ MNG_missions_1_2 = {
 					who = 1821
 				}
 				export_to_variable = {
-					which = beijing_developmentlo
+					which = beijing_development
 					value = development
 					who = 1816
 				}
@@ -241,6 +320,14 @@ MNG_missions_1_2 = {
 			}
 		}
 		effect = {
+			define_advisor = {
+				type = treasurer
+				skill = 3
+				name = "Gao Lishi"
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
 			hebei_area = {
 				limit = {
 					owned_by = ROOT
@@ -250,17 +337,9 @@ MNG_missions_1_2 = {
 					duration = 5475
 				}
 			}
-			define_advisor = {
-				type = treasurer
-				skill = 3
-				name = "Gao Lishi"
-				culture = ROOT
-				religion = ROOT
-				cost_multiplier = 0.5
-			}
 		}
 	}
-		
+	
 	MNG_ming_renaissance = {
 		required_missions = { 
 			MNG_conclude_the_translation
@@ -272,13 +351,17 @@ MNG_missions_1_2 = {
 			any_owned_province = {
 				has_institution = renaissance
 			}
-			calc_true_if = {
-				all_province = {
-					development = 30
-				}
-				amount = 3
+			num_of_owned_provinces_with = {
+				value = 3
+				development = 30
 			}
-			imperial_mandate = 55
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				is_emperor_of_china = yes
+				imperial_mandate = 55
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -287,7 +370,7 @@ MNG_missions_1_2 = {
 			}
 		}
 	}
-		
+	
 	MNG_curb_the_power_of_the_eunuchs = {
 		required_missions = {
 			MNG_ming_renaissance
@@ -295,13 +378,22 @@ MNG_missions_1_2 = {
 		icon = me_mission_ming_eunuchs
 		position = 11
 		trigger = {
-			NOT = {
-				estate_influence = {
-					estate = ME_eunuchs_estate
-					influence = 50
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				is_emperor_of_china = yes
+				imperial_mandate = 60
+				NOT = {
+					estate_influence = {
+						estate = ME_eunuchs_estate
+						influence = 50
+					}
 				}
 			}
-			imperial_mandate = 60
+			else = {
+				legitimacy_equivalent = 100
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -351,6 +443,10 @@ MNG_missions_2 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MNG_horde_offensive
+				duration = 3650
+			}
 			ordos_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -386,10 +482,6 @@ MNG_missions_2 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			add_country_modifier = {
-				name = MNG_horde_offensive
-				duration = 3650
-			}
 		}
 	}
 	
@@ -399,6 +491,10 @@ MNG_missions_2 = {
 		}
 		icon = mission_non-western_cavalry_raid
 		position = 3
+		provinces_to_highlight = {
+			province_id = 460
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			NOT = { exists = OIR }
 			NOT = { exists = KAS }
@@ -426,18 +522,28 @@ MNG_missions_2 = {
 		icon = me_mission_ming_military_commision
 		position = 4
 		trigger = {
-			calc_true_if = {
-				all_country = {
-					government = tribal
-					OR = {
-						is_subject_of_type = tributary_state
-						is_subject_of = ROOT
-					}
-				}
-				amount = 2
-			}
-			army_size = 70
 			statesman = 1
+			army_size = 70
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				calc_true_if = {
+					all_subject_country = {
+						government = tribal
+						is_subject_of_type = tributary_state
+					}
+					amount = 2
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_subject_country = {
+						government = tribal
+					}
+					amount = 2
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -451,14 +557,20 @@ MNG_missions_2 = {
 		required_missions = { }
 		icon = mission_early_modern_university
 		position = 5
+		provinces_to_highlight = {
+			owned_by = ROOT
+			devastation = 0.01
+		}
 		trigger = {
 			OR = {
-				adm = 3
+				ADM = 3
 				economic_ideas = 5
 			}
 			NOT = { num_of_rebel_armies = 1 }
 			NOT = { num_of_rebel_controlled_provinces = 1 }
-			all_owned_province = { NOT = { devastation = 0.01 } }
+			all_owned_province = {
+				NOT = { devastation = 0.01 }
+			}
 		}
 		effect = {
 			add_ruler_modifier = {
@@ -476,12 +588,10 @@ MNG_missions_2 = {
 		position = 6
 		trigger = {
 			is_at_war = no
-			calc_true_if = {
-				all_owned_province = {
-					trade_goods = grain
-					development = 10
-				}
-				amount = 3
+			num_of_owned_provinces_with = {
+				value = 3
+				trade_goods = grain
+				development = 10
 			}
 		}
 		effect = {
@@ -489,6 +599,7 @@ MNG_missions_2 = {
 				name = MNG_food_surplus
 				duration = 7300
 			}
+			custom_tooltip = ME_EVERY_GRAIN_PROVINCE_GETS_MODIFIER
 			hidden_effect = {
 				every_owned_province = {
 					limit = {
@@ -501,7 +612,6 @@ MNG_missions_2 = {
 					}
 				}
 			}
-			custom_tooltip = ME_EVERY_GRAIN_PROVINCE_GETS_MODIFIER
 		}
 	}
 	
@@ -515,17 +625,19 @@ MNG_missions_2 = {
 		position = 7
 		trigger = {
 			is_at_war = no
-			europe = { has_discovered = ROOT }
 			stability = 2
 			adm = 5
 			full_idea_group = innovative_ideas
+			europe = {
+				has_discovered = ROOT
+			}
 		}
 		effect = {
 			add_country_modifier = {
 				name = MNG_western_influences
 				duration = -1
+				desc = MNG_MODIFIER_WILL_GO_AWAY_IF_STABILITY_IS_0
 			}
-			custom_tooltip = MNG_MODIFIER_WILL_GO_AWAY_IF_STABILITY_IS_0.tooltip
 		}
 	}
 	
@@ -536,20 +648,22 @@ MNG_missions_2 = {
 		icon = mission_galleys_in_port
 		position = 9
 		trigger = {
-			calc_true_if = {
-				all_country = {
-					is_subject_of_type = tributary_state
-					is_subject_of = ROOT
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
 				}
-				amount = 20
+				tributary_state = 20
+			}
+			else = {
+				vassal = 3
 			}
 		}
 		effect = {
+			add_legitimacy_equivalent = { value = 10 }
 			add_country_modifier = {
 				name = MNG_imperial_majesty
 				duration = 9125
 			}
-			add_legitimacy_equivalent = { value = 10 }
 			every_known_country = {
 				limit = {
 					capital_scope = {
@@ -558,10 +672,22 @@ MNG_missions_2 = {
 					is_subject = no
 					total_development = 200
 				}
-				reverse_add_casus_belli = {
-					target = MNG
-					type = cb_force_tributary
-					months = 240
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_force_tributary
+						months = 240
+					}
+				}
+				else = {
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_vassalize_mission
+						months = 240
+					}
 				}
 			}
 		}
@@ -574,13 +700,25 @@ MNG_missions_2 = {
 		icon = mission_build_up_to_force_limit
 		position = 10
 		trigger = {
-			any_country = {
-				capital_scope = {
-					superregion = india_superregion
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
 				}
-				is_subject_of_type = tributary_state
-				is_subject_of = ROOT
-				total_development = 200
+				any_subject_country = {
+					capital_scope = {
+						superregion = india_superregion
+					}
+					is_subject_of_type = tributary_state
+					total_development = 200
+				}
+			}
+			else = {
+				any_subject_country = {
+					capital_scope = {
+						superregion = india_superregion
+					}
+					total_development = 200
+				}
 			}
 		}
 		effect = {
@@ -599,23 +737,25 @@ MNG_missions_2 = {
 		icon = me_mission_ming_quandiu_diguo
 		position = 11
 		trigger = {
-			calc_true_if = {
-				all_country = {
-					is_subject_of_type = tributary_state
-					is_subject_of = ROOT
-				}
-				amount = 30
-			}
 			absolutism = 90
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				tributary_state = 30
+			}
+			else = {
+				vassal = 5
+			}
 		}
 		effect = {
+			change_adm = 1
+			change_mil = 1
+			change_dip = 1
 			add_country_modifier = {
 				name = MNG_golden_ming_empire
 				duration = -1
 			}
-			change_adm = 1
-			change_mil = 1
-			change_dip = 1
 		}
 	}			
 }
@@ -655,40 +795,119 @@ MNG_missions_3 = {
 		position = 6
 		provinces_to_highlight = {
 			OR = {
-				province_id = 684
-				province_id = 667
-				province_id = 1821
+				AND = {
+					province_id = 684
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Dharma"
+							NOT = { province_has_center_of_trade_of_level = 3 }
+						}
+						AND = {
+							NOT = { has_dlc = "Dharma" }
+							NOT = { base_production = 10 }
+						}
+					}
+				}
+				AND = {
+					OR = {
+						province_id = 667
+						province_id = 1821
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						has_estate = yes
+					}
+				}
+				AND = {
+					OR = {
+						area = zhejiang_area
+						area = jiangsu_area
+						area = guangdong_area
+					}
+					OR = {
+						NOT = { owned_by = ROOT }
+						is_state = no
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							is_prosperous = no
+						}
+					}
+				}
 			}
-			NOT = { controlled_by = ROOT }
 		}
 		trigger = {
-			zhejiang_area = {
-				custom_trigger_tooltip = {
-					tooltip = IS_PROSPEROUS
-					is_prosperous = yes
-				}
-			}
-			jiangsu_area = {
-				custom_trigger_tooltip = {
-					tooltip = IS_PROSPEROUS
-					is_prosperous = yes
-				}
-			}
-			guangdong_area = {
-				custom_trigger_tooltip = {
-					tooltip = IS_PROSPEROUS
-					is_prosperous = yes
-				}
-			}
 			had_recent_war = 5
-			684 = {
-				province_has_center_of_trade_of_level = 3
+			owns = 684
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				684 = {
+					province_has_center_of_trade_of_level = 3
+				}
+			}
+			else = {
+				684 = {
+					base_production = 10
+				}
 			}
 			667 = {
+				owned_by = ROOT
 				has_estate = no
 			}
 			1821 = {
+				owned_by = ROOT
 				has_estate = no
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				zhejiang_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				jiangsu_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+				guangdong_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				zhejiang_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+				}
+				jiangsu_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+				}
+				guangdong_area = {
+					type = all
+					owned_by = ROOT
+					is_state = yes
+				}
 			}
 		}
 		effect = {
@@ -718,15 +937,14 @@ MNG_missions_3 = {
 			OR = {
 				south_america = { has_discovered = ROOT }
 				north_america = { has_discovered = ROOT }
-				new_world = { has_discovered = ROOT }
 			}
 		}
 		effect = {
+			add_dip_power = 50
 			add_country_modifier = {
 				name = MNG_beyond_the_horizon
 				duration = 5475
 			}
-			add_dip_power = 50
 		}
 	}
 	
@@ -759,9 +977,9 @@ MNG_missions_3 = {
 		icon = mission_market_place_with_asian_traders
 		position = 9
 		trigger = {
-			num_of_colonial_subjects = 1
-			any_country = {
-				has_colonial_parent = ROOT
+			colony = 1
+			any_subject_country = {
+				is_colonial_nation = yes
 				total_development = 100
 			}
 		}
@@ -780,19 +998,43 @@ MNG_missions_3 = {
 		icon = mission_alliances
 		position = 10
 		trigger = {
-			imperial_mandate = 90
 			current_age = age_of_absolutism
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				is_emperor_of_china = yes
+				imperial_mandate = 90
+			}
 		}
 		effect = {
 			every_known_country = {
 				limit = {
-					is_great_power = yes
 					NOT = { tag = ROOT }
+					OR = {
+						is_great_power = yes
+						AND = {
+							NOT = { has_dlc = "Rights of Man" }
+							total_development = 300
+						}
+					}
 				}
-				reverse_add_casus_belli = {
-					target = ROOT
-					type = cb_force_tributary
-					months = 240
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_force_tributary
+						months = 240
+					}
+				}
+				else = {
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_vassalize_mission
+						months = 240
+					}
 				}
 			}
 		}
@@ -817,14 +1059,28 @@ MNG_missions_4 = {
 		position = 2
 		provinces_to_highlight = {
 			region = japan_region
-			NOT = { controlled_by = ROOT }
+			NOT = { owned_by = ROOT }
+			NOT = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					war_with = ROOT
+				}
+			}
 		}
 		trigger = {
-			any_country = {
-				capital_scope = {
-					region = japan_region
+			OR = {
+				japan_region = {
+					type = all
+					owned_by = ROOT
 				}
-				war_with = ROOT
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					war_with = ROOT
+				}
 			}
 		}
 		effect = {
@@ -846,7 +1102,7 @@ MNG_missions_4 = {
 		position = 3
 		provinces_to_highlight = {
 			region = japan_region
-			NOT = { controlled_by = ROOT }
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -857,6 +1113,7 @@ MNG_missions_4 = {
 		effect = {
 			if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
 					is_emperor_of_china = yes
 				}
 				add_mandate = 5
@@ -864,7 +1121,6 @@ MNG_missions_4 = {
 			else = {
 				add_legitimacy_equivalent = { value = 10 }
 			}
-			
 			japan_region = {
 				limit = {
 					owned_by = ROOT
@@ -881,8 +1137,19 @@ MNG_missions_4 = {
 		icon = mission_monarch_in_throne_room
 		position = 4
 		provinces_to_highlight = {
-			province_id = 1020
-			NOT = { controlled_by = ROOT }
+			OR = {
+				AND = {
+					region = japan_region
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 1020
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -892,16 +1159,14 @@ MNG_missions_4 = {
 			1020 = {
 				owns_core_province = ROOT
 			}
-			JAP = {
-				OR = {
-					exists = no
-					is_subject_of = ROOT
-				}
+			OR = {
+				NOT = { exists = JAP }
+				overlord_of = JAP
 			}
 		}
 		effect = {
-			country_event = { id = ME_Ming_Event.2 }
 			add_prestige = 25
+			country_event = { id = ME_Ming_Events.2 }
 		}
 	}
 	
@@ -913,20 +1178,38 @@ MNG_missions_4 = {
 		}
 		icon = me_mission_ming_jade_dragon
 		position = 5
-		trigger = {
-			capital_scope = {
-				custom_trigger_tooltip = {
-					tooltip = IS_PROSPEROUS
-					is_prosperous = yes
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					is_capital_of = ROOT
+					is_prosperous = no
+				}
+				AND = {
+					owned_by = ROOT
+					devastation = 0.01
 				}
 			}
-			any_owned_province = {
-				NOT = { devastation = 0.01 }
-			}
-			NOT = { num_of_rebel_armies = 1 }
-			NOT = { num_of_rebel_controlled_provinces = 1 }
+		}
+		trigger = {
 			stability = 3
 			prestige = 75
+			NOT = { num_of_rebel_armies = 1 }
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				capital_scope = {
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			all_owned_province = {
+				NOT = { devastation = 0.01 }
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -957,19 +1240,41 @@ MNG_missions_4 = {
 		}
 		icon = mission_invade_island
 		position = 6
+		provinces_to_highlight = {
+			region = moluccas_region
+			NOT = { owned_by = ROOT }
+			moluccas_region = {
+				type = all
+				NOT = { owned_by = ROOT }
+			}
+		}
 		trigger = {
 			moluccas_region = {
 				owned_by = ROOT
 			}
-			calc_true_if = {
-				all_country = {
-					capital_scope = {
-						region = moluccas_region	
-					}
-					is_subject_of_type = tributary_state
-					is_subject_of = ROOT
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
 				}
-				amount = 3
+				calc_true_if = {
+					all_subject_country = {
+						capital_scope = {
+							region = moluccas_region	
+						}
+						is_subject_of_type = tributary_state
+					}
+					amount = 3
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_subject_country = {
+						capital_scope = {
+							region = moluccas_region	
+						}
+					}
+					amount = 3
+				}
 			}
 		}
 		effect = {
@@ -980,7 +1285,6 @@ MNG_missions_4 = {
 		}
 	}
 }
-			
 
 MNG_missions_5 = {
 	slot = 5
@@ -1003,7 +1307,10 @@ MNG_missions_5 = {
 				province_id = 1018
 				province_id = 4184
 			}
-			NOT = { controlled_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 12 }
+			}
 		}
 		trigger = {
 			1018 = {
@@ -1043,7 +1350,7 @@ MNG_missions_5 = {
 			treasury = 2000
 		}
 		effect = {
-			country_event = { id = ME_Ming_Event.1 }
+			country_event = { id = ME_Ming_Events.1 }
 		}
 	}
 	
@@ -1055,18 +1362,28 @@ MNG_missions_5 = {
 		position = 5
 		trigger = {
 			treasurer = 1
-			calc_true_if = {
-				all_owned_province = {
-					custom_trigger_tooltip = {
-					tooltip = IS_PROSPEROUS
-					is_prosperous = yes
-					}
-				}
-				amount = 6
-			}
 			OR = {
 				temple = 10
 				cathedral = 10
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				num_of_owned_provinces_with = {
+					value = 6
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 6
+					is_state = yes
+					development = 30
+				}
 			}
 		}
 		effect = {
@@ -1084,10 +1401,10 @@ MNG_missions_5 = {
 		icon = mission_asian_trader
 		position = 6
 		trigger = {
-			any_province = {
+			natural_scientist = 1
+			any_owned_province = {
 				has_institution = printing_press
 			}
-			natural_scientist = 1
 			any_owned_province = {
 				trade_goods = paper
 				development = 30
@@ -1098,6 +1415,7 @@ MNG_missions_5 = {
 				name = MNG_new_printing_techniques_and_encyclopedias
 				duration = 7300
 			}
+			custom_tooltip = EVERY_PROVINCE_GETS_PRINTING_PRESS
 			hidden_effect = {
 				every_owned_province = {
 					limit = {
@@ -1110,7 +1428,6 @@ MNG_missions_5 = {
 					}
 				}
 			}
-			custom_tooltip = EVERY_PROVINCE_GETS_PRINTING_PRESS
 		}
 	}			
 }
