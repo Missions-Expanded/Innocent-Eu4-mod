@@ -23,10 +23,10 @@ country_event = { #Return of the Sultan
 		}
 		define_general = {
 			name = "Murad II"
-			fire = 4
-			shock = 5
-			manuever = 5
-			siege = 2
+			fire = 3
+			shock = 3
+			manuever = 1
+			siege = 0
 			age = 39
 		}
 	}
@@ -47,10 +47,10 @@ country_event = { #Return of the Sultan
 		}
 		add_ruler_personality = inspiring_leader_personality
 		define_ruler_to_general = {
-			fire = 4
-			shock = 5
-			manuever = 5
-			siege = 2
+			fire = 3
+			shock = 3
+			manuever = 1
+			siege = 0
 		}
 		# add_country_modifier = {
 			# name = tur_murad
@@ -106,7 +106,7 @@ country_event = { #Fall of Constantinople
 				# cede_province = ROOT
 			# }
 		# }
-		add_prestige = 50
+		add_prestige = 5
 	}
 	
 	option = { #show the pretenders mercy
@@ -125,7 +125,7 @@ country_event = { #Fall of Constantinople
 				# cede_province = ROOT
 			# }
 		# }
-		add_prestige = 30
+		add_prestige = 10
 		145 = {
 			add_core = MOE
 			cede_province = MOE
@@ -390,6 +390,7 @@ country_event = { #powerful mamluk estates
 	picture = ACCUSATION_eventPicture
 	
 	trigger = {
+		ai = no
 		OR = {
 			tag = TUR
 			is_subject_of = TUR
@@ -398,6 +399,7 @@ country_event = { #powerful mamluk estates
 			is_core = MAM
 			NOT = { has_mamluk_autonomy_modifier = yes }
 		}
+		NOT = { has_country_flag = mamluks_gone }
 	}
 	
 	mean_time_to_happen = {
@@ -768,7 +770,6 @@ country_event = { #defeat of the expedition
 	
 	immediate = {
 		clr_country_flag = opt_in_tunis
-		set_country_flag = finished_opt_in_tunis
 	}
 	
 	option = {
@@ -790,7 +791,6 @@ country_event = { #failure to complete tunis coalition
 	fire_only_once = yes
 	
 	trigger = {
-		NOT = { has_country_flag = finished_opt_in_tunis }
 		OR = {
 			had_country_flag = {
 				flag = opt_in_tunis
@@ -2098,7 +2098,6 @@ country_event = { #end of persian humiliation
 	immediate = {
 		clr_country_flag = TUR_opt_in_persia
 		clear_global_event_target = TUR_persian_power
-		set_country_flag = TUR_persian_incident_finished
 	}
 	
 	option = {
@@ -2280,7 +2279,6 @@ country_event = { #failure to complete persia
 	fire_only_once = yes
 	
 	trigger = {
-		NOT = { has_country_flag = TUR_persian_incident_finished }
 		OR = {
 			had_country_flag = {
 				flag = TUR_opt_in_persia
@@ -2871,5 +2869,34 @@ country_event = { #fund the madaris
 			name = TUR_madaris
 			duration = -1
 		}
+	}
+}
+
+country_event = { #remove mamluks
+	id = ME_TUR_Events.50
+	title = ME_TUR_Events.50.t
+	desc = ME_TUR_Events.50.d
+	picture = REFORM_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = TUR
+		any_owned_province = {
+			has_province_modifier = mamluk_rule_65
+		}
+	}
+	
+	immediate = {
+		set_country_flag = mamluks_gone
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = ME_TUR_Events.50.a
+		remove_mamluk_autonomy = yes
+		custom_tooltip = mamluk_estate_disabled
 	}
 }
