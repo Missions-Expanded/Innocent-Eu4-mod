@@ -23,11 +23,11 @@ country_event = { #Return of the Sultan
 		}
 		define_general = {
 			name = "Murad II"
-			fire = 4
-			shock = 5
-			manuever = 5
-			siege = 2
-			age = 39
+			fire = 3
+			shock = 3
+			manuever = 1
+			siege = 0
+			#age = 39
 		}
 	}
 	
@@ -47,10 +47,10 @@ country_event = { #Return of the Sultan
 		}
 		add_ruler_personality = inspiring_leader_personality
 		define_ruler_to_general = {
-			fire = 4
-			shock = 5
-			manuever = 5
-			siege = 2
+			fire = 3
+			shock = 3
+			manuever = 1
+			siege = 0
 		}
 		# add_country_modifier = {
 			# name = tur_murad
@@ -106,7 +106,7 @@ country_event = { #Fall of Constantinople
 				# cede_province = ROOT
 			# }
 		# }
-		add_prestige = 50
+		add_prestige = 5
 	}
 	
 	option = { #show the pretenders mercy
@@ -125,7 +125,7 @@ country_event = { #Fall of Constantinople
 				# cede_province = ROOT
 			# }
 		# }
-		add_prestige = 30
+		add_prestige = 10
 		145 = {
 			add_core = MOE
 			cede_province = MOE
@@ -390,6 +390,7 @@ country_event = { #powerful mamluk estates
 	picture = ACCUSATION_eventPicture
 	
 	trigger = {
+		ai = no
 		OR = {
 			tag = TUR
 			is_subject_of = TUR
@@ -398,6 +399,7 @@ country_event = { #powerful mamluk estates
 			is_core = MAM
 			NOT = { has_mamluk_autonomy_modifier = yes }
 		}
+		NOT = { has_country_flag = mamluks_gone }
 	}
 	
 	mean_time_to_happen = {
@@ -720,16 +722,20 @@ country_event = { #capture of tunis
 		}
 		101 = { #geona trade hegemon
 			owner = {
-				limit = {
-					is_subject = no
+				IF = {
+					limit = {
+						is_subject = no
+					}
 				}
 				form_coalition_against = ROOT
 			}
 		}
 		224 = { #sevilla trade hegemon
 			owner = {
-				limit = {
-					is_subject = no
+				IF = {
+					limit = {
+						is_subject = no
+					}
 				}
 				form_coalition_against = ROOT
 			}
@@ -1358,7 +1364,7 @@ country_event = { #principality of upper hungary
 	option = { #establish the principality of upper hungary
 		name = ME_TUR_Events.27.a
 		ai_chance = { factor = 100 }
-		slovak_area = {
+		slovakia_area = {
 			limit = {
 				owned_by = ROOT
 			}
@@ -1384,7 +1390,7 @@ country_event = { #principality of upper hungary
 	option = { #create a slovak vassal state
 		name = ME_TUR_Events.27.b
 		ai_chance = { factor = 0 }
-		slovak_area = {
+		slovakia_area = {
 			limit = {
 				owned_by = ROOT
 			}
@@ -2871,5 +2877,34 @@ country_event = { #fund the madaris
 			name = TUR_madaris
 			duration = -1
 		}
+	}
+}
+
+country_event = { #remove mamluks
+	id = ME_TUR_Events.50
+	title = ME_TUR_Events.50.t
+	desc = ME_TUR_Events.50.d
+	picture = REFORM_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		tag = TUR
+		any_owned_province = {
+			has_province_modifier = mamluk_rule_65
+		}
+	}
+	
+	immediate = {
+		set_country_flag = mamluks_gone
+	}
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	option = {
+		name = ME_TUR_Events.50.a
+		remove_mamluk_autonomy = yes
+		custom_tooltip = mamluk_estate_disabled
 	}
 }
