@@ -1044,27 +1044,51 @@ SPA_missions_2 = {
 				limit = {
 					exists = FRA
 				}
-				war_score_against = {
-					who = FRA
-					value = 90
+				OR = {
+					war_score_against = {
+						who = FRA
+						value = 90
+					}
+					AND = {
+						overlord_of = FRA
+						FRA = {
+							NOT = { liberty_desire = 50 }
+						}
+					}
 				}
 			}
 			else_if = {
 				limit = {
 					exists = BRI
 				}
-				war_score_against = {
-					who = BRI
-					value = 90
+				OR = {
+					war_score_against = {
+						who = BRI
+						value = 90
+					}
+					AND = {
+						overlord_of = BRI
+						BRI = {
+							NOT = { liberty_desire = 50 }
+						}
+					}
 				}
 			}
 			else_if = {
 				limit = {
 					exists = BUR
 				}
-				war_score_against = {
-					who = BUR
-					value = 90
+				OR = {
+					war_score_against = {
+						who = BUR
+						value = 90
+					}
+					AND = {
+						overlord_of = BUR
+						BUR = {
+							NOT = { liberty_desire = 50 }
+						}
+					}
 				}
 			}
 			else_if = {
@@ -1214,9 +1238,14 @@ SPA_missions_2 = {
 				}
 				is_great_power = yes
 				OR = {
-					NOT = { exists = FRA }
-					FRA = {
-						is_great_power = no
+					AND = {
+						NOT = { great_power_rank = 6 }
+						OR = {
+							NOT = { exists = FRA }
+							FRA = {
+								is_great_power = no
+							}
+						}
 					}
 					NOT = { great_power_rank = FRA }
 				}
@@ -1224,7 +1253,10 @@ SPA_missions_2 = {
 			else = {
 				OR = {
 					total_development = FRA
-					NOT = { exists = FRA }
+					AND = {
+						NOT = { exists = FRA }
+						total_development = 500
+					}
 				}
 			}
 		}
@@ -1243,10 +1275,20 @@ SPA_missions_2 = {
 		position = 14
 		provinces_to_highlight = {
 			NOT = { exists = FRA }
-			ROOT = {
-				owns = 183
+			OR = {
+				AND = {
+					ROOT = {
+						owns = 183
+					}
+					region = france_region
+				}
+				AND = {
+					ROOT = {
+						NOT = { owns = 183 }
+					}
+					province_id = 183
+				}
 			}
-			region = france_region
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -1261,9 +1303,7 @@ SPA_missions_2 = {
 					NOT = { owns = 183 }
 				}
 				183 = {
-					owner = {
-						is_subject_of = ROOT
-					}
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 			else = {
