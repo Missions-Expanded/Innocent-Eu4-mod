@@ -139,6 +139,22 @@ TRE_Missions_1 = {
 				name = TRE_naval_zeal
 				duration = 9125
 			}
+			2195 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_claim = ROOT
+				}
+			}
+			imereti_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_claim = ROOT
+			}
 		}
 	}
 	TRE_bring_theodoro_back_to_fold = {
@@ -169,7 +185,9 @@ TRE_Missions_1 = {
 					owns_core_province = 2410
 					NOT = { exists = FEO }
 				}
-				
+				add_adm_power = 100
+				add_dip_power = 100
+				add_mil_power = 100
 			}
 			else = {
 				country_event = { id = ME_Trebizond_Events.1 } #"An Offer to Theodoro" .2 is reserved for response event
@@ -188,6 +206,13 @@ TRE_Missions_1 = {
 			num_of_owned_provinces_with = {
 				has_port = yes
 				value = 3
+			}
+			330 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		effect = {
@@ -242,7 +267,9 @@ TRE_Missions_1 = {
 					owns_core_province = 285
 					owns_core_province = 286
 				}
-				
+				add_adm_power = 100
+				add_dip_power = 100
+				add_mil_power = 100
 			}
 			else = {
 				country_event = { id = ME_Trebizond_Events.3 } #"Proposition to Genoa" .4 is reserved for response event
@@ -836,10 +863,23 @@ TRE_Missions_4 = {
 		required_missions = { TRE_rise_from_the_ashes }
 		position = 7
 		provinces_to_highlight = {
+			area = bulgaria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = { 
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			bulgaria_area = {
+				add_nationalism = -5
+			}
+			add_country_modifier = {
+				name = TRE_bulgaria_defeated
+				duration = 7300
+			}
 		}
 	}
 	TRE_return_prosperity_to_greece = {
@@ -847,10 +887,97 @@ TRE_Missions_4 = {
 		required_missions = { TRE_bulgarian_expansion TRE_reclaim_greece }
 		position = 8
 		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = northern_greece_area
+				area = morea_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				is_prosperous = no
+			}
+			else = {
+				devastation = 0.01
+			}
 		}
-		trigger = { 
+		trigger = {
+			macedonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					is_prosperous = yes
+				}
+				else = {
+					NOT = { devastation = 0.01 }
+				}
+			}
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					is_prosperous = yes
+				}
+				else = {
+					NOT = { devastation = 0.01 }
+				}
+			}
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					is_prosperous = yes
+				}
+				else = {
+					NOT = { devastation = 0.01 }
+				}
+			}
 		}
 		effect = {
+			morea_area = {
+				add_province_modifier = {
+					name = TRE_greece_in_rightful_hands
+					duration = 9125
+				}
+			}
+			northern_greece_area = {
+				add_province_modifier = {
+					name = TRE_greece_in_rightful_hands
+					duration = 9125
+				}
+			}
+			macedonia_area = {
+				add_province_modifier = {
+					name = TRE_greece_in_rightful_hands
+					duration = 9125
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						148 = {
+							province_has_center_of_trade_of_level = 3
+						}
+					}
+				}
+				148 = {
+					add_center_of_trade_level = 1
+				}
+			}
+			else = {
+				add_treasury = 250
+			}
 		}
 	}
 }
@@ -922,10 +1049,35 @@ TRE_Missions_5 = {
 		required_missions = { TRE_across_the_mountains }
 		position = 5
 		provinces_to_highlight = {
+			area = hudavendigar_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		trigger = { 
+		trigger = {
+			hudavendigar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			151 = {
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+			}
 		}
 		effect = {
+			thrace_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			hudavendigar_area = {
+				add_province_modifier = {
+					name = TRE_quest_to_cross_the_strait
+					duration = 7300
+				}
+			}
 		}
 	}
 	TRE_rise_from_the_ashes = {
@@ -933,10 +1085,48 @@ TRE_Missions_5 = {
 		required_missions = { TRE_open_the_straits }
 		position = 6
 		provinces_to_highlight = {
+			area = thrace_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		trigger = { 
+		trigger = {
+			thrace_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			bulgaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			macedonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_greece_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = TRE_the_phoenix_rises
+				duration = 7300
+			}
 		}
 	}
 	TRE_reclaim_greece = {
@@ -944,10 +1134,32 @@ TRE_Missions_5 = {
 		required_missions = { TRE_rise_from_the_ashes }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = northern_greece_area
+				area = morea_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		trigger = { 
+		trigger = {
+			macedonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = TRE_the_komnenoi_restoration
+				duration = 7300
+			}
 		}
 	}
 }
