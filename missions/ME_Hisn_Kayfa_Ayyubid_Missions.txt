@@ -83,7 +83,7 @@ HSN_AYY_missions_1 = {
 				}
 			}
 			custom_trigger_tooltip = {
-				tooltip = ME_Ayyubid_Tooltips.6
+				tooltip = ME_Ayyubid_Tooltips.7
 				NOT = {
 					any_country = {
 						religion = catholic
@@ -488,21 +488,31 @@ HSN_AYY_missions_3 = {
 		position = 4
 		provinces_to_highlight = {
 			province_id = 377
-			NOT = { development = 30 }
-			NOT = { has_building = temple }
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { development = 30 }
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
+				NOT = { owned_by = ROOT }
+			}
 		}
 		trigger = {
 			377 = {
 				owned_by = ROOT
 				development = 30
-				has_building = temple
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
 		effect = {
-			add_province_modifier = {
-				name = AYY_the_last_bastion_modifier
-				duration = -1
+			377 = {
+				add_province_modifier = {
+					name = AYY_the_last_bastion_modifier
+					duration = -1
+				}
 			}
 			377 = {
 				change_province_name = "Halab"
@@ -587,10 +597,39 @@ HSN_AYY_missions_3 = {
 		required_missions = { AYY_sharifate_of_mecca }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				province_id = 384
+				province_id = 385
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { development = 20 }
+			NOT = { has_building = temple }
 		}
 		trigger = {
+			OR = {
+				AND = {
+					384 = {
+						owned_by = ROOT
+						development = 20
+						has_building = temple
+					}
+					385 = {
+						owned_by = ROOT
+						development = 20
+						has_building = temple
+					}
+				}
+				reverse_has_opinion = {
+					who = MCC
+					value = 100
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = AYY_custodian_of_the_two_holy_mosques
+				duration = 9125
+			}
 		}
 	}
 	AYY_restore_cairo = {
@@ -598,10 +637,18 @@ HSN_AYY_missions_3 = {
 		required_missions = { AYY_conquer_egypt }
 		position = 7
 		provinces_to_highlight = {
+			province_id = 361
+			NOT = { owned_by = ROOT }
+			NOT = { development = 40 }
 		}
 		trigger = {
+			361 = {
+				development = 40
+				owned_by = ROOT
+			}
 		}
 		effect = {
+			custom_tooltip = ME_Ayyubid_Tooltips.8
 		}
 	}
 	AYY_prosperity_of_the_mouth = {
@@ -784,9 +831,11 @@ HSN_AYY_missions_4 = {
 			}
 		}
 		effect = {
-			add_province_modifier = {
-				name = AYY_the_last_bastion_modifier
-				duration = -1
+			382 = {
+				add_province_modifier = {
+					name = AYY_the_last_bastion_modifier
+					duration = -1
+				}
 			}
 			country_event = { id = ME_Ayyubid_Events.13 }
 		}
@@ -841,10 +890,88 @@ HSN_AYY_missions_4 = {
 		required_missions = { AYY_mouth_of_yemen }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				province_id = 387
+				province_id = 386
+				province_id = 4280
+				province_id = 4279
+				province_id = 4282
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { has_building = workshop }
+				NOT = { has_building = counting_house }
+			}
 		}
 		trigger = {
+			387 = {
+				OR = { 
+					has_building = workshop
+					has_building = counting_house
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			386 = {
+				OR = { 
+					has_building = workshop
+					has_building = counting_house
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4280 = {
+				OR = { 
+					has_building = workshop
+					has_building = counting_house
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4279 = {
+				OR = { 
+					has_building = workshop
+					has_building = counting_house
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4282 = {
+				OR = { 
+					has_building = workshop
+					has_building = counting_house
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			387 = {
+				add_province_modifier = {
+					name = AYY_yemeni_coffee
+					duration = -1
+				}
+			}
+			386 = {
+				add_province_modifier = {
+					name = AYY_yemeni_coffee
+					duration = -1
+				}
+			}
+			4280 = {
+				add_province_modifier = {
+					name = AYY_yemeni_coffee
+					duration = -1
+				}
+			}
+			4279 = {
+				add_province_modifier = {
+					name = AYY_yemeni_coffee
+					duration = -1
+				}
+			}
+			4282 = {
+				add_province_modifier = {
+					name = AYY_yemeni_coffee
+					duration = -1
+				}
+			}
+			add_prestige = 10
 		}
 	}
 	AYY_restore_alexandria = {
@@ -997,8 +1124,8 @@ HSN_AYY_missions_5 = {
 			custom_tooltip = ME_Ayyubid_Tooltips.4
 			tooltip = {
 				add_province_modifier = {
-						name = AYY_prosperity
-						duration = 9125
+					name = AYY_prosperity
+					duration = 9125
 				}
 				random_list = {
 					33 = {
@@ -1014,37 +1141,97 @@ HSN_AYY_missions_5 = {
 			}
 		}
 	}
-	AYY_fix_the_fakes = {
+	AYY_cradle = {
 		icon = mission_arabian_fort
 		required_missions = { AYY_restore_baghdad }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = al_jazira_area
+				area = shahrizor_area
+				area = iraq_arabi_area
+				area = basra_area
+				area = khuzestan_area
+			}
+			NOT = { owned_by = ROOT }
+			NOT = { development = 12 }
 		}
 		trigger = {
+			al_jazira_area = {
+				type = all
+				owned_by = ROOT
+				development = 12
+			}
+			shahrizor_area = {
+				type = all
+				owned_by = ROOT
+				development = 12
+			}
+			iraq_arabi_area = {
+				type = all
+				owned_by = ROOT
+				development = 12
+			}
+			basra_area = {
+				type = all
+				owned_by = ROOT
+				development = 12
+			}
+			khuzestan_area = {
+				type = all
+				owned_by = ROOT
+				development = 12
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = AYY_bringing_the_golden_age_back
+				duration = 10950
+			}
 		}
 	}
-	AYY_cradle = {
+	AYY_fix_the_fakes = {
 		icon = mission_arabian_fort
-		required_missions = { AYY_fix_the_fakes }
-		position = 7
+		required_missions = { AYY_cradle }
+		position = 6
 		provinces_to_highlight = {
 		}
 		trigger = {
+			NOT = { exists = TUR }
+			NOT = { exists = MAM }
 		}
 		effect = {
+			add_country_modifier = {
+				name = AYY_leader_of_the_faithful
+				duration = -1
+			}
 		}
 	}
 	AYY_rebirth_of_red_sea_trade = {
 		icon = mission_arabian_fort
 		required_missions = { AYY_yemeni_coffee }
 		position = 8
-		provinces_to_highlight = {
-		}
 		trigger = {
+			358 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
+			4346 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
 		}
 		effect = {
+			add_mercantilism = 5
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = AYY_rebirth_of_the_trade
+				duration = 9125
+			}
 		}
 	}
 	AYY_virtues_of_a_ruler = {
@@ -1073,6 +1260,10 @@ HSN_AYY_missions_5 = {
 			}
 		}
 		effect = {
+			add_ruler_modifier = {
+				name = AYY_virtue
+				duration = -1
+			}
 		}
 	}
 	AYY_funder_of_madras = {
