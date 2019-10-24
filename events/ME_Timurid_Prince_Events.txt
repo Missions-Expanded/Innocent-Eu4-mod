@@ -425,7 +425,7 @@ country_event = { #Abu Sa'id Clearing Stuff
 	trigger = {
 		OR = {
 			AND = {
-				has_advisor = abu_said_mirza
+				advisor = abu_said_mirza
 				NOT = {
 					has_leader_with = {
 						general = yes
@@ -484,7 +484,7 @@ country_event = { #Abu Sa'id Mirza
 			skill = 2
 			culture = ROOT
 			religion = ROOT
-			cost_multiplier = 0.5
+			cost_multiplier = 0.66
 		}
 		custom_tooltip = ALLOW_ABU_SAID_MIZRA_EVENTS
 		ai_chance = { 
@@ -545,19 +545,8 @@ country_event = { #Death of Ulugh Beg
 	desc = "ME_Timurid_Prince_Event.EVTDESC11"
 	picture = REVOLUTION_eventPicture
 	
-	trigger = {
-		OR = {
-			tag = TRS
-			was_tag = TRS
-		NOT = { has_ruler_flag = Ulugh_beg_is_ruler }
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	
+	is_triggered_only = yes
 	fire_only_once = yes
-	
-	mean_time_to_happen = {
-		months = 1
-	}
 	
 	option = {
 		name = "ME_Timurid_Prince_Event11.EVTOPTA1"
@@ -779,8 +768,64 @@ country_event = { #legitimacy stuff 2.0
 	option = {
 		name = ME_Timurid_Prince_Event15.EVTOPT1
 		
+		trigger = {
+			check_variable = { timurid_legitimacy_value = 10 }
+		}
+		
 		subtract_variable = { timurid_legitimacy_value = 10 }
 		add_yearly_manpower = 1
+	}
+	option = {
+		name = ME_Timurid_Prince_Event15.EVTOPT2
+		
+		trigger = {
+			check_variable = { timurid_legitimacy_value = 20 }
+		}
+		
+		subtract_variable = { timurid_legitimacy_value = 20 }
+		create_general = { tradition = 65 }
+	}
+	option = {
+		name = ME_Timurid_Prince_Event15.EVTOPT3
+		
+		trigger = {
+			check_variable = { timurid_legitimacy_value = 10 }
+		}
+		
+		subtract_variable = { timurid_legitimacy_value = 10 }
+		add_country_modifier = {
+			name = timurid_prince_satisfied_the_masses
+			duration = 7300
+		}
+	}
+	option = {
+		name = ME_Timurid_Prince_Event15.EVTOPT4
+		
+		trigger = {
+			check_variable = { timurid_legitimacy_value = 15 }
+		}
+		
+		subtract_variable = { timurid_legitimacy_value = 15 }
+		add_years_of_income = 1
+	}
+	option = {
+		name = ME_Timurid_Prince_Event15.EVTOPT5
+		
+		trigger = {
+			check_variable = { timurid_legitimacy_value = 15 }
+		}
+		
+		subtract_variable = { timurid_legitimacy_value = 15 }
+		define_advisor = {
+			type = land_reformer
+			skill = 2
+			culture = ROOT
+			cost_multiplier = 0.5
+			religion = ROOT
+		}
+	}
+	option = {
+		name = ME_Timurid_Prince_Event15.EVTOPT6
 	}
 }
 
@@ -1211,23 +1256,60 @@ country_event = { #Abu Sa'id Revolts
 	desc = "ME_Timurid_Prince_Event.EVTDESC26"
 	picture = REVOLUTION_eventPicture
 	
-	hidden = yes
-	
 	trigger = {
-		has_country_flag = allow_persian_restoration
-		NOT = { has_country_modifier = allow_persian_restoration_for_20_years }
+		OR = {
+			advisor = abu_said_mirza
+			AND = {
+				has_leader_with = {
+					general = yes
+					shock = 4
+					fire = 3
+					manuever = 4
+					siege = 1
+				}
+				has_country_flag = said_mizra_as_general
+			}
+		}
+		has_country_flag = abu_said_rebellion
 	}
 	
 	mean_time_to_happen = {
-		days = 1
+		months = 20
 	}
 	
 	immediate = {
-		clr_country_flag = allow_persian_restoration
+		hidden_effect = {
+			set_saved_name = {
+				key = abu_said_name
+				type = simple
+				name = "Abu Sa'id Mirza"
+			}
+			kill_advisor = abu_said_mirza
+			kill_leader = "Abu Sa'id Mirza"
+		}
 	}
 	
 	option = {
 		name = ME_Timurid_Prince_Event26.EVTOPT1
+		capital_scope = {
+			spawn_rebels = {
+				size = 2
+				leader = abu_said_name
+				type = abu_said_rebels
+			}
+		}
+		random_owned_province = {
+			spawn_rebels = {
+				size = 1
+				type = abu_said_rebels
+			}
+		}
+		random_owned_province = {
+			spawn_rebels = {
+				size = 1
+				type = abu_said_rebels
+			}
+		}
 		
 		ai_chance = { factor = 100 }
 	}
@@ -1238,6 +1320,7 @@ country_event = { #Timmies Formed
 	title = "ME_Timurid_Prince_Event.EVTNAME27"
 	desc = "ME_Timurid_Prince_Event.EVTDESC27"
 	picture = REVOLUTION_eventPicture
+	
 	is_triggered_only = yes
 	
 	option = {
