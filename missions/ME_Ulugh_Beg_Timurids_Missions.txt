@@ -1,20 +1,21 @@
-TIM_missions_1 = {
+Timurid_princes_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
 		tag = TIM
+		has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		NOT = { has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG }
 	}
 	has_country_shield = yes
+	
 	
 	preperation_against_osman = {
 		required_missions = {
 			revenge_against_the_sheep
 		}
 		icon = me_mission_ottomans_persian_war
-		position = 5
+		position = 6
 		provinces_to_highlight = {
 			OR = {
 				area = al_jazira_area
@@ -68,7 +69,7 @@ TIM_missions_1 = {
 			preperation_against_osman
 		}
 		icon = mission_impaled_soldies
-		position = 6
+		position = 7
 		provinces_to_highlight = {
 			region = anatolia_region
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -96,7 +97,7 @@ TIM_missions_1 = {
 			tim_religious_values
 		}
 		icon = mission_hands_praying
-		position = 8
+		position = 9
 		provinces_to_highlight = {
 			region = persia_region
 			NOT = { religion = shiite }
@@ -138,39 +139,24 @@ TIM_missions_1 = {
 	}
 }
 
-TIM_missions_2 = {
+Timurid_princes_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		tag = TIM
+		has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		NOT = { has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG }
 	}
 	has_country_shield = yes
 	
-	tim_shah_departure = {
-		required_missions = { }
-		icon = mission_monarch_in_throne_room
-		position = 1
-		trigger = {
-			NOT = { has_country_modifier = shahrukhs_empire }
-			all_subject_country = {
-				NOT = { liberty_desire = 50 }
-			}
-		}
-		effect = {
-			add_prestige = 15
-			add_legitimacy_equivalent = { value = 10 }
-		}
-	}
 	
 	caspian_frontier = {
 		required_missions = {
 			tim_unleash_the_tiger
 		}
 		icon = mission_non-western_cavalry_raid
-		position = 3
+		position = 4
 		provinces_to_highlight = {
 			OR = {
 				area = shirvan_area
@@ -267,7 +253,7 @@ TIM_missions_2 = {
 			caspian_frontier
 		}
 		icon = mission_non-western_soldiers
-		position = 4
+		position = 5
 		provinces_to_highlight = {
 			OR = {
 				area = iraq_arabi_area
@@ -383,7 +369,7 @@ TIM_missions_2 = {
 			revenge_against_the_sheep
 		}
 		icon = me_mission_african_ship
-		position = 5
+		position = 6
 		provinces_to_highlight = {
 			province_id = 2999
 			NOT = { owned_by = ROOT }
@@ -408,7 +394,7 @@ TIM_missions_2 = {
 			the_old_capital
 		}
 		icon = mission_empire
-		position = 7
+		position = 8
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
@@ -439,7 +425,7 @@ TIM_missions_2 = {
 			tim_religious_values
 		}
 		icon = mission_have_manufactories
-		position = 9
+		position = 10
 		trigger = {
 			has_idea = riches_of_the_silk_road
 			#timurid_ideas = 6
@@ -566,24 +552,90 @@ TIM_missions_2 = {
 	}
 }
 
-TIM_missions_3 = {
+Timurid_princes_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
 		tag = TIM
+		has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		NOT = { has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG }
 	}
 	has_country_shield = yes
 	
+	
+	Ulugh_heir_of_timur = {
+		icon = mission_empire
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size = AFG
+			army_size = KHO
+			army_size = QOM
+			army_size = FRS
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = AFG
+				}
+				AFG = {
+					country_event = { id = ME_Timurid_Prince_Event.16 }
+				}
+				custom_tooltip = AFGHANISTAN_MUST_ACCEPT_OUR_DEMANDS
+				tooltip = {
+					vassalize = AFG
+				}
+			}
+			else = {
+				every_province = {
+					limit = {
+						culture = afghan
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	Ulugh_demand_subjucation = {
+		icon = mission_empire
+		required_missions = { Ulugh_heir_of_timur }
+		position = 2
+		trigger = {
+			OR = {
+				AFG = {
+					is_subject_of = ROOT
+				}
+				NOT = { exists = AFG }
+			}
+			446 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			every_country = {
+				limit = {
+					is_vassal = no
+					dynasty = "Timurid"
+				}
+				reverse_add_casus_belli = {
+					who = ROOT
+					type = cb_vassalize_mission
+					months = 60
+				}
+			}
+		}
+	}
+	
 	tim_unleash_the_tiger = {
 		required_missions = {
-			tim_shah_departure
-			stampeding_the_rebellion
+			Ulugh_demand_subjucation
 		}
 		icon = mission_cannons_firing
-		position = 2
+		position = 3
 		provinces_to_highlight = {
 			OR = {
 				area = farsistan_area
@@ -791,7 +843,7 @@ TIM_missions_3 = {
 			tim_unleash_the_tiger
 		}
 		icon = mission_build_up_to_force_limit
-		position = 3
+		position = 4
 		provinces_to_highlight = {
 			area = sind_sagar_area
 			NOT = { owned_by = ROOT }
@@ -833,7 +885,7 @@ TIM_missions_3 = {
 			revenge_against_the_sheep
 		}
 		icon = mission_arabian_fort
-		position = 5
+		position = 6
 		provinces_to_highlight = {
 			OR = {
 				area = basra_area
@@ -863,7 +915,7 @@ TIM_missions_3 = {
 	the_old_capital = {
 		required_missions = { }
 		icon = mission_early_game_buildings
-		position = 6
+		position = 7
 		provinces_to_highlight = {
 			province_id = 454
 			OR = {
@@ -900,7 +952,7 @@ TIM_missions_3 = {
 			the_old_capital
 		}
 		icon = mission_indian_soldier_elephant
-		position = 7
+		position = 8
 		trigger = {
 			MIL = 3
 			num_of_cavalry = 25
@@ -923,7 +975,7 @@ TIM_missions_3 = {
 			tim_religious_values
 		}
 		icon = mission_mosque
-		position = 8
+		position = 9
 		trigger = {
 			calc_true_if = {
 				all_owned_province = {
@@ -949,77 +1001,24 @@ TIM_missions_3 = {
 	}
 }
 
-TIM_missions_4 = {
+Timurid_princes_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		tag = TIM
+		has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		NOT = { has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG }
 	}
 	has_country_shield = yes
 	
-	stampeding_the_rebellion = {
-		required_missions = { }
-		icon = mission_unite_home_region
-		position = 1
-		provinces_to_highlight = {
-			OR = {
-				area = iraq_e_ajam_area
-				area = azerbaijan_area
-				province_id = 414
-				province_id = 2210
-			}
-			NOT = { owned_by = ROOT }
-			NOT = { exists = QOM }
-		}
-		trigger = {
-			if = {
-				limit = {
-					exists = QOM
-				}
-				offensive_war_with = QOM
-			}
-			else = {
-				iraq_e_ajam_area = {
-					type = all
-					owned_by = ROOT
-				}
-				azerbaijan_area = {
-					type = all
-					owned_by = ROOT
-				}
-				414 = {
-					owned_by = ROOT
-				}
-				2210 = {
-					owned_by = ROOT
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					exists = QOM
-				}
-				country_event = { id = ME_Timurid_Prince_Event.20 }
-			}
-			else = {
-				add_country_modifier = {
-					name = traitors_demise
-					duration = 7300
-				}
-			}
-		}
-	}
 	
 	southern_thrust = {
 		required_missions = {
 			tim_unleash_the_tiger
 		}
 		icon = mission_assemble_an_army
-		position = 3
+		position = 4
 		provinces_to_highlight = {
 			OR = {
 				area = makran_area
@@ -1051,7 +1050,7 @@ TIM_missions_4 = {
 			beyond_suleiman_range
 		}
 		icon = mission_conquer_50_development
-		position = 4
+		position = 5
 		provinces_to_highlight = {
 			OR = {
 				area = lahore_area
@@ -1090,7 +1089,7 @@ TIM_missions_4 = {
 			the_old_capital
 		}
 		icon = mission_early_game_buildings
-		position = 7
+		position = 8
 		provinces_to_highlight = {
 			province_id = 454
 			OR = {
@@ -1128,16 +1127,56 @@ TIM_missions_4 = {
 			custom_tooltip = allow_decision_enhance_observatory.tooltip
 		}
 	}
+	
+	ulugh_relations_with_china = {
+		required_missions = {
+			samarkand_observatory
+		}
+		icon = mission_early_game_buildings
+		position = 9
+		trigger = {
+			MNG = {
+				is_emperor_of_china = ye
+				imperial_mandate = 50	
+			}
+			reverse_has_opinion = {
+				who = MNG
+				value = 100
+			}
+		}
+		effect = {
+			1816 = {
+				owner = {
+					country_event = { id = ME_Timurid_Prince_Event.19 }
+				}
+			}
+			tooltip = {
+				1816 = {
+					owner = {
+						add_country_modifier = {
+							name = ME_beijing_samarkand_pact
+							duration = -1
+						}
+					}
+				}
+				add_country_modifier = {
+					name = ME_beijing_samarkand_pact
+					duration = -1
+				}
+			}
+			custom_tooltip = CHINA_MUST_ACCEPT_OUR_DEMANDS
+		}
+	}
 }
 
-TIM_missions_5 = {
+Timurid_princes_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
 		tag = TIM
+		has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		NOT = { has_country_flag = FORMED_TIMMIES_AS_ULUGH_BEG }
 	}
 	has_country_shield = yes
 	
@@ -1146,7 +1185,7 @@ TIM_missions_5 = {
 			the_old_capital
 		}
 		icon = mission_mosque
-		position = 7
+		position = 8
 		provinces_to_highlight = {
 			OR = {
 				AND = {
