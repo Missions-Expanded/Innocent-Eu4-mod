@@ -21,12 +21,14 @@
 		effect = {
 			set_country_flag = ME_can_use_timurid_legitimacy
 			custom_tooltip = ME_ALLOW_POWER_STRUGLE.tooltip
-			add_country_modifier = {
-				name = ME_yearly_timurid_legitimacy 
-				duration = -1
-				hidden = yes
+			hidden_effect = {
+				add_country_modifier = {
+					name = ME_yearly_timurid_legitimacy 
+					duration = -1
+					hidden = yes
+				}
+				set_variable = { timurid_legitimacy_value = 0 }
 			}
-			set_variable = { timurid_legitimacy_value = 0 }
 		}
 	}
 	
@@ -39,7 +41,15 @@
 		}
 		effect = {
 			add_prestige = 10
-			add_splendor = 50
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 50
+			}
+			else = {
+				add_legitimacy_equivalent = { value = 25 }
+			}
 		}
 	}
 	
@@ -78,12 +88,16 @@ Timurid_princes_missions_2 = {
 			Timurid_heir_of_timur
 		}
 		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 0.01
+		}
 		trigger = {
 			all_owned_province = { 
 				NOT = { unrest = 0.01 }
 			}
 			OR = {
-				dip = 4
+				DIP = 4
 				calc_true_if = {
 					all_country = {
 						dynasty = "Timurid"
@@ -108,9 +122,9 @@ Timurid_princes_missions_2 = {
 			OR = {
 				total_development = 400
 				AND = {
-					adm = 4
-					dip = 4
-					mil = 4
+					ADM = 4
+					DIP = 4
+					MIL = 4
 				}
 			}
 		}
@@ -137,10 +151,10 @@ Timurid_princes_missions_3 = {
 		required_missions = { }
 		position = 1
 		trigger = {
+			army_size_percentage = 1
 			TIM = {
 				NOT = { has_country_modifier = shahrukhs_empire }
 			}
-			army_size_percentage = 1
 		}
 		effect = {
 			add_country_modifier = {
@@ -156,6 +170,7 @@ Timurid_princes_missions_3 = {
 		position = 3
 		trigger = {
 			OR = {
+				army_size = 40
 				calc_true_if = {
 					all_country = {
 						dynasty = "Timurid"
@@ -163,7 +178,6 @@ Timurid_princes_missions_3 = {
 					}
 					amount = 3
 				}
-				army_size = 40
 			}
 		}
 		effect = {
@@ -174,7 +188,7 @@ Timurid_princes_missions_3 = {
 				change_variable = { timurid_legitimacy_value = 5 }
 			}
 			add_prestige = 20
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 		}
 	}
 	
@@ -186,6 +200,12 @@ Timurid_princes_missions_3 = {
 			Timurid_ruler_of_our_region
 		}
 		position = 4
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			capital_scope = {
 				region_for_scope_province = {
@@ -223,6 +243,8 @@ Timurid_princes_missions_4 = {
 		position = 2
 		trigger = {
 			OR = {
+				government_rank = 3
+				dominant_culture = uzbehk
 				calc_true_if = {
 					accepted_culture = persian
 					accepted_culture = luri
@@ -234,8 +256,6 @@ Timurid_princes_missions_4 = {
 					accepted_culture = mazandarani
 					amount = 5
 				}
-				government_rank = 3
-				dominant_culture = uzbehk
 			}
 		}
 		effect = {
@@ -252,6 +272,24 @@ Timurid_princes_missions_4 = {
 			Timurid_pacify_the_persian_people
 		}
 		position = 2
+		provinces_to_highlight = {
+			OR = {
+				region = persia_region
+				region = khorasan_region
+			}
+			NOT = { religion = ROOT }
+			ROOT = {
+				NOT = {
+					OR = {
+						full_idea_group = humanist_ideas
+						AND = {
+							religious_unity = 1
+							is_year = 1480
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			OR = {
 				full_idea_group = humanist_ideas
@@ -321,6 +359,7 @@ Timurid_princes_missions_5 = {
 		required_missions = { Timurid_follow_seljuk_architecture }
 		position = 3
 		trigger = {
+			religion_group = muslim
 			OR = {
 				piety = 0.7
 				NOT = { piety = -0.7 }
@@ -343,6 +382,16 @@ Timurid_princes_missions_5 = {
 			Timurid_heal_the_persian_religious_turmoil
 		}
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				region = persia_region
+				region = khorasan_region
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				unrest = 2
+			}
+		}
 		trigger = {
 			persia_region = {
 				type = all
@@ -357,11 +406,13 @@ Timurid_princes_missions_5 = {
 		}
 		effect = {
 			custom_tooltip = ALLOW_PERSIAN_REGION_RESTORATION_EVENTS.tooltip
-			set_country_flag = allow_persian_restoration
-			add_country_modifier = {
-				name = allow_persian_restoration_for_20_years
-				duration = 7300
-				hidden = yes
+			hidden_effect = {
+				set_country_flag = allow_persian_restoration
+				add_country_modifier = {
+					name = allow_persian_restoration_for_20_years
+					duration = 7300
+					hidden = yes
+				}
 			}
 		}
 	}
