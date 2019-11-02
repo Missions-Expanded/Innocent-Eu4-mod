@@ -14,6 +14,7 @@ country_event = { #Fall of the Timurid Empire
 		NOT = { has_country_modifier = ME_fall_of_herat_in_2_years }
 		has_country_flag = ME_fall_of_herat
 		NOT = { has_country_flag = formed_timurids_flag } #So formed Timmies don't get it
+		NOT = { is_year 1470 }
 	}
 	
 	mean_time_to_happen = {
@@ -23,6 +24,7 @@ country_event = { #Fall of the Timurid Empire
 	immediate = {
 		hidden_effect = {
 			clr_global_flag = ME_fall_of_herat_fired
+			set_global_flag = ME_fall_of_the_timurids_has_happened
 		}
 	}
 	
@@ -170,6 +172,7 @@ country_event = { #Fall of Herat
 	fire_only_once = yes
 	
 	trigger = {
+		NOT = { is_year 1470 }
 		tag = TIM
 		NOT = { has_global_flag = ME_fall_of_herat_fired }
 		NOT = { has_country_flag = formed_timurids_flag } #So formed Timmies don't get it
@@ -1354,5 +1357,97 @@ country_event = { #Timmies Formed
 		name = ME_Timurid_Princes_Event27.EVTOPT1
 		
 		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = { #The flight to India
+	id = ME_Timurid_Princes_Event.28
+	title = "ME_Timurid_Princes_Event.EVTNAME28"
+	desc = "ME_Timurid_Princes_Event.EVTDESC28"
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	major = yes
+	
+	trigger = {
+		tag = TIM
+		has_global_flag = ME_fall_of_the_timurids_has_happened
+		capital_scope = {
+			region = hindusthan_region
+		}
+		NOT = { has_country_flag = formed_timurids_flag }
+	}
+	
+	option = {
+		name = ME_Timurid_Princes_Event28.EVTOPT1
+		
+		ai_chance = { factor = 100 }
+		
+		define_ruler = {
+			name = "Babur"
+			dynasty = "Timurid"
+			adm = 5
+			dip = 6
+			mil = 6
+			age = 30
+			claim = 100
+		}
+		
+		define_ruler_to_general = {
+			fire = 5
+			shock = 6
+			manuever = 6
+			siege = 1
+		}
+		
+		add_ruler_modifier = {
+			name = ME_rise_of_babur
+			duration = -1
+		}
+		hidden_effect = {
+			lahore_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_core = ROOT
+			}
+			sirhind_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_core = ROOT
+			}
+			upper_doab_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_core = ROOT
+			}
+			
+			every_province = {
+				limit = {
+					OR = {
+						region = persia_region
+						region = khorasan_region
+					}
+					OR = {
+						is_core = ROOT
+						is_claim = ROOT
+					}
+				}
+				remove_core = ROOT
+				remove_claim = ROOT
+			}
+		}
+		custom_tooltip = timurid_claims_abandoned_tooltip
+	}
+	
+	option = {
+		name = ME_Timurid_Princes_Event28.EVTOPT2
+		
+		ai_chance = { factor = 0 }
 	}
 }
