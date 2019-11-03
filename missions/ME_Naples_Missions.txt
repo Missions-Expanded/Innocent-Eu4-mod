@@ -20,7 +20,7 @@ naples_missions_1 = {
 		}
 		effect = {
 			add_papal_influence = 50
-			all_country = {
+			every_country = {
 				limit = {
 					religion = catholic
 				}
@@ -55,8 +55,10 @@ naples_missions_1 = {
 			}
 		}
 		effect = {
-		}
-		
+			country_event = { 
+				id = ME_Naples_Events.1
+			}
+		}		
 	}
 
 	nap_foothold_levant = {
@@ -67,6 +69,12 @@ naples_missions_1 = {
 		position = 3
 		trigger = {
 			mercantilism = 17
+			151 = { #Constantinople
+				trade_share = {
+					country = NAP
+					share = 20
+				}
+			}
 		}
 		effect = {
 			321 = {
@@ -117,19 +125,96 @@ naples_missions_1 = {
 		position = 5
 		trigger = {
 			num_of_admirals = 1
-			num_of_light_ship = TUN
-		}
-		effect = {
-			tunisia_area = {
+			#Tunis exist
+			if = {
 				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
+					exists = TUN
+				}
+				341 = { #Tunis
+					trade_share = {
+						country = TUN
+						share = 15
 					}
 				}
-				add_permanent_claim = ROOT
+				num_of_light_ship = TUN
+			}
+			#Tunis does not exist, but a maghrebi faction has taken its place
+			else_if = {
+				limit = {
+					NOT = {
+						exists = TUN
+					}
+				}
+				any_country = {
+					limit = {
+						owns_or_non_sovereign_subject_of = tunisia_area
+						culture = maghrebi
+					}
+					341 = { #Tunis
+						trade_share = {
+							country = THIS
+							share = 15
+						}
+					}
+					NOT = {
+						num_of_light_ship = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			#Tunis exist
+			if = {
+				limit = {
+					exists = TUN
+				}
+				tunisia_area = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+				add_casus_belli = {
+					type = cb_trade_war
+					months = 300
+					target = TUN
+				}
+			}
+			#Tunis does not exist, but a maghrebi faction has taken its place
+			else_if = {
+				limit = {
+					NOT = {
+						exists = TUN
+					}
+				}
+				any_country = {
+					limit = {
+						owns_or_non_sovereign_subject_of = tunisia_area
+						culture = maghrebi
+					}
+						add_casus_belli = {
+						type = cb_trade_war
+						months = 300
+						target = THIS
+					}
+				}
+				tunisia_area = {
+					limit = {
+						owned_by = THIS
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -147,7 +232,8 @@ naples_missions_1 = {
 			emilia_romagna_area = {
 				limit = {
 					NOT = { 
-						owned_by = ROOT 
+						owned_by = ROOT
+						owned_by = PAP
 					}
 					NOT = { 
 						is_core = ROOT 
@@ -177,18 +263,19 @@ naples_missions_2 = {
 		trigger = {
 			is_subject = no
 			2983 = {
-				development = 15
-				base_production = 7
-				has_building = marketplace
-				has_estate = estate_burghers
+				development = 14
+				base_production = 6
+				OR = {
+					has_building = marketplace
+					has_estate = estate_burghers
+				}
 			}
 		}
 		effect = {
-			add_navy_tradition = 20
+			add_navy_tradition = 10
 			add_mercantilism = 5
 			2983 = {
 				add_building = shipyard
-				add_building = trade_depot
 				add_province_modifier = {
 					name = nap_restore_republic
 					duration = -1
@@ -208,6 +295,12 @@ naples_missions_2 = {
 				estate = estate_burghers
 				loyalty = 65
 			}
+			101 = { #Genoa
+				trade_share = {
+					country = NAP
+					share = 15
+				}
+			}
 		}
 		effect = {
 			every_province = {
@@ -220,6 +313,11 @@ naples_missions_2 = {
 			any_country = {
 				limit = {
 					owns_or_non_sovereign_subject_of = 115
+				}
+				add_casus_belli = {
+					type = cb_trade_war
+					months = 300
+					target = TUR
 				}
 			}
 			121 = {
@@ -238,6 +336,12 @@ naples_missions_2 = {
 			num_of_admirals = 1
 			num_of_light_ship = MAM 
 			num_of_galley = MAM
+			358 = { #Alexandria
+				trade_share = {
+					country = MAM
+					share = 25
+				}
+			}
 		}
 		effect = {
 			cyrenaica_area = {
@@ -273,15 +377,17 @@ naples_missions_2 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			add_casus_belli = {
+				type = cb_trade_war
+				months = 300
+				target = MAM
+			}
 		}
 	}
 
 	nap_ruling_trade = {
 		icon = me_mission_venice_small_ship_in_port
 		required_missions = {
-			nap_berbers_raiding
-			nap_land_sultan
-			nap_ottoman_domain
 		}
 		position = 6
 		trigger = {
@@ -303,6 +409,42 @@ naples_missions_2 = {
 			358 = { # Alexandria
 				is_strongest_trade_power = ROOT
 			}
+			if = {
+				limit = {
+					exists = ARA
+				}
+				navy_size = ARA
+			}
+			if = {
+				limit = {
+					exists = CAS
+				}
+				navy_size = CAS
+			}
+			if = {
+				limit = {
+					exists = GEN
+				}
+				navy_size = GEN
+			}
+			if = {
+				limit = {
+					exists = VEN
+				}
+				navy_size = VEN
+			}
+			if = {
+				limit = {
+					exists = MAM
+				}
+				navy_size = MAM
+			}
+			if = {
+				limit = {
+					exists = PRO
+				}
+				navy_size = TUR
+			}
 		}
 		effect = {
 			add_mercantilism = 10
@@ -319,10 +461,6 @@ naples_missions_2 = {
 			nap_italian_conquest
 		}
 		provinces_to_highlight = {
-			area = liguria_area
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-				}
 		}
 		position = 7
 		trigger = {
@@ -408,6 +546,9 @@ naples_missions_3 = {
 			sicily_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				NOT = {
+					unrest = 3
+				}
 			}
 		}
 		effect = {
@@ -431,6 +572,34 @@ naples_missions_3 = {
 		}
 		position = 3
 		trigger = {
+			112 = { #Venice
+				trade_share = {
+					country = NAP
+					share = 30
+				}
+			}
+			#OR = {
+				112 = {
+					num_of_owned_provinces_with = {
+						value = 5
+						owned_by = NAP
+						has_port = yes
+						}
+					}
+				#}
+				112 = {
+					num_of_owned_provinces_with = {
+						value = 2
+						every_trade_node_member_province = {
+							limit = {
+								owned_by = NAP
+								province_has_center_of_trade_of_level = 1
+							}
+						}
+					}
+				}
+			#}
+			num_of_galley = VEN
 		}
 		effect = {
 			apulia_area ={
@@ -453,6 +622,11 @@ naples_missions_3 = {
 			add_country_modifier = {
 				name = nap_end_of_doge
 				duration = 5475
+			}
+			add_casus_belli = {
+				type = cb_trade_war
+				months = 300
+				target = VEN
 			}
 		}
 	}
@@ -489,6 +663,9 @@ naples_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			country_event = { 
+					id = ME_Naples_Events.3
+				}
 		}
 	}
 
@@ -501,6 +678,12 @@ naples_missions_3 = {
 		trigger = {
 			num_of_admirals = 2
 			navy_size = TUR
+			151 = { #Constantinople
+				trade_share = {
+					country = TUR
+					share = 33
+				}
+			}
 		}
 		effect = {
 			137 = {
@@ -524,6 +707,11 @@ naples_missions_3 = {
 					}
 				}
 				add_permanent_claim = ROOT
+			}
+			add_casus_belli = {
+				type = cb_trade_war
+				months = 300
+				target = TUR
 			}
 		}
 	}
@@ -550,15 +738,35 @@ naples_missions_3 = {
 			nap_italian_conquest
 		}
 		provinces_to_highlight = {
-			area = tuscany_area
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			region = italy_region
+			country_or_non_sovereign_subject_holds = LAN
 		}
 		position = 7
 		trigger = {
+			OR = {
+				AND = {
+					calc_true_if = {
+						ROOT = {
+							army_size = LAN
+						}
+						amount = 2
+					}
+					is_rival = LAN
+				}
+				#every_province = {
+				#	limit = {
+				#		owned_by = LAN
+				#		region = italy_region
+				#	}
+				#}
+			}
 		}
 		effect = {
+			add_casus_belli = {
+				type = cb_humiliate
+				months = 300
+				target = LAN
+			}
 			every_province = {
 				limit = {
 					owned_by = LAN
@@ -566,7 +774,24 @@ naples_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-		}
+			every_country = {
+				limit = {
+					region = italy_region				
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = +25
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = -100
+			}
+			add_opinion = {
+				who = LAN
+				modifier = -100
+			}
+		}		
 	}
 }
 
@@ -658,16 +883,6 @@ naples_missions_4 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					NOT = { 
-						exists = GRE 
-					}
-				}
-				country_event = { 
-					id = ME_Naples_Events.2 
-				}
-			}
 			145 = {
 				limit = {
 					NOT = { 
@@ -760,10 +975,20 @@ naples_missions_4 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					NOT = { 
+						exists = GRE 
+					}
+				}
+				country_event = { 
+					id = ME_Naples_Events.2 
+				}
+			}
 			thrace_area = {
 				limit = {
 					NOT = { 
-						owned_by = ROOT 
+						owned_by = ROOT
 					}
 					NOT = { 
 						is_core = ROOT 
@@ -796,37 +1021,98 @@ naples_missions_4 = {
 			thrace_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				NOT = {
+					unrest = 3
+					devastation = 1
+				}
 			}
 		}
 		effect = {
 			thrace_area = {
-
 			}
 		}
 	}
 
-	nap_jerusalem_dominus = {
+	nap_provence = {
 		icon = mission_monarch_in_throne_room
 		required_missions = {
 		}
 		provinces_to_highlight = {
-			OR = {
-				area = palestine_area
-			}
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 		}
 		position = 6
 		trigger = {
-			palestine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				religion = catholic
+			if = {
+				limit = {
+					exists = PRO
+				}
+				diplomatic_reputation = 2
+				reverse_has_opinion = {
+					who = PRO
+					value = 100
+				}
+				has_opinion = {
+					who = PRO
+					value = 100
+				}
+				marriage_with = PRO
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						exists = PRO
+					}
+				}
+				diplomatic_reputation = 3
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					exists = PRO
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 300
+					target = PRO
+				}
 
+			}
+			else_if = {
+				limit = {
+					NOT = {
+						exists = PRO
+					}
+				}
+				every_province = {
+					limit = {
+						is_core = PRO
+						region = france_region
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			loire_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			provence_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -865,7 +1151,7 @@ naples_missions_5 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			natural_scientist = 1	
+			
 		}
 		effect = {
 			add_prestige = 25
@@ -887,7 +1173,7 @@ naples_missions_5 = {
 		}
 		position = 2
 		trigger = {
-			treasurer = 2
+			
 		}
 		effect = {
 			add_country_modifier = {
@@ -944,119 +1230,59 @@ naples_missions_5 = {
 			}
 		}
 	}
-
-	nap_kingdom_jerusalem = {
-		icon = mission_monarch_in_throne_room
-		required_missions = {
-		}
-		provinces_to_highlight = {
-			OR = {
-				area = palestine_area
-			}
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT 
-			}
-		}
-		position = 6
-		trigger = {
-			# KOJ is_client_state_of ROOT
-			palestine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-				religion = catholic
-			}
-		}
-		effect = {
-
-		}
-	}
-
-	nap_provence = {
-		icon = mission_monarch_in_throne_room
-		required_missions = {
-		}
-		provinces_to_highlight = {
-		}
-		position = 7
-		trigger = {
-			if = {
-				limit = {
-					exists = PRO
-				}
-				diplomatic_reputation = 3
-				reverse_has_opinion = {
-					who = PRO
-					value = 100
-				}
-				has_opinion = {
-					who = PRO
-					value = 100
-				}
-				marriage_with = PRO
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						exists = PRO
-					}
-				}
-
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					exists = PRO
-				}
-				add_casus_belli = {
-					type = cb_restore_personal_union
-					months = 300
-					target = PRO
-				}
-
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						exists = PRO
-					}
-				}
-				every_province = {
-					limit = {
-						is_core = PRO
-						region = france_region
-					}
-				}
-				add_permanent_claim = ROOT
-				
-			}
-			loire_area = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
-				}
-				add_permanent_claim = ROOT
-			}
-			provence_area = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
 	
 }
 
 #add_base_tax = 1
-#add_base_production = 2
+#add_base_production = 1
 #add_base_manpower = 1
+#    nap_kingdom_jerusalem = {
+#	icon = mission_monarch_in_throne_room
+#		required_missions = {
+#		}
+#		provinces_to_highlight = {
+#			OR = {
+#				area = palestine_area
+#			}
+#			NOT = { 
+#				country_or_non_sovereign_subject_holds = ROOT 
+#			}
+#		}
+#		position = 6
+#		trigger = {
+#			# KOJ is_client_state_of ROOT
+#			palestine_area = {
+#				type = all
+#				country_or_non_sovereign_subject_holds = ROOT
+#				religion = catholic
+#			}
+#		}
+#		effect = {
+#
+#		}
+#	}
+#  
+#	nap_jerusalem_dominus = {
+#		icon = mission_monarch_in_throne_room
+#		required_missions = {
+#		}
+#		provinces_to_highlight = {
+#			OR = {
+#				area = palestine_area
+#			}
+#			NOT = { 
+#				country_or_non_sovereign_subject_holds = ROOT
+#			}
+#		}
+#		position = 6
+#		trigger = {
+#			palestine_area = {
+#				type = all
+#				country_or_non_sovereign_subject_holds = ROOT
+#				religion = catholic
+#			}
+#		}
+#		effect = {
+#
+#		}
+#	}
