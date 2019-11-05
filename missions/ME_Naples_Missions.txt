@@ -15,11 +15,11 @@ naples_missions_1 = {
 			diplomatic_reputation = 2
 			reverse_has_opinion = {
 				who = PAP
-				value = 50
+				value = 100
 			}
 		}
 		effect = {
-			add_papal_influence = 50
+			add_papal_influence = 25
 			add_country_modifier = {
 				name = nap_dominus_vobiscum
 				duration = 5475
@@ -38,11 +38,11 @@ naples_missions_1 = {
 			is_subject = no
 			has_opinion = {
 				who = PAP
-				value = 100
+				value = 170
 			}
 			reverse_has_opinion = {
 				who = PAP
-				value = 100
+				value = 170
 			}
 		}
 		effect = {
@@ -69,15 +69,17 @@ naples_missions_1 = {
 		}
 		effect = {
 			321 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
 			add_country_modifier = {
 				name = nap_italian_chestnut
@@ -186,7 +188,7 @@ naples_missions_1 = {
 						exists = TUN
 					}
 				}
-				any_country = {
+				every_country = {
 					limit = {
 						owns_or_non_sovereign_subject_of = tunisia_area
 						culture = maghrebi
@@ -228,19 +230,15 @@ naples_missions_1 = {
 		}
 		position = 7
 		trigger = {
+			emilia_romagna_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-			emilia_romagna_area = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT
-						owned_by = PAP
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = nap_tortellini
+				duration = 7300
 			}
 		}
 	}
@@ -299,6 +297,7 @@ naples_missions_2 = {
 		}
 		position = 4
 		trigger = {
+			num_of_light_ship = GEN
 			estate_loyalty = {
 				estate = estate_burghers
 				loyalty = 65
@@ -311,21 +310,25 @@ naples_missions_2 = {
 			}
 		}
 		effect = {
-			every_province = {
+			liguria_area = {
 				limit = {
-					owned_by = GEN
-					region = italy_region
+					NOT = { 
+						owned_by = ROOT 
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
 				}
 				add_permanent_claim = ROOT
 			}
-			any_country = {
+			every_country = {
 				limit = {
 					owns_or_non_sovereign_subject_of = 115
 				}
 				add_casus_belli = {
 					type = cb_trade_war
 					months = 300
-					target = TUR
+					target = ROOT
 				}
 			}
 			121 = {
@@ -458,40 +461,23 @@ naples_missions_2 = {
 		}
 		provinces_to_highlight = {
 			OR = {
-				province_id = 101
+				area = lombardy_area
+			}
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		position = 7
 		trigger = {
-			101 = {
+			lombardy_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			OR = {
-				AND = {
-					has_opinion = {
-						who = FRA
-						value = 50
-					}
-					reverse_has_opinion = {
-						who = FRA
-						value = 50
-					}
-				}
-				is_rival = MLO
-			}
-
 		}
 		effect = {
-			every_province = {
-				limit = {
-					owned_by = MLO
-					region = italy_region
-				}
-				add_permanent_claim = ROOT
-			}
 			add_country_modifier = {
 				name = nap_end_visconti
-				duration = 5475
+				duration = 7300
 			}
 		}
 	}
@@ -552,6 +538,7 @@ naples_missions_3 = {
 			}
 		}
 		effect = {
+			add_legitimacy = 25
 			sicily_area = {
 				add_province_modifier = {
 					name = nap_legacy_ruggero
@@ -572,6 +559,7 @@ naples_missions_3 = {
 		}
 		position = 3
 		trigger = {
+			num_of_galley = VEN
 			112 = { #Venice
 				trade_share = {
 					country = NAP
@@ -579,32 +567,36 @@ naples_missions_3 = {
 				}
 			}
 			OR = {
-				#Five provinces with has_port=yes in the venice trade node
-				#The venice trade node has these area:  apulia_area, emilia_romagna_area, 
-				#central_italy_area, lombardy_area, venetia_area, carinthia_area
-				112 = {
-					every_trade_node_member_province = {
-						limit = {
-							owned_by = ROOT
-							has_port = yes
-						}
+				num_of_owned_provinces_with = {
+					value = 2
+					owned_by = ROOT
+					province_has_center_of_trade_of_level = 1
+					any_trade_node_member_province = {
+						province_id = 112
 					}
 				}
-				num_of_galley = VEN
+				num_of_owned_provinces_with = {
+					value = 5
+					owned_by = ROOT
+					has_port = yes
+					any_trade_node_member_province = {
+						province_id = 112
+					}
+				}
 			}
 		}
 		effect = {
-			apulia_area ={
-				random_province_in_state = {
-					center_of_trade = +1
+			random_owned_province = {
+				limit = {
+					area = apulia_area					
 				}
+				center_of_trade = +1
 			}
 			112 = {
 				every_trade_node_member_province = {
 					limit = {
 						owned_by = VEN
 						has_port = yes
-						region = italy_region
 						NOT = { is_core = ROOT }
 						NOT = { is_permanent_claim = ROOT }
 					}
@@ -720,6 +712,50 @@ naples_missions_3 = {
 			create_general = {
 				tradition = 50
 			}
+			emilia_romagna_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			piedmont_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			tuscany_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			lombardy_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT
+					}
+					NOT = { 
+						is_core = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -729,54 +765,26 @@ naples_missions_3 = {
 			nap_italian_conquest
 		}
 		provinces_to_highlight = {
-			region = italy_region
-			country_or_non_sovereign_subject_holds = LAN
+			OR = {
+				area = tuscany_area
+			}
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		position = 7
 		trigger = {
-			OR = {
-				AND = {
-					calc_true_if = {
-						ROOT = {
-							army_size = LAN
-						}
-						amount = 2
-					}
-					is_rival = LAN
-				}
+			tuscany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_casus_belli = {
-				type = cb_humiliate
-				months = 300
-				target = LAN
+			add_country_modifier = {
+				name = nap_tuscan_usurer
+				duration = 7300
 			}
-			every_province = {
-				limit = {
-					owned_by = LAN
-					region = italy_region
-				}
-				add_permanent_claim = ROOT
-			}
-			every_country = {
-				limit = {
-					region = italy_region				
-				}
-				add_opinion = {
-					who = ROOT
-					modifier = +25
-				}
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = -100
-			}
-			add_opinion = {
-				who = LAN
-				modifier = -100
-			}
-		}		
+		}	
 	}
 
 }
@@ -803,37 +811,33 @@ naples_missions_4 = {
 		}
 		effect = {
 			albania_area = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
-				}
 				add_permanent_claim = ROOT
 			}
 			144 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
 			147 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
 			add_country_modifier = {
 				name = nap_military_campaign
@@ -870,37 +874,56 @@ naples_missions_4 = {
 		}
 		effect = {
 			145 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
 			146 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
 			}
 			148 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_permanent_claim = ROOT
 				}
-				add_permanent_claim = ROOT
+			}
+			1773 = {
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 			aleppo_area = {
 				limit = {
@@ -912,18 +935,7 @@ naples_missions_4 = {
 					}
 				}
 				add_permanent_claim = ROOT
-			}
-			1773 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
-				}
-				add_permanent_claim = ROOT
-			}
+			}			
 		}
 	}
 
@@ -944,6 +956,7 @@ naples_missions_4 = {
 		}
 		position = 4
 		trigger = {
+			army_size = TUR
 			144 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
@@ -1109,17 +1122,25 @@ naples_missions_4 = {
 		required_missions = {
 			nap_italian_conquest
 		}
+		provinces_to_highlight = {
+			OR = {
+				area = piedmont_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		position = 7
 		trigger = {
-			
+			piedmont_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-			every_province = {
-				limit = {
-					owned_by = SAV
-					region = italy_region
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = nap_alp_defense
+				duration = 7300
 			}
 		}
 	}
