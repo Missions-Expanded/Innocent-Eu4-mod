@@ -17,8 +17,8 @@ KAR_missions_1 = {
 
 	KAR_cores = {
 		icon = mission_unite_home_region
-		required_missions = {}
-		position = 1
+		required_missions = { beylik_force_limit_mission }
+		position = 2
 		provinces_to_highlight = {
 			OR = {
 				province_id = 4311
@@ -48,10 +48,11 @@ KAR_missions_1 = {
 
 	KAR_ankara = {
 		icon = mission_unite_home_region
-		required_missions = { beylik_force_limit_mission }
-		position = 2
+		required_missions = { KAR_cores }
+		position = 3
 		provinces_to_highlight = {
 			province_id = 326
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			326 = {
@@ -97,8 +98,10 @@ KAR_missions_4 = {
 		required_missions = { beylik_force_limit_mission }
 		position = 2
 		provinces_to_highlight = {
-			province_id = 2298
-			province_id = 2302
+			OR = {
+				province_id = 2298
+				province_id = 2302
+			}
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
@@ -150,15 +153,44 @@ KAR_missions_5 = {
 			NOT = { has_building = temple }
 		}
 		trigger = {
-			temple = 5
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
 		}
 		effect = {
 			define_advisor = {
 				type = artist
 				skill = 2
-				discount = 0.50
+				cost_multiplier = 0.50
 				culture = turkish
 				religion = sunni
+			}
+		}
+	}
+	
+	KAR_madrasas_mission = {
+		icon = mission_unite_home_region
+		required_missions = { KAR_buildings }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_building = university }
+		}
+		trigger = {
+			university = 5
+			capital_scope = {
+				has_building = university
+			}
+		}
+		effect = {
+			change_innovativeness = 4
+			add_country_modifier = {
+				name = kar_madrasas
+				duration = 9125
 			}
 		}
 	}
