@@ -1,0 +1,761 @@
+#Made by SharkFins#
+###################
+KNI_slot_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = KNI
+	}
+	has_country_shield = yes
+	KNI_Develop = {
+		icon = mission_early_game_buildings
+		required_missions = {}
+		position = 1
+		provinces_to_highlight = {
+			province_id = 320
+			OR = {
+				NOT = { has_building = marketplace }
+				NOT = { has_building = temple }
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+			}
+		}
+		trigger = {
+			320 = {
+				has_building = marketplace
+				has_building = temple
+				development = 15
+				owned_by = ROOT
+			}
+		}
+		effect = { 
+			320 = {	
+				#add_base_tax = 2
+				#add_base_production = 2
+				#add_base_manpower = 2
+				add_center_of_trade_level = 1
+			}
+			add_accepted_culture = greek
+		}
+	}
+	KNI_Modernize = {
+		icon = mission_early_modern_university
+		required_missions = {KNI_Develop}
+		position = 4
+		trigger = {
+			has_institution = renaissance
+			is_institution_enabled = colonialism
+			grown_by_development = 50
+		}
+		effect = {
+			add_country_modifier = {
+				name = KNI_Great
+				duration = 9125
+			}
+		}
+	}
+}
+KNI_slot_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = KNI
+	}
+	has_country_shield = yes
+
+	KNI_Crusade = {
+		icon = mission_hands_praying
+		required_missions = {KNI_Unity_War}
+		position = 2
+		trigger = {
+			OR = {
+				war_with = MAM
+				war_with = TUR
+				NOT = {
+					exists = TUR
+					exists = MAM
+				}
+			}
+		}
+		effect = {
+			364 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1854 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			379 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					war_with = MAM
+				}
+				delta_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT	
+				}
+			}
+			if = {
+				limit ={
+					war_with = TUR
+				}
+				northern_greece_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				macedonia_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT	
+				}
+			}
+			add_country_modifier = {
+				name = KNI_Vult
+				duration = 5475
+			}
+		}
+	}
+	KNI_Sugla = {
+		icon = mission_pf_map_table
+		required_missions = { KNI_Crusade }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 318
+			NOT = {
+				owned_by = ROOT
+			}
+		}	
+		trigger = {
+			318 = {
+				owned_by = ROOT
+			}
+		}
+		effect = { 
+			318 = {
+				change_religion = ROOT
+				add_province_modifier = {
+					name = KNI_Last
+					duration = -1
+				}
+			}
+			add_accepted_culture = turkish
+		}
+	}	
+	KNI_Grand_Nation = {
+		icon = mission_build_up_to_force_limit
+		required_missions = { KNI_Sugla }
+		position = 4
+		trigger = {
+			army_size = 25
+			army_size_percentage = 0.75
+			OR = {
+				NOT = {
+					exists = BYZ
+				}
+				is_vassal = BYZ
+			}
+		}
+		effect = {
+			358 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			2313 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			151 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = KNI_Centralization
+				duration = 3650
+			}
+		}
+	}
+	KNI_Mediterranean = {
+		icon = mission_empire
+		required_missions = { KNI_Grand_Nation KNI_Modernize }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 358
+				province_id = 2313
+				province_id = 151
+				province_id = 379
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			religious_unity = 1
+			religion_group = christian
+			358 = {
+				owned_by = ROOT
+			}
+			2313 = {
+				owned_by = ROOT
+			}
+			151 = {
+				owned_by = ROOT
+			}
+			379 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			add_country_modifier = {
+				name = KNI_mediterranean_modifier
+				duration = 9125
+			}
+		}
+	}
+}
+KNI_slot_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = KNI
+	}
+	has_country_shield = yes
+	
+	KNI_Unity_War = {
+		icon = mission_conquer_50_development
+		required_missions = {}
+		position = 1
+		trigger = {
+			OR = {
+				religious_unity = 1
+				accepted_culture = greek
+			}
+			stability = 1
+			army_size_percentage = 1
+		}
+		effect = {
+			163 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			321 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			164 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			3003 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_mil_power = 100
+		}
+	}
+	KNI_Crusaders_United = {
+		icon = mission_assemble_an_army
+		required_missions = {KNI_Unity_War}
+		position = 2
+		provinces_to_highlight = {
+			province_id = 321
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			321 = {
+				owned_by = ROOT
+			}
+		}	
+		effect = {
+			add_country_modifier = {
+				name = KNI_Inspire
+				duration = -1
+			}
+			364 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			379 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1854 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}	
+	KNI_Jerusalem = {
+		icon = mission_mosque
+		required_missions = { KNI_Crusade KNI_Crusaders_United}
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 364
+				province_id = 379
+				province_id = 1854				
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			364 = { 
+				owned_by = ROOT
+			}
+			379 = { 
+				owned_by = ROOT
+			}
+			1854 = { 
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = KNI_New_Era
+				duration = 18250
+			}
+			aleppo_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	KNI_ports = {
+		icon = mission_galleys_in_port
+		required_missions = {KNI_Jerusalem}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = syria_area
+						area = palestine_area
+						area = aleppo_area
+					}
+					NOT = { owned_by = ROOT }
+				}
+				AND = {	
+					OR = {
+						province_id = 377
+						province_id = 382
+						province_id = 378
+					}
+					OR = {
+						NOT = {
+							owned_by = ROOT
+						}
+						NOT = {
+							OR = {
+								has_building = marketplace
+								has_building = trade_depot
+								has_building = stock_exchange 
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			syria_area = {
+				type = all
+				owned_by = ROOT
+			}
+			palestine_area = {
+				type = all
+				owned_by = ROOT
+			}
+			aleppo_area = {
+				type = all
+				owned_by = ROOT
+			}
+			377 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			378 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			382 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}	
+			}
+		}
+		effect = {
+			1854 = {
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					add_center_of_trade_level = 1
+				}
+				else = {
+					add_base_production = 3
+				}
+			}
+			377 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 30
+					key = KNI_extra_trade_power
+				}
+			}
+			358 = {	
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 30
+					key = KNI_extra_trade_power
+				}
+			}
+			add_mercantilism = 5
+		}
+	}
+}
+KNI_slot_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = KNI
+	}
+	has_country_shield = yes
+	
+	KNI_Heart = {
+		icon = mission_invade_island
+		required_missions = {KNI_Unity_War}
+		position = 2
+		trigger = {
+			accepted_culture = greek
+		}
+		effect = {
+			145 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			146 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1773 = {
+				if = {
+					limit = {
+						NOT = {
+							is_permanent_claim = ROOT
+							is_core = ROOT
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	KNI_Protector = {
+		icon = mission_have_two_subjects
+		required_missions = {KNI_Heart}
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 145
+				province_id = 146
+				province_id = 1773
+			}
+			NOT = {
+				owned_by = ROOT
+			}
+		}
+		trigger = {
+			145 = {
+				owned_by = ROOT
+			}
+			146 = {
+				owned_by = ROOT
+			}
+			1773 = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			145 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_core = ROOT
+			}
+			146 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_core = ROOT
+			}
+			1773 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_core = ROOT
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 5
+			}
+		}
+	}
+	KNI_Restore = {
+		icon = mission_have_manufactories
+		required_missions = {KNI_Jerusalem}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 379
+			NOT = {
+				owned_by = ROOT
+			}
+			NOT = { 
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}				
+		}
+		trigger = {
+			379 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				owned_by = ROOT
+				NOT = {
+					religion_group = muslim
+				}
+			}
+		}
+		effect = {
+			379 = {
+				add_base_manpower = 3
+				add_base_production = 3
+				add_base_tax = 3
+				change_trade_goods = wine
+				build_possible_manufactory_in_province = yes
+			}
+		}
+	}
+}
+KNI_slot_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = KNI
+	}
+	has_country_shield = yes
+	
+	KNI_Fleet = {
+		icon = mission_galleys_in_port
+		required_missions = {}
+		position = 1
+		trigger = {
+			num_of_galley = 10
+		}
+		effect = {
+			add_country_modifier = {
+				name = KNI_Terror
+				duration = 18250
+			}
+		}
+	}
+	KNI_Order = {
+		icon = mission_galleys_in_port
+		required_missions = {KNI_Fleet KNI_Heart}
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				NOT = { has_building = shipyard }
+				NOT = { has_building = grand_shipyard }
+			}
+		}
+		trigger = {
+			navy_size_percentage = 0.8
+			num_of_owned_provinces_with = {
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+				value = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = KNI_Raiders
+				duration = 18250
+			}
+		}
+	}
+	KNI_Kingdom = {
+		icon = mission_empire
+		required_missions = {KNI_Order}
+		position = 4
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Dharma"
+				}
+				country_has_center_of_trade_of_level = 3
+			}
+			treasury = 1000
+			navy_size = 40
+			navy_size_percentage = 0.9
+		}
+		effect = {
+			country_event = { id = ME_Rhodes_Events.1 }
+			add_reform_progress_medium_effect = yes
+		}
+	}	
+}
