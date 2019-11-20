@@ -8,37 +8,66 @@ KNI_slot_1 = {
 		tag = KNI
 	}
 	has_country_shield = yes
+
 	KNI_Develop = {
 		icon = mission_early_game_buildings
-		required_missions = {}
+		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
 			province_id = 320
 			OR = {
-				NOT = { has_building = marketplace }
-				NOT = { has_building = temple }
 				NOT = { owned_by = ROOT }
 				NOT = { development = 15 }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+				AND = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+				}
 			}
 		}
 		trigger = {
+			owns = 320
 			320 = {
-				has_building = marketplace
-				has_building = temple
 				development = 15
-				owned_by = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
 			}
 		}
-		effect = { 
-			320 = {	
-				#add_base_tax = 2
-				#add_base_production = 2
-				#add_base_manpower = 2
-				add_center_of_trade_level = 1
-			}
+		effect = {
 			add_accepted_culture = greek
+			320 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+				else = {
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
 		}
 	}
+
 	KNI_Modernize = {
 		icon = mission_early_modern_university
 		required_missions = {KNI_Develop}
@@ -56,6 +85,7 @@ KNI_slot_1 = {
 		}
 	}
 }
+
 KNI_slot_2 = {
 	slot = 2
 	generic = no
@@ -73,20 +103,22 @@ KNI_slot_2 = {
 			OR = {
 				war_with = MAM
 				war_with = TUR
-				NOT = {
-					exists = TUR
-					exists = MAM
+				AND = {
+					NOT = { exists = TUR }
+					NOT = { exists = MAM }
 				}
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = KNI_Vult
+				duration = 5475
+			}
 			364 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -94,10 +126,8 @@ KNI_slot_2 = {
 			1854 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -105,10 +135,8 @@ KNI_slot_2 = {
 			379 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -119,53 +147,47 @@ KNI_slot_2 = {
 				}
 				delta_area = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
-					add_permanent_claim = ROOT	
+					add_permanent_claim = ROOT
 				}
 			}
 			if = {
-				limit ={
+				limit = {
 					war_with = TUR
 				}
 				northern_greece_area = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 				macedonia_area = {
 					limit = {
+						NOT = { owned_by = ROOT }
 						NOT = { is_core = ROOT }
-						NOT = { is_permanent_claim = ROOT }
 					}
-					add_permanent_claim = ROOT	
+					add_permanent_claim = ROOT
 				}
-			}
-			add_country_modifier = {
-				name = KNI_Vult
-				duration = 5475
 			}
 		}
 	}
+
 	KNI_Sugla = {
 		icon = mission_pf_map_table
 		required_missions = { KNI_Crusade }
 		position = 3
 		provinces_to_highlight = {
 			province_id = 318
-			NOT = {
-				owned_by = ROOT
-			}
-		}	
-		trigger = {
-			318 = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
-		effect = { 
+		trigger = {
+			owns = 318
+		}
+		effect = {
+			add_accepted_culture = turkish
 			318 = {
 				change_religion = ROOT
 				add_province_modifier = {
@@ -173,9 +195,9 @@ KNI_slot_2 = {
 					duration = -1
 				}
 			}
-			add_accepted_culture = turkish
 		}
-	}	
+	}
+
 	KNI_Grand_Nation = {
 		icon = mission_build_up_to_force_limit
 		required_missions = { KNI_Sugla }
@@ -184,20 +206,20 @@ KNI_slot_2 = {
 			army_size = 25
 			army_size_percentage = 0.75
 			OR = {
-				NOT = {
-					exists = BYZ
-				}
-				is_vassal = BYZ
+				overlord_of = BYZ
+				NOT = { exists = BYZ }
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = KNI_Centralization
+				duration = 3650
+			}
 			358 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -205,10 +227,8 @@ KNI_slot_2 = {
 			2313 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -216,20 +236,15 @@ KNI_slot_2 = {
 			151 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
-			add_country_modifier = {
-				name = KNI_Centralization
-				duration = 3650
-			}
 		}
 	}
+
 	KNI_Mediterranean = {
 		icon = mission_empire
 		required_missions = { KNI_Grand_Nation KNI_Modernize }
@@ -246,18 +261,10 @@ KNI_slot_2 = {
 		trigger = {
 			religious_unity = 1
 			religion_group = christian
-			358 = {
-				owned_by = ROOT
-			}
-			2313 = {
-				owned_by = ROOT
-			}
-			151 = {
-				owned_by = ROOT
-			}
-			379 = {
-				owned_by = ROOT
-			}
+			owns = 358
+			owns = 2313
+			owns = 151
+			owns = 379
 		}
 		effect = {
 			add_adm_power = 100
@@ -270,6 +277,7 @@ KNI_slot_2 = {
 		}
 	}
 }
+
 KNI_slot_3 = {
 	slot = 3
 	generic = no
@@ -278,10 +286,10 @@ KNI_slot_3 = {
 		tag = KNI
 	}
 	has_country_shield = yes
-	
+
 	KNI_Unity_War = {
 		icon = mission_conquer_50_development
-		required_missions = {}
+		required_missions = { }
 		position = 1
 		trigger = {
 			OR = {
@@ -292,13 +300,12 @@ KNI_slot_3 = {
 			army_size_percentage = 1
 		}
 		effect = {
+			add_mil_power = 100
 			163 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -306,10 +313,8 @@ KNI_slot_3 = {
 			321 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -317,10 +322,8 @@ KNI_slot_3 = {
 			164 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -328,17 +331,15 @@ KNI_slot_3 = {
 			3003 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
-			add_mil_power = 100
 		}
 	}
+
 	KNI_Crusaders_United = {
 		icon = mission_assemble_an_army
 		required_missions = {KNI_Unity_War}
@@ -348,10 +349,8 @@ KNI_slot_3 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			321 = {
-				owned_by = ROOT
-			}
-		}	
+			owns = 321
+		}
 		effect = {
 			add_country_modifier = {
 				name = KNI_Inspire
@@ -360,10 +359,8 @@ KNI_slot_3 = {
 			364 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -371,10 +368,8 @@ KNI_slot_3 = {
 			379 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -382,16 +377,15 @@ KNI_slot_3 = {
 			1854 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
-	}	
+	}
+
 	KNI_Jerusalem = {
 		icon = mission_mosque
 		required_missions = { KNI_Crusade KNI_Crusaders_United}
@@ -400,22 +394,14 @@ KNI_slot_3 = {
 			OR = {
 				province_id = 364
 				province_id = 379
-				province_id = 1854				
+				province_id = 1854
 			}
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			364 = { 
-				owned_by = ROOT
-			}
-			379 = { 
-				owned_by = ROOT
-			}
-			1854 = { 
-				owned_by = ROOT
-			}
+			owns = 364
+			owns = 379
+			owns = 1854
 		}
 		effect = {
 			add_country_modifier = {
@@ -438,6 +424,7 @@ KNI_slot_3 = {
 			}
 		}
 	}
+
 	KNI_ports = {
 		icon = mission_galleys_in_port
 		required_missions = {KNI_Jerusalem}
@@ -452,22 +439,18 @@ KNI_slot_3 = {
 					}
 					NOT = { owned_by = ROOT }
 				}
-				AND = {	
+				AND = {
 					OR = {
 						province_id = 377
 						province_id = 382
 						province_id = 378
 					}
 					OR = {
-						NOT = {
-							owned_by = ROOT
-						}
-						NOT = {
-							OR = {
-								has_building = marketplace
-								has_building = trade_depot
-								has_building = stock_exchange 
-							}
+						NOT = { owned_by = ROOT }
+						AND = {
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
 						}
 					}
 				}
@@ -505,19 +488,23 @@ KNI_slot_3 = {
 					has_building = marketplace
 					has_building = trade_depot
 					has_building = stock_exchange
-				}	
+				}
 			}
 		}
 		effect = {
+			add_mercantilism = 5
 			1854 = {
 				if = {
 					limit = {
-						has_dlc = "Dharma"
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
 					}
 					add_center_of_trade_level = 1
-				}
-				else = {
-					add_base_production = 3
 				}
 			}
 			377 = {
@@ -528,7 +515,7 @@ KNI_slot_3 = {
 					key = KNI_extra_trade_power
 				}
 			}
-			358 = {	
+			358 = {
 				add_trade_modifier = {
 					who = ROOT
 					duration = -1
@@ -536,10 +523,10 @@ KNI_slot_3 = {
 					key = KNI_extra_trade_power
 				}
 			}
-			add_mercantilism = 5
 		}
 	}
 }
+
 KNI_slot_4 = {
 	slot = 4
 	generic = no
@@ -548,22 +535,23 @@ KNI_slot_4 = {
 		tag = KNI
 	}
 	has_country_shield = yes
-	
+
 	KNI_Heart = {
 		icon = mission_invade_island
 		required_missions = {KNI_Unity_War}
 		position = 2
 		trigger = {
-			accepted_culture = greek
+			OR = {
+				primary_culture = greek
+				accepted_culture = greek
+			}
 		}
 		effect = {
 			145 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -571,10 +559,8 @@ KNI_slot_4 = {
 			146 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
@@ -582,16 +568,15 @@ KNI_slot_4 = {
 			1773 = {
 				if = {
 					limit = {
-						NOT = {
-							is_permanent_claim = ROOT
-							is_core = ROOT
-						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
 				}
 			}
 		}
 	}
+
 	KNI_Protector = {
 		icon = mission_have_two_subjects
 		required_missions = {KNI_Heart}
@@ -602,67 +587,78 @@ KNI_slot_4 = {
 				province_id = 146
 				province_id = 1773
 			}
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			145 = {
-				owned_by = ROOT
-			}
-			146 = {
-				owned_by = ROOT
-			}
-			1773 = {
-				owned_by = ROOT
-			}
+			owns = 145
+			owns = 146
+			owns = 1773
 		}
 		effect = {
-			145 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-				add_core = ROOT
-			}
-			146 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-				add_core = ROOT
-			}
-			1773 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-				add_core = ROOT
-			}
 			if = {
 				limit = {
 					has_dlc = "Rule Britannia"
 				}
 				change_innovativeness = 5
 			}
+			else = {
+				add_adm_power = 50
+			}
+			145 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			146 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			1773 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
 		}
 	}
+
 	KNI_Restore = {
 		icon = mission_have_manufactories
 		required_missions = {KNI_Jerusalem}
 		position = 4
 		provinces_to_highlight = {
 			province_id = 379
-			NOT = {
-				owned_by = ROOT
-			}
-			NOT = { 
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
 				}
-			}				
+				religion_group = muslim
+			}
 		}
 		trigger = {
+			owns = 379
 			379 = {
 				OR = {
 					has_building = fort_15th
@@ -670,10 +666,7 @@ KNI_slot_4 = {
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-				owned_by = ROOT
-				NOT = {
-					religion_group = muslim
-				}
+				NOT = { religion_group = muslim }
 			}
 		}
 		effect = {
@@ -687,6 +680,7 @@ KNI_slot_4 = {
 		}
 	}
 }
+
 KNI_slot_5 = {
 	slot = 5
 	generic = no
@@ -695,10 +689,10 @@ KNI_slot_5 = {
 		tag = KNI
 	}
 	has_country_shield = yes
-	
+
 	KNI_Fleet = {
 		icon = mission_galleys_in_port
-		required_missions = {}
+		required_missions = { }
 		position = 1
 		trigger = {
 			num_of_galley = 10
@@ -710,25 +704,19 @@ KNI_slot_5 = {
 			}
 		}
 	}
+
 	KNI_Order = {
 		icon = mission_galleys_in_port
 		required_missions = {KNI_Fleet KNI_Heart}
 		position = 3
-		provinces_to_highlight = {
-			owned_by = ROOT
-			OR = {
-				NOT = { has_building = shipyard }
-				NOT = { has_building = grand_shipyard }
-			}
-		}
 		trigger = {
 			navy_size_percentage = 0.8
 			num_of_owned_provinces_with = {
+				value = 5
 				OR = {
 					has_building = shipyard
 					has_building = grand_shipyard
 				}
-				value = 5
 			}
 		}
 		effect = {
@@ -738,24 +726,27 @@ KNI_slot_5 = {
 			}
 		}
 	}
+
 	KNI_Kingdom = {
 		icon = mission_empire
 		required_missions = {KNI_Order}
 		position = 4
 		trigger = {
+			treasury = 1000
+			navy_size = 40
+			navy_size_percentage = 0.9
 			if = {
 				limit = {
 					has_dlc = "Dharma"
 				}
-				country_has_center_of_trade_of_level = 3
+				any_owned_province = {
+					province_has_center_of_trade_of_level = 3
+				}
 			}
-			treasury = 1000
-			navy_size = 40
-			navy_size_percentage = 0.9
 		}
 		effect = {
-			country_event = { id = ME_Rhodes_Events.1 }
 			add_reform_progress_medium_effect = yes
+			country_event = { id = ME_Knights_Events.1 }
 		}
-	}	
+	}
 }
