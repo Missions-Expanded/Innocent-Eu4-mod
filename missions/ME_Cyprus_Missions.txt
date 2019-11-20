@@ -7,16 +7,20 @@ CYP_slot_1 = {
 	}
 	has_country_shield = yes
 	
-	cyp_greek_league = {
+	cyp_wooden_wall = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_become_greek }
-		position = 3
+		required_missions = { cyp_kingdom_cyprus }
+		position = 2
 		trigger = {
-			legitimacy_equivalent = 50
+			num_of_galley = 10
+			num_of_admirals = 1
 		}
 		effect = {
-			change_government = republic
-			add_government_reform = greek_league_reform
+			add_country_modifier = {
+				name = cyp_wooden_wall
+				duration = 7120
+			}
+			add_sailors = 500
 		}
 	}
 	
@@ -204,35 +208,137 @@ CYP_slot_3 = {
 	}
 	has_country_shield = yes
 	
-	cyp_defend = {
+	cyp_kingdom_cyprus = {
 		icon = mission_assemble_an_army
 		required_missions = { }
+		position = 1
 		trigger = {
-			is_year = 1450
 			OR = {
-				fort_15th = 1
-				fort_16th = 1
-				fort_17th = 1
-				fort_18th = 1
+				OR = {
+					army_size_percentage = 1
+					navy_size_percentage = 1
+				}
+				reverse_has_opinion = {
+					who = PAP
+					value = 100
+				}
 			}
 		}
 		effect = {
-			add_army_tradition = 10
-			add_navy_tradition = 10
-			add_dip_power = 50
+			if = {
+				limit = {
+					OR = {
+						army_size_percentage = 1
+						navy_size_percentage = 1
+					}
+				}
+				add_country_modifier = {
+					name = cyp_reinstated_crusading_army
+					duration = 7600
+				}
+				2302 = {
+					if = {
+						limit = {
+							NOT = { 
+								owned_by = ROOT 
+							}
+							NOT = { 
+								is_core = ROOT 
+							}
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				327 = {
+					if = {
+						limit = {
+							NOT = { 
+								owned_by = ROOT 
+							}
+							NOT = { 
+								is_core = ROOT 
+							}
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				
+			}
+			else_if = {
+				limit = {
+					reverse_has_opinion = {
+						who = PAP
+						value = 100
+					}
+				}
+				country_event = { 
+					id = ME_Cyprus_Events.1
+				}
+				320 = {
+					if = {
+						limit = {
+							NOT = { 
+								owned_by = ROOT 
+							}
+							NOT = { 
+								is_core = ROOT 
+							}
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
 		}
 	}
 
-	cyp_last_crusade = {
+	cyp_landing_anatolia = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_defend }
+		required_missions = { 
+			cyp_kingdom_cyprus 
+		}
 		trigger = {
-			religion = catholic
-			reverse_has_opinion = { who = PAP value = 30 }
-			NOT = { culture = greek }
+			OR = {
+				2302 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				327 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
-			add_papal_influence = 20
+			if = {
+				limit = {
+					religion = catholic
+				}
+				add_papal_influence = 10
+			}
+			if = {
+				limit = {
+					religion = orthodox
+				}
+				add_patriarch_authority = 5
+			}
+			add_country_modifier = {
+				name = cyp_heathen_persecution
+				duration = 3650
+			}
+			2302 = {
+				if = {
+					limit = {
+						owned_by = CYP
+					}
+					change_culture = ROOT
+				}
+			}
+			327 = {
+				if = {
+					limit = {
+						owned_by = CYP
+					}
+					change_culture = ROOT
+				}
+			}
 		}
 	}
 
@@ -342,21 +448,55 @@ CYP_slot_4 = {
 	}
 	has_country_shield = yes
 	
-	cyp_crusading_army = {
+	cyp_knights_hospitallier = {
 		icon = mission_assemble_an_army
-		required_missions = { cyp_last_crusade }
-		position = 3
+		required_missions = { 
+			cyp_kingdom_cyprus
+		}
+		position = 2
 		trigger = {
-			army_size_percentage = 1
-			MIL = 5
-			mil_power = 100
+			OR = {
+				OR = {
+					alliance_with = KNI
+					reverse_has_opinion = {
+						who = KNI
+						value = 100
+					}
+					total_development = KNI
+					KNI = {
+						NOT = {
+							is_at_war = yes
+						}
+					}
+					KNI = {
+						NOT = {
+							is_subject = yes 
+						}
+					}
+				}
+				320 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = crusading_army
-				duration = -1
+			if = {
+				limit = {
+					alliance_with = KNI
+				}
+				country_event = { 
+					id = ME_Cyprus_Events.2
+				} 
 			}
-			add_mil_power = -100
+			else_if = {
+				320 = {
+					owned_by = ROOT
+				}
+				add_country_modifier = {
+					name = cyp_subdued_knights
+					duration = -1
+				}
+			}
 		}
 	}
 
