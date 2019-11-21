@@ -18,11 +18,11 @@ CYP_slot_1 = {
 			num_of_admirals = 1
 		}
 		effect = {
+			add_sailors = 500
 			add_country_modifier = {
 				name = cyp_wooden_wall
 				duration = 7120
 			}
-			add_sailors = 500
 		}
 	}
 	
@@ -33,23 +33,30 @@ CYP_slot_1 = {
 			cyp_aegean_trade
 		}
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 320
+				province_id = 321
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			if = { 
 				limit = {
 					exists = VEN
 				}
 				num_of_galley = VEN
-			}
-			NOT = {
-				reverse_has_opinion = {
-					who = VEN
-					value = -50
+				NOT = {
+					reverse_has_opinion = {
+						who = VEN
+						value = -50
+					}
 				}
-			}
-			NOT = {
-				has_opinion = {
-					who = VEN
-					value = -50
+				NOT = {
+					has_opinion = {
+						who = VEN
+						value = -50
+					}
 				}
 			}
 			321 = {
@@ -60,6 +67,7 @@ CYP_slot_1 = {
 			}
 		}
 		effect = {
+			add_treasury = 300
 			320 = {
 				add_province_modifier = {
 					name = cyp_victory_cyprus
@@ -72,7 +80,6 @@ CYP_slot_1 = {
 					duration = -1
 				}
 			}
-			add_treasury = 300
 		}
 	}
 
@@ -82,6 +89,17 @@ CYP_slot_1 = {
 			cyp_trade_rivalry
 		}
 		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 320
+				province_id = 321
+				province_id = 2348
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 10 }
+			}
+		}
 		trigger = {
 			if = { 
 				limit = {
@@ -123,7 +141,6 @@ CYP_slot_1 = {
 			}
 		}
 	}
-
 }
 
 CYP_slot_2 = {
@@ -141,9 +158,25 @@ CYP_slot_2 = {
 			cyp_wooden_wall 
 		}
 		position = 3
+		provinces_to_highlight = {
+			province_id = 320
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = marketplace }
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+			}
+		}
 		trigger = {
 			320 = {
-				has_building = marketplace
+				owned_by = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 			151 = { #Constantinople
 				trade_share = {
@@ -154,7 +187,24 @@ CYP_slot_2 = {
 		}
 		effect = {
 			320 = {
-				center_of_trade = 2
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+					add_center_of_trade_level = 2
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
 				add_base_tax = 2
 				add_base_production = 1
 				add_base_manpower = 1
@@ -169,12 +219,17 @@ CYP_slot_2 = {
 			cyp_aegean_trade
 		}
 		position = 5
+		provinces_to_highlight = {
+			area = aegean_archipelago_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 15 }
+			}
+		}
 		trigger = {
 			num_of_light_ship = 25
-			any_province = {
-				limit = {
-					area = aegean_archipelago_area
-				}
+			aegean_archipelago_area = {
+				type = all
 				owned_by = ROOT
 				development = 15
 			}
@@ -186,13 +241,18 @@ CYP_slot_2 = {
 			}
 		}
 		effect = {
-			random_province = {
+			add_country_modifier = {
+				name = cyp_aegean_merchant_flag
+				duration = 7300
+			}
+			random_owned_province = {
 				limit = {
-					owned_by = ROOT
 					area = aegean_archipelago_area
 					development = 15
+					province_has_center_of_trade_of_level = 1
+					NOT = { province_has_center_of_trade_of_level = 3 }
 				}
-				center_of_trade = 1
+				add_center_of_trade_level = 1
 			}
 			151 = { #Constantinople
 				add_trade_modifier = {
@@ -201,10 +261,6 @@ CYP_slot_2 = {
 					power = 20
 					key = cyp_mercantile_fleet
 				}
-			}
-			add_country_modifier = {
-				name = cyp_aegean_merchant_flag
-				duration = 7300
 			}
 		}
 	}
@@ -225,10 +281,8 @@ CYP_slot_3 = {
 		position = 1
 		trigger = {
 			OR = {
-				OR = {
-					army_size_percentage = 1
-					navy_size_percentage = 1
-				}
+				army_size_percentage = 1
+				navy_size_percentage = 1
 				reverse_has_opinion = {
 					who = PAP
 					value = 100
@@ -250,12 +304,8 @@ CYP_slot_3 = {
 				2302 = {
 					if = {
 						limit = {
-							NOT = { 
-								owned_by = ROOT 
-							}
-							NOT = { 
-								is_core = ROOT 
-							}
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
 						}
 						add_permanent_claim = ROOT
 					}
@@ -263,39 +313,23 @@ CYP_slot_3 = {
 				327 = {
 					if = {
 						limit = {
-							NOT = { 
-								owned_by = ROOT 
-							}
-							NOT = { 
-								is_core = ROOT 
-							}
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
 						}
 						add_permanent_claim = ROOT
 					}
 				}
 				
 			}
-			else_if = {
-				limit = {
-					reverse_has_opinion = {
-						who = PAP
-						value = 100
-					}
-				}
+			else = {
 				PAP = {
-					country_event = { 
-						id = ME_Papal_State_Events.10
-					}
+					country_event = { id = ME_Cyprus_Events.11 }
 				}
 				320 = {
 					if = {
 						limit = {
-							NOT = { 
-								owned_by = ROOT 
-							}
-							NOT = { 
-								is_core = ROOT 
-							}
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
 						}
 						add_permanent_claim = ROOT
 					}
@@ -310,6 +344,19 @@ CYP_slot_3 = {
 			cyp_kingdom_cyprus
 		}
 		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2302
+				province_id = 327
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			2302 = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			327 = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
 		trigger = {
 			OR = {
 				2302 = {
@@ -321,16 +368,6 @@ CYP_slot_3 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = cyp_heathen_persecution
-				duration = 3650
-			}
-			2302 = {
-				change_culture = ROOT
-			}
-			327 = {
-				change_culture = ROOT
-			}
 			if = {
 				limit = {
 					religion = catholic
@@ -342,6 +379,16 @@ CYP_slot_3 = {
 					religion = orthodox
 				}
 				add_patriarch_authority = 5
+			}
+			add_country_modifier = {
+				name = cyp_heathen_persecution
+				duration = 3650
+			}
+			2302 = {
+				change_culture = ROOT
+			}
+			327 = {
+				change_culture = ROOT
 			}
 		}
 	}
@@ -402,9 +449,11 @@ CYP_slot_4 = {
 			cyp_kingdom_cyprus
 		}
 		position = 2
-		trigger = {
-			OR = {
-				OR = {
+		provinces_to_highlight = {
+			province_id = 320
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
 					alliance_with = KNI
 					reverse_has_opinion = {
 						who = KNI
@@ -412,14 +461,24 @@ CYP_slot_4 = {
 					}
 					total_development = KNI
 					KNI = {
-						NOT = {
-							is_at_war = yes
-						}
+						is_at_war = no
+						is_subject = no
 					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				AND = {
+					alliance_with = KNI
+					reverse_has_opinion = {
+						who = KNI
+						value = 100
+					}
+					total_development = KNI
 					KNI = {
-						NOT = {
-							is_subject = yes 
-						}
+						is_at_war = no
+						is_subject = no
 					}
 				}
 				320 = {
@@ -431,19 +490,21 @@ CYP_slot_4 = {
 			if = {
 				limit = {
 					alliance_with = KNI
+					reverse_has_opinion = {
+						who = KNI
+						value = 100
+					}
+					total_development = KNI
+					KNI = {
+						is_at_war = no
+						is_subject = no
+					}
 				}
 				KNI = {
-					country_event = { 
-						id = ME_Knights_Events.2
-					}
+					country_event = { id = ME_Cyprus_Events.13 }
 				}
 			}
-			else_if = {
-				limit = {
-					320 = {
-						owned_by = ROOT
-					}
-				}
+			else = {
 				add_country_modifier = {
 					name = cyp_subdued_knights
 					duration = -1
@@ -476,26 +537,14 @@ CYP_slot_4 = {
 				limit = {
 					has_dlc = "Cradle of Civilization"
 				}
-				custom_tooltip = CYP_REFORMED_COC_TOOLTIP
-				hidden_effect = {
-					add_country_modifier = {
-						name = cyp_reformed_crusader_knights_CoC
-						duration = 10950
-					}
+				add_country_modifier = {
+					name = cyp_reformed_crusader_knights_CoC
+					duration = 10950
 				}
 			}
 			else = {
-				custom_tooltip = CYP_REFORMED_MOR_TOOLTIP
-				hidden_effect = {
-					add_country_modifier = {
-						name = cyp_reformed_crusader_knights_moral
-						duration = 10950
-					}
-				}
-			}
-			hidden_effect = {
 				add_country_modifier = {
-					name = cyp_reformed_crusader_knights
+					name = cyp_reformed_crusader_knights_moral
 					duration = 10950
 				}
 			}
