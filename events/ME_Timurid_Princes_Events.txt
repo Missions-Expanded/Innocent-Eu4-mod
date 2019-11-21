@@ -10,8 +10,17 @@ country_event = { #Fall of the Timurid Empire
 	fire_only_once = yes
 	
 	trigger = {
-		tag = TIM
-		NOT = { has_country_modifier = ME_fall_of_herat_in_2_years }
+		tag = TIM	
+		OR = {
+			AND = {
+				NOT = { has_country_modifier = ME_fall_of_herat_in_1_years }
+				has_country_flag = ai_fall_of_herat
+			}
+			AND = {
+				NOT = { has_country_modifier = ME_fall_of_herat_in_2_years }
+				has_country_flag = player_fall_of_herat
+			}
+		}
 		has_country_flag = ME_fall_of_herat
 		NOT = { has_country_flag = formed_timurids_flag } #So formed Timmies don't get it
 		NOT = { is_year = 1470 }
@@ -42,7 +51,7 @@ country_event = { #Fall of the Timurid Empire
 			if = {
 				limit = {
 					FRS = {
-						vassal_of = TIM
+						is_subject_of = TIM
 					}
 				}
 				FRS = {
@@ -52,7 +61,7 @@ country_event = { #Fall of the Timurid Empire
 			if = {
 				limit = {
 					KHO = {
-						vassal_of = TIM
+						is_subject_of = TIM
 					}
 				}
 				KHO = {
@@ -62,7 +71,7 @@ country_event = { #Fall of the Timurid Empire
 			if = {
 				limit = {
 					TRS = {
-						vassal_of = TIM
+						is_subject_of = TIM
 					}
 				}
 				TRS = {
@@ -72,7 +81,7 @@ country_event = { #Fall of the Timurid Empire
 			if = {
 				limit = {
 					SIS = {
-						vassal_of = TIM
+						is_subject_of = TIM
 					}
 				}
 				SIS = {
@@ -82,7 +91,7 @@ country_event = { #Fall of the Timurid Empire
 			if = {
 				limit = {
 					AFG = {
-						vassal_of = TIM
+						is_subject_of = TIM
 					}
 				}
 				AFG = {
@@ -172,7 +181,7 @@ country_event = { #Fall of Herat
 	fire_only_once = yes
 	
 	trigger = {
-		NOT = { is_year 1470 }
+		NOT = { is_year = 1470 }
 		tag = TIM
 		NOT = { has_global_flag = ME_fall_of_herat_fired }
 		NOT = { has_country_flag = formed_timurids_flag } #So formed Timmies don't get it
@@ -195,10 +204,27 @@ country_event = { #Fall of Herat
 		name = "ME_Timurid_Princes_Event2.EVTOPTA1"
 		
 		custom_tooltip = FALL_OF_HERAT_WILL_FIRE
-		add_country_modifier = {
-			name = ME_fall_of_herat_in_2_years
-			duration = 365
-			hidden = yes
+		if = {
+			limit = {
+				any_country = {
+					dynasty = "Timurid"
+					was_player = yes
+				}
+			}
+			set_country_flag = player_fall_of_herat
+			add_country_modifier = {
+				name = ME_fall_of_herat_in_2_years
+				duration = 365
+				hidden = yes
+			}
+		}
+		else = {
+			set_country_flag = ai_fall_of_herat
+			add_country_modifier = {
+				name = ME_fall_of_herat_in_1_years
+				duration = 365
+				hidden = yes
+			}
 		}
 		set_country_flag = ME_fall_of_herat
 		set_global_flag = ME_fall_of_herat_fired
@@ -362,7 +388,7 @@ country_event = { #an unlikely shah
 		name = "ME_Timurid_Princes_Event6.EVTOPTA2"
 		
 		ai_chance = { 
-			factor = 90
+			factor = 10
 		}
 		
 		add_legitimacy_equivalent = { value = -5 }
@@ -603,20 +629,24 @@ country_event = { #Death of Ulugh Beg
 	}	
 }
 
-country_event = { #Afghanistan
+country_event = { #Another Clearing Event, dw
 	id = ME_Timurid_Princes_Event.12
 	title = "ME_Timurid_Princes_Event.EVTNAME12"
 	desc = "ME_Timurid_Princes_Event.EVTDESC12"
 	picture = ADVISOR_eventPicture
+	hidden = yes
 	
 	trigger = {
-		tag = AFG
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_modifier = ME_khorasan_agaist_beg
+		NOT = { war_with = TIM }
 	}
 	
 	mean_time_to_happen = {
 		days = 1
 	}
+	
+	immediate = {
+		remove_country_modifier = ME_khorasan_agaist_beg
 	
 	option = {
 		name = "ME_Timurid_Princes_Event12.EVTOPTA1"
