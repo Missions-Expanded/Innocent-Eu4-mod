@@ -6,7 +6,15 @@ country_event = { # Cypriot Revolt
 	desc = ME_Cyprus_Events.EVTDESC100
 	picture = HARBOUR_eventPicture
 	
-	is_triggered_only = yes
+	fire_only_once = yes
+	mean_time_to_happen = { #Random Event that is not triggered, it just happens.
+		months = 24
+	}
+
+	trigger = {
+		tag = CYP
+		owns = 321
+	}
 	
 	option = {
 		name = ME_Cyprus_Events100.EVTOPT1
@@ -24,6 +32,8 @@ country_event = { # Cypriot Revolt
 			}
 		}
 		add_papal_influence = 20
+		set_country_flag = cyprus_is_catholic
+		swap_non_generic_missions = yes
 	}
 	
 	option = {
@@ -31,8 +41,7 @@ country_event = { # Cypriot Revolt
 
 		ai_chance = {
 			factor = 0.5
-		}
-		
+		}		
 		change_religion = orthodox
 		change_primary_culture = greek
 		add_patriarch_authority = 0.20
@@ -42,6 +51,8 @@ country_event = { # Cypriot Revolt
 				size = 1
 			}
 		}
+		set_country_flag = cyprus_is_orthodox
+		swap_non_generic_missions = yes
 	}
 }
 
@@ -148,19 +159,46 @@ country_event = { # We? We Found the?
 		add_treasury = -100
 		add_prestige = 50
 		163 = {
+			#Has 1° lvl fort
 			if = {
-				limit = {
-					NOT = { has_building = fort_15th }
-					NOT = { has_building = fort_16th }
-					NOT = { has_building = fort_17th }
-					NOT = { has_building = fort_18th }
+					limit = {
+						has_building = fort_15th
+					}
+					add_building_construction = {
+						building = fort_16th
+						speed = 0.5
+						cost = 0
+					}
 				}
-				add_building_construction = {
-					building = fort_15th
-					speed = 0.5
-					cost = 0
+				#Has 2° lvl fort
+				else_if = {
+					limit = {
+						has_building = fort_16th
+					}
+					add_building_construction = {
+						building = fort_17th
+						speed = 0.5
+						cost = 0
+					}
 				}
-			}
+				#Has 3° lvl fort
+				else_if = {
+					limit = {
+						has_building = fort_17th
+					}
+					add_building_construction = {
+						building = fort_18th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				else = {
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.5
+						cost = 0
+					}
+				}
 			add_province_modifier = {
 				name = cyp_labyrinth_crete
 				duration = -1
