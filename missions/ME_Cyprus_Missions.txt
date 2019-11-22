@@ -782,9 +782,7 @@ CYP_slot_4_Catholic = { # Catholic
 			}
 		}
 		trigger = {
-			NOT = {
-				is_at_war = yes
-			}
+			is_at_war = no
 			aleppo_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -827,11 +825,24 @@ CYP_slot_4_Orthodox = { # Orthodox
 			cyp_hellenic_navy
 		}
 		position = 4
+		provinces_to_highlight = {
+			province_id = 163
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		trigger = {
-
+			163 = {
+				is_core = ROOT
+				owned_by = ROOT
+			}
 		}
 		effect = {
-
+			add_country_modifier = {
+				name = cyp_cretian_trade
+				duration = 3650
+			}
+			add_treasury = 75
 		}
 	}
 
@@ -843,10 +854,13 @@ CYP_slot_4_Orthodox = { # Orthodox
 		}
 		position = 5
 		trigger = {
-
+			statesman = 1
+			primary_culture = greek
+			adm_power = 50
+			dip_power = 50
 		}
 		effect = {
-
+			# ENABLE TWO T1 REFORMS
 		}
 	}
 
@@ -858,11 +872,34 @@ CYP_slot_4_Orthodox = { # Orthodox
 			cyp_filike_eteria
 		}
 		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = northern_greece_area
+			}
+		}
 		trigger = {
-
+			if = {
+				limit = {
+					exists = TUR
+				}
+				TUR = {
+					war_with = ROOT
+				}
+			}
+			else = {
+				any_country = {
+					limit = {
+						owns_or_non_sovereign_subject_of = northern_greece_area
+					}
+					war_with = ROOT
+				}
+			}
 		}
 		effect = {
-
+			add_country_modifier = {
+				name = cyp_greek_revolutionaries
+				duration = 3650
+			}
 		}
 	}
 
@@ -872,11 +909,28 @@ CYP_slot_4_Orthodox = { # Orthodox
 			cyp_greek_war_independence
 		}
 		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = northern_greece_area
+				area = morea_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		trigger = {
-
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			is_at_war = no
 		}
 		effect = {
-
+			# Enable Decision Cypriot Kingdom of Greece
+			add_country_modifier = {
+				name = cyp_greeece_united
+				duration = -1
+			}
 		}
 	}
 }
@@ -1094,14 +1148,29 @@ CYP_slot_5_Orthodox = { # Orthodox
 	cyp_hellenic_navy = {
 		icon = mission_assemble_an_army
 		required_missions = {
-
 		}
 		position = 3
 		trigger = {
+			navy_size_percentage = 0.75
 
 		}
 		effect = {
-
+			random_province = {
+				limit = {
+					has_port = yes
+					owned_by = ROOT
+				}
+				add_unit_construction = {
+					type = galley
+					amount = 5
+					speed = 0.5
+					cost = 0
+				}
+			}
+			add_country_modifier = {
+				name = cyp_hellenic_naval_marines
+				duration = -1
+			}
 		}
 	}
 
@@ -1111,11 +1180,69 @@ CYP_slot_5_Orthodox = { # Orthodox
 			cyp_hellenic_navy
 		}
 		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 164
+				province_id = 2348
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		trigger = {
-
+			164 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2348 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-
+			164 = {
+				add_province_modifier = {
+					name = cyp_forward_naval_base
+					duration = -1
+				}
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			2348 = {
+				if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+			}
+			3003 = {
+				if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+			}
+			164 = {
+				if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+			}
+			320 = {
+				if = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+			}
 		}
 	}
 
@@ -1127,10 +1254,29 @@ CYP_slot_5_Orthodox = { # Orthodox
 		}
 		position = 5
 		trigger = {
-
+			TUR = {
+				NOT = {
+					has_opinion = {
+						who = ROOT
+						value = -100
+					}
+				}
+			}
+			NOT = {
+				has_opinion = {
+					who = TUR
+					value = -100
+				}
+			}
 		}
 		effect = {
-
+			country_event = {
+				id = ME_Cyprus_Events.7
+			}
+			add_country_modifier = {
+				name = cyp_filiki_eteria_modifier
+				duration = 3650
+			}
 		}
 	}
 }
