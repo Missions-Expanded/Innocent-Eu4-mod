@@ -187,6 +187,9 @@ CYP_slot_2 = {
 		}
 		effect = {
 			320 = {
+				add_base_tax = 2
+				add_base_production = 1
+				add_base_manpower = 1
 				if = {
 					limit = {
 						NOT = { province_has_center_of_trade_of_level = 1 }
@@ -205,9 +208,6 @@ CYP_slot_2 = {
 					}
 					add_center_of_trade_level = 1
 				}
-				add_base_tax = 2
-				add_base_production = 1
-				add_base_manpower = 1
 			}
 		}
 	}
@@ -328,9 +328,7 @@ CYP_slot_3 = {
 			}
 			else = {
 				PAP = {
-					country_event = { 
-						id = ME_Cyprus_Events.2
-					}
+					country_event = { id = ME_Cyprus_Events.2 }
 				}
 				320 = {
 					if = {
@@ -448,7 +446,6 @@ CYP_slot_3 = {
 			}
 		}
 	}
-
 }
 
 CYP_slot_3_Catholic = { # Catholic
@@ -458,9 +455,7 @@ CYP_slot_3_Catholic = { # Catholic
 	potential = {
 		tag = CYP
 		has_country_flag = cyprus_is_catholic
-		NOT = {
-			has_country_flag = cyprus_is_orthodox
-		}
+		NOT = { has_country_flag = cyprus_is_orthodox }
 	}
 	has_country_shield = yes
 
@@ -472,9 +467,7 @@ CYP_slot_3_Catholic = { # Catholic
 		position = 5
 		provinces_to_highlight = {
 			area = aleppo_area
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			aleppo_area = {
@@ -498,9 +491,7 @@ CYP_slot_3_Orthodox = { # Orthodox
 	potential = {
 		tag = CYP
 		has_country_flag = cyprus_is_orthodox
-		NOT = {
-			has_country_flag = cyprus_is_catholic
-		}
+		NOT = { has_country_flag = cyprus_is_catholic }
 	}
 	has_country_shield = yes
 
@@ -513,16 +504,7 @@ CYP_slot_3_Orthodox = { # Orthodox
 		position = 5
 		provinces_to_highlight = {
 			area = aegean_archipelago_area
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { development = 15 }
-			}
-			NOT = {
-				aegean_archipelago_area = {
-					owned_by = ROOT
-					development = 15
-				}
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			aegean_archipelago_area = {
@@ -531,18 +513,15 @@ CYP_slot_3_Orthodox = { # Orthodox
 			}
 		}
 		effect = {
+			country_event = { id = ME_Cyprus_Events.9 days = 1200 tooltip = ME_Cyprus_Events.9.tooltip }
 			3003 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
 				add_province_modifier = {
 					name = cyp_forward_naval_base
 					duration = 	-1
 				}
-				add_base_tax = 2
-				add_base_production = 2
-				add_base_manpower = 2
-			}
-			country_event = {
-				id = ME_Cyprus_Events.9
-				months = 40
 			}
 		}
 	}
@@ -615,9 +594,7 @@ CYP_slot_4 = {
 					}
 				}
 				KNI = {
-					country_event = { 
-						id = ME_Cyprus_Events.4
-					}
+					country_event = { id = ME_Cyprus_Events.4 }
 				}
 			}
 			else = {
@@ -675,9 +652,7 @@ CYP_slot_4_Catholic = { # Catholic
 	potential = {
 		tag = CYP
 		has_country_flag = cyprus_is_catholic
-		NOT = {
-			has_country_flag = cyprus_is_orthodox
-		}
+		NOT = { has_country_flag = cyprus_is_orthodox }
 	}
 	has_country_shield = yes
 
@@ -690,10 +665,24 @@ CYP_slot_4_Catholic = { # Catholic
 		provinces_to_highlight = {
 			OR = {
 				province_id = 378
-				province_id = 4297
-				province_id = 1855
-				province_id = 382
+				AND = {
+					OR = {
+						province_id = 4297
+						province_id = 1855
+						province_id = 382
+					}
+					4279 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					1855 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					382 = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
 			}
+			country_or_non_sovereign_subject_holds = ROOT
 		}
 		trigger = {
 			378 = {
@@ -713,53 +702,58 @@ CYP_slot_4_Catholic = { # Catholic
 		}
 		effect = {
 			378 = {
+				change_religion = catholic
+				change_province_name = "Tarabulus"
+				rename_capital = "Tripoli"
 				if = {
 					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
+						has_building = fort_15th
 					}
-					if = {
-						limit = {
-							has_building = fort_15th
-						}
-						add_building_construction = {
-							building = fort_16th
-							speed = 0.5
-							cost = 0
-						}
+					remove_building = fort_15th
+					add_building_construction = {
+						building = fort_16th
+						speed = 0.5
+						cost = 0
 					}
-					else_if = {
-						limit = {
-							has_building = fort_16th
-						}
-						add_building_construction = {
-							building = fort_17th
-							speed = 0.5
-							cost = 0
-						}
+				}
+				else_if = {
+					limit = {
+						has_building = fort_16th
 					}
-					else_if = {
-						limit = {
-							has_building = fort_17th
-						}
-						add_building_construction = {
-							building = fort_18th
-							speed = 0.5
-							cost = 0
-						}
+					remove_building = fort_16th
+					add_building_construction = {
+						building = fort_17th
+						speed = 0.5
+						cost = 0
 					}
-					else = {
-						add_building_construction = {
-							building = fort_15th
-							speed = 0.5
-							cost = 0
-						}
+				}
+				else_if = {
+					limit = {
+						has_building = fort_17th
 					}
-					add_province_modifier = {
-						name = cyp_mount_lebanon
-						duration = -1
+					remove_building = fort_17th
+					add_building_construction = {
+						building = fort_18th
+						speed = 0.5
+						cost = 0
 					}
-					change_religion = catholic
-					change_province_name = Tarabulus rename_capital = Tripoli
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				add_province_modifier = {
+					name = cyp_mount_lebanon
+					duration = -1
 				}
 			}
 		}
@@ -779,9 +773,7 @@ CYP_slot_4_Catholic = { # Catholic
 				area = syria_area
 				area = palestine_area
 			}
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			is_at_war = no
@@ -805,7 +797,6 @@ CYP_slot_4_Catholic = { # Catholic
 			}
 		}
 	}
-
 }
 
 CYP_slot_4_Orthodox = { # Orthodox
@@ -815,9 +806,7 @@ CYP_slot_4_Orthodox = { # Orthodox
 	potential = {
 		tag = CYP
 		has_country_flag = cyprus_is_orthodox
-		NOT = {
-			has_country_flag = cyprus_is_catholic
-		}
+		NOT = { has_country_flag = cyprus_is_catholic }
 	}
 	has_country_shield = yes
 
@@ -829,25 +818,20 @@ CYP_slot_4_Orthodox = { # Orthodox
 		position = 4
 		provinces_to_highlight = {
 			province_id = 163
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
-			163 = {
-				is_core = ROOT
-				owned_by = ROOT
-			}
+			owns_core_province = 163
 		}
 		effect = {
+			add_treasury = 75
+			country_event = { id = ME_Cyprus_Events.5 days = 60 tooltip = ME_Cyprus_Events.5.tooltip }
 			add_country_modifier = {
 				name = cyp_cretian_trade
 				duration = 3650
-			}
-			add_treasury = 75
-			country_event = {
-				id = ME_Cyprus_Events.5
-				days = 60
 			}
 		}
 	}
@@ -860,7 +844,7 @@ CYP_slot_4_Orthodox = { # Orthodox
 		}
 		position = 5
 		trigger = {
-			statesman = 1
+			advisor = statesman
 			primary_culture = greek
 			adm_power = 50
 			dip_power = 50
@@ -878,22 +862,21 @@ CYP_slot_4_Orthodox = { # Orthodox
 			cyp_filike_eteria
 		}
 		position = 6
-		provinces_to_highlight = {
-			OR = {
-				area = northern_greece_area
-			}
-		}
 		trigger = {
 			if = {
-				exists = TUR
+				limit = {
+					exists = TUR
+				}
 				TUR = {
 					war_with = ROOT
 				}
 			}
 			else = {
 				any_country = {
-					owns_or_non_sovereign_subject_of = northern_greece_area
 					war_with = ROOT
+					capital_scope = {
+						area = northern_greece_area
+					}
 				}
 			}
 		}
@@ -916,16 +899,14 @@ CYP_slot_4_Orthodox = { # Orthodox
 				area = northern_greece_area
 				area = morea_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			is_at_war = no
 			northern_greece_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			is_at_war = no
 		}
 		effect = {
 			add_country_modifier = {
@@ -943,17 +924,13 @@ CYP_slot_5_Catholic = { # Catholic
 	potential = {
 		tag = CYP
 		has_country_flag = cyprus_is_catholic
-		NOT = {
-			has_country_flag = cyprus_is_orthodox
-		}
+		NOT = { has_country_flag = cyprus_is_orthodox }
 	}
 	has_country_shield = yes
 
 	cyp_roman_delegation = {
 		icon = mission_assemble_an_army
-		required_missions = {
-
-		}
+		required_missions = { }
 		position = 3
 		trigger = {
 			if = {
@@ -971,7 +948,7 @@ CYP_slot_5_Catholic = { # Catholic
 					is_papal_controller = yes
 				}
 			}
-			diplomat = 1
+			advisor = diplomat
 		}
 		effect = {
 			if = {
@@ -983,42 +960,30 @@ CYP_slot_5_Catholic = { # Catholic
 				}
 				add_historical_friend = PAP
 			}
+			add_country_modifier = {
+				name = cyp_papal_seal_approval 
+				duration = -1
+			}
 			palestine_area = {
 				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			syria_area = {
 				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			aleppo_area = {
 				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			add_country_modifier = {
-				name = cyp_papal_seal_approval 
-				duration = -1
 			}
 		}
 	}
@@ -1030,6 +995,7 @@ CYP_slot_5_Catholic = { # Catholic
 		}
 		position = 4
 		trigger = {
+			advisor = theologian
 			if = {
 				limit = {
 					exists = PAP
@@ -1052,7 +1018,6 @@ CYP_slot_5_Catholic = { # Catholic
 					}
 				}
 			}
-			theologian = 1
 		}
 		effect = {
 			add_country_modifier = {
@@ -1061,36 +1026,25 @@ CYP_slot_5_Catholic = { # Catholic
 			}
 			palestine_area = {
 				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			syria_area = {
 				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			379 = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
+				if = {
+					limit = {
+						NOT = { is_core = ROOT }
 					}
-					NOT = { 
-						is_core = ROOT 
-					}
+					add_core = ROOT
 				}
-				add_core = ROOT
 			}
 		}
 	}
@@ -1103,9 +1057,7 @@ CYP_slot_5_Catholic = { # Catholic
 		position = 5
 		provinces_to_highlight = {
 			area = palestine_area
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			palestine_area = {
@@ -1116,10 +1068,7 @@ CYP_slot_5_Catholic = { # Catholic
 		effect = {
 			if = {
 				limit = {
-					is_expanded_mod_active = { 
-							mod = government 
-						}
-						
+					is_expanded_mod_active = { mod = governments }
 				}
 				# "If GE is enabled, you gain the Crusader Kingdom Government"
 			}
@@ -1132,9 +1081,7 @@ CYP_slot_5_Catholic = { # Catholic
 				limit = {
 					religion_group = muslim
 				}
-				country_event = {
-					id = ME_Cyprus_Events.16
-				}
+				country_event = { id = ME_Cyprus_Events.16 }
 			}
 			every_country = {
 				limit = {
@@ -1145,13 +1092,10 @@ CYP_slot_5_Catholic = { # Catholic
 						religion_group = zoroastrian_group
 					}
 				}
-				country_event = {
-					id = ME_Cyprus_Events.17
-				}
+				country_event = { id = ME_Cyprus_Events.17 }
 			}
 		}
 	}
-
 }
 
 CYP_slot_5_Orthodox = { # Orthodox
@@ -1161,26 +1105,26 @@ CYP_slot_5_Orthodox = { # Orthodox
 	potential = {
 		tag = CYP
 		has_country_flag = cyprus_is_orthodox
-		NOT = {
-			has_country_flag = cyprus_is_catholic
-		}
+		NOT = { has_country_flag = cyprus_is_catholic }
 	}
 	has_country_shield = yes
 
 	cyp_hellenic_navy = {
 		icon = mission_assemble_an_army
-		required_missions = {
-		}
+		required_missions = { }
 		position = 3
 		trigger = {
 			navy_size_percentage = 0.75
 			galley_fraction = 0.33
 		}
 		effect = {
-			random_province = {
+			add_country_modifier = {
+				name = cyp_hellenic_naval_marines
+				duration = -1
+			}
+			random_owned_province = {
 				limit = {
 					has_port = yes
-					owned_by = ROOT
 				}
 				add_unit_construction = {
 					type = galley
@@ -1188,10 +1132,6 @@ CYP_slot_5_Orthodox = { # Orthodox
 					speed = 0.5
 					cost = 0
 				}
-			}
-			add_country_modifier = {
-				name = cyp_hellenic_naval_marines
-				duration = -1
 			}
 		}
 	}
@@ -1207,9 +1147,7 @@ CYP_slot_5_Orthodox = { # Orthodox
 				province_id = 164
 				province_id = 2348
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			164 = {
@@ -1221,13 +1159,13 @@ CYP_slot_5_Orthodox = { # Orthodox
 		}
 		effect = {
 			164 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
 				add_province_modifier = {
 					name = cyp_forward_naval_base
 					duration = -1
 				}
-				add_base_tax = 2
-				add_base_production = 2
-				add_base_manpower = 2
 			}
 			2348 = {
 				if = {
@@ -1276,25 +1214,21 @@ CYP_slot_5_Orthodox = { # Orthodox
 		}
 		position = 5
 		trigger = {
-			TUR = {
-				NOT = {
-					has_opinion = {
-						who = ROOT
-						value = -100
-					}
-				}
-			}
 			NOT = {
 				has_opinion = {
 					who = TUR
 					value = -100
 				}
 			}
+			NOT = {
+				reverse_has_opinion = {
+					who = TUR
+					value = -100
+				}
+			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Cyprus_Events.10
-			}
+			country_event = { id = ME_Cyprus_Events.10 }
 			add_country_modifier = {
 				name = cyp_filiki_eteria_modifier
 				duration = 3650
