@@ -827,18 +827,27 @@ country_event = { # A letter to the Pope - Papal State Event
 		ai_chance = {
 			factor = 0.5
 		}
-		
+
+		FROM = { save_event_target_as = coronation_target }		
 		add_trust = {
 			who = FROM
 			value = 50
 			mutual = yes
 		}
+		FROM = {
+			country_event = {
+				id = ME_Cyprus_Events.22
+				days = 30
+			}
+		}
 		every_country = {
 			limit = {
-				NOT = { tag = CYP }
+				NOT = { tag = ROOT } 
+				NOT = { tag = FROM }
 				religion = catholic
 			}
 			country_event = { id = ME_Cyprus_Events.20 }
+			country_event = { id = ME_Cyprus_Events.21 }
 		}
 	}
 
@@ -864,8 +873,6 @@ country_event = { # A letter to the Pope - Papal State Event
 				who = ROOT
 				modifier = pap_crusades_over
 			}
-		}
-		CYP = {
 			country_event = { id = ME_Cyprus_Events.19 }
 		}
 	}
@@ -1058,28 +1065,7 @@ country_event = { # The Last Crusade
 		name = ME_Cyprus_Events20.EVTOPT1
 
 		ai_chance = {
-			factor = 0.5
-		}
-		
-		every_country = {
-			limit = {
-				NOT = { tag = CYP }
-				NOT = { tag = PAP }
-				religion = catholic
-			}
-			country_event = { id = ME_Cyprus_Events.21 }
-		}
-	}
-
-	option = {
-		name = ME_Cyprus_Events20.EVTOPT2
-
-		ai_chance = {
-			factor = 0.5
-		}
-		
-		CYP = {
-			country_event = { id = ME_Cyprus_Events.22 }
+			factor = 1
 		}
 	}
 }
@@ -1100,37 +1086,28 @@ country_event = { # The Coronation of The King of Jerusalem?
 		}
 		
 		add_opinion = {
-			who = CYP
+			who = event_target:coronation_target
 			modifier = cyp_coronation_present
 		}
-		CYP = {
+		event_target:coronation_target = {
 			add_opinion = {
 				who = ROOT
 				modifier = cyp_coronation_present
 			}
 		}
-
-		PAP = {
+		FROM = {
 			add_opinion = {
-				who = CYP
+				who = ROOT
 				modifier = cyp_coronation_present
 			}
 		}
-		CYP = {
+		ROOT = {
 			add_opinion = {
-				who = PAP
+				who = FROM
 				modifier = cyp_coronation_present
 			}
 		}
-		CYP = {
-			country_event = { id = ME_Cyprus_Events.22 days = 30 tooltip = ME_Cyprus_Events.22.tooltip }
-		}
-		every_country = {
-			limit = {
-				NOT = { tag = CYP }
-				NOT = { tag = PAP }
-				religion = catholic
-			}
+		ROOT = {
 			country_event = { id = ME_Cyprus_Events.23 }
 		}
 	}
@@ -1144,35 +1121,24 @@ country_event = { # The Coronation of The King of Jerusalem?
 		
 		add_prestige = -10
 		add_opinion = {
-			who = CYP
+			who = event_target:coronation_target
 			modifier = cyp_coronation_absent
 		}
-		CYP = {
+		event_target:coronation_target = {
 			add_opinion = {
 				who = ROOT
 				modifier = cyp_coronation_absent
 			}
 		}
 		add_opinion = {
-			who = PAP
+			who = FROM
 			modifier = pap_coronation_absent
 		}
-		PAP = {
+		FROM = {
 			add_opinion = {
 				who = ROOT
 				modifier = pap_coronation_absent
 			}
-		}
-		CYP = {
-			country_event = { id = ME_Cyprus_Events.22 days = 30 tooltip = ME_Cyprus_Events.22.tooltip }
-		}
-		every_country = {
-			limit = {
-				NOT = { tag = CYP }
-				NOT = { tag = PAP }
-				religion = catholic
-			}
-			country_event = { id = ME_Cyprus_Events.23 }
 		}
 	}
 
@@ -1188,16 +1154,26 @@ country_event = { # The Coronation of The King of Jerusalem?
 		}
 
 		add_opinion = {
-			who = CYP
+			who = event_target:coronation_target
 			modifier = cyp_coronation_greedy
 		}
-		CYP = {
+		event_target:coronation_target = {
 			add_opinion = {
 				who = ROOT
 				modifier = cyp_coronation_greedy
 			}
 		}
-		country_event = { id = ME_Cyprus_Events.23 days = 30 tooltip = ME_Cyprus_Events.23.tooltip }
+		add_opinion = {
+			who = FROM
+			modifier = cyp_coronation_present
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = cyp_coronation_present
+			}
+		}
+		country_event = { id = ME_Cyprus_Events.23 tooltip = ME_Cyprus_Events.23.tooltip }
 	}
 }
 
@@ -1210,178 +1186,178 @@ country_event = { # Coronation Day for Cyprus 22
 	is_triggered_only = yes
 	fire_only_once = yes
 
-option = {
-	name = ME_Cyprus_Events22.EVTOPT1
+	option = {
+		name = ME_Cyprus_Events22.EVTOPT1
 
-	ai_chance = {
-		factor = 0.50
-	}
-	
-	add_prestige = 50
-	#Form Jerusalem
-	every_province = {
-		limit = {
-			OR = {
-				area = trans_jordan_area
-				area = palestine_area
-				province_id = 378 #County of Tripoli
-				province_id = 1855 #Sayda
-				province_id = 4268 #Aqaba
-			}
+		ai_chance = {
+			factor = 0.50
 		}
-		add_core = KOJ
-	}
-	if = {
-		limit = {
-			OR = {
-				AND = {
-					NOT = { tag = KNI }
-					NOT = { tag = CYP }
-					NOT = { tag = PRO }
+		
+		add_prestige = 50
+		#Form Jerusalem
+		every_province = {
+			limit = {
+				OR = {
+					area = trans_jordan_area
+					area = palestine_area
+					province_id = 378 #County of Tripoli
+					province_id = 1855 #Sayda
+					province_id = 4268 #Aqaba
 				}
-				NOT = { was_never_end_game_tag_trigger = yes }
 			}
-		}
-		release = KOJ
-		KOJ = { change_primary_culture = ROOT }
-	}
-	if = {
-		limit = {
-			OR = {
-				tag = KNI
-				tag = CYP
-				tag = PRO
-			}
-			was_never_end_game_tag_trigger = yes
-		}
-		if = {
-			limit = { tag = KNI }
-			set_country_flag = knights_formed_jerusalem
-		}
-		change_tag = KOJ
-		if = {
-			limit = { has_custom_ideas = no }
-			country_event = { id = ideagroups.1 } #Swap Ideas
-		}
-	}
-	KOJ = {
-		set_capital = 379 #Jerusalem
-		change_religion = catholic
-		if = {
-			limit = {
-				NOT = { government = monarchy }
-			}
-			change_government = monarchy
-			set_legacy_government = feudal_monarchy
+			add_core = KOJ
 		}
 		if = {
 			limit = {
-				NOT = { government_rank = 2 }
+				OR = {
+					AND = {
+						NOT = { tag = KNI }
+						NOT = { tag = CYP }
+						NOT = { tag = PRO }
+					}
+					NOT = { was_never_end_game_tag_trigger = yes }
+				}
 			}
-			set_government_rank = 2
+			release = KOJ
+			KOJ = { change_primary_culture = ROOT }
 		}
-		set_country_flag = formed_jerusalem
+		if = {
+			limit = {
+				OR = {
+					tag = KNI
+					tag = CYP
+					tag = PRO
+				}
+				was_never_end_game_tag_trigger = yes
+			}
+			if = {
+				limit = { tag = KNI }
+				set_country_flag = knights_formed_jerusalem
+			}
+			change_tag = KOJ
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+		}
+		KOJ = {
+			set_capital = 379 #Jerusalem
+			change_religion = catholic
+			if = {
+				limit = {
+					NOT = { government = monarchy }
+				}
+				change_government = monarchy
+				set_legacy_government = feudal_monarchy
+			}
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			set_country_flag = formed_jerusalem
+		}
 	}
-}
 
-option = {
-	name = ME_Cyprus_Events22.EVTOPT2
+	option = {
+		name = ME_Cyprus_Events22.EVTOPT2
 
-	ai_chance = {
-		factor = 0.50
-	}
-	
-	add_prestige = 100
-	every_country = {
-		limit = {
-			religion = catholic
+		ai_chance = {
+			factor = 0.50
 		}
-		add_opinion = {
-			who = CYP
-			modifier = cyp_coronation_catholics
-		}
-		CYP = {
+		
+		add_prestige = 100
+		every_country = {
+			limit = {
+				religion = catholic
+			}
 			add_opinion = {
-				who = ROOT
+				who = CYP
 				modifier = cyp_coronation_catholics
 			}
+			CYP = {
+				add_opinion = {
+					who = ROOT
+					modifier = cyp_coronation_catholics
+				}
+			}
 		}
-	}
-	add_opinion = {
-		who = PAP
-		modifier = cyp_coronation_pap
-	}
-	PAP = {
 		add_opinion = {
-			who = ROOT
+			who = PAP
 			modifier = cyp_coronation_pap
 		}
-	}
-	#Form Jerusalem
-	every_province = {
-		limit = {
-			OR = {
-				area = trans_jordan_area
-				area = palestine_area
-				province_id = 378 #County of Tripoli
-				province_id = 1855 #Sayda
-				province_id = 4268 #Aqaba
+		PAP = {
+			add_opinion = {
+				who = ROOT
+				modifier = cyp_coronation_pap
 			}
 		}
-		add_core = KOJ
-	}
-	if = {
-		limit = {
-			OR = {
-				AND = {
-					NOT = { tag = KNI }
-					NOT = { tag = CYP }
-					NOT = { tag = PRO }
+		#Form Jerusalem
+		every_province = {
+			limit = {
+				OR = {
+					area = trans_jordan_area
+					area = palestine_area
+					province_id = 378 #County of Tripoli
+					province_id = 1855 #Sayda
+					province_id = 4268 #Aqaba
 				}
-				NOT = { was_never_end_game_tag_trigger = yes }
 			}
-		}
-		release = KOJ
-		KOJ = { change_primary_culture = ROOT }
-	}
-	if = {
-		limit = {
-			OR = {
-				tag = KNI
-				tag = CYP
-				tag = PRO
-			}
-			was_never_end_game_tag_trigger = yes
-		}
-		if = {
-			limit = { tag = KNI }
-			set_country_flag = knights_formed_jerusalem
-		}
-		change_tag = KOJ
-		if = {
-			limit = { has_custom_ideas = no }
-			country_event = { id = ideagroups.1 } #Swap Ideas
-		}
-	}
-	KOJ = {
-		set_capital = 379 #Jerusalem
-		change_religion = catholic
-		if = {
-			limit = {
-				NOT = { government = monarchy }
-			}
-			change_government = monarchy
-			set_legacy_government = feudal_monarchy
+			add_core = KOJ
 		}
 		if = {
 			limit = {
-				NOT = { government_rank = 2 }
+				OR = {
+					AND = {
+						NOT = { tag = KNI }
+						NOT = { tag = CYP }
+						NOT = { tag = PRO }
+					}
+					NOT = { was_never_end_game_tag_trigger = yes }
+				}
 			}
-			set_government_rank = 2
+			release = KOJ
+			KOJ = { change_primary_culture = ROOT }
 		}
-		set_country_flag = formed_jerusalem
+		if = {
+			limit = {
+				OR = {
+					tag = KNI
+					tag = CYP
+					tag = PRO
+				}
+				was_never_end_game_tag_trigger = yes
+			}
+			if = {
+				limit = { tag = KNI }
+				set_country_flag = knights_formed_jerusalem
+			}
+			change_tag = KOJ
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+		}
+		KOJ = {
+			set_capital = 379 #Jerusalem
+			change_religion = catholic
+			if = {
+				limit = {
+					NOT = { government = monarchy }
+				}
+				change_government = monarchy
+				set_legacy_government = feudal_monarchy
+			}
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			set_country_flag = formed_jerusalem
+		}
 	}
-}
 }
 
 country_event = { # Coronation Day for Others 23
