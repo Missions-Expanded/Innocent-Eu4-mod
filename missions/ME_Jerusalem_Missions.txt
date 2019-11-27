@@ -114,12 +114,14 @@ KOJ_missions_1 = {
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				NOT = { religion = ROOT }
+				NOT = { development = 35 }
 			}
 		}
 		trigger = {
 			151 = {
 				country_or_non_sovereign_subject_holds = ROOT
 				religion = ROOT
+				development = 35
 			}
 		}
 		effect = {
@@ -127,6 +129,11 @@ KOJ_missions_1 = {
 			add_country_modifier = {
 				name = koj_triumph_faith
 				duration = 7300
+			}
+			151 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
 			}
 		}
 	}
@@ -177,16 +184,20 @@ KOJ_missions_2 = {
 		icon = mission_ottomans_solidify_sphere_of_influence
 		required_missions = { koj_march_antioch }
 		provinces_to_highlight = {
-			province_id = 361
 			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { religion = ROOT }
+				area = aleppo_area
+				area = dulkadir_area
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			361 = {
+			aleppo_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
-				religion = ROOT
+			}
+			dulkadir_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -285,62 +296,53 @@ KOJ_missions_3 = {
 			}
 			if = {
 				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						religion = catholic
-						capital_scope = {
-							continent = europe
-						}
-						OR = {
-							AND = {
-								has_dlc = "Rights of Man"
-								is_great_power = yes
-								NOT = { great_power_rank = 4 }
-							}
-							AND = {
-								NOT = { has_dlc = "Rights of Man" }
-								NOT = {
-									calc_true_if = {
-										all_country = {
-											total_development = ROOT
-										}
-										amount = 3
-									}
-								}
-							}
-						}
-					}
+					exists = GBR
 				}
-				every_country = {
-					limit = {
-						NOT = { tag = ROOT }
-						religion = catholic
-						capital_scope = {
-							continent = europe
-						}
-						OR = {
-							AND = {
-								has_dlc = "Rights of Man"
-								is_great_power = yes
-								NOT = { great_power_rank = 4 }
-							}
-							AND = {
-								NOT = { has_dlc = "Rights of Man" }
-								NOT = {
-									calc_true_if = {
-										all_country = {
-											total_development = ROOT
-										}
-										amount = 3
-									}
-								}
-							}
-						}
-					}
+				GBR = {
+					country_event = { id = ME_Jerusalem_Events.2 }
+				}
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				ENG = {
+					country_event = { id = ME_Jerusalem_Events.2 }
+				}
+			}
+			if = {
+				limit = {
+					exists = SPA
+				}
+				SPA = {
+					country_event = { id = ME_Jerusalem_Events.2 }
+				}
+			}
+			else_if = {
+				limit = {
+					exists = CAS
+				}
+				CAS = {
+					country_event = { id = ME_Jerusalem_Events.2 }
+				}
+			}
+			if = {
+				limit = {
+					exists = FRA
+				}
+				FRA = {
 					country_event = { id = ME_Jerusalem_Events.2 }
 				}
 			}
 			mashriq_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_claim = ROOT
+			}
+			egypt_region = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
@@ -587,7 +589,7 @@ KOJ_missions_4 = {
 				NOT = { unrest = 0.01 }
 				base_production = 10
 			}
-			2313 = {
+			2316 = {
 				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 0.01 }
 				base_production = 10
@@ -774,7 +776,6 @@ KOJ_missions_5 = {
 		icon = mission_high_income
 		required_missions = { koj_abu_haneefa }
 		trigger = {
-			town_hall = 10
 			NOT = { unrest = 0.01 }
 			num_of_owned_provinces_with = {
 				value = 10
@@ -782,6 +783,22 @@ KOJ_missions_5 = {
 					has_building = temple
 					has_building = cathedral
 				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				num_of_owned_provinces_with = {
+					value = 20
+					is_state = yes
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
+				}
+			}
+			else = {
+				town_hall = 10
 			}
 		}
 		effect = {
