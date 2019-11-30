@@ -43,9 +43,20 @@ IME_missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-		always = no
+			OR = {
+				war_with = SME
+				AND = {
+					owns = 2204
+					owns = 4303
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_our_lands
+				duration = 1825
+			}
+			
 		}
 	}
 }
@@ -62,11 +73,36 @@ SME_missions_1 = {
 		required_missions = { GEO_combat_the_collapse }
 		position = 2
 		provinces_to_highlight = {
+			OR = {
+				area = imereti_area
+				province_id = 2196
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-		always = no
+			imereti_area = {
+				type = all
+				owned_by = ROOT
+			}
+			2196 = {
+				owned_by = ROOT
+			}
 		}
 		effect = {
+			2196 = {
+				build_to_forcelimit = {
+					galley = 0.1
+					light_ship = 0.3
+					transport = 0.1
+				}
+			}
+			circassia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 }
@@ -114,10 +150,36 @@ GEO_missions_1 = {
 		required_missions = { GEO_gateway_to_caspian GEO_noble_peasantry }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = shirvan_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 421
+					OR = {
+						NOT = { base_production = 6 }
+						NOT = { num_of_times_improved = 3 }
+					}
+				}
+			}
 		}
 		trigger = {
+			shirvan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			421 = {
+				base_production = 6
+				num_of_times_improved = 3
+			}
 		}
 		effect = {
+			#doesn't make quite sense
+			add_country_modifier = {
+				name = GEO_unbrided_prosperity
+				duration = 9125
+			}
 		}
 	}
 }
@@ -149,6 +211,51 @@ GEO_missions_2_shared = {
 			add_country_modifier = {
 				name = GEO_restoration_campaigns
 				duration = 7300
+			}
+			if = {
+				limit = {
+					tag = IME
+				}
+				circassia_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				samtskhe_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				kartli_kakheti_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			if = {
+				limit = {
+					tag = SME
+				}
+				kartli_kakheti_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				imereti_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -189,10 +296,46 @@ GEO_missions_2 = {
 		required_missions = { GEO_quell_the_atabegate GEO_imereti_campaign }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				area = samtskhe_area
+				area = imereti_area
+				area = kartli_kakheti_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			samtskhe_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				type = all
+			}
+			imereti_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				type = all
+			}
+			kartli_kakheti_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+				type = all
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_ruler_of_the_georgian_people
+				duration = 10950
+			}
+			armenia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			shirvan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	GEO_gateway_to_caspian = {
@@ -200,10 +343,22 @@ GEO_missions_2 = {
 		required_missions = { GEO_georgia_united }
 		position = 3
 		provinces_to_highlight = {
+			area = shirvan_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			shirvan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			421 = {
+				add_province_modifier = {
+					name = GEO_seat_of_a_kura
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -269,8 +424,49 @@ IME_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				GEO = {
+					is_subject_of = IME
+				}
+				kartli_kakheti_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					senior_union_with = GEO
+				}
+				change_mil = 1
+				add_country_modifier = {
+					name = GEO_resolved_centralization
+					duration = 10950
+				}
+			}
+			else = {
+				kartli_kakheti_area = {
+					add_province_modifier = {
+						name = GEO_harsh_centralization
+						duration = 5475
+					}
+				}
+			}
+			4301 ={
+				add_province_modifier = {
+					name = GEO_flank_secured
+					duration = 3650
+				}
+			}
+			add_stability = 1
+			armenia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 }
@@ -287,10 +483,35 @@ SME_missions_3 = {
 		required_missions = { GEO_combat_the_collapse }
 		position = 2
 		provinces_to_highlight = {
+			area = kartli_kakheti_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			kartli_kakheti_area = {
+				type = all
+				owned_by = ROOT
+			}
 		}
 		effect = {
+			kartli_kakheti_area = {
+				add_core = ROOT
+				add_local_autonomy = -25
+				add_nationalism = -10
+			}
+			armenia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			shirvan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 }
@@ -308,10 +529,53 @@ GEO_missions_3 = {
 		required_missions = { GEO_combat_the_collapse }
 		position = 2
 		provinces_to_highlight = {
+			OR = {
+				owned_by = IME
+				area = imereti_area 
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			OR = {
+				senior_union_with = IME
+				imereti_area = {
+					owned_by = ROOT
+					type = all
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					senior_union_with = IME
+				}
+				change_adm = 1
+				add_country_modifier = {
+					name = GEO_resolved_centralization
+					duration = 10950
+				}
+			}
+			else = {
+				imereti_area = {
+					add_province_modifier = {
+						name = GEO_harsh_centralization
+						duration = 5475
+					}
+				}
+			}
+			4301 ={
+				add_province_modifier = {
+					name = GEO_flank_secured
+					duration = 3650
+				}
+			}
+			circassia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	GEO_beauty_tis_nigh = {
@@ -319,10 +583,27 @@ GEO_missions_3 = {
 		required_missions = { GEO_imereti_campaign }
 		position = 3
 		provinces_to_highlight = {
+			area = circassia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			circassia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name =  GEO_conquest_of_circassia
+				duration = 7300
+			}
+			dagestan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	GEO_of_the_shamakalate = {
@@ -330,10 +611,20 @@ GEO_missions_3 = {
 		required_missions = { GEO_gateway_to_caspian GEO_beauty_tis_nigh }
 		position = 5
 		provinces_to_highlight = {
+			area = dagestan_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			dagestan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_dagestani_levy
+				duration = 10950
+			}
 		}
 	}
 }
@@ -502,14 +793,38 @@ GEO_missions_5_shared = {
 			}
 		}
 		effect = {
-			capital_scope = {
-				add_next_institution_embracement = 25
-			}
-			every_owned_province = {
+			if = {
 				limit = {
-					development = 15
+					NOT = {
+						has_institution = renaissance
+					}
 				}
-			 	add_next_institution_embracement = 50
+				capital_scope = {
+					add_institution_embracement = {
+						which = renaissance
+						value = 25
+					}
+				}
+				every_owned_province = {
+					limit = {
+						development = 15
+					}
+					add_institution_embracement = {
+						which = renaissance
+						value = 50
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					add_next_institution_embracement = 25
+				}
+				every_owned_province = {
+					limit = {
+						development = 15
+					}
+					add_next_institution_embracement = 50
+				}
 			}
 		}
 	}
