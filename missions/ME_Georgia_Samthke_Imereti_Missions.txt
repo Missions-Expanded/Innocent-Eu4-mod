@@ -18,9 +18,13 @@ GEO_missions_1_shared = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-		always = no
+			patriarch_authority = 0.4
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_bastion_of_christ
+				duration = 18250
+			}
 		}
 	}
 }
@@ -82,8 +86,27 @@ GEO_missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			capital_scope = {
+				area_for_scope_province = {
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						OR = {
+							has_state_edict = edict_promote_military_recruitment 
+							has_state_edict = edict_defensive_edict 
+						}
+					}
+					owned_by = ROOT
+					num_of_times_improved = 2
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_peasants_flock
+				duration = 5475
+			}
 		}
 	}
 	GEO_bring_forth_prosperity = {
@@ -117,9 +140,16 @@ GEO_missions_2_shared = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			always = no
+			OR = {
+				army_size = 9
+				army_size_percentage = 1
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_restoration_campaigns
+				duration = 7300
+			}
 		}
 	}
 }
@@ -139,9 +169,19 @@ GEO_missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-		always = no
+			OR = {
+				war_with = SME
+				AND = {
+					owns = 2204
+					owns = 4303
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_our_lands
+				duration = 1825
+			}
 		}
 	}
 	GEO_georgia_united = {
@@ -184,11 +224,33 @@ GEO_missions_3_shared = {
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			province_id = 423
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 13 }
+			}
 		}
 		trigger = {
-			always = no
+			423 = {
+				owned_by = ROOT
+				development = 13
+			}
 		}
 		effect = {
+			423 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 1 }
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
 		}
 	}
 }
@@ -294,9 +356,15 @@ GEO_missions_4_shared = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			always = no
+			stability = 1
+			legitimacy_equivalent = 100
 		}
 		effect = {
+			add_prestige = 10
+			add_country_modifier = {
+				name = GEO_georgians_stand_strong
+				duration = 5475
+			}
 		}
 	}
 	GEO_crossroads_of_caucasia = {
@@ -306,8 +374,31 @@ GEO_missions_4_shared = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			284 = {
+				trade_share = {
+					country = ROOT
+					share = 20
+				}
+			}
+			4341 = {
+				trade_share = {
+					country = ROOT
+					share = 20
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_influx_of_trade
+				duration = 10950
+			}
+			crimea_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 }
@@ -325,10 +416,21 @@ GEO_missions_4 = {
 		required_missions = { GEO_beauty_tis_nigh GEO_crossroads_of_caucasia }
 		position = 4
 		provinces_to_highlight = {
+			area = crimea_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			crimea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			#not adding the core effect, reduntant and hard to script, also needs custom tooltip
+			add_country_modifier = {
+				name = GEO_conquest_of_the_peninsula
+				duration = 10950
+			}
 		}
 	}
 	
@@ -352,9 +454,20 @@ GEO_missions_5_shared = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			always = no
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.1
+			}
+			army_tradition = 25
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_mountain_men
+				duration = 10950
+			}
+			change_mil = 1
 		}
 	}
 	GEO_militarized_state = {
@@ -364,8 +477,15 @@ GEO_missions_5_shared = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			army_tradition = 50
+			manpower_percentage = 0.8
+			army_size_percentage = 1
 		}
 		effect = {
+			add_country_modifier = {
+				name = GEO_full_militarization
+				duration = 10950
+			}
 		}
 	}
 	GEO_georgian_renaissance = {
@@ -373,10 +493,24 @@ GEO_missions_5_shared = {
 		required_missions = { GEO_crossroads_of_caucasia }
 		position = 3
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { development = 15 }
 		}
 		trigger = {
+			any_owned_province = {
+				development = 15
+			}
 		}
 		effect = {
+			capital_scope = {
+				add_next_institution_embracement = 25
+			}
+			every_owned_province = {
+				limit = {
+					development = 15
+				}
+			 	add_next_institution_embracement = 50
+			}
 		}
 	}
 }
