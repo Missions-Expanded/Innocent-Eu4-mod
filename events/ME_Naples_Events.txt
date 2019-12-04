@@ -1,33 +1,29 @@
 namespace = ME_Naples_Events
 
-country_event = {
+country_event = { #The Fate of Naples
 	id = ME_Naples_Events.1
 	title = ME_Naples_Events.EVTNAME1
 	desc = ME_Naples_Events.EVTDESC1
 	picture = HARBOUR_eventPicture
 
-	fire_only_once = yes
-
-	trigger = {
-		tag = NAP
-		owns = 121
-	}
-
-	mean_time_to_happen = {
-		months = 24
-	}
+	is_triggered_only = yes
 
 	option = {
 		name = ME_Naples_Events1.EVTOPT1
 		ai_chance = {
 			factor = 33
-		}
-		modifier = {
-			
+			modifier = {
+				factor = 3
+				has_opinion = {
+					who = FRA
+					value = 100
+				}
+			}
 		}
 		FRA = {
 			country_event = {
 				id = ME_Naples_Events.2
+				days = 30
 			}
 		}
 
@@ -37,9 +33,6 @@ country_event = {
 		name = ME_Naples_Events1.EVTOPT2
 		ai_chance = {
 			factor = 33
-		}
-		modifier = {
-
 		}
 		random_country = {
 			limit = {
@@ -56,7 +49,10 @@ country_event = {
 					}
 				}
 			}
-			country_event = { id = ME_Naples_Events.3 }
+			country_event = { 
+				id = ME_Naples_Events.3
+				days = 30
+			}
 		}
 	}
 	option = {
@@ -64,11 +60,9 @@ country_event = {
 		ai_chance = {
 			factor = 33
 		}
-		modifier = {
-			
-		}
 		country_event = {
 			id = ME_Naples_Events.4
+			days = 30
 		}
 	}
 }
@@ -81,17 +75,14 @@ country_event = { # For France
 
 	is_triggered_only = yes
 
-	mean_time_to_happen = {
-		months = 3
-	}
-
 	option = {
 		name = ME_Naples_Events2.EVTOPT1
 		ai_chance = {
 			factor = 33
-		}
-		modifier = {
-	
+			modifier = {
+				factor = 3
+				is_rival = ARA
+			}
 		}
 		ROOT = {
 			add_treasury = -100
@@ -113,27 +104,48 @@ country_event = { # For France
 			}
 		}
 		121 = {
+			if = {
+				owned_by = FROM
+			}
 			infantry = FROM
 			infantry = FROM
 			infantry = FROM
 		}
+		ARA = {
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellionAra
+			}
+		}
+		add_opinion = {
+			who = ARA
+			modifier = nap_helped_rebellionAra
+		}
+		add_historical_rival = ARA
 	}
 
 	option = {
 		name = ME_Naples_Events2.EVTOPT2
 		ai_chance = {
 			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					has_opinion = {
+						who = NAP
+						value = 100
+					}
+					is_at_war = no
+				}
+			}
 		}
-		modifier = {
-
-		}
-		create_alliance = FROM
 		add_trust = {
 			who = FROM
-			value = 50
+			value = 75
 			mutual = yes
 		}
 		add_historical_friend = FROM
+		add_historical_rival = ARA
 		grant_independence = yes
 		add_opinion = {
 			who = FROM
@@ -146,14 +158,22 @@ country_event = { # For France
 				modifier = nap_helped_rebellion_war
 			}
 		}
+		ARA = {
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellion_warAra
+			}
+		}
+		add_opinion = {
+			who = ARA
+			modifier = nap_helped_rebellion_warAra
+		}
 	}
 
 	option = {
 		name = ME_Naples_Events2.EVTOPT3
 		ai_chance = {
 			factor = 33
-		}
-		modifier = {
 		}
 		random_country = {
 			limit = {
@@ -170,7 +190,10 @@ country_event = { # For France
 					}
 				}
 			}
-			country_event = { id = ME_Naples_Events.3 }
+			country_event = { 
+				id = ME_Naples_Events.3 
+				days = 30
+			}
 		}
 		add_opinion = {
 			who = FROM
@@ -191,19 +214,12 @@ country_event = { # For the Italian Nations
 	desc = ME_Naples_Events.EVTDESC3
 	picture = HARBOUR_eventPicture
 
-	mean_time_to_happen = {
-		months = 3
-	}
-
 	is_triggered_only = yes
 
 	option = {
 		name = ME_Naples_Events3.EVTOPT1
 		ai_chance = {
 			factor = 33
-		}
-		modifier = {
-
 		}
 		ROOT = {
 			add_treasury = -100
@@ -224,7 +240,20 @@ country_event = { # For the Italian Nations
 				modifier = nap_helped_rebellion
 			}
 		}
+		ARA = {
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellionAra
+			}
+		}
+		add_opinion = {
+			who = ARA
+			modifier = nap_helped_rebellionAra
+		}
 		121 = {
+			if = {
+				owned_by = FROM
+			}
 			infantry = NAP
 			infantry = NAP
 			infantry = NAP
@@ -236,19 +265,32 @@ country_event = { # For the Italian Nations
 		ai_chance = {
 			factor = 33
 		}
-		modifier = {
-
+		add_historical_rival = ARA
+		add_historical_friend = NAP
+		add_trust = {
+			who = NAP
+			value = 75
+			mutual = yes
 		}
-		create_alliance = NAP
 		add_opinion = {
 			who = NAP
 			modifier = nap_helped_rebellion_war
-		}
+		}		
 		NAP = {
 			add_opinion = {
 				who = ROOT
 				modifier = nap_helped_rebellion_war
 			}
+		}
+		ARA = {
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellion_warAra
+			}
+		}
+		add_opinion = {
+			who = ARA
+			modifier = nap_helped_rebellion_warAra
 		}
 	}
 
@@ -256,9 +298,9 @@ country_event = { # For the Italian Nations
 		name = ME_Naples_Events3.EVTOPT3
 		ai_chance = {
 			factor = 33
-		}
-		modifier = {
-
+			modifier = {
+				factor = 3
+			}
 		}
 		add_opinion = {
 			who = NAP
@@ -267,6 +309,7 @@ country_event = { # For the Italian Nations
 		NAP = {
 			country_event = {
 				id = ME_Naples_Events.4
+				days = 30
 			}
 			add_opinion = {
 				who = ROOT
@@ -281,22 +324,13 @@ country_event = { #Naples stands alone
 	title = ME_Naples_Events.EVTNAME4
 	desc = ME_Naples_Events.EVTDESC4
 	picture = HARBOUR_eventPicture
-	mean_time_to_happen = {
-		months = 3
-	}
 
 	is_triggered_only = yes
-
-	mean_time_to_happen = {
-		months = 3
-	}
 
 	option = {
 		name = ME_Naples_Events4.EVTOPT1
 		ai_chance = {
 			factor = 100
-		}
-		modifier = {
 		}
 		random_province = {
 			limit = {
@@ -308,6 +342,10 @@ country_event = { #Naples stands alone
 				type = naples_rebels
 				size = 3
 			}
+		}
+		add_spy_network_in = {
+			who = ARA
+			value = 50
 		}
 	}
 }
@@ -325,19 +363,20 @@ country_event = { #Friends or Foes
 		
 		ai_chance = {
 			factor = 50
-		}
-		modifier = {
-			factor = 0
-			NOT = {
-				num_of_free_diplomatic_relations = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					num_of_free_diplomatic_relations = 1
+				}
 			}
 		}
+		
 		PAP = {
 			add_historical_friend = ROOT
 		}
 		add_historical_friend = PAP
 		125 = { #Palermo
-			limit = {
+			if = {
 				owned_by = ROOT
 			}
 			add_cardinal = yes
@@ -401,13 +440,13 @@ country_event = { #Restoring the Glory of Greece
 		
 		ai_chance = {
 			factor = 50
-		}
-		modifier = {
-			factor = 0
-			NOT = {
-				num_of_free_diplomatic_relations = 1
+			modifier = {
+				factor = 0
+				NOT = {
+					num_of_free_diplomatic_relations = 1
+				}
 			}
-		}
+		}		
 		every_province = {
 			limit = {
 				NOT = {
