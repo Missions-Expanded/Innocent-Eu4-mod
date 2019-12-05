@@ -43,21 +43,93 @@ naples_missions_1 = {
 		}
 		position = 2
 		trigger = {
-			has_opinion = {
-				who = PAP
-				value = 170
-			}
-			PAP = {
-				has_opinion = {
-					who = ROOT
-					value = 170
+			OR = {
+				AND = {
+					alliance_with = PAP
+					has_opinion = {
+						who = PAP
+						value = 170
+					}
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 170
+						}
+					}
+				}
+				AND = {
+					is_rival = PAP
+					NOT = {
+						has_opinion = {
+							who = PAP
+							value = -100
+						}
+					}
+					NOT = {
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = -100
+							}
+							is_rival = ROOT
+						}
+					}
 				}
 			}
 		}
 		effect = {
-			country_event = { 
-				id = ME_Naples_Events.5
-				months = 1
+			if = {
+				limit = {
+					alliance_with = PAP
+				}
+				PAP = {
+					add_historical_friend = ROOT
+				}
+				add_historical_friend = PAP
+				125 = { #Palermo
+					if = {
+						owned_by = ROOT
+					}
+					add_cardinal = yes
+				}
+				emilia_romagna_area = {
+					limit = {
+						owned_by = PAP
+						NOT = {
+							is_core = ROOT
+						}
+					}
+					add_core = NAP
+					cede_province = NAP
+					remove_core = PAP
+				}
+				tuscany_area = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT
+						}
+						NOT = { 
+							is_core = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			else_if = {
+				limit = {
+					is_rival = PAP
+				}
+				add_historical_rival = PAP
+				every_province = {
+					limit = {
+						owned_by = PAP
+						region = italy_region
+					}
+					add_permanent_claim = ROOT
+				}
+				create_general = {
+					tradition = 50
+				}
 			}
 		}		
 	}
@@ -858,7 +930,7 @@ naples_missions_3 = {
 				add_permanent_claim = ROOT
 			}
 			country_event = { 
-					id = ME_Naples_Events.8
+					id = ME_Naples_Events.7
 				}
 		}
 	}
@@ -1286,7 +1358,7 @@ naples_missions_4 = {
 					}
 				}
 				country_event = { 
-					id = ME_Naples_Events.6
+					id = ME_Naples_Events.5
 				}
 			}
 			thrace_area = {
@@ -1377,7 +1449,7 @@ naples_missions_4 = {
 				}
 				PRO = {
 					country_event = {
-						id = ME_Naples_Events.7
+						id = ME_Naples_Events.6
 						months = 3
 					}
 				}
