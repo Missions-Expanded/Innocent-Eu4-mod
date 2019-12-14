@@ -167,6 +167,22 @@ country_event = { #Fall of the Timurid Empire
 				cede_province = QOM
 				add_core = QOM
 			}
+			pirate_coast_area = {
+				limit = {
+					owned_by = TIM
+				}
+				cede_province = ORM
+				add_core = ORM
+			}
+			2999 = {
+				if = {
+					limit = {
+						owned_by = TIM
+					}
+					cede_province = ORM
+					add_core = ORM
+				}
+			}
 		}
 	}
 }
@@ -343,23 +359,8 @@ country_event = { #an unlikely shah
 	option = {
 		name = "ME_Timurid_Princes_Event6.EVTOPTA1"
 		
-		change_tag = TIM
-		swap_non_generic_missions = yes
-		remove_non_electors_emperors_from_empire_effect = yes
-		if = {
-			limit = {
-				NOT = { government_rank = 3 }
-			}
-			set_government_rank = 3
-		}
-		if = {
-			limit = { has_custom_ideas = no }
-			country_event = { id = ideagroups.1 } #Swap Ideas
-		}
-		set_country_flag = formed_timurids_flag
 		set_global_flag = ulugh_beg_claimed_empire
-		custom_tooltip = OTHER_PRINCES_MAY_TAKE_ACTION
-		clr_country_flag = ME_can_use_timurid_legitimacy
+		set_country_flag = transoxiana_allows_mission_completion
 		every_country = {
 			limit = {
 				dynasty = "Timurid"
@@ -367,15 +368,6 @@ country_event = { #an unlikely shah
 			add_opinion = {
 				who = TIM
 				modifier = TIM_claimed_the_empire
-			}
-		}
-		
-		hidden_effect = {
-			every_known_country = {
-				limit = {
-					NOT = { tag = ROOT }
-				}
-				country_event = { id = ME_Timurid_Princes_Event.27 }
 			}
 		}
 		
@@ -391,6 +383,7 @@ country_event = { #an unlikely shah
 			factor = 10
 		}
 		
+		set_country_flag = transoxiana_allows_mission_completion
 		add_legitimacy_equivalent = { value = -5 }
 	}
 }
@@ -404,7 +397,9 @@ country_event = { #Against Ulugh Beg
 	
 	trigger = {
 		tag = KHO
-		exists = TIM
+		445 = {
+			owned_by = TRS
+		}
 		has_global_flag = ulugh_beg_claimed_empire
 		has_ruler_flag = babur_is_ruler
 	}
@@ -420,21 +415,8 @@ country_event = { #Against Ulugh Beg
 			factor = 80
 		}
 		
-		declare_war = TIM
-		add_country_modifier = {
-			name = ME_khorasan_agaist_beg
-			duration = -1
-		}
-		custom_tooltip = MODIFIER_WILL_EXPIRE_AFTER_WAR
-		custom_tooltip = WE_GAIN_MORE_TROOPS
-		hidden_effect = {
-			capital_scope = {
-				build_to_forcelimit = {
-					infantry = 0.6
-					cavalry = 0.4
-				}
-			}
-		}
+		set_country_flag = me_allow_skirmish_at_merv
+		custom_tooltip = ALLOW_SKIRMISH_AT_MERV_DECISION
 	}
 	
 	option = {
@@ -1590,13 +1572,189 @@ country_event = {
 	}
 	
 	immediate = {
-		hidden_effect = {
-			clr_country_flag = ME_can_use_timurid_legitimacy
-		}
+		clr_country_flag = ME_can_use_timurid_legitimacy
 	}
 	
 	option = {
 		name = "ME_Timurid_Princes_Event32.EVTOPTA1"
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Timurid_Princes_Event.33
+	title = "ME_Timurid_Princes_Event.EVTNAME33"
+	desc = "ME_Timurid_Princes_Event.EVTDESC33"
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	
+	option = {
+		name = "ME_Timurid_Princes_Event33.EVTOPTA1"
+		
+		random_list = {
+			50 = {
+				country_event = { id = ME_Timurid_Princes_Event.34 }
+			}
+			50 = {
+				country_event = { id = ME_Timurid_Princes_Event.35 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Timurid_Princes_Event.34
+	title = "ME_Timurid_Princes_Event.EVTNAME34"
+	desc = "ME_Timurid_Princes_Event.EVTDESC34"
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Timurid_Princes_Event34.EVTOPTA1"
+		
+		add_country_modifier = {
+			name = ME_khorasan_agaist_beg
+			duration = -1
+			desc = MODIFIER_WILL_EXPIRE_AFTER_WAR
+		}
+		custom_tooltip = WE_GAIN_MORE_TROOPS
+		hidden_effect = {
+			capital_scope = {
+				build_to_forcelimit = {
+					infantry = 0.6
+					cavalry = 0.4
+				}
+			}
+		}
+		declare_war_with_cb = {
+			who = TRS
+			casus_belli = cb_core
+			war_goal_province = 445
+		}
+		set_country_flag = me_skirmish_at_merv_incident
+		swap_non_generic_missions = yes
+	}
+}
+
+country_event = {
+	id = ME_Timurid_Princes_Event.35
+	title = "ME_Timurid_Princes_Event.EVTNAME35"
+	desc = "ME_Timurid_Princes_Event.EVTDESC35"
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Timurid_Princes_Event35.EVTOPTA1"
+		
+		declare_war_with_cb = {
+			who = TRS
+			casus_belli = cb_core
+			war_goal_province = 445
+		}
+	
+		custom_tooltip = WE_GAIN_MORE_TROOPS
+		hidden_effect = {
+			capital_scope = {
+				build_to_forcelimit = {
+					infantry = 0.6
+					cavalry = 0.4
+				}
+			}
+		}
+		set_country_flag = me_skirmish_at_merv_incident
+		swap_non_generic_missions = yes
+	}
+}
+
+country_event = {
+	id = ME_Timurid_Princes_Event.36
+	title = "ME_Timurid_Princes_Event.EVTNAME36"
+	desc = "ME_Timurid_Princes_Event.EVTDESC36"
+	picture = ADVISOR_eventPicture
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = me_skirmish_at_merv_incident
+		NOT = { war_with = TRS }
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		clr_country_flag = me_allow_skirmish_at_merv
+		swap_non_generic_missions = yes
+	}
+	
+	option = {
+		name = "ME_Timurid_Princes_Event36.EVTOPT1"
+		
+		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Timurid_Princes_Event.37
+	title = "ME_Timurid_Princes_Event.EVTNAME37"
+	desc = "ME_Timurid_Princes_Event.EVTDESC37"
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Timurid_Princes_Event37.EVTOPT1"
+		
+		ai_chance = { factor = 70 }
+		
+		FROM = {
+			add_prestige = 15
+		}
+		
+		445 = {
+			cede_province = PREV
+		}
+	}
+	
+	option = {
+		name = "ME_Timurid_Princes_Event37.EVTOPT2"
+		
+		ai_chance = { factor = 30 }
+		
+		add_country_modifier = {
+			name = me_defeat_at_merv_incident
+			duration = 5475
+		}
+	}
+}
+
+country_event = {
+	id = ME_Timurid_Princes_Event.38
+	title = "ME_Timurid_Princes_Event.EVTNAME38"
+	desc = "ME_Timurid_Princes_Event.EVTDESC38"
+	picture = ADVISOR_eventPicture
+	hidden = yes
+	
+	trigger = {
+		has_country_modifier = me_khorasan_lighting_warfare
+		NOT = { war_with = TRS }	
+	}
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	immediate = {
+		remove_country_modifier = me_khorasan_lighting_warfare
+	}
+	
+	option = {
+		name = "ME_Timurid_Princes_Event38.EVTOPT1"
 		
 		ai_chance = { factor = 100 }
 	}
