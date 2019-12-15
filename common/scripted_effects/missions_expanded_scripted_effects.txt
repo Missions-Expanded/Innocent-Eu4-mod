@@ -170,6 +170,9 @@ build_possible_manufactory_in_province = {
 	}
 }
 
+## create or add a CoT
+### create_or_add_center_of_trade_level = { level = <number> }
+
 create_or_add_center_of_trade_level = {
 	if = {
 		limit = {
@@ -252,6 +255,52 @@ create_or_add_center_of_trade_level = {
 				province_has_center_of_trade_of_level = 2
 			}
 			add_center_of_trade_level = -1
+		}
+	}
+}
+
+## replace a province modifier with another
+### replace_province_modifier = { remove = test_modifier_1 add = test_modifier_2 time = -1 permanent = yes }
+replace_province_modifier = {
+	if = {
+		limit = {
+			has_province_modifier = $remove$
+		}
+		custom_tooltip = tt_replace_modifier_$remove$_with_$add$
+		hidden_effect = {
+			remove_province_modifier = $remove$
+			if = {
+				limit = {
+					always = $permanent$
+				}
+				add_permanent_province_modifier = {
+					name = $add$
+					duration = $time$
+				}
+			}
+			else = {
+				add_province_modifier = {
+					name = $add$
+					duration = $time$
+				}
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				always = $permanent$
+			}
+			add_permanent_province_modifier = {
+				name = $add$
+				duration = $time$
+			}
+		}
+		else = {
+			add_province_modifier = {
+				name = $add$
+				duration = $time$
+			}
 		}
 	}
 }
@@ -340,48 +389,101 @@ replace_country_modifier = {
 	}
 }
 
-## replace a province modifier with another
-### replace_province_modifier = { remove = test_modifier_1 add = test_modifier_2 time = -1 permanent = yes }
-replace_province_modifier = {
-	if = {
-		limit = {
-			has_province_modifier = $remove$
-		}
-		custom_tooltip = tt_replace_modifier_$remove$_with_$add$
-		hidden_effect = {
-			remove_province_modifier = $remove$
-			if = {
-				limit = {
-					always = $permanent$
-				}
-				add_permanent_province_modifier = {
-					name = $add$
-					duration = $time$
-				}
-			}
-			else = {
-				add_province_modifier = {
-					name = $add$
-					duration = $time$
-				}
-			}
-		}
-	}
-	else = {
+## release subjects and collapse nation
+### release_subjects_and_cede_cores = { who = ROOT release_subjects = yes rebels = yes }
+### "release_subjects" and "rebels" are optional
+### must be used in the same scope as "who", "who" is used for some in-effect scopes, so only ROOT, FROM and direct tags/event targets work
+release_subjects_and_cede_cores = {
+	[[release_subjects]
 		if = {
 			limit = {
-				always = $permanent$
+				always = $release_subjects$
 			}
-			add_permanent_province_modifier = {
-				name = $add$
-				duration = $time$
-			}
+			release_all_subjects = yes
 		}
-		else = {
-			add_province_modifier = {
-				name = $add$
-				duration = $time$
+	]
+	custom_tooltip = RELEASE_SUBJECTS_AND_CEDE_CORES_CEDE_CORES_TT
+	hidden_effect = {
+		every_owned_province = {
+			limit = {
+				is_capital = no
+				any_core_country = {
+					NOT = { tag = $who$ }
+				}
+			}
+			random_core_country = {
+				limit = {
+					NOT = { tag = $who$ }
+				}
+				hidden_effect = {
+					if = {
+						limit = {
+							exists = no
+						}
+						set_country_flag = core_country_not_exists
+					}
+				}
+				PREV = { cede_province = PREV }
+				hidden_effect = {
+					if = {
+						limit = {
+							has_country_flag = core_country_not_exists
+						}
+						clr_country_flag = core_country_not_exists
+						change_government = monarchy
+						add_government_reform = feudalism_reform
+					}
+				}
 			}
 		}
 	}
+	custom_tooltip = RELEASE_SUBJECTS_AND_CEDE_CORES_GAIN_UNREST_TT
+	hidden_effect = {
+		every_owned_province = {
+			limit = {
+				OR = {
+					is_capital = yes
+					NOT = {
+						any_core_country = {
+							NOT = { tag = $who$ }
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					any_country = {
+						NOT = { tag = $who$ }
+						primary_culture = PREV
+					}
+				}
+				random_country = {
+					limit = {
+						NOT = { tag = $who$ }
+						primary_culture = PREV
+					}
+					PREV = { add_core = PREV }
+				}
+			}
+			add_unrest = 25
+			add_nationalism = 10
+			[[rebels]
+				if = {
+					limit = {
+						always = $rebels$
+						is_capital = no
+					}
+					nationalist_rebels = 1
+				}
+			]
+		}
+	}
+	[[rebels]
+		if = {
+			limit = {
+				always = $rebels$
+			}
+			custom_tooltip = RELEASE_SUBJECTS_AND_CEDE_CORES_SPAWN_REBELS_TT
+		}
+	]
 }
