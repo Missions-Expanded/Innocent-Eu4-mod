@@ -43,6 +43,10 @@ naples_missions_1 = {
 		}
 		position = 6
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAP_INDEP_SPAIN
+				has_country_flag = nap_coronated
+			}
 			OR = {
 				OR = {
 					alliance_with = PAP
@@ -170,87 +174,82 @@ naples_missions_1 = {
 		}		
 	}
 
-	nap_foothold_levant = {
-		icon = me_mission_merchant_navy
+	nap_venetian_goods = {
+		icon = mission_disrupt_portuguese_trade
 		required_missions = {
-			nap_republic_amalfi 
+			nap_republic_amalfi
 		}
 		position = 7
 		trigger = {
-			mercantilism = 17
-			151 = { #Constantinople
+			num_of_galley = VEN
+			112 = { #Venice
 				trade_share = {
 					country = ROOT
 					share = 20
 				}
 			}
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 2
+					owned_by = ROOT
+					province_has_center_of_trade_of_level = 1
+					any_trade_node_member_province = {
+						province_id = 112
+					}
+				}
+				num_of_owned_provinces_with = {
+					value = 5
+					owned_by = ROOT
+					has_port = yes
+					any_trade_node_member_province = {
+						province_id = 112
+					}
+				}
+			}
 		}
 		effect = {
-			321 = {
-				if = {
-					limit = {
-						NOT = { 
-							owned_by = ROOT 
-						}
+			random_province = {
+				limit = {
+					owned_by = ROOT
+					area = apulia_area
+					NOT = {
+						province_has_center_of_trade_of_level = 1
 					}
-					add_permanent_claim = ROOT
+				}
+				add_base_production = 2
+				center_of_trade = 1
+			}
+			add_country_modifier = {
+				name = nap_dominating_adriatic
+				duration = 7300
+			}
+			if = {
+				limit = {
+					exists = VEN
+				}
+				add_casus_belli = {
+					type = cb_trade_war
+					months = 300
+					target = VEN
 				}
 			}
-			377 = {				# Aleppo
-				add_trade_modifier = {
-					who = ROOT
-					duration = 7300
-					power = 20
-					key = nap_italian_chestnut
-				}
-			}
-			358 = {				# Alexandria
-				add_trade_modifier = {
-					who = ROOT
-					duration = 7300
-					power = 20
-					key = nap_italian_chestnut
+			custom_tooltip = NAP_VENETIAN_GOODS_TOOLTIP
+			hidden_effect = {
+				112 = {
+					every_trade_node_member_province = {
+						limit = {
+							owned_by = VEN
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
 				}
 			}
 		}
 	}
 
-	nap_goods_east = {
-		icon = mission_dominate_home_trade_node
-		required_missions = {
-			nap_foothold_levant
-		}
-		provinces_to_highlight = {
-			province_id = 321
-		}
-		position = 8
-		trigger = {
-			321 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			321 = {
-				add_province_modifier = {
-					name = nap_spyce_trade
-					duration = 7300
-				}
-				add_building_construction = {
-					building = grand_shipyard
-					speed = 0.75
-					cost = 0
-				}
-				custom_tooltip = NAP_GALLEY_TOOLTIP
-				hidden_effect = {
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-				}
-			}
-		}
-	}
 
 	nap_berbers_raiding = {
 		icon = mission_galleys_in_port
@@ -370,6 +369,54 @@ naples_missions_1 = {
 		}
 	}
 
+	nap_calabria_road = {
+		icon = me_mission_hungary_road
+		required_missions = {
+		}
+		provinces_to_highlight = {
+			area = calabria_area
+		}
+		position = 11
+		trigger = {
+			stability = 2
+			treasury = 300
+			calabria_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_treasury = -300
+			every_province = {
+				limit = {
+					area = calabria_area
+				}
+				add_base_tax = 2
+				add_base_manpower = 2
+			}
+			every_province = {
+				limit = {
+					area = calabria_area
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_prosperity = 25
+				}
+				else = {
+					add_devastation = -1
+				}
+			}
+			calabria_area = {
+				add_province_modifier = {
+					name = nap_development3
+					duration = -1
+				}
+			}
+		}
+	}
+
 }
 
 naples_missions_2 = {
@@ -435,6 +482,10 @@ naples_missions_2 = {
 		}
 		position = 6
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAP_INDEP_SPAIN
+				has_country_flag = nap_coronated
+			}
 			2983 = {
 				development = 16
 				base_production = 6
@@ -479,7 +530,7 @@ naples_missions_2 = {
 			}
 			121 = {
 				owned_by = ROOT
-				development = 25
+				development = 30
 			}
 			num_of_light_ship = GEN
 			estate_loyalty = {
@@ -677,7 +728,7 @@ naples_missions_3 = {
 		}
 	}
 
-	nap_sicily = {
+	nap_two_sicilies = {
 		icon = me_mission_byzantium_in_italian_shores
 		required_missions = { 
 			nap_freedom 
@@ -690,6 +741,10 @@ naples_missions_3 = {
 		}
 		position = 6
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAP_INDEP_SPAIN
+				has_country_flag = nap_coronated
+			}
 			sicily_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -713,114 +768,86 @@ naples_missions_3 = {
 		}
 	}
 
-	nap_venetian_goods = {
-		icon = mission_disrupt_portuguese_trade
+	nap_foothold_levant = {
+		icon = me_mission_merchant_navy
 		required_missions = {
 			nap_republic_amalfi
+			nap_traversing_adriatic
 		}
 		position = 7
 		trigger = {
-			num_of_galley = VEN
-			112 = { #Venice
+			mercantilism = 17
+			151 = { #Constantinople
 				trade_share = {
 					country = ROOT
 					share = 20
 				}
 			}
-			OR = {
-				num_of_owned_provinces_with = {
-					value = 2
-					owned_by = ROOT
-					province_has_center_of_trade_of_level = 1
-					any_trade_node_member_province = {
-						province_id = 112
-					}
-				}
-				num_of_owned_provinces_with = {
-					value = 5
-					owned_by = ROOT
-					has_port = yes
-					any_trade_node_member_province = {
-						province_id = 112
-					}
-				}
-			}
 		}
 		effect = {
-			random_province = {
-				limit = {
-					owned_by = ROOT
-					area = apulia_area
-					NOT = {
-						province_has_center_of_trade_of_level = 1
-					}
-				}
-				add_base_production = 2
-				center_of_trade = 1
-			}
-			add_country_modifier = {
-				name = nap_dominating_adriatic
-				duration = 7300
-			}
-			if = {
-				limit = {
-					exists = VEN
-				}
-				add_casus_belli = {
-					type = cb_trade_war
-					months = 300
-					target = VEN
-				}
-			}
-			custom_tooltip = NAP_VENETIAN_GOODS_TOOLTIP
-			hidden_effect = {
-				112 = {
-					every_trade_node_member_province = {
-						limit = {
-							owned_by = VEN
-							has_port = yes
-							NOT = { owned_by = ROOT }
-							NOT = { is_permanent_claim = ROOT }
+			321 = {
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
 						}
-						add_permanent_claim = ROOT
 					}
+					add_permanent_claim = ROOT
+				}
+			}
+			377 = {				# Aleppo
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = nap_italian_chestnut
+				}
+			}
+			358 = {				# Alexandria
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = nap_italian_chestnut
 				}
 			}
 		}
 	}
 
-	nap_conquest_antioch = {
-		icon = mission_arabian_fort
+	nap_goods_east = {
+		icon = mission_dominate_home_trade_node
 		required_missions = {
-			nap_crown_greece
+			nap_foothold_levant
 		}
 		provinces_to_highlight = {
-			area = aleppo_area
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			province_id = 321
 		}
 		position = 8
 		trigger = {
-			aleppo_area = {
-				type = all
+			321 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				religion = catholic
 			}
-			legitimacy = 85
 		}
 		effect = {
-			syria_area = {
-				limit = {
-					NOT = { 
-						owned_by = ROOT 
-					}
+			321 = {
+				add_province_modifier = {
+					name = nap_spyce_trade
+					duration = 7300
 				}
-				add_permanent_claim = ROOT
+				add_building_construction = {
+					building = grand_shipyard
+					speed = 0.75
+					cost = 0
+				}
+				custom_tooltip = NAP_GALLEY_TOOLTIP
+				hidden_effect = {
+					galley = ROOT
+					galley = ROOT
+					galley = ROOT
+					galley = ROOT
+					galley = ROOT
+				}
 			}
-			country_event = { 
-					id = ME_Naples_Events.7
-				}
 		}
 	}
 
@@ -828,6 +855,7 @@ naples_missions_3 = {
 		icon = mission_establish_high_seas_navy
 		required_missions = {
 			nap_riches_naples
+			nap_crown_greece
 		}
 		position = 9
 		trigger = {
@@ -1000,6 +1028,10 @@ naples_missions_4 = {
 		}
 		position = 6
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NAP_INDEP_SPAIN
+				has_country_flag = nap_coronated
+			}
 			manpower_percentage = 1
 			war_exhaustion = 0
 		}
@@ -1047,7 +1079,7 @@ naples_missions_4 = {
 				country_or_non_sovereign_subject_holds = ROOT 
 			}
 		}
-		position = 7
+		position = 8
 		trigger = {
 			albania_area = {
 				type = all
@@ -1133,7 +1165,7 @@ naples_missions_4 = {
 				province_id = 1773
 				}
 		}
-		position = 8
+		position = 9
 		trigger = {
 			army_size = TUR
 			144 = {
@@ -1184,7 +1216,8 @@ naples_missions_4 = {
 	nap_conquest_constantinople = {
 		icon = me_mission_byzantium_flag_red
 		required_missions = {
-			nap_doors_christianity 
+			nap_doors_christianity
+			nap_ottoman_domain
 		}
 		provinces_to_highlight = {
 			OR = {
@@ -1194,7 +1227,7 @@ naples_missions_4 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
-		position = 9
+		position = 10
 		trigger = {
 			thrace_area = {
 				type = all
@@ -1239,7 +1272,7 @@ naples_missions_5 = {
 			natural_scientist = 2
 			121 = {
 				owned_by = ROOT
-				development = 27
+				development = 30
 			}
 		}
 		effect = {
@@ -1268,6 +1301,8 @@ naples_missions_5 = {
 	nap_royal_palace = {
 		icon = me_mission_generic_old_university
 		required_missions = {
+			nap_freedom
+			nap_university
 		}
 		provinces_to_highlight = {
 			province_id = 121
@@ -1305,62 +1340,15 @@ naples_missions_5 = {
 		}
 	}
 
-	nap_dev3 = {
-		icon = me_mission_hungary_road
-		required_missions = {
-		}
-		provinces_to_highlight = {
-			area = calabria_area
-		}
-		position = 7
-		trigger = {
-			stability = 2
-			treasury = 300
-			calabria_area = {
-				type = all
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			add_treasury = -300
-			every_province = {
-				limit = {
-					area = calabria_area
-				}
-				add_base_tax = 2
-				add_base_manpower = 2
-			}
-			every_province = {
-				limit = {
-					area = calabria_area
-				}
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
-					add_prosperity = 25
-				}
-				else = {
-					add_devastation = -1
-				}
-			}
-			calabria_area = {
-				add_province_modifier = {
-					name = nap_development3
-					duration = -1
-				}
-			}
-		}
-	}
-
-	nap_dev4 = {
+	nap_apulia_lighthouse = {
 		icon = me_mission_aragon_lighthouse_of_alexandria
 		required_missions = {
+			nap_traversing_adriatic
 		}
 		provinces_to_highlight = {
 			area = apulia_area
 		}
-		position = 8
+		position = 7
 		trigger = {
 			stability = 2
 			treasury = 300
@@ -1394,15 +1382,50 @@ naples_missions_5 = {
 			}
 		}
 	}
-
-	nap_dev5 = {
+	
+	nap_conquest_antioch = {
+		icon = mission_arabian_fort
+		required_missions = {
+			nap_crown_greece
+		}
+		provinces_to_highlight = {
+			area = aleppo_area
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		position = 9
+		trigger = {
+			aleppo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				religion = catholic
+			}
+			legitimacy = 85
+		}
+		effect = {
+			syria_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = { 
+					id = ME_Naples_Events.7
+				}
+		}
+	}
+	
+	nap_sicily = {
 		icon = me_mission_malta_expand_to_sicily
 		required_missions = {
 		}
 		provinces_to_highlight = {
 			area = sicily_area
 		}
-		position = 9
+		position = 11
 		trigger = {
 			sicily_area = {
 				type = all
@@ -1432,5 +1455,5 @@ naples_missions_5 = {
 			}
 		}
 	}
-	
+
 }
