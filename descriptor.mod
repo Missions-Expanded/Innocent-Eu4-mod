@@ -1,5 +1,5 @@
 name="Missions Expanded"
-path="C:/Users/COOL VASILIS/Documents/Paradox Interactive/Europa Universalis IV/mod/missions"
+archive="mod/missions.zip"
 tags={
 	"Historical"
 	"Missions And Decisions"
@@ -7,6 +7,5 @@ tags={
 	"Gameplay"
 	"New Nations"
 }
-picture="thumbnail.png"
+picture="ME.png"
 supported_version="1.29.*.*"
-remote_file_id="1349005102"
