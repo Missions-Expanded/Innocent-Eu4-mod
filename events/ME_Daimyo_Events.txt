@@ -26,6 +26,14 @@ country_event = { #Ashikaga Succession Crisis - For Ashikaga
 					NOT = { tag = YMN }
 				}
 				country_event = { id = ME_Daimyo_Events.2 }
+				set_variable = {
+					which = Daimyo_Support_for_HSK
+					value = 0
+				}
+				set_variable = {
+					which = Daimyo_Support_for_YMN
+					value = 0
+				}
 			}
 		}
 		add_legitimacy = -10
@@ -266,5 +274,69 @@ country_event = { #Buddhism in Japan
 		
 		ai_chance = { factor = 85 }
 		add_stability_or_adm_power = yes
+	}
+}
+
+country_event = { #Onset of the War
+	id = ME_Daimyo_Events.8
+	title = ME_Daimyo_Events.8.t
+	desc = ME_Daimyo_Events.8.d
+	picture = DIPLOMACY_eventPicture
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	trigger = {
+		had_global_flag = {
+			flag = JAP_crisis
+			days = 3650
+		}
+		OR = {
+			tag = HSK
+			tag = YMN
+		}
+	}
+	
+	option = {
+		name = ME_Daimyo_Events.8.a
+		if = {
+			limit = {
+				ai = yes
+				tag = HSK
+			}
+			declare_war_with_cb = {
+				who = YMN
+				casus_belli = cb_onin_war 
+			}
+		}
+		else_if = {
+			limit = {
+				ai = yes
+				tag = YMN
+			}
+			declare_war_with_cb = {
+				who = HSK
+				casus_belli = cb_onin_war 
+			}
+		}
+		else_if = {
+			limit = {
+				tag = HSK
+			}
+			add_casus_belli = {
+				target = YMN
+				type = cb_onin_war
+				months = 60
+			}
+		}
+		else = {
+			add_casus_belli = {
+				target = HSK
+				type = cb_onin_war
+				months = 60
+			}
+		}
+		clr_country_flag = JAP_crisis #disable ability to influence
+		ai_chance = { factor = 100 }
 	}
 }
