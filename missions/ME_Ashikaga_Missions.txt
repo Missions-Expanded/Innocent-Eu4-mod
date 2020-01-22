@@ -21,17 +21,22 @@ ASK_missions_1 = {
 		required_missions = { }
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = ME_Ashikaga_Tooltips.3
+				tooltip = ASK_DAIMYO_CONTRIBUTION_EVENT_HAS_HAPPENED
 				has_country_flag = JAP_daimyo_contribution_flag
 			}
 		}
 		effect = {
-			add_stability = 1
+			add_stability_or_adm_power = yes
 			if = {
 				limit = {
 					has_dlc = "Mandate of Heaven"
 				}
-				remove_ruler_personality = obsessive_perfectionist_personality
+				if = {
+					limit = {
+						ruler_has_personality = obsessive_perfectionist_personality
+					}
+					remove_ruler_personality = obsessive_perfectionist_personality
+				}
 				add_ruler_personality = architectural_visionary_personality
 			}
 			else = {
@@ -44,6 +49,7 @@ ASK_missions_1 = {
 			}
 		}
 	}
+	
 	ASK_development_plan = {
 		icon = mission_asian_city
 		position = 3
@@ -77,11 +83,15 @@ ASK_missions_1 = {
 		}
 		effect = {
 			capital_scope = {
-				add_institution_embracement = {
-					which = renaissance
-					value = 30
+				if = {
+					limit = {
+						NOT = { renaissance = 100 }
+					}
+					add_institution_embracement = {
+						which = renaissance
+						value = 30
+					}
 				}
-				
 			}
 			if = {
 				limit = {
@@ -101,6 +111,7 @@ ASK_missions_1 = {
 			}
 		}
 	}
+	
 	ASK_temple = {
 		icon = mission_rb_trinity_college_dublin
 		position = 4
@@ -124,6 +135,7 @@ ASK_missions_1 = {
 		}
 	}
 }
+
 ASK_missions_2 = {
 	slot = 2
 	generic = no
@@ -147,11 +159,12 @@ ASK_missions_2 = {
 		required_missions = { ASK_the_kyoto_contribution ASK_restore_shogun_authority }
 		trigger = {
 			num_of_light_ship = 5
+			num_of_subjects = 3
 			calc_true_if = {
 				all_subject_country = {
 					has_divert_trade = yes
 				}
-				value = 3
+				amount = 3
 			}
 		}
 		effect = {
@@ -169,18 +182,17 @@ ASK_missions_2 = {
 			}
 		}
 	}
+	
 	ASK_castle_of_capital = {
 		icon = mission_japanese_fort
 		position = 4
 		required_missions = { ASK_development_plan }
 		provinces_to_highlight = {
 			is_capital_of = ROOT
-			AND = {
-				NOT = { has_building = fort_15th }
-				NOT = { has_building = fort_16th }
-				NOT = { has_building = fort_17th }
-				NOT = { has_building = fort_18th }
-			}
+			NOT = { has_building = fort_15th }
+			NOT = { has_building = fort_16th }
+			NOT = { has_building = fort_17th }
+			NOT = { has_building = fort_18th }
 		}
 		trigger = {
 			capital_scope = {
@@ -220,7 +232,9 @@ ASK_missions_2 = {
 					limit = {
 						has_building = fort_18th
 					}
-					add_mil_power = 200
+					ROOT = {
+						add_mil_power = 200
+					}
 				}
 				#add_province_modifier = {
 				#	name = ASK_capital_fortifications
@@ -230,8 +244,8 @@ ASK_missions_2 = {
 			}
 		}
 	}
-
 }
+
 ASK_missions_3 = {
 	generic = no
 	slot = 3
@@ -258,36 +272,28 @@ ASK_missions_3 = {
 				diplomat = 1
 				statesman = 1
 			}
-			NOT = {
-				any_country = {
-					is_subject_of = ROOT
-					liberty_desire = 30
-				}
+			all_subject_country = {
+				NOT = { liberty_desire = 30 }
 			}
 		}
 		effect = {
-			add_legitimacy = 5
+			add_legitimacy_equivalent = { value = 5 }
 			add_country_modifier = {
 				name = ASK_Reinstated
 				duration = 7300
 			}
 		}
 	}
+	
 	ASK_enforce_diplomatic_attendance  = {
 		icon = mission_scholar_officials
 		position = 2
 		required_missions = { ASK_restore_shogun_authority }
 		trigger = {
-			all_subject_country = {
-				has_opinion = {
-					who = ROOT
-					value = 125
-				}
-			}
 			if = {
 				limit = {
-					is_expanded_mod_active = { mod = governments }
 					has_dlc = "Dharma"
+					is_expanded_mod_active = { mod = governments }
 				}
 				OR = {
 					has_reform = diplomatic_positions_reform
@@ -297,9 +303,20 @@ ASK_missions_3 = {
 			else = {
 				diplomat = 2
 			}	
+			all_subject_country = {
+				has_opinion = {
+					who = ROOT
+					value = 125
+				}
+			}
 		}
 		effect = {
-			change_dip = 1
+			if = {
+				limit = {
+					NOT = { DIP = 6 }
+				}
+				change_dip = 1
+			}
 			add_prestige = 10
 			add_country_modifier = {
 				name = ASK_enforced_attendance
@@ -307,23 +324,25 @@ ASK_missions_3 = {
 			}
 		}
 	}
+	
 	ASK_diplomatic_integration  = {
 		icon = mission_rb_monopolize_the_channel
 		position = 3
 		required_missions = { ASK_enforce_diplomatic_attendance }
 		trigger = {
-			num_of_owned_provinces_with = {
-				region = japan_region
-				value = 5
-			}
 			has_country_modifier = annexers_legacy 
+			num_of_owned_provinces_with = {
+				value = 5
+				region = japan_region
+			}
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 			remove_country_modifier = annexers_legacy
 		}
 	}
 }
+
 ASK_missions_4 = {
 	generic = no
 	slot = 4
@@ -340,6 +359,7 @@ ASK_missions_4 = {
 		}
 	}
 	has_country_shield = yes
+	
 	ASK_rein_the_daimyo_lords  = {
 		icon = mission_noble_council
 		position = 2
@@ -348,20 +368,19 @@ ASK_missions_4 = {
 			OR = {
 				full_idea_group = influence_ideas
 				full_idea_group = diplomatic_ideas
-				dip = 5
+				DIP = 5
 			}
 		}
 		effect = {
+			add_prestige = 15
 			add_ruler_modifier = {
 				name = ASK_benevolent_rule
 				duration = -1
 			}
-			add_prestige = 15
-			#no personality, as we cannot reliably control it.
 		}
 	}
-
 }
+
 ASK_missions_5 = {
 	generic = no
 	slot = 5
@@ -389,7 +408,7 @@ ASK_missions_5 = {
 					has_dlc = "Mandate of Heaven"
 				}
 				custom_trigger_tooltip = {
-					tooltip = ME_Ashikaga_Tooltips.4
+					tooltip = ASK_HAS_ENACTED_SWORD_HUNT_ABILITY
 					has_country_modifier = overlord_sword_hunt 
 				}
 			}
@@ -408,15 +427,7 @@ ASK_missions_5 = {
 			else = {
 				add_army_tradition = 15
 			}
-			custom_tooltip = ME_Ashikaga_Tooltips.5
-			tooltip = {
-				random_subject_country = {
-					add_opinion = {
-						who = ROOT
-						modifier = ASK_hunted_down_the_ronin
-					}
-				}
-			}
+			custom_tooltip = ASK_DAIMYO_OPINION_INCREASED
 			hidden_effect = {
 				every_subject_country = {
 					limit = {
@@ -430,5 +441,4 @@ ASK_missions_5 = {
 			}
 		}
 	}
-
 }
