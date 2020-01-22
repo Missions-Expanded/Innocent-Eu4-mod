@@ -379,6 +379,25 @@ ASK_missions_4 = {
 			}
 		}
 	}
+	ASK_assign_tosenbugyo = {
+		icon = mission_japanese_samurai
+		position = 4
+		required_missions = { ASK_recruit_brilliant_minds }
+		trigger = {
+			legitimacy = 100
+			prestige = 25
+			stability = 2
+			calc_true_if = {
+				all_subject_country = {
+					is_subject_of_type = daimyo_vassal 
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_adm_power = 100
+		}
+	}
 }
 
 ASK_missions_5 = {
@@ -439,6 +458,69 @@ ASK_missions_5 = {
 					}
 				}
 			}
+		}
+	}
+	ASK_recruit_brilliant_minds = {
+		icon = mission_japanese_samurai
+		position = 3
+		required_missions = { ASK_hunt_for_ronin ASK_enforce_diplomatic_attendance }
+		trigger = {
+			has_mil_advisor = yes
+			OR = {
+				has_leader_with = { fire = 4 }
+				has_leader_with = { shock = 4 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ASK_military_minds
+				duration = 9125
+			}
+		}
+	}
+	ASK_punish_warmongers = {
+		icon = mission_japanese_samurai
+		position = 4
+		required_missions = { ASK_recruit_brilliant_minds }
+		trigger = {
+			any_subject_country = {
+				is_subject_of_type = daimyo_vassal 
+				reverse_has_opinion_modifier = {
+					who = ROOT
+					modifier = aggressive_expansion
+					value = 15
+				}
+			}
+		}
+		effect = {
+			every_subject_country = {
+				if = {
+					limit = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+						is_subject_of_type = daimyo_vassal 
+					}
+					add_trust = {
+						who = ROOT
+						value = 25
+						mutual = yes
+					}
+				}
+			}
+			hidden_effect = {
+				every_subject_country = {
+					every_subject_country = {
+						add_opinion = {
+							who = THIS
+							modifier = aggressive_expansion
+							value = 20
+						}
+					}
+				}
+			}
+			custom_tooltip = ASK_DAIMYO_WILL_BE_PUNISHED
 		}
 	}
 }
