@@ -105,6 +105,10 @@ naples_missions_1 = {
 				}
 				PAP = {
 					add_historical_friend = ROOT
+					country_event = {
+						id = ME_Naples_Events.13
+						months = 3
+					}
 				}
 				add_historical_friend = PAP
 				125 = { #Palermo
@@ -112,17 +116,6 @@ naples_missions_1 = {
 						owned_by = ROOT
 					}
 					add_cardinal = yes
-				}
-				emilia_romagna_area = {
-					limit = {
-						owned_by = PAP
-						NOT = {
-							is_core = ROOT
-						}
-					}
-					add_core = NAP
-					cede_province = NAP
-					remove_core = PAP
 				}
 				tuscany_area = {
 					limit = {
@@ -250,125 +243,6 @@ naples_missions_1 = {
 		}
 	}
 
-
-	nap_berbers_raiding = {
-		icon = mission_galleys_in_port
-		required_missions = {
-			nap_riches_naples
-		}
-		position = 5
-		trigger = {
-			num_of_admirals = 1
-			#Tunis exist
-			OR = {
-				341 = { #Tunis
-					trade_share = {
-						country = ROOT
-						share = 20
-					}
-				}
-				if = {
-					limit = {
-						exists = TUN
-					}
-					341 = { #Tunis
-						trade_share = {
-							country = TUN
-							share = 15
-						}
-					}
-					num_of_light_ship = TUN
-				}
-				#Tunis does not exist, but a maghrebi faction has taken its place
-				else_if = {
-					limit = {
-						NOT = {
-							exists = TUN
-						}
-					}
-					any_country = {
-						limit = {
-							owns_or_non_sovereign_subject_of = tunisia_area
-							culture = maghrebi
-						}
-						341 = { #Tunis
-							trade_share = {
-								country = THIS
-								share = 15
-							}
-						}
-						NOT = {
-							num_of_light_ship = ROOT
-						}
-					}
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = nap_counter_raids
-				duration = 7300
-			}
-			#Tunis exist
-			if = {
-				limit = {
-					exists = TUN
-				}
-				tunisia_area = {
-					limit = {
-						NOT = { 
-							owned_by = ROOT 
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-				add_casus_belli = {
-					type = cb_trade_war
-					months = 300
-					target = TUN
-				}
-			}
-			#Tunis does not exist, but a maghrebi faction has taken its place
-			else_if = {
-				limit = {
-					NOT = {
-						exists = TUN
-					}
-				}
-				every_country = {
-					limit = {
-						owns_or_non_sovereign_subject_of = tunisia_area
-						culture = maghrebi
-					}
-						add_casus_belli = {
-						type = cb_trade_war
-						months = 300
-						target = THIS
-					}
-				}
-				tunisia_area = {
-					limit = {
-						owned_by = THIS
-						NOT = { 
-							owned_by = ROOT 
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			else = {
-				tunisia_area = {
-					limit = {
-						NOT = { 
-							owned_by = ROOT 
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-
 	nap_calabria_road = {
 		icon = me_mission_hungary_road
 		required_missions = {
@@ -376,7 +250,7 @@ naples_missions_1 = {
 		provinces_to_highlight = {
 			area = calabria_area
 		}
-		position = 7
+		position = 4
 		trigger = {
 			stability = 2
 			treasury = 300
@@ -417,6 +291,156 @@ naples_missions_1 = {
 		}
 	}
 
+	nap_berbers_raiding = {
+		icon = mission_galleys_in_port
+		required_missions = {
+			nap_riches_naples
+		}
+		position = 5
+		trigger = {
+			num_of_admirals = 1
+			#Tunis exist
+			OR = {
+				341 = { #Tunis
+					trade_share = {
+						country = ROOT
+						share = 20
+					}
+				}
+				if = {
+					limit = {
+						exists = TUN
+					}
+					341 = { #Tunis
+						trade_share = {
+							country = TUN
+							share = 15
+						}
+					}
+					num_of_light_ship = TUN
+				}
+				#A maghrebi faction has taken the place of Tunis
+				else_if = {
+					limit = {
+						NOT = {
+							exists = TUN
+						}
+					}
+					any_country = {
+						owns_or_non_sovereign_subject_of = tunisia_area
+						culture = maghrebi
+						341 = { #Tunis
+							trade_share = {
+								country = THIS
+								share = 15
+							}
+						}
+						NOT = {
+							num_of_light_ship = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = nap_counter_raids
+				duration = 7300
+			}
+			#Tunis exist
+			if = {
+				limit = {
+					exists = TUN
+				}
+				tunisia_area = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+				add_casus_belli = {
+					type = cb_trade_war
+					months = 300
+					target = TUN
+				}
+			}
+			#A maghrebi faction has taken the place of Tunis
+			else_if = {
+				limit = {
+					NOT = {
+						exists = TUN
+					}
+				}
+				every_country = {
+					limit = {
+						owns_or_non_sovereign_subject_of = tunisia_area
+						culture = maghrebi
+					}
+					add_casus_belli = {
+						type = cb_trade_war
+						months = 300
+						target = THIS
+					}
+				}
+				tunisia_area = {
+					limit = {
+						owned_by = THIS
+						NOT = { 
+							owned_by = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			else = {
+				tunisia_area = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	nap_dauphine = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_toulouse
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = languedoc_area
+				province_id = 198
+			}
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		trigger = {
+			languedoc_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			198 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			if = {
+				limit = {
+					exists = ARA
+				}
+				
+			}
+		}
+		effect = {
+			
+		}
+	}
 }
 
 naples_missions_2 = {
@@ -692,6 +716,144 @@ naples_missions_2 = {
 		}
 	}
 	
+	nap_provence = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_king_carlo
+		}
+		position = 8
+		trigger = {
+			if = {
+				limit = {
+					exists = PRO
+				}
+				diplomatic_reputation = 3
+				reverse_has_opinion = {
+					who = PRO
+					value = 100
+				}
+				has_opinion = {
+					who = PRO
+					value = 100
+				}
+				marriage_with = PRO
+			}
+			else = {
+				legitimacy = 90
+				manpower_percentage = 1
+				army_size_percentage = 1
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = PRO
+				}
+				PRO = {
+					country_event = {
+						id = ME_Naples_Events.6
+						months = 3
+					}
+				}
+			}
+			else = {
+				every_province = {
+					limit = {
+						is_core = PRO
+						region = france_region
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = nap_provence_modifier
+				duration = 7300
+			}
+		}
+	}
+
+	nap_toulouse = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_provence
+		}
+		position = 9
+		trigger = {
+			if = {
+				limit = {
+					exists = PRO
+				}
+				PRO = {
+					is_subject_of = NAP
+				}
+			}
+			else = {
+				provence_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			languedoc_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			198 = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			every_province = {
+				limit = {
+					area = provence_area
+				}
+				add_local_autonomy = -20
+			}
+		}
+	}
+
+	nap_spanish_problem = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_toulouse
+		}
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = languedoc_area
+				province_id = 198
+			}
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		trigger = {
+			languedoc_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			198 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			if = {
+				limit = {
+					exists = ARA
+				}
+
+			}
+		}
+		effect = {
+			
+		}
+	}
 }
 
 naples_missions_3 = {
@@ -830,6 +992,7 @@ naples_missions_3 = {
 		}
 		effect = {
 			321 = {
+				add_center_of_trade_level = 1
 				add_province_modifier = {
 					name = nap_spyce_trade
 					duration = 7300
@@ -930,6 +1093,81 @@ naples_missions_3 = {
 		}
 	}
 
+	nap_king_carlo = {
+		icon = me_mission_get_pu
+		required_missions = {
+		}
+		position = 7
+		trigger = {
+			legitimacy = 90
+			custom_trigger_tooltip = {
+				tooltip = NAP_INDEP_SPAIN
+				has_country_flag = nap_coronated
+			}
+		}
+		effect = {
+			east_adriatic_coast_area = {
+				limit = {
+					NOT = {
+						country_or_non_sovereign_subject_holds = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			albania_area = {
+				limit = {
+					NOT = {
+						country_or_non_sovereign_subject_holds = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			loire_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+			provence_area = {
+				limit = {
+					NOT = { 
+						owned_by = ROOT 
+					}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	nap_king_jerusalem = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_king_carlo
+		}
+		position = 8
+		provinces_to_highlight = {
+			area = palestine_area
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		trigger = {
+			palestine_area = {
+				type = all
+				is_core = ROOT
+				religion = catholic
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = nap_deus_vult
+				duration = -1
+			}
+		}
+	}
+
 }
 
 naples_missions_4 = {
@@ -940,86 +1178,6 @@ naples_missions_4 = {
 		tag = NAP
 	}
 	has_country_shield = yes
-
-	nap_provence = {
-		icon = me_mission_get_pu
-		required_missions = {
-		}
-		provinces_to_highlight = {
-		}
-		position = 1
-		trigger = {
-			if = {
-				limit = {
-					exists = PRO
-				}
-				diplomatic_reputation = 3
-				reverse_has_opinion = {
-					who = PRO
-					value = 100
-				}
-				has_opinion = {
-					who = PRO
-					value = 100
-				}
-				marriage_with = PRO
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						exists = PRO
-					}
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					exists = PRO
-				}
-				PRO = {
-					country_event = {
-						id = ME_Naples_Events.6
-						months = 3
-					}
-				}
-				loire_area = {
-					limit = {
-						NOT = { 
-							owned_by = ROOT 
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-				provence_area = {
-					limit = {
-						NOT = { 
-							owned_by = ROOT 
-						}
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = {
-						exists = PRO
-					}
-				}
-				every_province = {
-					limit = {
-						is_core = PRO
-						region = france_region
-					}
-					add_permanent_claim = ROOT
-				}
-				add_country_modifier = {
-					name = nap_provence_modifier
-					duration = 7300
-				}
-			}
-		}
-	}
 
 	nap_traversing_adriatic = {
 		icon = mission_invade_island
@@ -1074,6 +1232,8 @@ naples_missions_4 = {
 		provinces_to_highlight = {
 			OR = {
 				area = albania_area
+				province_id = 144
+				province_id = 147
 			}
 			NOT = { 
 				country_or_non_sovereign_subject_holds = ROOT 
@@ -1249,6 +1409,115 @@ naples_missions_4 = {
 		}
 	}
 	
+	nap_dalmatian_shore = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_king_carlo
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = east_adriatic_coast_area
+			}
+			NOT = { 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		trigger = {
+			east_adriatic_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = nap_hungary_modifier
+				duration = 7300
+			}
+		}
+	}
+
+	nap_magyar_union = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_dalmatian_shore
+		}
+		position = 9
+		trigger = {
+			if = {
+				limit = {
+					exists = HUN
+				}
+				diplomatic_reputation = 3
+				reverse_has_opinion = {
+					who = HUN
+					value = 100
+				}
+				has_opinion = {
+					who = HUN
+					value = 100
+				}
+				marriage_with = HUN
+			}
+			else = {
+				legitimacy = 90
+				manpower_percentage = 1
+				army_size_percentage = 1
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = HUN
+				}
+				HUN = {
+					country_event = {
+						id = ME_Naples_Events.14
+						months = 3
+					}
+				}
+			}
+			else = {
+				every_province = {
+					limit = {
+						is_core = HUN
+						region = balkan_region
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			every_province = {
+				limit = {
+					area = east_adriatic_coast_area
+				}
+				add_local_autonomy = -20
+			}
+		}
+	}
+
+	nap_symmetry_1 = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_magyar_union
+		}
+		position = 10
+		trigger = {
+			if = {
+				limit = {
+					exists = HUN
+				}
+				HUN = {
+					is_subject_of = NAP
+				}
+			}
+			else = {
+				
+			}
+		}
+		effect = {
+			
+		}
+	}
 }
 
 naples_missions_5 = {
@@ -1347,6 +1616,7 @@ naples_missions_5 = {
 		}
 		provinces_to_highlight = {
 			area = apulia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 3
 		trigger = {
@@ -1383,6 +1653,44 @@ naples_missions_5 = {
 		}
 	}
 	
+	nap_sicily = {
+		icon = me_mission_malta_expand_to_sicily
+		required_missions = {
+		}
+		provinces_to_highlight = {
+			area = sicily_area
+		}
+		position = 4
+		trigger = {
+			sicily_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			sicily_area = {
+				add_province_modifier = {
+					name = nap_development5
+					duration = -1
+				}
+			}
+			every_province = {
+				limit = {
+					area = sicily_area
+				}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_prosperity = 25
+				}
+				else = {
+					add_devastation = -1
+				}
+			}
+		}
+	}
+
 	nap_conquest_antioch = {
 		icon = mission_arabian_fort
 		required_missions = {
@@ -1417,43 +1725,28 @@ naples_missions_5 = {
 				}
 		}
 	}
-	
-	nap_sicily = {
-		icon = me_mission_malta_expand_to_sicily
+
+	nap_symmetry_2 = {
+		icon = me_mission_get_pu
 		required_missions = {
+			nap_magyar_union
 		}
-		provinces_to_highlight = {
-			area = sicily_area
-		}
-		position = 7
+		position = 10
 		trigger = {
-			sicily_area = {
-				type = all
-				owned_by = ROOT
+			if = {
+				limit = {
+					exists = HUN
+				}
+				HUN = {
+					is_subject_of = NAP
+				}
+			}
+			else = {
+				
 			}
 		}
 		effect = {
-			sicily_area = {
-				add_province_modifier = {
-					name = nap_development5
-					duration = -1
-				}
-			}
-			every_province = {
-				limit = {
-					area = sicily_area
-				}
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
-					add_prosperity = 25
-				}
-				else = {
-					add_devastation = -1
-				}
-			}
+			
 		}
 	}
-
 }
