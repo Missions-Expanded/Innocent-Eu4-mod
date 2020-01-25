@@ -5,32 +5,33 @@ country_event = { # The Rise of Oda Nobunaga
 	title = ME_Oda_Events.EVTNAME1
 	desc = ME_Oda_Events.EVTDESC1
 	picture = COURT_eventPicture
-
-	mean_time_to_happen = { months = 12 }
-
+	
+	fire_only_once = yes
+	
 	trigger = {
 		tag = ODA
 		mission_completed = ODA_western_chubu
 	}
+	
+	mean_time_to_happen = { months = 12 }
 
 	option = {
 		name = ME_Oda_Events1.EVTOPT1
-		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 2
-
+		
+		ai_chance = { factor = 50 }
+		
+		tooltip = {
+			kill_ruler = yes
+			if = {
+				limit = {
+					has_heir = yes
+				}
+				kill_heir = yes
 			}
-		}
-		if = {
-			limit = {
-				has_heir = yes
-			}
-			kill_heir = yes
 		}
 		define_ruler = {
-			name = "Oda"
-			dynasty = "Nobunaga"
+			name = "Nobunaga"
+			dynasty = "Oda"
 			adm = 2
 			max_random_adm = 6
 			dip = 2
@@ -40,26 +41,19 @@ country_event = { # The Rise of Oda Nobunaga
 			age = 20
 			claim = 100
 		}
+		set_country_flag = ODA_Nobunaga
 		set_ruler_flag = ODA_Nobunaga
 	}
 
 	option = {
 		name = ME_Oda_Events1.EVTOPT2
+		
 		ai_chance = {
 			factor = 50
 		}
 
-		set_ruler_flag = ODA_Nobunaga
 		add_prestige = 10
-		if = {
-			limit = {
-				stability = 3
-			}
-			add_adm_power = 50
-		}
-		else = {
-			add_stability = 1
-		}
+		add_stability_or_adm_power = yes
 	}
 }
 
@@ -73,15 +67,17 @@ country_event = { # The Rise of Toyotomi Hideyoshi
 
 	trigger = {
 		tag = ODA
-		has_country_flag = ODA_nobunaga
+		has_country_flag = ODA_Nobunaga
 		is_at_war = yes
 	}
 
 	option = {
 		name = ME_Oda_Events2.EVTOPT1
+		
 		ai_chance = {
 			factor = 50
 		}
+		
 		add_mil_power = 50
 		add_army_tradition = 5
 		define_general = {
@@ -95,6 +91,7 @@ country_event = { # The Rise of Toyotomi Hideyoshi
 
 	option = {
 		name = ME_Oda_Events2.EVTOPT2
+		
 		ai_chance = {
 			factor = 50
 		}
@@ -117,21 +114,24 @@ country_event = { # The Death of Nobunaga
 	trigger = {
 		tag = ODA
 		has_country_flag = ODA_Nobunaga
-		NOT = {
-			has_ruler = "Oda Nobunaga" 
-		}
+		NOT = { has_ruler_flag = ODA_Nobunaga }
 	}
 
 	option = {
 		name = ME_Oda_Events3.EVTOPT1
+		
 		ai_chance = {
 			factor = 50
 		}
-		if = {
-			limit = {
-				has_heir = yes
+		
+		tooltip = {
+			kill_ruler = yes
+			if = {
+				limit = {
+					has_heir = yes
+				}
+				kill_heir = yes
 			}
-			kill_heir = yes
 		}
 		define_ruler = {
 			name = "Toyotomi"
@@ -149,9 +149,11 @@ country_event = { # The Death of Nobunaga
 
 	option = {
 		name = ME_Oda_Events3.EVTOPT2
+		
 		ai_chance = {
 			factor = 50
 		}
+		
 		add_estate_loyalty = {
 			estate = estate_nobles
 			loyalty = 20
@@ -173,13 +175,15 @@ country_event = { # Oda Expansionism
 	desc = ME_Oda_Events.EVTDESC4
 	picture = COURT_eventPicture
 
-	is_triggered_only = yes
 	major = yes
+	is_triggered_only = yes
 
 	option = {
 		name = ME_Oda_Events4.EVTOPT1
+		
 		ai_chance = {
 			factor = 50
+			
 			modifier = {
 				factor = 2
 				has_opinion = {
@@ -194,31 +198,26 @@ country_event = { # Oda Expansionism
 				}
 			}
 		}
+		
+		add_country_modifier = {
+			name = ODA_peace_shogun
+			duration = 7300
+		}
 		FROM = {
+			add_stability_or_adm_power = yes
 			add_country_modifier = {
 				name = ODA_appeased_shogun
 				duration = 7300
 			}
-			if = {
-				limit = {
-					stability = 3
-				}
-				add_adm_power = 50
-			}
-			else = {
-				add_stability = 1
-			}
-		}
-		add_country_modifier = {
-			name = ODA_peace_shogun
-			duration = 7300
 		}
 	}
 
 	option = {
 		name = ME_Oda_Events4.EVTOPT2
+		
 		ai_chance = {
 			factor = 50
+			
 			modifier = {
 				factor = 2
 				NOT = {
@@ -237,16 +236,17 @@ country_event = { # Oda Expansionism
 				}
 			}
 		}
+		
+		add_country_modifier = {
+			name = ODA_quelling_daimyo
+			duration = 7300
+		}
 		FROM = {
+			add_stability = -1
 			add_country_modifier = {
 				name = ODA_irritated_shogun
 				duration = 7300
 			}
-			add_stability = -1
-		}
-		add_country_modifier = {
-			name = ODA_quelling_daimyo
-			duration = 7300
 		}
 	}
 }
@@ -257,14 +257,18 @@ country_event = { # Hidden Event needed
 	desc = ME_Oda_Events.EVTDESC5
 	picture = COURT_eventPicture
 
-	is_triggered_only = yes
 	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			save_event_target_as = oda_allied_rival
+		}
+	}
 
 	option = {
 		name = ME_Oda_Events5.EVTOPT1
-		ai_chance = {
-			factor = 100
-		}
-		ROOT = { save_event_target_as = oda_allied_rival }
+		
+		ai_chance = { factor = 100 }
 	}
 }
