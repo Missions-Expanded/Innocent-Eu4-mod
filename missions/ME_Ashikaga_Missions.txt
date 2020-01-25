@@ -14,7 +14,7 @@ ASK_missions_1 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	ASK_the_kyoto_contribution = {
 		icon = mission_high_income
 		position = 1
@@ -27,29 +27,29 @@ ASK_missions_1 = {
 		}
 		effect = {
 			add_stability_or_adm_power = yes
-			# if = {
-				# limit = {
-					# has_dlc = "Rights of Man"
-				# }
-				# if = {
-					# limit = {
-						# ruler_has_personality = obsessive_perfectionist_personality
-					# }
-					# remove_ruler_personality = obsessive_perfectionist_personality
-				# }
-				# add_ruler_personality = architectural_visionary_personality
-			# }
-			# else = {
-				capital_scope = {				
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				if = {
+					limit = {
+						ruler_has_personality = obsessive_perfectionist_personality
+					}
+					remove_ruler_personality = obsessive_perfectionist_personality
+				}
+				add_ruler_personality = architectural_visionary_personality
+			}
+			else = {
+				capital_scope = {
 					add_province_modifier = {
 						name = ASK_daimyo_tributes
 						duration = 7300
 					}
 				}
-			# }
+			}
 		}
 	}
-	
+
 	ASK_development_plan = {
 		icon = mission_asian_city
 		position = 3
@@ -61,7 +61,7 @@ ASK_missions_1 = {
 					NOT = { has_building = temple }
 					NOT = { has_building = cathedral }
 				}
-				AND = { 
+				AND = {
 					NOT = { has_building = marketplace }
 					NOT = { has_building = trade_depot }
 					NOT = { has_building = stock_exchange }
@@ -110,7 +110,7 @@ ASK_missions_1 = {
 			}
 		}
 	}
-	
+
 	ASK_temple = {
 		icon = mission_rb_trinity_college_dublin
 		position = 4
@@ -181,7 +181,7 @@ ASK_missions_2 = {
 			}
 		}
 	}
-	
+
 	ASK_castle_of_capital = {
 		icon = mission_japanese_fort
 		position = 4
@@ -283,7 +283,7 @@ ASK_missions_3 = {
 			}
 		}
 	}
-	
+
 	ASK_enforce_diplomatic_attendance  = {
 		icon = mission_scholar_officials
 		position = 2
@@ -301,7 +301,7 @@ ASK_missions_3 = {
 			}
 			else = {
 				diplomat = 2
-			}	
+			}
 			all_subject_country = {
 				has_opinion = {
 					who = ROOT
@@ -323,13 +323,13 @@ ASK_missions_3 = {
 			}
 		}
 	}
-	
+
 	ASK_diplomatic_integration  = {
 		icon = mission_rb_monopolize_the_channel
 		position = 3
 		required_missions = { ASK_enforce_diplomatic_attendance }
 		trigger = {
-			has_country_modifier = annexers_legacy 
+			has_country_modifier = annexers_legacy
 			num_of_owned_provinces_with = {
 				value = 5
 				region = japan_region
@@ -376,7 +376,7 @@ ASK_missions_4 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	ASK_rein_the_daimyo_lords  = {
 		icon = mission_noble_council
 		position = 2
@@ -396,20 +396,16 @@ ASK_missions_4 = {
 			}
 		}
 	}
+
 	ASK_assign_tosenbugyo = {
 		icon = mission_asian_trader
 		position = 4
 		required_missions = { ASK_recruit_brilliant_minds }
 		trigger = {
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			prestige = 25
 			stability = 2
-			calc_true_if = {
-				all_subject_country = {
-					is_subject_of_type = daimyo_vassal 
-				}
-				amount = 3
-			}
+			daimyo_vassal = 3
 		}
 		effect = {
 			add_adm_power = 100
@@ -439,7 +435,7 @@ ASK_missions_5 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	ASK_hunt_for_ronin = {
 		icon = mission_japanese_samurai
 		position = 1
@@ -451,7 +447,7 @@ ASK_missions_5 = {
 				}
 				custom_trigger_tooltip = {
 					tooltip = ASK_HAS_ENACTED_SWORD_HUNT_ABILITY
-					has_country_modifier = overlord_sword_hunt 
+					has_country_modifier = overlord_sword_hunt
 				}
 			}
 			else = {
@@ -483,6 +479,7 @@ ASK_missions_5 = {
 			}
 		}
 	}
+
 	ASK_recruit_brilliant_minds = {
 		icon = mission_protect_albania
 		position = 3
@@ -501,29 +498,40 @@ ASK_missions_5 = {
 			}
 		}
 	}
+
 	ASK_punish_warmongers = {
 		icon = mission_non-western_cavalry_raid
 		position = 4
 		required_missions = { ASK_recruit_brilliant_minds }
 		trigger = {
 			any_subject_country = {
-				is_subject_of_type = daimyo_vassal 
-				reverse_has_opinion_modifier = {
-					who = ROOT
-					modifier = aggressive_expansion
-					value = 15
+				is_subject_of_type = daimyo_vassal
+				custom_trigger_tooltip = {
+					tooltip = ASK_DAIMYO_WE_HAVE_AT_LEAST_15_AE_OF
+					reverse_has_opinion_modifier = {
+						who = ROOT
+						modifier = aggressive_expansion
+					}
+					NOT = {
+						reverse_has_opinion_modifier = {
+							who = ROOT
+							modifier = aggressive_expansion
+							value = -15
+						}
+					}
 				}
 			}
 		}
 		effect = {
+			custom_tooltip = ASK_DAIMYO_WILL_BE_PUNISHED
 			every_subject_country = {
 				if = {
 					limit = {
+						is_subject_of_type = daimyo_vassal
 						has_opinion = {
 							who = ROOT
 							value = 100
 						}
-						is_subject_of_type = daimyo_vassal 
 					}
 					add_trust = {
 						who = ROOT
@@ -536,14 +544,88 @@ ASK_missions_5 = {
 				every_subject_country = {
 					every_subject_country = {
 						add_opinion = {
-							who = THIS
+							who = PREV
 							modifier = aggressive_expansion
-							value = 20
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
+						}
+						add_opinion = {
+							who = PREV
+							modifier = aggressive_expansion
 						}
 					}
 				}
 			}
-			custom_tooltip = ASK_DAIMYO_WILL_BE_PUNISHED
 		}
 	}
 }
