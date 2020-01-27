@@ -1,0 +1,492 @@
+So_missions_1 = {
+	slot = 1
+	generic = no
+	ai=yes
+	potential = {
+		tag = SOO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	So_Pirate_Fleet = {
+		icon = mission_dhr_seize_the_bengal_coast
+		position = 2
+		required_missions = {So_Grand_Fleet}
+		trigger = {
+		navy_size_percentage = 0.5
+			galley_fraction = 0.5
+		}
+		
+		effect = {
+			capital_scope = {
+				add_unit_construction = {
+					type = galley
+					amount = 5
+					speed = 0.5
+					cost = 0
+				}
+			}
+			add_sailors = 250
+		}
+		
+		
+	}
+	
+	So_Pride_Of_Fleet = {
+		icon = mission_raid_christian_trade
+		position = 4
+		required_missions = {So_Pirate_Fleet}
+		trigger = {
+			OR = {
+				navy_size = 30
+				has_idea_group = naval_ideas
+				
+			}
+			mil = 6
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				capital_scope = {
+					create_flagship = {
+					name = "Merry" 
+					type = galley 
+					}
+				}
+				add_country_modifier = {
+					name = So_the_merry
+					duration = -1
+				}	
+			}
+			else = {
+				capital_scope = {
+					add_unit_construction = {
+						type = galley
+						amount = 5
+						speed = 0.25
+						cost = 0
+					}
+				}
+				add_country_modifier = {
+					name = SO_offensive_fleet
+					duration = 9125‬
+				}
+			}
+		}
+
+	}
+
+}
+
+
+So_missions_2 = {
+	slot = 2
+	generic = no
+	ai=yes
+	potential = {
+		tag = SOO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	So_Grand_Fleet = {
+		icon = mission_junk_boat
+		position = 1
+		trigger = {
+			treasury = 150
+			num_of_admirals = 1
+		}
+		
+		effect = {
+			country_event = { id = ME_So_Events.1}
+		}
+	}
+	
+	So_Tsushima_Temple = {
+		icon = mission_asian_city
+		position = 2
+		required_missions = {So_Grand_Fleet}
+		provinces_to_highlight = {
+			is_capital_of = ROOT 
+		}
+		trigger = {
+			capital_scope = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			
+		}
+		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = SO_development_plan
+					duration = 3650
+				}
+				add_base_tax = 1
+			}
+
+		}
+	}
+	So_Trade_In_Capital = {
+		icon = mission_market_place
+		position = 3
+		required_missions = { So_Tsushima_Temple So_Negotiate_With_Joseon }
+		provinces_to_highlight = {
+				is_capital_of = ROOT
+		}
+		trigger = {
+			capital_scope = {
+				base_production = 5
+			} 
+		}
+		effect = {
+			capital_scope = {
+				if = {
+					limit = {
+						NOT = {province_has_center_of_trade_of_level = 1}
+					}
+					center_of_trade = 1
+				}
+				else_if = {
+					limit = {
+						NOT = {province_has_center_of_trade_of_level = 3}
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			
+		}
+		
+	}
+
+	So_Pirate_King_of_Japan = {
+		icon = mission_war_chest
+		position = 5
+		required_missions = {So_Pride_Of_Fleet So_Toss_a_Coin}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				region = japan_region
+			}
+			NOT = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+			navy_size = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = SO_the_pirate_king
+				duration = -1
+			}
+		}
+	}
+}
+
+SO_missions_3 = {
+	slot = 3
+	generic = no
+	ai=yes
+	potential = {
+		tag = SOO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	So_Negotiate_With_Joseon = {
+		icon = mission_al_andalus
+		position = 2
+		required_missions = {So_Grand_Fleet}
+		provinces_to_highlight = {
+			region = korea_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {has_port = NO}
+			
+		}
+		trigger = {
+			num_of_galley = KOR
+			korea_region = {
+				if = {
+					has_province_modifier = slaves_raided
+				}
+				
+				
+			}
+		}
+		
+		effect = {
+			country_event = {id = ME_SO_Events.2}
+			
+		}
+	}
+	
+	So_Toss_a_Coin = {
+		icon = mission_dhr_entrepot_of_india
+		position = 4
+		required_missions = {So_Negotiate_With_Joseon}
+		trigger = {
+			dip = 6
+			if = {
+				limit = {
+					NOT = {has_dlc = "Golden Century"}
+					NOT = {has_dlc = "Dharma"}
+				}
+				stability = 2
+			}
+			else {
+				OR = {
+					has_reform = pirate_king_reform
+					has_reform = war_against_the_world_doctrine_reform 
+					has_reform = black_market_consortium_reform 
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = SO_ample_spoils
+				duration = 7300
+			}
+		}
+	}
+}
+
+So_missions_4 = {
+	slot = 4
+	generic = no
+	ai=yes
+	potential = {
+		tag = SOO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	So_Foothold_Northern_Kyushu = {
+		icon = mission_retake_ceuta
+		position = 2
+		required_missions = {So_The_Wokou_Militia}
+		provinces_to_highlight = {
+			area = northern_kyushu
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		trigger = {
+				num_of_owned_provinces_with = {
+					value = 2
+					area = northern_kyushu	
+				}
+				
+			}
+			
+			
+		
+		effect = {
+			add_country_modifier = {
+				name = So_presence_in_kyushu
+				duration = -1
+			}
+			mil = 50
+		}
+	}
+	
+	So_raid_china = {
+		icon = mission_great_wall
+		position = 3
+		required_missions = {So_Negotiate_With_Joseon}
+		provinces_to_highlight = {
+			OR = {
+				region = south_china_region
+				region = north_china_region
+			}
+			NOT = {country_or_non_sovereign_subject_holds = ROOT}
+			NOT = {has_port = NO}
+			
+		}
+		trigger = {
+			if = {
+				limit = {
+					NOT = {has_dlc = "Golden Century"}
+				}
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = north_china_region
+							region = south_china_region
+						}
+					}
+					war_with = ROOT
+				}
+			}
+			else = {
+				OR = {
+					north_china_region = {
+						if = {
+							has_province_modifier = slaves_raided
+						}
+					}
+					south_china_region = {
+						if = {
+							has_province_modifier = slaves_raided
+						}
+					}
+				}
+			}
+			treasury = 750
+		}
+		effect = {
+			add_country_modifier = {
+				name = So_strawhat_pirates
+				duration = -1
+			}
+		}
+	}
+	So_the_red_demon = {
+		icon = mission_raid_on_venice
+		position = 4
+		required_missions = {So_secure_southern_japan So_raid_china}
+		trigger = {
+			num_of_galley = 50
+			OR = {
+				has_idea = improved_rams
+				has_leader_with = {
+					admiral = yes
+					shock = 6
+					}
+				has_leader_with = {	
+					admiral = yes
+					fire = 6
+					}
+				
+			}
+			
+		}
+		effect = {
+			add_country_modifier = {
+				name = SO_red_oni_rams
+				duration = -1
+				desc = until_you_forn_japan
+			}
+		}
+	
+	}
+}
+So_missions_5 = {
+	slot = 5
+	generic = no
+	ai=yes
+	potential = {
+		tag = SOO
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	So_The_Wokou_Militia = {
+		icon = mission_dhr_seize_the_bengal_coast
+		position = 1
+		trigger = {
+			if {
+				limit = {
+					NOT = {has_dlc = "Golden Century"}
+				}
+				manpower_percentage = 0.8
+			}
+			else {
+				has_reform = pirate_republic_reform
+			}
+		}
+		effect = {
+			northern_kyushu = {
+				limit = {
+					NOT = {owned_by = ROOT}
+					NOT = {is_core = ROOT}
+				}
+				add_permanent_claim = ROOT
+			}
+			kyushu_area = {
+				limit = {
+					NOT = {owned_by = ROOT}
+					NOT = {is_core = ROOT}
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					NOT = {personality = strict_personality}
+				}
+				add_ruler_personality = strict_personality
+			}
+			
+		}
+		
+	}
+	
+	So_Foothold_Southern_Kyushu = {
+		icon = mission_retake_ceuta
+		required_missions = { So_The_Wokou_Militia }
+		position = 2
+		provinces_to_highlight = {
+			area = kyushu_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		
+		trigger = {
+			kyushu_area = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = SO_push_for_victory
+				duration = -1
+			}
+			
+		}
+	}
+	
+	So_secure_southern_japan = {
+		icon = mission_invade_island
+		required_missions = { So_Foothold_Northern_Kyushu So_Foothold_Southern_Kyushu }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = northern_kyushu
+				area = kyushu_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		trigger = {
+			northern_kyushu = {
+				type = all	
+				owned_by = ROOT
+			}
+			kyushu_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = So_An_Emerging_Power
+				duration = 7300
+			}
+			add_yearly_manpower = 0.5
+			if = {
+				limit = {
+					NOT = { has_dlc = "Cradle of Civilization"}
+				}
+				add_army_tradition = 10
+			}
+			else = {
+				
+				add_army_professionalism = 0.05
+			}
+		}
+	}
+
+}
