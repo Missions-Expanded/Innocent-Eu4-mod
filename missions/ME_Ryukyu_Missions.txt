@@ -31,14 +31,14 @@
 			grown_by_development = 100
 		}
 		effect = {
+			add_country_modifier = {
+				name = RYU_growing
+				duration = 7300
+			}
 			capital_scope = {
 				add_base_tax = 1
 				add_base_production = 1
 				add_base_manpower = 1
-			}
-			add_country_modifier = {
-				name = RYU_growing
-				duration = 7300
 			}
 		}
 	}
@@ -49,8 +49,8 @@
 		required_missions = { RYU_expand RYU_sulfur_center }
 		trigger = {
 			num_of_owned_provinces_with = {
-				superregion = far_east_superregion
 				value = 75
+				superregion = far_east_superregion
 			}
 		}
 		effect = {
@@ -112,13 +112,9 @@ RYU_missions_2 = {
 		required_missions = { RYU_gunpowder_era RYU_welcome_japanese_traders }
 		provinces_to_highlight = {
 			is_capital_of = ROOT
-			NOT = {
-				AND = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-				}
-			}
+			NOT = { has_building = marketplace }
+			NOT = { has_building = trade_depot }
+			NOT = { has_building = stock_exchange }
 		}
 		trigger = {
 			capital_scope = {
@@ -130,11 +126,11 @@ RYU_missions_2 = {
 			}
 		}
 		effect = {
+			add_mil_power = 100
 			add_country_modifier = {
 				name = RYU_technology_sharing
 				duration = 9125
 			}
-			add_mil_power = 100
 		}
 	}
 }
@@ -153,14 +149,35 @@ RYU_missions_3 = {
 		icon = mission_asian_city
 		position = 3
 		required_missions = { }
-		trigger = {
-			any_country = {
-				capital_scope = {
-					region = japan_region
+		provinces_to_highlight = {
+			region = japan_region
+			NOT = { owned_by = ROOT }
+			NOT = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
 				}
-				has_opinion = {
-					who = ROOT
-					value = 75
+			}
+		}
+		trigger = {
+			OR = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 75
+					}
+				}
+				japan_region = {
+					type = all
+					owned_by = ROOT
 				}
 			}
 		}
@@ -175,26 +192,83 @@ RYU_missions_3 = {
 		icon = mission_asian_city
 		position = 4
 		required_missions = { RYU_welcome_japanese_traders RYU_tributary_fleet }
-		trigger = {
-			any_country = {
-				capital_scope = {
+		provinces_to_highlight = {
+			OR = {
+				AND = {
 					region = japan_region
+					NOT = {
+						any_country = {
+							capital_scope = {
+								region = japan_region
+							}
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
 				}
-				has_opinion = {
-					who = ROOT
-					value = 125
-				}
-			}
-			any_country = {
-				capital_scope = {
+				AND = {
 					OR = {
 						region = south_china_region
 						region = north_china_region
 					}
+					NOT = {
+						any_country = {
+							capital_scope = {
+								OR = {
+									region = south_china_region
+									region = north_china_region
+								}
+							}
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
 				}
-				has_opinion = {
-					who = ROOT
-					value = 125
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				any_country = {
+					capital_scope = {
+						region = japan_region
+					}
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+				japan_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			OR = {
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = south_china_region
+							region = north_china_region
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+				AND = {
+					south_china_region = {
+						type = all
+						owned_by = ROOT
+					}
+					north_china_region = {
+						type = all
+						owned_by = ROOT
+					}
 				}
 			}
 		}
@@ -272,6 +346,34 @@ RYU_missions_5 = {
 		icon = mission_asian_city
 		position = 2
 		required_missions = { RYU_fleet }
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+			}
+			NOT = { owned_by = ROOT }
+			NOT = {
+				any_country = {
+					is_emperor_of_china = yes
+				}
+			}
+			NOT = {
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = north_china_region
+							region = south_china_region
+							region = xinan_region
+						}
+					}
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -288,17 +390,33 @@ RYU_missions_5 = {
 				}
 			}
 			else = {
-				any_country = {
-					capital_scope = {
-						OR = {
-							region = north_china_region
-							region = south_china_region
-							region = xinan_region
+				OR = {
+					any_country = {
+						capital_scope = {
+							OR = {
+								region = north_china_region
+								region = south_china_region
+								region = xinan_region
+							}
+						}
+						has_opinion = {
+							who = ROOT
+							value = 100
 						}
 					}
-					has_opinion = {
-						who = ROOT
-						value = 100
+					AND = {
+						north_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						south_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						xinan_region = {
+							type = all
+							owned_by = ROOT
+						}
 					}
 				}
 			}
@@ -315,6 +433,35 @@ RYU_missions_5 = {
 		icon = mission_asian_city
 		position = 4
 		required_missions = { RYU_tributary_fleet RYU_fleet }
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+			}
+			NOT = {
+				any_country = {
+					is_emperor_of_china = yes
+				}
+			}
+			NOT = {
+				any_country = {
+					capital_scope = {
+						OR = {
+							region = north_china_region
+							region = south_china_region
+							region = xinan_region
+						}
+					}
+					ROOT = {
+						has_spy_network_in = {
+							who = PREV
+							value = 100
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -333,18 +480,34 @@ RYU_missions_5 = {
 				}
 			}
 			else = {
-				any_country = {
-					capital_scope = {
-						OR = {
-							region = north_china_region
-							region = south_china_region
-							region = xinan_region
+				OR = {
+					any_country = {
+						capital_scope = {
+							OR = {
+								region = north_china_region
+								region = south_china_region
+								region = xinan_region
+							}
+						}
+						ROOT = {
+							has_spy_network_in = {
+								who = PREV
+								value = 100
+							}
 						}
 					}
-					ROOT = {
-						has_spy_network_in = {
-							who = PREV
-							value = 100
+					AND = {
+						north_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						south_china_region = {
+							type = all
+							owned_by = ROOT
+						}
+						xinan_region = {
+							type = all
+							owned_by = ROOT
 						}
 					}
 				}
