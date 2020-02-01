@@ -2093,6 +2093,345 @@ japan_missions_5_conquest = {
 	}
 }
 
+japan_missions_1_colonial = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = japan_chose_colonial_missions
+	}
+	has_country_shield = yes
+	
+	japan_discover_america = {
+		icon = mission_arabian_sea_trade
+		required_missions = { japan_colonialist_ventures }
+		position = 11
+		trigger = {
+			OR = {
+				south_america = {
+					has_discovered = ROOT
+				}
+				north_america = {
+					has_discovered = ROOT
+				}
+			}
+		}
+		effect = {
+			add_prestige = 10
+			country_event = { id = ME_Japan_Events.17 }
+		}
+	}
+	
+	japan_establish_shokuminchi = {
+		icon = mission_caribbean_cn
+		required_missions = { japan_discover_america }
+		position = 12
+		trigger = {
+			OR = {
+				south_america = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				north_america = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = japan_establish_shokuminchi_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	japan_dominant_power = {
+		icon = me_mission_spain_colonial
+		required_missions = { japan_establish_shokuminchi }
+		position = 13
+		trigger = {
+			colony = 1
+			ADM = 4
+		}
+		effect = {
+			country_event = { id = ME_Japan_Events.18 }
+		}
+	}
+	
+	japan_early_modern_colonial_empire = {
+		icon = mission_colonize_california
+		required_missions = { japan_dominant_power }
+		position = 15
+		trigger = {
+			colony = 2
+			navy_size = 200
+			stability = 2
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				is_great_power = yes
+			}
+			else = {
+				total_development = 1000
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = japan_early_modern_colonial_empire_modifier
+				duration = -1
+				desc = JAP_UNTIL_LESS_THAN_0_STAB
+			}
+			every_subject_country = {
+				limit = {
+					is_colonial_nation = yes
+				}
+				add_country_modifier = {
+					name = japan_early_modern_colonial_empire_subject_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+}
+
+japan_missions_2_colonial = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = japan_chose_colonial_missions
+	}
+	has_country_shield = yes
+	
+	japan_secure_okinawa = {
+		icon = mission_invade_island
+		required_missions = { japan_colonialist_ventures }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 1015
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 10 }
+				AND = {
+					NOT = { has_building = dock }
+					NOT = { has_building = drydock }
+				}
+			}
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 1015
+			1015 = {
+				development = 10
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+		}
+		effect = {
+			1015 = {
+				add_province_modifier = {
+					name = japan_the_island_station_province_modifier
+					duration = -1
+				}
+			}
+			2154 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								owned_by = ROOT
+								is_colony = yes
+							}
+						}
+					}
+					add_siberian_construction = 1000
+				}
+				else_if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+			2155 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								owned_by = ROOT
+								is_colony = yes
+							}
+						}
+					}
+					add_siberian_construction = 1000
+				}
+				else_if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	
+	japan_warlords_of_trade = {
+		icon = mission_disrupt_portuguese_trade
+		required_missions = { japan_secure_okinawa }
+		position = 13
+		provinces_to_highlight = {
+			region = moluccas_region
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 3
+						region = moluccas_region
+						is_city = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+				region = moluccas_region
+				is_city = yes
+			}
+		}
+		effect = {
+			add_years_of_income = 0.5
+			add_country_modifier = {
+				name = japan_warlords_of_trade_modifier
+				duration = 7300
+			}
+			custom_tooltip = JAP_GAINS_PERM_CLAIMS_ON_TRADE_CENTERS_IN_MALAYA
+			custom_tooltip = JAP_GAINS_PERM_CLAIMS_ON_TRADE_CENTERS_IN_INDONESIA
+			hidden_effect = {
+				malaya_region = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						province_has_center_of_trade_of_level = 1
+					}
+					add_permanent_claim = ROOT
+				}
+				indonesia_region = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						province_has_center_of_trade_of_level = 1
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	japan_control_the_spice = {
+		icon = mission_rb_colonise_spice_islands
+		required_missions = { japan_warlords_of_trade }
+		position = 14
+		provinces_to_highlight = {
+			trade_goods = spices
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 2
+						trade_goods = spices
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 2
+				trade_goods = spices
+			}
+		}
+		effect = {
+			country_event = { id = ME_Japan_Events.16 }
+		}
+	}
+	
+	japan_lord_of_indonesia = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = { japan_control_the_spice japan_foothold_in_malacca }
+		position = 15
+		trigger = {
+			1361 = {
+				is_strongest_trade_power = ROOT
+				trade_share = {
+					share = 70
+					country = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = japan_lord_of_indonesia_modifier
+				duration = 10950
+			}
+			if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 2
+						province_has_center_of_trade_of_level = 1
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+				}
+				random_owned_province = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+				random_owned_province = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+			else_if = {
+				limit = {
+					any_owned_province = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+				}
+				random_owned_province = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
+		}
+	}
+}
+
 japan_missions_3_colonial = {
 	slot = 3
 	generic = no
@@ -2331,6 +2670,254 @@ japan_missions_3_colonial = {
 			add_country_modifier = {
 				name = japan_umi_no_teikoku_modifier
 				duration = -1
+			}
+		}
+	}
+}
+
+japan_missions_4_colonial = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = japan_chose_colonial_missions
+	}
+	has_country_shield = yes
+	
+	japan_populate_kurils = {
+		icon = mission_retake_ceuta
+		required_missions = { japan_colonialist_ventures }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 1032
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 1032
+		}
+		effect = {
+			1032 = {
+				add_province_modifier = {
+					name = japan_the_island_station_province_modifier
+					duration = -1
+				}
+			}
+			1033 = {
+				if = {
+					limit = {
+						OR = {
+							is_empty = yes
+							AND = {
+								owned_by = ROOT
+								is_colony = yes
+							}
+						}
+					}
+					add_siberian_construction = 500
+				}
+				else_if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	
+	japan_dawn_of_colonialism = {
+		icon = mission_look_west
+		required_missions = { japan_the_kaiji_kyoku_edict }
+		position = 13
+		trigger = {
+			num_of_explorers = 1
+			num_of_light_ship = 25
+		}
+		effect = {
+			add_dip_power = 100
+			country_event = { id = ME_Japan_Events.20 }
+		}
+	}
+	
+	japan_study_western_ships = {
+		icon = mission_raid_christian_trade
+		required_missions = { japan_dawn_of_colonialism japan_a_fleets_pride }
+		position = 15
+		trigger = {
+			heavy_ship_fraction = 0.25
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				has_flagship = yes
+			}
+			else = {
+				navy_tradition = 80
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 50
+			}
+			else = {
+				OR = {
+					full_idea_group = naval_ideas
+					AND = {
+						navy_size = 100
+						navy_size_percentage = 1
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = japan_study_western_ships_modifier
+				duration = 9125
+			}
+			set_country_flag = enables_ned_hol_naval_professionalism_mechanic
+			custom_tooltip = ENABLES_NED_HOL_NAVAL_PROFESSIONALISM_MECHANIC
+			hidden_effect = {
+				set_variable = { naval_professionalism_var = 0 }
+				set_variable = { naval_professionalism_level_var = 0 }
+			}
+		}
+	}
+}
+
+japan_missions_5_colonial = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = JAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = japan_chose_colonial_missions
+	}
+	has_country_shield = yes
+	
+	japan_the_imperial_fleet = {
+		icon = mission_establish_high_seas_navy
+		required_missions = { japan_colonialist_ventures }
+		position = 11
+		trigger = {
+			navy_size_percentage = 1
+			OR = {
+				dock = 10
+				drydock = 10
+			}
+			OR = {
+				shipyard = 10
+				grand_shipyard = 10
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = japan_the_imperial_fleet_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	japan_teikoku_kaigun = {
+		icon = me_mission_venice_navy
+		required_missions = { japan_the_imperial_fleet }
+		position = 12
+		trigger = {
+			num_of_heavy_ship = 25
+			navy_size = 100
+		}
+		effect = {
+			add_prestige = 10
+			add_navy_tradition = 25
+			add_country_modifier = {
+				name = japan_teikoku_kaigun_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	japan_a_fleets_pride = {
+		icon = mission_launch_a_flagship
+		required_missions = { japan_teikoku_kaigun }
+		position = 14
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				has_flagship = yes
+			}
+			else = {
+				num_of_heavy_ship = 30
+			}
+		}
+		effect = {
+			add_navy_tradition = 25
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = yes
+				}
+				add_country_modifier = {
+					name = japan_a_fleets_pride_modifier
+					duration = -1
+					desc = JAP_UNTIL_OUR_FLAGSHIP_GETS_SUNK
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = japan_a_fleets_pride_modifier
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	japan_the_geokbuseon = {
+		icon = me_mission_japan_turtle_ship
+		required_missions = { japan_a_fleets_pride }
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				province_id = 735
+				AND = {
+					region = korea_region
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 15
+								region = korea_region
+							}
+						}
+					}
+				}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			owns_or_non_sovereign_subject_of = 735
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 15
+				region = korea_region
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = japan_the_geokbuseon_modifier
+				duration = -1
+			}
+			735 = {
+				add_province_modifier = {
+					name = japan_the_geokbuseon_province_modifier
+					duration = -1
+				}
 			}
 		}
 	}
