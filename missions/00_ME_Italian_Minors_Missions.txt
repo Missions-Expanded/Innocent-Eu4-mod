@@ -4,6 +4,7 @@ italian_minors_missions_1 = {
 	ai = yes
 	potential = {
 		is_italian_minor = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -195,6 +196,7 @@ italian_minors_missions_2 = {
 	ai = yes
 	potential = {
 		is_italian_minor = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -266,8 +268,8 @@ italian_minors_missions_2 = {
 		}
 		position = 6
 		trigger = {
-			#custom_trigger_tooltip = {
-				#tooltip = dominate_italian_sea_tooltip
+			custom_trigger_tooltip = {
+				tooltip = dominate_italian_sea_tooltip
 				all_country = {
 					OR = {
 						NOT = {
@@ -279,7 +281,7 @@ italian_minors_missions_2 = {
 						NOT = { culture_group = latin }
 					}
 				}
-			#}
+			}
 		}
 		effect = {
 	
@@ -294,6 +296,7 @@ italian_minors_missions_3 = {
 	ai = yes
 	potential = {
 		is_italian_minor = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -559,6 +562,7 @@ italian_minors_missions_3 = {
 		}
 		position = 8
 		trigger = {
+			mercantilism = 25
 			trade_income_percentage = 0.33
 			101 = {
 				trade_share = {
@@ -572,8 +576,8 @@ italian_minors_missions_3 = {
 					share = 33
 				}
 			}
-			#custom_trigger_tooltip = {
-				#tooltip = dominate_italian_sea_tooltip
+			custom_trigger_tooltip = {
+				tooltip = dominate_italian_sea_tooltip2
 				all_country = {
 					OR = {
 						NOT = {
@@ -585,13 +589,10 @@ italian_minors_missions_3 = {
 						NOT = { culture_group = latin }
 					}
 				}
-			#}
+			}
 		}
 		effect = {
-			random_province = {
-				limit = {
-					is_capital_of = ROOT 
-				}
+			capital_scope = {
 				create_or_add_center_of_trade_level = {
 					level = 1
 				}
@@ -606,6 +607,7 @@ italian_minors_missions_4 = {
 	ai = yes
 	potential = {
 		is_italian_minor = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -657,15 +659,25 @@ italian_minors_missions_4 = {
 		required_missions = {	}
 		position = 5
 		trigger = {
-			
+			mercantilism = 15
+			112 = {
+				has_trader = ROOT
+			}
+			101 = {
+				has_trader = ROOT
+			}
 		}
 		effect = {
-			
+			add_dip_power = 100
+			add_country_modifier = {
+				name = italian_minors_trading
+				duration = 9125
+			}
 		}
 	}
 
 	italian_minors_secure_homeland_trade = {
-		icon = me_mission_byzantium_fourth_crusade
+		icon = mission_dominate_home_trade_node
 		required_missions = { italian_minors_trading_powerness	}
 		provinces_to_highlight = { }
 		position = 6
@@ -684,6 +696,7 @@ italian_minors_missions_5 = {
 	ai = yes
 	potential = {
 		is_italian_minor = yes
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -781,10 +794,63 @@ italian_minors_missions_5 = {
 		}
 		position = 6
 		trigger = {
-			
+			treasury = 200
+			all_owned_province = {
+				OR = {
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+					has_estate = estate_burghers
+				}
+			}
 		}
 		effect = {
-			
+			add_treasury = -200
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 15
+			}
+			every_owned_province = {
+				if = {
+					limit = {
+						NOT = { has_building = trade_depot }
+						NOT = { has_building = stock_exchange }
+						NOT = { has_building = marketplace }
+					}
+					add_building_construction = {
+						building = marketplace
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = marketplace
+					}
+					remove_building = marketplace
+					add_building_construction = {
+						building = trade_depot
+						speed = 1
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = trade_depot
+					}
+					remove_building = trade_depot
+					add_building_construction = {
+						building = stock_exchange
+						speed = 1
+						cost = 0
+					}
+				}
+				else = {
+					add_production = 2
+				}
+			}
 		}
 	}
 	
@@ -802,7 +868,23 @@ italian_minors_missions_5 = {
 			
 		}
 		effect = {
-			
+			capital_scope = {
+				add_province_modifier = {
+					name = italian_minor_development_plan
+					duration = 3650
+				}
+				add_base_tax = 1
+			}
 		}
+	}
+}
+
+effect = {
+	capital_scope = {
+		add_province_modifier = {
+			name = SO_development_plan
+			duration = 3650
+		}
+		add_base_tax = 1
 	}
 }
