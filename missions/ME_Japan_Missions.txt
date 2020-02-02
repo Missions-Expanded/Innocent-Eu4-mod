@@ -205,7 +205,7 @@ japan_missions_1 = {
 			add_mercantilism = 3
 			add_estate_loyalty = {
 				estate = estate_burghers
-				loyalty = 20
+				loyalty = 10
 			}
 			add_country_modifier = {
 				name = japan_close_down_the_ports_modifier
@@ -234,7 +234,7 @@ japan_missions_1 = {
 			}
 			add_country_modifier = {
 				name = japan_strengthen_the_zaibatsu_modifier
-				duration = 7300
+				duration = 5475
 			}
 		}
 	}
@@ -434,12 +434,15 @@ japan_missions_2 = {
 						fort_level = 2
 					}
 				}
-				every_owned_province = {
-					limit = {
-						region = japan_region
-						fort_level = 2
+				custom_tooltip = JAP_JAPAN_SHORELINE_FORTIFICATIONS_TT
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							region = japan_region
+							fort_level = 2
+						}
+						add_base_manpower = 1
 					}
-					add_base_manpower = 1
 				}
 			}
 		}
@@ -622,6 +625,12 @@ japan_missions_3 = {
 					}
 					add_base_tax = 1
 					add_base_production = 1
+					if = {
+						limit = {
+							has_province_modifier = japan_found_the_zaibatsu_province_modifier
+						}
+						remove_province_modifier = japan_found_the_zaibatsu_province_modifier
+					}
 					add_province_modifier = {
 						name = japan_conclude_urbanization_province_modifier
 						duration = -1
@@ -677,13 +686,29 @@ japan_missions_3 = {
 				AND = {
 					region = japan_region
 					owned_by = ROOT
-					NOT = { development = 30 }
-					ROOT = {
-						NOT = {
-							num_of_owned_provinces_with = {
-								value = 4
-								region = japan_region
-								development = 30
+					OR = {
+						AND = {
+							NOT = { development = 30 }
+							ROOT = {
+								NOT = {
+									num_of_owned_provinces_with = {
+										value = 4
+										region = japan_region
+										development = 30
+									}
+								}
+							}
+						}
+						AND = {
+							NOT = { has_building = university }
+							ROOT = {
+								NOT = {
+									num_of_owned_provinces_with = {
+										value = 10
+										region = japan_region
+										has_building = university
+									}
+								}
 							}
 						}
 					}
@@ -709,6 +734,11 @@ japan_missions_3 = {
 				region = japan_region
 				development = 30
 			}
+			num_of_owned_provinces_with = {
+				value = 10
+				region = japan_region
+				has_building = university
+			}
 		}
 		effect = {
 			add_years_of_income = -1
@@ -716,14 +746,20 @@ japan_missions_3 = {
 				name = japan_promote_scholarly_practices_modifier
 				duration = 7300
 			}
-			every_owned_province = {
-				limit = {
-					region = japan_region
-					development = 30
-				}
-				add_province_modifier = {
-					name = japan_promote_scholarly_practices_province_modifier
-					duration = -1
+			custom_tooltip = JAP_JAPAN_PROMOTE_SCHOLARLY_PRACTICES_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						region = japan_region
+						OR = {
+							development = 30
+							has_building = university
+						}
+					}
+					add_province_modifier = {
+						name = japan_promote_scholarly_practices_province_modifier
+						duration = -1
+					}
 				}
 			}
 		}
@@ -2180,8 +2216,7 @@ japan_missions_1_colonial = {
 		effect = {
 			add_country_modifier = {
 				name = japan_early_modern_colonial_empire_modifier
-				duration = -1
-				desc = JAP_UNTIL_LESS_THAN_0_STAB
+				duration = 9125
 			}
 			every_subject_country = {
 				limit = {
