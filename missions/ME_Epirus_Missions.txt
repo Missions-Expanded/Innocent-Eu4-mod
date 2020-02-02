@@ -4,7 +4,6 @@ EPI_mission_1 = {
 	ai = yes
 	potential = {
 		tag = EPI
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -15,14 +14,12 @@ EPI_mission_1 = {
 		}
 		position = 2
 		trigger = {
-			
+			num_of_admirals = 1
+			navy_size_percentage = 1.00
 		}
 		effect = {
-			create_admiral = {
-				tradition = 40
-			}
 			add_country_modifier = {
-				name = 
+				name = epi_blessing_brizo
 				duration = 9125
 			}
 			142 = {
@@ -44,15 +41,22 @@ EPI_mission_1 = {
 			epi_mighty_fleet
 		}
 		position = 3
+		provinces_to_highlight = {
+			province_id = 142
+		}
 		trigger = {
-			142 = = {
-				country_or_non_sovereign_subject_holds = ROOT
+			142 = {
+				owned_by = ROOT
+				NOT = {
+					local_autonomy = 10
+				}
 			}
 		}
 		effect = {
 			142 = {
+				add_base_tax = 60
 				add_province_modifier = {
-					name = 
+					name = epi_blessing_eurybia
 					duration = -1
 				}
 			}
@@ -67,7 +71,6 @@ EPI_mission_1_ancient = {
 	potential = {
 		tag = EPI
 		has_country_flag = epirus_ancient_root
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -201,7 +204,6 @@ EPI_mission_2 = {
 	ai = yes
 	potential = {
 		tag = EPI
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -212,22 +214,21 @@ EPI_mission_2 = {
 		}
 		position = 2
 		provinces_to_highlight = {
-			provinces_to_highlight = 144
+			province_id = 144
 		}
 		trigger = {
 			144 = {
-				country_or_non_sovereign_subject_holds = ROOT
+				owned_by = ROOT
+				num_of_times_improved = 3
 			}
 		}
 		effect = {
 			144 = {
-				add_province_modifier = {
-					name = 
-					duration = -1
+				create_or_add_center_of_trade_level = { 
+					level = 1 
 				}
-				add_base_manpower = 2
-				add_base_production = 2
-				add_base_tax = 2
+				change_province_name = Nicopolis
+				rename_capital = Nicopolis
 			}
 		}
 	}
@@ -246,15 +247,28 @@ EPI_mission_2 = {
 				owned_by = ROOT
 				development = 15
 			}
-			artist = 2
+			OR = {
+				treasury = 100
+				artist = 2
+			}
 		}
 		effect = {
-			add_adm_power = 50
-			add_dip_power = 50
+			if = {
+				limit = {
+					NOT = { artist = 2 }
+				}
+				add_treasury = -100
+			}
 			144 = {
-				add_province_modifier = {
-					name = 
+				add_country_modifier = {
+					name = epi_theatre_dodona_modifier
 					duration = -1
+				}
+				if = {
+					limit = {
+						has_building = university
+					}
+					add_base_tax = 2
 				}
 				add_building_construction = {
 					building = university
@@ -273,7 +287,6 @@ EPI_mission_2_ancient = {
 	potential = {
 		tag = EPI
 		has_country_flag = epirus_ancient_root
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -426,26 +439,23 @@ EPI_mission_3 = {
 	ai = yes
 	potential = {
 		tag = EPI
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
 	epi_building_strength = {
 		icon = mission_assemble_an_army
 		required_missions = {
-
 		}
 		position = 1
 		trigger = {
 			army_size_percentage = 1
 			num_of_generals = 1
-			manpower_percentage = 1
 		}
 		effect = {
 			add_mil_power = 50
 			add_country_modifier = {
-				name = 
-				duration = -1
+				name = epi_struggling_power
+				duration = 9125
 			}
 			147 = {
 				if = {
@@ -453,7 +463,11 @@ EPI_mission_3 = {
 						NOT = { 
 							owned_by = ROOT 
 						}
+						NOT = { 
+							is_core = ROOT
+						}
 					}
+					add_core = ROOT
 					add_permanent_claim = ROOT
 				}
 			}
@@ -481,11 +495,6 @@ EPI_mission_3 = {
 			}
 		}
 		effect = {
-			add_mil_power = 50
-			add_country_modifier = {
-				name = 
-				duration = -1
-			}
 			albania_area = {
 				add_permanent_claim = ROOT
 			}
@@ -567,7 +576,7 @@ EPI_mission_3 = {
 		provinces_to_highlight = {
 			OR = {
 				area = albania_area
-				area = northern_greece
+				area = northern_greece_area
 				province_id = 145
 				province_id = 146
 				province_id = 1773
@@ -577,9 +586,30 @@ EPI_mission_3 = {
 			}
 		}
 		trigger = {
+			albania_area = {
+				type = all
+				owned_by = ROOT
+			}
+			northern_greece_area = {
+				type = all
+				owned_by = ROOT
+			}
+			owns = 145
+			owns = 146
+			owns = 1773
 			legitimacy = 90
+			stability = 2
 		}
 		effect = {
+			if = {
+				limit = {
+					government_rank = 1
+				}
+				set_government_rank = 2
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 			country_event = {
 				id = ME_Epirus_Events.1
 				months = 2
@@ -595,7 +625,6 @@ EPI_mission_3_despotate = {
 	potential = {
 		tag = EPI
 		has_country_flag = epirus_despotate_root
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -618,9 +647,11 @@ EPI_mission_3_despotate = {
 			}
 		}
 		effect = {
+			add_stability = 1
 			add_adm_power = 100
 			add_dip_power = 100
 			add_mil_power = 100
+			add_prestige = 25
 		}
 	}
 }
@@ -631,7 +662,6 @@ EPI_mission_4 = {
 	ai = yes
 	potential = {
 		tag = EPI
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -674,7 +704,6 @@ EPI_mission_4_despotate = {
 	potential = {
 		tag = EPI
 		has_country_flag = epirus_despotate_root
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -698,9 +727,11 @@ EPI_mission_4_despotate = {
 				add_core = ROOT
 				add_permanent_claim = ROOT
 			}
+			add_stability = 1
 			add_adm_power = 100
 			add_dip_power = 100
 			add_mil_power = 100
+			add_prestige = 25
 		}
 	}
 
@@ -835,7 +866,6 @@ EPI_mission_5 = {
 	ai = yes
 	potential = {
 		tag = EPI
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -893,7 +923,6 @@ EPI_mission_5_despotate = {
 	potential = {
 		tag = EPI
 		has_country_flag = epirus_despotate_root
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -908,9 +937,11 @@ EPI_mission_5_despotate = {
 			war_exhaustion = 0
 		}
 		effect = {
+			add_stability = 1
 			add_adm_power = 100
 			add_dip_power = 100
 			add_mil_power = 100
+			add_prestige = 25
 		}
 	}
 
@@ -940,9 +971,11 @@ EPI_mission_5_despotate = {
 			}
 		}
 		effect = {
+			add_stability = 1
 			add_adm_power = 100
 			add_dip_power = 100
 			add_mil_power = 100
+			add_prestige = 25
 		}
 	}
 }
