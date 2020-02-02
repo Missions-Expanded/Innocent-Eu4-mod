@@ -8,7 +8,7 @@ EPI_mission_1 = {
 	has_country_shield = yes
 
 	epi_mighty_fleet = {
-		icon = mission_assemble_an_army
+		icon = mission_disrupt_portuguese_trade
 		required_missions = { 
 			epi_building_strength
 		}
@@ -36,7 +36,7 @@ EPI_mission_1 = {
 	}
 
 	epi_conquest_corfu = {
-		icon = mission_monarch_in_throne_room
+		icon = me_mission_greece_corfu
 		required_missions = {
 			epi_mighty_fleet
 		}
@@ -54,7 +54,6 @@ EPI_mission_1 = {
 		}
 		effect = {
 			142 = {
-				add_base_tax = 60
 				add_province_modifier = {
 					name = epi_blessing_eurybia
 					duration = -1
@@ -234,7 +233,7 @@ EPI_mission_2 = {
 	}
 
 	epi_theatre_dodona = {
-		icon = mission_unite_home_region
+		icon = me_mission_greece_theatre
 		required_missions = {
 			epi_nicopolis
 		}
@@ -410,7 +409,7 @@ EPI_mission_2_ancient = {
 	}
 
 	epi_conquest_sicily = {
-		icon = mission_invade_island
+		icon = me_mission_malta_expand_to_sicily
 		required_missions = {
 			epi_conquest_south_italy
 		}
@@ -443,7 +442,7 @@ EPI_mission_3 = {
 	has_country_shield = yes
 
 	epi_building_strength = {
-		icon = mission_assemble_an_army
+		icon = me_mission_italy_army1
 		required_missions = {
 		}
 		position = 1
@@ -532,7 +531,7 @@ EPI_mission_3 = {
 	}
 
 	epi_core_hellas = {
-		icon = mission_assemble_an_army
+		icon = me_mission_byzantium_recover_greece
 		required_missions = {
 			epi_ours_right
 		}
@@ -556,10 +555,15 @@ EPI_mission_3 = {
 			}
 		}
 		effect = {
-			add_mil_power = 50
-			add_country_modifier = {
-				name = 
-				duration = -1
+			every_province = {
+				limit = {
+					owned_by = ROOT
+					area = morea_area
+				}				
+				add_province_modifier = {
+					name = epi_glory_hellas
+					duration = 3650
+				}
 			}
 		}
 	}
@@ -686,12 +690,13 @@ EPI_mission_4 = {
 			}
 		}
 		effect = {
-			add_army_tradition = 10
-			if = {
+			add_accepted_culture = albanian
+			every_province = {
 				limit = {
-					has_dlc = "Cradle of Civilization"
+					area = albania_area
+					owned_by = ROOT
 				}
-				add_army_professionalism = 0.05
+				add_local_autonomy = -20
 			}
 		}
 	}
@@ -870,47 +875,85 @@ EPI_mission_5 = {
 	has_country_shield = yes
 
 	epi_mighty_army = {
-		icon = mission_cannons_firing
+		icon = me_mission_greece_army_reform
 		required_missions = {
 			epi_building_strength
 		}
 		position = 2
-		provinces_to_highlight = {
-			
-		}
 		trigger = {
-			
+			OR = {
+				treasury = 200
+				army_organiser = 2
+			}
+			num_of_owned_provinces_with = {
+				value = 2
+				OR = {
+					has_building = regimental_camp
+					has_building = barracks
+				}
+			}
 		}
 		effect = {
-			add_army_tradition = 10
 			if = {
 				limit = {
-					has_dlc = "Cradle of Civilization"
+					NOT = { 
+						army_organiser = 2 
+					}
 				}
-				add_army_professionalism = 0.05
+				add_treasury = -200
+			}
+			every_owned_province = {
+				if = {
+					limit = {
+						has_building = regimental_camp
+					}
+					remove_building = regimental_camp
+					add_building_construction = {
+						building = conscription_center
+						speed = 0.75
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_building = barracks
+					}
+					remove_building = barracks
+					add_building_construction = {
+						building = training_fields
+						speed = 0.75
+						cost = 0
+					}
+				}
+				else = {
+					add_base_manpower = 2
+				}
 			}
 		}
 	}
 
 	epi_royal_guard = {
-		icon = mission_cannons_firing
+		icon = me_mission_greece_hellenic_royal_guards
 		required_missions = {
 			epi_mighty_army
 		}
 		position = 3
-		provinces_to_highlight = {
-			
-		}
 		trigger = {
-			
+			MIL = 5
+			OR = {
+				if = {
+					limit = {
+						has_dlc = "Cradle of Civilization"
+					}
+					army_professionalism = 0.20
+				}
+				mil_power = 200
+			}
 		}
 		effect = {
-			add_army_tradition = 10
-			if = {
-				limit = {
-					has_dlc = "Cradle of Civilization"
-				}
-				add_army_professionalism = 0.05
+			add_country_modifier = {
+				name = epi_royal_guard
+				duration = -1
 			}
 		}
 	}
