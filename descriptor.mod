@@ -1,11 +1,11 @@
-name="Missions Expanded"
-archive="mod/missions.zip"
+version="1.29.*.*"
 tags={
+	"Alternative History"
 	"Historical"
 	"Missions And Decisions"
-	"events"
-	"Gameplay"
+	"Events"
 	"New Nations"
+	"Gameplay"
 }
-picture="ME.png"
-supported_version="1.29.*.*"
+name="Mission Expanded Dev"
+supported_version="1.29.5"
