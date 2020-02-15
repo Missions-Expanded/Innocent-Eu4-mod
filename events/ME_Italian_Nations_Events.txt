@@ -1,44 +1,140 @@
 namespace = ME_Italian_Nations_Events
 
-country_event = { # The Occupation of Rome
+country_event = { # The Occupation of Rome Hidden Save
 	id = ME_Italian_Nations_Events.1
 	title = ME_Italian_Nations_Events.1.N
 	desc = ME_Italian_Nations_Events.1.D
 	picture = HRE_eventPicture
-
-	mean_time_to_happen = {
-		months = 3
-	}
-
-	major = yes
 	
-	trigger = {
-		118 = {
-			NOT = {
-				owned_by = PAP
-			}
-			owner = {
-				culture_group = latin
-			}
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			save_global_event_target_as = country_ruling_italy_yes
 		}
 	}
 	
 	option = {
 		name = ME_Italian_Nations_Events.1.OPT1
-		
 		ai_chance = { 
-			factor = 0.50
+			factor = 100
 		}
-		add_country_flag = ruling_italy_yes
+	}
+}
+
+country_event = { # The Occupation of Rome
+	id = ME_Italian_Nations_Events.2
+	title = ME_Italian_Nations_Events.2.N
+	desc = ME_Italian_Nations_Events.2.D
+	picture = HRE_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	mean_time_to_happen = {
+		months = 3
+	}
+
+	is_triggered_only = yes
+	major = yes
+	
+	option = {
+		name = ME_Italian_Nations_Events.2.OPT1
+		ai_chance = { 
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					tag = PAP
+					NOT = {
+						has_opinion = {
+							who = ROOT
+							value = -100
+						}
+					}
+				}
+			}
+		}
+		set_country_flag = ruling_italy_no
+		add_opinion = {
+			who = FROM
+			modifier = italian_nations_ruling_no
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = italian_nations_ruling_no
+			}
+		}
+		custom_tooltip = italian_nations_ruling_no_tooltip
 	}
 	
 	option = {
-		name = ME_Italian_Nations_Events.1.OPT2
-		
+		name = ME_Italian_Nations_Events.2.OPT2
 		ai_chance = { 
-			factor = 0.50
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					NOT = {
+						army_strength = {
+							who = FROM
+							value = 1
+						}
+					}
+					alliance_with = FROM
+					has_opinion = {
+						who = FROM
+						value = 125
+					}
+				}
+			}
 		}
-		add_country_flag = ruling_italy_no
+		trigger = {
+			NOT = {
+				tag = PAP
+			}
+		}
+		set_country_flag = ruling_italy_yes
+		add_trust = {
+			who = FROM
+			value = 25
+			mutual = yes
+		}
+		add_opinion = {
+			who = FROM
+			modifier = italian_nations_ruling_yes
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = italian_nations_ruling_yes
+			}
+		}
+		custom_tooltip = italian_nations_ruling_yes_tooltip
+	}
+	option = {
+		name = ME_Italian_Nations_Events.2.OPT3
+		ai_chance = { 
+			factor = 33
+			modifier = {
+				factor = 3
+				AND = {
+					has_opinion = {
+						who = FROM
+						value = 50
+					}
+					NOT = {
+						has_opinion = {
+							who = FROM
+							value = -50
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = italian_nations_ruling_nothing_tooltip
 	}
 }
 
@@ -49,10 +145,11 @@ country_event = {
 	picture = HRE_eventPicture
 
 	mean_time_to_happen = {
-		months = 3
+		days = 90
 	}
 
 	major = yes
+	is_triggered_only = yes
 	
 	trigger = {
 		OR = {
@@ -74,7 +171,8 @@ country_event = {
 		ai_chance = { 
 			factor = 0.50
 		}
-		add_country_flag = ruling_italy_yes
+		set_country_flag = ruling_italy_yes
+		set_country_flag = pope_emperor_choice
 	}
 	
 	option = {
@@ -83,6 +181,7 @@ country_event = {
 		ai_chance = { 
 			factor = 0.50
 		}
-		add_country_flag = ruling_italy_no
+		set_country_flag = ruling_italy_no
+		set_country_flag = pope_emperor_choice
 	}
 }

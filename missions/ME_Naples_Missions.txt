@@ -55,12 +55,12 @@ naples_missions_1 = {
 					AND = {
 						has_opinion = {
 							who = PAP
-							value = 170
+							value = 150
 						}
 						PAP = {
 							has_opinion = {
 								who = ROOT
-								value = 170
+								value = 150
 							}
 						}
 					}
@@ -87,107 +87,13 @@ naples_missions_1 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					OR = {
-						alliance_with = PAP
-						AND = {
-							has_opinion = {
-								who = PAP
-								value = 170
-							}
-							PAP = {
-								has_opinion = {
-									who = ROOT
-									value = 170
-								}
-							}
-						}
-					}
-				}
-				PAP = {
-					add_historical_friend = ROOT
-					country_event = {
-						id = ME_Naples_Events.13
-						days = 90
-					}
-				}
-				add_historical_friend = PAP
-				125 = { #Palermo
-					if = {
-						limit = {
-							owned_by = ROOT
-							has_cardinal = no
-						}
-						add_cardinal = yes
-					}
-					else_if = {
-						limit = {
-							has_building = temple
-						}
-						remove_building = temple
-						add_building_construction = {
-							building = cathedral
-							speed = 0.75
-							cost = 0
-						}
-					}
-					else = {
-						add_building_construction = {
-							building = temple
-							speed = 0.75
-							cost = 1
-						}
-					}
-				}
-				tuscany_area = {
-					limit = {
-						NOT = { 
-							owned_by = ROOT
-						}
-						NOT = { 
-							is_core = ROOT 
-						}
-					}
-					add_permanent_claim = ROOT
+			PAP = {
+				country_event = {
+					id = ME_Naples_Events.10
+					days = 90
 				}
 			}
-			else_if = {
-				limit = {
-					OR = {
-						is_rival = PAP
-						AND = {
-							NOT = {
-								has_opinion = {
-									who = PAP
-									value = -100
-								}
-							}
-							NOT = {
-								PAP = {
-									has_opinion = {
-										who = ROOT
-										value = -100
-									}
-								}
-							}
-						}
-					}
-
-				}
-				add_historical_rival = PAP
-				every_province = {
-					limit = {
-						owned_by = PAP
-						region = italy_region
-					}
-					add_permanent_claim = ROOT
-				}
-				create_general = {
-					tradition = 50
-				}
-			}
-		}		
+		}
 	}
 
 	nap_venetian_goods = {
@@ -1162,7 +1068,7 @@ naples_missions_3 = {
 				}
 				add_casus_belli = {
 					type = cb_trade_war
-					days = 9000
+					months = 300
 					target = TUR
 				}
 			}
@@ -1237,6 +1143,10 @@ naples_missions_3 = {
 			}
 		}
 		effect = {
+			add_prestige = 25
+			change_religious_influence_equivalent = {
+				add = 25
+			}
 			add_country_modifier = {
 				name = nap_deus_vult
 				duration = -1
@@ -1486,40 +1396,12 @@ naples_missions_4 = {
 		}
 	}
 	
-	nap_dalmatian_shore = {
+	nap_magyar_union = {
 		icon = me_mission_get_pu
 		required_missions = {
 			nap_king_carlo
 		}
 		position = 8
-		provinces_to_highlight = {
-			OR = {
-				area = east_adriatic_coast_area
-			}
-			NOT = { 
-				country_or_non_sovereign_subject_holds = ROOT 
-			}
-		}
-		trigger = {
-			east_adriatic_coast_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = nap_hungary_modifier
-				duration = 7300
-			}
-		}
-	}
-
-	nap_magyar_union = {
-		icon = me_mission_get_pu
-		required_missions = {
-			nap_dalmatian_shore
-		}
-		position = 9
 		trigger = {
 			if = {
 				limit = {
@@ -1559,7 +1441,7 @@ naples_missions_4 = {
 				}
 				HUN = {
 					country_event = {
-						id = ME_Naples_Events.14
+						id = ME_Naples_Events.11
 						days = 90
 					}
 				}
@@ -1573,19 +1455,50 @@ naples_missions_4 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			every_province = {
-				limit = {
-					area = east_adriatic_coast_area
-				}
-				add_local_autonomy = -20
-			}
 		}
 	}
 
-	nap_symmetry_1 = {
+	nap_imperial_throne = {
 		icon = me_mission_get_pu
 		required_missions = {
 			nap_magyar_union
+		}
+		position = 9
+		trigger = {
+			calc_true_if = {
+				amount = 3
+				any_country = {
+					is_elector = yes
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Naples_Events.12
+				days = 30
+			}
+		}
+	}
+}
+
+naple_missions_4_throne = {
+	slot = 4
+	generic = no
+	ai = yes 
+	potential = {
+		tag = NAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = nap_imperial_throne_accepted
+	}
+
+	nap_duchy_swabia = {
+		icon = me_mission_get_pu
+		required_missions = {
+			nap_imperial_throne
 		}
 		position = 10
 		trigger = {
@@ -1728,7 +1641,7 @@ naples_missions_5 = {
 					limit = {
 						has_dlc = "Mandate of Heaven"
 					}
-					add_prosperity = 25
+					add_prosperity = 100
 				}
 				else = {
 					add_devastation = -1
@@ -1815,11 +1728,22 @@ naples_missions_5 = {
 				}
 		}
 	}
+}
 
-	nap_symmetry_2 = {
+naple_missions_5_throne = {
+	slot = 4
+	generic = no
+	ai = yes 
+	potential = {
+		tag = NAP
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = nap_imperial_throne_accepted
+	}
+
+	nap_hohenstaufen = {
 		icon = me_mission_get_pu
 		required_missions = {
-			nap_magyar_union
+			nap_imperial_throne
 		}
 		position = 10
 		trigger = {
