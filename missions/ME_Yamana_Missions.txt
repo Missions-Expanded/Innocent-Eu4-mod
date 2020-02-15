@@ -1,10 +1,17 @@
-Yamana_Missions_1 = {
+YMN_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
 		tag = YMN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
 	}
 	has_country_shield = yes
 
@@ -12,20 +19,30 @@ Yamana_Missions_1 = {
 		icon = mission_asian_trader
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			province_id = 1020
+			NOT = { owned_by = ROOT }
+			owner = {
+				NOT = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+			}
+		}
 		trigger = {
 			is_at_war = yes
 			is_monarch_leader = yes
-			OR = {
-				1020 = {
+			1020 = {
+				OR = {
+					owned_by = ROOT
 					owner = {
-						reverse_has_opinion = {
+						has_opinion = {
 							who = ROOT
 							value = 125
 						}
 					}
-				}
-				1020 = {
-					owned_by = ROOT
 				}
 			}
 		}
@@ -50,15 +67,27 @@ Yamana_Missions_1 = {
 			}
 		}
 	}
+	
 	Yamana_Silk_for_Blood = { # Silk for Blood
 		icon = mission_impaled_soldiers
 		required_missions = { Yaman_Ascendacy }
 		position = 2
 		provinces_to_highlight = {
-			area = saigoku_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				area = saigoku_area
+				AND = {
+					area = sanindo_area
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 3
+								area = sanindo_area
+							}
+						}
+					}
+				}
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			saigoku_area = {
@@ -92,6 +121,7 @@ Yamana_Missions_1 = {
 			}
 		}
 	}
+	
 	Yamana_Lord_of_Kyushu = { # Lord of Kyushu
 		icon = mission_warchest
 		required_missions = { Yamana_Silk_for_Blood }
@@ -101,8 +131,17 @@ Yamana_Missions_1 = {
 				area = kyushu_area
 				area = northern_kyushu
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 4
+						OR = {
+							area = kyushu_area
+							area = northern_kyushu
+						}
+					}
+				}
 			}
 		}
 		trigger = {
@@ -112,19 +151,17 @@ Yamana_Missions_1 = {
 					area = kyushu_area
 					area = northern_kyushu
 				}
-				NOT = {
-					province_id = 1015
-				}
 			}
 		}
 		effect = {
+			add_prestige = 5
 			add_country_modifier = {
 				name = YMN_Kyushu_Trade_Ports
 				duration = 7300
 			}
-			add_prestige = 5
 		}
 	}
+	
 	Yamana_Secure_our_Trade_Route = { # Secure our Trade Routes
 		icon = mission_seize_the_dragon_throne
 		required_missions = { 
@@ -132,86 +169,75 @@ Yamana_Missions_1 = {
 			Yamana_Shugo_of_South_Japan
 		}
 		position = 5
-		trigger = {
-			OR = {
-				AND = {
-					4651 = {
-						owned_by = ROOT
+		provinces_to_highlight = {
+			province_id = 4651
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 2
+						province_has_center_of_trade_of_level = 2
 					}
-					navy_size_percentage = 1
-					light_ship_fraction = 0.25
+				}
+			}
+		}
+		trigger = {
+			navy_size_percentage = 1
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 2
+					province_has_center_of_trade_of_level = 2
 				}
 				AND = {
-					navy_size_percentage = 1
-					calc_true_if = {
-						all_owned_province = {
-							province_has_center_of_trade_of_level = 2
-						}
-						amount = 2
-					}
+					light_ship_fraction = 0.25
+					owns = 4651
 				}
 			}
 		}
 		effect = {
 			if = {
 				limit = {
-					4651 = {
-						owned_by = ROOT
-					}
-					navy_size_percentage = 1
-					light_ship_fraction = 0.25
-					is_expanded_mod_active = TGE
+					owns = 4651
 				}
 				add_dip_power = 50
 				add_country_modifier = {
 					name = YMN_Safe_Merchant_Haven
 					duration = 9125
 				}
-				4651 = {
-					change_trade_goods = pearls
-				}
-			}
-			else_if = {
-				limit = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
 					4651 = {
-						owned_by = ROOT
+						change_trade_goods = pearls
 					}
-					navy_size_percentage = 1
-					light_ship_fraction = 0.25
-				}
-				add_dip_power = 50
-				add_country_modifier = {
-					name = YMN_Safe_Merchant_Haven
-					duration = 9125
 				}
 			}
-			else_if = {
-				limit = {
-					navy_size_percentage = 1
-					calc_true_if = {
-						all_owned_province = {
-							province_has_center_of_trade_of_level = 2
-						}
-						amount = 2
-					}
-				}
+			else = {
+				add_dip_power = 100
 				add_country_modifier = {
 					name = YMN_Pirate_Patrols
 					duration = 7300
 				}
-				add_dip_power = 100
 			}
 		}
 	}
 }
 
-Yamana_Missions_2 = {
+YMN_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
 		tag = YMN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
 	}
 	has_country_shield = yes
 
@@ -229,6 +255,7 @@ Yamana_Missions_2 = {
 			
 		}
 	}
+	
 	Yamana_Shugo_of_South_Japan = { # Shugo of South Japan
 		icon = mission_kowtow
 		required_missions = { Yamana_Annihilate_Hosokawa }
@@ -245,13 +272,20 @@ Yamana_Missions_2 = {
 	}
 }
 
-Yamana_Missions_3 = {
+YMN_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
 		tag = YMN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
 	}
 	has_country_shield = yes
 
@@ -269,6 +303,7 @@ Yamana_Missions_3 = {
 			
 		}
 	}
+	
 	Yamana_Lingchi = { # Lingchi
 		icon = mission_collect_yasak
 		required_missions = { Yamana_the_Onin_War }
@@ -283,6 +318,7 @@ Yamana_Missions_3 = {
 			
 		}
 	}
+	
 	Yamana_a_Bloodied_Victor = { # A Bloodied Victor
 		icon = mission_asian_trader
 		required_missions = { Yamana_Shugo_of_South_Japan Yamana_Lingchi}
@@ -299,13 +335,20 @@ Yamana_Missions_3 = {
 	}
 }
 
-Yamana_Missions_4 = {
+YMN_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		tag = YMN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
 	}
 	has_country_shield = yes
 
@@ -326,6 +369,7 @@ Yamana_Missions_4 = {
 			
 		}
 	}
+	
 	Yamana_Markets_of_Settsu = { # Markets of Settsu
 		icon = mission_seize_north_sea_trade
 		required_missions = { Yamana_Lingchi }
@@ -341,13 +385,21 @@ Yamana_Missions_4 = {
 		}
 	}
 }
-Yamana_Missions_5 = {
+
+YMN_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
 		tag = YMN
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			AND = {
+				NOT = { has_reform = indep_daimyo }
+				NOT = { has_reform = daimyo }
+				NOT = { has_reform = shogunate }
+			}
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		}
 	}
 	has_country_shield = yes
 
@@ -365,6 +417,7 @@ Yamana_Missions_5 = {
 			
 		}
 	}
+	
 	Yamana_Erase_our_Rivals = { # Erase our Rivals
 		icon = mission_asian_trader
 		required_missions = { Yamana_Political_Supremacy }
@@ -379,6 +432,7 @@ Yamana_Missions_5 = {
 			
 		}
 	}
+	
 	Yamana_the_Faithful_of_Miyoshin = { # The Faithful of Miyoshin-Ji
 		icon = mission_asian_trader
 		required_missions = { 
