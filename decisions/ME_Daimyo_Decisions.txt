@@ -1,44 +1,46 @@
 country_decisions = {
 	SMZ_proliferation_trigger = {
 		potential = {
+			has_dlc = "Mandate of Heaven"
 			has_country_flag = ME_Proliferation
 			religion = shinto
-			#is_incident_active = no
 			NOT = { has_country_flag = end_of_incident_firearms_chain }
 		}
 		allow = {
-			is_incident_active = no
+			is_incident_active = none
 		}
 		effect = {
 			country_event = { id = shinto_events.32 }
-			set_country_flag = active_incident_flag
 			custom_tooltip = ME_Proliferation_Tooltip
+			set_country_flag = active_incident_flag
 		}
 		ai_will_do = {
 			factor = 1
 		}
 	}
+	
 	JAP_urbanization_trigger = {
 		potential = {
+			has_dlc = "Mandate of Heaven"
 			has_country_flag = ME_Urbanization
 			religion = shinto
-			#is_incident_active = no
 			NOT = { has_country_flag = end_of_urbanisation_chain }
 		}
 		allow = {
-			is_incident_active = no
-			has_institution = global_trade
 			num_of_cities = 2
+			has_institution = global_trade
+			is_incident_active = none
 		}
 		effect = {
 			country_event = { id = shinto_events.7 }
-			set_country_flag = active_incident_flag
 			custom_tooltip = ME_Urbanization_Tooltip
+			set_country_flag = active_incident_flag
 		}
 		ai_will_do = {
 			factor = 1
 		}
 	}
+	
 	JAP_support = {
 		major = yes
 		potential = {
@@ -46,10 +48,13 @@ country_decisions = {
 			has_reform = daimyo
 			NOT = { tag = YMN }
 			NOT = { tag = HSK }
+			NOT = { has_country_flag = choosing_side_in_onin_war_support }
 		}
 		allow = {
+			always = yes
 		}
 		effect = {
+			set_country_flag = choosing_side_in_onin_war_support
 			country_event = { id = ME_Daimyo_Events.9 }
 			if = {
 				limit = {
@@ -71,6 +76,10 @@ country_decisions = {
 			factor = 1 #Basic
 			modifier = { #there is not a defining power and the flags are not activated
 				factor = 0
+				NOT = {
+					has_country_flag = JAP_supporting_yamana
+					has_country_flag = JAP_supporting_hosokawa
+				}
 				AND = {
 					NOT = {
 						variable_arithmetic_trigger = {
@@ -131,107 +140,99 @@ country_decisions = {
 								which = Daimyo_Support_for_YMN_temp
 							}
 						}
-					}
-					NOT = {
-						has_country_flag = JAP_supporting_yamana
-						has_country_flag = JAP_supporting_hosokawa
 					}
 				}
 			}
 			modifier = { #support for yamana and flag for yamana
 				factor = 0
-				AND = {
-					variable_arithmetic_trigger = {
-						export_to_variable = {
-							variable_name = Daimyo_Support_for_YMN_temp
-							value = 0
-						}
-						change_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							which = Daimyo_Support_for_YMN
-						}
-						export_to_variable = {
-							variable_name = Daimyo_Support_for_HSK_temp
-							value = 0
-						}
-						change_variable = {
-							which = Daimyo_Support_for_HSK_temp
-							which = Daimyo_Support_for_HSK
-						}
-						
-						change_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							value = 25
-						}
-
-						check_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							which = Daimyo_Support_for_HSK_temp
-						}
+				has_country_flag = JAP_supporting_yamana
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						variable_name = Daimyo_Support_for_YMN_temp
+						value = 0
 					}
-					variable_arithmetic_trigger = {
-						export_to_variable = {
-							variable_name = Daimyo_Support_for_YMN_temp
-							value = 0
-						}
-						change_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							which = Daimyo_Support_for_YMN
-						}
-						export_to_variable = {
-							variable_name = Daimyo_Support_for_HSK_temp
-							value = 0
-						}
-						change_variable = {
-							which = Daimyo_Support_for_HSK_temp
-							which = Daimyo_Support_for_HSK
-						}
-						
-						change_variable = {
-							which = Daimyo_Support_for_HSK_temp
-							value = 25
-						}
-
-						check_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							which = Daimyo_Support_for_HSK_temp
-						}
+					change_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						which = Daimyo_Support_for_YMN
 					}
-					has_country_flag = JAP_supporting_yamana
+					export_to_variable = {
+						variable_name = Daimyo_Support_for_HSK_temp
+						value = 0
+					}
+					change_variable = {
+						which = Daimyo_Support_for_HSK_temp
+						which = Daimyo_Support_for_HSK
+					}
+					
+					change_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						value = 25
+					}
+
+					check_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						which = Daimyo_Support_for_HSK_temp
+					}
+				}
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						variable_name = Daimyo_Support_for_YMN_temp
+						value = 0
+					}
+					change_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						which = Daimyo_Support_for_YMN
+					}
+					export_to_variable = {
+						variable_name = Daimyo_Support_for_HSK_temp
+						value = 0
+					}
+					change_variable = {
+						which = Daimyo_Support_for_HSK_temp
+						which = Daimyo_Support_for_HSK
+					}
+					
+					change_variable = {
+						which = Daimyo_Support_for_HSK_temp
+						value = 25
+					}
+
+					check_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						which = Daimyo_Support_for_HSK_temp
+					}
 				}
 			}
 			modifier = { #support for hosokawa and flag for hosokawa
 				factor = 0
-				AND = {
-					variable_arithmetic_trigger = {
-						export_to_variable = {
-							variable_name = Daimyo_Support_for_YMN_temp
-							value = 0
-						}
-						change_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							which = Daimyo_Support_for_YMN
-						}
-						export_to_variable = {
-							variable_name = Daimyo_Support_for_HSK_temp
-							value = 0
-						}
-						change_variable = {
-							which = Daimyo_Support_for_HSK_temp
-							which = Daimyo_Support_for_HSK
-						}
-						
-						change_variable = {
-							which = Daimyo_Support_for_YMN_temp
-							value = 25
-						}
-
-						check_variable = {
-							which = Daimyo_Support_for_HSK_temp
-							which = Daimyo_Support_for_YMN_temp
-						}
+				has_country_flag = JAP_supporting_hosokawa
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						variable_name = Daimyo_Support_for_YMN_temp
+						value = 0
 					}
-					has_country_flag = JAP_supporting_hosokawa
+					change_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						which = Daimyo_Support_for_YMN
+					}
+					export_to_variable = {
+						variable_name = Daimyo_Support_for_HSK_temp
+						value = 0
+					}
+					change_variable = {
+						which = Daimyo_Support_for_HSK_temp
+						which = Daimyo_Support_for_HSK
+					}
+					
+					change_variable = {
+						which = Daimyo_Support_for_YMN_temp
+						value = 25
+					}
+
+					check_variable = {
+						which = Daimyo_Support_for_HSK_temp
+						which = Daimyo_Support_for_YMN_temp
+					}
 				}
 			}
 		}

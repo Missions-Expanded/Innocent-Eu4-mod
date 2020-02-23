@@ -320,8 +320,16 @@ SMZ_missions_4 = {
 			}
 		}
 		effect = {
-			custom_tooltip = SMZ_tooltips.2
-			set_country_flag = ME_Proliferation
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				custom_tooltip = SMZ_tooltips.2
+				set_country_flag = ME_Proliferation
+			}
+			else = {
+				# ???
+			}
 		}
 	}
 	
@@ -484,21 +492,30 @@ SMZ_missions_5 = {
 		position = 4
 		required_missions = { SMZ_fund_the_satsunan_school SMZ_acquire_foreign_weaponry }
 		trigger = {
-			any_owned_province = {
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = trade_goods }
-					}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				any_owned_province = {
 					OR = {
 						trade_goods = iron
 						trade_goods = gunpowder
 					}
+					base_production = 5
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
 				}
-				else = { trade_goods = iron }
-				base_production = 5
-				OR = {
-					has_building = workshop
-					has_building = counting_house
+			}
+			else = {
+				any_owned_province = {
+					trade_goods = iron
+					base_production = 5
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
 				}
 			}
 		}
@@ -507,10 +524,17 @@ SMZ_missions_5 = {
 				name = SMZ_glorious_nippon_steel_modifier
 				duration = 5475
 			}
+			custom_tooltip = SMZ_tooltips.3
 			hidden_effect = {
 				every_owned_province = {
 					limit = {
-						trade_goods = iron
+						OR = {
+							trade_goods = iron
+							AND = {
+								is_expanded_mod_active = { mod = trade_goods }
+								trade_goods = gunpowder
+							}
+						}
 						base_production = 5
 						OR = {
 							has_building = workshop
@@ -521,13 +545,6 @@ SMZ_missions_5 = {
 						name = SMZ_excellent_weaponsmiths
 						duration = -1
 					}
-				}
-			}
-			custom_tooltip = SMZ_tooltips.3
-			tooltip = {
-				add_province_modifier = {
-					name = SMZ_excellent_weaponsmiths
-					duration = -1
 				}
 			}
 		}
