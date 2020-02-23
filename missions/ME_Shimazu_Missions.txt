@@ -321,6 +321,7 @@ SMZ_missions_4 = {
 		}
 		effect = {
 			custom_tooltip = SMZ_tooltips.2
+			set_country_flag = ME_Proliferation
 		}
 	}
 	
@@ -372,7 +373,7 @@ SMZ_missions_4 = {
 			add_mil_power = 100
 			add_country_modifier = {
 				name = SMZ_might
-				duration = 36500
+				duration = 10950
 			}
 		}
 	}
@@ -439,7 +440,7 @@ SMZ_missions_5 = {
 			1012 = {
 				add_province_modifier ={
 					name = SMZ_prospering_in_isolation
-					duration = -1
+					duration = 10950
 				}
 			}
 		}
@@ -484,7 +485,16 @@ SMZ_missions_5 = {
 		required_missions = { SMZ_fund_the_satsunan_school SMZ_acquire_foreign_weaponry }
 		trigger = {
 			any_owned_province = {
-				trade_goods = iron
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					OR = {
+						trade_goods = iron
+						trade_goods = gunpowder
+					}
+				}
+				else = { trade_goods = iron }
 				base_production = 5
 				OR = {
 					has_building = workshop
@@ -497,15 +507,24 @@ SMZ_missions_5 = {
 				name = SMZ_glorious_nippon_steel_modifier
 				duration = 5475
 			}
-			every_owned_province = {
-				limit = {
-					trade_goods = iron
-					base_production = 5
-					OR = {
-						has_building = workshop
-						has_building = counting_house
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						trade_goods = iron
+						base_production = 5
+						OR = {
+							has_building = workshop
+							has_building = counting_house
+						}
+					}
+					add_province_modifier = {
+						name = SMZ_excellent_weaponsmiths
+						duration = -1
 					}
 				}
+			}
+			custom_tooltip = SMZ_tooltips.3
+			tooltip = {
 				add_province_modifier = {
 					name = SMZ_excellent_weaponsmiths
 					duration = -1
