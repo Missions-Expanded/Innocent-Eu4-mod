@@ -3,8 +3,8 @@ CN_Generic_missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		is_colonial_nation = yes
-		is_subject = yes
+		# is_colonial_nation = yes
+		# is_subject = yes
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -83,18 +83,67 @@ CN_Generic_missions_1 = {
 		icon = mission_rb_colonise_canada
 		position = 5
 		required_missions = { }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = {
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
 		trigger = {
+			OR = {
+				workshop = 5
+				counting_house = 5
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = CN_workshops_going_boom
+				duration = 5475
+			}
 		}
 	}
 	CN_manufactories = {
 		icon = mission_rb_colonise_canada
 		position = 6
 		required_missions = { CN_workshops }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = {
+				OR = {
+					has_building = mills
+					has_building = farm_estate
+					has_building = tradecompany
+					has_building = plantations
+					has_building = textile
+					has_building = weapons
+					has_building = wharf
+					has_building = furnace
+				}
+			}		
+		}
 		trigger = {
+			calc_true_if = {
+				all_owned_province = {
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 10
+			}
 		}
 		effect = {
+			country_event = { id = ME_CN_Events.2 }
+			add_years_of_income = 0.25
 		}
 	}
 }
@@ -103,8 +152,8 @@ CN_Generic_missions_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		is_colonial_nation = yes
-		is_subject = yes
+		# is_colonial_nation = yes
+		# is_subject = yes
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -191,6 +240,18 @@ CN_Generic_missions_2 = {
 		position = 6
 		required_missions = { CN_workshops }
 		trigger = {
+			OR = {
+				gold = 3
+				AND = {
+					production_leader = {
+						trade_goods = cocoa
+					}
+					cocoa = 7
+				}
+				production_leader = {
+					trade_goods = coffee
+				}
+			}
 		}
 		effect = {
 		}
@@ -201,8 +262,8 @@ CN_Generic_missions_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		is_colonial_nation = yes
-		is_subject = yes
+		# is_colonial_nation = yes
+		# is_subject = yes
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -212,8 +273,13 @@ CN_Generic_missions_3 = {
 		position = 2
 		required_missions = { CN_encourage_immigration CN_beyond_our_borders }
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = HAS_COLONIAL_ASSEMBLY
+				has_country_flag = colonial_assembly
+			}
 		}
 		effect = {
+			
 		}
 	}
 	CN_colonial_laws = {
@@ -221,8 +287,13 @@ CN_Generic_missions_3 = {
 		position = 3
 		required_missions = { CN_colonial_assembly }
 		trigger = {
+			OR = {
+				NOT = { average_autonomy_above_min = 10 }
+				absolutism = 25
+			}
 		}
 		effect = {
+			country_event = { id = ME_CN_Events.3 }
 		}
 	}
 	CN_articles = {
@@ -240,8 +311,8 @@ CN_Generic_missions_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		is_colonial_nation = yes
-		is_subject = yes
+		# is_colonial_nation = yes
+		# is_subject = yes
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -316,8 +387,16 @@ CN_Generic_missions_4 = {
 		position = 4
 		required_missions = { CN_colonial_laws }
 		trigger = {
+			calc_true_if = {
+				army_size_percentage = 0.8
+				manpower_percentage = 0.8
+				num_of_generals = 2
+				amount = 2
+			}
 		}
 		effect = {
+			custom_tooltip = CN_Tooltips.3
+			set_country_flag = CN_freedom_fighters
 		}
 	}
 }
@@ -326,8 +405,8 @@ CN_Generic_missions_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		is_colonial_nation = yes
-		is_subject = yes
+		# is_colonial_nation = yes
+		# is_subject = yes
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
@@ -404,4 +483,142 @@ CN_Generic_missions_5 = {
 			}
 		}
 	}
+	CN_mercantilism = {
+		icon = mission_rb_colonise_canada
+		position = 5
+		required_missions = { }
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				mercantilism = 20
+				has_idea = shrewd_commerce_practise 
+				has_idea = free_merchants 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = CN_growing_economy
+				duration = 9125
+			}
+		}
+	}
 }
+CN_Generic_missions_4_Gold_Producing_Cns = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		# is_colonial_nation = yes
+		# is_subject = yes
+		capital_scope = {
+			OR = {
+				colonial_region = colonial_brazil
+				colonial_region = colonial_alaska
+				colonial_region = colonial_california
+				colonial_region = colonial_australia
+				colonial_region = colonial_mexico
+				colonial_region = colonial_peru
+			}
+		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	CN_mmm_myes_gold = {
+		icon = mission_rb_colonise_canada
+		position = 6
+		required_missions = { CN_mercantilism }
+		provinces_to_highlight = {
+			capital_scope = {
+				PREV = {
+					is_in_same_colonial_region_as = { target = PREV }
+					NOT = { owned_by = ROOT }
+					OR = {
+						is_empty = yes
+						trade_goods = gold
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				calc_true_if = {
+					all_owned_province = {
+						trade_goods = gold
+						num_of_times_improved = 3
+					}
+					amount = 3
+				}
+				capital_scope = {
+					all_province = {
+						OR = {
+							is_not_in_same_colonial_region_as = { target = PREV }
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 1.5 #50% better than GOLD RUSH!
+			random_owned_province = {
+				limit = {
+					trade_goods = gold
+				}
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = CN_influx_of_settlers
+					duration = 9125
+				}
+			}
+		}
+	}
+}
+# CN_Generic_missions_4_Gold_Producing_Cns = {
+	# slot = 5
+	# generic = no
+	# ai = yes
+	# potential = {
+		# is_colonial_nation = yes
+		# is_subject = yes
+		# capital_scope = {
+			# OR = {
+				# colonial_region = colonial_brazil
+				# colonial_region = colonial_alaska
+				# colonial_region = colonial_california
+				# colonial_region = colonial_australia
+				# colonial_region = colonial_mexico
+				# colonial_region = colonial_peru
+			# }
+		# }
+		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	# }
+	# has_country_shield = yes
+	
+	# CN_mmm_myes_gold = {
+		# icon = mission_rb_colonise_canada
+		# position = 6
+		# required_missions = { CN_mercantilism }
+		# provinces_to_highlight = {
+			# capital_scope = {
+				# PREV = {
+					# is_in_same_colonial_region_as = { target = PREV }
+					# NOT = { owned_by = ROOT }
+					# OR = {
+						# is_empty = yes
+						# trade_goods = gold
+					# }
+				# }
+			# }
+		# }
+		# trigger = {
+
+		# }
+		# effect = {
+			# add_years_of_income = 1.5 #50% better than GOLD RUSH!
+		# }
+	# }
+# }
