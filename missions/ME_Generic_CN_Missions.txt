@@ -3,12 +3,10 @@ CN_Generic_missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		# is_colonial_nation = yes
-		# is_subject = yes
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		is_colonial_nation = yes
 	}
 	has_country_shield = yes
-	
+
 	CN_forming_a_merchant_case = {
 		icon = mission_rb_colonise_canada
 		position = 1
@@ -34,6 +32,7 @@ CN_Generic_missions_1 = {
 			}
 		}
 	}
+
 	CN_dominate_home_trade_node = {
 		icon = mission_rb_colonise_canada
 		position = 2
@@ -44,11 +43,11 @@ CN_Generic_missions_1 = {
 			}
 		}
 		effect = {
+			custom_tooltip = CN_Tooltips.1
 			add_country_modifier = {
 				name = CN_positive_vibes
 				duration = 9125
 			}
-			custom_tooltip = CN_Tooltips.1
 			hidden_effect = {
 				home_trade_node_effect_scope = {
 					limit = {
@@ -61,6 +60,7 @@ CN_Generic_missions_1 = {
 			}
 		}
 	}
+
 	CN_rapid_urbanization = {
 		icon = mission_rb_colonise_canada
 		position = 4
@@ -68,30 +68,30 @@ CN_Generic_missions_1 = {
 		provinces_to_highlight = {
 			owned_by = ROOT
 			NOT = { development = 24 }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						development = 24
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
-				development = 24
 				value = 5
+				development = 24
 			}
 		}
 		effect = {
 			custom_tooltip = CN_Tooltips.2
 		}
 	}
+
 	CN_workshops = {
 		icon = mission_rb_colonise_canada
 		position = 5
 		required_missions = { }
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = {
-				OR = {
-					has_building = workshop
-					has_building = counting_house
-				}
-			}
-		}
 		trigger = {
 			OR = {
 				workshop = 5
@@ -105,84 +105,39 @@ CN_Generic_missions_1 = {
 			}
 		}
 	}
+
 	CN_manufactories = {
 		icon = mission_rb_colonise_canada
 		position = 6
 		required_missions = { CN_workshops }
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = {
-				OR = {
-					has_building = mills
-					has_building = farm_estate
-					has_building = tradecompany
-					has_building = plantations
-					has_building = textile
-					has_building = weapons
-					has_building = wharf
-					has_building = furnace
-				}
-			}		
-		}
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = mills
-						has_building = farm_estate
-						has_building = tradecompany
-						has_building = plantations
-						has_building = textile
-						has_building = weapons
-						has_building = wharf
-						has_building = furnace
-					}
-				}
-				amount = 10
-			}
+			num_of_owned_manufactory_combined_trigger = { amount = 10 }
 		}
 		effect = {
-			country_event = { id = ME_CN_Events.2 }
 			add_years_of_income = 0.25
+			country_event = { id = ME_CN_Events.2 }
 		}
 	}
 }
+
 CN_Generic_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
-		# is_colonial_nation = yes
-		# is_subject = yes
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		is_colonial_nation = yes
 	}
 	has_country_shield = yes
-	
+
 	CN_encourage_immigration = {
 		icon = mission_rb_colonise_canada
 		position = 1
-		required_missions = {  }
+		required_missions = { }
 		trigger = {
-			if = { 
-				limit = {
-					is_colonial_nation = yes
-				}
-				colonial_parent = {
-					has_opinion = {
-						who = ROOT
-						value = 200
-					}
-				}
-			}
-			else = {
-				any_country = {
-					capital_scope = {
-						continent = europe
-					}
-					has_opinion = {
-						who = ROOT
-						value = 150
-					}
+			colonial_parent = {
+				has_opinion = {
+					who = ROOT
+					value = 200
 				}
 			}
 		}
@@ -190,33 +145,18 @@ CN_Generic_missions_2 = {
 			country_event = { id = ME_CN_Events.1 } #Immigration
 		}
 	}
+
 	CN_growth_of_cities = {
 		icon = mission_settlers_north_america
 		position = 3
 		required_missions = { CN_encourage_immigration }
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = {
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
-			}
-			# NOT = {
-				# OR = {
-					# has_building = marketplace
-					# has_building = trade_depot
-					# has_building = stock_exchange
-				# }
-			# }
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
+				value = 5
 				OR = {
 					has_building = temple
 					has_building = cathedral
 				}
-				value = 5
 			}
 		}
 		effect = {
@@ -226,6 +166,7 @@ CN_Generic_missions_2 = {
 			}
 		}
 	}
+
 	CN_support = {
 		icon = mission_rb_colonise_canada
 		position = 4
@@ -235,6 +176,7 @@ CN_Generic_missions_2 = {
 		effect = {
 		}
 	}
+
 	CN_riches_of_the_new_world = {
 		icon = mission_rb_colonise_canada
 		position = 6
@@ -242,14 +184,14 @@ CN_Generic_missions_2 = {
 		trigger = {
 			OR = {
 				gold = 3
+				production_leader = {
+					trade_goods = coffee
+				}
 				AND = {
+					cocoa = 7
 					production_leader = {
 						trade_goods = cocoa
 					}
-					cocoa = 7
-				}
-				production_leader = {
-					trade_goods = coffee
 				}
 			}
 		}
@@ -257,17 +199,16 @@ CN_Generic_missions_2 = {
 		}
 	}
 }
+
 CN_Generic_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
-		# is_colonial_nation = yes
-		# is_subject = yes
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		is_colonial_nation = yes
 	}
 	has_country_shield = yes
-	
+
 	CN_colonial_assembly = {
 		icon = mission_rb_colonise_canada
 		position = 2
@@ -279,9 +220,9 @@ CN_Generic_missions_3 = {
 			}
 		}
 		effect = {
-			
 		}
 	}
+
 	CN_colonial_laws = {
 		icon = mission_rb_colonise_canada
 		position = 3
@@ -296,6 +237,7 @@ CN_Generic_missions_3 = {
 			country_event = { id = ME_CN_Events.3 }
 		}
 	}
+
 	CN_articles = {
 		icon = mission_rb_colonise_canada
 		position = 5
@@ -306,20 +248,30 @@ CN_Generic_missions_3 = {
 		}
 	}
 }
+
 CN_Generic_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
-		# is_colonial_nation = yes
-		# is_subject = yes
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		is_colonial_nation = yes
 	}
 	has_country_shield = yes
+
 	CN_beyond_our_borders = {
 		icon = mission_rb_colonise_canada
 		position = 1
 		required_missions = {  }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { grown_by_development = 50 }
+				NOT = { grown_by_states = 2 }
+			}
+		}
 		trigger = {
 			OR = {
 				grown_by_development = 50
@@ -339,8 +291,9 @@ CN_Generic_missions_4 = {
 			}
 			hidden_effect = {
 				capital_scope = {
-					region_for_scope_province = {
+					every_province = {
 						limit = {
+							region = PREV
 							any_neighbor_province = {
 								owned_by = ROOT
 							}
@@ -353,23 +306,40 @@ CN_Generic_missions_4 = {
 			}
 		}
 	}
+
 	CN_subdue_natives = {
 		icon = mission_rb_colonise_canada
 		position = 3
 		required_missions = { CN_beyond_our_borders }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			owner = {
+				OR = {
+					is_colonial_nation = yes
+					capital_scope = {
+						OR = {
+							continent = north_america
+							continent = south_america
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			capital_scope = {
 				region_for_scope_province = {
 					type = all
-					owner = {
-						NOT = {
+					OR = {
+						owned_by = ROOT
+						owner = {
+							is_colonial_nation = no
 							capital_scope = {
-								OR = {
-									continent = north_america
-									continent = south_america
-								}
+								NOT = { continent = north_america }
+								NOT = { continent = south_america }
 							}
-							NOT = { is_colonial_nation = yes }
 						}
 					}
 				}
@@ -382,6 +352,7 @@ CN_Generic_missions_4 = {
 			}
 		}
 	}
+
 	CN_army = {
 		icon = mission_rb_colonise_canada
 		position = 4
@@ -400,17 +371,16 @@ CN_Generic_missions_4 = {
 		}
 	}
 }
+
 CN_Generic_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
-		# is_colonial_nation = yes
-		# is_subject = yes
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		is_colonial_nation = yes
 	}
 	has_country_shield = yes
-	
+
 	CN_colonial_expansion = {
 		icon = mission_rb_colonise_canada
 		position = 1
@@ -420,13 +390,23 @@ CN_Generic_missions_5 = {
 				is_capital_of = ROOT
 			}
 			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						region_for_scope_province = {
+							is_capital_of = ROOT
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
+				value = 10
 				region_for_scope_province = {
 					is_capital_of = ROOT
 				}
-				value = 10
 			}
 		}
 		effect = {
@@ -436,10 +416,20 @@ CN_Generic_missions_5 = {
 			}
 		}
 	}
+
 	CN_extensive_colonization = {
 		icon = mission_rb_colonise_canada
 		position = 2
 		required_missions = { CN_colonial_expansion }
+		provinces_to_highlight = {
+			region_for_scope_province = {
+				is_capital_of = ROOT
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { num_of_colonies = 2 }
+			}
+		}
 		trigger = {
 			OR = {
 				num_of_colonies = 2
@@ -450,7 +440,7 @@ CN_Generic_missions_5 = {
 					}
 				}
 			}
-		}	
+		}
 		effect = {
 			add_country_modifier = {
 				name = CN_new_land_claimed
@@ -458,6 +448,7 @@ CN_Generic_missions_5 = {
 			}
 		}
 	}
+
 	CN_unite_the_region = {
 		icon = mission_rb_colonise_canada
 		position = 4
@@ -483,17 +474,16 @@ CN_Generic_missions_5 = {
 			}
 		}
 	}
+
 	CN_mercantilism = {
 		icon = mission_rb_colonise_canada
 		position = 5
 		required_missions = { }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				mercantilism = 20
-				has_idea = shrewd_commerce_practise 
-				has_idea = free_merchants 
+				has_idea = shrewd_commerce_practise
+				has_idea = free_merchants
 			}
 		}
 		effect = {
@@ -504,13 +494,13 @@ CN_Generic_missions_5 = {
 		}
 	}
 }
+
 CN_Generic_missions_4_Gold_Producing_Cns = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
-		# is_colonial_nation = yes
-		# is_subject = yes
+		is_colonial_nation = yes
 		capital_scope = {
 			OR = {
 				colonial_region = colonial_brazil
@@ -521,41 +511,56 @@ CN_Generic_missions_4_Gold_Producing_Cns = {
 				colonial_region = colonial_peru
 			}
 		}
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	CN_mmm_myes_gold = {
 		icon = mission_rb_colonise_canada
 		position = 6
 		required_missions = { CN_mercantilism }
 		provinces_to_highlight = {
-			capital_scope = {
-				PREV = {
-					is_in_same_colonial_region_as = { target = PREV }
+			OR = {
+				AND = {
+					owned_by = ROOT
+					trade_goods = gold
+					NOT = { num_of_times_improved = 3 }
+				}
+				AND = {
+					region_for_scope_province = {
+						is_capital_of = ROOT
+					}
 					NOT = { owned_by = ROOT }
-					OR = {
-						is_empty = yes
+				}
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
 						trade_goods = gold
+						num_of_times_improved = 3
+					}
+				}
+				NOT = {
+					capital_scope = {
+						region_for_scope_province = {
+							type = all
+							owned_by = ROOT
+						}
 					}
 				}
 			}
 		}
 		trigger = {
 			OR = {
-				calc_true_if = {
-					all_owned_province = {
-						trade_goods = gold
-						num_of_times_improved = 3
-					}
-					amount = 3
+				num_of_owned_provinces_with = {
+					value = 3
+					trade_goods = gold
+					num_of_times_improved = 3
 				}
 				capital_scope = {
-					all_province = {
-						OR = {
-							is_not_in_same_colonial_region_as = { target = PREV }
-							owned_by = ROOT
-						}
+					region_for_scope_province = {
+						type = all
+						owned_by = ROOT
 					}
 				}
 			}
@@ -577,13 +582,13 @@ CN_Generic_missions_4_Gold_Producing_Cns = {
 		}
 	}
 }
+
 # CN_Generic_missions_4_Gold_Producing_Cns = {
 	# slot = 5
 	# generic = no
 	# ai = yes
 	# potential = {
 		# is_colonial_nation = yes
-		# is_subject = yes
 		# capital_scope = {
 			# OR = {
 				# colonial_region = colonial_brazil
@@ -594,10 +599,9 @@ CN_Generic_missions_4_Gold_Producing_Cns = {
 				# colonial_region = colonial_peru
 			# }
 		# }
-		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	# }
 	# has_country_shield = yes
-	
+
 	# CN_mmm_myes_gold = {
 		# icon = mission_rb_colonise_canada
 		# position = 6
