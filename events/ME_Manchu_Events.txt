@@ -1,5 +1,73 @@
 namespace = ME_Manchu_Events
 
+country_event = { #Manchu - rise of naruhaci
+	id = ME_Manchu_Events.N
+	title = ME_Manchu_Events.N.t
+	desc = ME_Manchu_Events.N.d
+	picture = IMPERIAL_SEAL_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	trigger = {}
+	
+	option = {
+		name = ME_Manchu_Events.N.a
+		define_ruler = {
+			name = "Naruhaci"
+			dynasty = ROOT
+			culture = manchu_new
+			fixed = yes
+			adm = 5
+			dip = 4
+			mil = 6
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.N.c
+		define_general = {
+			name = "Naruhaci"
+			fire = 2
+			shock = 5
+			manuever = 4
+			siege = 2
+			trait = siege_specialist_personality
+		}
+	}
+}
+
+country_event = { #usurping jianzhou
+	id = ME_Manchu_Events.MJZ
+	title = ME_Manchu_Events.MJZ.t
+	desc = ME_Manchu_Events.MJZ.d
+	picture = IMPERIAL_SEAL_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	trigger = {}
+	
+	option = {
+		name = ME_Manchu_Events.MJZ.a
+		change_tag = MJZ
+		add_adm_power = 20
+		add_dip_power = 20
+		add_mil_power = 20
+	}
+	
+	option = {
+		name = ME_Manchu_Events.MJZ.c
+		every_owned_province = {
+			limit = {
+				is_core = MJZ
+			}
+			remove_core = MJZ
+		}
+		add_prestige = 20
+	}
+}
+
 country_event = { #Jianzhou - Ginseng Production
 	id = ME_Manchu_Events.1
 	title = ME_Manchu_Events.1.t
@@ -8,7 +76,11 @@ country_event = { #Jianzhou - Ginseng Production
 
 	fire_only_once = yes
 	is_triggered_only = yes
-	
+
+	trigger = {
+		
+	}
+
 	immediate = {
 		hidden_effect = {
 			random_owned_province = {
@@ -173,7 +245,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		704 = { #ningyuan
-			IF = {
+			if = {
 				limit = {
 					owned_by = MNG
 				}
@@ -181,7 +253,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		726 = {#shenyang
-			IF = {
+			if = {
 				limit = {
 					owned_by = MNG
 				}
@@ -189,7 +261,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		2113 = {#gaizhou
-			IF = {
+			if = {
 				limit = {
 					owned_by = MNG
 				}
@@ -197,7 +269,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		2112 = {#andong
-			IF = {
+			if = {
 				limit = {
 					owned_by = MNG
 				}
@@ -220,7 +292,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		704 = {
-			IF = {
+			if = {
 				limit = {
 					owned_by = ROOT
 				}
@@ -228,7 +300,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		726 = {
-			IF = {
+			if = {
 				limit = {
 					owned_by = ROOT
 				}
@@ -236,7 +308,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		2113 = {
-			IF = {
+			if = {
 				limit = {
 					owned_by = ROOT
 				}
@@ -244,7 +316,7 @@ country_event = { #siezure of liaoning
 			}
 		}
 		2112 = {
-			IF = {
+			if = {
 				limit = {
 					owned_by = ROOT
 				}
@@ -1089,7 +1161,7 @@ country_event = { #Ministry of Revenue event chain - 2 (Silk, Dyes, and Paper St
 		}
 	}
 	
-	#The Imperial Silk Factories of Kangxi in China, 1661-1722 A mirror for Louis XIV’s Royal Factories?
+	#The Imperial Silk Factories of Kangxi in China, 1661-1722 A mirror for Louis XIVï¿½s Royal Factories?
 	#Li Wang
 	#pg. 20
 	
@@ -1361,7 +1433,7 @@ country_event = { #Ministry of Revenue event chain - 3 (Implementing the Sheng-k
 	}
 }
 
-country_event = { #Ministry of Rites event chain - 1
+country_event = { #Ministry of Rites event chain - 1 (lavish envoys)
 	id = ME_Manchu_Events.24
 	title = ME_Manchu_Events.24.t
 	desc = ME_Manchu_Events.24.d
@@ -1387,10 +1459,41 @@ country_event = { #Ministry of Rites event chain - 1
 		}
 	}
 	
-	option = { #different tax plan
-		name = ME_Manchu_Events.23.a
+	option = { #reduce visits
+		name = ME_Manchu_Events.24.a
 		
+		add_country_modifier = {
+			name = QNG_less_tributes #+5 tax eff
+			duration = 36500
+		}
 		
+		every_subject_country = {
+			limit = {
+				is_subject_of_type = tributary_state
+			}
+			add_liberty_desire = -20
+		}
+
+		if = {
+			limit = {
+				check_variable = {
+					which = reformChainProgress
+					value = 3
+				}
+			}
+			clr_country_flag = reformed_ministry_rites
+			set_country_flag = finished_rites_event_chain_flag
+			custom_tooltip =  completed_ministry_rites_chain_tooltip
+		}
+	}
+
+	option = { #dont
+		name = ME_Manchu_Events.24.b
+		
+		hidden_effect = {
+			set_country_flag = qng_lavish_envoys
+		}
+		custom_tooltip = qng_sometimes_envoy_events
 		
 		if = {
 			limit = {
@@ -1419,7 +1522,7 @@ country_event = { #invasion of taiwan
 		name = ME_Manchu_Events.25.a
 		
 		taiwan_area = {
-			add_siberian_construction = 100
+			add_nationalism = -5
 		}
 		
 		738 = {
@@ -1433,9 +1536,9 @@ country_event = { #invasion of taiwan
 	option = { #colonize taiwan
 		name = ME_Manchu_Events.25.b
 		
-		taiwan_area = {
-			add_siberian_construction = 100
-		}
+		# taiwan_area = {
+			# add_siberian_construction = 100
+		# }
 		
 		add_country_modifier = {
 			name = QNG_end_of_ming_loyalists
@@ -1473,7 +1576,7 @@ country_event = { #tibetan rule
 					NOT = { is_year = 1505 }
 				}
 				define_ruler = {
-					name = "Sönam"
+					name = "Sï¿½nam"
 					dynasty = "Choklang"
 				}
 			}
@@ -1484,7 +1587,7 @@ country_event = { #tibetan rule
 				}
 				define_ruler = {
 					name = "Ensapa Lobsang"
-					dynasty = "Döndrup"
+					dynasty = "Dï¿½ndrup"
 				}
 			}
 			else_if = {
@@ -1493,7 +1596,7 @@ country_event = { #tibetan rule
 					NOT = { is_year = 1662 }
 				}
 				define_ruler = {
-					name = "Lobsang Chökyi"
+					name = "Lobsang Chï¿½kyi"
 					dynasty = "Gyalsten"
 				}
 			}
@@ -2300,7 +2403,7 @@ country_event = { #proliferation of opium
 		
 		if = {
 			limit = {
-				is_expanded_mod_active = { mod = trade_goods }
+				has_global_flag = trade_goods_exapanded_mod_active
 			}
 			change_price = {
 				trade_goods = opium
@@ -2351,7 +2454,7 @@ country_event = { #proliferation of opium
 		
 		if = {
 			limit = {
-				is_expanded_mod_active = { mod = trade_goods }
+				has_global_flag = trade_goods_exapanded_mod_active
 			}
 			change_price = {
 				trade_goods = opium
@@ -2412,7 +2515,7 @@ country_event = { #opium epidemic in country!
 	picture = COURT_eventPicture
 
 	trigger = {
-		# is_expanded_mod_active = { mod = trade_goods }
+		#has_global_flag = trade_goods_exapanded_mod_active
 		NOT = { has_country_flag = had_opium_epidemic }
 		OR = {
 			has_country_flag = qng_opium_patient_zero
@@ -2514,7 +2617,7 @@ country_event = { #global opium epidemic
 		
 		if = {
 			limit = {
-				is_expanded_mod_active = { mod = trade_goods }
+				has_global_flag = trade_goods_exapanded_mod_active
 			}
 			change_price = {
 				trade_goods = opium
@@ -2668,5 +2771,1558 @@ province_event = { #salt monopoly - new salt stations
 		
 		custom_tooltip = qng_salt_station_tt2
 		add_province_triggered_modifier = QNG_salt_stations
+	}
+}
+
+country_event = { #envoy event 1 (enabled by .24)
+	id = ME_Manchu_Events.44
+	title = ME_Manchu_Events.44.t
+	desc = ME_Manchu_Events.44.d
+	picture = COURT_eventPicture
+	
+	trigger = {
+		tag = QNG
+		has_country_flag = qng_lavish_envoys
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		random_subject_country = {
+			limit = {
+				is_subject_of_type = tributary_state
+			}
+			save_event_target_as = qng_big_tibute_target
+		}
+	}
+
+	option = { #recieve them with full honors
+		name = ME_Manchu_Events.44.a
+		
+		add_prestige = 5
+		add_years_of_income = -0.15
+		event_target:qng_big_tibute_target = {
+			add_prestige = 10
+			add_liberty_desire = -10
+		}
+		add_ruler_modifier = {
+			name = QNG_generous_host
+			duration = -1
+		}
+	}
+
+	option = { #no obligation
+		name = ME_Manchu_Events.44.a
+		
+		add_prestige = -5
+		
+		event_target:qng_big_tibute_target = {
+			add_prestige = 10
+		}
+	}
+}
+
+country_event = { #Huang Zongxi, Neo-Confucian Philosopher
+	id = ME_Manchu_Events.45
+	title = ME_Manchu_Events.45.t
+	desc = ME_Manchu_Events.45.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1610
+		NOT = { is_year = 1695 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #take
+		name = ME_Manchu_Events.45.a
+		define_advisor = {
+			type = philosopher
+			name = "Huang Zongxi"
+			skill = 3
+			culture = wu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #no take
+		name = ME_Manchu_Events.45.b
+		add_mil_power = 15
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+}
+
+country_event = { #Gu Yanwu
+	id = ME_Manchu_Events.46
+	title = ME_Manchu_Events.46.t
+	desc = ME_Manchu_Events.46.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1610
+		NOT = { is_year = 1695 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #take
+		name = ME_Manchu_Events.46.a
+		define_advisor = {
+			type = philosopher
+			name = "Gu Yanwu"
+			skill = 3
+			culture = wu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #no take
+		name = ME_Manchu_Events.46.b
+		add_prestige = -5
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+}
+
+country_event = { #Wang Fuzhi
+	id = ME_Manchu_Events.47
+	title = ME_Manchu_Events.47.t
+	desc = ME_Manchu_Events.47.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1620
+		NOT = { is_year = 1695 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.47.a
+		define_advisor = {
+			type = philosopher
+			name = "Wang Fuzhi"
+			skill = 3
+			culture = xiang
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+		add_ruler_modifier = {
+			name = QNG_materialist
+			duration = -1
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.47.b
+		add_ruler_modifier = {
+			name = QNG_neo_confucian
+			duration = -1
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+}
+
+country_event = { #3 great early qing philos
+	id = ME_Manchu_Events.48
+	title = ME_Manchu_Events.48.t
+	desc = ME_Manchu_Events.48.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1580
+		NOT = { is_year = 1710 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.48.a
+		trigger = {
+			is_year = 1630
+			NOT = { is_year = 1710 }
+		}
+		define_advisor = {
+			type = philosopher
+			name = "Li Yong"
+			skill = 3
+			culture = xibei
+			religion = confucianism
+			cost_multiplier = 0.90
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.48.b
+		trigger = {
+			is_year = 1580
+			NOT = { is_year = 1680 }
+		}
+		define_advisor = {
+			type = philosopher
+			name = "Sun Qifeng"
+			skill = 3
+			culture = chihan
+			religion = confucianism
+			cost_multiplier = 0.90
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.48.c
+		trigger = {
+			is_year = 1610
+			NOT = { is_year = 1700 }
+		}
+		define_advisor = {
+			type = philosopher
+			name = "Huang Zongxi"
+			skill = 3
+			culture = wu
+			religion = confucianism
+			cost_multiplier = 0.90
+		}
+		hidden_effect = {
+			set_country_flag = qng_ranked_lists_flag
+		}
+	}
+}
+
+country_event = { #yan yuan and li gong
+	id = ME_Manchu_Events.49
+	title = ME_Manchu_Events.49.t
+	desc = ME_Manchu_Events.49.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1630
+		NOT = { is_year = 1730 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #yy
+		name = ME_Manchu_Events.49.a
+		trigger = {
+			is_year = 1635
+			NOT = { is_year = 1705 }
+		}
+		define_advisor = {
+			type = philosopher
+			name = "Yan Yuan"
+			skill = 3
+			culture = chihan
+			religion = confucianism
+			cost_multiplier = 0.80
+		}
+	}
+	
+	option = { #lg
+		name = ME_Manchu_Events.49.a
+		trigger = {
+			is_year = 1660
+			NOT = { is_year = 1730 }
+		}
+		define_advisor = {
+			type = philosopher
+			name = "Li Gong"
+			skill = 3
+			culture = chihan
+			religion = confucianism
+			cost_multiplier = 0.80
+		}
+	}
+}
+
+country_event = { #Hui Dong
+	id = ME_Manchu_Events.50
+	title = ME_Manchu_Events.50.t
+	desc = ME_Manchu_Events.50.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1700
+		NOT = { is_year = 1760 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.50.a
+		define_advisor = {
+			type = philosopher
+			name = "Hui Dong"
+			skill = 3
+			culture = wu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+}
+
+country_event = { #Dai Zhen
+	id = ME_Manchu_Events.51
+	title = ME_Manchu_Events.51.t
+	desc = ME_Manchu_Events.51.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1725
+		NOT = { is_year = 1780 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #
+		name = ME_Manchu_Events.51.a
+		define_advisor = {
+			type = philosopher
+			name = "Dai Zhen"
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+}
+
+country_event = { #bada shanren
+	id = ME_Manchu_Events.52
+	title = ME_Manchu_Events.52.t
+	desc = ME_Manchu_Events.52.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1630
+		NOT = { is_year = 1710 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.52.a
+		define_advisor = {
+			type = artist
+			name = "Bada Shanren"
+			skill = 5
+			culture = chihan
+			religion = confucianism
+			cost_multiplier = 0.75
+		}
+	}
+}
+
+country_event = { #jiang tinxi
+	id = ME_Manchu_Events.53
+	title = ME_Manchu_Events.53.t
+	desc = ME_Manchu_Events.53.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1670
+		NOT = { is_year = 1735 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.52.a
+		define_advisor = {
+			type = artist
+			name = "Jiang Tingxi"
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+			cost_multiplier = 0.95
+		}
+	}
+}
+
+country_event = { #shi tao
+	id = ME_Manchu_Events.54
+	title = ME_Manchu_Events.54.t
+	desc = ME_Manchu_Events.54.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1640
+		NOT = { is_year = 1710 }
+		NOT = { has_adm_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.54.a
+		
+		define_advisor = {
+			type = artist
+			name = "Shi Tao"
+			skill = 3
+			culture = zhuang
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+		add_prestige = -10
+	}
+	
+	option = {
+		name = ME_Manchu_Events.54.b
+	}
+}
+
+country_event = { #Fuqing
+	id = ME_Manchu_Events.55
+	title = ME_Manchu_Events.55.t
+	desc = ME_Manchu_Events.55.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1690
+		NOT = { is_year = 1750 }
+		NOT = { has_dip_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #staesman
+		name = ME_Manchu_Events.55.a
+		
+		define_advisor = {
+			type = statesman
+			name = "Fuqing"
+			skill = 2
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+	
+	option = { #general
+		name = ME_Manchu_Events.55.b
+		
+		define_general = {
+			name = "Fuqing"
+			shock = 3
+			fire = 3
+			manuever = 0
+			siege = 0
+		}
+	}
+}
+
+country_event = { #huang shujing
+	id = ME_Manchu_Events.56
+	title = ME_Manchu_Events.56.t
+	desc = ME_Manchu_Events.56.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1680
+		NOT = { is_year = 1725 }
+		NOT = { has_dip_advisor = yes }
+		taiwan_area = {
+			type = all
+			owned_by = ROOT
+		}
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #staesman
+		name = ME_Manchu_Events.56.a
+		
+		define_advisor = {
+			type = statesman
+			name = "Huang Shujing"
+			skill = 3
+			culture = chihan
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+	
+	option = { #staesman
+		name = ME_Manchu_Events.56.b
+		
+		taiwan_area = {
+			add_base_tax = 1
+		}
+	}
+}
+
+country_event = { #Keying
+	id = ME_Manchu_Events.57
+	title = ME_Manchu_Events.57.t
+	desc = ME_Manchu_Events.57.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1780
+		NOT = { is_year = 1860 }
+		NOT = { has_dip_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #statesman
+		name = ME_Manchu_Events.57.a
+		
+		define_advisor = {
+			type = statesman
+			name = "Keying"
+			skill = 3
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.90
+		}
+	}
+	
+	option = { #statesman
+		name = ME_Manchu_Events.57.a
+		
+		define_advisor = {
+			type = diplomat
+			name = "Keying"
+			skill = 3
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.70
+		}
+	}
+}
+
+country_event = { #Songgotu
+	id = ME_Manchu_Events.58
+	title = ME_Manchu_Events.58.t
+	desc = ME_Manchu_Events.58.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		mission_completed = QNG_russia
+		is_year = 1640
+		NOT = { is_year = 1700 }
+		NOT = { has_dip_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #statesman
+		name = ME_Manchu_Events.58.a
+		
+		define_advisor = {
+			type = statesman
+			name = "Keying"
+			skill = 5
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.75
+		}
+	}
+	
+	option = { #diplomat
+		name = ME_Manchu_Events.58.b
+		
+		define_advisor = {
+			type = diplomat
+			name = "Keying"
+			skill = 3
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+}
+
+country_event = { #tulisen
+	id = ME_Manchu_Events.59
+	title = ME_Manchu_Events.59.t
+	desc = ME_Manchu_Events.59.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		mission_completed = QNG_russia
+		is_year = 1670
+		NOT = { is_year = 1740 }
+		NOT = { has_dip_advisor = yes }
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #statesman
+		name = ME_Manchu_Events.59.a
+		
+		define_advisor = {
+			type = statesman
+			name = "Tulisen"
+			skill = 3
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+	
+	option = { #diplomat
+		name = ME_Manchu_Events.59.b
+		
+		define_advisor = {
+			type = diplomat
+			name = "Tulisen"
+			skill = 3
+			culture = manchu
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+}
+
+country_event = { #Yang Fang
+	id = ME_Manchu_Events.60
+	title = ME_Manchu_Events.60.t
+	desc = ME_Manchu_Events.60.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = QNG_advisors
+		is_year = 1770
+		NOT = { is_year = 1850 }
+		OR = {
+			NOT = { has_dip_advisor = yes }
+			NOT = { has_mil_advisor = yes }
+		}
+		had_country_flag = {
+			flag = qng_ranked_lists_flag
+			days = 2190
+		}
+	}
+	
+	mean_time_to_happen = {
+		days = 18
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = qng_ranked_lists_flag
+		}
+	}
+	
+	option = { #diplomat
+		name = ME_Manchu_Events.60.a
+		
+		define_advisor = {
+			type = diplomat
+			name = "Yang Fang"
+			skill = 3
+			culture = miao
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+	
+	option = { #diplomat
+		name = ME_Manchu_Events.60.b
+		
+		define_general = {
+			name = "Fuqing"
+			shock = 2
+			fire = 4
+			manuever = 1
+			siege = 0
+		}
+	}
+	
+	option = { #diplomat
+		name = ME_Manchu_Events.60.b
+		
+		define_advisor = {
+			type = army_organiser
+			name = "Tulisen"
+			skill = 3
+			culture = miao
+			religion = confucianism
+			cost_multiplier = 0.85
+		}
+	}
+}
+
+country_event = { #High Qing
+	id = ME_Manchu_Events.65
+	title = ME_Manchu_Events.65.t
+	desc = ME_Manchu_Events.65.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				which = eraNameCounter
+				value = 0
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Manchu_Events.65.a
+		
+		add_ruler_modifier = {
+			name = QNG_kangxi_emperor #-5% power costs
+			duration = -1
+		}
+		
+		custom_tooltip = qng_regnal_titles
+	}
+}
+
+country_event = { #choose regnal title
+	id = ME_Manchu_Events.66
+	title = ME_Manchu_Events.66.t
+	desc = ME_Manchu_Events.66.d
+	picture = COURT_eventPicture
+	
+	trigger = {
+		mission_completed = QNG_high_qing
+		NOT = { has_era_name = yes }
+		has_regency = no
+		NOT = {
+			check_variable = {
+				which = eraNameCounter
+				value = 28
+			}
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	immediate = {
+		hidden_effect = {
+			change_variable = {
+				which = eraNameCounter
+				value = 1
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_country_flag = qng_era_name_flag_1_used
+						has_country_flag = qng_era_name_flag_2_used
+						has_country_flag = qng_era_name_flag_3_used
+						has_country_flag = qng_era_name_flag_4_used
+						has_country_flag = qng_era_name_flag_5_used
+						has_country_flag = qng_era_name_flag_6_used
+						has_country_flag = qng_era_name_flag_7_used
+					}
+				}
+			}
+			while = {
+				limit = {
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = qng_era_name_flag_1
+								NOT = { has_country_flag = qng_era_name_flag_1_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_2
+								NOT = { has_country_flag = qng_era_name_flag_2_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_3
+								NOT = { has_country_flag = qng_era_name_flag_3_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_4
+								NOT = { has_country_flag = qng_era_name_flag_4_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_5
+								NOT = { has_country_flag = qng_era_name_flag_5_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_6
+								NOT = { has_country_flag = qng_era_name_flag_6_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_7
+								NOT = { has_country_flag = qng_era_name_flag_7_used }
+							}
+						}
+					}
+				}
+				random_list = { #adm pool
+					100 = { set_country_flag = qng_era_name_flag_1 }
+					100 = { set_country_flag = qng_era_name_flag_2 }
+					100 = { set_country_flag = qng_era_name_flag_3 }
+					100 = { set_country_flag = qng_era_name_flag_4 }
+					100 = { set_country_flag = qng_era_name_flag_5 }
+					100 = { set_country_flag = qng_era_name_flag_6 }
+					100 = { set_country_flag = qng_era_name_flag_7 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_country_flag = qng_era_name_flag_8_used
+						has_country_flag = qng_era_name_flag_9_used
+						has_country_flag = qng_era_name_flag_10_used
+						has_country_flag = qng_era_name_flag_11_used
+						has_country_flag = qng_era_name_flag_12_used
+						has_country_flag = qng_era_name_flag_13_used
+						has_country_flag = qng_era_name_flag_14_used
+					}
+				}
+			}
+			while = {
+				limit = {
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = qng_era_name_flag_8
+								NOT = { has_country_flag = qng_era_name_flag_8_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_9
+								NOT = { has_country_flag = qng_era_name_flag_9_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_10
+								NOT = { has_country_flag = qng_era_name_flag_10_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_11
+								NOT = { has_country_flag = qng_era_name_flag_11_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_12
+								NOT = { has_country_flag = qng_era_name_flag_12_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_13
+								NOT = { has_country_flag = qng_era_name_flag_13_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_14
+								NOT = { has_country_flag = qng_era_name_flag_14_used }
+							}
+						}
+					}
+				}
+				random_list = { #dip pool
+					100 = { set_country_flag = qng_era_name_flag_8 }
+					100 = { set_country_flag = qng_era_name_flag_9 }
+					100 = { set_country_flag = qng_era_name_flag_10 }
+					100 = { set_country_flag = qng_era_name_flag_11 }
+					100 = { set_country_flag = qng_era_name_flag_12 }
+					100 = { set_country_flag = qng_era_name_flag_13 }
+					100 = { set_country_flag = qng_era_name_flag_14 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_country_flag = qng_era_name_flag_15_used
+						has_country_flag = qng_era_name_flag_16_used
+						has_country_flag = qng_era_name_flag_17_used
+						has_country_flag = qng_era_name_flag_18_used
+						has_country_flag = qng_era_name_flag_19_used
+						has_country_flag = qng_era_name_flag_20_used
+						has_country_flag = qng_era_name_flag_21_used
+					}
+				}
+			}
+			while = {
+				limit = {
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = qng_era_name_flag_15
+								NOT = { has_country_flag = qng_era_name_flag_15_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_16
+								NOT = { has_country_flag = qng_era_name_flag_16_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_17
+								NOT = { has_country_flag = qng_era_name_flag_17_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_18
+								NOT = { has_country_flag = qng_era_name_flag_18_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_19
+								NOT = { has_country_flag = qng_era_name_flag_19_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_20
+								NOT = { has_country_flag = qng_era_name_flag_20_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_21
+								NOT = { has_country_flag = qng_era_name_flag_21_used }
+							}
+						}
+					}
+				}
+				random_list = { #mil pool
+					100 = { set_country_flag = qng_era_name_flag_15 }
+					100 = { set_country_flag = qng_era_name_flag_16 }
+					100 = { set_country_flag = qng_era_name_flag_17 }
+					100 = { set_country_flag = qng_era_name_flag_18 }
+					100 = { set_country_flag = qng_era_name_flag_19 }
+					100 = { set_country_flag = qng_era_name_flag_20 }
+					100 = { set_country_flag = qng_era_name_flag_21 }
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						has_country_flag = qng_era_name_flag_22_used
+						has_country_flag = qng_era_name_flag_23_used
+						has_country_flag = qng_era_name_flag_24_used
+						has_country_flag = qng_era_name_flag_25_used
+						has_country_flag = qng_era_name_flag_26_used
+						has_country_flag = qng_era_name_flag_27_used
+						has_country_flag = qng_era_name_flag_28_used
+					}
+				}
+			}
+			while = {
+				limit = {
+					NOT = {
+						OR = {
+							AND = {
+								has_country_flag = qng_era_name_flag_22
+								NOT = { has_country_flag = qng_era_name_flag_22_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_23
+								NOT = { has_country_flag = qng_era_name_flag_23_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_24
+								NOT = { has_country_flag = qng_era_name_flag_24_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_25
+								NOT = { has_country_flag = qng_era_name_flag_25_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_26
+								NOT = { has_country_flag = qng_era_name_flag_26_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_27
+								NOT = { has_country_flag = qng_era_name_flag_27_used }
+							}
+							AND = {
+								has_country_flag = qng_era_name_flag_28
+								NOT = { has_country_flag = qng_era_name_flag_28_used }
+							}
+						}
+					}
+				}
+				random_list = { #wild pool
+					100 = { set_country_flag = qng_era_name_flag_22 }
+					100 = { set_country_flag = qng_era_name_flag_23 }
+					100 = { set_country_flag = qng_era_name_flag_24 }
+					100 = { set_country_flag = qng_era_name_flag_25 }
+					100 = { set_country_flag = qng_era_name_flag_26 }
+					100 = { set_country_flag = qng_era_name_flag_27 }
+					100 = { set_country_flag = qng_era_name_flag_28 }
+				}
+			}
+		}
+	}
+
+	#adm options
+	option = {
+		name = ME_Manchu_Events.66.1
+		trigger = {
+			has_country_flag = qng_era_name_flag_1
+			NOT = { has_country_flag = qng_era_name_flag_1_used }
+		}
+		set_country_flag = qng_era_name_flag_1_used
+		add_ruler_modifier = {
+			name = QNG_era_name_xuantong #idk what this means
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.2
+		trigger = {
+			has_country_flag = qng_era_name_flag_2
+			NOT = { has_country_flag = qng_era_name_flag_2_used }
+		}
+		set_country_flag = qng_era_name_flag_2_used
+		add_ruler_modifier = {
+			name = QNG_era_name_daoguang #idk what this means either
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.3
+		trigger = { has_country_flag = qng_era_name_flag_3
+			NOT = { has_country_flag = qng_era_name_flag_3_used }
+		}
+		set_country_flag = qng_era_name_flag_3_used
+		add_ruler_modifier = {
+			name = QNG_era_name_shunzhi #Smoothly-Ruling
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.4
+		trigger = { has_country_flag = qng_era_name_flag_4
+			NOT = { has_country_flag = qng_era_name_flag_4_used }
+		}
+		set_country_flag = qng_era_name_flag_4_used
+		add_ruler_modifier = {
+			name = QNG_era_name_yongli #perpetual calendar
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.5
+		trigger = { has_country_flag = qng_era_name_flag_5
+			NOT = { has_country_flag = qng_era_name_flag_5_used }
+		}
+		set_country_flag = qng_era_name_flag_5_used
+		add_ruler_modifier = {
+			name = QNG_era_name_yongchang #??
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.6
+		trigger = { has_country_flag = qng_era_name_flag_6
+			NOT = { has_country_flag = qng_era_name_flag_6_used }
+		}
+		set_country_flag = qng_era_name_flag_6_used
+		add_ruler_modifier = {
+			name = QNG_era_name_wanli #ten thousand calendars
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.7
+		trigger = { has_country_flag = qng_era_name_flag_7
+			NOT = { has_country_flag = qng_era_name_flag_7_used }
+		}
+		set_country_flag = qng_era_name_flag_7_used
+		add_ruler_modifier = {
+			name = QNG_era_name_hongzhi #great government
+			duration = -1
+		}
+	}
+
+	#dip options
+	option = {
+		name = ME_Manchu_Events.66.8
+		trigger = { has_country_flag = qng_era_name_flag_8
+			NOT = { has_country_flag = qng_era_name_flag_8_used }
+		}
+		set_country_flag = qng_era_name_flag_8_used
+		add_ruler_modifier = {
+			name = QNG_era_name_guagnxu #glorius succession
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.9
+		trigger = { has_country_flag = qng_era_name_flag_9
+			NOT = { has_country_flag = qng_era_name_flag_9_used }
+		}
+		set_country_flag = qng_era_name_flag_9_used
+		add_ruler_modifier = {
+			name = QNG_era_name_jiaqing #?
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.10
+		trigger = { has_country_flag = qng_era_name_flag_10
+			NOT = { has_country_flag = qng_era_name_flag_10_used }
+		}
+		set_country_flag = qng_era_name_flag_10_used
+		add_ruler_modifier = {
+			name = QNG_era_name_tiancong #heavenly wisdom
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.11
+		trigger = { has_country_flag = qng_era_name_flag_11
+			NOT = { has_country_flag = qng_era_name_flag_11_used }
+		}
+		set_country_flag = qng_era_name_flag_11_used
+		add_ruler_modifier = {
+			name = QNG_era_name_shaowu #?
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.12
+		trigger = { has_country_flag = qng_era_name_flag_12
+			NOT = { has_country_flag = qng_era_name_flag_12_used }
+		}
+		set_country_flag = qng_era_name_flag_12_used
+		add_ruler_modifier = {
+			name = QNG_era_name_chongzhen #honorable and auspicious
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.13
+		trigger = { has_country_flag = qng_era_name_flag_13
+			NOT = { has_country_flag = qng_era_name_flag_13_used }
+		}
+		set_country_flag = qng_era_name_flag_13_used
+		add_ruler_modifier = {
+			name = QNG_era_name_longqing #great celebration
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.14
+		trigger = { has_country_flag = qng_era_name_flag_14
+			NOT = { has_country_flag = qng_era_name_flag_14_used }
+		}
+		set_country_flag = qng_era_name_flag_14_used
+		add_ruler_modifier = {
+			name = QNG_era_name_jingtai #exhalted view
+			duration = -1
+		}
+	}
+
+	#mil options
+	option = {
+		name = ME_Manchu_Events.66.15
+		trigger = { has_country_flag = qng_era_name_flag_15
+			NOT = { has_country_flag = qng_era_name_flag_15_used }
+		}
+		set_country_flag = qng_era_name_flag_15_used
+		add_ruler_modifier = {
+			name = QNG_era_name_tongzhi #restore order together
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.16
+		trigger = { has_country_flag = qng_era_name_flag_16
+			NOT = { has_country_flag = qng_era_name_flag_16_used }
+		}
+		set_country_flag = qng_era_name_flag_16_used
+		add_ruler_modifier = {
+			name = QNG_era_name_qianlong #lasting eminence
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.17
+		trigger = { has_country_flag = qng_era_name_flag_17
+			NOT = { has_country_flag = qng_era_name_flag_17_used }
+		}
+		set_country_flag = qng_era_name_flag_17_used
+		add_ruler_modifier = {
+			name = QNG_era_name_chongde #lofty virtue
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.18
+		trigger = { has_country_flag = qng_era_name_flag_18
+			NOT = { has_country_flag = qng_era_name_flag_18_used }
+		}
+		set_country_flag = qng_era_name_flag_18_used
+		add_ruler_modifier = {
+			name = QNG_era_name_longwu #plentiful and martial
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.19
+		trigger = { has_country_flag = qng_era_name_flag_19
+			NOT = { has_country_flag = qng_era_name_flag_19_used }
+		}
+		set_country_flag = qng_era_name_flag_19_used
+		add_ruler_modifier = {
+			name = QNG_era_name_tianqi #heavenly opening
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.20
+		trigger = { has_country_flag = qng_era_name_flag_20
+			NOT = { has_country_flag = qng_era_name_flag_20_used }
+		}
+		set_country_flag = qng_era_name_flag_20_used
+		add_ruler_modifier = {
+			name = QNG_era_name_jiajing #admirable tranquility
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.21
+		trigger = { has_country_flag = qng_era_name_flag_21
+			NOT = { has_country_flag = qng_era_name_flag_21_used }
+		}
+		set_country_flag = qng_era_name_flag_21_used
+		add_ruler_modifier = {
+			name = QNG_era_name_tianshun #obedience to heaven
+			duration = -1
+		}
+	}
+
+	#wild card options
+	option = {
+		name = ME_Manchu_Events.66.22
+		trigger = { has_country_flag = qng_era_name_flag_22
+			NOT = { has_country_flag = qng_era_name_flag_22_used }
+		}
+		set_country_flag = qng_era_name_flag_22_used
+		add_ruler_modifier = {
+			name = QNG_era_name_xiangfeng #universal prosperity
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.23
+		trigger = { has_country_flag = qng_era_name_flag_23
+			NOT = { has_country_flag = qng_era_name_flag_23_used }
+		}
+		set_country_flag = qng_era_name_flag_23_used
+		add_ruler_modifier = {
+			name = QNG_era_name_yongzheng #harmonius justice
+			duration = -1
+		}
+		change_dip = 2
+	}
+	option = {
+		name = ME_Manchu_Events.66.24
+		trigger = { has_country_flag = qng_era_name_flag_24
+			NOT = { has_country_flag = qng_era_name_flag_24_used }
+		}
+		set_country_flag = qng_era_name_flag_24_used
+		add_ruler_modifier = {
+			name = QNG_era_name_tianming #The Emperor of Heaven's Mandate
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.25
+		trigger = { has_country_flag = qng_era_name_flag_25
+			NOT = { has_country_flag = qng_era_name_flag_25_used }
+		}
+		set_country_flag = qng_era_name_flag_25_used
+		add_ruler_modifier = {
+			name = QNG_era_name_hongguang #??
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.26
+		trigger = { has_country_flag = qng_era_name_flag_26
+			NOT = { has_country_flag = qng_era_name_flag_26_used }
+		}
+		set_country_flag = qng_era_name_flag_26_used
+		add_ruler_modifier = {
+			name = QNG_era_name_taichang #grand prosperity
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.27
+		trigger = { has_country_flag = qng_era_name_flag_27
+			NOT = { has_country_flag = qng_era_name_flag_27_used }
+		}
+		set_country_flag = qng_era_name_flag_27_used
+		add_ruler_modifier = {
+			name = QNG_era_name_zhengde #right virtue
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Manchu_Events.66.28
+		trigger = { has_country_flag = qng_era_name_flag_28
+			NOT = { has_country_flag = qng_era_name_flag_28_used }
+		}
+		set_country_flag = qng_era_name_flag_28_used
+		add_ruler_modifier = {
+			name = QNG_era_name_chenghua #accomplished change
+			duration = -1
+		}
 	}
 }
