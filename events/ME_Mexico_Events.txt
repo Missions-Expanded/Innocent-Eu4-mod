@@ -260,6 +260,10 @@ country_event = { #Gold Rush
 		ai_chance = {
 			factor = 33
 		}
+		set_country_flag = mex_gold_rush_pursue
+		custom_tooltip = MEX_GOLD_RUSH_TOOLTIP
+		add_yearly_manpower = -2
+		add_years_of_income = -2
 	}
 
 	option = {
@@ -271,16 +275,288 @@ country_event = { #Gold Rush
 	}
 }
 
-country_event = { #Secularisation or Spiritualism
+province_event = { #Scope all Provinces in Colonial California
 	id = ME_Mexico_Events.5
 	title = ME_Mexico_Events.5.T
 	desc = ME_Mexico_Events.5.D
 	picture = CIVIL_WAR_eventPicture
 
-	is_triggered_only = yes
+	mean_time_to_happen = {
+		years = 1
+	}
+	
+	trigger = {
+		owner = {
+			tag = MEX
+			has_country_flag = mex_gold_rush_pursue
+		}
+		NOT = {
+			has_province_flag = mex_gold_rush_province_done
+		}
+		colonial_region = colonial_california
+		OR = {
+			has_terrain = hills
+			has_terrain = mountain
+			has_terrain = highlands
+		}
+		NOT = {
+			trade_goods = gold
+		}
+		OR = {
+			NOT = {
+				is_expanded_mod_active = { 
+					mod = trade_goods
+				}
+			}
+			NOT = {
+				trade_goods = silver
+			}
+		}
+	}
 
 	option = {
 		name = ME_Mexico_Events.5.OPT1
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				#Owner has Inflation lower than 2
+			}
+		}
+		custom_tooltip = MEX_GOLD_RUSH_TOOLTIP_PROVINCE1
+		hidden_effect = {
+			province_event = {
+				id = ME_Mexico_Events.6
+				days = 90
+			}
+		}
+		owner = {
+			add_years_of_income = -0.5
+			add_yearly_manpower = -0.5
+		}
+		add_devastation = 2
+		add_unrest = 2
+		add_province_modifier = {
+			name = mex_gold_rush
+			duration = 3650
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.5.OPT2
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				is_at_war = yes
+				#Owner has Inflation higher than 2
+			}
+		}
+		set_province_flag = mex_gold_rush_province_done
+	}
+}
+
+province_event = {
+	id = ME_Mexico_Events.6
+	title = ME_Mexico_Events.6.T
+	desc = ME_Mexico_Events.6.D
+	picture = CIVIL_WAR_eventPicture
+
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				random_list = {
+					40 = {
+						set_province_flag = mex_found_silver
+					}
+					25 = {
+						set_province_flag = mex_found_gold
+					}
+					15 = {
+						set_province_flag = mex_found_gems
+					}
+					15 = {
+						set_province_flag = mex_found_metal
+					}
+					5 = {
+						set_province_flag = mex_found_nothing
+					}
+				}
+			}
+			else = {
+				random_list = {
+					36 = {
+						set_province_flag = mex_found_gems
+					}
+					35 = {
+						set_province_flag = mex_found_metal
+					}
+					24 = {
+						set_province_flag = mex_found_gold
+					}
+					5 = {
+						set_province_flag = mex_found_nothing
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.6.OPT1
+		ai_chance = {
+			factor = 20
+		}
+		trigger = {
+			has_province_flag = mex_found_gold
+		}
+		province_event = {
+			id = ME_Mexico_Events.7
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.6.OPT2
+		ai_chance = {
+			factor = 20
+		}
+		trigger = {
+			AND = {
+				is_expanded_mod_active = {
+					mod = trade_goods
+				}
+				has_province_flag = mex_found_silver
+			}
+		}
+		province_event = {
+			id = ME_Mexico_Events.7
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.6.OPT3
+		ai_chance = {
+			factor = 20
+		}
+		trigger = {
+			has_province_flag = mex_found_metal
+		}
+		random_list = {
+			50 = {
+				change_trade_goods = iron
+			}
+			50 = {
+				change_trade_goods = copper
+			}
+		}
+		province_event = {
+			id = ME_Mexico_Events.7
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.6.OPT4
+		ai_chance = {
+			factor = 20
+		}
+		trigger = {
+			has_province_flag = mex_found_gems
+		}
+		province_event = {
+			id = ME_Mexico_Events.7
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.6.OPT5
+		ai_chance = {
+			factor = 20
+		}
+		trigger = {
+			has_province_flag = mex_found_nothing
+		}
+		add_prestige = -5
+	}
+}
+
+province_event = {
+	id = ME_Mexico_Events.7
+	title = ME_Mexico_Events.7.T
+	desc = ME_Mexico_Events.7.D
+	picture = CIVIL_WAR_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Mexico_Events.6.OPT1
+		ai_chance = {
+			factor = 50
+		}
+		set_province_flag = mex_gold_rush_province_done
+		if = {
+			limit = {
+				has_province_flag = mex_found_gold
+			}
+			change_trade_goods = gold
+			add_prestige = 10
+		}
+		else_if = {
+			limit = { 
+				has_province_flag = mex_found_silver
+				is_expanded_mod_active = {
+					mod = trade_goods
+				}
+			}
+			change_trade_goods = silver
+			add_prestige = 5
+		}
+		else_if = {
+			limit = { 
+				has_province_flag = mex_found_metal
+			}
+			add_prestige = 5
+			random_list = {
+				50 = {
+					change_trade_goods = iron
+				}
+				50 = {
+					change_trade_goods = copper
+				}
+			}
+		}
+		else = {
+			change_trade_goods = gems
+			add_prestige = 5
+		}
+	}
+
+	option = {
+		name = ME_Mexico_Events.7.OPT2
+		ai_chance = {
+			factor = 25
+		}
+		trigger = {
+		}
+		set_province_flag = mex_gold_rush_province_done
+	}
+}
+
+country_event = { #Secularisation or Spiritualism
+	id = ME_Mexico_Events.8
+	title = ME_Mexico_Events.8.T
+	desc = ME_Mexico_Events.8.D
+	picture = CIVIL_WAR_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Mexico_Events.8.OPT1
 
 		ai_chance = {
 			factor = 33
@@ -288,7 +564,7 @@ country_event = { #Secularisation or Spiritualism
 	}
 
 	option = {
-		name = ME_Mexico_Events.5.OPT2
+		name = ME_Mexico_Events.8.OPT2
 
 		ai_chance = {
 			factor = 50
