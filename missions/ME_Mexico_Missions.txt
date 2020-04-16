@@ -20,36 +20,52 @@ mexico_missions_1 = {
 		}
 		trigger = {
 			treasury = 100
-			natural_scientist = 2
+			OR = {
+				natural_scientist = 2
+				treasurer = 2
+				master_of_mint = 2
+			}
 			capital_scope = {
 				NOT = { unrest = 1 }
 				NOT = { devastation = 1 }
 			}
 		}
 		effect = {
-			capital_scope = {
-				random_list = {
-					33 = {
-						add_base_tax = 2
-						add_province_modifier = {
-							name = mex_blooming_population_t
-							duration = -1
-						}
-					}
-					33 = {
-						add_base_production = 2
-						add_province_modifier = {
-							name = mex_blooming_population_p
-							duration = -1
-						}
-					}
-					33 = {
-						add_base_manpower = 2
-						add_province_modifier = {
-							name = mex_blooming_population_m
-							duration = -1
-						}
-					}
+			if = {
+				limit = {
+					treasurer = 2
+				}
+				capital_scope = {
+					add_base_tax = 3
+				}
+				add_country_modifier = {
+					name = mex_desarollo1
+					duration = 9125
+				}
+			}
+			else_if = {
+				limit = {
+					natural_scientist = 2
+				}
+				add
+				capital_scope = {
+					add_base_production = 3
+				}
+				add_country_modifier = {
+					name = mex_desarollo2
+					duration = 9125
+				}
+			}
+			else_if = {
+				limit = {
+					master_of_mint = 2
+				}
+				add_country_modifier = {
+					name = mex_desarollo3
+					duration = 9125
+				}
+				capital_scope = {
+					add_base_production = 3
 				}
 			}
 		}
@@ -68,7 +84,7 @@ mexico_missions_1 = {
 					is_institution_enabled = enlightenment
 				}
 				capital_scope = {
-					enlightenment = 10
+					enlightenment = 75
 				}
 			}
 			else_if = {
@@ -76,7 +92,7 @@ mexico_missions_1 = {
 					is_institution_enabled = manufactories
 				}
 				capital_scope = {
-					manufactories = 10
+					manufactories = 75
 				}
 			}
 			else_if = {
@@ -84,7 +100,7 @@ mexico_missions_1 = {
 					is_institution_enabled = global_trade
 				}
 				capital_scope = {
-					global_trade = 10
+					global_trade = 75
 				}
 			}
 			else_if = {
@@ -92,7 +108,7 @@ mexico_missions_1 = {
 					is_institution_enabled = printing_press
 				}
 				capital_scope = {
-					printing_press = 10
+					printing_press = 75
 				}
 			}
 			else_if = {
@@ -100,7 +116,7 @@ mexico_missions_1 = {
 					is_institution_enabled = new_world_i
 				}
 				capital_scope = {
-					new_world_i = 10
+					new_world_i = 75
 				}
 			}
 			else_if = {
@@ -108,18 +124,18 @@ mexico_missions_1 = {
 					is_institution_enabled = renaissance
 				}
 				capital_scope = {
-					renaissance = 10
+					renaissance = 75
 				}
 			}
 			else = {
 				capital_scope = {
-					feudalism = 10
+					feudalism = 75
 				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = mex_flow_knowledge
+				name = mex_embracing_institution
 				duration = 9125
 			}
 			capital_scope = {
@@ -156,9 +172,10 @@ mexico_missions_1 = {
 					limit = {
 						trade_goods = cocoa
 					}
+					add_base_production = 3
 					add_province_modifier = {
 						name = mex_ibarra
-						duration = -1
+						duration = 7300
 					}
 				}
 			}
@@ -169,7 +186,7 @@ mexico_missions_1 = {
 		icon = mission_rb_colonise_canada
 		position = 5
 		required_missions = {
-			mex_sea_expansion
+			mex_naval_preparation
 		}
 		provinces_to_highlight = {
 			province_id = 835
@@ -262,9 +279,16 @@ mexico_missions_1 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = mex_cuban_tobaco
-				duration = -1
+			every_province = {
+				limit = {
+					owned_by = ROOT
+					region = carribeans_region
+					trade_goods = tobacco
+				}
+				add_province_modifier = {
+					name = mex_cuban_tobacco
+					duration = 7300
+				}
 			}
 			random_province = {
 				limit = {
@@ -293,14 +317,14 @@ mexico_missions_1 = {
 				1516 = {
 					trade_share = {
 						country = ROOT
-						share = 100
+						share = 70
 					}
 				}
 				AND = {
 					1516 = {
 						trade_share = {
 							country = ROOT
-							share = 75
+							share = 50
 						}
 					}
 					any_country = {
@@ -397,14 +421,14 @@ mexico_missions_2 = {
 					}
 					add_province_modifier = {
 						name = mex_piloncillo
-						duration = -1
+						duration = 7300
 					}
 				}
 			}
 		}
 	}
 
-	mex_sea_expansion = {
+	mex_naval_preparation = {
 		icon = mission_establish_high_seas_navy
 		position = 4
 		required_missions = { mex_yucatan }
@@ -413,6 +437,10 @@ mexico_missions_2 = {
 			navy_size_percentage = 0.75
 		}
 		effect = {
+			add_country_modifier = {
+				name = mex_sea_expansion
+				duration = 5475
+			}
 			487 = { #Jamaica
 				if = {
 					limit = {
@@ -437,7 +465,7 @@ mexico_missions_2 = {
 	mex_carribean_islands = {
 		icon = mission_invade_island
 		position = 5
-		required_missions = { mex_sea_expansion }
+		required_missions = { mex_naval_preparation }
 		provinces_to_highlight = {
 			province_id = 487
 			NOT = { owned_by = ROOT }
@@ -595,7 +623,7 @@ mexico_missions_3 = {
 		}
 		effect = {
 			add_prestige = 10
-			add_legitimacy_equivalent = { value = 10 }
+			add_legitimacy_equivalent = { value = 5 }
 		}
 	}
 
@@ -999,7 +1027,7 @@ mexico_missions_4 = {
 		}
 	}
 
-	mex_northern_desert = {
+	mex_northern_plains = {
 		icon = mission_rb_colonise_canada
 		position = 6
 		required_missions = { mex_control_mexico }
@@ -1026,6 +1054,10 @@ mexico_missions_4 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mex_grazing_plains
+				duration = 7300
+			}
 			badlands_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -1053,7 +1085,7 @@ mexico_missions_4 = {
 	mex_protecting_lands = {
 		icon = mission_arabian_fort
 		position = 8
-		required_missions = { mex_northern_desert }
+		required_missions = { mex_northern_plains }
 		provinces_to_highlight = {
 			OR = {
 				province_id = 885
@@ -1300,7 +1332,7 @@ mexico_missions_5 = {
 	}
 	has_country_shield = yes
 
-	mex_religion_stability = {
+	mex_religious_stability = {
 		icon = mission_european_church
 		position = 1
 		required_missions = { }
@@ -1309,16 +1341,46 @@ mexico_missions_5 = {
 			has_owner_religion = no
 		}
 		trigger = {
-			religious_unity = 0.50
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = idea_groups }
+				}
+				OR = {
+					christian_idea_groups_expanded = 1
+					muslim_idea_groups_expanded = 1
+					confucian_idea_groups_expanded = 1
+					muslim_idea_groups_expanded = 1
+					humanist_ideas = 1
+					religious_ideas = 1
+				}
+			}
+			else = {
+				OR = {
+					humanist_ideas = 1
+					religious_ideas = 1
+				}
+			}
+			religious_unity = 0.90
 			capital_scope = {
 				has_owner_religion = yes
 			}
 		}
 		effect = {
-			change_religious_influence_equivalent = { add = 15 }
-			add_country_modifier = {
-				name = mex_converting_integrating
-				duration = 5475
+			if = {
+				limit = {
+					humanist_ideas = 1
+				}
+				add_country_modifier = {
+					name = mex_humanist_path1
+					duration = 10950
+				}
+			}
+			else = {
+				change_religious_influence_equivalent = { add = 15 }
+				add_country_modifier = {
+					name = mex_converting_integrating
+					duration = 10950
+				}
 			}
 		}
 	}
@@ -1327,7 +1389,7 @@ mexico_missions_5 = {
 		icon = me_mission_one_country_one_faith
 		position = 2
 		required_missions = {
-			mex_religion_stability
+			mex_religious_stability
 			mex_regaining_strength
 		}
 		provinces_to_highlight = {
@@ -1338,15 +1400,102 @@ mexico_missions_5 = {
 			}
 		}
 		trigger = {
-			all_owned_province = {
-				has_owner_religion = yes
-				NOT = { unrest = 1 }
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = idea_groups }
+				}
+				OR = {
+					AND = {
+						OR = {
+							christian_idea_groups_expanded = 3
+							muslim_idea_groups_expanded = 3
+							confucian_idea_groups_expanded = 3
+							muslim_idea_groups_expanded = 3
+							religious_ideas = 3
+						}
+						all_owned_province = {
+							has_owner_religion = yes
+							NOT = { unrest = 1 }
+						}
+					}
+					AND = {
+						humanist_ideas = 3
+						has_global_modifier_value = {
+							which = tolerance_heathen
+							value = 0.01
+							extra_shortcut = yes
+						}
+						has_global_modifier_value = {
+							which = tolerance_heretic
+							value = 0.01
+							extra_shortcut = yes
+						}
+						check_variable = {
+							which = tolerance_heathen 
+							value = 0
+						}
+						check_variable = {
+							which = tolerance_heretic
+							value = 0
+						}
+					}
+					
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						humanist_ideas = 3
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_2_TOLERANCE_HERETIC
+							has_global_modifier_value = {
+								which = tolerance_heretic
+								value = 2
+							}
+						}
+						custom_trigger_tooltip = {
+							tooltip = HAS_AT_LEAST_2_TOLERANCE_HEATHENS
+							has_global_modifier_value = {
+								which = tolerance_heathen
+								value = 2
+							}
+						}
+					}
+					AND = {
+						religious_ideas = 3
+						all_owned_province = {
+							has_owner_religion = yes
+							NOT = { unrest = 1 }
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = idea_groups }
+					humanist_ideas = 3
+				}
+				add_country_modifier = {
+					name = mex_humanist_path2
+					duration = 7300
+				}
+			}
+			else_if = {
+				limit = {
+					humanist_ideas = 3
+				}
+				add_country_modifier = {
+					name = mex_humanist_path2
+					duration = 7300					
+				}
+			}
+			else = {
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
 		}
 	}
 
@@ -1363,18 +1512,18 @@ mexico_missions_5 = {
 					is_expanded_mod_active = { mod = idea_groups }
 				}
 				OR = {
-					full_idea_group = christian_idea_groups_expanded
-					full_idea_group = muslim_idea_groups_expanded
-					full_idea_group = confucian_idea_groups_expanded
-					full_idea_group = muslim_idea_groups_expanded
-					full_idea_group = humanist_ideas
-					full_idea_group = religious_ideas
+					christian_idea_groups_expanded = 5
+					muslim_idea_groups_expanded = 5
+					confucian_idea_groups_expanded = 5
+					muslim_idea_groups_expanded = 5
+					humanist_ideas = 5
+					religious_ideas = 5
 				}
 			}
 			else = {
 				OR = {
-					full_idea_group = humanist_ideas
-					full_idea_group = religious_ideas
+					humanist_ideas = 5
+					religious_ideas = 5
 				}
 			}
 		}
