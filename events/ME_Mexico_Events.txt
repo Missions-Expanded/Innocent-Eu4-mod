@@ -297,36 +297,32 @@ province_event = { #Scope all Provinces in Colonial California
 	desc = ME_Mexico_Events.5.D
 	picture = CIVIL_WAR_eventPicture
 
-	mean_time_to_happen = {
-		years = 5
-	}
-	
 	trigger = {
+		colonial_region = colonial_california
 		owner = {
 			tag = MEX
 			has_country_flag = mex_gold_rush_pursue
 		}
-		NOT = {
-			has_province_flag = mex_gold_rush_province_done
-		}
-		colonial_region = colonial_california
+		NOT = { has_province_flag = mex_gold_rush_province_done }
 		OR = {
 			has_terrain = hills
 			has_terrain = mountain
 			has_terrain = highlands
 		}
-		NOT = {
-			trade_goods = gold
-		}
+		NOT = { trade_goods = gold }
 		OR = {
-			NOT = {
-				is_expanded_mod_active = { 
-					mod = trade_goods
-				}
-			}
-			NOT = {
-				trade_goods = silver
-			}
+			NOT = { is_expanded_mod_active = { mod = trade_goods } }
+			NOT = { trade_goods = silver }
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 60
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_province_flag = mex_gold_rush_province_done
 		}
 	}
 
@@ -337,15 +333,16 @@ province_event = { #Scope all Provinces in Colonial California
 			factor = 50
 			modifier = {
 				factor = 2
-				#Owner has Inflation lower than 2
+				owner = {
+					is_at_war = no
+					NOT = { inflation = 2 }
+				}
 			}
 		}
+
 		custom_tooltip = MEX_GOLD_RUSH_TOOLTIP_PROVINCE1
 		hidden_effect = {
-			province_event = {
-				id = ME_Mexico_Events.6
-				days = 90
-			}
+			province_event = { id = ME_Mexico_Events.6 days = 90 }
 		}
 		owner = {
 			add_years_of_income = -0.5
@@ -366,11 +363,14 @@ province_event = { #Scope all Provinces in Colonial California
 			factor = 50
 			modifier = {
 				factor = 2
-				is_at_war = yes
-				#Owner has Inflation higher than 2
+				owner = {
+					OR = {
+						is_at_war = yes
+						inflation = 2
+					}
+				}
 			}
 		}
-		set_province_flag = mex_gold_rush_province_done
 	}
 }
 
@@ -381,6 +381,7 @@ province_event = {
 	picture = CIVIL_WAR_eventPicture
 
 	is_triggered_only = yes
+
 	immediate = {
 		hidden_effect = {
 			if = {
@@ -426,77 +427,71 @@ province_event = {
 
 	option = {
 		name = ME_Mexico_Events.6.OPT1
+
 		ai_chance = {
 			factor = 20
 		}
+
 		trigger = {
 			has_province_flag = mex_found_gold
 		}
-		province_event = {
-			id = ME_Mexico_Events.7
-		}
+
+		province_event = { id = ME_Mexico_Events.7 }
 	}
 
 	option = {
 		name = ME_Mexico_Events.6.OPT2
+
 		ai_chance = {
 			factor = 20
 		}
+
 		trigger = {
-			AND = {
-				is_expanded_mod_active = {
-					mod = trade_goods
-				}
-				has_province_flag = mex_found_silver
-			}
+			has_province_flag = mex_found_silver
 		}
-		province_event = {
-			id = ME_Mexico_Events.7
-		}
+
+		province_event = { id = ME_Mexico_Events.7 }
 	}
 
 	option = {
 		name = ME_Mexico_Events.6.OPT3
+
 		ai_chance = {
 			factor = 20
 		}
+
 		trigger = {
 			has_province_flag = mex_found_metal
 		}
-		random_list = {
-			50 = {
-				change_trade_goods = iron
-			}
-			50 = {
-				change_trade_goods = copper
-			}
-		}
-		province_event = {
-			id = ME_Mexico_Events.7
-		}
+
+		province_event = { id = ME_Mexico_Events.7 }
 	}
 
 	option = {
 		name = ME_Mexico_Events.6.OPT4
+
 		ai_chance = {
 			factor = 20
 		}
+
 		trigger = {
 			has_province_flag = mex_found_gems
 		}
-		province_event = {
-			id = ME_Mexico_Events.7
-		}
+
+		province_event = { id = ME_Mexico_Events.7 }
 	}
 
 	option = {
 		name = ME_Mexico_Events.6.OPT5
+
 		ai_chance = {
 			factor = 20
 		}
+
 		trigger = {
 			has_province_flag = mex_found_nothing
 		}
+
 		add_prestige = -5
 	}
 }
@@ -511,10 +506,11 @@ province_event = {
 
 	option = {
 		name = ME_Mexico_Events.6.OPT1
+
 		ai_chance = {
 			factor = 50
 		}
-		set_province_flag = mex_gold_rush_province_done
+
 		if = {
 			limit = {
 				has_province_flag = mex_found_gold
@@ -523,17 +519,14 @@ province_event = {
 			add_prestige = 10
 		}
 		else_if = {
-			limit = { 
+			limit = {
 				has_province_flag = mex_found_silver
-				is_expanded_mod_active = {
-					mod = trade_goods
-				}
 			}
-			change_trade_goods = silver
 			add_prestige = 5
+			change_trade_goods = silver
 		}
 		else_if = {
-			limit = { 
+			limit = {
 				has_province_flag = mex_found_metal
 			}
 			add_prestige = 5
@@ -547,19 +540,25 @@ province_event = {
 			}
 		}
 		else = {
-			change_trade_goods = gems
 			add_prestige = 5
+			change_trade_goods = gems
 		}
 	}
 
 	option = {
 		name = ME_Mexico_Events.7.OPT2
+
 		ai_chance = {
 			factor = 25
 		}
-		trigger = {
-		}
-		set_province_flag = mex_gold_rush_province_done
+	}
+
+	after = {
+		clr_province_flag = mex_found_silver
+		clr_province_flag = mex_found_gold
+		clr_province_flag = mex_found_gems
+		clr_province_flag = mex_found_metal
+		clr_province_flag = mex_found_nothing
 	}
 }
 
@@ -577,6 +576,7 @@ country_event = { #Secularisation or Spiritualism
 		ai_chance = {
 			factor = 50
 		}
+
 		if = {
 			limit = {
 				has_dlc = "Rights of Man"
@@ -608,9 +608,7 @@ country_event = { #Secularisation or Spiritualism
 				}
 			}
 			else = {
-				change_religious_influence_equivalent = {
-					add = 15
-				}
+				change_religious_influence_equivalent = { add = 15 }
 			}
 		}
 		else_if = {
@@ -629,21 +627,17 @@ country_event = { #Secularisation or Spiritualism
 				duration = 7300
 			}
 		}
+		else_if = {
+			limit = {
+				full_idea_group = religious_ideas
+			}
+			add_country_modifier = {
+				name = mex_spiritualisation
+				duration = 7300
+			}
+		}
 		else = {
-			if = {
-				limit = {
-					full_idea_group = religious_ideas
-				}
-				add_country_modifier = {
-					name = mex_spiritualisation
-					duration = 7300
-				}
-			}
-			else = {
-				change_religious_influence_equivalent = {
-					add = 15
-				}
-			}
+			change_religious_influence_equivalent = { add = 15 }
 		}
 	}
 
@@ -653,6 +647,7 @@ country_event = { #Secularisation or Spiritualism
 		ai_chance = {
 			factor = 50
 		}
+
 		if = {
 			limit = {
 				has_dlc = "Rights of Man"
@@ -678,9 +673,7 @@ country_event = { #Secularisation or Spiritualism
 				}
 			}
 			else = {
-				add_legitimacy_equivalent = { 
-					value = 15 
-				}
+				add_legitimacy_equivalent = { value = 15 }
 			}
 		}
 		else_if = {
@@ -693,21 +686,17 @@ country_event = { #Secularisation or Spiritualism
 				duration = 7300
 			}
 		}
+		else_if = {
+			limit = {
+				full_idea_group = humanist_ideas
+			}
+			add_country_modifier = {
+				name = mex_secularisation
+				duration = 7300
+			}
+		}
 		else = {
-			if = {
-				limit = {
-					full_idea_group = humanist_ideas
-				}
-				add_country_modifier = {
-					name = mex_secularisation
-					duration = 7300
-				}
-			}
-			else = {
-				add_legitimacy_equivalent = { 
-					value = 15 
-				}
-			}
+			add_legitimacy_equivalent = { value = 15 }
 		}
 	}
 }
