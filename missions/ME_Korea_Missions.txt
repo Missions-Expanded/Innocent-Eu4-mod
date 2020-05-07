@@ -1447,17 +1447,59 @@ KOR_missions_5 = {
 		required_missions = { }
 		position  = 9
 		trigger = {
+			OR = {
+				has_country_modifier = KOR_empowered_Hungu
+				has_country_modifier = KOR_empowered_Sarim
+				has_country_modifier = KOR_empowered_East
+				has_country_modifier = KOR_empowered_West
+			}
 		}
 		effect = {
+			
 		}
 	}
 	KOR_peasant_upheaval = {
 		icon = mission_sea_battles
 		required_missions = { KOR_faction_reform }
 		position  = 10
-		trigger = {
+		provinces_to_highlight = {
+			region = korea_region
+			NOT = { development = 6 }
 		}
+		
+		trigger = {
+			korea_region = {
+				type = all
+				development = 6
+			}
+		}
+		
 		effect = {
+			add_stability = 1
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = kor_peasant_struggles
+					}
+				}
+				custom_tooltip = kor_peasant_struggles_mission_tt1
+				hidden_effect = {
+					set_country_flag = kor_peasant_struggles_resolved
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = kor_peasant_struggles
+				}
+				remove_country_modifier = kor_peasant_struggles
+				custom_tooltip = kor_peasant_struggles_mission_tt2
+				hidden_effect = {
+					set_country_flag = kor_peasant_struggles_resolved
+				}
+			}
+			else = {
+				add_legitimacy = 15
+			}
 		}
 	}
 	KOR_secure_the_strait = {
@@ -1474,7 +1516,7 @@ KOR_missions_5 = {
 				4651 = { country_or_non_sovereign_subject_holds = ROOT }
 				2745 = {
 					trade_share = {
-						who = ROOT
+						country = ROOT
 						share = 60
 					}
 				}
@@ -1604,9 +1646,97 @@ KOR_missions_1_Daehan = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_a_new_conqueror }
 		position  = 16
+		provinces_to_highlight = {
+			OR = {
+				province_id = 708
+				province_id = 2182
+				province_id = 699
+				province_id = 698
+				province_id = 2179 #5
+				province_id = 2177
+				province_id = 697
+				province_id = 2136
+				province_id = 703
+				province_id = 704 #10
+				province_id = 4652
+				province_id = 726
+				province_id = 2110
+				province_id = 730
+				province_id = 2188 #15
+			}
+			AND = {
+				NOT = { has_building = KOR_wall }
+				NOT = { owned_by = ROOT }
+			}
+		}
 		trigger = {
+			708 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			2182 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			699 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			698 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			2179 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			2177 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			697 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			2136 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			703 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			704 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			4652 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			726 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			2110 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			730 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
+			2188 = {
+				owned_by = ROOT
+				has_building = KOR_wall
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = KOR_the_great_wall
+				duration = -1
+			}
+			add_prestige_or_monarch_power = { amount = 50 }
 		}
 	}
 	KOR_conscript_the_chinese = {
@@ -1614,17 +1744,71 @@ KOR_missions_1_Daehan = {
 		required_missions = { KOR_pacify_the_newly_conquered }
 		position  = 18
 		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					OR = {
+						has_building = conscription_center
+						has_building = regimental_camp
+						base_manpower = 5
+					}
+					OR = {
+						region = xinan_region
+						region = north_china_region
+						region = south_china_region
+					}
+					value = 5
+				}
+				quartermaster = 1
+			}
 		}
 		effect = {
+			country_event = { id = ME_Korea_Events.45 } #Seemingly Infinite Manpower
 		}
 	}
-	KOR_conscript_the_chinese = {
+	KOR_enforce_tributary_status = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_a_new_dynasty }
 		position  = 19
 		trigger = {
+			if = {
+				limit = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+				}
+				num_of_subjects = 3
+			}
+			else = {
+				tributary_state  = 10
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+				}
+				every_subject_country = {
+					limit = {
+						is_subject_of_type = tributary_state 
+					}
+					reverse_remove_opinion = {
+						who = ROOT
+						modifier = kor_tributary
+					}
+				}
+				add_meritocracy = 25
+			}
+			else = {
+				every_subject_country = {
+					add_opinion = {
+						who = ROOT
+						modifier = kor_tributary
+					}
+					reverse_remove_opinion = {
+						who = ROOT
+						modifier = kor_tributary
+					}
+				}
+				add_prestige_or_monarch_power = { amount = 20 }
+			}
 		}
 	}
 }
@@ -1647,9 +1831,40 @@ KOR_missions_2_Daehan = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_a_new_conqueror }
 		position  = 17
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				nationalism = 1
+			}
+		}
 		trigger = {
+			north_china_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { nationalism = 1 }
+			}
+			south_china_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { nationalism = 1 }
+			}
+			xinan_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { nationalism = 1 }
+			}
 		}
 		effect = {
+			add_stability_or_adm_power = yes
+			add_country_modifier = {
+				name = KOR_centralization
+				duration = 10950
+			}
 		}
 	}
 	KOR_a_new_dynasty = {
@@ -1657,8 +1872,19 @@ KOR_missions_2_Daehan = {
 		required_missions = { KOR_pacify_the_newly_conquered }
 		position  = 18
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				imperial_mandate = 80
+			}
+			else = {
+				stability = 3
+			}
 		}
 		effect = {
+			country_event = { id = ME_Korea_Events.1 }
+			add_prestige_or_monarch_power = { amount = 10 }
 		}
 	}
 	KOR_the_great_empire = {
@@ -1666,8 +1892,33 @@ KOR_missions_2_Daehan = {
 		required_missions = { KOR_centralize_the_empire }
 		position  = 20
 		trigger = {
+			if = {
+				limit = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+				}
+				total_development = 3000
+			}
+			else = {
+				imperial_mandate = 100
+				tributary_state = 25
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_country_modifier = {
+					name = KOR_rule_of_the_heavens
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = KOR_rule_of_the_heavens_non_MOH
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -1690,45 +1941,190 @@ KOR_missions_3_Daehan = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_a_new_conqueror }
 		position  = 16
+		provinces_to_highlight = {
+			OR = {
+				region = xinan_region
+				region = south_china_region
+				region = north_china_region
+			}
+			owned_by = ROOT
+			AND = {
+				NOT = { has_building = workshop }
+				NOT = { has_building = counting_house }
+			}
+		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					region = xinan_region
+					region = south_china_region
+					region = north_china_region
+				}
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				value = 20
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = KOR_new_prospects_modifier
+				duration = 9125
+			}
 		}
 	}
 	KOR_metals = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_new_prospects }
 		position  = 17
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				trade_goods = iron
+				trade_goods = copper
+			}
+			NOT = { has_building = weapons }
+		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					trade_goods = iron
+					trade_goods = copper
+				}
+				has_building = weapons
+				value = 8
+			}
 		}
 		effect = {
+			every_owned_province = {
+				limit = {
+					area_for_scope_province = {
+						OR = {
+							trade_goods = iron
+							trade_goods = copper
+						}
+						has_building = weapons
+					}
+				}
+				area = {
+					add_province_modifier = {
+						name = KOR_regiment_cost
+						duration = -1
+					}
+				}
+			}
+			add_mercantilism = 5
 		}
 	}
 	KOR_new_coinage = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_metals KOR_pacify_the_newly_conquered }
 		position  = 18
+		provinces_to_highlight = {
+			province_id = 2174
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
 		trigger = {
+			2174 = {
+				owned_by = ROOT
+				base_production = 10
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					NOT = { has_country_flag = bank }
+				}
+				country_event = { id = 4042 } #National Bank
+			}
+			else = {
+			}
 		}
 	}
 	KOR_centralize_the_empire = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_a_new_dynasty }
 		position  = 19
+		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+				region = xinan_region
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 5
+			}
+		}
 		trigger = {
+			north_china_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 5 }
+			}
+			south_china_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 5 }
+			}
+			xinan_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { local_autonomy = 5 }
+			}
 		}
 		effect = {
+			custom_tooltip = KOR_Move_culture
+			hidden_effect = {
+				every_province = {
+					limit = {
+						culture = korean
+					}
+					change_culture = chaoxian
+				}
+				change_primary_culture = chaoxian
+				set_ruler_culture = chaoxian
+				if = {
+					limit = {
+						has_heir = yes
+					}
+					set_heir_culture = chaoxian
+				}
+			}
 		}
 	}
 	KOR_not_just_name = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_centralize_the_empire }
 		position  = 20
+		provinces_to_highlight = {
+			culture_group = east_asian
+			NOT = {
+				is_state_core = yes
+				owned_by = ROOT
+				NOT = { nationalism = 1 }
+				NOT = { local_autonomy = 5 }
+			}
+		}
 		trigger = {
+			government_rank = 3
+			num_of_owned_provinces_with = {
+				is_state_core = yes
+				culture_group = east_asian 
+				NOT = { nationalism = 1 }
+				NOT = { local_autonomy = 5 }
+				value = 100
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = KOR_empire
+				duration = -1
+			}
 		}
 	}
 }
@@ -1752,18 +2148,91 @@ KOR_missions_4_Daehan = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_new_prospects }
 		position  = 17
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4212
+				province_id = 4213
+				province_id = 679
+				province_id = 2169
+				province_id = 680
+			}
+		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = KOR_sichuan_has_40_prod
+				area_has_total_development_of_type = {
+					type = production
+					1 = 4212
+					2 = 4213
+					3 = 679
+					4 = 2169
+					5 = 680
+					total = 40
+				}
+			}
 		}
 		effect = {
+			4212 = {
+				add_province_modifier = {
+					name = KOR_ricebowl
+					duration = -1
+				}
+			}
+			4213 = {
+				add_province_modifier = {
+					name = KOR_ricebowl
+					duration = -1
+				}
+			}
+			679 = {
+				add_province_modifier = {
+					name = KOR_ricebowl
+					duration = -1
+				}
+			}
+			2169 = {
+				add_province_modifier = {
+					name = KOR_ricebowl
+					duration = -1
+				}
+			}
+			680 = {
+				add_province_modifier = {
+					name = KOR_ricebowl
+					duration = -1
+				}
+			}
 		}
 	}
 	KOR_rebuilding_the_silk_road = {
 		icon = mission_cannons_firing
 		required_missions = { KOR_breadbasket KOR_new_coinage }
 		position  = 19
+		provinces_to_highlight = {
+			owned_by = ROOT
+			trade_goods = silk
+			NOT = { has_building = textile }
+		}
 		trigger = {
+			OR = {
+				454 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							amount = 100
+						}
+					}
+				}
+				owns_core_province = 454
+			}
+			num_of_owned_provinces_with = {
+				trade_goods = silk
+				has_building = textile
+				value = 5
+			}
 		}
 		effect = {
+			country_event = { id = ME_Korea_Events.48 } #Silk Road Reopened
 		}
 	}
 	
@@ -1789,8 +2258,44 @@ KOR_missions_5_Daehan = {
 		required_missions = { KOR_high_seas_fleet }
 		position  = 16
 		trigger = {
+			OR = {
+				navy_size_percentage = 0.4
+				num_of_light_ship = 40
+			}
 		}
 		effect = {
+			every_country = {
+				limit = {
+					OR = {
+						1361 = {
+							trade_share = {
+								share = 10
+								country  = PREV
+							}
+						}
+						1357 = {
+							trade_share = {
+								share = 10
+								country  = PREV
+							}
+						}
+						1365 = {
+							trade_share = {
+								share = 10
+								country  = PREV
+							}
+						}
+						2699 = {
+							trade_share = {
+								share = 10
+								country  = PREV
+							}
+						}
+					}
+				}
+				country_event = { id = ME_Korea_Events.46 }
+			}
+			custom_tooltip = KOR_EVENT_TO_BECOME_TRIB
 		}
 	}
 	KOR_waegu = {
@@ -1798,8 +2303,21 @@ KOR_missions_5_Daehan = {
 		required_missions = { KOR_junk_boat_fleet }
 		position  = 18
 		trigger = {
+			NOT = {
+				SOO = {
+					has_reform = pirate_republic_reform
+				}
+				RYU = {
+					has_reform = pirate_republic_reform
+				}
+			}
+			num_of_galley = 40
 		}
 		effect = {
+			add_country_modifier = {
+				name = KOR_dealing_with_waegu
+				duration = 10950
+			}
 		}
 	}
 	KOR_global_trade = {
@@ -1807,8 +2325,17 @@ KOR_missions_5_Daehan = {
 		required_missions = { KOR_waegu KOR_rebuilding_the_silk_road }
 		position  = 20
 		trigger = {
+			has_institution = global_trade
+			home_trade_node = {
+				highest_value_trade_node = yes
+				is_strongest_trade_power = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = KOR_advent_of_the_global_trade
+				duration = -1
+			}
 		}
 	}
 }
