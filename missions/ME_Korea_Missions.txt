@@ -49,9 +49,21 @@ KOR_missions_1 = {
 		icon = mission_assemble_an_army
 		required_missions = { KOR_the_forest }
 		position  = 4
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = {
+				has_building = cathedral
+			}
+		}
 		trigger = {
+			cathedral = 10
 		}
 		effect = {
+			add_country_modifier = {
+				name = KOR_Harmony
+				duration = 10950
+			}
+			add_adm_power = 50
 		}
 	}
 	KOR_military_innovations = {
@@ -59,17 +71,24 @@ KOR_missions_1 = {
 		required_missions = { KOR_jingwan }
 		position  = 7
 		trigger = {
+			mil_tech = 11
+			num_of_artillery = 5
 		}
 		effect = {
+			change_innovativeness = 3
 		}
 	}
 	KOR_hwacha = {
 		icon = mission_assemble_an_army
-		required_missions = { KOR_military_innovations }
+		required_missions = { KOR_military_innovations KOR_adapting_the_army }
 		position  = 9
 		trigger = {
-			is_at_war = yes
 			mil_tech = 16
+			OR = {
+				innovative_ideas = 7
+				army_tradition = 40
+				innovativeness = 20
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -383,6 +402,13 @@ KOR_missions_2 = {
 				name = KOR_mobile_army
 				duration = 10950
 			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				custom_tooltip = KOR_REFUND_REFORM_PROGRESS
+				set_country_flag = KOR_GE_refund
+			}
 		}
 	}
 	KOR_garrison_the_south = {
@@ -439,9 +465,23 @@ KOR_missions_2 = {
 		required_missions = { KOR_military_innovations }
 		position  = 8
 		trigger = {
-			
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.1
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+					has_reform = jaeseungbangryak_reform 
+				}
+				country_event = { id = ME_Korea_Events.49 }
+			}
+			add_country_modifier = {
+				name = KOR_modernizing_army
+				duration = 10950
+			}
 		}
 	}
 	KOR_spread_of_a_new_religion = {
@@ -1236,15 +1276,64 @@ KOR_missions_4 = {
 			}
 		}
 		effect = {
+			pyongan_area = {
+				add_province_modifier = {
+					name = KOR_attrition
+					duration = 9125
+				}
+			}
+			hamgyeong_area = {
+				add_province_modifier = {
+					name = KOR_attrition
+					duration = 9125
+				}
+			}
+			add_mil_power = 100
 		}
 	}
 	KOR_garrison_the_north = {
 		icon = mission_sea_battles
 		required_missions = { KOR_fort_in_baekdu }
 		position  = 7
+		provinces_to_highlight = {
+			OR = {
+				area = hamgyeong_area
+				area = pyongan_area
+			}
+			NOT = {
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+			}
+		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					area = hamgyeong_area
+					area = pyongan_area
+				}
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+				value = 2
+			}
 		}
 		effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = hamgyeong_area
+						area = pyongan_area
+					}
+					fort_level = 1
+				}
+				add_province_modifier = {
+					name = KOR_defenses
+					duration = -1
+				}
+			}
 		}
 	}
 	KOR_naval_might = {
@@ -1439,19 +1528,19 @@ KOR_missions_5 = {
 			}
 		}
 	}
-	KOR_modernize_the_border = {
-		icon = mission_sea_battles
-		required_missions = { KOR_garrison_the_north }
-		position  = 8
-		trigger = {
-		}
-		effect = {
-		}
-	}
+	# KOR_modernize_the_border = {
+		# icon = mission_sea_battles
+		# required_missions = { KOR_garrison_the_north }
+		# position  = 8
+		# trigger = {
+		# }
+		# effect = {
+		# }
+	# }
 	KOR_faction_reform = {
 		icon = mission_sea_battles
 		required_missions = { }
-		position  = 9
+		position  = 8
 		trigger = {
 			OR = {
 				has_country_modifier = KOR_empowered_Hungu
