@@ -7,5 +7,5 @@ tags={
 	"New Nations"
 	"Gameplay"
 }
-name="Mission Expanded Dev"
-supported_version="1.29.5"
+name="Mission Expanded Italy"
+supported_version="1.29.*.*"
