@@ -2504,6 +2504,25 @@ KOR_missions_1_Colonial = {
 				name = KOR_saboteurs
 				duration = 10950
 			}
+			custom_tooltip = KOR_CLAIM_ON_ALL_CENTERS_OF_TRADE
+			hidden_effect = {
+				indonesia_region = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				malaya_region = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	KOR_australia = {
@@ -2515,13 +2534,44 @@ KOR_missions_1_Colonial = {
 				colonial_region = colonial_australia
 				value = 10
 			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				colonial_region = colonial_australia
+				has_port = yes
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				value = 3
+			}
+			1090 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
+			1090 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			custom_tooltip = KOR_EVERY_AUSTRALIAN_PROV
+			tooltip = {
+				add_province_modifier = {
+					name = KOR_exports
+					duration = -1
+				}
+			}
 			colonial_australia = {
 				limit = {
-					development = 1
+					country_or_non_sovereign_subject_holds = ROOT
+					has_port = yes
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
 				}
-			}	
+				add_province_modifier = {
+					name = KOR_exports
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -2546,8 +2596,16 @@ KOR_missions_2_Colonial = {
 		required_missions = { KOR_high_seas_fleet }
 		position = 16
 		trigger = {
+			596 = {
+				range = ROOT
+			}
+			taiwan_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 10 }
+			add_dip_power = 50
 		}
 	}
 	KOR_presence_in_indonesia = {
@@ -2555,8 +2613,16 @@ KOR_missions_2_Colonial = {
 		required_missions = { KOR_southward_expansion }
 		position = 17
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					region = indonesia_region
+					region = malaya_region
+				}
+				value = 5
+			}
 		}
 		effect = {
+			
 		}
 	}
 	KOR_moluccas = {
