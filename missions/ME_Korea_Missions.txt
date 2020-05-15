@@ -17,6 +17,18 @@ KOR_missions_1 = {
 		icon = mission_assert_control_over_delhi
 		required_missions = { KOR_munmyo }
 		position  = 2
+		provinces_to_highlight = {
+			OR = {
+				area = eastern_korea_area
+				area = south_korea_area
+			}
+			NOT = {
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				} 
+			}
+		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				OR = {
@@ -75,7 +87,17 @@ KOR_missions_1 = {
 			num_of_artillery = 5
 		}
 		effect = {
-			change_innovativeness = 3
+			if = { 
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 3
+			}
+			else = {
+				add_adm_power = 30
+				add_dip_power = 30
+				add_mil_power = 30
+			}
 		}
 	}
 	KOR_hwacha = {
@@ -85,9 +107,14 @@ KOR_missions_1 = {
 		trigger = {
 			mil_tech = 16
 			OR = {
-				innovative_ideas = 7
+				innovativeness_ideas = 7
 				army_tradition = 40
-				innovativeness = 20
+				if = {
+					limit = {
+						has_dlc = "Rule Britannia"
+					}
+					innovativeness = 20
+				}
 			}
 		}
 		effect = {
@@ -383,7 +410,7 @@ KOR_missions_2 = {
 					}
 					innovativeness = 10
 				}
-				innovative_ideas = 4
+				innovativeness_ideas = 4
 				adm = 4
 			}
 		}
@@ -396,7 +423,7 @@ KOR_missions_2 = {
 	}
 	KOR_jingwan = {
 		icon = mission_japanese_samurai
-		required_missions = {  }
+		required_missions = { }
 		position  = 6
 		trigger = {
 			army_tradition = 20
@@ -445,12 +472,8 @@ KOR_missions_2 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
+			eastern_korea_area = {
 				limit = {
-					OR = {
-						area = eastern_korea_area
-						area = south_korea_area
-					}
 					fort_level = 1
 				}
 				add_province_modifier = {
@@ -458,10 +481,34 @@ KOR_missions_2 = {
 					duration = -1
 				}
 			}
-			add_country_modifier = {
-				name = KOR_ready_for_the_darkest_hour
-				duration = -1
+			south_korea_area = {
+				limit = {
+					fort_level = 1
+				}
+				add_province_modifier = {
+					name = KOR_defenses
+					duration = -1
+				}
 			}
+			add_army_tradition = 5
+			if = {
+				limit = {
+					mission_completed = KOR_garrison_the_north
+				}
+				western_korea_area = {
+					limit = {
+						fort_level = 1
+					}
+					add_province_modifier = {
+						name = KOR_defenses
+						duration = -1
+					}
+				}
+			}
+			#add_country_modifier = {
+			#	name = KOR_ready_for_the_darkest_hour
+			#	duration = -1
+			#}
 		}
 	}
 	KOR_adapting_the_army = {
@@ -488,7 +535,7 @@ KOR_missions_2 = {
 			}
 		}
 	}
-	KOR_spread_of_a_new_religion = {
+	KOR_spread_of_a_new_religion = { #Not done
 		icon = mission_hands_praying
 		required_missions = { KOR_europeans }
 		position  = 10
@@ -571,8 +618,8 @@ KOR_missions_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			set_country_flag = KOR_New_idea_group
-			country_event = { id = ideagroups.1 }
+			
+			country_event = { id = ME_Korea_Events.50 } #New Traditions and Ambitions
 		}
 	}
 	KOR_secure_hebei = {
@@ -763,6 +810,7 @@ KOR_missions_2 = {
 					}
 				}
 			}
+			custom_tooltip = KOR_AUGMENT_5_MORALE
 			north_china_region = {
 				if = {
 					limit = {
@@ -772,7 +820,7 @@ KOR_missions_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			custom_tooltip = KOR_AUGMENT_5_MORALE
+			
 		}
 	}
 	KOR_a_new_conqueror = {
@@ -985,7 +1033,7 @@ KOR_missions_3 = {
 			}
 		}
 	}
-	KOR_europeans = {
+	KOR_europeans = { #Not Done Yet
 		icon = mission_arts_and_letters
 		required_missions = { }
 		position  = 9
@@ -995,7 +1043,7 @@ KOR_missions_3 = {
 		effect = {
 		}
 	}
-	KOR_silhak = {
+	KOR_silhak = { #Not Done Yet
 		icon = mission_vedic_education
 		required_missions = { KOR_europeans }
 		position  = 11
@@ -1012,7 +1060,7 @@ KOR_missions_3 = {
 			num_of_galley = 20
 			navy_tradition = 40
 			OR = {
-				innovative_ideas = 7
+				innovativeness_ideas = 7
 				navy_tradition = 60
 				innovativeness = 20
 			}
@@ -1077,6 +1125,7 @@ KOR_missions_3 = {
 					}
 				}
 			}
+			custom_tooltip = KOR_AUGMENT_5_MORALE
 			south_china_region = {
 				if = {
 					limit = {
@@ -1086,7 +1135,7 @@ KOR_missions_3 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			custom_tooltip = KOR_AUGMENT_5_MORALE
+			
 		}
 	}
 }
@@ -1199,7 +1248,7 @@ KOR_missions_4 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = KOR_the_merchant_case_forming
+				name = KOR_the_merchant_caste_forming
 				duration = 7300
 			}
 		}
@@ -1334,17 +1383,36 @@ KOR_missions_4 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
+			hamgyeong_area = {
 				limit = {
-					OR = {
-						area = hamgyeong_area
-						area = pyongan_area
-					}
 					fort_level = 1
 				}
 				add_province_modifier = {
 					name = KOR_defenses
 					duration = -1
+				}
+			}
+			pyongan_area = {
+				limit = {
+					fort_level = 1
+				}
+				add_province_modifier = {
+					name = KOR_defenses
+					duration = -1
+				}
+			}	
+			if = {
+				limit = {
+					mission_completed = KOR_garrison_the_south
+				}
+				western_korea_area = {
+					limit = {
+						fort_level = 1
+					}
+					add_province_modifier = {
+						name = KOR_defenses
+						duration = -1
+					}
 				}
 			}
 		}
@@ -1575,14 +1643,12 @@ KOR_missions_5 = {
 			region = korea_region
 			NOT = { development = 6 }
 		}
-		
 		trigger = {
 			korea_region = {
 				type = all
 				development = 6
 			}
 		}
-		
 		effect = {
 			add_stability = 1
 			if = {
@@ -1704,6 +1770,7 @@ KOR_missions_5 = {
 					add_permanent_claim = ROOT
 				}
 			}
+			add_prestige_or_monarch_power = { amount = 10 }
 		}
 	}
 	KOR_seize_the_chrysanthemum_throne = {
@@ -2151,6 +2218,7 @@ KOR_missions_3_Daehan = {
 				country_event = { id = 4042 } #National Bank
 			}
 			else = {
+				add_years_of_income = 1
 			}
 		}
 	}
@@ -2166,24 +2234,24 @@ KOR_missions_3_Daehan = {
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
-				local_autonomy = 5
+				local_autonomy_above_min = 15
 			}
 		}
 		trigger = {
 			north_china_region = {
 				type = all
 				owned_by = ROOT
-				NOT = { local_autonomy = 5 }
+				NOT = { local_autonomy_above_min = 15 }
 			}
 			south_china_region = {
 				type = all
 				owned_by = ROOT
-				NOT = { local_autonomy = 5 }
+				NOT = { local_autonomy_above_min = 15 }
 			}
 			xinan_region = {
 				type = all
 				owned_by = ROOT
-				NOT = { local_autonomy = 5 }
+				NOT = { local_autonomy_above_min = 15 }
 			}
 		}
 		effect = {
@@ -2216,7 +2284,7 @@ KOR_missions_3_Daehan = {
 				is_state_core = yes
 				owned_by = ROOT
 				NOT = { nationalism = 1 }
-				NOT = { local_autonomy = 5 }
+				NOT = { local_autonomy_above_min = 5 }
 			}
 		}
 		trigger = {
@@ -2225,7 +2293,7 @@ KOR_missions_3_Daehan = {
 				is_state_core = yes
 				culture_group = east_asian 
 				NOT = { nationalism = 1 }
-				NOT = { local_autonomy = 5 }
+				NOT = { local_autonomy_above_min = 15 }
 				value = 100
 			}
 		}
@@ -2504,6 +2572,25 @@ KOR_missions_1_Colonial = {
 				name = KOR_saboteurs
 				duration = 10950
 			}
+			custom_tooltip = KOR_CLAIM_ON_ALL_CENTERS_OF_TRADE
+			hidden_effect = {
+				indonesia_region = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				malaya_region = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	KOR_australia = {
@@ -2515,13 +2602,44 @@ KOR_missions_1_Colonial = {
 				colonial_region = colonial_australia
 				value = 10
 			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				colonial_region = colonial_australia
+				has_port = yes
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				value = 3
+			}
+			1090 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
+			1090 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			custom_tooltip = KOR_EVERY_AUSTRALIAN_PROV
+			tooltip = {
+				add_province_modifier = {
+					name = KOR_exports
+					duration = -1
+				}
+			}
 			colonial_australia = {
 				limit = {
-					development = 1
+					country_or_non_sovereign_subject_holds = ROOT
+					has_port = yes
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
 				}
-			}	
+				add_province_modifier = {
+					name = KOR_exports
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -2546,8 +2664,16 @@ KOR_missions_2_Colonial = {
 		required_missions = { KOR_high_seas_fleet }
 		position = 16
 		trigger = {
+			596 = {
+				range = ROOT
+			}
+			taiwan_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 10 }
+			add_dip_power = 50
 		}
 	}
 	KOR_presence_in_indonesia = {
@@ -2555,8 +2681,24 @@ KOR_missions_2_Colonial = {
 		required_missions = { KOR_southward_expansion }
 		position = 17
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					region = indonesia_region
+					region = malaya_region
+				}
+				value = 5
+			}
 		}
 		effect = {
+			596 = {
+				add_trade_node_income = 1
+			}
+			change_price = {
+				trade_goods = spices
+				key = KOR_korean_trade
+				value = 0.2
+				duration = 9125
+			}
 		}
 	}
 	KOR_moluccas = {
@@ -2564,8 +2706,22 @@ KOR_missions_2_Colonial = {
 		required_missions = { KOR_presence_in_indonesia }
 		position = 19
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				region = moluccas_region
+				value = 15
+			}
 		}
 		effect = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = colonialism
+					value = 50
+				}
+			}
+			add_country_modifier = {
+				name = KOR_southern_enthusiasm
+				duration = -1
+			}
 		}
 	}
 	KOR_repulse_the_europeans = {
@@ -2573,8 +2729,73 @@ KOR_missions_2_Colonial = {
 		required_missions = { KOR_into_mexico }
 		position = 20
 		trigger = {
+			colonial_alaska = {
+				type = all
+				NOT = {
+					OR = {
+						capital_scope = {
+							continent = europe
+						}
+						overlord = {
+							capital_scope = {
+								continent = europe
+							}
+						}
+					}
+				}
+			}
+			colonial_california = {
+				type = all
+				NOT = {
+					OR = {
+						capital_scope = {
+							continent = europe
+						}
+						overlord = {
+							capital_scope = {
+								continent = europe
+							}
+						}
+					}
+				}
+			}
+			colonial_mexico = {
+				type = all
+				NOT = {
+					OR = {
+						capital_scope = {
+							continent = europe
+						}
+						overlord = {
+							capital_scope = {
+								continent = europe
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = KOR_PERM_CLAIM_ON_ALL_EURO_COLONIES
+			hidden_effect = {
+				north_america = {
+					limit = {
+						owner = {
+							OR = {
+								capital_scope = {
+									continent = europe
+								}
+								overlord = {
+									capital_scope = {
+										continent = europe
+									}
+								}
+							}
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 }
@@ -2598,9 +2819,51 @@ KOR_missions_3_Colonial = {
 		icon = mission_galleys_in_port
 		required_missions = { KOR_discover_the_fusang }
 		position = 17
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1240
+				province_id = 1997
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
+			OR = {
+				1240 = { country_or_non_sovereign_subject_holds = ROOT }
+				1997 = { country_or_non_sovereign_subject_holds = ROOT }
+				1240 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+				1997 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = colonialism
+					value = 25
+				}
+			}
+			custom_tooltip = KOR_every_colony
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						is_city = no
+					}
+					add_colonysize = 200
+				}
+			}
 		}
 	}
 	KOR_into_mexico = {
@@ -2637,6 +2900,7 @@ KOR_missions_3_Colonial = {
 				}
 				add_permanent_claim = ROOT
 			}
+			add_mercantilism = 5
 		}
 	}
 	KOR_mexican_gold = {
@@ -2717,6 +2981,11 @@ KOR_missions_4_Colonial = {
 			}
 		}
 		effect = {
+			add_institution_embracement = {
+				which = colonialism
+				value = 25
+			}
+			country_event = { id = ME_Mexico_Events.4 }
 		}
 	}
 	KOR_extend_the_transpacific_route = {
@@ -2797,7 +3066,7 @@ KOR_missions_5_Colonial = {
 			}
 		}
 		effect = {
-			
+			add_years_of_income = 2
 		}
 	}
 	
