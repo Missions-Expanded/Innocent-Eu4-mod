@@ -1401,12 +1401,56 @@ canada_missions_4 = {
 		icon = mission_colonial
 		position = 3
 		required_missions = { can_lower_canada }
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 994
+				province_id = 993
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-
+			owns = 994
+			993 = {
+				owned_by = ROOT
+				development = 7
+			}
 		}
 		effect = {
-			
+			993 = {
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building_construction = {
+						building = university
+						speed = 1
+						cost = 0
+					}
+				}
+				add_province_modifier = {
+					name = can_multicultural_city
+					duration = -1
+				}
+			}
+			993 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				add_province_modifier = {
+					name = can_citadel_quebec
+					duration = -1
+				}
+				if = {
+					limit = {
+						NOT = { has_building = fort_17th }
+					}
+					add_building_construction = {
+						building = fort_17th
+						speed = 1
+						cost = 0
+					}
+				}				
+			}
 		}
 	}
 
@@ -1417,12 +1461,44 @@ canada_missions_4 = {
 			can_cities_quebec
 			can_secure_lawrence
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			province_id = 2569
+			NOT = {
+				AND = {
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+					}
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+			}
+		}
 		trigger = {
-
+			2569 = {
+				owned_by = ROOT
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
 		}
 		effect = {
-			
+			2569 = {
+				add_province_modifier = {
+					name = can_port_new_world
+					duration = -1
+				}
+			}
+			country_event = {
+				id = ME_Canada_Events.11
+			}
 		}
 	}
 
@@ -1433,12 +1509,46 @@ canada_missions_4 = {
 			can_forts_canada
 			can_populating_our_lands
 		}
-		provinces_to_highlight = { }
 		trigger = {
-
+			num_accepted_cultures = 3
+			OR = {
+				OR = {
+					NOT = { is_expanded_mod_active = { mod = trade_goods } }
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						splendor = 300
+					}
+					else = {
+						prestige = 50
+					}
+				}
+				trading_bonus = {
+					trade_goods = maple_syrup
+					value = yes
+				}
+			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = can_cuisines_canada
+				duration = -1
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				change_price = {
+					trade_goods = maple_syrup
+					key = can_cuisines_canada_desc
+					value = 0.25
+					duration = -1
+				}
+			}
+			country_event = {
+				id = ME_Canada_Events.12
+			}
 		}
 	}
 
@@ -1449,12 +1559,50 @@ canada_missions_4 = {
 			can_eliminate_iroquois
 			can_cuisines_canada
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				area = maine_area
+				area = great_woods_area
+				area = south_iroquoisia_area
+			}
+			NOT = {
+				OR = {
+					owned_by = ROOT
+					NOT = {
+						unrest = 1
+					}
+				}
+			}
+		}
 		trigger = {
-
+			maine_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 1 }
+			}
+			great_woods_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 1 }
+			}
+			south_iroquoisia_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 1 }
+			}
 		}
 		effect = {
-			
+			massachusetts_bay_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = can_new_england_traditions
+				duration = -1
+			}
 		}
 	}
 
@@ -1464,10 +1612,55 @@ canada_missions_4 = {
 		required_missions = { }
 		provinces_to_highlight = { }
 		trigger = {
-
+			notre_dame_mountains_area = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 1 }
+				NOT = { has_rebel_faction = nationalist_rebels }
+			}
+			laurentian_area = {
+				type = all
+				owned_by = ROOT
+			}
+			lower_canada_area = {
+				type = all
+				owned_by = ROOT
+			}
+			lower_acadia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			cote_nord_area = {
+				type = all
+				owned_by = ROOT
+			}
+			OR = {
+				DIP = 4
+				statesman = 1
+			}
 		}
 		effect = {
-			
+			mississippi_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			great_lakes_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			# I do not know how to do this triggered modifier:
+			#Canada gains "Québécois Support" granting -2 unrest in Quebec, 
+			# Laurentina, Lower Canada, Lower Acadia and Cote Nord Areas, 
+			# 10% manpower modifier AS LONG as Unrest never goes positive 
+			# ANYWHERE in these areas
+			# If that occurs, Gains "Québécois Discontent" granting +2 unrest 
+			# and -10% manpower modifier, until once positive again. 
 		}
 	}
 }
@@ -1490,12 +1683,36 @@ canada_missions_5 = {
 		icon = mission_colonial
 		position = 1
 		required_missions = { }
-		provinces_to_highlight = { }
 		trigger = {
-
+			num_of_light_ship = 10
 		}
 		effect = {
-			
+			1490 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 30
+					key = can_canadian_tradeships
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = no
+					any_owned_province = {
+						has_port = yes
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_port = yes
+					}
+					create_flagship = {
+						name = "HMCS Haidia"
+						type = heavy_ship
+					}
+				}
+			}
 		}
 	}
 
@@ -1506,12 +1723,44 @@ canada_missions_5 = {
 			can_british_north_america
 			can_canadian_tradeship
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = { 
+			OR = {
+				province_id = 2580
+				province_id = 2579
+				area = lower_canada_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-
+			lower_canada_area = {
+				type = all
+				owned_by = ROOT
+			}
+			owns = 2580
+			owns = 2579
 		}
 		effect = {
-			
+			lower_canada_area = {
+				add_province_modifier = {
+					name = can_indigenous_tree_sap
+					duration = 18250
+				}
+			}
+			2580 = {
+				add_province_modifier = {
+					name = can_indigenous_tree_sap
+					duration = 18250
+				}
+			}
+			2579 = {
+				add_province_modifier = {
+					name = can_indigenous_tree_sap
+					duration = 18250
+				}
+			}
+			country_event = {
+				id = ME_Canada_Events.13
+			}
 		}
 	}
 
@@ -1521,10 +1770,122 @@ canada_missions_5 = {
 		required_missions = { can_lower_canada }
 		provinces_to_highlight = { }
 		trigger = {
-
+			owns = 986
+			owns = 989
+			owns = 990
+			owns = 993
+			owns = 994
+			owns = 995
+			owns = 2577
+			owns = 2576
+			owns = 2578
+			owns = 2582
+			owns = 2583
+			owns = 2585
+			980 = {
+				owned_by = ROOT
+				development = 6
+			}
+			981 = {
+				owned_by = ROOT
+				development = 6
+			}
+			2573 = {
+				owned_by = ROOT
+				development = 6
+			}
 		}
 		effect = {
-			
+			986 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			989 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			990 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			993 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			994 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			995 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2577 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2576 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2578 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2582 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2583 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2585 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			980 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			981 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}
+			2573 = {
+				add_province_modifier = {
+					name = can_grand_banks
+					duration = 18250
+				}
+			}			
 		}
 	}
 
@@ -1532,12 +1893,25 @@ canada_missions_5 = {
 		icon = mission_colonial
 		position = 6
 		required_missions = { }
-		provinces_to_highlight = { }
 		trigger = {
-
+			stability = 2
+			num_of_owned_provinces_with = {
+				value = 0
+				NOT = { unrest = 1 }
+			}
+			num_of_owned_provinces_with = {
+				value = 60
+				development = 8
+			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = can_enriching_canadian_land
+				duration = 9125
+			}
+			country_event = {
+				id = ME_Canada_Events.13
+			}
 		}
 	}
 
@@ -1550,10 +1924,25 @@ canada_missions_5 = {
 		}
 		provinces_to_highlight = { }
 		trigger = {
-
+			development_in_provinces = {
+				value = 350
+				OR = {
+					has_owner_culture = yes
+					has_owner_accepted_culture = yes
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 25
+				OR = {
+					has_building = workshop
+					has_building = courthouse
+				}
+			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = can_growing_nation_2
+			}
 		}
 	}
 
@@ -1563,10 +1952,17 @@ canada_missions_5 = {
 		required_missions = { can_development_canada }
 		provinces_to_highlight = { }
 		trigger = {
-
+			total_development = 500
+			has_institution = enlightenment
+			num_of_owned_manufactory_trigger = {
+				amount = 20
+			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = can_industrial_revolution
+				duration = -1
+			}
 		}
 	}
 
@@ -1578,10 +1974,43 @@ canada_missions_5 = {
 		}
 		provinces_to_highlight = { }
 		trigger = {
-
+			# Need to add Vermont, but cannot find the id
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_bonus = {
+					trade_goods = maple_syrup
+					value = yes
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					splendor = 500
+				}
+				else = {
+					prestige = 90
+				}
+			}
 		}
 		effect = {
-			
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				every_owned_province = {
+					limit = {
+						trade_goods = maple_syrup
+					}
+					add_province_modifier = {
+						name = can_maple_syrup_monopoly_modifier
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 
@@ -1593,10 +2022,27 @@ canada_missions_5 = {
 		}
 		provinces_to_highlight = { }
 		trigger = {
-
+			great_lakes_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 1 }
+			}
+			mississippi_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 1 }
+			}
+			NOT = { has_country_modifier = can_quebecois_discontent }
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = can_new_france_reclaimed
+				duration = 9125
+			}
+			add_country_modifier = {
+				name = can_road_louisiana
+				duration = -1
+			}
 		}
 	}
 }
