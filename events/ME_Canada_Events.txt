@@ -534,7 +534,7 @@ country_event = {
 		ai_chance = {
 			factor = 50
 		}
-		set_consort_culture = decision_reserve_system_enable
+		set_country_flag = can_reserve_treaties_enable
 		every_owned_province = {
 			limit = {
 				has_owner_accepted_culture = no
@@ -553,10 +553,92 @@ country_event = {
 			name = can_true_religious
 			duration = -1
 		}
-		set_consort_culture = decision_residential_schoool_system_enable
+		set_country_flag = can_indian_residential_school_system_enable
 	}
 }
 
+# The Numbered Treaties
+country_event = {
+	id = ME_Canada_Events.15
+	title = ME_Canada_Events.15.T
+	desc = ME_Canada_Events.15.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Canada_Events.15.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+		every_country = {
+			limit = {
+				technology_group = mesoamerican
+				capital_scope = {
+					OR = {
+						region = cascadia_region
+						region = canada_region
+						region = hudson_bay_region
+						region = great_lakes_region
+						region = great_plains_region
+					}
+				}
+			}
+			country_event = {
+				id = ME_Canada_Events.16
+			}
+		}
+	}
+}
+
+# The Reserve System?
+country_event = {
+	id = ME_Canada_Events.16
+	title = ME_Canada_Events.16.T
+	desc = ME_Canada_Events.16.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Canada_Events.16.OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+		FROM = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+				}
+				create_subject = {
+					subject_type = native_reserve
+					who = ROOT
+				}
+			}
+			else = {
+				vassalize = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.16.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+		FROM = {
+			add_casus_belli = {
+				type = cb_vassalize_mission
+				target = ROOT
+			}
+		}
+	}
+}
+
+# Leave 100 for now, I want to put all the other, more important, events between this and the others
 country_event = {
 	id = ME_Canada_Events.100
 	title = ME_Canada_Events.100.T
