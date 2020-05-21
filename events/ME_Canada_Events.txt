@@ -147,7 +147,11 @@ country_event = {
 		}
 		declare_war_with_cb = {
 			casus_belli = cb_independence_war
-			who = canada_overlord
+			who = event_target:canada_overlord
+		}
+		custom_tooltip = CAN_SUPPORT_CANADIAN_INDEPENDENCE_RIVALS
+		hidden_effect = {
+			set_country_flag = can_seek_support
 		}
 	}
 }
@@ -158,18 +162,41 @@ country_event = {
 	title = ME_Canada_Events.5.T
 	desc = ME_Canada_Events.5.D
 	picture = CITY_DEVELOPMENT_eventPicture
-	
-	is_triggered_only = yes
+
+	major = yes
+
+	trigger = {
+		is_rival = event_target:canada_overlord
+		CAN = {
+			war_with = event_target:canada_overlord
+			has_country_flag = can_seek_support
+		}
+	}
+
+	mean_time_to_happen = {
+		months = 12
+		modifier = {
+			factor = 0.08 #scaling down to 1 month
+			CAN = {
+				war_score_against = {
+					who = event_target:canada_overlord
+					value = 15
+				}
+			}
+		}
+	}
 
 	option = {
 		name = ME_Canada_Events.5.OPT1
 
 		ai_chance = {
-			factor = 60
+			factor = 33
 		}
-		overlord = {
-			country_event = {
-				id = ME_Canada_Events.5
+		
+		CAN = {
+			add_manpower = 4
+			create_general = {
+				tradition = 50
 			}
 		}
 	}
@@ -178,8 +205,18 @@ country_event = {
 		name = ME_Canada_Events.5.OPT2
 
 		ai_chance = {
-			factor = 40
+			factor = 33
 		}
+	}
+
+	option = {
+		name = ME_Canada_Events.5.OPT3
+
+		ai_chance = {
+			factor = 33
+		}
+
+		#Join the War, for 1.30
 	}
 }
 
@@ -197,8 +234,18 @@ country_event = {
 
 		ai_chance = {
 			factor = 50
+			modifier = {
+				factor = 1.2
+				ai = yes
+			}
 		}
-		overlord = {
+		
+		#Technically, because this event happens only if Canada is a Dominion, it means that 
+		#Subject Expanded is already active, so there should be no need to check for it once again
+
+		create_subject = {
+			subject_type = autonomous_dominion
+			who = FROM
 		}
 	}
 
@@ -207,6 +254,17 @@ country_event = {
 
 		ai_chance = {
 			factor = 50
+			modifier = {
+				factor = 0.8
+				ai = yes
+			}
+		}
+
+		FROM = {
+			add_liberty_desire = 35
+			country_event = {
+				id = ME_Canada_Events.7
+			}
 		}
 	}
 }
@@ -226,6 +284,15 @@ country_event = {
 		ai_chance = {
 			factor = 100
 		}
+
+		every_country = {
+			limit = {
+				is_rival = event_target:canada_overlord
+			}
+			country_event = {
+				id = ME_Canada_Events.8
+			}
+		}
 	}
 }
 
@@ -235,6 +302,8 @@ country_event = {
 	title = ME_Canada_Events.8.T
 	desc = ME_Canada_Events.8.D
 	picture = CITY_DEVELOPMENT_eventPicture
+
+	major = yes
 	
 	is_triggered_only = yes
 
@@ -242,8 +311,32 @@ country_event = {
 		name = ME_Canada_Events.8.OPT1
 
 		ai_chance = {
-			factor = 100
+			factor = 33
 		}
+		FROM = {
+			add_manpower = 4
+			create_general = {
+				tradition = 50
+			}
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.8.OPT2
+
+		ai_chance = {
+			factor = 33
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.8.OPT3
+
+		ai_chance = {
+			factor = 33
+		}
+
+		#Join the War, for 1.30
 	}
 }
 
