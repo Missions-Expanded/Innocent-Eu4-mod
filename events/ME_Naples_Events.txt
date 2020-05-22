@@ -32,6 +32,8 @@ country_event = { #The Fate of Naples
 				days = 60
 			}
 		}
+		set_country_flag = naples_request_france
+		swap_non_generic_missions = yes
 	}
 
 	option = {
@@ -58,6 +60,8 @@ country_event = { #The Fate of Naples
 				days = 60
 			}
 		}
+		set_country_flag = naples_request_austria
+		swap_non_generic_missions = yes
 	}
 
 	option = {
@@ -84,6 +88,8 @@ country_event = { #The Fate of Naples
 				days = 60
 			}
 		}
+		set_country_flag = naples_request_ottoman
+		swap_non_generic_missions = yes
 	}
 
 	option = {
@@ -509,16 +515,586 @@ country_event = { # For the Ottomans
 	}
 }
 
-country_event = { #Restoring the Glory of Greece
+country_event = { #Their demands
 	id = ME_Naples_Events.5
 	title = ME_Naples_Events.5.T
 	desc = ME_Naples_Events.5.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = NAP
+		is_subject = no
+		is_at_war = no
+		OR = {
+			has_country_flag = naples_france_helped_war
+			has_country_flag = naples_austria_helped_war
+			has_country_flag = naples_ottomans_helped_war
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.5.OPT1
+		ai_chance = {
+			factor = 50
+		}
+		if = { #if has chosen France help
+			limit = {
+				has_country_flag = naples_france_helped_war
+			}
+			if = {
+				limit = {
+					has_heir = yes
+				}
+				kill_heir = yes
+			}
+			kill_ruler = yes
+			set_dynasty = FRA
+		}
+
+		else_if = { #if has chosen Austrian help
+			limit = {
+				has_country_flag = naples_austria_helped_war
+			}
+			if = {
+				limit = {
+					has_heir = yes
+				}
+				kill_heir = yes
+			}
+			kill_ruler = yes
+			set_dynasty = HAB
+		}
+
+		else_if = { #if has chosen Ottoman help
+			limit = {
+				has_country_flag = naples_ottomans_helped_war
+			}
+			if = {
+				limit = {
+					owns = 126
+				}
+				126 = {
+					cede_province = TUR
+				}
+			}
+			else_if = {
+				limit = {
+					owns = 122
+				}
+				122 = {
+					cede_province = TUR
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.5.OPT2
+		ai_chance = {
+			factor = 50
+		}
+		if = { #if has chosen France help
+			limit = {
+				has_country_flag = naples_france_helped_war
+			}
+			FRA = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_annex
+					months = 300
+				}
+			}
+		}
+
+		else_if = { #if has chosen Austrian help
+			limit = {
+				has_country_flag = naples_austria_helped_war
+			}
+			HAB = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_annex
+					months = 300
+				}
+			}
+		}
+
+		else_if = { #if has chosen Ottoman help
+			limit = {
+				has_country_flag = naples_ottomans_helped_war
+			}
+			TUR = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_annex
+					months = 300
+				}
+			}
+		}
+	}
+}
+
+country_event = { #The Request
+	id = ME_Naples_Events.6
+	title = ME_Naples_Events.6.T
+	desc = ME_Naples_Events.6.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		tag = NAP
+		is_subject = no
+		is_at_war = no
+		has_country_flag = nap_final_request
+	}
+
+	option = {
+		name = ME_Naples_Events.6.OPT1
+		ai_chance = {
+			factor = 50
+		}
+		if = { #if has chosen France help
+			limit = {
+				has_country_flag = naples_france_helped_war
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+				}
+				FRA = {
+					create_subject = {
+						subject_type = brother_kingdom
+						subject = ROOT
+					}
+				}
+			}
+			else = {
+				FRA = {
+					create_subject = {
+						subject_type = personal_union
+						subject = ROOT
+					}
+				}
+			}
+		}
+
+		else_if = { #if has chosen Austrian help
+			limit = {
+				has_country_flag = naples_austria_helped_war
+			}
+			HAB = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					create_subject = {
+						subject_type = imperial_feud_subject
+						subject = ROOT
+					}
+				}
+				else = {
+					ROOT = {
+						set_in_empire = yes 
+					}
+					create_subject = {
+						subject_type = march
+						subject = ROOT
+					}
+				}
+			}
+		}
+
+		else_if = { #if has chosen Ottoman help
+			limit = {
+				has_country_flag = naples_ottomans_helped_war
+			}
+			NAP = {
+				release = SIC
+			}
+			SIC = {
+				set_dynasty = NAP
+				change_government = monarchy
+			}
+			TUR = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					create_subject = {
+						subject_type = muslim_tributary_vassal
+						subject = SIC
+					}
+				}
+				else = { 
+					create_march = SIC 
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.6.OPT2
+		ai_chance = {
+			factor = 50
+		}
+		if = { #if has chosen France help
+			limit = {
+				has_country_flag = naples_france_helped_war
+			}
+			FRA = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_annex
+					months = 300
+				}
+			}
+		}
+
+		else_if = { #if has chosen Austrian help
+			limit = {
+				has_country_flag = naples_austria_helped_war
+			}
+			HAB = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_annex
+					months = 300
+				}
+			}
+		}
+
+		else_if = { #if has chosen Ottoman help
+			limit = {
+				has_country_flag = naples_ottomans_helped_war
+			}
+			TUR = {
+				add_casus_belli = {
+					target = ROOT
+					type = cb_annex
+					months = 300
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Coronation Day
+	id = ME_Naples_Events.7
+	title = ME_Naples_Events.7.T
+	desc = ME_Naples_Events.7.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = NAP
+		is_subject = no
+		is_at_war = no
+	}
+
+	option = {
+		name = ME_Naples_Events.7.OPT1
+		ai_chance = {
+			factor = 100
+		}
+		add_prestige = 25
+		add_legitimacy = 25
+		set_country_flag = nap_coronated
+		if = {
+			limit = {
+				has_heir = yes
+			}
+			kill_heir = yes
+		}
+		define_ruler = {
+			name = "Carlo I"
+			dynasty = "Delle due Sicilie"
+			adm = 4
+			dip = 6
+			mil = 5
+			age = 20
+			claim = 100
+			fixed = yes
+		}
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			add_ruler_personality = just_personality
+			add_ruler_personality = well_connected_personality
+			add_ruler_personality = conqueror_personality
+		}
+	}
+}
+
+country_event = { #A request from Naples for #PAP
+	id = ME_Naples_Events.8
+	title = ME_Naples_Events.8.T
+	desc = ME_Naples_Events.8.D
+	picture = POPE_PREACHING_eventPicture
+
+	major = yes
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Naples_Events.8.OPT1
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					alliance_with = PAP
+					has_opinion = {
+						who = PAP
+						value = 125
+					}
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+				}
+			}
+		}
+		add_historical_friend = FROM
+		FROM = {
+			add_historical_friend = ROOT
+			add_years_of_income = -1
+		}
+		add_years_of_income = 1
+		emilia_romagna_area = {
+			limit = {
+				owned_by = ROOT
+				NOT = {
+					is_core = FROM
+				}
+			}
+			add_core = FROM
+			cede_province = FROM
+			remove_core = ROOT
+		}
+	}
+	option = {
+		name = ME_Naples_Events.8.OPT2
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					has_opinion = {
+						who = PAP
+						value = 100
+					}
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
+		}
+		FROM = {
+			add_years_of_income = -1
+		}
+		add_years_of_income = 1
+		central_italy_area = {
+			limit = {
+				owned_by = ROOT
+				has_port = yes
+				NOT = {
+					is_core = FROM
+				}
+			}
+			add_core = FROM
+			cede_province = FROM
+			remove_core = ROOT
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.8.OPT3
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					is_rival = PAP
+					NOT = {
+						has_opinion = {
+							who = PAP
+							value = -100
+						}
+					}
+					NOT = {
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = -100
+							}
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				religion = catholic
+				125 = {
+					owned_by = ROOT
+				}
+			}
+			125 = { #Palermo
+				if = {
+					limit = {
+						has_cardinal = no
+					}
+					add_cardinal = yes
+				}
+				else_if = {
+					limit = {
+						has_cardinal = yes
+						has_building = temple
+					}
+					remove_building = temple
+					add_building_construction = {
+						building = cathedral
+						speed = 0.75
+						cost = 0
+					}
+				}
+				else_if = {
+					limit = {
+						has_cardinal = yes
+					}
+					add_building_construction = {
+						building = temple
+						speed = 0.75
+						cost = 0
+					}
+				}
+				else = {
+					add_base_tax = 2
+				}
+			}
+		}
+		else = {
+			FROM = {
+				if = {
+					limit = {
+						religion = catholic
+					}
+					add_papal_influence = 25
+				}
+				else = {
+					add_legitimacy_equivalent = {
+						value = 20
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Sicilian Independence
+	id = ME_Naples_Events.9
+	title = ME_Naples_Events.9.T
+	desc = ME_Naples_Events.9.D
+	picture = ANGRY_MOB_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Naples_Events.9.OPT1
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				ai = yes
+			}
+		}
+		
+		release = SIC
+		SIC = {
+			set_dynasty = NAP
+			change_government = monarchy
+			add_government_reform = autocracy_reform
+			religion = NAP
+			hidden_effect = {
+				add_treasury = 20
+				add_yearly_manpower = 10
+				add_yearly_sailors = 10
+			}
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = subjects }
+			}
+			create_subject = {
+				subject_type = brother_kingdom
+				subject = SIC
+			}
+		}
+		else = {
+			ROOT = {
+				set_in_empire = yes 
+			}
+			create_subject = {
+				subject_type = personal_union
+				subject = SIC
+			}
+		}
+		add_country_modifier = {
+			name = nap_union_two_crowns
+			duration = -1
+		}
+		SIC = {
+			add_country_modifier = {
+				name = nap_union_two_crowns
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.9.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		every_owned_province = {
+			limit = {
+				area = sicily_area
+			}
+			add_province_modifier = {
+				name = nap_forced_subdjucation
+				duration = 5475
+			}
+		}
+	}
+}
+
+country_event = { #Restoring the Glory of Greece
+	id = ME_Naples_Events.10
+	title = ME_Naples_Events.10.T
+	desc = ME_Naples_Events.10.D
 	picture = DIPLOMACY_eventPicture
 	
 	is_triggered_only = yes
 	
 	option = {
-		name = ME_Naples_Events.5.OPT1
+		name = ME_Naples_Events.10.OPT1
 		
 		ai_chance = {
 			factor = 50
@@ -598,7 +1174,7 @@ country_event = { #Restoring the Glory of Greece
 	}
 
 	option = {
-		name = ME_Naples_Events.5.OPT2
+		name = ME_Naples_Events.10.OPT2
 
 		ai_chance = {
 			factor = 50
@@ -620,510 +1196,13 @@ country_event = { #Restoring the Glory of Greece
 }
 
 country_event = { #The Throne of Provence for Provence
-	id = ME_Naples_Events.6
-	title = ME_Naples_Events.6.T
-	desc = ME_Naples_Events.6.D
-	picture = COURT_eventPicture
-	
-	is_triggered_only = yes
-	major = yes
-
-	option = {
-		name = ME_Naples_Events.6.OPT1
-
-		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 2
-				army_strength = {
-					who = NAP
-					value = 0.50
-				}
-			}
-		}
-		FROM = {
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = subjects }
-				}
-				create_subject = {
-					subject_type = brother_kingdom
-					subject = ROOT
-				}
-			}
-			else = {
-				create_union = ROOT
-			}
-		}
-	}
-
-	option = {
-		name = ME_Naples_Events.6.OPT2
-
-		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 0
-				is_subject = yes
-			}
-		}
-		add_casus_belli = {
-			type = cb_insult
-			target = FROM
-		}
-		FROM = {
-			add_casus_belli = {
-				type = cb_restore_personal_union
-				months = 300
-				target = ROOT
-			}
-		}
-	}
-}
-
-country_event = { #The Crown of Jerusalem
-	id = ME_Naples_Events.7
-	title = ME_Naples_Events.7.T
-	desc = ME_Naples_Events.7.D
-	picture = GOOD_WITH_MONARCH_eventPicture
-	
-	is_triggered_only = yes
-	
-	option = {
-		name = ME_Naples_Events.7.OPT1
-		
-		ai_chance = {
-			factor = 50
-		}
-		add_years_of_income = -1
-		palestine_area = {
-			limit = {
-				NOT = { 
-					owned_by = ROOT 
-				}
-			}
-			add_permanent_claim = ROOT
-		}
-		add_country_modifier = {
-			name = nap_defender_christianity
-			duration = -1
-		}
-		every_country = {
-			limit = {
-				religion = catholic
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = nap_crown_himself
-			}
-		}
-	}
-	option = {
-		name = ME_Naples_Events.7.OPT2
-
-		ai_chance = {
-			factor = 50
-		}
-		change_religious_influence_equivalent = {
-			add = 25
-		}
-		if = {
-			limit = {
-				stability = 3
-			}
-			add_adm_power = 100
-		}
-		else_if = {
-			add_stability = 1
-		}
-		every_country = {
-			limit = {
-				religion = catholic
-			}
-			add_opinion = {
-				who = ROOT
-				modifier = nap_refuse_crown
-			}
-		}
-	}
-}
-
-country_event = { #Their demands 
-	id = ME_Naples_Events.8
-	title = ME_Naples_Events.8.T
-	desc = ME_Naples_Events.8.D
-	picture = DIPLOMACY_eventPicture
-
-	fire_only_once = yes
-
-	trigger = {
-		tag = NAP
-		is_subject = no
-		is_at_war = no
-		OR = {
-			has_country_flag = naples_france_helped_war
-			has_country_flag = naples_austria_helped_war
-			has_country_flag = naples_ottomans_helped_war
-		}
-	}
-
-	option = {
-		name = ME_Naples_Events.8.OPT1
-		ai_chance = {
-			factor = 50
-		}
-		if = { #if has chosen France help
-			limit = {
-				has_country_flag = naples_france_helped_war
-			}
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = subjects }
-				}
-				FRA = {
-					create_subject = {
-						subject_type = brother_kingdom
-						subject = ROOT
-					}
-				}
-			}
-			else = {
-				ROOT = {
-					kill_ruler = yes
-					set_dynasty = FRA
-				}
-				FRA = {
-					add_casus_belli = {
-						type = cb_restore_personal_union
-						months = 300
-						target = ROOT
-					}
-				}
-			}
-		}
-
-		else_if = { #if has chosen Austrian help
-			limit = {
-				has_country_flag = naples_austria_helped_war
-			}
-			HAB = {
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = subjects }
-					}
-					create_subject = {
-						subject_type = imperial_feud_subject
-						subject = ROOT
-					}
-				}
-				else = {
-					NAP = {
-						set_in_empire = yes 
-					}
-				}
-			}
-		}
-
-		else_if = { #if has chosen Ottoman help
-			limit = {
-				has_country_flag = naples_ottomans_helped_war
-			}
-			NAP = {
-				release = SIC
-			}
-			SIC = {
-				set_dynasty = NAP
-				change_government = monarchy
-				change_government_via_reform = feudalism_reform
-			}
-			TUR = {
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = subjects }
-					}
-					create_subject = {
-						subject_type = muslim_tributary_vassal
-						subject = SIC
-					}
-				}
-				else = { 
-					create_march = SIC 
-				}
-			}
-		}
-	}
-
-	option = {
-		name = ME_Naples_Events.8.OPT2
-		ai_chance = {
-			factor = 50
-		}
-		if = { #if has chosen France help
-			limit = {
-				has_country_flag = naples_france_helped_war
-			}
-			FRA = {
-				add_casus_belli = {
-					target = ROOT
-					type = cb_annex
-					months = 300
-				}
-			}
-		}
-
-		else_if = { #if has chosen Austrian help
-			limit = {
-				has_country_flag = naples_austria_helped_war
-			}
-			HAB = {
-				add_casus_belli = {
-					target = ROOT
-					type = cb_annex
-					months = 300
-				}
-			}
-		}
-
-		else_if = { #if has chosen Ottoman help
-			limit = {
-				has_country_flag = naples_ottomans_helped_war
-			}
-			TUR = {
-				add_casus_belli = {
-					target = ROOT
-					type = cb_annex
-					months = 300
-				}
-			}
-		}
-	}
-}
-
-country_event = { #Coronation Day
-	id = ME_Naples_Events.9
-	title = ME_Naples_Events.9.T
-	desc = ME_Naples_Events.9.D
-	picture = GOOD_WITH_MONARCH_eventPicture
-
-	fire_only_once = yes
-	is_triggered_only = yes
-
-	mean_time_to_happen = {
-		months = 1
-	}
-
-	trigger = {
-		tag = NAP
-		is_subject = no
-		is_at_war = no
-	}
-
-	option = {
-		name = ME_Naples_Events.9.OPT1
-		ai_chance = {
-			factor = 100
-		}
-		add_prestige = 25
-		add_legitimacy = 25
-		set_country_flag = nap_coronated
-		if = {
-			limit = {
-				has_heir = yes
-			}
-			kill_heir = yes
-			define_ruler = {
-				name = "Carlo I"
-				dynasty = "Borbone"
-				adm = 4
-				dip = 6
-				mil = 5
-				age = 20
-				claim = 100
-				fixed = yes
-			}
-		}
-	}
-}
-
-country_event = { #A request from Naples
-	id = ME_Naples_Events.10
-	title = ME_Naples_Events.10.T
-	desc = ME_Naples_Events.10.D
-	picture = POPE_PREACHING_eventPicture
-
-	major = yes
-	is_triggered_only = yes
-
-	option = {
-		name = ME_Naples_Events.10.OPT1
-		ai_chance = {
-			factor = 33
-			modifier = {
-				factor = 3
-				OR = {
-					alliance_with = PAP
-					has_opinion = {
-						who = PAP
-						value = 125
-					}
-					PAP = {
-						has_opinion = {
-							who = ROOT
-							value = 125
-						}
-					}
-				}
-			}
-		}
-		add_historical_friend = FROM
-		FROM = {
-			add_historical_friend = ROOT
-			add_years_of_income = -1
-		}
-		add_years_of_income = 1
-		emilia_romagna_area = {
-			limit = {
-				owned_by = ROOT
-				NOT = {
-					is_core = FROM
-				}
-			}
-			add_core = FROM
-			cede_province = FROM
-			remove_core = ROOT
-		}
-	}
-	option = {
-		name = ME_Naples_Events.10.OPT2
-		ai_chance = {
-			factor = 33
-			modifier = {
-				factor = 3
-				OR = {
-					has_opinion = {
-						who = PAP
-						value = 100
-					}
-					PAP = {
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-				}
-			}
-		}
-		FROM = {
-			add_years_of_income = -1
-		}
-		add_years_of_income = 1
-		central_italy_area = {
-			limit = {
-				owned_by = ROOT
-				has_port = yes
-				NOT = {
-					is_core = FROM
-				}
-			}
-			add_core = FROM
-			cede_province = FROM
-			remove_core = ROOT
-		}
-	}
-
-	option = {
-		name = ME_Naples_Events.10.OPT3
-		ai_chance = {
-			factor = 33
-			modifier = {
-				factor = 3
-				OR = {
-					is_rival = PAP
-					NOT = {
-						has_opinion = {
-							who = PAP
-							value = -100
-						}
-					}
-					NOT = {
-						PAP = {
-							has_opinion = {
-								who = ROOT
-								value = -100
-							}
-						}
-					}
-				}
-			}
-		}
-		if = {
-			limit = {
-				religion = catholic
-				125 = {
-					owned_by = ROOT
-				}
-			}
-			125 = { #Palermo
-				if = {
-					limit = {
-						has_cardinal = no
-					}
-					add_cardinal = yes
-				}
-				else_if = {
-					limit = {
-						has_cardinal = yes
-						has_building = temple
-					}
-					remove_building = temple
-					add_building_construction = {
-						building = cathedral
-						speed = 0.75
-						cost = 0
-					}
-				}
-				else_if = {
-					limit = {
-						has_cardinal = yes
-					}
-					add_building_construction = {
-						building = temple
-						speed = 0.75
-						cost = 0
-					}
-				}
-				else = {
-					add_base_tax = 2
-				}
-			}
-		}
-		else = {
-			FROM = {
-				if = {
-					limit = {
-						religion = catholic
-					}
-					add_papal_influence = 25
-				}
-				else = {
-					add_legitimacy_equivalent = {
-
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { #The bond with Naples for Hungary
 	id = ME_Naples_Events.11
 	title = ME_Naples_Events.11.T
 	desc = ME_Naples_Events.11.D
 	picture = COURT_eventPicture
-
-	major = yes
 	
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Naples_Events.11.OPT1
@@ -1178,13 +1257,143 @@ country_event = { #The bond with Naples for Hungary
 	}
 }
 
-country_event = { #The imperial throne
+country_event = { #The bond with Naples for Hungary
 	id = ME_Naples_Events.12
 	title = ME_Naples_Events.12.T
 	desc = ME_Naples_Events.12.D
+	picture = COURT_eventPicture
+
+	major = yes
+	
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Naples_Events.12.OPT1
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 2
+				army_strength = {
+					who = NAP
+					value = 0.50
+				}
+			}
+		}
+		FROM = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+				}
+				create_subject = {
+					subject_type = brother_kingdom
+					subject = ROOT
+				}
+			}
+			else = {
+				create_union = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.12.OPT2
+
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				is_subject = yes
+			}
+		}
+		add_casus_belli = {
+			type = cb_insult
+			target = FROM
+		}
+		FROM = {
+			add_casus_belli = {
+				type = cb_restore_personal_union
+				months = 300
+				target = ROOT
+			}
+		}
+	}
+}
+
+country_event = { #The Crown of Jerusalem
+	id = ME_Naples_Events.13
+	title = ME_Naples_Events.13.T
+	desc = ME_Naples_Events.13.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Naples_Events.13.OPT1
+		
+		ai_chance = {
+			factor = 50
+		}
+		add_years_of_income = -1
+		palestine_area = {
+			limit = {
+				NOT = { 
+					owned_by = ROOT 
+				}
+			}
+			add_permanent_claim = ROOT
+		}
+		add_country_modifier = {
+			name = nap_defender_christianity
+			duration = -1
+		}
+		every_country = {
+			limit = {
+				religion = catholic
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nap_crown_himself
+			}
+		}
+	}
+	option = {
+		name = ME_Naples_Events.13.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+		change_religious_influence_equivalent = {
+			add = 25
+		}
+		if = {
+			limit = {
+				stability = 3
+			}
+			add_adm_power = 100
+		}
+		else_if = {
+			add_stability = 1
+		}
+		every_country = {
+			limit = {
+				religion = catholic
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nap_refuse_crown
+			}
+		}
+	}
+}
+
+country_event = { #Anjou
+	id = ME_Naples_Events.14
+	title = ME_Naples_Events.14.T
+	desc = ME_Naples_Events.14.D
 	picture = GOOD_WITH_MONARCH_eventPicture
 
-	is_triggered_only = yes
+	fire_only_once = yes
 
 	mean_time_to_happen = {
 		months = 1
@@ -1192,22 +1401,283 @@ country_event = { #The imperial throne
 
 	trigger = {
 		tag = NAP
-		is_subject = no
-		is_at_war = no
+		178 = {
+			owned_by = NAP
+			NOT = { unrest = 1 }
+			NOT = { has_rebel_faction = nationalist_rebels }
+		}
 	}
 
 	option = {
-		name = ME_Naples_Events.12.OPT1
+		name = ME_Naples_Events.14.OPT1
 		ai_chance = {
-			factor = 50
-		}
-		set_country_flag = nap_imperial_throne_accepted
-	}
-	option = {
-		name = ME_Naples_Events.12.OPT2
-		ai_chance = {
-			factor = 50
+			factor = 100
 		}
 		
+		add_prestige = 20
+		add_legitimacy = 10
+
+		178 = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_prosperity = 100
+			}
+			add_province_modifier = {
+				name = nap_home_land
+				duration = 3650
+			}
+		}
+	}
+}
+
+country_event = { #The fall of the infamous Doge
+	id = ME_Naples_Events.15
+	title = ME_Naples_Events.15.T
+	desc = ME_Naples_Events.15.D
+	picture = SIEGE_eventPicture
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = NAP
+		war_score_against = {
+			who = VEN
+			value = 75
+		}
+		VEN = {
+			capital_scope = {
+				sieged_by = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.15.OPT1
+		ai_chance = {
+			factor = 100
+		}
+
+		add_prestige = 10
+		add_years_of_income = 3
+		112 = {
+			add_devastation = 20
+			owner = {
+				add_years_of_income = -3
+			}
+			add_base_tax = -4
+			add_base_production = -2
+			add_base_manpower = -3
+		}		
+		capital_scope = {
+			add_base_tax = 4
+			add_base_production = 2
+			add_base_manpower = 3
+		}
+	}
+}
+
+country_event = { #The sack of Spain
+	id = ME_Naples_Events.16
+	title = ME_Naples_Events.16.T
+	desc = ME_Naples_Events.16.D
+	picture = SIEGE_eventPicture
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = NAP
+		war_score_against = {
+			who = VEN
+			value = 75
+		}
+		VEN = {
+			capital_scope = {
+				sieged_by = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.16.OPT1
+		ai_chance = {
+			factor = 100
+		}
+
+		add_prestige = 10
+		add_years_of_income = 3
+		112 = {
+			add_devastation = 20
+			owner = {
+				add_years_of_income = -3
+			}
+			add_base_tax = -4
+			add_base_production = -2
+			add_base_manpower = -3
+		}		
+		capital_scope = {
+			add_base_tax = 4
+			add_base_production = 2
+			add_base_manpower = 3
+		}
+	}
+}
+
+country_event = { #Fall of Spain
+	id = ME_Naples_Events.17
+	title = ME_Naples_Events.17.T
+	desc = ME_Naples_Events.17.D
+	picture = SIEGE_eventPicture
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = NAP
+		war_score_against = {
+			who = VEN
+			value = 75
+		}
+		VEN = {
+			capital_scope = {
+				sieged_by = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.17.OPT1
+		ai_chance = {
+			factor = 100
+		}
+
+		add_prestige = 10
+		add_years_of_income = 3
+		112 = {
+			add_devastation = 20
+			owner = {
+				add_years_of_income = -3
+			}
+			add_base_tax = -4
+			add_base_production = -2
+			add_base_manpower = -3
+		}		
+		capital_scope = {
+			add_base_tax = 4
+			add_base_production = 2
+			add_base_manpower = 3
+		}
+	}
+}
+
+country_event = { #The sack of France
+	id = ME_Naples_Events.18
+	title = ME_Naples_Events.18.T
+	desc = ME_Naples_Events.18.D
+	picture = SIEGE_eventPicture
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = NAP
+		war_score_against = {
+			who = VEN
+			value = 75
+		}
+		VEN = {
+			capital_scope = {
+				sieged_by = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.18.OPT1
+		ai_chance = {
+			factor = 100
+		}
+
+		add_prestige = 10
+		add_years_of_income = 3
+		112 = {
+			add_devastation = 20
+			owner = {
+				add_years_of_income = -3
+			}
+			add_base_tax = -4
+			add_base_production = -2
+			add_base_manpower = -3
+		}		
+		capital_scope = {
+			add_base_tax = 4
+			add_base_production = 2
+			add_base_manpower = 3
+		}
+	}
+}
+
+country_event = { #Fall of France
+	id = ME_Naples_Events.17
+	title = ME_Naples_Events.17.T
+	desc = ME_Naples_Events.17.D
+	picture = SIEGE_eventPicture
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = NAP
+		war_score_against = {
+			who = VEN
+			value = 75
+		}
+		VEN = {
+			capital_scope = {
+				sieged_by = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Naples_Events.17.OPT1
+		ai_chance = {
+			factor = 100
+		}
+
+		add_prestige = 10
+		add_years_of_income = 3
+		112 = {
+			add_devastation = 20
+			owner = {
+				add_years_of_income = -3
+			}
+			add_base_tax = -4
+			add_base_production = -2
+			add_base_manpower = -3
+		}		
+		capital_scope = {
+			add_base_tax = 4
+			add_base_production = 2
+			add_base_manpower = 3
+		}
 	}
 }
