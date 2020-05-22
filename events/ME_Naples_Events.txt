@@ -1496,13 +1496,39 @@ country_event = { #The sack of Spain
 
 	trigger = {
 		tag = NAP
-		war_score_against = {
-			who = VEN
-			value = 75
-		}
-		VEN = {
-			capital_scope = {
-				sieged_by = ROOT
+		OR = {
+			AND = {
+				war_score_against = {
+					who = SPA
+					value = 75
+				}
+				SPA = {
+					capital_scope = {
+						sieged_by = ROOT
+					}
+				}
+			}
+			AND = {
+				war_score_against = {
+					who = CAS
+					value = 75
+				}
+				CAS = {
+					capital_scope = {
+						sieged_by = ROOT
+					}
+				}
+			}
+			AND = {
+				war_score_against = {
+					who = ARA
+					value = 75
+				}
+				ARA = {
+					capital_scope = {
+						sieged_by = ROOT
+					}
+				}
 			}
 		}
 	}
@@ -1515,15 +1541,48 @@ country_event = { #The sack of Spain
 
 		add_prestige = 10
 		add_years_of_income = 3
-		112 = {
-			add_devastation = 20
-			owner = {
-				add_years_of_income = -3
+		if = {
+			limit = {
+				war_with = CAS
 			}
-			add_base_tax = -4
-			add_base_production = -2
-			add_base_manpower = -3
-		}		
+			CAS = {
+				add_years_of_income = -3
+				capital_scope = {
+					add_devastation = 20
+					add_base_tax = -4
+					add_base_production = -2
+					add_base_manpower = -3
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				war_with = ARA
+			}
+			ARA = {
+				add_years_of_income = -3
+				capital_scope = {
+					add_devastation = 20
+					add_base_tax = -4
+					add_base_production = -2
+					add_base_manpower = -3
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				war_with = SPA
+			}
+			SPA = {
+				add_years_of_income = -3
+				capital_scope = {
+					add_devastation = 20
+					add_base_tax = -4
+					add_base_production = -2
+					add_base_manpower = -3
+				}
+			}
+		}
 		capital_scope = {
 			add_base_tax = 4
 			add_base_production = 2
@@ -1545,39 +1604,100 @@ country_event = { #Fall of Spain
 	}
 
 	trigger = {
-		tag = NAP
-		war_score_against = {
-			who = VEN
-			value = 75
+		catalonia_area = {
+			type = all
+			owned_by = ROOT
 		}
-		VEN = {
-			capital_scope = {
-				sieged_by = ROOT
-			}
+		war_score_against = {
+			who = NAP
+			value = -75
 		}
 	}
 
 	option = {
 		name = ME_Naples_Events.17.OPT1
 		ai_chance = {
-			factor = 100
+			factor = 50
+			modifier = {
+				factor = 2
+				war_exhaustion = 3
+			}
 		}
 
-		add_prestige = 10
-		add_years_of_income = 3
-		112 = {
-			add_devastation = 20
-			owner = {
-				add_years_of_income = -3
+		if = {
+			limit = {
+				exists = CAT
 			}
-			add_base_tax = -4
-			add_base_production = -2
-			add_base_manpower = -3
-		}		
-		capital_scope = {
-			add_base_tax = 4
-			add_base_production = 2
-			add_base_manpower = 3
+			if = {
+				limit = {
+					CAT = {
+						vassal_of = ROOT
+					}
+				}
+				NAP = {
+					if = {
+						limit = {
+							is_expanded_mod_active = { mod = subjects }
+						}
+						create_subject = {
+							subject_type = brother_kingdom
+							subject = CAT
+						}
+					}
+					else = {
+						create_subject = {
+							subject_type = personal_union
+							subject = CAT
+						}
+					}
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						area = catalonia_area
+						NOT = {	is_core = CAT }
+					}
+					add_core = CAT
+					cede_province = CAT
+				}
+			}
+		}
+		else = {
+			every_owned_province = {
+				limit = {
+					area = catalonia_area
+					NOT = {	is_core = CAT }
+				}
+				add_core = CAT
+			}
+			release = CAT
+			NAP = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					create_subject = {
+						subject_type = brother_kingdom
+						subject = CAT
+					}
+				}
+				else = {
+					create_subject = {
+						subject_type = personal_union
+						subject = CAT
+					}
+				}
+			}
+		}
+		white_peace = NAP
+		add_truce_with = NAP
+	}
+
+	option = {
+		name = ME_Naples_Events.17.OPT2
+		ai_chance = {
+			factor = 50
 		}
 	}
 }
@@ -1597,10 +1717,10 @@ country_event = { #The sack of France
 	trigger = {
 		tag = NAP
 		war_score_against = {
-			who = VEN
+			who = FRA
 			value = 75
 		}
-		VEN = {
+		FRA = {
 			capital_scope = {
 				sieged_by = ROOT
 			}
@@ -1615,14 +1735,14 @@ country_event = { #The sack of France
 
 		add_prestige = 10
 		add_years_of_income = 3
-		112 = {
-			add_devastation = 20
-			owner = {
-				add_years_of_income = -3
+		FRA = {
+			add_years_of_income = -3
+			capital_scope = {
+				add_devastation = 20
+				add_base_tax = -4
+				add_base_production = -2
+				add_base_manpower = -3
 			}
-			add_base_tax = -4
-			add_base_production = -2
-			add_base_manpower = -3
 		}		
 		capital_scope = {
 			add_base_tax = 4
@@ -1633,9 +1753,9 @@ country_event = { #The sack of France
 }
 
 country_event = { #Fall of France
-	id = ME_Naples_Events.17
-	title = ME_Naples_Events.17.T
-	desc = ME_Naples_Events.17.D
+	id = ME_Naples_Events.19
+	title = ME_Naples_Events.19.T
+	desc = ME_Naples_Events.19.D
 	picture = SIEGE_eventPicture
 
 	fire_only_once = yes
@@ -1645,39 +1765,96 @@ country_event = { #Fall of France
 	}
 
 	trigger = {
-		tag = NAP
+		tag = FRA
 		war_score_against = {
-			who = VEN
-			value = 75
-		}
-		VEN = {
-			capital_scope = {
-				sieged_by = ROOT
-			}
+			who = NAP
+			value = -75
 		}
 	}
 
 	option = {
-		name = ME_Naples_Events.17.OPT1
+		name = ME_Naples_Events.19.OPT1
 		ai_chance = {
-			factor = 100
+			factor = 50
 		}
 
-		add_prestige = 10
-		add_years_of_income = 3
-		112 = {
-			add_devastation = 20
-			owner = {
-				add_years_of_income = -3
+		if = {
+			limit = {
+				exists = PRO
 			}
-			add_base_tax = -4
-			add_base_production = -2
-			add_base_manpower = -3
-		}		
-		capital_scope = {
-			add_base_tax = 4
-			add_base_production = 2
-			add_base_manpower = 3
+			if = {
+				limit = {
+					PRO = {
+						vassal_of = ROOT
+					}
+				}
+				NAP = {
+					if = {
+						limit = {
+							is_expanded_mod_active = { mod = subjects }
+						}
+						create_subject = {
+							subject_type = brother_kingdom
+							subject = PRO
+						}
+					}
+					else = {
+						create_subject = {
+							subject_type = personal_union
+							subject = PRO
+						}
+					}
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							area = provence_area
+							area = loire_area
+						}
+						NOT = { is_core = PRO }
+					}
+					add_core = PRO
+					cede_province = PRO
+				}
+			}
 		}
+		else = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = provence_area
+						area = loire_area
+					}
+					NOT = { is_core = PRO }
+				}
+				add_core = PRO
+			}
+			release = PRO
+			NAP = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					create_subject = {
+						subject_type = brother_kingdom
+						subject = PRO
+					}
+				}
+				else = {
+					create_subject = {
+						subject_type = personal_union
+						subject = PRO
+					}
+				}
+			}
+		}
+		white_peace = NAP
+		add_truce_with = NAP
+	}
+
+	option = {
+		name = ME_Naples_Events.19.OPT2
 	}
 }
