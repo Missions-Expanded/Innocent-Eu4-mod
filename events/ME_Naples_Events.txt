@@ -788,7 +788,6 @@ country_event = { #Coronation Day
 	picture = GOOD_WITH_MONARCH_eventPicture
 
 	fire_only_once = yes
-	is_triggered_only = yes
 
 	mean_time_to_happen = {
 		months = 1
@@ -1046,9 +1045,6 @@ country_event = { #Sicilian Independence
 			}
 		}
 		else = {
-			ROOT = {
-				set_in_empire = yes 
-			}
 			create_subject = {
 				subject_type = personal_union
 				subject = SIC
@@ -1073,10 +1069,8 @@ country_event = { #Sicilian Independence
 			factor = 50
 		}
 
-		every_owned_province = {
-			limit = {
-				area = sicily_area
-			}
+		sicily_area = {
+			add_unrest = 5
 			add_province_modifier = {
 				name = nap_forced_subdjucation
 				duration = 5475
@@ -1591,121 +1585,10 @@ country_event = { #The sack of Spain
 	}
 }
 
-country_event = { #Fall of Spain
+country_event = { #The sack of France
 	id = ME_Naples_Events.17
 	title = ME_Naples_Events.17.T
 	desc = ME_Naples_Events.17.D
-	picture = SIEGE_eventPicture
-
-	fire_only_once = yes
-
-	mean_time_to_happen = {
-		months = 1
-	}
-
-	trigger = {
-		catalonia_area = {
-			type = all
-			owned_by = ROOT
-		}
-		war_score_against = {
-			who = NAP
-			value = -75
-		}
-	}
-
-	option = {
-		name = ME_Naples_Events.17.OPT1
-		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 2
-				war_exhaustion = 3
-			}
-		}
-
-		if = {
-			limit = {
-				exists = CAT
-			}
-			if = {
-				limit = {
-					CAT = {
-						vassal_of = ROOT
-					}
-				}
-				NAP = {
-					if = {
-						limit = {
-							is_expanded_mod_active = { mod = subjects }
-						}
-						create_subject = {
-							subject_type = brother_kingdom
-							subject = CAT
-						}
-					}
-					else = {
-						create_subject = {
-							subject_type = personal_union
-							subject = CAT
-						}
-					}
-				}
-			}
-			else = {
-				every_owned_province = {
-					limit = {
-						area = catalonia_area
-						NOT = {	is_core = CAT }
-					}
-					add_core = CAT
-					cede_province = CAT
-				}
-			}
-		}
-		else = {
-			every_owned_province = {
-				limit = {
-					area = catalonia_area
-					NOT = {	is_core = CAT }
-				}
-				add_core = CAT
-			}
-			release = CAT
-			NAP = {
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = subjects }
-					}
-					create_subject = {
-						subject_type = brother_kingdom
-						subject = CAT
-					}
-				}
-				else = {
-					create_subject = {
-						subject_type = personal_union
-						subject = CAT
-					}
-				}
-			}
-		}
-		white_peace = NAP
-		add_truce_with = NAP
-	}
-
-	option = {
-		name = ME_Naples_Events.17.OPT2
-		ai_chance = {
-			factor = 50
-		}
-	}
-}
-
-country_event = { #The sack of France
-	id = ME_Naples_Events.18
-	title = ME_Naples_Events.18.T
-	desc = ME_Naples_Events.18.D
 	picture = SIEGE_eventPicture
 
 	fire_only_once = yes
@@ -1728,7 +1611,7 @@ country_event = { #The sack of France
 	}
 
 	option = {
-		name = ME_Naples_Events.18.OPT1
+		name = ME_Naples_Events.17.OPT1
 		ai_chance = {
 			factor = 100
 		}
@@ -1752,109 +1635,78 @@ country_event = { #The sack of France
 	}
 }
 
-country_event = { #Fall of France
-	id = ME_Naples_Events.19
-	title = ME_Naples_Events.19.T
-	desc = ME_Naples_Events.19.D
-	picture = SIEGE_eventPicture
+country_event = { #The Siblings
+	id = ME_Naples_Events.18
+	title = ME_Naples_Events.18.T
+	desc = ME_Naples_Events.18.D
+	picture = ANGRY_MOB_eventPicture
 
-	fire_only_once = yes
+	is_triggered_only = yes
 
-	mean_time_to_happen = {
-		months = 1
-	}
+	option = {
+		name = ME_Naples_Events.18.OPT1
 
-	trigger = {
-		tag = FRA
-		war_score_against = {
-			who = NAP
-			value = -75
+		ai_chance = {
+			factor = 50
+			modifier = {
+				factor = 0
+				ai = yes
+			}
+		}
+		
+		release = CAT
+		CAT = {
+			set_dynasty = NAP
+			change_government = monarchy
+			add_government_reform = autocracy_reform
+			religion = NAP
+			hidden_effect = {
+				add_treasury = 20
+				add_yearly_manpower = 10
+				add_yearly_sailors = 10
+			}
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = subjects }
+			}
+			create_subject = {
+				subject_type = brother_kingdom
+				subject = CAT
+			}
+		}
+		else = {
+			create_subject = {
+				subject_type = personal_union
+				subject = CAT
+			}
+		}
+		add_country_modifier = {
+			name = nap_union_two_crowns
+			duration = -1
+		}
+		CAT = {
+			add_country_modifier = {
+				name = nap_union_two_crowns
+				duration = -1
+			}
 		}
 	}
 
 	option = {
-		name = ME_Naples_Events.19.OPT1
+		name = ME_Naples_Events.18.OPT2
+
 		ai_chance = {
 			factor = 50
 		}
 
-		if = {
-			limit = {
-				exists = PRO
-			}
-			if = {
-				limit = {
-					PRO = {
-						vassal_of = ROOT
-					}
-				}
-				NAP = {
-					if = {
-						limit = {
-							is_expanded_mod_active = { mod = subjects }
-						}
-						create_subject = {
-							subject_type = brother_kingdom
-							subject = PRO
-						}
-					}
-					else = {
-						create_subject = {
-							subject_type = personal_union
-							subject = PRO
-						}
-					}
-				}
-			}
-			else = {
-				every_owned_province = {
-					limit = {
-						OR = {
-							area = provence_area
-							area = loire_area
-						}
-						NOT = { is_core = PRO }
-					}
-					add_core = PRO
-					cede_province = PRO
-				}
+		catalonia_area = {
+			limit = { owned_by = ROOT }
+			add_unrest = 5
+			add_province_modifier = {
+				name = nap_forced_subdjucation
+				duration = 5475
 			}
 		}
-		else = {
-			every_owned_province = {
-				limit = {
-					OR = {
-						area = provence_area
-						area = loire_area
-					}
-					NOT = { is_core = PRO }
-				}
-				add_core = PRO
-			}
-			release = PRO
-			NAP = {
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = subjects }
-					}
-					create_subject = {
-						subject_type = brother_kingdom
-						subject = PRO
-					}
-				}
-				else = {
-					create_subject = {
-						subject_type = personal_union
-						subject = PRO
-					}
-				}
-			}
-		}
-		white_peace = NAP
-		add_truce_with = NAP
-	}
-
-	option = {
-		name = ME_Naples_Events.19.OPT2
 	}
 }
