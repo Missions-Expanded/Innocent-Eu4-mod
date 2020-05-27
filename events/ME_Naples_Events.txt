@@ -11,7 +11,7 @@ country_event = { #The Fate of Naples
 	option = {
 		name = ME_Naples_Events.1.OPT1
 		ai_chance = {
-			factor = 25
+			factor = 33
 			modifier = {
 				factor = 4
 				has_opinion = {
@@ -32,14 +32,14 @@ country_event = { #The Fate of Naples
 				days = 60
 			}
 		}
-		set_country_flag = naples_request_france
+		set_country_flag = naples_request_austria
 		swap_non_generic_missions = yes
 	}
 
 	option = {
 		name = ME_Naples_Events.1.OPT2
 		ai_chance = {
-			factor = 25
+			factor = 33
 			modifier = {
 				factor = 4
 				has_opinion = {
@@ -60,40 +60,12 @@ country_event = { #The Fate of Naples
 				days = 60
 			}
 		}
-		set_country_flag = naples_request_austria
+		set_country_flag = naples_request_france
 		swap_non_generic_missions = yes
 	}
 
 	option = {
 		name = ME_Naples_Events.1.OPT3
-		ai_chance = {
-			factor = 25
-			modifier = {
-				factor = 4
-				has_opinion = {
-					who = TUR
-					value = 100
-				}
-				TUR = {
-					has_opinion = {
-						who = NAP
-						value = 100
-					}
-				}
-			}
-		}
-		TUR = {
-			country_event = {
-				id = ME_Naples_Events.4
-				days = 60
-			}
-		}
-		set_country_flag = naples_request_ottoman
-		swap_non_generic_missions = yes
-	}
-
-	option = {
-		name = ME_Naples_Events.1.OPT4
 		ai_chance = {
 			factor = 25 
 			modifier = {
@@ -384,134 +356,34 @@ country_event = { # For Austria
 	}
 }
 
-country_event = { # For the Ottomans
+country_event = { # Call to War
 	id = ME_Naples_Events.4
 	title = ME_Naples_Events.4.T
 	desc = ME_Naples_Events.4.D
 	picture = DIPLOMACY_eventPicture
 
-	is_triggered_only = yes
-	major = yes
+	fire_only_once = yes
+
+	trigger = {
+		NAP = {
+			is_in_war = {
+				attacker_leader = NAP
+				casus_belli = cb_independence_war
+				defender_leader = ARA
+			}
+		}
+		has_opinion_modifier = {
+			who = NAP
+			modifier = nap_helped_rebellion_war
+		}
+	}
 
 	option = {
 		name = ME_Naples_Events.4.OPT1
 		ai_chance = {
-			factor = 33
-			modifier = {
-				factor = 3
-				is_rival = ARA
-			}
+			factor = 100
 		}
-		ARA = {
-			add_opinion = {
-				who = ROOT
-				modifier = nap_helped_rebellionAra
-			}
-			add_historical_rival = ROOT
-		}
-		ROOT = {
-			add_years_of_income = -1
-			add_yearly_manpower = -1
-			add_opinion = {
-				who = FROM
-				modifier = nap_helped_rebellion
-			}
-			add_opinion = {
-				who = ARA
-				modifier = nap_helped_rebellionAra
-			}
-		}
-		FROM = {
-			add_opinion = {
-				who = ROOT
-				modifier = nap_helped_rebellion
-			}
-			add_years_of_income = 1
-			add_yearly_manpower = 1
-			create_general = {
-				tradition = 75
-			}
-			capital_scope = {
-				infantry = FROM
-				infantry = FROM
-				infantry = FROM
-			}
-		}
-		add_historical_rival = ARA
-	}
-
-	option = {
-		name = ME_Naples_Events.4.OPT2
-		ai_chance = {
-			factor = 33
-			modifier = {
-				factor = 3
-				OR = {
-					has_opinion = {
-						who = NAP
-						value = 100
-					}
-					is_rival = ARA
-					army_strength = {
-						who = ARA
-						value = 0.75
-					}
-				}
-			}
-		}
-		add_historical_friend = FROM
-		add_historical_rival = ARA
-		add_opinion = {
-			who = FROM
-			modifier = nap_helped_rebellion_war
-		}
-		add_opinion = {
-			who = ARA
-			modifier = nap_helped_rebellion_warAra
-		}
-		add_trust = {
-			who = NAP
-			value = 75
-			mutual = yes
-		}
-		ARA = {
-			add_opinion = {
-				who = ROOT
-				modifier = nap_helped_rebellion_warAra
-			}
-		}
-		FROM = {
-			add_opinion = {
-				who = ROOT
-				modifier = nap_helped_rebellion_war
-			}
-			set_country_flag = naples_france_helped_war
-		}
-	}
-
-	option = {
-		name = ME_Naples_Events.4.OPT3
-		ai_chance = {
-			factor = 33
-			modifier = {
-				factor = 3
-				alliance_with = ARA
-			}
-		}
-		add_opinion = {
-			who = FROM
-			modifier = nap_denied_help
-		}
-		FROM = {
-			add_opinion = {
-				who = ROOT
-				modifier = nap_denied_help
-			}
-			country_event = {
-				id = ME_Naples_Events.1
-				days = 30
-			}
-		}
+		#JOIN WAR
 	}
 }
 
@@ -530,7 +402,6 @@ country_event = { #Their demands
 		OR = {
 			has_country_flag = naples_france_helped_war
 			has_country_flag = naples_austria_helped_war
-			has_country_flag = naples_ottomans_helped_war
 		}
 	}
 
@@ -566,28 +437,6 @@ country_event = { #Their demands
 			kill_ruler = yes
 			set_dynasty = HAB
 		}
-
-		else_if = { #if has chosen Ottoman help
-			limit = {
-				has_country_flag = naples_ottomans_helped_war
-			}
-			if = {
-				limit = {
-					owns = 126
-				}
-				126 = {
-					cede_province = TUR
-				}
-			}
-			else_if = {
-				limit = {
-					owns = 122
-				}
-				122 = {
-					cede_province = TUR
-				}
-			}
-		}
 	}
 
 	option = {
@@ -613,19 +462,6 @@ country_event = { #Their demands
 				has_country_flag = naples_austria_helped_war
 			}
 			HAB = {
-				add_casus_belli = {
-					target = ROOT
-					type = cb_annex
-					months = 300
-				}
-			}
-		}
-
-		else_if = { #if has chosen Ottoman help
-			limit = {
-				has_country_flag = naples_ottomans_helped_war
-			}
-			TUR = {
 				add_casus_belli = {
 					target = ROOT
 					type = cb_annex
@@ -660,6 +496,7 @@ country_event = { #The Request
 			limit = {
 				has_country_flag = naples_france_helped_war
 			}
+			set_dynasty = FRA
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = subjects }
@@ -706,33 +543,6 @@ country_event = { #The Request
 				}
 			}
 		}
-
-		else_if = { #if has chosen Ottoman help
-			limit = {
-				has_country_flag = naples_ottomans_helped_war
-			}
-			NAP = {
-				release = SIC
-			}
-			SIC = {
-				set_dynasty = NAP
-				change_government = monarchy
-			}
-			TUR = {
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = subjects }
-					}
-					create_subject = {
-						subject_type = muslim_tributary_vassal
-						subject = SIC
-					}
-				}
-				else = { 
-					create_march = SIC 
-				}
-			}
-		}
 	}
 
 	option = {
@@ -758,19 +568,6 @@ country_event = { #The Request
 				has_country_flag = naples_austria_helped_war
 			}
 			HAB = {
-				add_casus_belli = {
-					target = ROOT
-					type = cb_annex
-					months = 300
-				}
-			}
-		}
-
-		else_if = { #if has chosen Ottoman help
-			limit = {
-				has_country_flag = naples_ottomans_helped_war
-			}
-			TUR = {
 				add_casus_belli = {
 					target = ROOT
 					type = cb_annex
@@ -1029,6 +826,10 @@ country_event = { #Sicilian Independence
 			change_government = monarchy
 			add_government_reform = autocracy_reform
 			religion = NAP
+			add_country_modifier = {
+				name = nap_union_two_crowns
+				duration = -1
+			}
 			hidden_effect = {
 				add_treasury = 20
 				add_yearly_manpower = 10
@@ -1051,14 +852,8 @@ country_event = { #Sicilian Independence
 			}
 		}
 		add_country_modifier = {
-			name = nap_union_two_crowns
+			name = nap_subject_tribute
 			duration = -1
-		}
-		SIC = {
-			add_country_modifier = {
-				name = nap_union_two_crowns
-				duration = -1
-			}
 		}
 	}
 
@@ -1098,14 +893,13 @@ country_event = { #Restoring the Glory of Greece
 					num_of_free_diplomatic_relations = 1
 				}
 			}
-		}		
-		every_province = {
+		}
+		every_owned_province = {
 			limit = {
 				NOT = {
 					is_core = GRE
 				}
-				owned_by = ROOT
-				culture = greek
+				culture_group = byzantine
 			}
 			add_core = GRE
 		}
@@ -1113,7 +907,11 @@ country_event = { #Restoring the Glory of Greece
 		GRE = {
 			set_dynasty = NAP
 			change_government = monarchy
-			add_government_reform = feudalism_reform
+			hidden_effect = {
+				add_treasury = 20
+				add_yearly_manpower = 10
+				add_yearly_sailors = 10
+			}
 		}
 		if = {
 			limit = {
@@ -1125,10 +923,6 @@ country_event = { #Restoring the Glory of Greece
 			}
 		}
 		else = { create_march = GRE }
-		add_country_modifier = {
-			name = nap_subject_tribute
-			duration = -1
-		}
 		northern_greece_area = {
 			limit = {
 				NOT = {
@@ -1173,13 +967,10 @@ country_event = { #Restoring the Glory of Greece
 		ai_chance = {
 			factor = 50
 		}
-		custom_tooltip = NAP_EVENT6_SUBJECT_SLAVE_TOOLTIP
+		custom_tooltip = NAP_EVENT10_SUBJECT_SLAVE_TOOLTIP
 		hidden_effect = {
-			every_province = {
-				limit = {
-					owned_by = ROOT
-					region = italy_region
-				}
+			every_owned_province = {
+				limit = { region = italy_region }
 				add_province_modifier = {
 					name = nap_subject_slaves
 					duration = 9125
@@ -1211,6 +1002,7 @@ country_event = { #The Throne of Provence for Provence
 				}
 			}
 		}
+		set_dynasty = FROM
 		FROM = {
 			if = {
 				limit = {
@@ -1275,18 +1067,7 @@ country_event = { #The bond with Naples for Hungary
 			}
 		}
 		FROM = {
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = subjects }
-				}
-				create_subject = {
-					subject_type = brother_kingdom
-					subject = ROOT
-				}
-			}
-			else = {
-				create_union = ROOT
-			}
+			create_union = ROOT
 		}
 	}
 

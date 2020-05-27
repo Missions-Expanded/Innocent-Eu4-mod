@@ -434,13 +434,50 @@ naples_missions_1_french = {
 			}
 			if = {
 				limit = {
-					exists = ARA
+					exists = FRA
 				}
-				
+				FRA = {
+					NOT = {
+						army_strength = {
+							who = ROOT
+							value = 1
+						}
+					}
+				}
+			}
+			else = {
+				198 = {
+					owner = {
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			
+			if = {
+				limit = {
+					exists = FRA
+				}
+				add_casus_belli = {
+					type = cb_humiliate
+					target = FRA
+				}
+			}
+			else = {
+				198 = {
+					owner = {
+						add_casus_belli = {
+							type = cb_humiliate
+							target = THIS
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -879,15 +916,89 @@ naples_missions_2_french = {
 			198 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
+		}
+		effect = {
 			if = {
 				limit = {
 					exists = ARA
 				}
-
+				if = {
+					limit = {
+						ARA = {
+							is_subject_of = CAS
+						}
+					}
+					add_casus_belli = {
+						type = cb_humiliate
+						target = CAS
+					}
+				}
+				else_if = {
+					limit = {
+						is_subject = yes
+					}
+					overlord = {
+						reverse_add_casus_belli = {
+							type = cb_humiliate
+							target = ROOT
+						}
+					}
+				}
+				else = {
+					add_casus_belli = {
+						type = cb_humiliate
+						target = ARA
+					}
+				}
 			}
-		}
-		effect = {
-			
+			else_if = {
+				limit = {
+					exists = CAS
+				}
+				if = {
+					limit = {
+						CAS = {
+							is_subject = yes
+						}
+					}
+					overlord = {
+						reverse_add_casus_belli = {
+							type = cb_humiliate
+							target = ROOT
+						}
+					}
+				}
+				else = {
+					add_casus_belli = {
+						type = cb_humiliate
+						target = CAS
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = SPA
+				}
+				if = {
+					limit = {
+						SPA = {
+							is_subject = yes
+						}
+					}
+					overlord = {
+						reverse_add_casus_belli = {
+							type = cb_humiliate
+							target = ROOT
+						}
+					}
+				}
+				else = {
+					add_casus_belli = {
+						type = cb_humiliate
+						target = SPA
+					}
+				}
+			}
 		}
 	}
 }
@@ -1277,17 +1388,6 @@ naples_missions_3 = {
 
 }
 
-naples_missions_3_ottoman = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		tag = NAP
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		has_country_flag = naples_request_ottoman
-	}
-}
-
 naples_missions_4 = {
 	slot = 4
 	generic = no
@@ -1620,10 +1720,20 @@ naples_missions_4_austria = {
 			}
 		}
 		effect = {
-			add_legitimacy_equivalent = {
-				value = 10
+			lower_swabia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT				
 			}
-			
+			upper_swabia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -1633,21 +1743,30 @@ naples_missions_4_austria = {
 			nap_imperial_throne
 		}
 		position = 10
-		trigger = {
-			if = {
-				limit = {
-					exists = HUN
-				}
-				HUN = {
-					is_subject_of = NAP
-				}
+		provinces_to_highlight = {
+			OR = {
+				area = lower_swabia_area
+				area = upper_swabia_area
 			}
-			else = {
-				
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lower_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_swabia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			
+			if = {
+				limit = {
+					is_emperor = yes
+				}
+				add_imperial_authority = 25
+			}
 		}
 	}
 }
@@ -1816,7 +1935,7 @@ naples_missions_5 = {
 				add_permanent_claim = ROOT
 			}
 			country_event = { 
-				id = ME_Naples_Events.7
+				id = ME_Naples_Events.13
 			}
 		}
 	}
