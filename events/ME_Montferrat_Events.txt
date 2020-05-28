@@ -1,0 +1,739 @@
+namespace = ME_Montferrat_Events
+
+country_event = { #The Fate of Naples
+	id = ME_Montferrat_Events.1
+	title = ME_Montferrat_Events.1.T
+	desc = ME_Montferrat_Events.1.D
+	picture = CIVIL_WAR_eventPicture
+
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			overlord = {
+				save_global_event_target_as = montferrat_overlord
+			}
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.1.OPT1
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 4
+				has_opinion = {
+					who = FRA
+					value = 100
+				}
+				FRA = {
+					has_opinion = {
+						who = MFA
+						value = 100
+					}
+				}
+			}
+		}
+		FRA = {
+			country_event = {
+				id = ME_Montferrat_Events.2
+				days = 60
+			}
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.1.OPT2
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 4
+				has_opinion = {
+					who = MLO
+					value = 100
+				}
+				MLO = {
+					has_opinion = {
+						who = MFA
+						value = 100
+					}
+				}
+			}
+		}
+		MLO = {
+			country_event = {
+				id = ME_Montferrat_Events.3
+				days = 60
+			}
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.1.OPT3
+		ai_chance = {
+			factor = 33 
+			modifier = {
+				factor = 3
+			}			
+		}
+
+		random_country = {
+			limit = {
+				is_rival = event_target:montferrat_overlord
+				OR = {
+					NOT = { tag = FRA }
+					NOT = { tag = MLO }
+				}
+			}
+			country_event = {
+				id = ME_Montferrat_Events.4
+				days = 60
+			}
+		}
+	}
+}
+
+country_event = { # For France
+	id = ME_Montferrat_Events.2
+	title = ME_Montferrat_Events.2.T
+	desc = ME_Montferrat_Events.2.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = ME_Montferrat_Events.2.OPT1
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				is_rival = SAV
+			}
+		}
+
+		SAV = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellionAra
+			}
+			add_historical_rival = ROOT
+		}
+		ROOT = {
+			add_years_of_income = -1
+			add_yearly_manpower = -1
+			add_opinion = {
+				who = FROM
+				modifier = mfa_helped_rebellion
+			}
+			add_opinion = {
+				who = SAV
+				modifier = mfa_helped_rebellionAra
+			}
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion
+			}
+			add_years_of_income = 1
+			add_yearly_manpower = 1
+			create_general = {
+				tradition = 75
+			}
+			capital_scope = {
+				infantry = FROM
+				infantry = FROM
+				infantry = FROM
+			}
+		}
+		add_historical_rival = SAV
+	}
+
+	option = {
+		name = ME_Montferrat_Events.2.OPT2
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					has_opinion = {
+						who = MFA
+						value = 100
+					}
+					is_rival = SAV
+					army_strength = {
+						who = SAV
+						value = 0.75
+					}
+				}
+			}
+		}
+		add_historical_friend = FROM
+		add_historical_rival = SAV
+		add_opinion = {
+			who = FROM
+			modifier = mfa_helped_rebellion_war
+		}
+		add_opinion = {
+			who = SAV
+			modifier = mfa_helped_rebellion_warAra
+		}
+		add_trust = {
+			who = MFA
+			value = 75
+			mutual = yes
+		}
+		SAV = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion_warAra
+			}
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion_war
+			}
+			set_country_flag = naples_france_helped_war
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.2.OPT3
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				alliance_with = SAV
+			}
+		}
+		add_opinion = {
+			who = FROM
+			modifier = mfa_denied_help
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_denied_help
+			}
+			country_event = {
+				id = ME_Montferrat_Events.1
+				days = 30
+			}
+		}
+	}
+}
+
+country_event = { # For Austria
+	id = ME_Montferrat_Events.3
+	title = ME_Montferrat_Events.3.T
+	desc = ME_Montferrat_Events.3.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = ME_Montferrat_Events.3.OPT1
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				has_opinion = {
+					who = MFA
+					value = 100
+				}
+			}
+		}
+		SAV = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellionAra
+			}
+			add_historical_rival = ROOT
+		}
+		ROOT = {
+			add_years_of_income = -1
+			add_yearly_manpower = -1
+			add_opinion = {
+				who = FROM
+				modifier = mfa_helped_rebellion
+			}
+			add_opinion = {
+				who = SAV
+				modifier = mfa_helped_rebellionAra
+			}
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion
+			}
+			add_years_of_income = 1
+			add_yearly_manpower = 1
+			create_general = {
+				tradition = 75
+			}
+			capital_scope = {
+				infantry = FROM
+				infantry = FROM
+				infantry = FROM
+			}
+		}
+		add_historical_rival = SAV
+	}
+
+	option = {
+		name = ME_Montferrat_Events.3.OPT2
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					has_opinion = {
+						who = MFA
+						value = 100
+					}
+					is_at_war = no
+					army_strength = {
+						who = SAV
+						value = 0.66
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					army_strength = {
+						who = SAV
+						value = 0.50
+					}
+				}
+			}
+		}
+
+		add_historical_friend = FROM
+		add_historical_rival = SAV
+		add_opinion = {
+			who = FROM
+			modifier = mfa_helped_rebellion_war
+		}
+		add_opinion = {
+			who = SAV
+			modifier = mfa_helped_rebellion_warAra
+		}
+		add_trust = {
+			who = MFA
+			value = 75
+			mutual = yes
+		}
+		SAV = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion_warAra
+			}
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion_war
+			}
+			set_country_flag = naples_france_helped_war
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.3.OPT3
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				NOT = {
+					army_strength = {
+						who = SAV
+						value = 0.50
+					}
+				}
+			}
+		}
+		add_opinion = {
+			who = FROM
+			modifier = mfa_denied_help
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_denied_help
+			}
+			country_event = {
+				id = ME_Montferrat_Events.1
+				days = 30
+			}
+		}
+	}
+}
+
+country_event = { # For Rival
+	id = ME_Montferrat_Events.4
+	title = ME_Montferrat_Events.4.T
+	desc = ME_Montferrat_Events.4.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = ME_Montferrat_Events.3.OPT1
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				has_opinion = {
+					who = MFA
+					value = 100
+				}
+			}
+		}
+		SAV = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellionAra
+			}
+			add_historical_rival = ROOT
+		}
+		ROOT = {
+			add_years_of_income = -1
+			add_yearly_manpower = -1
+			add_opinion = {
+				who = FROM
+				modifier = mfa_helped_rebellion
+			}
+			add_opinion = {
+				who = SAV
+				modifier = mfa_helped_rebellionAra
+			}
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion
+			}
+			add_years_of_income = 1
+			add_yearly_manpower = 1
+			create_general = {
+				tradition = 75
+			}
+			capital_scope = {
+				infantry = FROM
+				infantry = FROM
+				infantry = FROM
+			}
+		}
+		add_historical_rival = SAV
+	}
+
+	option = {
+		name = ME_Montferrat_Events.3.OPT2
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					has_opinion = {
+						who = MFA
+						value = 100
+					}
+					is_at_war = no
+					army_strength = {
+						who = SAV
+						value = 0.66
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					army_strength = {
+						who = SAV
+						value = 0.50
+					}
+				}
+			}
+		}
+
+		add_historical_friend = FROM
+		add_historical_rival = SAV
+		add_opinion = {
+			who = FROM
+			modifier = mfa_helped_rebellion_war
+		}
+		add_opinion = {
+			who = SAV
+			modifier = mfa_helped_rebellion_warAra
+		}
+		add_trust = {
+			who = MFA
+			value = 75
+			mutual = yes
+		}
+		SAV = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion_warAra
+			}
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_helped_rebellion_war
+			}
+			set_country_flag = naples_france_helped_war
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.3.OPT3
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				NOT = {
+					army_strength = {
+						who = SAV
+						value = 0.50
+					}
+				}
+			}
+		}
+		add_opinion = {
+			who = FROM
+			modifier = mfa_denied_help
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = mfa_denied_help
+			}
+			country_event = {
+				id = ME_Montferrat_Events.1
+				days = 30
+			}
+		}
+	}
+}
+
+country_event = { # Call to Arms
+	id = ME_Montferrat_Events.5
+	title = ME_Montferrat_Events.5.T
+	desc = ME_Montferrat_Events.5.D
+	picture = BATTLE_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		MFA = {
+			is_in_war = {
+				attacker_leader = MFA
+				casus_belli = cb_independence_war
+				defender_leader = SAV
+			}
+		}
+		has_opinion_modifier = {
+			who = MFA
+			modifier = mfa_helped_rebellion_war
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.5.OPT1
+		ai_chance = {
+			factor = 100
+		}
+		#JOIN WAR for 1.30
+	}
+}
+
+#Vicotry's Celebration
+country_event = {
+	id = ME_Montferrat_Events.6
+	title = ME_Montferrat_Events.6.T
+	desc = ME_Montferrat_Events.6.D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Montferrat_Events.6.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		
+	}
+}
+
+#Greek Knowledge
+country_event = {
+	id = ME_Montferrat_Events.7
+	title = ME_Montferrat_Events.7.T
+	desc = ME_Montferrat_Events.7.D
+	picture = ENLIGHTENMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Montferrat_Events.7.OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+		add_country_modifier = {
+			name = mfa_greek_influx
+			duration = 7300
+		}
+		country_event = {
+			id = ME_Montferrat_Events.7
+			days = 180
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.7.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		add_country_modifier = {
+			name = mfa_italian_knowledge
+			duration = 9125
+		}
+	}
+}
+
+#Gemistus Pletho
+country_event = {
+	id = ME_Montferrat_Events.8
+	title = ME_Montferrat_Events.8.T
+	desc = ME_Montferrat_Events.8.D
+	picture = ADVISOR_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Montferrat_Events.8.OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+		define_advisor = {
+			type = philosopher
+			name = "Gemistus Pletho"
+			skill = 2
+			culture = greek
+			religion = orthodox
+			cost_multiplier = 0.5
+		}
+	}
+
+	option = {
+		name = ME_Montferrat_Events.8.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+}
+
+country_event = {
+	id = ME_Montferrat_Events.
+	title = ME_Montferrat_Events..T
+	desc = ME_Montferrat_Events..D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Montferrat_Events..OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+
+	option = {
+		name = ME_Montferrat_Events..OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+}
+
+country_event = {
+	id = ME_Montferrat_Events.
+	title = ME_Montferrat_Events..T
+	desc = ME_Montferrat_Events..D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Montferrat_Events..OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+
+	option = {
+		name = ME_Montferrat_Events..OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+}
+
+country_event = {
+	id = ME_Montferrat_Events.
+	title = ME_Montferrat_Events..T
+	desc = ME_Montferrat_Events..D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Montferrat_Events..OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+
+	option = {
+		name = ME_Montferrat_Events..OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		
+	}
+}
