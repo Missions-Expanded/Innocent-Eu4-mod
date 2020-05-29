@@ -402,7 +402,7 @@ venice_missions_2 = {
 		required_missions = {
 			ven_mare_hadriaticum
 		}
-		position = 3
+		position = 4
 		trigger = {
 			num_of_admirals = 1
 			if = {
@@ -506,7 +506,7 @@ venice_missions_2 = {
 			any_country = {
 				1308 = {
 					trade_share = {
-						share = 10
+						share = 1
 						country = PREV
 					}
 				}
@@ -545,6 +545,7 @@ venice_missions_2 = {
 			}
 		}
 		effect = {
+			add_years_of_income = 4
 		}
 	}
 
@@ -788,12 +789,72 @@ venice_missions_3 = {
 			ven_a_second_home
 		}
 		position = 4
+		provinces_to_highlight = {
+			area = crimea_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
+			285 = {
+				NOT = { unrest = 1 }
+				NOT = { devastation = 1 }
+			}
+			crimea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			285 = {
+				if = {
+					limit = {
+						province_has_center_of_trade_of_level = 3
+					}
+					add_base_production = 4
+				}
+				else = {
+					create_or_add_center_of_trade_level = {
+						level = 1
+					}
+				}
+			}
 			add_country_modifier = {
 				name = ven_black_sea_trade
 				duration = 9125
+			}
+			286 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			325 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			328 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			330 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1756 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -959,8 +1020,15 @@ venice_missions_4 = {
 			ven_prelude_to_bosporus
 		}
 		position = 3
+		provinces_to_highlight = {
+			area = aegean_archipelago_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-
+			aegean_archipelago_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			377 = {	# Aleppo
@@ -971,6 +1039,23 @@ venice_missions_4 = {
 					key = ven_silk_port_trade
 				}
 			}
+			321 = {
+				if = {
+					limit = {
+						NOT = { 
+							owned_by = ROOT 
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			crime_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -980,10 +1065,68 @@ venice_missions_4 = {
 			ven_aegean_sea
 		}
 		position = 4
+		provinces_to_highlight = {
+			province_id = 321
+			NOT = { owned_by = ROOT }
+			NOT = { is_core = ROOT }
+			NOT = { unrest = 1 }
+		}
 		trigger = {
-
+			321 = {
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = { unrest = 1 }
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+					has_building = dock
+					has_building = drydock
+				}
+			}
 		}
 		effect = {
+			321 = {
+				if = {
+					limit = {
+						has_building = shipyard
+					}
+					remove_building = shipyard
+					add_building_construction = {
+						building = grand_shipyard
+						speed = 0.5
+						cost = 0
+					}
+				}
+				if = {
+					limit = {
+						has_building = dock
+					}
+					remove_building = dock
+					add_building_construction = {
+						building = drydock
+						speed = 0.5
+						cost = 0
+					}
+				}
+				add_base_prduction = 2
+				add_nationalism = -10
+			}
+			aleppo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
+			syria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					has_port = yes
+				}
+				add_permanent_claim = ROOT
+			}
 			country_event = {
 				id = ME_Venice_Events.5
 			}
