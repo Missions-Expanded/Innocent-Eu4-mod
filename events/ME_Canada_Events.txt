@@ -1371,6 +1371,480 @@ country_event = {
 	}
 }
 
+#Impressment of Sailors - Canada
+country_event = {
+	id = ME_Canada_Events.21
+	title = ME_Canada_Events.21.T
+	desc = ME_Canada_Events.21.D
+	picture = REVOLT_eventPicture
+
+	fire_only_once = yes
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = canada_is_at_war
+		}
+	}
+
+	trigger = {
+		exists = USA
+		is_institution_enabled = enlightenment
+		is_subject = yes
+		OR = {
+			tag = CAN
+			AND = {
+				NOT = { exists = CAN }
+				is_colonial_nation = yes
+				capital_scope = {
+					colonial_region = colonial_canada
+				}
+			}
+		}
+		OR = {
+			AND = {
+				any_country = {
+					capital_scope = {
+						continent = europe
+					}
+					is_great_power = yes
+					is_in_war = {
+						attacker = THIS
+						defender = ROOT
+					}
+					save_global_event_target_as = canada_fighting_against
+				}
+				any_country = {
+					capital_scope = {
+						continent = europe
+					}
+					is_great_power = yes
+					is_in_war = {
+						defender = THIS
+						defender = ROOT
+					}
+					save_global_event_target_as = canada_fighting_with
+				}
+			}
+			AND = {
+				any_country = {
+					capital_scope = {
+						continent = europe
+					}
+					is_great_power = yes
+					is_in_war = {
+						attacker = THIS
+						attacker = ROOT
+					}
+					save_global_event_target_as = canada_fighting_against
+				}
+				any_country = {
+					capital_scope = {
+						continent = europe
+					}
+					is_great_power = yes
+					is_in_war = {
+						defender = THIS
+						attacker = ROOT
+					}
+					save_global_event_target_as = canada_fighting_with
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.21.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		USA = {
+			country_event = {
+				id = ME_Canada_Events.22
+				days = 90
+			}
+		}
+	}
+}
+
+#Impressment of Sailors - USA
+country_event = {
+	id = ME_Canada_Events.22
+	title = ME_Canada_Events.22.T
+	desc = ME_Canada_Events.22.D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Canada_Events.22.OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+		add_sailors = -1000
+		FROM = {
+			country_event = {
+				id = ME_Canada_Events.23
+			}
+		}
+		#How would I even do this?
+		#USA declares war on the GP that Canada is fighting alongside.
+		#Well I need join_War anyway
+		#join_war = event_target:canada_fighting_with
+	}
+
+	option = {
+		name = ME_Canada_Events.22.OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+		add_sailors = -1000
+		add_stability = -1
+	}
+}
+
+#The War of $year$ - Global Event for Everyone
+country_event = {
+	id = ME_Canada_Events.23
+	title = ME_Canada_Events.23.T
+	desc = ME_Canada_Events..D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	major = yes
+
+	option = {
+		name = ME_Canada_Events.23.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+	}
+}
+
+#Hidden End To War
+country_event = {
+	id = ME_Canada_Events.24
+	title = ME_Canada_Events.24.T
+	desc = ME_Canada_Events.24.D
+	picture = REVOLT_eventPicture
+
+	fire_only_once = yes
+
+	hidden = yes
+
+	trigger = {
+		has_country_flag = canada_is_at_war
+		is_at_war = yes
+	}
+
+	option = {
+		name = ME_Canada_Events.24.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		if = {
+			limit = {
+				USA = {
+					capital_scope = {
+						controlled_by = ROOT
+					}
+				}
+			}
+			country_event = {
+				id = ME_Canada_Events.25
+			}
+		}
+		else_if = {
+			limit = {
+				capital_scope = {
+					controlled_by = USA
+				}
+			}
+			country_event = {
+				id = ME_Canada_Events.26
+			}
+		}
+		else = {
+			country_event = {
+				id = ME_Canada_Events.27
+			}
+		}
+	}
+}
+
+#The Canadian Stormtrooper
+country_event = {
+	id = ME_Canada_Events.25
+	title = ME_Canada_Events.25.T
+	desc = ME_Canada_Events.25.D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Canada_Events.25.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		USA = {
+			add_years_of_income = -3
+		}
+		every_trade_node = {
+			limit = {
+				trade_share = {
+					country = USA
+					share = 1
+				}
+			}
+			add_trade_modifier = {
+				who = USA
+				duration = 20
+				power = -30
+				key = can_victorious_trade
+			}
+			add_trade_modifier = {
+				who = ROOT
+				duration = 20
+				power = 30
+				key = can_victorious_trade
+			}
+		}
+		add_years_of_income = 3
+		event_target:canada_fighting_with = {
+			add_years_of_income = 3
+		}
+	}
+}
+
+#Great Patriotic Victory!
+country_event = {
+	id = ME_Canada_Events.26
+	title = ME_Canada_Events.26.T
+	desc = ME_Canada_Events.26.D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Canada_Events.26.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		USA = {
+			add_years_of_income = -3
+		}
+		every_trade_node = {
+			limit = {
+				trade_share = {
+					country = USA
+					share = 1
+				}
+			}
+			add_trade_modifier = {
+				who = ROOT
+				duration = 20
+				power = -30
+				key = can_lost_trade
+			}
+			add_trade_modifier = {
+				who = USA
+				duration = 20
+				power = 30
+				key = can_lost_trade
+			}
+		}
+		add_years_of_income = 3
+		event_target:canada_fighting_with = {
+			add_years_of_income = 3
+		}
+
+
+	}
+}
+
+#Status Quo
+country_event = {
+	id = ME_Canada_Events.27
+	title = ME_Canada_Events.27.T
+	desc = ME_Canada_Events.27.D
+	picture = REVOLT_eventPicture
+
+	is_triggered_only = yes
+
+	major = yes
+
+	option = {
+		name = ME_Canada_Events..OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+	}
+}
+
+#The Burning of Washington
+country_event = {
+	id = ME_Canada_Events.28
+	title = ME_Canada_Events.28.T
+	desc = ME_Canada_Events.28.D
+	picture = REVOLT_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		NOT = { has_country_flag = can_burning_washingston_fired }
+		OR = {
+			OR = {
+				tag = CAN
+				AND = {
+					NOT = { exists = CAN }
+					is_colonial_nation = yes
+					capital_scope = {
+						colonial_region = colonial_canada
+					}
+				}
+			}
+			tag = USA
+		}
+		953 = {
+			OR = {
+				OR = {
+					tag = CAN
+					AND = {
+						NOT = { exists = CAN }
+						is_colonial_nation = yes
+						capital_scope = {
+							colonial_region = colonial_canada
+						}
+					}
+				}
+				#Trigger, Canada or Ally has Washington Occupied #953
+			}
+		}
+	}
+
+	immediate = {
+		hidden_effect = {
+			set_country_flag = can_burning_washingston_fired
+		}
+	}
+
+	option = {
+		name = ME_Canada_Events.28.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+		USA = {
+			add_country_modifier = {
+				name = can_white_house_burning
+				duration = 730
+			}
+		}
+		953 = {
+			random_list = {
+				33 = { add_base_tax = -3 }
+				33 = { add_base_production = -3 }
+				33 = { add_base_manpower = -3 }
+			}
+		}
+	}
+}
+
+#The Burning of Washington 2
+#This event has a 60% chance of firing
+country_event = {
+	id = ME_Canada_Events.29
+	title = ME_Canada_Events.29.T
+	desc = ME_Canada_Events.29.D
+	picture = REVOLT_eventPicture
+
+	fire_only_once = yes
+
+	option = {
+		name = ME_Canada_Events.29.OPT1
+
+		ai_chance = {
+			factor = 100
+		}
+
+	}
+}
+
+#Burning of York
+country_event = {
+	id = ME_Canada_Events.
+	title = ME_Canada_Events..T
+	desc = ME_Canada_Events..D
+	picture = REVOLT_eventPicture
+
+	fire_only_once = yes
+
+	option = {
+		name = ME_Canada_Events..OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+
+	}
+
+	option = {
+		name = ME_Canada_Events..OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+
+	}
+}
+
+#Burning of York 2
+country_event = {
+	id = ME_Canada_Events.
+	title = ME_Canada_Events..T
+	desc = ME_Canada_Events..D
+	picture = REVOLT_eventPicture
+
+	fire_only_once = yes
+
+	option = {
+		name = ME_Canada_Events..OPT1
+
+		ai_chance = {
+			factor = 50
+		}
+
+
+	}
+
+	option = {
+		name = ME_Canada_Events..OPT2
+
+		ai_chance = {
+			factor = 50
+		}
+
+
+	}
+}
+
 country_event = {
 	id = ME_Canada_Events.
 	title = ME_Canada_Events..T
