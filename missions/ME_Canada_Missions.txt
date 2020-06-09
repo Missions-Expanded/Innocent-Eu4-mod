@@ -12,11 +12,10 @@ canada_missions_1 = {
 	}
 	has_country_shield = yes
 
-	can_organise_militia = {
-		icon = mission_colonial
+	can_organise_militia = { 
+		icon = me_mission_canada_militia
 		position = 1
 		required_missions = { }
-		provinces_to_highlight = { }
 		trigger = {
 			num_of_infantry = 10
 		}
@@ -24,21 +23,32 @@ canada_missions_1 = {
 			add_country_modifier = {
 				name = can_militia_organised
 				duration = 3650
-			}			
+			}
 		}
 	}
 
 	can_upper_canada = {
-		icon = mission_colonial
+		icon = me_mission_canada_dam
 		position = 2
 		required_missions = {
 			can_organise_militia
 			can_british_north_america
 		}
-		provinces_to_highlight = { 
-			area = upper_canada_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = upper_canada_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					area = upper_ontario_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = {
+						upper_ontario_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
 			}
 		}
 		trigger = {
@@ -46,35 +56,29 @@ canada_missions_1 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			num_of_owned_provinces_with = {
-				value = 1
-				area = upper_ontario_area
+			upper_ontario_area = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
+			country_event = { id = ME_Canada_Events.1 }
 			hudson_bay_area = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			country_event = {
-				id = ME_Canada_Events.1
 			}
 		}
 	}
 
 	can_hudson_bay_company = {
-		icon = mission_colonial
+		icon = me_mission_canada_fur_trade
 		position = 4
 		required_missions = { can_upper_canada }
-		provinces_to_highlight = { 
+		provinces_to_highlight = {
 			province_id = 1005
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			1005 = {
@@ -90,39 +94,43 @@ canada_missions_1 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Canada_Events.2 days = 365 tooltip = ME_Canada_Events.2.tooltip }
 			1005 = {
 				add_base_tax = 2
 				add_base_production = 4
 				add_base_manpower = 2
 				add_permanent_province_modifier = {
 					name = can_york_factory
+					duration = -1
 				}
-				create_or_add_center_of_trade_level = {
-					level = 2
-				}
+				create_or_add_center_of_trade_level = { level = 2 }
 			}
 			hudson_bay_region = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			country_event = {
-				id = ME_Canada_Events.2
 			}
 		}
 	}
 
 	can_gateway_west = {
-		icon = mission_colonial
+		icon = me_mission_canada_snow_frontier
 		position = 5
 		required_missions = { can_hudson_bay_company }
 		provinces_to_highlight = {
 			province_id = 1008
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+				AND = {
+					has_colonist = no
+					NOT = { num_of_times_improved = 3 }
+				}
 			}
 		}
 		trigger = {
@@ -139,43 +147,68 @@ canada_missions_1 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
+			cascadia_region = {
 				limit = {
-					region = cascadia_region
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 		}
 	}
 
 	can_saskatchewan = {
-		icon = mission_colonial
+		icon = me_mission_canada_cross_snow
 		position = 6
 		required_missions = {
 			can_gateway_west
 			can_fur_trade
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = saskatchewan_area
+					NOT = {
+						saskatchewan_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				AND = {
+					area = assiniboia_area
+					NOT = {
+						assiniboia_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				AND = {
+					area = prairies_area
+					NOT = {
+						prairies_area = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				value = 1
-				area = saskatchewan_area
+			saskatchewan_area = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
-			num_of_owned_provinces_with = {
-				value = 1
-				area = assiniboia_area
+			assiniboia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
-			num_of_owned_provinces_with = {
-				value = 1
-				area = prairies_area
+			prairies_area = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			
+
 		}
 	}
 
 	can_pacific_railway = {
-		icon = mission_colonial
+		icon = me_mission_canada_steam
 		position = 9
 		required_missions = {
 			can_klondike_gold_rush
@@ -184,35 +217,22 @@ canada_missions_1 = {
 			OR = {
 				AND = {
 					OR = {
-						province_id = 2569
 						province_id = 984
 						province_id = 985
 						province_id = 2571
 						province_id = 2582
 						province_id = 2583
 						province_id = 2584
-						province_id = 2585
 						province_id = 991
 						province_id = 1001
 						province_id = 2015
-						province_id = 1007
 						province_id = 2593
-						province_id = 1008
-						province_id = 2005
-						province_id = 2598
-						province_id = 2017
 						province_id = 2597
-						province_id = 2602
-						province_id = 2018
 						province_id = 2003
 						province_id = 2607
-						province_id = 973
-						province_id = 1813
-						# province_id = 
+						province_id = 2018
 					}
-					NOT = {
-						owned_by = ROOT
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
 				AND = {
 					OR = {
@@ -220,275 +240,402 @@ canada_missions_1 = {
 						province_id = 2585
 						province_id = 1007
 						province_id = 1008
-						province_id = 1813
+						province_id = 2017
 						province_id = 973
-						# province_id =
 					}
-					NOT = {
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 						AND = {
-							OR = {
-								has_building = marketplace
-								has_building = trade_depot
-								has_building = stock_exchange
-							}
-							owned_by = ROOT
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
 						}
 					}
 				}
 			}
 		}
 		trigger = {
-			2569 = {
-				owned_by = ROOT
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-				}
-			}
+			has_institution = manufactories
 			984 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			985 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2571 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2582 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2583 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2584 = {
-				owned_by = ROOT
-			}
-			2585 = {
-				owned_by = ROOT
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-				}
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			991 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			1001 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2015 = {
-				owned_by = ROOT
-			}
-			1007 = {
-				owned_by = ROOT
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-				}
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2593 = {
-				owned_by = ROOT
-			}
-			1008 = {
-				owned_by = ROOT
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-				}
-			}
-			2005 = {
-				owned_by = ROOT
-			}
-			2598 = {
-				owned_by = ROOT
-			}
-			2017 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2597 = {
-				owned_by = ROOT
-			}
-			2602 = {
-				owned_by = ROOT
-			}
-			2018 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2003 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			2607 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2018 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				AND = {
+					1010 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					1011 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					1813 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+				AND = {
+					2511 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					2005 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					2598 = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+			2569 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			2585 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			1007 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			1008 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+			2017 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 			973 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				OR = {
 					has_building = marketplace
 					has_building = trade_depot
 					has_building = stock_exchange
 				}
 			}
-			1813 = {
-				owned_by = ROOT
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
+			OR = {
+				1813 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
+				}
+				2005 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange
+					}
 				}
 			}
-			has_institution = manufactories
 		}
 		effect = {
+			custom_tooltip = CAN_FIRST_INCONTINENTAL_RAIL_TOOLTIP
+			hidden_effect = {
+				984 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				985 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2571 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2582 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2583 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2584 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				991 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				1001 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2015 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2593 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2597 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2003 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2607 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2018 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+			}
+			if = {
+				limit = {
+					owns = 1010
+					owns = 1011
+					owns = 1813
+					owns = 2511
+					owns = 2005
+					owns = 2598
+				}
+				1010 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				1011 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				1813 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2511 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2005 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2598 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					owns = 1010
+					owns = 1011
+					owns = 1813
+				}
+				1010 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				1011 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				1813 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					owns = 2511
+					owns = 2005
+					owns = 2598
+				}
+				2511 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2005 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+				2598 = {
+					add_permanent_province_modifier = {
+						name = can_first_intercontinental_rail
+						duration = -1
+					}
+				}
+			}
 			2569 = {
 				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
 					name = can_railroad_towns
+					duration = -1
 				}
 			}
 			2585 = {
 				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
 					name = can_railroad_towns
+					duration = -1
 				}
 			}
 			1007 = {
 				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
 					name = can_railroad_towns
-				}
-			}
-			2593 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
-					name = can_railroad_towns
+					duration = -1
 				}
 			}
 			1008 = {
 				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
 					name = can_railroad_towns
-				}
-			}
-			973 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
-					name = can_railroad_towns
-				}
-			}
-			1813 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-				add_permanent_province_modifier = {
-					name = can_railroad_towns
-				}
-			}
-			984 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			985 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2571 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2582 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2583 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2584 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			991 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			1001 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2015 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2005 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2598 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
+					duration = -1
 				}
 			}
 			2017 = {
 				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
+					name = can_railroad_towns
+					duration = -1
 				}
 			}
-			2597 = {
+			973 = {
 				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
+					name = can_railroad_towns
+					duration = -1
 				}
 			}
-			2602 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
+			if = {
+				limit = {
+					owns = 1813
+				}
+				1813 = {
+					add_permanent_province_modifier = {
+						name = can_railroad_towns
+						duration = -1
+					}
 				}
 			}
-			2018 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
+			else_if = {
+				limit = {
+					owns = 2005
 				}
-			}
-			2003 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
-				}
-			}
-			2607 = {
-				add_permanent_province_modifier = {
-					name = can_first_intercontinental_rail
+				2005 = {
+					add_permanent_province_modifier = {
+						name = can_railroad_towns
+						duration = -1
+					}
 				}
 			}
 		}
 	}
 
 	can_rightful_alaska = {
-		icon = mission_colonial
+		icon = me_mission_canada_chalet
 		position = 10
 		required_missions = {
 			can_pacific_railway
@@ -498,18 +645,16 @@ canada_missions_1 = {
 				area = alaska_area
 				area = east_alaska_area
 			}
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			alaska_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			east_alaska_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -548,7 +693,7 @@ canada_missions_1 = {
 	}
 
 	can_california_dreaming = {
-		icon = mission_colonial
+		icon = me_mission_mexico_gold_rush
 		position = 12
 		required_missions = {
 			can_rocky_mountains
@@ -557,22 +702,34 @@ canada_missions_1 = {
 			OR = {
 				AND = {
 					province_id = 868
-					owned_by = ROOT
-					NOT = {
-						OR = {
-							has_building = marketplace
-							has_building = trade_depot
-							has_building = stock_exchange
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						AND = {
+							NOT = { has_building = marketplace }
+							NOT = { has_building = trade_depot }
+							NOT = { has_building = stock_exchange }
 						}
 					}
-				} 
+				}
 				AND = {
 					province_id = 2021
-					owned_by = ROOT
-					NOT = {
-						OR = {
-							has_building = shipyard
-							has_building = grand_shipyard
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						AND = {
+							NOT = { has_building = shipyard }
+							NOT = { has_building = grand_shipyard }
+						}
+					}
+				}
+				AND = {
+					region = california_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 10
+								region = california_region
+							}
 						}
 					}
 				}
@@ -584,7 +741,7 @@ canada_missions_1 = {
 				region = california_region
 			}
 			868 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				OR = {
 					has_building = marketplace
 					has_building = trade_depot
@@ -592,22 +749,24 @@ canada_missions_1 = {
 				}
 			}
 			2021 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				OR = {
 					has_building = shipyard
 					has_building = grand_shipyard
 				}
-			}			
+			}
 		}
 		effect = {
 			868 = {
 				add_permanent_province_modifier = {
 					name = can_ports_pacific
+					duration = -1
 				}
 			}
 			2021 = {
 				add_permanent_province_modifier = {
 					name = can_ports_pacific
+					duration = -1
 				}
 			}
 			2021 = {
@@ -637,17 +796,48 @@ canada_missions_2 = {
 	has_country_shield = yes
 
 	can_growing_city_kingston = {
-		icon = mission_colonial
+		icon = me_mission_road_city
 		position = 3
 		required_missions = {
 			can_upper_canada
 		}
 		provinces_to_highlight = {
 			province_id = 989
-			NOT = {
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 15 }
 				AND = {
-					development = 15
-					OR = {
+					NOT = { has_building = temple }
+					NOT = { has_building = cathedral }
+					NOT = { has_building = barracks }
+					NOT = { has_building = training_fields }
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+		}
+		trigger = {
+			989 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 15
+				OR = {
+					has_building = temple
+					has_building = cathedral
+					has_building = barracks
+					has_building = training_fields
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					989 = {
 						OR = {
 							has_building = temple
 							has_building = cathedral
@@ -662,36 +852,40 @@ canada_missions_2 = {
 						}
 					}
 				}
+				custom_tooltip = CANADA_KINGSTON_TOOLTIP
+				add_country_modifier = {
+					name = can_kingston_rising
+					duration = 9125
+				}
+				set_country_flag = kingston_25_years
 			}
-		}
-		trigger = {
-			989 = {
-				owned_by = ROOT
-				development = 15
-				OR = {
-					OR = {
-						has_building = temple
-						has_building = cathedral
-					}
-					OR = {
-						has_building = barracks
-						has_building = training_fields
-						has_building = fort_15th
-						has_building = fort_16th
-						has_building = fort_17th
-						has_building = fort_18th
+			else_if = {
+				limit = {
+					989 = {
+						OR = {
+							has_building = temple
+							has_building = cathedral
+						}
 					}
 				}
+				add_country_modifier = {
+					name = can_george_cathedral
+					duration = 9125
+				}
 			}
-		}
-		effect = {
+			else = {
+				custom_tooltip = CANADA_KINGSTON_TOOLTIP
+				add_country_modifier = {
+					name = can_royal_military_college
+					duration = 9125
+				}
+				set_country_flag = kingston_25_years
+			}
 			989 = {
 				rename_capital = "Kingston"
 				if = {
 					limit = {
-						NOT = {
-							has_building = town_hall
-						}
+						NOT = { has_building = town_hall }
 					}
 					if = {
 						limit = {
@@ -705,80 +899,20 @@ canada_missions_2 = {
 						cost = 0
 					}
 				}
-				if = {
-					limit = {
-						OR = {
-							has_building = temple
-							has_building = cathedral
-						}
-						OR = {
-							has_building = barracks
-							has_building = training_fields
-							has_building = fort_15th
-							has_building = fort_16th
-							has_building = fort_17th
-							has_building = fort_18th
-						}
-					}
-					owner = {
-						add_country_modifier = {
-							name = can_kingston_rising
-							duration = 9125
-						}
-						set_country_flag = kingston_25_years
-						custom_tooltip = CANADA_KINGSTON_TOOLTIP
-					}
-				}
-				else_if = {
-					limit = {
-						OR = {
-							has_building = temple
-							has_building = cathedral
-						}
-					}
-					owner = {
-						add_country_modifier = {
-							name = can_george_cathedral
-							duration = 9125
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						OR = {
-							has_building = barracks
-							has_building = training_fields
-							has_building = fort_15th
-							has_building = fort_16th
-							has_building = fort_17th
-							has_building = fort_18th
-						}					
-					}
-					owner = {
-						add_country_modifier = {
-							name = can_royal_military_college
-							duration = 9125
-						}
-						set_country_flag = kingston_25_years
-						custom_tooltip = CANADA_KINGSTON_TOOLTIP
-					}
-				}
 			}
 		}
 	}
 
 	can_fur_trade = {
-		icon = mission_colonial
+		icon = me_mission_native_western_trade_01
 		position = 5
 		required_missions = {
 			can_hudson_bay_company
 		}
 		trigger = {
-			OR = {
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 15
-					trade_goods = fur
-				}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 15
+				trade_goods = fur
 			}
 		}
 		effect = {
@@ -788,13 +922,13 @@ canada_missions_2 = {
 				value = 0.15
 				duration = 5475
 			}
-			every_country = {
+			every_known_country = {
 				limit = {
 					NOT = { tag = ROOT }
 					capital_scope = {
 						continent = north_america
 					}
-					technology_group = mesoamerican					
+					technology_group = mesoamerican
 				}
 				add_opinion = {
 					who = ROOT
@@ -805,24 +939,35 @@ canada_missions_2 = {
 	}
 
 	can_mari_usque_mare = {
-		icon = mission_colonial
+		icon = me_mission_canada_a_mari
 		position = 7
 		required_missions = {
 			can_saskatchewan
 			can_forts_canada
 		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 973
+				province_id = 2569
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_in_capital_area = no
+			}
+		}
 		trigger = {
+			stability = 0
+			owns = 973
 			973 = {
 				is_in_capital_area = yes
 			}
+			owns = 2569
 			2569 = {
 				is_in_capital_area = yes
 			}
-			NOT = {
-				stability = 0
-			}
 		}
 		effect = {
+			set_country_flag = can_deed_surrender_enable
 			add_prestige = 50
 			add_adm_power = 100
 			add_dip_power = 100
@@ -835,17 +980,19 @@ canada_missions_2 = {
 	}
 
 	can_klondike_gold_rush = {
-		icon = mission_colonial
+		icon = me_mission_inca_people_with_gold
 		position = 8
 		required_missions = {
 			can_mari_usque_mare
 		}
-		provinces_to_highlight = { }
 		trigger = {
-			OR = {
-				has_country_flag = gold_event_fired
-				HBC = {
+			custom_trigger_tooltip = {
+				tooltip = CAN_GOLD_EVENT_TOOLTIP
+				OR = {
 					has_country_flag = gold_event_fired
+					HBC = {
+						has_country_flag = gold_event_fired
+					}
 				}
 			}
 			num_of_owned_provinces_with = {
@@ -860,32 +1007,43 @@ canada_missions_2 = {
 		}
 		effect = {
 			set_country_flag = earch_for_gold_decision_enabled
-			country_event = {
-				id = ME_Canada_Events.3
-			}
+			country_event = { id = ME_Canada_Events.3 }
 		}
 	}
 
 	can_amphibious_ambitions = {
-		icon = mission_colonial
+		icon = me_mission_canada_native_musket
 		position = 9
 		required_missions = {
 			can_eliminate_iroquois
 		}
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					region = great_lakes_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 915
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { development = 15 }
+					}
+				}
+			}
 		}
 		trigger = {
 			915 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				development = 15
 			}
 			great_lakes_region = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			random_province = {
+			random_owned_province = {
 				limit = {
 					OR = {
 						area = lake_superior_area
@@ -898,7 +1056,7 @@ canada_missions_2 = {
 					duration = -1
 				}
 			}
-			random_province = {
+			random_owned_province = {
 				limit = {
 					OR = {
 						area = lake_superior_area
@@ -911,7 +1069,7 @@ canada_missions_2 = {
 					duration = -1
 				}
 			}
-			random_province = {
+			random_owned_province = {
 				limit = {
 					OR = {
 						area = lake_superior_area
@@ -935,7 +1093,7 @@ canada_missions_2 = {
 	}
 
 	can_rocky_mountains = {
-		icon = mission_colonial
+		icon = me_mission_canada_caravan
 		position = 11
 		required_missions = {
 			can_rightful_alaska
@@ -943,11 +1101,11 @@ canada_missions_2 = {
 		}
 		provinces_to_highlight = {
 			province_id = 873
-			NOT = {	owned_by = ROOT	}
+			NOT = {	country_or_non_sovereign_subject_holds = ROOT	}
 		}
 		trigger = {
 			873 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			num_of_owned_provinces_with = {
 				value = 50
@@ -993,7 +1151,13 @@ canada_missions_2 = {
 						cost = 0
 					}
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
 					add_building_construction = {
 						building = fort_15th
 						speed = 0.5
@@ -1001,9 +1165,9 @@ canada_missions_2 = {
 					}
 				}
 			}
-			every_owned_province = {
+			cascadia_region = {
 				limit = {
-					region = cascadia_region
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 				add_province_modifier = {
 					name = can_rocky_mountain_forts
@@ -1029,13 +1193,13 @@ canada_missions_3 = {
 	has_country_shield = yes
 
 	can_british_north_america = {
-		icon = mission_colonial
+		icon = me_mission_canada_goverance
 		position = 1
 		required_missions = { }
 		provinces_to_highlight = { }
 		trigger = {
 			OR = {
-				dip = 4
+				DIP = 4
 				statesman = 1
 			}
 			OR = {
@@ -1048,9 +1212,7 @@ canada_missions_3 = {
 				limit = {
 					is_subject = yes
 				}
-				country_event = {
-					id = ME_Canada_Events.4
-				}
+				country_event = { id = ME_Canada_Events.4 }
 			}
 			else = {
 				add_prestige = 20
@@ -1059,7 +1221,7 @@ canada_missions_3 = {
 	}
 
 	can_province_canada = {
-		icon = mission_colonial
+		icon = me_mission_canada_diplomacy
 		position = 4
 		required_missions = {
 			can_growing_city_kingston
@@ -1068,7 +1230,7 @@ canada_missions_3 = {
 		provinces_to_highlight = { }
 		trigger = {
 			OR = {
-				adm = 3
+				ADM = 3
 				statesman = 1
 			}
 			if = {
@@ -1097,18 +1259,15 @@ canada_missions_3 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Canada_Events.9 }
 			add_country_modifier = {
 				name = can_growing_nation
 				duration = 5475
 			}
-			country_event = {
-				id = ME_Canada_Events.9
-			}
 			northeast_america_region = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -1116,21 +1275,19 @@ canada_missions_3 = {
 	}
 
 	can_niagara_lake = {
-		icon = mission_colonial
+		icon = me_mission_canada_niagara_falls
 		position = 5
 		required_missions = { can_province_canada }
 		provinces_to_highlight = {
 			province_id = 987
-			NOT = {
-				AND = {
-					owned_by = ROOT
-					development = 10
-				}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 10 }
 			}
 		}
 		trigger = {
 			987 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				development = 10
 			}
 		}
@@ -1146,7 +1303,7 @@ canada_missions_3 = {
 	}
 
 	can_forts_canada = {
-		icon = mission_colonial
+		icon = me_mission_medieval_fort
 		position = 6
 		required_missions = {
 			can_niagara_lake
@@ -1154,42 +1311,40 @@ canada_missions_3 = {
 		}
 		provinces_to_highlight = {
 			OR = {
-				OR = {
+				AND = {
 					province_id = 982
-					NOT = {
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 						AND = {
-							owned_by = ROOT
-							OR = {
-								has_building = barracks
-								has_building = training_fields
-							}
+							NOT = { has_building = barracks }
+							NOT = { has_building = training_fields }
 						}
 					}
 				}
-				OR = {
+				AND = {
 					province_id = 2670
-					NOT = {
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { development = 15 }
 						AND = {
-							OR = {
-								has_building = barracks
-								has_building = training_fields
-							}
-							development = 15
+							NOT = { has_building = barracks }
+							NOT = { has_building = training_fields }
 						}
 					}
 				}
 			}
 		}
 		trigger = {
+			has_mil_advisor_3 = yes
 			982 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				OR = {
 					has_building = barracks
 					has_building = training_fields
 				}
 			}
 			2670 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				OR = {
 					OR = {
 						has_building = barracks
@@ -1198,31 +1353,26 @@ canada_missions_3 = {
 					development = 15
 				}
 			}
-			has_mil_advisor_3 = yes
 		}
 		effect = {
 			987 = {
-				add_province_modifier = {
-					name = can_fortress_louisbourg
-					duration = -1
-				}
 				if = {
 					limit = {
 						has_building = fort_17th
 					}
 					remove_building = fort_17th
+					add_building_construction = {
+						building = fort_18th
+						speed = 0.5
+						cost = 0
+					}
 				}
-				add_building_construction = {
-					building = fort_18th
-					speed = 0.5
-					cost = 0
+				add_province_modifier = {
+					name = can_fortress_louisbourg
+					duration = -1
 				}
 			}
 			2670 = {
-				add_province_modifier = {
-					name = can_fort_york
-					duration = 18250
-				}
 				if = {
 					limit = {
 						has_building = fort_15th
@@ -1256,19 +1406,29 @@ canada_missions_3 = {
 						cost = 0
 					}
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
 					add_building_construction = {
 						building = fort_15th
 						speed = 0.5
 						cost = 0
 					}
 				}
+				add_province_modifier = {
+					name = can_fort_york
+					duration = 18250
+				}
 			}
 		}
 	}
 
 	can_eliminate_iroquois = {
-		icon = mission_colonial
+		icon = me_mission_native_iroquois
 		position = 8
 		required_missions = {
 			can_mari_usque_mare
@@ -1285,39 +1445,35 @@ canada_missions_3 = {
 			}
 		}
 		effect = {
+			add_prestige = 15
 			maine_area = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			great_woods_area = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			south_iroquoisia_area = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			great_lakes_region = {
 				limit = {
-					NOT = {
-						country_or_non_sovereign_subject_holds = ROOT 
-					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			add_prestige = 15
 		}
 	}
 
@@ -1331,22 +1487,19 @@ canada_missions_3 = {
 		}
 		provinces_to_highlight = {
 			province_id = 965
-			NOT = {
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { development = 10 }
 				AND = {
-					is_core = ROOT
-					owned_by = ROOT
-					development = 10
-					OR = {
-						has_building = shipyard
-						has_building = grand_shipyard
-					}
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
 				}
 			}
 		}
 		trigger = {
+			owns_core_province = 965
 			965 = {
-				is_core = ROOT
-				owned_by = ROOT
 				development = 10
 				OR = {
 					has_building = shipyard
@@ -1365,7 +1518,7 @@ canada_missions_3 = {
 	}
 
 	can_canadian_empire = {
-		icon = mission_colonial
+		icon = me_mission_canada_mapleleaf
 		position = 13
 		required_missions = {
 			can_california_dreaming
@@ -1403,15 +1556,23 @@ canada_missions_4 = {
 		required_missions = { can_lower_canada }
 		provinces_to_highlight = {
 			OR = {
-				province_id = 994
-				province_id = 993
+				AND = {
+					province_id = 994
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 993
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { development = 7 }
+					}
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			owns = 994
+			owns = 993
 			993 = {
-				owned_by = ROOT
 				development = 7
 			}
 		}
@@ -1436,20 +1597,33 @@ canada_missions_4 = {
 				add_base_tax = 2
 				add_base_production = 2
 				add_base_manpower = 2
-				add_province_modifier = {
-					name = can_citadel_quebec
-					duration = -1
-				}
 				if = {
 					limit = {
 						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					if = {
+						limit = {
+							has_building = fort_15th
+						}
+						remove_building = fort_15th
+					}
+					if = {
+						limit = {
+							has_building = fort_16th
+						}
+						remove_building = fort_16th
 					}
 					add_building_construction = {
 						building = fort_17th
 						speed = 1
 						cost = 0
 					}
-				}				
+				}
+				add_province_modifier = {
+					name = can_citadel_quebec
+					duration = -1
+				}
 			}
 		}
 	}
@@ -1457,28 +1631,27 @@ canada_missions_4 = {
 	can_port_halifax = {
 		icon = mission_colonial
 		position = 5
-		required_missions = { 
+		required_missions = {
 			can_cities_quebec
 			can_secure_lawrence
 		}
 		provinces_to_highlight = {
 			province_id = 2569
-			NOT = {
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				AND = {
-					OR = {
-						has_building = shipyard
-						has_building = grand_shipyard
-					}
-					OR = {
-						has_building = workshop
-						has_building = counting_house
-					}
+					NOT = { has_building = shipyard }
+					NOT = { has_building = grand_shipyard }
+				}
+				AND = {
+					NOT = { has_building = workshop }
+					NOT = { has_building = counting_house }
 				}
 			}
 		}
 		trigger = {
 			2569 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				OR = {
 					has_building = shipyard
 					has_building = grand_shipyard
@@ -1490,20 +1663,18 @@ canada_missions_4 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Canada_Events.11 }
 			2569 = {
 				add_province_modifier = {
 					name = can_port_new_world
 					duration = -1
 				}
 			}
-			country_event = {
-				id = ME_Canada_Events.11
-			}
 		}
 	}
 
 	can_cuisines_canada = {
-		icon = mission_colonial
+		icon = me_mission_canada_poutine
 		position = 7
 		required_missions = {
 			can_forts_canada
@@ -1511,30 +1682,50 @@ canada_missions_4 = {
 		}
 		trigger = {
 			num_accepted_cultures = 3
-			OR = {
-				OR = {
-					NOT = { is_expanded_mod_active = { mod = trade_goods } }
-					if = {
-						limit = {
-							has_dlc = "Mandate of Heaven"
-						}
-						splendor = 300
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
 					}
-					else = {
+					OR = {
+						splendor = 300
+						prestige = 50
+						trading_bonus = {
+							trade_goods = maple_syrup
+							value = yes
+						}
+					}
+				}
+				else = {
+					OR = {
+						splendor = 300
 						prestige = 50
 					}
 				}
-				trading_bonus = {
-					trade_goods = maple_syrup
-					value = yes
+			}
+			else = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					OR = {
+						prestige = 50
+						trading_bonus = {
+							trade_goods = maple_syrup
+							value = yes
+						}
+					}
+				}
+				else = {
+					prestige = 50
 				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = can_cuisines_canada
-				duration = -1
-			}
+			country_event = { id = ME_Canada_Events.12 }
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
@@ -1546,14 +1737,15 @@ canada_missions_4 = {
 					duration = -1
 				}
 			}
-			country_event = {
-				id = ME_Canada_Events.12
+			add_country_modifier = {
+				name = can_cuisines_canada
+				duration = -1
 			}
 		}
 	}
 
 	can_expand_new_england = {
-		icon = mission_colonial
+		icon = me_mission_iceland_colonize_eastern_america
 		position = 9
 		required_missions = {
 			can_eliminate_iroquois
@@ -1565,102 +1757,151 @@ canada_missions_4 = {
 				area = great_woods_area
 				area = south_iroquoisia_area
 			}
-			NOT = {
-				OR = {
-					owned_by = ROOT
-					NOT = {
-						unrest = 1
-					}
-				}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				unrest = 1
 			}
 		}
 		trigger = {
 			maine_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 1 }
 			}
 			great_woods_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 1 }
 			}
 			south_iroquoisia_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 1 }
 			}
 		}
 		effect = {
-			massachusetts_bay_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
 			add_country_modifier = {
 				name = can_new_england_traditions
 				duration = -1
+			}
+			massachusetts_bay_area = {
+				limit = {
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
 
 	can_quebecois_claims = {
-		icon = mission_colonial
+		icon = me_mission_conquer
 		position = 11
 		required_missions = { }
-		provinces_to_highlight = { }
+		provinces_to_highlight = { 
+			OR = {
+				AND = {
+					OR = {
+						area = laurentian_area
+						area = lower_canada_area
+						area = lower_acadia_area
+						area = cote_nord_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					area = notre_dame_mountains_area
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						unrest = 1
+						has_rebel_faction = nationalist_rebels
+					}
+				}
+			}
+		}
 		trigger = {
+			OR = {
+				DIP = 4
+				statesman = 1
+			}
 			notre_dame_mountains_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 1 }
 				NOT = { has_rebel_faction = nationalist_rebels }
 			}
 			laurentian_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			lower_canada_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			lower_acadia_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			cote_nord_area = {
 				type = all
-				owned_by = ROOT
-			}
-			OR = {
-				DIP = 4
-				statesman = 1
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
+			# I do not know how to do this triggered modifier:
+			# Canada gains "Québécois Support" granting -2 unrest in Quebec,
+			# Laurentina, Lower Canada, Lower Acadia and Cote Nord Areas,
+			# 10% manpower modifier AS LONG as Unrest never goes positive
+			# ANYWHERE in these areas
+			# If that occurs, Gains "Québécois Discontent" granting +2 unrest
+			# and -10% manpower modifier, until once positive again.
+			custom_tooltip = CAN_QUEBECOIS_CONTENT_TOOLTIP
+			hidden_effect = {
+				notre_dame_mountains_area = {
+					add_province_modifier = {
+						name = can_quebecois_content
+						duration = -1
+					}
+				}
+				laurentian_area = {
+					add_province_modifier = {
+						name = can_quebecois_content
+						duration = -1
+					}
+				}
+				lower_canada_area = {
+					add_province_modifier = {
+						name = can_quebecois_content
+						duration = -1
+					}
+				}
+				lower_acadia_area = {
+					add_province_modifier = {
+						name = can_quebecois_content
+						duration = -1
+					}
+				}
+				cote_nord_area = {
+					add_province_modifier = {
+						name = can_quebecois_content
+						duration = -1
+					}
+				}
+			}
 			mississippi_region = {
 				limit = {
-					NOT = { owned_by = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			great_lakes_region = {
 				limit = {
-					NOT = { owned_by = ROOT }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			# I do not know how to do this triggered modifier:
-			#Canada gains "Québécois Support" granting -2 unrest in Quebec, 
-			# Laurentina, Lower Canada, Lower Acadia and Cote Nord Areas, 
-			# 10% manpower modifier AS LONG as Unrest never goes positive 
-			# ANYWHERE in these areas
-			# If that occurs, Gains "Québécois Discontent" granting +2 unrest 
-			# and -10% manpower modifier, until once positive again. 
 		}
 	}
 }
@@ -1680,21 +1921,13 @@ canada_missions_5 = {
 	has_country_shield = yes
 
 	can_canadian_tradeship = {
-		icon = mission_colonial
+		icon = me_mission_merchant_navy
 		position = 1
 		required_missions = { }
 		trigger = {
 			num_of_light_ship = 10
 		}
 		effect = {
-			1490 = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = 5475
-					power = 30
-					key = can_canadian_tradeships
-				}
-			}
 			if = {
 				limit = {
 					has_dlc = "Golden Century"
@@ -1708,38 +1941,47 @@ canada_missions_5 = {
 						has_port = yes
 					}
 					create_flagship = {
-						name = "HMCS Haidia"
+						name = "HMCS Haida"
 						type = heavy_ship
 					}
+				}
+			}
+			1490 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 30
+					key = can_canadian_tradeships
 				}
 			}
 		}
 	}
 
 	can_lower_canada = {
-		icon = mission_colonial
+		icon = me_mission_canada_native_fireplace
 		position = 2
 		required_missions = {
 			can_british_north_america
 			can_canadian_tradeship
 		}
-		provinces_to_highlight = { 
+		provinces_to_highlight = {
 			OR = {
 				province_id = 2580
 				province_id = 2579
 				area = lower_canada_area
 			}
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			lower_canada_area = {
-				type = all
-				owned_by = ROOT
-			}
 			owns = 2580
 			owns = 2579
+			lower_canada_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Canada_Events.13 }
 			lower_canada_area = {
 				add_province_modifier = {
 					name = can_indigenous_tree_sap
@@ -1758,17 +2000,45 @@ canada_missions_5 = {
 					duration = 18250
 				}
 			}
-			country_event = {
-				id = ME_Canada_Events.13
-			}
 		}
 	}
 
 	can_secure_lawrence = {
-		icon = mission_colonial
+		icon = me_mission_canada_natives_river
 		position = 4
 		required_missions = { can_lower_canada }
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 986
+						province_id = 989
+						province_id = 990
+						province_id = 993
+						province_id = 994
+						province_id = 995
+						province_id = 2577
+						province_id = 2576
+						province_id = 2578
+						province_id = 2582
+						province_id = 2583
+						province_id = 2585
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					OR = {
+						province_id = 980
+						province_id = 981
+						province_id = 2573
+					}
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { development = 6 }
+					}
+				}
+			}
+		}
 		trigger = {
 			owns = 986
 			owns = 989
@@ -1783,15 +2053,15 @@ canada_missions_5 = {
 			owns = 2583
 			owns = 2585
 			980 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				development = 6
 			}
 			981 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				development = 6
 			}
 			2573 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				development = 6
 			}
 		}
@@ -1885,52 +2155,45 @@ canada_missions_5 = {
 					name = can_grand_banks
 					duration = 18250
 				}
-			}			
+			}
 		}
 	}
 
 	can_populating_our_lands = {
-		icon = mission_colonial
+		icon = me_mission_canada_populatinglands
 		position = 6
 		required_missions = { }
+		provinces_to_highlight = {
+			country_or_non_sovereign_subject_holds = ROOT
+			unrest = 1
+		}
 		trigger = {
 			stability = 2
-			num_of_owned_provinces_with = {
-				value = 0
-				NOT = { unrest = 1 }
-			}
 			num_of_owned_provinces_with = {
 				value = 60
 				development = 8
 			}
+			all_owned_province = {
+				NOT = { unrest = 1 }
+			}
 		}
 		effect = {
+			country_event = { id = ME_Canada_Events.14 }
 			add_country_modifier = {
 				name = can_enriching_canadian_land
 				duration = 9125
-			}
-			country_event = {
-				id = ME_Canada_Events.13
 			}
 		}
 	}
 
 	can_development_canada = {
-		icon = mission_colonial
+		icon = me_mission_canada_hunting_return
 		position = 7
 		required_missions = {
 			can_forts_canada
 			can_populating_our_lands
 		}
-		provinces_to_highlight = { }
 		trigger = {
-			development_in_provinces = {
-				value = 350
-				OR = {
-					has_owner_culture = yes
-					has_owner_accepted_culture = yes
-				}
-			}
 			num_of_owned_provinces_with = {
 				value = 25
 				OR = {
@@ -1938,25 +2201,31 @@ canada_missions_5 = {
 					has_building = courthouse
 				}
 			}
+			development_in_provinces = {
+				value = 350
+				OR = {
+					has_owner_culture = yes
+					has_owner_accepted_culture = yes
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
 				name = can_growing_nation_2
+				duration = -1
 			}
 		}
 	}
 
 	can_industrial_revolution = {
-		icon = mission_colonial
+		icon = me_mission_industrial_smoking_chimney
 		position = 8
 		required_missions = { can_development_canada }
 		provinces_to_highlight = { }
 		trigger = {
 			total_development = 500
 			has_institution = enlightenment
-			num_of_owned_manufactory_trigger = {
-				amount = 20
-			}
+			num_of_owned_manufactory_combined_trigger = { amount = 20 }
 		}
 		effect = {
 			add_country_modifier = {
@@ -1967,14 +2236,20 @@ canada_missions_5 = {
 	}
 
 	can_maple_syrup_monopoly = {
-		icon = mission_colonial
+		icon = me_mission_canada_syrupbarrel
 		position = 10
 		required_missions = {
 			can_expand_new_england
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			area = south_iroquoisia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			# Need to add Vermont, but cannot find the id
+			south_iroquoisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
@@ -2011,28 +2286,40 @@ canada_missions_5 = {
 					}
 				}
 			}
+			else = {
+				# ???
+			}
 		}
 	}
 
 	can_detroit_louisiana = {
-		icon = mission_colonial
+		icon = me_mission_native_european_colonist
 		position = 12
 		required_missions = {
 			can_quebecois_claims
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				region = great_lakes_region
+				region = mississippi_region
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				unrest = 1
+			}
+		}
 		trigger = {
+			NOT = { has_country_modifier = can_quebecois_discontent }
 			great_lakes_region = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 1 }
 			}
 			mississippi_region = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 1 }
 			}
-			NOT = { has_country_modifier = can_quebecois_discontent }
 		}
 		effect = {
 			add_country_modifier = {
