@@ -8,4 +8,4 @@ tags={
 	"New Nations"
 }
 picture="ME.png"
-supported_version="1.29.*.*"
+supported_version="1.30.*.*"
