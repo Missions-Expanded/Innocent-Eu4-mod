@@ -2,8 +2,18 @@
 # Remember to keep the vanilla effects
 
 on_startup = {
+	emperor = {
+		save_global_event_target_as = Emperor
+	}
+	if = {
+		limit = {
+			is_emperor_of_china = yes
+		}
+		save_global_event_target_as = EmperorOfChina
+	}
 	events = {
 		muslim_school_events.20 #Pick School
+#		flavor_fra.15000 #Make the French Revolution happen if starting in 1789
 	}
 	if = {
 		limit = {
@@ -15,6 +25,30 @@ on_startup = {
 	initialize_schools_effect = yes #This is only used here but is used for readability of on_action file.
 	SWE = {
 		set_variable = { swe_num_of_wars_against_non_catholics = 0 }
+	}
+	if = {
+		limit = {
+			NOT = { has_country_flag = new_flavour_bav_13_has_been_triggered }
+			OR = {
+				tag = UBV
+				tag = LBV
+				tag = ING
+			}
+		}
+		set_country_flag = new_flavour_bav_13_has_been_triggered
+		country_event = { id = new_flavour_bav.13 days = 90 } #better not to allow almost instant DOWs
+	}
+	if = {
+		limit = {
+			tag = FRA
+			started_in = 1789.7.14
+			NOT = { is_year = 1790 }
+			NOT = { has_disaster = french_revolution }
+		}
+		add_disaster_progress = {
+			value = 100
+			disaster = french_revolution
+		}
 	}
 	if = {
 		limit = {
@@ -54,6 +88,24 @@ on_monarch_death = {
 		}
 	}
 	if = {
+		limit = { has_country_modifier = sought_after_bachelor }
+		remove_country_modifier = sought_after_bachelor
+	}
+	if = {
+		limit = {
+			tag = SAX
+			has_country_flag = sax_thuringen_split_to_happen
+			OR = {
+				NOT = { dynasty = "von Wettin" }
+				NOT = { senior_union_with = THU }
+				has_regency = yes
+			}
+		}
+		clr_country_flag = sax_thuringen_split_to_happen
+	}
+	burgundian_inheritance_start_effect = yes
+	ladislaus_postumus_king_died_effect = yes
+	if = {
 		limit = {
 			has_ruler_flag = Ulugh_beg_is_ruler
 		}
@@ -62,8 +114,13 @@ on_monarch_death = {
 		}
 	}
 	events = {
-		flavor_tus.16 #Savanorola Leaves This World
 		flavor_wal.1 # Vlad the Impaler. So that he doesn't try to usurp his father.
+		flavor_nav.4 # Navarra succession event
+		flavor_sax.8 # Treaty of Leipzig
+		flavor_pap.16 # Borgia Pope
+		flavor_pap.19 # death of borgia pope
+		flavor_tus.22 # Medici Pope
+		flavor_tus.24 # death of the Medici Pope
 		ME_Spain_Events.8
 		ME_Reform_Events.1
 		ME_Korea_Events.6
@@ -102,15 +159,15 @@ on_monarch_death = {
 on_heir_death = {
 	if = {
 		limit = { has_country_flag = heir_dip_education }
-		clr_ruler_flag = heir_dip_education
+		clr_country_flag = heir_dip_education
 	}
 	if = {
 		limit = { has_country_flag = heir_mil_education }
-		clr_ruler_flag = heir_mil_education
+		clr_country_flag = heir_mil_education
 	}
 	if = {
 		limit = { has_country_flag = heir_adm_education }
-		clr_ruler_flag = heir_adm_education
+		clr_country_flag = heir_adm_education
 	}
 	if = {
 		limit = { has_ruler_flag = well_advised_tutored_heir }
@@ -138,6 +195,7 @@ on_heir_death = {
 		limit = { has_ruler_flag = returned_from_sancaga_sikma_province }
 		clr_ruler_flag = returned_from_sancaga_sikma_province
 	}
+	ladislaus_postumus_heir_died_effect = yes
 	if = {
 		limit = {
 			tag = CRI
@@ -359,6 +417,18 @@ on_flagship_destroyed = {
 
 # ROOT = winning country, FROM = loser country
 on_battle_won_country = {
+	if = {
+		limit = {
+			ROOT = {
+				tag = ALB
+				NOT = { has_country_flag = albanian_victory }
+			}
+			FROM = {
+				tag = TUR
+			}
+		}
+		ROOT = { set_country_flag = albanian_victory }
+	}
 	if = {
 		limit = {
 			tag = ILK
