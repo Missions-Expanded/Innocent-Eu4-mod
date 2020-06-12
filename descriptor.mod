@@ -8,4 +8,5 @@ tags={
 	"Gameplay"
 }
 name="Mission Expanded Italy"
-supported_version="1.29.*.*"
+supported_version="1.30.*.*"
+picture="ME.png"
