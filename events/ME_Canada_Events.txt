@@ -1633,6 +1633,12 @@ country_event = {
 	trigger = {
 		has_country_flag = canada_is_at_war
 		is_at_war = yes
+		NOT = {
+			had_country_flag = {
+				flag = canada_is_at_war
+				days = 1825
+			}
+		}
 	}
 
 	option = {
@@ -1645,13 +1651,13 @@ country_event = {
 		if = {
 			limit = {
 				USA = {
+					#Canada or its ally controls the capital of usa
 					capital_scope = {
-						controlled_by = ROOT
+						OR = {
+							controlled_by = CAN
+							controlled_by = event_target:canada_fighting_with
+						}
 					}
-				}
-				had_country_flag = {
-					flag = capital_usa_besieged
-					days = 1825
 				}
 			}
 			country_event = {
@@ -1660,12 +1666,12 @@ country_event = {
 		}
 		else_if = {
 			limit = {
+				#Canada's capital is controlled by USA or its ally
 				capital_scope = {
-					controlled_by = USA
-				}
-				had_country_flag = {
-					flag = capital_can_besieged
-					days = 1825
+					OR = {
+						controlled_by = USA
+						controlled_by = event_target:canada_fighting_against
+					}
 				}
 			}
 			country_event = {
@@ -3058,6 +3064,7 @@ country_event = {
 	}
 }
 
+#Quebecois Content/Discontent
 province_event = {
 	id = ME_Canada_Events.200
 	title = ME_Canada_Events.200.T
@@ -3125,78 +3132,6 @@ country_event = {
 			capital_scope = {
 				OR = {
 					controlled_by = CAN
-					controlled_by = event_target:canada_fighting_against
-				}
-			}
-		}
-	}
-
-	immediate = {
-		hidden_effect = {
-			set_country_flag = capital_usa_besieged
-		}
-	}
-
-	option = {
-		name = ME_Canada_Events.300.OPT1
-
-		ai_chance = {
-			factor = 100
-		}
-	}
-}
-
-country_event = {
-	id = ME_Canada_Events.301
-	title = ME_Canada_Events.301.T
-	desc = ME_Canada_Events.301.D
-	picture = CITY_DEVELOPMENT_eventPicture
-
-	hidden = yes
-
-	trigger = {
-		has_country_flag = canada_is_at_war
-		CAN = {
-			#Canada's capital is controlled by USA or its ally
-			capital_scope = {
-				OR = {
-					controlled_by = USA
-					controlled_by = event_target:canada_fighting_against
-				}
-			}
-		}
-	}
-
-	immediate = {
-		hidden_effect = {
-			set_country_flag = capital_can_besieged
-		}
-	}
-
-	option = {
-		name = ME_Canada_Events.301.OPT1
-
-		ai_chance = {
-			factor = 100
-		}
-	}
-}
-
-country_event = {
-	id = ME_Canada_Events.302
-	title = ME_Canada_Events.302.T
-	desc = ME_Canada_Events.302.D
-	picture = CITY_DEVELOPMENT_eventPicture
-
-	hidden = yes
-
-	trigger = {
-		has_country_flag = canada_is_at_war
-		USA = {
-			#Canada or its ally controls the capital of usa
-			capital_scope = {
-				OR = {
-					controlled_by = CAN
 					controlled_by = event_target:canada_fighting_with
 				}
 			}
@@ -3213,7 +3148,7 @@ country_event = {
 	}
 
 	option = {
-		name = ME_Canada_Events.302.OPT1
+		name = ME_Canada_Events.300.OPT1
 
 		ai_chance = {
 			factor = 100
