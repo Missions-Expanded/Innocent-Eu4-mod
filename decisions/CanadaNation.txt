@@ -6,9 +6,26 @@ country_decisions = {
 			was_never_end_game_tag_trigger = yes
 			is_nomad = no
 			is_random_new_world = no
+			NOT = { tag = HLR }
+			NOT = { tag = PAP }
 			OR = {
 				is_former_colonial_nation = yes
 				is_colonial_nation = yes
+				AND = {
+					NOT = {
+						OR = {
+							technology_group = north_american
+							technology_group = mesoamerican
+							technology_group = andean
+							technology_group = high_american
+							technology_group = south_american
+						}
+					}
+					capital_scope = {
+						colonial_region = colonial_canada
+						is_core = ROOT
+					}
+				}
 			}
 			colonial_canada = {
 				owned_by = ROOT
@@ -17,8 +34,15 @@ country_decisions = {
 				ai = no
 				AND = {
 					ai = yes
-					num_of_cities = 3
+					num_of_cities = 3	
 				}
+			}
+		}
+		provinces_to_highlight = {
+			colonial_region = colonial_canada
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
 			}
 		}
 		allow = {
@@ -28,6 +52,12 @@ country_decisions = {
 				colonial_region = colonial_canada
 				is_core = ROOT
 			}
+			num_of_owned_provinces_with = {
+				value = 10
+				colonial_region = colonial_canada
+				is_city = yes
+			}
+			NOT = { exists = CAN }
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = subjects }
@@ -48,7 +78,13 @@ country_decisions = {
 		}
 		effect = {
 			change_tag = CAN
-			remove_non_electors_emperors_from_empire_effect = yes
+			if = {
+				limit = {
+					NOT = { is_former_colonial_nation = yes }
+				}
+				restore_old_nation_on_formation_effect = yes
+				remove_non_electors_emperors_from_empire_effect = yes
+			}
 			if = {
 				limit = {
 					NOT = { government_rank = 2 }
