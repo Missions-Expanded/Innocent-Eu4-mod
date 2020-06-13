@@ -1,12 +1,11 @@
-version="1.29.*.*"
+name="Mission Expanded Italy"
+archive="mod/missions.zip"
 tags={
-	"Alternative History"
 	"Historical"
 	"Missions And Decisions"
-	"Events"
-	"New Nations"
+	"events"
 	"Gameplay"
+	"New Nations"
 }
-name="Mission Expanded Italy"
-supported_version="1.30.*.*"
 picture="ME.png"
+supported_version="1.30.*.*"
