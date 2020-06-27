@@ -39,6 +39,14 @@ BRZ_missions_1 = {
 			}
 		}
 		effect = {
+			create_conquistador = {
+				tradition = 40
+			}
+			748 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
 			guyana_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -89,6 +97,11 @@ BRZ_missions_1 = {
 			}
 		}
 		effect = {
+			add_years_of_income = 0.5
+			add_country_modifier = {
+				name = BRZ_northern_reaches
+				duration = 9125
+			}
 		}
 	}
 	BRZ_expanding_the_coast = {
@@ -96,8 +109,22 @@ BRZ_missions_1 = {
 		required_missions = { BRZ_encouraging_immigration }
 		position = 6
 		trigger = {
+			num_of_owned_provinces_with = {
+				region = brazil_region
+				has_port = yes
+				OR = {
+					development = 10
+					province_has_center_of_trade_of_level = 2
+				}
+				value = 10
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = BRZ_merchants
+				duration = 10950
+			}
+			add_years_of_income = 0.5
 		}
 	}
 	BRZ_mining_company = {
@@ -105,8 +132,29 @@ BRZ_missions_1 = {
 		required_missions = { BRZ_import_technology }
 		position = 7
 		trigger = {
+			OR = {
+				has_institution = global_trade
+				236 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			minas_gerais_area = {
+				add_base_tax = 1
+				add_base_production = 1
+			}
+			2894 = {
+				add_province_modifier = {
+					name = BRZ_saint_john
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -119,16 +167,29 @@ BRZ_missions_2 = {
 		tag = BRZ
 	}
 	has_country_shield = yes
+	
 	BRZ_recover = {
 		icon = mission_alliances
 		required_missions = { BRZ_ipiranga }
 		position = 2
 		trigger = {
+			NOT = { war_exhaustion = 0.1 }
+			is_at_war = no
+			is_subject = no
 		}
 		effect = {
+			custom_tooltip = BRZ_EVERY_PROVINCE_A_AUTONOMIC_HEAVEN
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						is_core = ROOT
+						NOT = { nationalism = 1 }
+					}
+					add_local_autonomy = -25
+				}
+			}
 		}
-	}
-	
+	}	
 	BRZ_northeast = {
 		icon = mission_alliances
 		required_missions = { BRZ_establish_the_bandeirantes }
@@ -171,6 +232,15 @@ BRZ_missions_2 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Brazil_Events.3 } #Extraction of Brazilwood
+			756 = {
+				add_base_tax = 1
+				add_base_production = 1
+			}
+			755 = {
+				add_base_tax = 1
+				add_base_production = 1
+			}
 		}
 	}
 	BRZ_encouraging_immigration = {
@@ -178,8 +248,18 @@ BRZ_missions_2 = {
 		required_missions = { BRZ_brazil_united }
 		position = 5
 		trigger = {
+			any_country = {
+				capital_scope = {
+					continent = europe
+				}
+				has_opinion = {
+					who = ROOT
+					value = 125
+				}
+			}
 		}
 		effect = {
+			country_event = { id = ME_Brazil_Events.5 } #First Wave of Immigration
 		}
 	}
 	BRZ_import_technology = {
@@ -187,8 +267,16 @@ BRZ_missions_2 = {
 		required_missions = { BRZ_encouraging_immigration }
 		position = 6
 		trigger = {
+			OR = {
+				has_institution = manufactories
+				num_of_owned_provinces_with = {
+					has_manufactory_trigger = yes
+					value = 15
+				}
+			}
 		}
 		effect = {
+			country_event = { id = ME_Brazil_Events.8 } #European Technology
 		}
 	}
 	BRZ_a_lei_aurea = {
@@ -196,8 +284,17 @@ BRZ_missions_2 = {
 		required_missions = { BRZ_restore_order }
 		position = 8
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = BRZ_ABOLISHED_SLAVERY
+				has_country_modifier = "the_abolish_slavery_act"
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = BRZ_golden_law
+				duration = 10950
+			}
+			set_country_flag = BRZ_a_lei
 		}
 	}
 	BRZ_set_the_world_free = {
@@ -205,8 +302,18 @@ BRZ_missions_2 = {
 		required_missions = { BRZ_a_lei_aurea BRZ_enlightenment }
 		position = 9
 		trigger = {
+			NOT = {
+				any_country = {
+					technology_group = western
+					slaves = 1
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = BRZ_liberty_and_equality
+				duration = -1
+			}
 		}
 	}
 }
@@ -229,7 +336,10 @@ BRZ_missions_3 = {
 			stability = 1
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = BRZ_struggle_for_freedom
+				duration = 3650
+			}
 		}
 	}
 	BRZ_establish_the_bandeirantes = {
@@ -237,6 +347,10 @@ BRZ_missions_3 = {
 		required_missions = { BRZ_ipiranga }
 		position = 2
 		trigger = {
+			OR = {
+				expansion_ideas = 2
+				has_adm_advisor = yes
+			}
 		}
 		effect = {
 			brazil_region = {
@@ -246,6 +360,8 @@ BRZ_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			set_country_flag = por_bandeirantes_flag
+			custom_tooltip = por_bandeirantes_tooltip
 		}
 	}
 	BRZ_centralwest = {
@@ -280,24 +396,54 @@ BRZ_missions_3 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Brazil_Events.1 } #Exploring the Interior
 		}
 	}
 	BRZ_brazil_united = {
 		icon = mission_alliances
 		required_missions = { BRZ_centralwest BRZ_north BRZ_northeast BRZ_south BRZ_southeast }
 		position = 4
+		provinces_to_highlight = {
+			region = brazil_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT
+		}
 		trigger = {
+			brazil_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			brazil_region = {
+				add_province_modifier = {
+					name = BRZ_unity
+					duration = 10950
+				}
+			}
 		}
 	}
 	BRZ_restore_order = {
 		icon = mission_alliances
 		required_missions = { BRZ_brazil_united }
 		position = 7
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				unrest = 0.1
+				controlled_by = REB
+			}
+		}
 		trigger = {
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			brazil_region = {
+				type = all
+				owned_by = ROOT
+				NOT = { unrest = 0.1 }
+			}
 		}
 		effect = {
+			add_stability = 1
+			country_event = { id = ME_Brazil_Events.7 } #Trial of Caralho
 		}
 	}
 	BRZ_enlightenment = {
@@ -305,8 +451,13 @@ BRZ_missions_3 = {
 		required_missions = { BRZ_restore_order }
 		position = 8
 		trigger = {
+			has_institution = enlightenment
 		}
 		effect = {
+			add_country_modifier = {
+				name = BRZ_enlightenment
+				duration = 9125
+			}
 		}
 	}
 }
@@ -329,7 +480,6 @@ BRZ_missions_4 = {
 		effect = {
 		}
 	}
-	
 	BRZ_south = {
 		icon = mission_alliances
 		required_missions = { BRZ_establish_the_bandeirantes }
@@ -352,6 +502,30 @@ BRZ_missions_4 = {
 			}
 		}
 		effect = {
+			2857 = {
+				if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building = cathedral
+				}
+				else_if = {
+					limit = {
+						has_building = cathedral
+					}
+					add_base_tax = 2
+				}
+				else = {
+					add_building = temple
+				}
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 25
+					key = BRZ_southern_influence
+				}
+			}
 		}
 	}
 	BRZ_forcelimit = {
@@ -473,13 +647,27 @@ BRZ_missions_4 = {
 		icon = mission_alliances
 		required_missions = { BRZ_chaco BRZ_cisplatina }
 		position = 7
-		trigger = {
+		provinces_to_highlight = {
 			OR = {
 				area = buenos_aires_area
 				area = southern_pampas_area
 				area = cuyo_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			buenos_aires_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			southern_pampas_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cuyo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			patagonia_area = {
@@ -523,6 +711,17 @@ BRZ_missions_4 = {
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
+			}
+			778 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			custom_tooltip = ME_BRZ_STRENGTHEN_PRESTIGE
+			hidden_effect = {
+				remove_country_modifier = BRZ_hegemony_1
+				add_country_modifier = {
+					name = BRZ_hegemony_2
+					duration = -1
+				}
 			}
 		}
 	}
@@ -569,6 +768,25 @@ BRZ_missions_5 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Brazil_Events.4 } #Brazilian Gold Rush
+			if = {
+				limit = {
+					765 = {
+						NOT = {
+							trade_goods = gold
+						}
+					}
+				}
+				765 = {
+					change_trade_goods = gold
+				}
+			}
+			765 = {
+				add_province_modifier = {
+					name = "por_minas_gerais"
+					duration = -1
+				}
+			}
 		}
 	}
 	BRZ_chaco = {
@@ -608,6 +826,13 @@ BRZ_missions_5 = {
 			}
 		}
 		effect = {
+			define_advisor = {
+				type = natural_scientist
+				skill = 2
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.33
+			}
 			upper_peru = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -694,6 +919,155 @@ BRZ_missions_5 = {
 			}
 		}
 		effect = {
+			add_prestige = 10
+			custom_tooltip = ME_BRZ_GOLD_MODIFIER
+			hidden_effect = {
+				if = {
+					limit = {
+						is_expanded_mod_active = trade_goods
+					}
+					upper_peru = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					potosi_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					jujuy_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					tucuman_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					northern_chile_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					antisuyu_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+				}
+				else = {
+					antisuyu_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							trade_goods = gold
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					potosi_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							trade_goods = gold
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					jujuy_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							trade_goods = gold
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					upper_peru = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							trade_goods = gold
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					northern_chile_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							trade_goods = gold
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+					tucuman_area = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							trade_goods = gold
+						}
+						add_province_modifier = {
+							name = BRZ_gold_modifier
+							duration = -1
+						}
+					}
+				}
+			}
 		}
 	}
 	BRZ_patagonia = {
@@ -738,6 +1112,14 @@ BRZ_missions_5 = {
 			}
 		}
 		effect = {
+			hidden_effect = {
+				remove_country_modifier = BRZ_hegemony_2
+				add_country_modifier = {
+					name = BRZ_hegemony_3
+					duration = -1
+				}
+			}
+			custom_tooltip = ME_BRZ_APPEND_10_GLOBAL
 		}
 	}
 }
