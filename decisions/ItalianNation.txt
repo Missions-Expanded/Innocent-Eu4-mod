@@ -4,6 +4,7 @@ country_decisions = {
 		major = yes
 		potential = {
 			normal_or_historical_nations = yes
+			was_never_end_game_tag_trigger = yes
 			NOT = { has_country_flag = formed_italy_flag }
 			OR = {
 				ai = no
@@ -32,15 +33,26 @@ country_decisions = {
 		}
 		provinces_to_highlight = {
 			OR = {
+				AND = {
+					region = italy_region
+					root = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 20
+								region = italy_region
+								is_core = root
+							}
+						}
+						owns_core_province = 101	
+						owns_core_province = 104	
+						owns_core_province = 116	
+						owns_core_province = 118	
+					}
+				}
 				province_id = 101	# Genoa
 				province_id = 104	# Milan
-				province_id = 106	# Modena
-				province_id = 108	# Verona
-				province_id = 109	# Mantua
 				province_id = 116	# Firenze
-				province_id = 117	# Siena
 				province_id = 118	# Roma
-				province_id = 119	# Ancona
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
@@ -53,13 +65,13 @@ country_decisions = {
 			is_at_war = no
 			owns_core_province = 101	# Genoa
 			owns_core_province = 104	# Milan
-			owns_core_province = 106	# Modena
-			owns_core_province = 108	# Verona
-			owns_core_province = 109	# Mantua
 			owns_core_province = 116	# Firenze
-			owns_core_province = 117	# Siena
 			owns_core_province = 118	# Roma
-			owns_core_province = 119	# Ancona
+			num_of_owned_provinces_with = {
+				value = 20
+				region = italy_region
+				is_core = root
+			}
 		}
 		effect = {
 			if = {
@@ -85,14 +97,7 @@ country_decisions = {
 				}
 				set_government_rank = 2
 			}
-			#if = {
-			#	limit = {
-			#		government = republic
-			#	}
-			#	change_government = despotic_monarchy
-			#}
 			change_tag = ITA
-			swap_non_generic_missions = yes	
 			italy_region = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -107,17 +112,14 @@ country_decisions = {
 				limit = { has_custom_ideas = no }
 				country_event = { id = ideagroups.1 } #Swap Ideas
 			}
+			swap_non_generic_missions = yes
 			set_country_flag = formed_italy_flag
 		}
 		ai_will_do = {
 			factor = 1
-			modifier = {
-				factor = 0
-				government = republic
-			}
 		}
 	}
-	
+
 	gods_kingdom = {
 		major = yes
 		potential = {
@@ -128,7 +130,7 @@ country_decisions = {
 			}
 			NOT = { exists = ITA }
 			tag = PAP
-			NOT = { has_country_modifier = kingdom_of_god }
+			NOT = { has_country_flag = is_kingdom_of_god_flag }
 			OR = {
 				ai = no
 				AND = {
@@ -178,10 +180,6 @@ country_decisions = {
 			owns_core_province = 2977	# Pesaro
 		}
 		effect = {
-			add_country_modifier = {
-				name = "kingdom_of_god"
-				duration = -1
-			}
 			country_event  = { id = catholic_flavor.2 }
 			every_province = {
 				limit = {
@@ -190,6 +188,8 @@ country_decisions = {
 				}
 				add_permanent_claim = ROOT
 			}
+			override_country_name = KINGDOM_OF_GOD
+			set_country_flag = is_kingdom_of_god_flag
 		}
 		ai_will_do = {
 			factor = 1
