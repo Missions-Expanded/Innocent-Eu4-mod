@@ -368,10 +368,49 @@ country_event = {
 		years = 1
 	}
 
+	immediate = {
+		hidden_effect = {
+			emperor = {
+				save_event_target_as = emperor_hre_guelph_ghibellines
+			}
+		}
+	}
+
 	option = {
 		name = ME_Italian_Nations_Events.9.OPT1
 		ai_chance = {
 			factor = 50
+			modifier = {
+				factor = 2
+				OR = {
+					AND = {
+						is_emperor = yes
+						OR = {
+							is_rival = PAP
+							NOT = {
+								has_opinion = {
+									who = PAP
+									value = -50
+								}
+							}
+						}
+					}
+					AND = {
+						tag = PAP
+						OR = {
+							is_rival = emperor
+							NOT = {
+								has_opinion = {
+									who = emperor
+									value = -50
+								}
+							}
+						}
+					}
+					NOT = { war_exhaustion = 1 }
+					stability = 2
+				}
+			}
 		}
 
 		set_country_flag = ruling_italy_yes
@@ -382,6 +421,33 @@ country_event = {
 		name = ME_Italian_Nations_Events.9.OPT2
 		ai_chance = {
 			factor = 50
+			modifier = {
+				factor = 2
+				OR = {
+					AND = {
+						is_emperor = yes
+						OR = {
+							alliance_with = PAP
+							has_opinion = {
+								who = PAP
+								value = 125
+							}
+						}
+					}
+					AND = {
+						tag = PAP
+						OR = {
+							alliance_with = emperor
+							has_opinion = {
+								who = emperor
+								value = 125
+							}
+						}
+					}
+					war_exhaustion = 2
+					NOT = { stability = 0 }
+				}
+			}
 		}
 		
 		set_country_flag = ruling_italy_no
@@ -397,14 +463,14 @@ country_event = {
 	
 	major = yes
 	trigger = {
-		capital_scope = {
-			region = italy_region
-		}
+		capital_scope = { region = italy_region }
 		culture_group = latin
 		NOT = { tag = PAP }
 		NOT = { is_emperor = yes }
 		is_subject = no
 		NOT = { has_country_flag = italian_nations_decided_side }
+		PAP = { has_country_flag = ruling_italy_yes }
+		event_target:emperor_hre_guelph_ghibellines = { has_country_flag = ruling_italy_yes }
 	}
 
 	mean_time_to_happen = {
@@ -415,6 +481,25 @@ country_event = {
 		name = ME_Italian_Nations_Events.10.OPT1
 		ai_chance = {
 			factor = 20
+			modifier = {
+				factor = 5
+				OR = {
+					AND = {
+						has_opinion = {
+							who = PAP
+							value = 100
+						}
+						has_opinion = {
+							who = event_target:emperor_hre_guelph_ghibellines
+							value = 100
+						}
+					}
+					AND = {
+						alliance_with = PAP
+						alliance_with = event_target:emperor_hre_guelph_ghibellines
+					}
+				}
+			}
 		}
 
 		set_country_flag = italian_nations_decided_side
@@ -424,9 +509,27 @@ country_event = {
 		name = ME_Italian_Nations_Events.10.OPT2
 		ai_chance = {
 			factor = 20
+			modifier = {
+				factor = 5
+				OR = {
+					has_opinion = {
+						who = PAP
+						value = 150
+					}
+					alliance_with = PAP
+					NOT = {
+						has_opinion = {
+							who = event_target:emperor_hre_guelph_ghibellines
+							value = -100
+						}
+					}
+					is_rival = event_target:emperor_hre_guelph_ghibellines
+				}
+			}
 		}
 		
 		set_country_flag = italian_nations_decided_side
+		set_country_flag = italian_nations_pope_side
 		country_event = {
 			id = ME_Italian_Nations_Events.11
 		}
@@ -436,6 +539,23 @@ country_event = {
 		name = ME_Italian_Nations_Events.10.OPT3
 		ai_chance = {
 			factor = 20
+			modifier = {
+				factor = 5
+				OR = {
+					has_opinion = {
+						who = PAP
+						value = 150
+					}
+					alliance_with = PAP
+					NOT = {
+						has_opinion = {
+							who = event_target:emperor_hre_guelph_ghibellines
+							value = -100
+						}
+					}
+					is_rival = event_target:emperor_hre_guelph_ghibellines
+				}
+			}
 		}
 		highlight = yes
 		hidden_trigger = {
@@ -443,6 +563,7 @@ country_event = {
 		}
 
 		set_country_flag = italian_nations_decided_side
+		set_country_flag = italian_nations_pope_side
 		add_government_reform = support_guelphs_reform
 		country_event = {
 			id = ME_Italian_Nations_Events.11
@@ -453,9 +574,27 @@ country_event = {
 		name = ME_Italian_Nations_Events.10.OPT4
 		ai_chance = {
 			factor = 20
+			modifier = {
+				factor = 5
+				OR = {
+					has_opinion = {
+						who = event_target:emperor_hre_guelph_ghibellines
+						value = 150
+					}
+					alliance_with = event_target:emperor_hre_guelph_ghibellines
+					NOT = {
+						has_opinion = {
+							who = PAP
+							value = -100
+						}
+					}
+					is_rival = PAP
+				}
+			}
 		}
 		
 		set_country_flag = italian_nations_decided_side
+		set_country_flag = italian_nations_emperor_side
 		country_event = {
 			id = ME_Italian_Nations_Events.13
 		}
@@ -465,6 +604,23 @@ country_event = {
 		name = ME_Italian_Nations_Events.10.OPT5
 		ai_chance = {
 			factor = 20
+			modifier = {
+				factor = 5
+				OR = {
+					has_opinion = {
+						who = event_target:emperor_hre_guelph_ghibellines
+						value = 150
+					}
+					alliance_with = event_target:emperor_hre_guelph_ghibellines
+					NOT = {
+						has_opinion = {
+							who = PAP
+							value = -100
+						}
+					}
+					is_rival = PAP
+				}
+			}
 		}
 		highlight = yes
 		hidden_trigger = {
@@ -472,6 +628,7 @@ country_event = {
 		}
 		
 		set_country_flag = italian_nations_decided_side
+		set_country_flag = italian_nations_emperor_side
 		add_government_reform = support_ghibbelline_reform
 		country_event = {
 			id = ME_Italian_Nations_Events.13
@@ -479,13 +636,13 @@ country_event = {
 	}
 }
 
+#Guelph 1
 country_event = {
 	id = ME_Italian_Nations_Events.11
 	title = ME_Italian_Nations_Events.11.T
 	desc = ME_Italian_Nations_Events.11.D
 	
 	is_triggered_only = yes
-	major = yes
 
 	option = {
 		name = ME_Italian_Nations_Events.11.OPT1
@@ -504,13 +661,13 @@ country_event = {
 	}
 }
 
+#Guelph 2
 country_event = {
 	id = ME_Italian_Nations_Events.12
 	title = ME_Italian_Nations_Events.12.T
 	desc = ME_Italian_Nations_Events.12.D
 	
 	is_triggered_only = yes
-	major = yes
 
 	option = {
 		name = ME_Italian_Nations_Events.12.OPT1
@@ -529,13 +686,13 @@ country_event = {
 	}
 }
 
+#Ghibellines 1
 country_event = {
 	id = ME_Italian_Nations_Events.13
 	title = ME_Italian_Nations_Events.13.T
 	desc = ME_Italian_Nations_Events.13.D
 	
 	is_triggered_only = yes
-	major = yes
 
 	option = {
 		name = ME_Italian_Nations_Events.13.OPT1
@@ -554,13 +711,13 @@ country_event = {
 	}
 }
 
+#Ghibellines 2
 country_event = {
 	id = ME_Italian_Nations_Events.14
 	title = ME_Italian_Nations_Events.14.T
 	desc = ME_Italian_Nations_Events.14.D
 	
 	is_triggered_only = yes
-	major = yes
 
 	option = {
 		name = ME_Italian_Nations_Events.14.OPT1
@@ -579,16 +736,64 @@ country_event = {
 	}
 }
 
+#Coalition War
 country_event = {
-	id = ME_Italian_Nations_Events.
-	title = ME_Italian_Nations_Events..T
-	desc = ME_Italian_Nations_Events..D
+	id = ME_Italian_Nations_Events.15
+	title = ME_Italian_Nations_Events.15.T
+	desc = ME_Italian_Nations_Events.15.D
+	
+	trigger = {
+		capital_scope = { region = italy_region }
+		culture_group = latin
+		NOT = { tag = PAP }
+		NOT = { is_emperor = yes }
+		has_country_flag = italian_nations_decided_side
+		NOT = { has_country_flag = italian_nations_called_war }
+	}
+	major = yes
+
+	immediate = {
+		set_country_flag = italian_nations_called_war
+	}
+
+	option = {
+		name = ME_Italian_Nations_Events.15.OPT1
+		ai_chance = {
+			factor = 100
+		}
+
+		if = {
+			limit = {
+				has_country_flag = italian_nations_emperor_side
+			}
+			join_all_offensive_wars_of = event_target:emperor_hre_guelph_ghibellines
+			every_subject_country = {
+				join_all_offensive_wars_of = event_target:emperor_hre_guelph_ghibellines
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = italian_nations_emperor_side
+			}
+			join_all_offensive_wars_of = PAP
+			every_subject_country = {
+				join_all_offensive_wars_of = PAP
+			}
+		}
+	}
+}
+
+#Victory for Guelphs/Ghibellines
+country_event = {
+	id = ME_Italian_Nations_Events.16
+	title = ME_Italian_Nations_Events.16.T
+	desc = ME_Italian_Nations_Events.16.D
 	
 	is_triggered_only = yes
 	major = yes
 
 	option = {
-		name = ME_Italian_Nations_Events..OPT1
+		name = ME_Italian_Nations_Events.16.OPT1
 		ai_chance = {
 			factor = 50
 		}
@@ -596,7 +801,37 @@ country_event = {
 	}
 
 	option = {
-		name = ME_Italian_Nations_Events..OPT2
+		name = ME_Italian_Nations_Events.16.OPT2
+		ai_chance = {
+			factor = 50
+		}
+		
+	}
+}
+
+#Peace in Italy
+country_event = {
+	id = ME_Italian_Nations_Events.17
+	title = ME_Italian_Nations_Events.17.T
+	desc = ME_Italian_Nations_Events.17.D
+	
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = ME_Italian_Nations_Events.17.OPT1
+		ai_chance = {
+			factor = 50
+		}
+		hidden_trigger = {
+			event_target:emperor_hre_guelph_ghibellines = {
+				has_country_flag = ruling_italy_no
+			}
+		}
+	}
+
+	option = {
+		name = ME_Italian_Nations_Events.17.OPT2
 		ai_chance = {
 			factor = 50
 		}
@@ -653,7 +888,6 @@ country_event = {
 		
 	}
 }
-
 
 country_event = { # The Occupation of Rome Hidden Save
 	id = ME_Italian_Nations_Events.1000
@@ -705,7 +939,7 @@ country_event = { # The Occupation of Rome
 			}
 		}
 
-		set_country_flag = ruling_italy_no
+		set_country_flag = italian_king_no
 		add_opinion = {
 			who = FROM
 			modifier = italian_nations_ruling_no
@@ -746,7 +980,7 @@ country_event = { # The Occupation of Rome
 				tag = PAP
 			}
 		}
-		set_country_flag = ruling_italy_yes
+		set_country_flag = italian_king_yes
 		add_trust = {
 			who = FROM
 			value = 25
