@@ -1,4 +1,4 @@
-name="Missions Expanded"
+name="Missions Expanded Colonial Nations"
 archive="mod/missions.zip"
 tags={
 	"Historical"
