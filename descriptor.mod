@@ -1,4 +1,4 @@
-name="Missions Expanded"
+name="Missions Expanded Dev"
 archive="mod/missions.zip"
 tags={
 	"Historical"
