@@ -1,5 +1,5 @@
-name="Missions Expanded Dev"
-archive="mod/missions.zip"
+name="Missions Expanded"
+path="mod/missions"
 tags={
 	"Historical"
 	"Missions And Decisions"
