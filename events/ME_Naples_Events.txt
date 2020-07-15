@@ -546,6 +546,11 @@ country_event = { #Coronation Day
 			add_ruler_personality = well_connected_personality
 			add_ruler_personality = conqueror_personality
 		}
+		hidden_effect = {
+			every_subject_country = {
+				set_dynasty = ROOT
+			}
+		}
 	}
 
 	option = {
@@ -852,18 +857,20 @@ country_event = { #Restoring the Glory of Greece
 			}
 		}
 
-		every_owned_province = {
-			limit = {
-				NOT = { is_core = GRE }
-				culture_group = byzantine
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = { is_core = GRE }
+					culture_group = byzantine
+				}
+				add_core = GRE
 			}
-			add_core = GRE
 		}
 		release = GRE
 		GRE = {
-			set_dynasty = ROOT
 			change_government = monarchy
 			hidden_effect = {
+				set_dynasty = ROOT
 				add_treasury = 20
 				add_yearly_manpower = 10
 				add_yearly_sailors = 10
@@ -1027,8 +1034,27 @@ country_event = { #The bond with Naples for Hungary
 			}
 		}
 
+		set_dynasty = FROM
 		FROM = {
-			create_union = ROOT
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = subjects }
+					can_create_subject_type = {
+						subject = ROOT
+						subject_type = brother_kingdom
+					}
+				}
+				create_subject = {
+					subject_type = brother_kingdom
+					subject = ROOT
+				}
+			}
+			else = {
+				create_subject = {
+					subject_type = personal_union
+					subject = ROOT
+				}
+			}
 		}
 	}
 
@@ -1176,7 +1202,7 @@ country_event = { #The fall of the infamous Doge
 		}
 		VEN = {
 			capital_scope = {
-				sieged_by = ROOT
+				controlled_by = ROOT
 			}
 		}
 	}
@@ -1189,17 +1215,19 @@ country_event = { #The fall of the infamous Doge
 
 		add_prestige = 10
 		add_years_of_income = 3
-		112 = {
-			owner = { add_years_of_income = -3 }
-			add_devastation = 20
-			add_base_tax = -4
-			add_base_production = -2
-			add_base_manpower = -3
-		}		
+		VEN = {
+			add_years_of_income = -3
+			capital_scope = {
+				add_devastation = 20
+				add_base_tax = -3
+				add_base_production = -1
+				add_base_manpower = -2
+			}
+		}
 		capital_scope = {
-			add_base_tax = 4
-			add_base_production = 2
-			add_base_manpower = 3
+			add_base_tax = 3
+			add_base_production = 1
+			add_base_manpower = 2
 		}
 	}
 }
@@ -1226,7 +1254,7 @@ country_event = { #The sack of Spain
 				}
 				SPA = {
 					capital_scope = {
-						sieged_by = ROOT
+						controlled_by = ROOT
 					}
 				}
 			}
@@ -1237,7 +1265,7 @@ country_event = { #The sack of Spain
 				}
 				CAS = {
 					capital_scope = {
-						sieged_by = ROOT
+						controlled_by = ROOT
 					}
 				}
 			}
@@ -1248,7 +1276,7 @@ country_event = { #The sack of Spain
 				}
 				ARA = {
 					capital_scope = {
-						sieged_by = ROOT
+						controlled_by = ROOT
 					}
 				}
 			}
@@ -1269,9 +1297,9 @@ country_event = { #The sack of Spain
 				add_years_of_income = -3
 				capital_scope = {
 					add_devastation = 20
-					add_base_tax = -4
-					add_base_production = -2
-					add_base_manpower = -3
+					add_base_tax = -3
+					add_base_production = -1
+					add_base_manpower = -2
 				}
 			}
 		}
@@ -1281,9 +1309,9 @@ country_event = { #The sack of Spain
 				add_years_of_income = -3
 				capital_scope = {
 					add_devastation = 20
-					add_base_tax = -4
-					add_base_production = -2
-					add_base_manpower = -3
+					add_base_tax = -3
+					add_base_production = -1
+					add_base_manpower = -2
 				}
 			}
 		}
@@ -1293,16 +1321,16 @@ country_event = { #The sack of Spain
 				add_years_of_income = -3
 				capital_scope = {
 					add_devastation = 20
-					add_base_tax = -4
-					add_base_production = -2
-					add_base_manpower = -3
+					add_base_tax = -3
+					add_base_production = -1
+					add_base_manpower = -2
 				}
 			}
 		}
 		capital_scope = {
-			add_base_tax = 4
-			add_base_production = 2
-			add_base_manpower = 3
+			add_base_tax = 3
+			add_base_production = 1
+			add_base_manpower = 2
 		}
 	}
 }
@@ -1326,7 +1354,7 @@ country_event = { #The sack of France
 			value = 75
 		}
 		FRA = {
-			capital_scope = { sieged_by = ROOT }
+			capital_scope = { controlled_by = ROOT }
 		}
 	}
 
@@ -1342,15 +1370,15 @@ country_event = { #The sack of France
 			add_years_of_income = -3
 			capital_scope = {
 				add_devastation = 20
-				add_base_tax = -4
-				add_base_production = -2
-				add_base_manpower = -3
+				add_base_tax = -3
+				add_base_production = -1
+				add_base_manpower = -2
 			}
 		}		
 		capital_scope = {
-			add_base_tax = 4
-			add_base_production = 2
-			add_base_manpower = 3
+			add_base_tax = 3
+			add_base_production = 1
+			add_base_manpower = 2
 		}
 	}
 }
@@ -1373,14 +1401,21 @@ country_event = { #The Siblings
 				ai = yes
 			}
 		}
-		
+
+		hidden_effect = {
+			catalonia_area = {
+				limit = {
+					NOT = { is_core = CAT }
+				}
+				add_core = CAT
+			}
+		}		
 		release = CAT
 		CAT = {
-			set_dynasty = FROM
 			change_government = monarchy
-			add_government_reform = autocracy_reform
-			change_religion = FROM
 			hidden_effect = {
+				set_dynasty = FROM	
+				change_religion = FROM
 				add_treasury = 20
 				add_yearly_manpower = 10
 				add_yearly_sailors = 10
@@ -1518,7 +1553,12 @@ country_event = { #Repubblica Marinara d'Amalfi
 		}
 		
 		2983 = {
-			change_trade_goods = citrus
+			if = {
+				limit = {
+					NOT = { trade_goods = citrus }
+				}
+				change_trade_goods = citrus
+			}
 			add_base_manpower = 3
 			add_permanent_province_modifier = {
 				name = nap_sfusato_amalfitano
