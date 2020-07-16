@@ -44,6 +44,99 @@ sicily_mission_1 = {
 			add_papal_influence = 25
 		}
 	}
+
+	sic_seeking_papal_support = {
+		icon = defender_of_the_faith
+		required_missions = {
+			sic_holy_see
+			sic_gain_independence
+		}
+		position = 2
+		trigger = {
+			OR = {
+				OR = {
+					alliance_with = PAP
+					AND = {
+						has_opinion = {
+							who = PAP
+							value = 150
+						}
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+					}
+				}
+				OR = {
+					is_rival = PAP
+					AND = {
+						NOT = {
+							has_opinion = {
+								who = PAP
+								value = -100
+							}
+						}
+						NOT = {
+							PAP = {
+								has_opinion = {
+									who = ROOT
+									value = -100
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+
+		}
+	}
+
+	sic_sardinian_shores = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_port_palermo
+		}
+		position = 4
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_baleares = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_sardinian_shores
+			sic_norman_navy
+		}
+		position = 6
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_fall_of_aragon = {
+		icon = mission_imperial_spain
+		required_missions = {
+			sic_baleares
+		}
+		position = 8
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
 }
 
 sicily_mission_2 = {
@@ -69,7 +162,7 @@ sicily_mission_2 = {
 	}
 
 	sic_port_palermo = {
-		icon = renaissance_city
+		icon = develop_naples
 		required_missions = { sic_matter_stability }
 		position = 3
 		trigger = {
@@ -86,6 +179,48 @@ sicily_mission_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
+		}
+	}
+
+	sic_norman_navy = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_port_palermo
+		}
+		position = 5
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_isle_of_malta = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_norman_navy
+		}
+		position = 7
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_controlling_strait = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_isle_of_malta
+		}
+		position = 8
+		trigger = {
+
+		}
+		effect = {
+
 		}
 	}
 }
@@ -113,14 +248,13 @@ sicily_mission_3 = {
 	}
 
 	sic_gain_independence = {
-		icon = mission_assemble_an_army
+		icon = unite_the_two_sicilies
 		required_missions = { }
 		position = 1
 		trigger = {
 			if = {
 				limit = { is_subject_of = ARA }
 				army_size_percentage = 1
-				num_of_generals = 1
 				OR = {
 					if = {
 						limit = { exists = NAP }
@@ -142,7 +276,6 @@ sicily_mission_3 = {
 			else = { stability = 1 }
 		}
 		effect = {
-			add_yearly_manpower = 5
 			add_country_modifier = {
 				name = nap_struggle_anew
 				duration = 3650
@@ -154,6 +287,14 @@ sicily_mission_3 = {
 				country_event = {
 					id = ME_Sicily_Events.1
 				}
+			}
+			define_general = {
+				name = "Sergio di Discordia"
+				fire = 2
+				shock = 5
+				manuever = 3
+				siege = 1
+				trait = master_of_arms_personality
 			}
 		}
 	}
@@ -213,6 +354,126 @@ sicily_mission_3 = {
 		}
 	}
 
+	sic_provinces_africa = {
+		icon = mission_occupy_alexandria
+		required_missions = {
+			sic_port_palermo
+			sic_corssing_strait
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = tunisia_area
+				area = djerba_area
+				province_id = 2452
+				province_id = 354
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				tunisia_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+				djerba_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+				2452 = {
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+				354 = {
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+			}
+			else = {
+				tunisia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				djerba_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				country_or_non_sovereign_subject_holds = 2452
+				country_or_non_sovereign_subject_holds = 354
+			}
+		}
+		effect = {
+			tunisia_area = {
+				add_province_modifier = {
+					name = nap_sicilian_ruling
+					duration = 7300
+				}
+			}
+			djerba_area = {
+				add_province_modifier = {
+					name = nap_sicilian_ruling
+					duration = 7300
+				}
+			}
+			2452 = {
+				add_province_modifier = {
+					name = nap_sicilian_ruling
+					duration = 7300
+				}
+			}
+			354 = {
+				add_province_modifier = {
+					name = nap_sicilian_ruling
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	sic_conquest_tripoli = {
+		icon = mission_arabian_fort
+		required_missions = {
+			sic_provinces_africa
+		}
+		position = 6
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_sicilian_union = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_fall_of_aragon
+			sic_controlling_strait
+			sic_conquest_tripoli
+			sic_cradle_knowledge
+			sic_city_500_domes
+		}
+		position = 9
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
 }
 
 sicily_mission_4 = {
@@ -238,28 +499,57 @@ sicily_mission_4 = {
 	}
 
 	sic_crossing_strait = {
-		icon = mission_assemble_an_army
+		icon = me_mission_aragon_lighthouse_of_alexandria
 		required_missions = { sic_matter_stability }
 		position = 3
 		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.6
-			num_of_generals = 1
 		}
 		effect = {
-			add_army_tradition = 15.0
-			add_mil_power = 100
-			add_manpower = 5
-			add_country_modifier = {
-				name = "army_enthusiasm"
-				duration = 7300
+			country_event = {
+				id = ME_Sicily_Events.8
 			}
-			if = {
-				limit = {
-					is_subject = yes
-				}
-				add_liberty_desire = 40
-			}
+		}
+	}
+
+	sic_apulia = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_mountains_aspromonte
+		}
+		position = 5
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_epirus = {
+		icon = cross_the_pindus
+		required_missions = {
+			sic_apulia
+		}
+		position = 7
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_cradle_knowledge = {
+		icon = despot_of_epirus
+		required_missions = {
+			sic_epirus
+		}
+		position = 8
+		trigger = {
+
+		}
+		effect = {
+
 		}
 	}
 }
@@ -287,27 +577,18 @@ sicily_mission_5 = {
 	}
 
 	sic_blooming_art = {
-		icon = mission_assemble_an_army
+		icon = rein_in_the_nobles
 		required_missions = { }
 		position = 1
 		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.6
-			num_of_generals = 1
 		}
 		effect = {
-			add_army_tradition = 15.0
-			add_mil_power = 100
-			add_manpower = 5
 			add_country_modifier = {
-				name = "army_enthusiasm"
-				duration = 7300
+				name = nap_sicilian_school
+				duration = 9125
 			}
-			if = {
-				limit = {
-					is_subject = yes
-				}
-				add_liberty_desire = 40
+			country_event = {
+				id = ME_Sicily_Events.7
 			}
 		}
 	}
@@ -346,48 +627,46 @@ sicily_mission_5 = {
 		}
 	}
 
-	sic_sicilian_union = {
-		icon = mission_monarch_in_throne_room
-		position = 3
-		required_missions = { 
-			sic_matter_stability
-			sic_first_parliament
+	sic_mountains_aspromonte = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_crossing_strait
 		}
+		position = 4
 		trigger = {
-			army_size_percentage = 1
-			navy_size_percentage = 1
-			num_of_allies = 3
-			if = {
-				limit = {
-					OR = {
-						exists = ENG
-						exists = GBR
-						exists = TUR
-						exists = FRA
-						exists = CAS
-						exists = SPA
-						exists = HAB
-					}
-				}
-				OR = {
-					alliance_with = ENG
-					alliance_with = GBR
-					alliance_with = TUR
-					alliance_with = FRA
-					alliance_with = CAS
-					alliance_with = SPA
-					alliance_with = HAB
-				}
-			}
+
 		}
 		effect = {
-			calabria_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
+
+		}
+	}
+
+	sic_campania = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_apulia
+			sic_mountains_aspromonte
+		}
+		position = 6
+		trigger = {
+
+		}
+		effect = {
+
+		}
+	}
+
+	sic_city_500_domes = {
+		icon = answer_the_roman_question
+		required_missions = {
+			sic_campania
+		}
+		position = 8
+		trigger = {
+
+		}
+		effect = {
+
 		}
 	}
 }
