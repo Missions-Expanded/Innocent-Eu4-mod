@@ -12,19 +12,31 @@ corsica_missions_1 = {
 		position = 2
 		required_missions = { cor_seek_support_from_abroad }
 		trigger = {
-			1298 = {
-				privateer_power = {
-					country = ROOT
-					share = 15
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Wealth of Nations"
+						has_dlc = "El Dorado"
+						has_dlc = "Mare Nostrum"
+						has_dlc = "Golden Century"
+					}
 				}
+				1298 = {
+					privateer_power = {
+						country = ROOT
+						share = 15
+					}
+				}
+			}
+			else = {
 			}
 		}
 		effect = {
+			add_dip_power = 100
 			add_country_modifier = {
 				name = cor_control_over_genoa
 				duration = 3650
 			}
-			add_dip_power = 100
 		}
 	}
 
@@ -40,16 +52,8 @@ corsica_missions_1 = {
 			num_of_galley = 20
 		}
 		effect = {
-			if = {
-				limit = { owns = 1247 }
-				1247 = {
-					create_or_add_center_of_trade_level = { level = 1 }
-				}
-			}
-			else = {
-				capital_scope = {
-					create_or_add_center_of_trade_level = { level = 1 }
-				}
+			capital_scope = {
+				create_or_add_center_of_trade_level = { level = 1 }
 			}
 			add_country_modifier = {
 				name = cor_rule_the_waves
@@ -75,25 +79,44 @@ corsica_missions_2 = {
 		trigger = {
 			if = {
 				limit = {
-					is_subject = yes
-				}
-				calc_true_if = {
-					amount = 2
-					all_country = {
-						is_supporting_independence_of = ROOT
+					OR = {
+						has_dlc = "El Dorado"
+						has_dlc = "Conquest of Paradise"
 					}
+				}
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					calc_true_if = {
+						amount = 2
+						all_country = {
+							is_supporting_independence_of = ROOT
+						}
+					}
+				}
+				else = {
+					stability = 1
 				}
 			}
 			else = {
-				stability = 1
+				if = {
+					limit = {
+						is_subject = yes
+					}
+					
+				}
+				else = {
+					stability = 1
+				}
 			}
 		}
 		effect = {
+			add_yearly_manpower = 2
 			add_country_modifier = {
 				name = cor_freedom_for_corsica
 				duration = 7300
 			}
-			add_yearly_manpower = 2
 		}
 	}
 
@@ -102,25 +125,25 @@ corsica_missions_2 = {
 		position = 3
 		required_missions = { cor_war_for_independence }
 		trigger = {
-			temple = 1
-			marketplace = 1
-			dock = 1
+			OR = {
+				temple = 1
+				cathedral = 1
+			}
+			OR = {
+				marketplace = 1
+				trade_depot = 1
+				stock_exchange = 1
+			}
+			OR = {
+				dock = 1
+				drydock = 1
+			}
 		}
 		effect = {
-			if = {
-				limit = { owns = 1247 }
-				1247 = {
-					create_or_add_center_of_trade_level = { 
-						level = 1
-					}
-				}
-			}
-			else = {
-				capital_scope = {
-					create_or_add_center_of_trade_level = { level = 1 }
-				}
-			}
 			add_years_of_income = 2
+			capital_scope = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
 		}
 	}
 
@@ -139,6 +162,12 @@ corsica_missions_2 = {
 			}
 		}
 		effect = {
+			baleares_area = {
+				add_province_modifier = {
+					name = cor_forward_ports
+					duration = 10950
+				}
+			}
 			catalonia_area = {
 				limit = {
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -152,12 +181,6 @@ corsica_missions_2 = {
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			baleares_area = {
-				add_province_modifier = {
-					name = cor_forward_ports
-					duration = 10950
-				}
 			}
 		}
 	}
@@ -180,32 +203,22 @@ corsica_missions_3 = {
 			cor_develop_the_island
 		}
 		trigger = {
-			is_in_war = {
-				attacker_leader = ROOT
-				casus_belli = cb_independence_war
+			OR = {
+				is_in_war = {
+					attacker_leader = ROOT
+					casus_belli = cb_independence_war
+				}
+				is_vassal = no
 			}
 		}   
 		effect = {
-			if = {
-				limit = { owns = 1247 }
-				1247 = {
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-				}
+			random_owned_province = {
+				limit = { has_port = yes }
+				galley = ROOT
+				galley = ROOT
+				galley = ROOT
+				galley = ROOT
 			}
-			else = {
-				random_owned_province = {
-					limit = {
-						has_port = yes
-					}
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-					galley = ROOT
-				}
-			}		
 			if = {
 				limit = {
 					has_dlc = "Golden Century"
@@ -243,15 +256,22 @@ corsica_missions_3 = {
 			navy_size_percentage = 0.80
 		}
 		effect = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				country_event = { id = ME_Corsica_Events.1 }
+			}
+			else = {
+				add_stability = 1
+				add_prestige = 5
+			}
 			corsica_sardinia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			country_event = {
-				id = ME_Corsica_Events.1
 			}
 		}	
 	}
@@ -303,15 +323,80 @@ corsica_missions_3 = {
 			cor_capture_of_sicily
 		}
 		provinces_to_highlight = {
+			OR = {
+				trade_company_region = trade_company_safi
+				trade_company_region = trade_company_sevilla
+				trade_company_region = trade_company_valencia
+				trade_company_region = trade_company_genua
+				trade_company_region = trade_company_tunis
+				trade_company_region = trade_company_venice
+				trade_company_region = trade_company_ragusa
+				trade_company_region = trade_company_alexandria
+				trade_company_region = trade_company_aleppo
+				trade_company_region = trade_company_constantinople
+				trade_company_region = trade_company_crimea
+			}
+			has_port = yes
 			province_has_center_of_trade_of_level = 1
-			region = mediterrenean_region
-			NOT = { owned_by = ROOT }
+			NOT = { area = southern_morocco_area } # single NOTs look cleaner
+			NOT = { area = alentejo_area }
+			NOT = { area = beieras_area }
+			NOT = { area = asturias_area }
+			NOT = { area = mecca_area }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			# stop highlighting after conditions are met
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 6
+						OR = {
+							trade_company_region = trade_company_safi
+							trade_company_region = trade_company_sevilla
+							trade_company_region = trade_company_valencia
+							trade_company_region = trade_company_genua
+							trade_company_region = trade_company_tunis
+							trade_company_region = trade_company_venice
+							trade_company_region = trade_company_ragusa
+							trade_company_region = trade_company_alexandria
+							trade_company_region = trade_company_aleppo
+							trade_company_region = trade_company_constantinople
+							trade_company_region = trade_company_crimea
+						}
+						has_port = yes
+						province_has_center_of_trade_of_level = 1
+						NOT = { area = southern_morocco_area } # single NOTs look cleaner
+						NOT = { area = alentejo_area }
+						NOT = { area = beieras_area }
+						NOT = { area = asturias_area }
+						NOT = { area = mecca_area }
+					}
+				}
+			}
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
+			# should be better performance wise (and also less code)
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 6
+				OR = {
+					trade_company_region = trade_company_safi
+					trade_company_region = trade_company_sevilla
+					trade_company_region = trade_company_valencia
+					trade_company_region = trade_company_genua
+					trade_company_region = trade_company_tunis
+					trade_company_region = trade_company_venice
+					trade_company_region = trade_company_ragusa
+					trade_company_region = trade_company_alexandria
+					trade_company_region = trade_company_aleppo
+					trade_company_region = trade_company_constantinople
+					trade_company_region = trade_company_crimea
+				}
+				has_port = yes
 				province_has_center_of_trade_of_level = 1
-				region = mediterrenean_region
+				NOT = { area = southern_morocco_area } # single NOTs look cleaner
+				NOT = { area = alentejo_area }
+				NOT = { area = beieras_area }
+				NOT = { area = asturias_area }
+				NOT = { area = mecca_area }
 			}
 		}
 		effect = {
@@ -337,33 +422,22 @@ corsica_missions_4 = {
 		icon = renaissance_city
 		position = 1
 		required_missions = { }
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { num_of_times_improved = 4 }
+		}
 		trigger = {
-			if = {
-				limit = { owns = 1247 }
-				1247 = { num_of_times_improved = 4 }
-			}
-			else = {
-				capital_scope = { num_of_times_improved = 4 }
+			capital_scope = {
+				num_of_times_improved = 4
 			}
 		}
 		effect = {
 			add_yearly_manpower = 2
 			add_years_of_income = 2
-			if = {
-				limit = { owns = 1247 }
-				1247 = {
-					add_province_modifier = {
-						name = cor_urban_development
-						duration = -1
-					}
-				}
-			}
-			else = {
-				capital_scope = {
-					add_province_modifier = {
-						name = cor_urban_development
-						duration = -1
-					}
+			capital_scope = {
+				add_province_modifier = {
+					name = COR_urban_development
+					duration = -1
 				}
 			}
 		}
@@ -374,10 +448,7 @@ corsica_missions_4 = {
 		position = 3
 		required_missions = { cor_war_for_independence }
 		trigger = {
-			is_institution_enabled = renaissance
-			all_owned_province = {
-				renaissance = 100
-			}
+			has_institution = renaissance
 		}
 		effect = {
 			add_prestige = 10
