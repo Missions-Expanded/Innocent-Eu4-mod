@@ -1,4 +1,4 @@
-name="Mission Expanded"
+name="Mission Expanded Italy"
 archive="mod/missions.zip"
 tags={
 	"Historical"
