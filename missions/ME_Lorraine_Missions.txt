@@ -275,7 +275,7 @@ LOR_FRA_missions_2 = {
 		trigger = {
 			FRA = {
 				has_opinion = {
-					who = root
+					who = ROOT
 					value = 150
 				}
 				alliance_with = ROOT
@@ -346,7 +346,8 @@ LOR_missions_2_2 = {
 			if = { 
 				limit = {
 					BUR = {
-						NOT = { development = 100 }
+						exists = yes 
+						NOT = { total_development = 100 }
 					}
 				}
 				add_casus_belli = {
@@ -355,8 +356,7 @@ LOR_missions_2_2 = {
 					months = 240
 				}
 			}
-			else_if = { 
-				BUR = { development = 100 }
+			else = {
 				add_casus_belli = {
 					target = BUR 
 					type = cb_restore_personal_union
@@ -492,7 +492,7 @@ LOR_missions_3 = {
 				AND = {
 					FRA = {
 						has_opinion = {
-							who = root
+							who = ROOT
 							value = 150
 						}
 					}
@@ -505,7 +505,7 @@ LOR_missions_3 = {
 					any_country = {
 						is_emperor = yes 
 						has_opinion = {
-							who = root
+							who = ROOT 
 							value = 150
 						}
 					}
@@ -514,7 +514,7 @@ LOR_missions_3 = {
 						advisor = diplomat
 					}
 				}
-				development = 300
+				total_development = 300
 			}
 		}
 		
@@ -525,7 +525,7 @@ LOR_missions_3 = {
 					limit = {
 						FRA = {
 							has_opinion = {
-								who = root
+								who = ROOT
 								value = 150
 							}
 						}
@@ -537,12 +537,12 @@ LOR_missions_3 = {
 					add_dip_power = 50
 					set_country_flag = LOR_SUCKED_FRANCE
 				}
-				else = {
+				else_if = {
 					limit = {
 						any_country = {
 							is_emperor = yes 
 							has_opinion = {
-								who = root
+								who = ROOT
 								value = 150
 							}
 						}
@@ -559,6 +559,7 @@ LOR_missions_3 = {
 					add_mil_power = 100
 				}
 			}
+			swap_non_generic_missions = yes
 			add_dip_power = 50
 		}
 	}
@@ -661,7 +662,18 @@ LOR_missions_4_1 = {
 		
 		effect = { 
 			189 = {
-				add_building = cathedral 
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					if = {
+						limit = {
+							has_building = temple
+						}
+						remove_building = temple
+					}
+					add_building = cathedral
+				}
 			}
 			add_country_modifier = { #+1 totf 
 				name = lor_sainthood_of_joan_d_arc
@@ -764,7 +776,7 @@ LOR_missions_4_2 = {
 			}
 			if = {
 				limit = {
-					has_dlc = "Mandate OF Heaven"
+					has_dlc = "Mandate of Heaven"
 				}
 				add_country_modifier = { #+2 monthly splendor and -20% adv cost 
 					name = lor_growing_splendor
@@ -773,7 +785,7 @@ LOR_missions_4_2 = {
 			}
 			if = {
 				limit = {
-					NOT = { has_dlc = "Mandate OF Heaven" }
+					NOT = { has_dlc = "Mandate of Heaven" }
 				}
 				add_country_modifier = { #+2 advisor_pool and -20% adv cost 
 					name = lor_growing_splendor_2 
@@ -830,7 +842,7 @@ LOR_missions_4_2 = {
 		trigger = {
 			stability = 2 
 			army_size = 75 
-			development = 600 
+			total_development = 600 
 			LOT = {
 				OR = {	
 					exists = no 
@@ -849,7 +861,7 @@ LOR_missions_4_2 = {
 					duration = 7300 
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					national_focus = DIP 
 				}
@@ -858,7 +870,7 @@ LOR_missions_4_2 = {
 					duration = 7300 
 				}
 			}
-			if = {
+			else_if = {
 				limit = {
 					national_focus = MIL 
 				}
@@ -887,17 +899,17 @@ LOR_EMP_missions_5 = {
 		position = 4
 		
 		trigger = { 
-			calc_true_if = {
-				all_country = {
+			all_country = {
+				OR = {
 					capital_scope = {
-						OR = {
-							area = north_rhine_area 
-							area = lower_rhineland_area 
-							area = palatinate_area 
-							area = alsace_area 
-						}
+						NOT = { area = north_rhine_area }
+						NOT = { area = lower_rhineland_area }
+						NOT = { area = palatinate_area }
+						NOT = { area = alsace_area }
 					}
-					NOT = { army_size = ROOT }	
+				}
+				AND = {
+					NOT = { army_size = ROOT }
 					NOT = { monthly_income = ROOT }
 				}
 			}
@@ -908,7 +920,7 @@ LOR_EMP_missions_5 = {
 				has_reform = imperial_circles_reform 
 			}
 			else = {
-				development = 100 
+				total_development = 100 
 			}
 		}
 		
