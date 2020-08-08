@@ -30,7 +30,7 @@ LOR_missions_1 = {
 	lor_elevate_lorraine = { 
 		icon = industrialized_rhineland
 		required_missions = { lor_develop_the_metz }
-		position = 5 
+		position = 4 
 		
 		trigger = {
 			development_in_provinces = {
@@ -71,7 +71,7 @@ LOR_missions_1 = {
 	lor_secure_champagne = {
 		icon = mission_rb_conquer_wales 
 		required_missions = { lor_elevate_lorraine }
-		position = 6 
+		position = 5 
 		
 		trigger = { 
 			custom_trigger_tooltip = {
@@ -112,7 +112,7 @@ LOR_missions_1 = {
 	lor_wine_of_burgundy = { 
 		icon = porcelain_from_meissen 
 		required_missions = { lor_secure_champagne lor_lock_down_west_burgundy }
-		position 7 
+		position 6 
 		provinces_to_highlight = {
 			province_id = 192
 			NOT = {
@@ -183,27 +183,30 @@ LOR_missions_1 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = {
-					OR = { 
-						trade_goods = iron
-						trade_goods = copper 
-						trade_goods = gems
-						AND = {
-							is_expanded_mod_active = { mod = trade_goods }
-							OR = {
-								trade_goods = metal_works
-								trade_goods = zinc
-								trade_goods = silver 
+			custom_tooltip = LOR_FUNDED_ORE_INDUSTRY_CT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = { 
+							trade_goods = iron
+							trade_goods = copper 
+							trade_goods = gems
+							AND = {
+								is_expanded_mod_active = { mod = trade_goods }
+								OR = {
+									trade_goods = metal_works
+									trade_goods = zinc
+									trade_goods = silver 
+								}
 							}
-						}
-					} 
-					has_manufactory_trigger = yes
-					development = 20    
-				}
-				add_province_modifier = { #+10% Local Goods Produced and -20% Local Development Cost 
-					name = lor_ore_industry_development 
-					duration = 7300 
+						} 
+						has_manufactory_trigger = yes
+						development = 20    
+					}
+					add_province_modifier = { #+10% Local Goods Produced and -20% Local Development Cost 
+						name = lor_ore_industry_development 
+						duration = 7300 
+					}
 				}
 			}
 		}
@@ -337,15 +340,17 @@ LOR_missions_2_2 = {
 		required_missions = { lor_lock_down_the_west }
 		position = 7
 		
-		BUR = {
-			NOT = { 
-				army_size = ROOT  
-			}
-			NOT = {
-				monthly_income = ROOT 
-			}
-			NOT = { 
-				prestige = ROOT 
+		trigger = {
+			BUR = {
+				NOT = { 
+					army_size = ROOT  
+				}
+				NOT = {
+					monthly_income = ROOT 
+				}
+				NOT = { 
+					prestige = ROOT 
+				}
 			}
 		}
 		
@@ -362,7 +367,8 @@ LOR_missions_2_2 = {
 					months = 240
 				}
 			}
-			else = { 
+			else_if = { 
+				BUR = { development = 100 }
 				add_casus_belli = {
 					target = BUR 
 					type = cb_restore_personal_union
@@ -393,18 +399,21 @@ LOR_missions_2_2 = {
 		}
 		
 		effect = {
-			every_owned_province = {
-				limit = {
-					OR = { 
-						trade_goods = cloth
-						trade_goods = wool 
-						trade_goods = cotton 
+			custom_tooltip = LOR_TEXTILES_FUNDED
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = { 
+							trade_goods = cloth
+							trade_goods = wool 
+							trade_goods = cotton 
+						}
+						has_manufactory_trigger = yes
 					}
-					has_manufactory_trigger = yes
-				}
-				add_province_modifier = { #+25% local goods produced
-					name = lor_efficient_production_of_textiles
-					duration = 9125
+					add_province_modifier = { #+25% local goods produced
+						name = lor_efficient_production_of_textiles
+						duration = 9125
+					}
 				}
 			}
 			custom_tooltip = LOR_TRADING_IN_ANY_GOODS
@@ -656,19 +665,14 @@ LOR_missions_4_1 = {
 				country_or_non_sovereign_subject_holds = ROOT 
 				base_tax = 10 
 				OR = {
-					has_building = church
+					has_building = temple
 					has_building = cathedral 
 				}
 			}
 		}
 		
 		effect = { 
-			if = {
-				limit = {
-					189 = {
-						NOT = { has_building = cathedral }
-					}
-				}
+			189 = {
 				add_building = cathedral 
 			}
 			add_country_modifier = { #+1 totf 
@@ -779,7 +783,7 @@ LOR_missions_4_2 = {
 					duration = 9125 
 				}
 			}
-			else_if = {
+			if = {
 				limit = {
 					NOT = { has_dlc = "Mandate OF Heaven" }
 				}
@@ -811,17 +815,20 @@ LOR_missions_4_2 = {
 			}
 		}
 		
-		effect = { 
-			every_owned_province = {
-				limit = {
-					province_has_center_of_trade_of_level = 2
-					any_trade_node_member_province = {
-						province_id = 1269
+		effect = {
+			custom_tooltip = LOR_ADMINISTRATE_THE_CLOGS
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						province_has_center_of_trade_of_level = 2
+						any_trade_node_member_province = {
+							province_id = 1269
+						}
 					}
-				}
-				add_province_modifier = { #+5% Trade Efficiency and +10 Local Trade Power
-					name = lor_contesting_the_channel
-					duration = 10950 
+					add_province_modifier = { #+5% Trade Efficiency and +10 Local Trade Power
+						name = lor_contesting_the_channel
+						duration = 10950 
+					}
 				}
 			}
 		}
@@ -955,7 +962,7 @@ LOR_missions_5 = {
 			87 = {
 				OR = {
 					has_building = dock
-					has_building = dockyard 
+					has_building = drydock 
 				}
 				OR = {
 					has_building = shipyard
@@ -965,10 +972,11 @@ LOR_missions_5 = {
 		}
 		
 		effect = {
+			
 			87 = { 
 				add_unit_construction = {
 					type = heavy_ship
-					amount = 2
+					amount = 4
 					speed = 0.25
 					cost = 0
 				}
