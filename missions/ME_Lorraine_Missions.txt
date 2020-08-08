@@ -1,4 +1,216 @@
-LOR_missions_2 = {
+LOR_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = LOR
+	}
+	has_country_shield = yes
+	
+	lor_develop_the_metz = { 
+		icon = reform_the_monte
+		required_missions = { } 
+		position = 3 
+		
+		trigger = { 
+			188 = { 
+				num_of_times_improved = 5 
+				OR = { 
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		
+		effect = { 
+			country_event = { id = ME_Lorraine_Events.1 } 
+		}
+	}
+	
+	lor_elevate_lorraine = { 
+		icon = industrialized_rhineland
+		required_missions = { lor_develop_the_metz }
+		position = 5 
+		
+		trigger = {
+			development_in_provinces = {
+				value = 50
+				area = lorraine_area
+			}
+			lorraine_area = { 
+				type = all 
+				owned_by = ROOT
+			}
+		}
+		
+		effect = {
+			if = { 
+				limit = { 
+					has_dlc = "Mandate of Heaven"
+				}
+				lorraine_area = {
+					add_province_modifier = { #-10% Local Construction Cost and +15% Local Tax Modifier
+						name = lor_improvement_works_of_lorraine
+						duration = 7300
+					}
+					add_prosperity = 100
+				}
+			}
+			else = {
+				lorraine_area = {
+					add_province_modifier = { #-10% Local Construction Cost and +15% Local Tax Modifier
+						name = lor_improvement_works_of_lorraine
+						duration = 7300
+					}
+				}
+				add_adm_power = 100 
+			}
+		}
+	}
+	
+	lor_secure_champagne = {
+		icon = mission_rb_conquer_wales 
+		required_missions = { lor_elevate_lorraine }
+		position = 6 
+		
+		trigger = { 
+			custom_trigger_tooltip = {
+				tooltip = LOR_OWN_AT_LEAST_2_COTS_IN_CHAMPAGNE
+				num_of_owned_provinces_with = {
+					value = 2
+					province_has_center_of_trade_of_level = 2
+					any_trade_node_member_province = {
+						province_id = 186
+					}
+				}
+			}
+			186 = { #Reims
+				trade_share = {
+					country = ROOT 
+					share = 25
+				}
+			}
+		}
+		
+		effect = { 
+			add_mercantilism = 5
+			custom_tooltip = LOR_EVERY_LVL2COT_GETS_3_PRODUCTION
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						any_trade_node_member_province = {
+							province_id = 186
+						}
+						province_has_center_of_trade_of_level = 2
+					}
+					add_base_production = 3
+				}
+			}
+		}
+	}
+	
+	lor_wine_of_burgundy = { 
+		icon = porcelain_from_meissen 
+		required_missions = { lor_secure_champagne lor_lock_down_west_burgundy }
+		position 7 
+		provinces_to_highlight = {
+			province_id = 192
+			NOT = {
+				OR = { 
+					OR = { 
+						has_building = workshop
+						has_building = counting_house 
+					}
+					base_production = 15 
+				}
+			}
+		}
+		
+		trigger = { 
+			192 = { 
+				OR = { 
+					has_building = workshop
+					has_building = counting_house 
+				}
+				base_production = 15 
+			}
+		}
+		
+		effect = { 
+			192 = { 
+				add_province_modifier = { #+1 Local Goods Produced 
+					name = lor_dijonnais_vineyards
+					duration = 7300 
+				}
+				build_possible_manufactory_in_province = yes
+			}
+		}
+	}
+	
+	lor_develop_the_ore_industry = { 
+		icon = mission_state_manufactories
+		required_missions = { lor_wine_of_burgundy }
+		position = 8
+		
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				any_owned_province = {
+					OR = { 
+						trade_goods = iron
+						trade_goods = copper 
+						trade_goods = gems
+						trade_goods = metal_works
+						trade_goods = zinc
+						trade_goods = silver 
+					}
+					has_manufactory_trigger = yes
+					development = 20 
+				}
+			}
+			else = {
+				any_owned_province = {
+					OR = { 
+						trade_goods = iron
+						trade_goods = copper  
+						trade_goods = gems
+					}
+					has_manufactory_trigger = yes 
+					development = 20
+				}
+			}
+		}
+		effect = {
+			every_owned_province = {
+				limit = {
+					OR = { 
+						trade_goods = iron
+						trade_goods = copper 
+						trade_goods = gems
+						AND = {
+							is_expanded_mod_active = { mod = trade_goods }
+							OR = {
+								trade_goods = metal_works
+								trade_goods = zinc
+								trade_goods = silver 
+							}
+						}
+					} 
+					has_manufactory_trigger = yes
+					development = 20    
+				}
+				add_province_modifier = { #+10% Local Goods Produced and -20% Local Development Cost 
+					name = lor_ore_industry_development 
+					duration = 7300 
+				}
+			}
+		}
+	}
+}
+	
+LOR_missions_2_1 = {
 	slot = 2
 	generic = no
 	ai = yes
@@ -6,126 +218,219 @@ LOR_missions_2 = {
 		tag = LOR
 	}
 	has_country_shield = yes
-
-	lor_revoke_swabian_grants = {
-		icon = mission_conquer_50_development
-		position = 3
-		required_missions = { lor_re_establish_lorraine }
-		provinces_to_highlight = {
-			province_id = 75
-			NOT = { owned_by = ROOT }
-		}
+	
+	lor_challenge_the_duke_of_luxembourg = { 
+		icon = boh_humiliate_austria 
+		required_missions = { lor_unite_lorraine } 
+		position = 3 
+		
 		trigger = {
-			owns = 75
-		}
-		effect = {
-			add_country_modifier = {
-				name = "swabian_marches"
-				duration = 3650
-			}
-		}
-	}
-
-	lor_crush_the_pretender = {
-		icon = mission_have_two_subjects
-		position = 5
-		required_missions = { lor_true_duke_of_lothier }
-		trigger = {
-			NOT = { exists = BRB }
-		}
-		effect = {
-			add_country_modifier = {
-				name = "duke_of_lorraine"
-				duration = 5475
-			}
-		}
-	}
-
-	lor_fortify_the_low_countries = {
-		icon = mission_conquer_50_development
-		position = 6
-		required_missions = { lor_restore_lower_lorraine }
-		provinces_to_highlight = {
 			OR = {
-				province_id = 4383
-				province_id = 1744
-				province_id = 93
-				province_id = 99
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
 				AND = {
-					NOT = { has_building = fort_15th }
-					NOT = { has_building = fort_16th }
-					NOT = { has_building = fort_17th }
-					NOT = { has_building = fort_18th }
+					94 = {
+					country_or_non_sovereign_subject_holds = ROOT
+					}
+					is_at_war = no 
+				}
+				controls = 94
+				94 = {
+					owner = {
+						war_with = ROOT
+					}
 				}
 			}
 		}
-		trigger = {
-			4383 = {
-				owned_by = ROOT
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
-			}
-			1744 = {
-				owned_by = ROOT
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
-			}
-			93 = {
-				owned_by = ROOT
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
-			}
-			99 = {
-				owned_by = ROOT
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
-			}
-		}
+		
 		effect = {
-			add_country_modifier = {
-				name = "fortify_the_low_countries"
-				duration = 7300
+			if = { 
+				limit = {
+					controls = 94 
+					94 = {
+						owner = {
+							war_with = ROOT
+						}
+					}
+				}
+				add_years_of_income = 0.5 
+				94 = {
+					add_devastation = 50
+				}
+			}
+			else = {
+				add_country_modifier = { #+10% Morale of Armies and 0.5 Yearly Legitimacy
+					name = lor_revenge_on_the_duke
+					duration = 7300 
+				}
 			}
 		}
 	}
+}
 
-	lor_burgundian_wine = {
-		icon = mission_unite_home_region
-		position = 7
-		required_missions = { lor_kingdom_of_lotharinga }
-		provinces_to_highlight = {
-			area = bourgogne_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+LOR_FRA_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = LOR
+		has_country_flag = LOR_SUCKED_FRANCE
+	}
+	has_country_shield = yes
+	
+	lor_shield_of_kin = {
+		icon = king_of_france
+		required_missions = { lor_the_struggle_for_power }
+		position = 4 
+		
 		trigger = {
-			bourgogne_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			FRA = {
+				has_opinion = {
+					who = root
+					value = 150
+				}
+				alliance_with = ROOT
+				marriage_with = ROOT
+			}
+			army_size = 20
+		}
+		
+		effect = {
+			add_country_modifier = { #+5% disc 
+				name = lor_protected_by_kin
+				duration = -1 
 			}
 		}
+	}
+}
+
+LOR_missions_2_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = LOR
+	}
+	has_country_shield = yes
+	
+	lor_lock_down_the_west = { 
+		icon = unite_the_wittelsbachs
+		required_missions = { lor_contest_lothairs_crown } 
+		position = 6 
+		
+		
+		trigger = {
+			west_burgundy_area = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				type = all 
+			}
+		}
+		
+		effect = { 
+			add_country_modifier = { #+33% Manpower
+				name = lor_expand_the_military_armament
+				duration = 10950
+			}
+		}
+	}
+	
+	lor_eradicate_burgundy = {
+		icon = conquer_burgundy
+		required_missions = { lor_lock_down_the_west }
+		position = 7
+		
+		BUR = {
+			NOT = { 
+				army_size = ROOT  
+			}
+			NOT = {
+				monthly_income = ROOT 
+			}
+			NOT = { 
+				prestige = ROOT 
+			}
+		}
+		
 		effect = {
-			add_country_modifier = {
-				name = "burgundian_wine"
-				duration = 9125
+			if = { 
+				limit = {
+					BUR = {
+						NOT = { development = 100 }
+					}
+				}
+				add_casus_belli = {
+					target = BUR
+					type = cb_vassalize_mission
+					months = 240
+				}
+			}
+			else = { 
+				add_casus_belli = {
+					target = BUR 
+					type = cb_restore_personal_union
+				}
+			}
+			add_country_modifier = { #+2 Dip Rep 
+				name = lor_dynastic_ambitions
+				duration = 7300 
+			}
+		}
+	}
+	
+	lor_support_the_textile_industry = { 
+		icon = the_shape_of_trades_to_come
+		required_missions = { lor_develop_the_ore_industry lor_crush_flanders } 
+		position = 9 
+		
+		trigger = { 
+			num_of_owned_provinces_with = {
+				OR = { 
+					trade_goods = cloth
+					trade_goods = wool 
+					trade_goods = cotton 
+				}
+				has_manufactory_trigger = yes
+				value = 10 
+			}
+		}
+		
+		effect = {
+			every_owned_province = {
+				limit = {
+					OR = { 
+						trade_goods = cloth
+						trade_goods = wool 
+						trade_goods = cotton 
+					}
+					has_manufactory_trigger = yes
+				}
+				add_province_modifier = { #+25% local goods produced
+					name = lor_efficient_production_of_textiles
+					duration = 9125
+				}
+			}
+			custom_tooltip = LOR_TRADING_IN_ANY_GOODS
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = { 
+							trading_bonus = {
+								trade_goods = cloth 
+								value = yes
+							}
+							trading_bonus = {
+								trade_goods = wool 
+								value = yes
+							}
+							trading_bonus = {
+								trade_goods = cotton
+								value = yes
+							}
+						}
+					}
+					add_country_modifier = { #+15% Morale of Armies
+						name = lor_excellent_uniforms 
+						duration = 5475
+					}
+				}
 			}
 		}
 	}
@@ -139,235 +444,279 @@ LOR_missions_3 = {
 		tag = LOR
 	}
 	has_country_shield = yes
-
-	lor_not_just_a_title = {
-		icon = mission_monarch_in_throne_room
-		position = 1
-		required_missions = { }
+	
+	lor_secure_independence = {
+		icon = mission_protect_albania
+		required_missions = { } 
+		position = 1 
+		
 		trigger = {
-			is_subject = no
-			is_at_war = no
+			is_subject = no 
+			army_size_percentage = 0.85  
 		}
-		effect = {
-			187 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			add_country_modifier = {
-				name = "Free_Spirit"
-				duration = 3650
-			}
+		
+		effect = { 
+			add_legitimacy = 20 
+			add_yearly_manpower = 1 
 		}
 	}
-
-	lor_re_establish_lorraine = {
-		icon = mission_unite_home_region
+	
+	lor_unite_lorraine = {
+		icon = integrate_lorraine 
 		position = 2
-		required_missions = { lor_not_just_a_title }
-		provinces_to_highlight = {
-			province_id = 187
-			NOT = { owned_by = ROOT }
-		}
+		required_missions = { lor_secure_independence }
+		
 		trigger = {
-			owns = 187
+			lorraine_area = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				type = all 
+			}
 		}
+		
 		effect = {
-			94 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			75 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			upper_rhineland_area = {
+			change_mil = 1 
+			every_owned_province = {
 				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+					area = lorraine_area
+					country_or_non_sovereign_subject_holds = ROOT 
 				}
-				add_permanent_claim = ROOT
+				add_local_autonomy = -10 
 			}
 		}
 	}
-
-	lor_unite_upper_lorraine = {
-		icon = mission_assemble_an_army
-		position = 3
-		required_missions = { lor_re_establish_lorraine }
-		provinces_to_highlight = {
+	
+	lor_the_struggle_for_power = {
+		icon = imperial_ascendancy 
+		required_missions = { lor_unite_lorraine }
+		position = 3 
+		
+		trigger = {
 			OR = {
-				area = lower_rhineland_area
-				province_id = 94
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-
-		}
-		trigger = {
-			94 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lower_rhineland_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			netherlands_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			wallonia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-
-	lor_true_duke_of_lothier = {
-		icon = mission_unite_home_region
-		position = 4
-		required_missions = { lor_unite_upper_lorraine }
-		provinces_to_highlight = {
-			OR = {
-				area = netherlands_area
-				area = wallonia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-
-		}
-		trigger = {
-			netherlands_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			wallonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			holland_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			frisia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			1744 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+				AND = {
+					FRA = {
+						has_opinion = {
+							who = root
+							value = 150
+						}
 					}
-					add_permanent_claim = ROOT
+					OR = {
+						advisor = statesman
+						advisor = diplomat
+					}
+				}
+				AND = {
+					any_country = {
+						is_emperor = yes 
+						has_opinion = {
+							who = root
+							value = 150
+						}
+					}
+					OR = {
+						advisor = statesman
+						advisor = diplomat
+					}
+				}
+				development = 300
+			}
+		}
+		
+		effect = {
+			custom_tooltip = LOR_SUCK_FRANCE_OR_AUSTRIA_OR_YOURSELF
+			hidden_effect = {
+				if = { 
+					limit = {
+						FRA = {
+							has_opinion = {
+								who = root
+								value = 150
+							}
+						}
+						OR = {
+							advisor = statesman
+							advisor = diplomat
+						}
+					}
+					add_dip_power = 50
+					set_country_flag = LOR_SUCKED_FRANCE
+				}
+				else = {
+					limit = {
+						any_country = {
+							is_emperor = yes 
+							has_opinion = {
+								who = root
+								value = 150
+							}
+						}
+						OR = {
+							advisor = statesman
+							advisor = diplomat
+						}
+					}
+					set_country_flag = LOR_SUCKED_EMPEROR
+				}
+				else = {
+					add_adm_power = 100
+					add_dip_power = 100 
+					add_mil_power = 100
 				}
 			}
+			add_dip_power = 50
 		}
 	}
-
-	lor_restore_lower_lorraine = {
-		icon = mission_cannons_firing
-		position = 5
-		required_missions = { lor_true_duke_of_lothier }
-		provinces_to_highlight = {
-			OR = {
-				area = holland_area
-				area = frisia_area
-				province_id = 1744
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+	
+	lor_contest_lothairs_crown = {
+		icon = centralized_empire
+		required_missions = { lor_the_struggle_for_power }
+		position = 5 
+		
 		trigger = {
-			1744 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			share_of_starting_income = 1.5 
+			OR = {
+				has_estate_privilege = estate_nobles_levies
+				mil = 5 
 			}
-			holland_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			frisia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 55
 			}
 		}
+		
 		effect = {
-			add_country_modifier = {
-				name = "duke_of_lorraine"
-				duration = 5475
-			}
+			create_general = { tradition = 80 }
 		}
 	}
-
-	lor_kingdom_of_lotharinga = {
-		icon = me_mission_shiny_crown
+	
+	lor_secure_the_east = {
+		icon = avoid_fragmentation
+		required_missions = { lor_contest_lothairs_crown }
 		position = 6
-		required_missions = { lor_restore_lower_lorraine }
+			
 		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Common Sense"
-				}
-				government_rank = 2
+			bourgogne_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
 			}
-			else = {
-				total_development = 300
+			193 = {
+				fort_level = 2 
+				development = 14 
 			}
 		}
+		
 		effect = {
-			bourgogne_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+			193 = {
+				add_country_modifier = { #+33% local defensiveness
+					name = lor_salt_fort_of_the_east
+					duration = -1 
 				}
-				add_permanent_claim = ROOT
 			}
-			north_rhine_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_mil_power = 50 
+		}
+	}
+	
+	lor_crush_flanders = {
+		icon = secure_the_republic
+		required_missions = { lor_reclaim_the_duchy_of_brabant }
+		position = 8 
+		
+		trigger = {
+			flanders_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
 			}
-			palatinate_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+		}
+		
+		effect = {
+			add_dip_power = 100 
+			add_country_modifier = { #-33% Mercantilism Cost and -25% Cost to Upgrade CoT
+				name = lor_coastal_expansion 
+				duration = 5475 
 			}
 		}
 	}
 }
 
-LOR_missions_4 = {
+LOR_missions_4_1 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = LOR
+	}
+	has_country_shield = yes					
+ 
+	lor_st_joan_d_arc = {
+		icon = convert_the_holy_lands
+		required_missions = { lor_secure_independence }
+		position = 2 
+		
+		trigger = {
+			189 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				base_tax = 10 
+				OR = {
+					has_building = church
+					has_building = cathedral 
+				}
+			}
+		}
+		
+		effect = { 
+			if = {
+				limit = {
+					189 = {
+						NOT = { has_building = cathedral }
+					}
+				}
+				add_building = cathedral 
+			}
+			add_country_modifier = { #+1 totf 
+				name = lor_sainthood_of_joan_d_arc
+				duration = -1 
+			}
+		}
+	}
+}
+
+LOR_EMP_missions_4 = {
+	slot = 4 
+	generic = no
+	ai = yes 
+	potential = {
+		tag = LOR 
+		has_country_flag = LOR_SUCKED_EMPEROR
+	}
+	
+	lor_petition_for_imperial_immediacy = {
+		icon = join_the_empire
+		required_missions = { lor_the_struggle_for_power }
+		position = 4 
+		
+		trigger = {
+			OR = {
+				alliance_with = emperor 
+				calc_true_if = {
+					all_ally = {
+						is_elector = yes 
+					}
+					amount = 2
+				}
+				is_emperor = yes 	
+			}
+			army_size = 20 
+		}
+		
+		effect = {
+			add_country_modifier = { #-15% CCR 
+				name = lor_superioritas_territorialis 
+				duration = -1 
+			}
+		}
+	}
+}
+
+LOR_missions_4_2 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -375,166 +724,432 @@ LOR_missions_4 = {
 		tag = LOR
 	}
 	has_country_shield = yes
-
-	lor_integrate_the_electorate = {
-		icon = mission_alliances
-		position = 3
-		required_missions = { lor_re_establish_lorraine }
-		provinces_to_highlight = {
-			province_id = 80
-			NOT = { owned_by = ROOT }
-		}
+	
+	lor_campagne_wallone = {
+		icon = mission_cannons_firing
+		required_missions = { lor_contest_lothairs_crown }
+		position = 6
+		
 		trigger = {
-			owns = 80
-			NOT = { exists = TRI }
-			OR = {
-				NOT = { num_of_electors = 7 }
-				is_elector = yes
+			wallonia_area = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				type = all 
 			}
 		}
-		effect = {
+		
+		effect = { 
+			add_country_modifier = { #+3 artillery vs fort 
+				name = lor_refined_the_walloon_process 
+				duration = 7300 
+			}
+		}
+	}
+	
+	lor_reclaim_the_duchy_of_brabant = {
+		icon = reform_bergordnung
+		required_missions = { lor_campagne_wallone }
+		position = 7 
+		
+		trigger = { 
+			north_brabant_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			brabant_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		
+		effect = { 
+			1744 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+			}
 			if = {
 				limit = {
-					is_elector = no
+					has_dlc = "Mandate OF Heaven"
 				}
-				elector = yes
+				add_country_modifier = { #+2 monthly splendor and -20% adv cost 
+					name = lor_growing_splendor
+					duration = 9125 
+				}
 			}
-			add_country_modifier = {
-				name = "integrate_the_electorate"
-				duration = 3650
+			else_if = {
+				limit = {
+					NOT = { has_dlc = "Mandate OF Heaven" }
+				}
+				add_country_modifier = { #+2 advisor_pool and -20% adv cost 
+					name = lor_growing_splendor_2 
+					duration = 9125 
+				}
+				add_adm_power = 100 
 			}
 		}
 	}
+	
+	lor_administrate_the_dutch_ports = {
+		icon = mission_spanish_netherlands
+		required_missions = { lor_reclaim_the_duchy_of_brabant }
+		position = 8 
+		
+		trigger = {
+			97 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				province_has_center_of_trade_of_level = 2 
+			}
+			num_of_owned_provinces_with = {
+				value = 7
+				any_trade_node_member_province = {
+					province_id = 1269
+				}
+				has_port = yes
+			}
+		}
+		
+		effect = { 
+			every_owned_province = {
+				limit = {
+					province_has_center_of_trade_of_level = 2
+					any_trade_node_member_province = {
+						province_id = 1269
+					}
+				}
+				add_province_modifier = { #+5% Trade Efficiency and +10 Local Trade Power
+					name = lor_contesting_the_channel
+					duration = 10950 
+				}
+			}
+		}
+	}
+	
+	lor_lorraine_resurgent = {
+		icon = the_crown_of_lothair
+		required_missions = { lor_crush_flanders lor_administrate_the_dutch_ports lor_crush_the_upstalsboom_league }
+		position = 9 
+		
+		trigger = {
+			stability = 2 
+			army_size = 75 
+			development = 600 
+			LOT = {
+				OR = {	
+					exists = no 
+					is_subject_of = ROOT 
+				}
+			}
+		}
+		
+		effect = { 
+			if = {
+				limit = {
+					national_focus = ADM
+				}
+				add_country_modifier = {
+					name = lor_administrative_efforts 
+					duration = 7300 
+				}
+			}
+			if = {
+				limit = {
+					national_focus = DIP 
+				}
+				add_country_modifier = {
+					name = lor_diplomatic_efforts 
+					duration = 7300 
+				}
+			}
+			if = {
+				limit = {
+					national_focus = MIL 
+				}
+				add_country_modifier = {
+					name = lor_military_efforts
+					duration = 7300 
+				}
+			}
+			country_event = { id = ME_Lorraine_Events.2 }
+		}
+	}
+}
 
-	lor_enlist_the_bishop = {
-		icon = mission_religious
+LOR_EMP_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes 
+	potential = {
+		tag = LOR 
+		has_country_flag = LOR_SUCKED_EMPEROR
+	}
+	
+	lor_the_rhenish_imperial_circle = {
+		icon = counter_reformation
+		required_missions = { lor_the_struggle_for_power }
 		position = 4
-		required_missions = { lor_unite_upper_lorraine }
-		provinces_to_highlight = {
-			province_id = 93
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			owns = 93
-			NOT = { exists = LIE }
-		}
-		effect = {
-			add_country_modifier = {
-				name = "liegan_veterans"
-				duration = -1
-			}
-			add_country_modifier = {
-				name = "liegan_bishop"
-				duration = 3650
-			}
-		}
-	}
-
-	lor_force_the_frisians = {
-		icon = mission_build_up_to_force_limit
-		position = 5
-		required_missions = { lor_true_duke_of_lothier }
-		provinces_to_highlight = {
-			area = frisia_area
-			OR = {
-				NOT = { owned_by = ROOT }
-				local_autonomy = 30
-			}
-		}
-		trigger = {
-			frisia_area = {
-				type = all
-				owned_by = ROOT
-				NOT = { local_autonomy = 30 }
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "frisian_support"
-				duration = 3650
-			}
-		}
-	}
-
-	lor_the_artery_of_lotharinga = {
-		icon = mission_asian_trader
-		position = 7
-		required_missions = { lor_kingdom_of_lotharinga }
-		provinces_to_highlight = {
-			OR = {
-				province_id = 78
-				province_id = 85
-				province_id = 188
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				AND = {
-					has_dlc = "Dharma"
-					NOT = { province_has_center_of_trade_of_level = 2 }
-				}
-				AND = {
-					NOT = { has_dlc = "Dharma" }
-					OR = {
-						NOT = { development = 20 }
-						AND = {
-							NOT = { has_building = marketplace }
-							NOT = { has_building = trade_depot }
-							NOT = { has_building = stock_exchange }
+		
+		trigger = { 
+			calc_true_if = {
+				all_country = {
+					capital_scope = {
+						OR = {
+							area = north_rhine_area 
+							area = lower_rhineland_area 
+							area = palatinate_area 
+							area = alsace_area 
 						}
 					}
+					NOT = { army_size = ROOT }	
+					NOT = { monthly_income = ROOT }
 				}
 			}
-		}
-		trigger = {
-			owns = 78
-			owns = 85
-			owns = 188
 			if = {
 				limit = {
-					has_dlc = "Dharma"
+					is_expanded_mod_active = { mod = governments }
 				}
-				78 = {
-					province_has_center_of_trade_of_level = 2
-				}
-				85 = {
-					province_has_center_of_trade_of_level = 2
-				}
-				188 = {
-					province_has_center_of_trade_of_level = 2
-				}
+				has_reform = imperial_circles_reform 
 			}
 			else = {
-				78 = {
-					development = 20
-					OR = {
-						has_building = marketplace
-						has_building = trade_depot
-						has_building = stock_exchange
-					}
-				}
-				85 = {
-					development = 20
-					OR = {
-						has_building = marketplace
-						has_building = trade_depot
-						has_building = stock_exchange
-					}
-				}
-				188 = {
-					development = 20
-					OR = {
-						has_building = marketplace
-						has_building = trade_depot
-						has_building = stock_exchange
-					}
-				}
+				development = 100 
 			}
 		}
+		
 		effect = {
-			add_country_modifier = {
-				name = "artery_of_lotharinga"
-				duration = -1
+			add_country_modifier = { #+24 yearly tax
+				name = lor_imperial_circle_tax 
+				duration = -1 
+			}
+			custom_tooltip = add_5_crown_land_share
+			hidden_effect = {
+				change_estate_land_share = {
+					estate = all
+					share = -5
+				}
 			}
 		}
 	}
 }
+
+LOR_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = LOR
+	}
+	has_country_shield = yes
+ 
+	lor_ports_of_calais = {
+		icon = adriatic_access
+		required_missions = { lor_contest_lothairs_crown }
+		position = 6
+		
+		trigger = {
+			picardy_area = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				type = all 
+			}
+			87 = {
+				OR = {
+					has_building = dock
+					has_building = dockyard 
+				}
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+		}
+		
+		effect = {
+			87 = { 
+				add_unit_construction = {
+					type = heavy_ship
+					amount = 2
+					speed = 0.25
+					cost = 0
+				}
+			}
+			custom_tooltip = IF_YOU_SMART_IDEAS_ACTIVE
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							full_idea_group = naval_ideas
+							full_idea_group = exploration_ideas
+							full_idea_group = expansion_ideas
+							full_idea_group = maritime_ideas 
+						}
+					}
+					create_explorer = { tradition = 100 } 
+				}
+			}
+		}
+	}
+	
+	lor_crush_the_upstalsboom_league = {
+		icon = balance_of_power 
+		required_missions = { lor_reclaim_the_duchy_of_brabant }
+		position = 8 
+		
+		trigger = {
+			frisia_area = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				type = all 
+			}
+		}
+		
+		effect = {
+			define_admiral = {
+				name = "Pier Gerfols Doria"
+				fire = 3
+				shock = 4 
+				manuever = 3
+				siege = 1 
+				
+				trait = prize_hunter_personality 
+			}
+			add_navy_tradition = 20 
+		}
+	}
+}
+
+#LOR_FRA_missions_2 = {
+#	slot = 2
+#	generic = no
+#	ai = yes
+#	potential = {
+#		tag = LOR
+#		has_country_flag = LOR_SUCKED_FRANCE
+#	}
+#	has_country_shield = yes
+#	
+#	lor_shield_of_kin = {
+#		icon = king_of_france
+#		required_missions = { lor_the_struggle_for_power }
+#		position = 4 
+#		
+#		trigger = {
+#			FRA = {
+#				has_opinion = {
+#					who = root
+#					value = 150
+#				}
+#				alliance_with = ROOT
+#				marriage_with = ROOT
+#			}
+#			army_size = 20
+#		}
+#		
+#		effect = {
+#			custom_tooltip = LOR_FRANCE_DISCIPLINE_AND_CTA 
+#			hidden_effect = {
+#				add_country_modifier = { #+5% disc 
+#					name = lor_protected_by_kin
+#					duration = -1 
+#				}
+#			}
+#		}
+#	}
+#}
+
+#LOR_EMP_missions_4 = {
+	#slot = 4 
+	#generic = no
+	#ai = yes 
+	#potential = {
+		#tag = LOR 
+		#has_country_flag = LOR_SUCKED_EMPEROR
+	#}
+	
+	#lor_petition_for_imperial_immediacy = {
+	#	icon = join_the_empire
+	#	required_missions = { lor_the_struggle_for_power }
+	#	position = 4 
+	#	
+	#	trigger = {
+	#		OR = {
+	#			alliance_with = emperor 
+	#			calc_true_if = {
+	#				all_ally = {
+	#					is_elector = yes 
+	#				}
+	#				amount = 2
+	#			}
+	#			is_emperor = yes 	
+	#		}
+	#		army_size = 20 
+	#	}
+	#	
+	#	effect = {
+	#		add_country_modifier = { #-15% CCR 
+	#			name = lor_superioritas_territorialis 
+	#	
+	#	}
+	#}
+#}
+
+#LOR_EMP_missions_5 = {
+#	slot = 5
+#	generic = no
+#	ai = yes 
+#	potential = {
+#		tag = LOR 
+#		has_country_flag = LOR_SUCKED_EMPEROR
+#	}
+#	
+#	lor_the_rhenish_imperial_circle = {
+#		icon = counter_reformation
+#		required_missions = { lor_the_struggle_for_power }
+#		position = 4
+#		
+#		trigger = { 
+#			calc_true_if = {
+#				all_country = {
+#					capital_scope = {
+#						OR = {
+#							area = north_rhine_area 
+#							area = lower_rhineland_area 
+#							area = palatinate_area 
+#							area = alsace_area 
+#						}
+#					}
+#					NOT = {
+#						army_size = ROOT 
+#						monthly_income = ROOT 
+#					}
+#				}
+#			}
+#			if = {
+#				limit = {
+#					is_expanded_mod_active = { mod = governments }
+#				}
+#				has_reform = imperial_circles_reform 
+#			}
+#			else = {
+#				development = 100 
+#			}
+#		}
+#		
+#		effect = {
+#			add_country_modifier = { #+24 yearly tax
+#				name = lor_imperial_circle_tax 
+#				duration = -1 
+#			}
+#			custom_tooltip = add_5_crown_land_share
+#			hidden_effect = {
+#				change_estate_land_share = {
+#					estate = all
+#					share = -5
+#				}
+#			}
+#		}
+#	}
+#}
+	
+	
+	
+	
