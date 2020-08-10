@@ -15,19 +15,19 @@ country_event = { #Vespri Siciliani
 			modifier = {
 				factor = 3
 				has_opinion = {
-					who = FRA
+					who = FROM
 					value = 100
 				}
-				FRA = {
+				NAP = {
 					has_opinion = {
-						who = NAP
+						who = FROM
 						value = 100
 					}
 				}
 			}
 		}
 
-		FRA = {
+		NAP = {
 			country_event = {
 				id = ME_Sicily_Events.2
 				days = 60
@@ -39,25 +39,14 @@ country_event = { #Vespri Siciliani
 		name = ME_Sicily_Events.1.OPT2
 		ai_chance = {
 			factor = 33
-			modifier = {
-				factor = 3
-				has_opinion = {
-					who = HAB
-					value = 100
-				}
-				HAB = {
-					has_opinion = {
-						who = NAP
-						value = 100
-					}
-				}
-			}
 		}
 
-		HAB = {
-			country_event = {
-				id = ME_Sicily_Events.3
-				days = 60
+		overlord = {
+			random_rival_country = {
+				country_event = {
+					id = ME_Sicily_Events.3
+					days = 60
+				}			
 			}
 		}
 	}
@@ -76,7 +65,493 @@ country_event = { #Vespri Siciliani
 	}
 }
 
-country_event = { #Neapolitan Renaissance
+#Sicilian Request Naples
+country_event = {
+	id = ME_Sicily_Events.2
+	title = ME_Sicily_Events.2.T
+	desc = ME_Sicily_Events.2.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = ME_Sicily_Events.2.OPT1
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 5
+				
+				FROM = {
+					overlord = {
+						is_rival = ROOT
+					}
+				}
+			}
+		}
+		
+		add_opinion = {
+			who = FROM
+			modifier = nap_helped_rebellion
+		}
+		FROM = {
+			overlord = {
+				add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellionAra
+				}
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellionAra
+				}
+				add_historical_rival = ROOT
+				ROOT = { add_historical_rival = THIS }
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellion
+			}
+			add_years_of_income = 1
+			add_yearly_manpower = 1
+			create_general = {
+				tradition = 75
+			}
+			capital_scope = {
+				infantry = FROM
+				infantry = FROM
+				infantry = FROM
+			}
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.2.OPT2
+		ai_chance = {
+			factor = 75
+			modifier = {
+				factor = 1.3
+				OR = {
+					has_opinion = {
+						who = FROM
+						value = 100
+					}
+					FROM = {
+						overlord = {
+							is_rival = ROOT
+							NOT = {
+								army_strength = {
+									who = ROOT
+									value = 0.75
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		add_historical_friend = FROM
+		add_opinion = {
+			who = FROM
+			modifier = nap_helped_rebellion_war
+		}
+		add_trust = {
+			who = FROM
+			value = 75
+			mutual = yes
+		}
+		FROM = {
+			overlord = {
+				add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellion_warAra
+				}
+				reverse_add_opinion = {
+					who = ARA
+					modifier = nap_helped_rebellion_warAra
+				}
+				ROOT = { add_historical_rival = THIS }
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellion_war
+			}
+			set_country_flag = naples_france_helped_war
+		}
+	}
+}
+
+# For Random Rival
+country_event = {
+	id = ME_Sicily_Events.3
+	title = ME_Sicily_Events.3.T
+	desc = ME_Sicily_Events.3.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+	major = yes
+
+	option = {
+		name = ME_Sicily_Events.3.OPT1
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				has_opinion = {
+					who = FROM
+					value = 100
+				}
+			}
+		}
+		
+		add_years_of_income = -1
+		add_yearly_manpower = -1
+		add_opinion = {
+			who = FROM
+			modifier = nap_helped_rebellion
+		}
+		FROM = {
+			overlord = {
+				add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellionAra
+				}
+				add_historical_rival = ROOT
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellionAra
+				}
+				add_historical_rival = ROOT
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellion
+			}
+			add_years_of_income = 1
+			add_yearly_manpower = 1
+			create_general = {
+				tradition = 75
+			}
+			capital_scope = {
+				infantry = FROM
+				infantry = FROM
+				infantry = FROM
+			}
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.3.OPT2
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				OR = {
+					has_opinion = {
+						who = FROM
+						value = 100
+					}
+					is_at_war = no
+					
+					FROM = {
+						overlord = {
+							NOT = {
+								army_strength = {
+									who = ROOT
+									value = 0.66
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		add_historical_friend = FROM
+		add_opinion = {
+			who = FROM
+			modifier = nap_helped_rebellion_war
+		}
+		add_trust = {
+			who = FROM
+			value = 75
+			mutual = yes
+		}
+		FROM = {
+			overlord = {
+				add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellion_warAra
+				}
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = nap_helped_rebellion_warAra
+				}
+				add_historical_rival = ROOT
+			}
+			add_opinion = {
+				who = ROOT
+				modifier = nap_helped_rebellion_war
+			}
+			set_country_flag = naples_austria_helped_war
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.3.OPT3
+		ai_chance = {
+			factor = 33
+			modifier = {
+				factor = 3
+				NOT = {
+					FROM = {
+						overlord = {
+							army_strength = {
+								who = ROOT
+								value = 0.50
+							}
+						}
+					}
+				}
+			}
+		}
+
+		add_opinion = {
+			who = FROM
+			modifier = nap_denied_help
+		}
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = nap_denied_help
+			}
+			country_event = {
+				id = ME_Sicily_Events.1
+				days = 30
+			}
+		}
+	}
+}
+
+# Call to War
+country_event = {
+	id = ME_Sicily_Events.4
+	title = ME_Sicily_Events.4.T
+	desc = ME_Sicily_Events.4.D
+	picture = DIPLOMACY_eventPicture
+
+	fire_only_once = yes
+	major = yes
+
+	trigger = {
+		SIC = {
+			is_in_war = {
+				attacker_leader = SIC
+				casus_belli = cb_independence_war
+				defender_leader = ARA
+			}
+		}
+		has_opinion_modifier = {
+			who = SIC
+			modifier = nap_helped_rebellion_war
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.4.OPT1
+		ai_chance = {
+			factor = 100
+		}
+		
+		if = {
+			limit = {
+				tag = NAP
+				is_subject_of = ARA
+			}
+			grant_independence = yes 
+			white_peace = SIC
+			add_truce_with = SIC
+			hidden_effect = {
+				country_event = {
+					id = ME_Sicily_Events.4
+					days = 735
+				}
+			}
+			SIC = {
+				add_yearly_manpower = 3
+				add_years_of_income = 2
+			}
+			custom_tooltip = SIC_NAP_JOINS_WARS_2_YEARS
+		}
+		join_all_offensive_wars_of = SIC
+		every_subject_country = {
+			join_all_offensive_wars_of = SIC
+		}
+	}
+}
+
+#Coronation Day
+country_event = { 
+	id = ME_Sicily_Events.5
+	title = ME_Sicily_Events.5.T
+	desc = ME_Sicily_Events.5.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 1
+	}
+
+	trigger = {
+		tag = SIC
+		is_subject = no
+		is_at_war = no
+	}
+
+	option = {
+		name = ME_Sicily_Events.5.OPT1
+		ai_chance = {
+			factor = 50
+		}
+
+		add_prestige = 10
+		add_legitimacy = 15
+		if = {
+			limit = {
+				has_heir = yes
+			}
+			kill_heir = yes
+		}
+		define_ruler = {
+			name = "Ruggero I"
+			dynasty = "Altavilla"
+			adm = 5
+			dip = 4
+			mil = 5
+			age = 20
+			claim = 100
+			fixed = yes
+		}
+		if = {
+			limit = {
+				has_dlc = "Rights of Man"
+			}
+			add_ruler_personality = just_personality
+			add_ruler_personality = well_connected_personality
+			add_ruler_personality = conqueror_personality
+		}
+		hidden_effect = {
+			every_subject_country = {
+				set_dynasty = ROOT
+			}
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.5.OPT2
+		ai_chance = {
+			factor = 50
+		}
+
+		add_prestige = 10
+		add_legitimacy = 15
+	}
+}
+
+#Civitas Invitissima
+country_event = {
+	id = ME_Sicily_Events.6
+	title = ME_Sicily_Events.6.T
+	desc = ME_Sicily_Events.6.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sicily_Events.6.OPT1
+		ai_chance = {
+			factor = 3
+		}
+
+		4736 = {
+			if = {
+				limit = {
+					has_building = fort_15th
+				}
+				add_base_manpower = 2
+			}
+			else = {
+				add_building_construction = {
+					building = fort_15th
+					speed = 1
+					cost = 0
+				}
+			}
+			add_permanent_province_modifier = {
+				name = sic_culummara
+			}
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.8.OPT2
+		ai_chance = {
+			factor = 33
+		}
+		
+		4736 = {
+			if = {
+				limit = {
+					has_building = shipyard
+				}
+				add_base_production = 2
+			}
+			else = {
+				add_building_construction = {
+					building = shipyard
+					speed = 1
+					cost = 0
+				}
+			}
+			add_permanent_province_modifier = {
+				name = sic_darban
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		name = ME_Sicily_Events.8.OPT3
+		ai_chance = {
+			factor = 33
+		}
+		
+		4736 = {
+			change_trade_goods = salt
+			if = {
+				limit = {
+					has_building = wharf
+				}
+				add_base_tax = 2
+			}
+			else = {
+				add_building_construction = {
+					building = wharf
+					speed = 1
+					cost = 0
+				}
+			}
+			add_permanent_province_modifier = {
+				name = sic_salinagrande
+				duration = -1
+			}
+		}
+	}
+}
+
+#Sicilian Renaissance
+country_event = { 
 	id = ME_Sicily_Events.7
 	title = ME_Sicily_Events.7.T
 	desc = ME_Sicily_Events.7.D
@@ -99,7 +574,7 @@ country_event = { #Neapolitan Renaissance
 			cost_multiplier = 0.5
 		}
 		125 = {
-			add_province_modifier = {
+			add_permanent_province_modifier = {
 				name = sic_matteo_carnilivari
 				duration = -1
 			}
@@ -122,8 +597,9 @@ country_event = { #Neapolitan Renaissance
 		}
 		add_country_modifier = {
 			name = sic_antonello_messina
-			duration = 18250
+			duration = -1
 		}
+		change_government_reform_progress = 25
 	}
 
 	option = {
@@ -141,7 +617,7 @@ country_event = { #Neapolitan Renaissance
 			cost_multiplier = 0.5
 		}
 		124 = {
-			add_province_modifier = {
+			add_permanent_province_modifier = {
 				name = sic_giorgio_milano
 				duration = -1
 			}
@@ -149,7 +625,8 @@ country_event = { #Neapolitan Renaissance
 	}
 }
 
-country_event = { #Civitas Invitissima
+#Knights of Malta
+country_event = { 
 	id = ME_Sicily_Events.8
 	title = ME_Sicily_Events.8.T
 	desc = ME_Sicily_Events.8.D
@@ -163,15 +640,28 @@ country_event = { #Civitas Invitissima
 			factor = 33
 		}
 		
-		4736 = {
-			add_building_construction = {
-				building = fort_15th
-				speed = 0.75
-				cost = 0
+		2982 = {
+			add_permanent_province_modifier = {
+				name = sic_guardia_ospitaliera
 			}
-			add_province_modifier = {
-				name = sic_culummara
-				duration = -1
+		}
+		126 = {
+			remove_core = ROOT
+			add_core = KNI
+			cede_province = KNI
+		}
+		add_opinion = {
+			who = KNI
+			modifier = spa_ceded_malta
+		}
+		KNI = {
+			add_opinion = {
+				who = ROOT
+				modifier = spa_ceded_malta
+			}
+			adopt_reform_progress = ROOT
+			hidden_effect = {
+				change_religion = catholic
 			}
 		}
 	}
@@ -182,36 +672,101 @@ country_event = { #Civitas Invitissima
 			factor = 33
 		}
 		
-		4736 = {
-			add_building_construction = {
-				building = shipyard
-				speed = 0.75
-				cost = 0
+		126 = {
+			add_base_production = 2
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				change_trade_goods = citrus
+				add_building_construction = {
+					building = farm_estate
+					speed = 2
+					cost = 0
+				}
 			}
+		}
+		PAP = {
+			add_opinion = {
+				who = ROOT
+				modifier = spa_refused_ceding_malta
+			}
+		}
+		KNI = {
+			add_opinion = {
+				who = ROOT
+				modifier = spa_refused_ceding_malta
+			}
+		}
+	}
+}
+
+#Kingdom of Africa
+country_event = { 
+	id = ME_Sicily_Events.9
+	title = ME_Sicily_Events.9.T
+	desc = ME_Sicily_Events.9.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sicily_Events.9.OPT1
+		ai_chance = {
+			factor = 33
+		}
+		
+		africa_superregion = {
+			limit = { owned_by = ROOT }
 			add_province_modifier = {
-				name = sic_darban
-				duration = -1
+				name = sic_iron_fist
+				duration = 9125
 			}
 		}
 	}
 
 	option = {
-		name = ME_Sicily_Events.8.OPT3
+		name = ME_Sicily_Events.9.OPT2
 		ai_chance = {
 			factor = 33
 		}
 		
-		4736 = {
-			change_trade_goods = salt
-			add_building_construction = {
-				building = wharf
-				speed = 0.75
-				cost = 0
-			}
+		africa_superregion = {
+			limit = { owned_by = ROOT }			
 			add_province_modifier = {
-				name = sic_salinagrande
-				duration = -1
+				name = sic_preserving
+				duration = 9125
 			}
+		}		
+	}
+}
+
+#Subjucation of Savoy
+country_event = { 
+	id = ME_Sicily_Events.10
+	title = ME_Sicily_Events.10.T
+	desc = ME_Sicily_Events.10.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	fire_only_once = yes
+
+	trigger = {
+		overlord_of = SAV
+	}
+
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	option = {
+		name = ME_Sicily_Events.10.OPT1
+		ai_chance = {
+			factor = 33
+		}
+		
+		add_power_projection = {
+			type = eclipsed_rival
+			amount = 25
 		}
 	}
 }

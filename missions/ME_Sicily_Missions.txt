@@ -34,14 +34,22 @@ sicily_mission_1 = {
 						value = 100
 					}
 				}
-			}			
+			}
+			else = {
+				any_country = {
+					is_papal_controller = yes
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+				}
+			}
 		}
 		effect = {
+			add_papal_influence = 25
 			random_owned_province = {
-				limit = { has_cardinal = no }
 				add_cardinal = yes
 			}
-			add_papal_influence = 25
 		}
 	}
 
@@ -56,34 +64,20 @@ sicily_mission_1 = {
 			OR = {
 				OR = {
 					alliance_with = PAP
-					AND = {
+					PAP = {
 						has_opinion = {
-							who = PAP
-							value = 150
-						}
-						PAP = {
-							has_opinion = {
-								who = ROOT
-								value = 150
-							}
+							who = ROOT
+							value = 170
 						}
 					}
 				}
 				OR = {
 					is_rival = PAP
-					AND = {
-						NOT = {
+					NOT = {
+						PAP = {
 							has_opinion = {
-								who = PAP
+								who = ROOT
 								value = -100
-							}
-						}
-						NOT = {
-							PAP = {
-								has_opinion = {
-									who = ROOT
-									value = -100
-								}
 							}
 						}
 					}
@@ -95,16 +89,10 @@ sicily_mission_1 = {
 				limit = {
 					OR = {
 						alliance_with = PAP
-						AND = {
+						PAP = {
 							has_opinion = {
-								who = PAP
+								who = ROOT
 								value = 150
-							}
-							PAP = {
-								has_opinion = {
-									who = ROOT
-									value = 150
-								}
 							}
 						}
 					}
@@ -115,38 +103,59 @@ sicily_mission_1 = {
 				}
 			}
 			else = {
-				125 = {
-					if = {
-						limit = { has_cardinal = no }
-						add_cardinal = yes
-					}
-					else_if = {
-						limit = {
-							has_cardinal = yes
-							has_building = temple
-						}
-						remove_building = temple
-						add_building_construction = {
-							building = cathedral
-							speed = 0.75
-							cost = 0
-						}
-					}
-					else_if = {
-						limit = { has_cardinal = yes }
-						add_building_construction = {
-							building = temple
-							speed = 0.75
-							cost = 0
-						}
-					}
-					else = {
-						add_base_tax = 2
-					}
-				}
 				add_country_modifier = {
 					name = sic_anti_pope_approval
 					duration = -1
+				}
+				if = {
+					limit = {
+						owns = 125
+					}
+					125 = { #Palermo
+						if = {
+							limit = {
+								has_cardinal = no
+							}
+							add_cardinal = yes
+						}
+						else_if = {
+							limit = {
+								has_cardinal = yes
+								has_building = temple
+							}
+							remove_building = temple
+							add_building_construction = {
+								building = cathedral
+								speed = 0.75
+								cost = 0
+							}
+						}
+						else_if = {
+							limit = { 
+								has_cardinal = yes
+							}
+							add_building_construction = {
+								building = temple
+								speed = 0.75
+								cost = 0
+							}
+						}
+						else = {
+							add_base_tax = 2
+						}
+					}
+				}
+				else = {
+					random_owned_province = {
+						limit = {
+							has_cardinal = no
+						}
+						add_cardinal = yes
+					}
+					if = {
+						limit = { religion = catholic }
+						add_papal_influence = 25
+					}
 				}
 			}
 		}
@@ -158,11 +167,24 @@ sicily_mission_1 = {
 			sic_port_palermo
 		}
 		position = 4
+		provinces_to_highlight = {
+			area = corsica_sardinia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-
+			corsica_sardinia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-
+			baleares_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -172,12 +194,32 @@ sicily_mission_1 = {
 			sic_sardinian_shores
 			sic_norman_navy
 		}
+		provinces_to_highlight = {
+			area = baleares_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		position = 6
 		trigger = {
-
+			baleares_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-
+			catalonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			valencia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -187,11 +229,42 @@ sicily_mission_1 = {
 			sic_baleares
 		}
 		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = catalonia_area
+				area = valencia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-
+			OR = {
+				overlord_of = ARA
+				AND = {
+					catalonia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					valencia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
 		}
 		effect = {
-
+			add_country_modifier = {
+				name = sic_subjucation_spanyards
+				duration = -1
+			}
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3
+			}
+			country_event = {
+				id = ME_The_Two_Sicilies_Events.3
+			}
 		}
 	}
 }
@@ -220,21 +293,58 @@ sicily_mission_2 = {
 
 	sic_port_palermo = {
 		icon = develop_naples
-		required_missions = { sic_matter_stability }
+		required_missions = { sic_internal_stability }
 		position = 3
+
+		provinces_to_highlight = {
+			province_id = 125
+			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { num_of_times_improved = 4 }
+				NOT = { base_production = 10 }
+			}
+			has_trade_building_trigger = no
+		}		
 		trigger = {
+			125 = {
+				owned_by = ROOT
+				OR = {	
+					base_production = 10
+					num_of_times_improved = 4
+				}					
+				has_trade_building_trigger = yes
+			}			
 		}
 		effect = {
 			125 = {
 				create_or_add_center_of_trade_level = { level = 1 }
-			}
-			126 = {
 				if = {
 					limit = {
-						NOT = { owned_by = ROOT }
+						has_building = shipyard
 					}
-					add_permanent_claim = ROOT
+					add_base_production = 2
 				}
+				else = {
+					add_building_construction = {
+						building = shipyard
+						speed = 1
+						cost = 0
+					}
+				}
+			}
+			corsica_sardinia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			djerba_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -246,25 +356,54 @@ sicily_mission_2 = {
 		}
 		position = 5
 		trigger = {
-
+			navy_size_percentage = 0.50
+			num_of_galley = 10
 		}
 		effect = {
-
+			add_country_modifier = {
+				name = sic_norman_navy
+				duration = -1 
+			}
+			add_yearly_sailors = 3			
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = no
+					any_owned_province = {
+						has_port = yes
+					}
+				}			
+				random_owned_province = {
+					limit = {
+						has_port = yes
+					}
+					create_flagship = {	
+						name = "Ruggiero"
+						type = galley
+					}
+				}
+			}
 		}
-	}
+	}   
 
 	sic_isle_of_malta = {
 		icon = answer_the_roman_question
 		required_missions = {
 			sic_norman_navy
 		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 126
+			}
+			NOT = { owned_by = ROOT }
+		}
 		position = 7
 		trigger = {
-
+			owns_core_province = 126
 		}
 		effect = {
 			country_event = {
-				id = flavor_kni.100
+				id = ME_Sicily_Events.8
 			}
 		}
 	}
@@ -276,10 +415,27 @@ sicily_mission_2 = {
 		}
 		position = 8
 		trigger = {
-
+			any_country = {
+				341 = {
+					trade_share = {
+						share = 1
+						country = PREV
+					}
+				}
+				NOT = {
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
 		}
 		effect = {
-
+			add_country_modifier = {
+				name = sic_difendere_lu_mari
+				duration = -1 
+			}
+			add_navy_tradition = 15
 		}
 	}
 }
@@ -312,22 +468,37 @@ sicily_mission_3 = {
 		position = 1
 		trigger = {
 			if = {
-				limit = { is_subject_of = ARA }
+				limit = { 
+					NOT = { is_subject_of = NAP }
+					is_subject = yes
+				}
 				army_size_percentage = 1
-				OR = {
-					if = {
-						limit = { exists = NAP }
+				if = {
+					limit = { exists = NAP }
+					OR = {
 						NAP = {
 							has_opinion = {
 								who = ROOT
 								value = 100
 							}
 						}
+						overlord = {
+							any_rival_country = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+							}
+						}
 					}
-					any_country = {
-						has_opinion = {
-							who = ROOT
-							value = 125
+				}
+				else = {
+					overlord = {
+						any_rival_country = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
 						}
 					}
 				}
@@ -341,6 +512,7 @@ sicily_mission_3 = {
 			}
 			if = {
 				limit = {
+					NOT = { is_subject_of = NAP }
 					is_subject = yes
 				}
 				country_event = {
@@ -358,16 +530,16 @@ sicily_mission_3 = {
 		}
 	}
 
-	sic_matter_stability = {
+	sic_internal_stability = {
 		icon = mission_religious
 		position = 2
 		required_missions = { sic_gain_independence }
 		trigger = {
-			is_subject = no
 			sicily_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 				NOT = { unrest = 3 }
+				NOT = { province_id = 126 }
 			}
 			western_sicily_area = {
 				type = all
@@ -376,6 +548,13 @@ sicily_mission_3 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = { exists = SAV }
+				add_casus_belli = {
+					target = SAV
+					type = cb_claim_throne
+				}
+			}
 			western_sicily_area = {
 				if = {
 					limit = { has_dlc = "Mandate of Heaven" }
@@ -390,6 +569,10 @@ sicily_mission_3 = {
 				}
 				add_province_modifier = {
 					name = nap_legacy_ruggero
+					duration = -1
+				}
+				add_province_modifier = {
+					name = nap_beauty_of_sicily
 					duration = -1
 				}
 			}
@@ -407,6 +590,10 @@ sicily_mission_3 = {
 				}
 				add_province_modifier = {
 					name = nap_legacy_ruggero
+					duration = -1
+				}
+				add_province_modifier = {
+					name = nap_beauty_of_sicily
 					duration = -1
 				}
 			}
@@ -417,7 +604,7 @@ sicily_mission_3 = {
 		icon = mission_occupy_alexandria
 		required_missions = {
 			sic_port_palermo
-			sic_corssing_strait
+			sic_crossing_strait
 		}
 		position = 4
 		provinces_to_highlight = {
@@ -427,7 +614,7 @@ sicily_mission_3 = {
 				province_id = 2452
 				province_id = 354
 			}
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			if = {
@@ -470,8 +657,8 @@ sicily_mission_3 = {
 					type = all
 					country_or_non_sovereign_subject_holds = ROOT
 				}
-				country_or_non_sovereign_subject_holds = 2452
-				country_or_non_sovereign_subject_holds = 354
+				owns_or_non_sovereign_subject_of = 2452
+				owns_or_non_sovereign_subject_of = 354
 			}
 		}
 		effect = {
@@ -487,6 +674,40 @@ sicily_mission_3 = {
 					duration = 7300
 				}
 			}
+		}
+	}
+
+	sic_conquest_tripoli = {
+		icon = mission_arabian_fort
+		required_missions = {
+			sic_provinces_africa
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2452
+				province_id = 354
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				354 = {
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+			}
+			else = {
+				owns_or_non_sovereign_subject_of = 2452
+				owns_or_non_sovereign_subject_of = 354
+			}
+		}
+		effect = {
 			2452 = {
 				add_province_modifier = {
 					name = nap_sicilian_ruling
@@ -499,20 +720,9 @@ sicily_mission_3 = {
 					duration = 7300
 				}
 			}
-		}
-	}
-
-	sic_conquest_tripoli = {
-		icon = mission_arabian_fort
-		required_missions = {
-			sic_provinces_africa
-		}
-		position = 6
-		trigger = {
-
-		}
-		effect = {
-
+			country_event = {
+				id = ME_Sicily_Events.9
+			}
 		}
 	}
 }
@@ -541,13 +751,28 @@ sicily_mission_4 = {
 
 	sic_crossing_strait = {
 		icon = me_mission_aragon_lighthouse_of_alexandria
-		required_missions = { sic_matter_stability }
+		required_missions = { sic_internal_stability }
 		position = 3
 		trigger = {
+			war_exhaustion = 0
+			stability = 1
 		}
 		effect = {
+			calabria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_yearly_sailors = 2
+			add_yearly_manpower = 2
+			add_country_modifier = {
+				name = nap_military_campaign
+				duration = 5475
+			}
 			country_event = {
-				id = ME_Sicily_Events.8
+				id = ME_Sicily_Events.6
 			}
 		}
 	}
@@ -558,11 +783,44 @@ sicily_mission_4 = {
 			sic_mountains_aspromonte
 		}
 		position = 5
+		provinces_to_highlight = {
+			area = apulia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				apulia_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+			}
+			else = {
+				apulia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
-
+			apulia_area = {
+				add_province_modifier = {
+					name = sic_transumanza
+					duration = -1
+				}
+			}
+			northern_greece_area = {
+				limit = {
+					NOT = { province_is_on_an_island = yes }
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+			}
 		}
 	}
 
@@ -572,11 +830,40 @@ sicily_mission_4 = {
 			sic_apulia
 		}
 		position = 7
+		provinces_to_highlight = {
+			area = northern_greece_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { province_is_on_an_island = yes }
+		}
 		trigger = {
-
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				northern_greece_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+			}
+			else = {
+				northern_greece_area = {
+					NOT = { province_is_on_an_island = yes }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
-
+			morea_area = {
+				limit = {
+					NOT = { province_is_on_an_island = yes }
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -586,11 +873,39 @@ sicily_mission_4 = {
 			sic_epirus
 		}
 		position = 8
+		provinces_to_highlight = {
+			area = morea_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { province_is_on_an_island = yes }
+			}
+		}
 		trigger = {
-
+			
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				morea_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+			}
+			else = {
+				morea_area = {
+					NOT = { province_is_on_an_island = yes }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
-
+			add_prestige = 10
+			country_event = {
+				id = ME_The_Two_Sicilies_Events.8
+			}
 		}
 	}
 }
@@ -622,6 +937,12 @@ sicily_mission_5 = {
 		required_missions = { }
 		position = 1
 		trigger = {
+			OR = {				
+				has_adm_advisor_with_skill = {
+					skill = 2
+				}
+				ADM = 4
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -634,7 +955,7 @@ sicily_mission_5 = {
 		}
 	}
 
-	sic_first_parliament = {
+	sic_parramentu_sicilianu = {
 		icon = mission_religious
 		position = 2
 		required_missions = { 
@@ -642,9 +963,37 @@ sicily_mission_5 = {
 			sic_blooming_art
 		}
 		trigger = {
-			is_subject = no
+			OR = {
+				statesman = 2
+				treasury = 100
+			}
+			125 = {
+				development = 15
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					NOT = { statesman = 2 }
+				}
+				add_treasury = -100
+			}
+			add_prestige = 10
+			125 = {
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building_construction = {
+						building = university
+						speed = 1
+						cost = 0
+					}
+				}
+				add_permanent_province_modifier = {
+					name = sic_parramentu_sicilianu_modifier
+				}
+			}
 			if = {
 				limit = {
 					NOT = { government_rank = 2 }
@@ -675,10 +1024,39 @@ sicily_mission_5 = {
 		}
 		position = 4
 		trigger = {
-
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				calabria_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						owned_by = NAP
+					}
+				}
+			}
+			else = {
+				calabria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
-
+			apulia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			calabria_area = {
+				add_province_modifier = {
+					name = sic_calabrian_oil
+					duration = -1
+				}
+			}
 		}
 	}
 
@@ -690,10 +1068,42 @@ sicily_mission_5 = {
 		}
 		position = 6
 		trigger = {
-
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				naples_area = {
+					type = all
+					NOT = { province_id = 121 }
+					OR = {
+						owned_by = NAP
+						owned_by = ROOT
+					}
+				}
+			}
+			naples_area = {
+				type = all
+				NOT = { province_id = 121 }
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-
+			naples_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				if = {
+					limit = {
+						has_dlc = "Mandate Of Heaven"
+					}
+					add_prosperity = 10
+				}
+				else = {
+					random_list = {
+						33 = { add_base_tax = 1 }
+						33 = { add_base_production = 1 }
+						33 = { add_base_manpower = 1 }
+					}
+				}
+			}
 		}
 	}
 
@@ -704,10 +1114,28 @@ sicily_mission_5 = {
 		}
 		position = 8
 		trigger = {
-
+			if = {
+				limit = {
+					is_subject_of = NAP
+				}
+				121 = {
+					OR = {
+						owned_by = NAP
+						owned_by = ROOT
+					}
+				}
+			}
+			else = {
+				owns_or_non_sovereign_subject_of = 121
+			}
 		}
 		effect = {
-
+			add_legitimacy_equivalent = {
+				amount = 10
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 		}
 	}
 }
