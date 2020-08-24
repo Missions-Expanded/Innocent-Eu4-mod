@@ -18,7 +18,7 @@ POM_STE_missions_1 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	STE_reclaim_uckermark = {
 		icon = claim_the_borderlands
 		required_missions = { POM_den_korps_pommerns }
@@ -31,13 +31,14 @@ POM_STE_missions_1 = {
 			owns = 2993
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 10 }
 			add_country_modifier = {
 				name = STE_resisting_the_eagle
 				duration = 10950
 			}
-			add_prestige_or_monarch_power = { amount = 10 }
 		}
 	}
+
 	STE_build_marketplace = {
 		icon = develop_provence
 		required_missions = { }
@@ -46,13 +47,13 @@ POM_STE_missions_1 = {
 			province_id = 1858
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_trade_building = yes }
+				NOT = { has_trade_building_trigger = yes }
 			}
 		}
 		trigger = {
 			1858 = {
 				owned_by = ROOT
-				has_trade_building = yes
+				has_trade_building_trigger = yes
 			}
 		}
 		effect = {
@@ -62,6 +63,7 @@ POM_STE_missions_1 = {
 			}
 		}
 	}
+
 	STE_stettin_stargard_war = {
 		icon = mission_alliances
 		required_missions = { STE_build_marketplace }
@@ -74,6 +76,18 @@ POM_STE_missions_1 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { num_of_times_improved = 3 }
+			}
+			1858 = {
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { num_of_times_improved = 3 }
+				}
+			}
+			4746 = {
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { num_of_times_improved = 3 }
+				}
 			}
 		}
 		trigger = {
@@ -89,13 +103,18 @@ POM_STE_missions_1 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				add_estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 10
+				}
+			}
 			add_country_modifier = {
 				name = STE_wheat_war_resolved
 				duration = 1825
-			}
-			add_estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 10
 			}
 		}
 	}
@@ -114,12 +133,12 @@ POM_WOL_missions_1 = {
 				OR = {
 					tag = POM
 					tag = PRU
-				}	
+				}
 			}
 		}
 	}
 	has_country_shield = yes
-	
+
 	WOL_support_the_mercantile_cities = {
 		icon = mission_hanseatic_city
 		required_missions = { }
@@ -159,26 +178,35 @@ POM_WOL_missions_1 = {
 				name = WOL_supporting_cities
 				duration = 7300
 			}
-			home_trade_node = {
+			home_trade_node_effect_scope = {
 				add_trade_node_income = 24
 			}
 		}
 	}
-	
+
 	WOL_golden_priveleges = {
 		icon = balance_the_estates
 		required_missions = { WOL_support_the_mercantile_cities }
 		position = 4
-		provinces_to_highlight = {
-		}
 		trigger = {
-			estate_influence = {
-				estate = estate_burghers
-				influence = 50
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_influence = {
+					estate = estate_burghers
+					influence = 50
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 50
+				}
 			}
-			estate_loyalty = {
-				estate = estate_burghers
-				loyalty = 50
+			else = {
+				num_of_owned_provinces_with = {
+					value = 5
+					has_trade_building_trigger = yes
+				}
 			}
 		}
 		effect = {
@@ -211,13 +239,11 @@ POM_GEN_missions_2 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_den_korps_pommerns = {
 		icon = mercenary_companies
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				army_size_percentage = 0.85
@@ -245,6 +271,7 @@ POM_GEN_missions_2 = {
 			}
 		}
 	}
+
 	POM_capture_rostock = {
 		icon = defend_the_city
 		required_missions = { POM_unite_pomerania POM_den_korps_pommerns }
@@ -258,31 +285,31 @@ POM_GEN_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			2996 = 	{ 	country_or_non_sovereign_subject_holds = ROOT 	} 
-			46 	= 	{ 	country_or_non_sovereign_subject_holds = ROOT 	}
-			4749 = 	{ 	country_or_non_sovereign_subject_holds = ROOT 	}
+			owns_or_non_sovereign_subject_of = 2996
+			owns_or_non_sovereign_subject_of = 46
+			owns_or_non_sovereign_subject_of = 4749
 		}
 		effect = {
 			2996 = {
+				add_nationalism = -5
 				add_province_modifier = {
 					name = POM_similar_customs
 					duration = 9125
 				}
-				add_nationalism = -5
 			}
 			4749 = {
+				add_nationalism = -5
 				add_province_modifier = {
 					name = POM_similar_customs
 					duration = 9125
 				}
-				add_nationalism = -5
 			}
 			46 = {
+				add_nationalism = -5
 				add_province_modifier = {
 					name = POM_similar_customs
 					duration = 9125
 				}
-				add_nationalism = -5
 			}
 		}
 	}
@@ -309,7 +336,7 @@ POM_GEN_missions_3 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_unite_pomerania = {
 		icon = mission_unite_home_region
 		required_missions = { POM_den_korps_pommerns POM_seek_marriages }
@@ -332,6 +359,7 @@ POM_GEN_missions_3 = {
 			}
 		}
 		effect = {
+			add_prestige = 10
 			add_ruler_modifier = {
 				name = POM_the_great
 				duration = -1
@@ -342,7 +370,6 @@ POM_GEN_missions_3 = {
 			vorpommern_area = {
 				add_nationalism = -20
 			}
-			add_prestige = 10
 			mecklenburg_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -389,7 +416,7 @@ POM_GEN_missions_4 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_seek_marriages = {
 		icon = spread_the_von_wettins
 		required_missions = { }
@@ -412,12 +439,11 @@ POM_GEN_missions_4 = {
 			}
 		}
 	}
+
 	POM_duke_of_pomerania = {
 		icon = join_the_empire
 		required_missions = { POM_unite_pomerania POM_emperor_support }
 		position = 3
-		provinces_to_highlight = {
-		}
 		trigger = {
 			total_development = 50
 			if = {
@@ -443,7 +469,6 @@ POM_GEN_missions_4 = {
 			}
 		}
 	}
-	
 }
 
 POM_GEN_missions_5 = {
@@ -467,30 +492,30 @@ POM_GEN_missions_5 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_emperor_support = {
 		icon = glory_to_von_habsburg
 		required_missions = { POM_seek_marriages }
 		position = 2
 		trigger = {
 			OR = {
+				is_emperor = yes
 				emperor = {
 					has_opinion = {
 						who = ROOT
 						amount = 100
 					}
 				}
-				is_emperor = yes
 			}
 		}
 		effect = {
+			add_legitimacy = 15
+			custom_tooltip = POM_if_we_get_attacked
+			set_country_flag = POM_may_get_event
 			add_country_modifier = {
 				name = POM_independence_mandated
 				duration = 10950
 			}
-			add_legitimacy = 15
-			custom_tooltip = POM_if_we_get_attacked
-			set_country_flag = POM_may_get_event
 		}
 	}
 }
@@ -510,19 +535,18 @@ POM_missions_1 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_seek_greatest_minds = {
 		icon = sponsor_the_arts
 		required_missions = { }
 		position = 5
-		provinces_to_highlight = {
-		}
 		trigger = {
 			calc_true_if = {
+				amount = 2
+				desc = POM_seek_greatest_minds_trigger_tt
 				has_adm_advisor = yes
 				has_dip_advisor = yes
 				has_mil_advisor = yes
-				amount = 2
 			}
 		}
 		effect = {
@@ -550,6 +574,7 @@ POM_missions_1 = {
 			}
 		}
 	}
+
 	POM_greifswald_university = {
 		icon = wittenberg_university
 		required_missions = { POM_seek_greatest_minds }
@@ -557,11 +582,12 @@ POM_missions_1 = {
 		provinces_to_highlight = {
 			province_id = 2994
 			OR = {
+				NOT = { owned_by = ROOT }
 				AND = {
 					NOT = { num_of_times_improved = 5 }
 					NOT = { has_building = university }
 				}
-				NOT = { owned_by = ROOT }
+				NOT = { higher_development_than = 46 }
 			}
 		}
 		trigger = {
@@ -575,6 +601,9 @@ POM_missions_1 = {
 			}
 		}
 		effect = {
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 			2994 = {
 				if = {
 					limit = {
@@ -592,9 +621,6 @@ POM_missions_1 = {
 					duration = -1
 				}
 			}
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
 		}
 	}
 }
@@ -614,7 +640,7 @@ POM_missions_2 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_subdue_the_league = {
 		icon = unite_the_league
 		required_missions = { POM_capture_rostock }
@@ -634,34 +660,43 @@ POM_missions_2 = {
 		}
 		effect = {
 			45 = {
+				create_or_add_center_of_trade_level = { level = 1 }
 				add_unit_construction = {
 					type = light_ship
 					amount = 5
 					speed = 0.1
 					cost = 0
 				}
-				create_or_add_center_of_trade_level = { level = 1 }
 			}
 		}
 	}
+
 	POM_pomeranian_reformation = {
 		icon = victor_for_the_true_faith
 		required_missions = { POM_seek_greatest_minds }
 		position = 6
 		trigger = {
-			OR = {
-				religion = protestant
-				religion = reformed
-				religion = hussite
-				AND = {
-					religion = catholic
-					if = {
-						limit = {
-							has_dlc = "Emperor"
-						}
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				OR = {
+					religion = protestant
+					religion = reformed
+					religion = hussite
+					AND = {
+						religion = catholic
 						is_all_concessions_in_council_taken = yes
 					}
-					else = {
+				}
+			}
+			else = {
+				OR = {
+					religion = protestant
+					religion = reformed
+					religion = hussite
+					AND = {
+						religion = catholic
 						is_papal_controller = yes
 					}
 				}
@@ -671,15 +706,6 @@ POM_missions_2 = {
 			if = {
 				limit = {
 					religion = catholic
-					if = {
-						limit = {
-							has_dlc = "Emperor"
-						}
-						is_all_concessions_in_council_taken = yes
-					}
-					else = {
-						is_papal_controller = yes
-					}
 				}
 				add_papal_influence = 10
 				add_country_modifier = {
@@ -742,31 +768,70 @@ POM_missions_3 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_vengeance = {
 		icon = me_mission_pomeranian_gryphin
 		required_missions = { POM_unite_pomerania }
 		position = 4
 		provinces_to_highlight = {
 			OR = {
-				province_id = 4786
-				area = mittelmark_area
-				area = neumark_area
+				province_id = 50
+				AND = {
+					OR = {
+						province_id = 4786
+						area = mittelmark_area
+						area = neumark_area
+					}
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 6
+								OR = {
+									province_id = 4786
+									area = mittelmark_area
+									area = neumark_area
+								}
+							}
+						}
+					}
+				}
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = 50
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 6
 				OR = {
 					province_id = 4786
 					area = mittelmark_area
 					area = neumark_area
 				}
-				value = 6
 			}
-			50 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
+			if = {
+				limit = {
+					exists = BRA
+				}
+				add_casus_belli = {
+					target = BRA
+					type = cb_annex
+					months = -1
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { num_of_electors = 7 }
+					hre_size = 1
+				}
+				emperor = {
+					country_event = { id = ME_Stettin_Wolgast_Pomerania_Events.5 }
+				}
+			}
+			else = {
+				add_prestige_or_monarch_power = { amount = 10 }
+			}
 			silesia_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -788,30 +853,9 @@ POM_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			if = {
-				limit = {
-					exists = BRA
-				}
-				add_casus_belli = {
-					target = BRA
-					type = cb_annex
-					months = -1
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { num_of_electors = 7 }
-					hre_size = 1
-				}
-				emperor = {
-					country_event = { id = ME_Pomerania_Events.5 }
-				}
-			}
-			else = {
-				add_prestige_or_monarch_power = { amount = 10 }
-			}
 		}
 	}
+
 	POM_silesia = {
 		icon = mission_unite_home_region
 		required_missions = { POM_vengeance }
@@ -833,6 +877,7 @@ POM_missions_3 = {
 			}
 		}
 	}
+
 	POM_prussian_glory = {
 		icon = an_army_with_a_state
 		required_missions = { POM_silesia POM_liberate_pomerelia }
@@ -842,7 +887,10 @@ POM_missions_3 = {
 				area = east_prussia_area
 				area = west_prussia_area
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy = 10
+			}
 		}
 		trigger = {
 			east_prussia_area = {
@@ -881,7 +929,7 @@ POM_missions_4 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_liberate_pomerelia = {
 		icon = protect_against_the_turks
 		required_missions = { POM_duke_of_pomerania POM_vengeance }
@@ -928,13 +976,11 @@ POM_missions_5 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	POM_support_the_merchants = {
 		icon = return_visby_to_the_league
 		required_missions = { }
 		position = 3
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -953,8 +999,8 @@ POM_missions_5 = {
 			}
 			else = {
 				num_of_owned_provinces_with = {
-					has_trade_building = yes
 					value = 5
+					has_trade_building_trigger = yes
 				}
 			}
 		}
@@ -969,12 +1015,11 @@ POM_missions_5 = {
 			}
 		}
 	}
+
 	POM_minting_a_coin = {
 		icon = dominant_economy
 		required_missions = { POM_support_the_merchants }
 		position = 6
-		provinces_to_highlight = {
-		}
 		trigger = {
 			NOT = { inflation = 0.1 }
 			master_of_mint = 1
