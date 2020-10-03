@@ -23,9 +23,12 @@ MOS_1 = {
 			}
 		}
 		trigger = {
-			estate_loyalty = {
-				estate = estate_church
-				loyalty = 60
+			OR = {
+				NOT = { has_estate = estate_church }
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
 			}
 			295 = {
 				OR = {
@@ -72,12 +75,8 @@ MOS_1 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = muscovy_tolerance_faith
-				duration = 9125 #25 years
-			}
-			add_country_modifier = {
 				name = muscovy_churches_people
-				duration = -1
+				duration = 5475 #15 years
 			}
 		}
 	}
@@ -187,10 +186,18 @@ MOS_1 = {
 		required_missions = { muscovy_proclamation_faith }
 		position = 7
 		provinces_to_highlight = {
-			province_id = 295
 			OR = {
-				NOT = { num_of_times_improved_by_owner = 5 }
-				capital_scope = { has_owner_religion = no }
+				AND = {
+					province_id = 295
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved_by_owner = 5 }
+					}
+				}
+				AND = {
+					is_capital_of = ROOT
+					has_owner_religion = no
+				}
 			}
 		}
 		trigger = {
@@ -200,6 +207,7 @@ MOS_1 = {
 					advisor = artist
 				}
 				AND = {
+					owns = 295
 					295 = { num_of_times_improved_by_owner = 5 }
 					capital_scope = { has_owner_religion = yes }
 					is_at_war = no
@@ -214,13 +222,16 @@ MOS_1 = {
 				add_prestige = 10
 			}
 			else = {
-				295 = { add_building = cathedral }
+				295 = {
+					remove_building = temple
+					add_building = cathedral
+				}
 			}
 			define_advisor = {
 				type = muscovy_architect
 				name = "Postnik Yakovlev"
-				skill = 2
-				cost_multiplier = 0.4
+				skill = 1
+				cost_multiplier = 0.5
 				culture = russian
 				religion = orthodox
 			}
@@ -255,14 +266,15 @@ MOS_2 = {
 			owns = 274
 		}
 		effect = {
-			add_legitimacy = 10
-			274 = { add_base_production = 1 }
+			add_legitimacy_equivalent = { value = 10 }
 			274 = {
+				add_base_production = 1
+				
 				if = {
 					limit = {
 						NOT = { province_has_center_of_trade_of_level = 2 }
 					}
-					add_center_of_trade_level = 1
+					create_or_add_center_of_trade_level = { level = 1 }
 				}
 			}
 			if = {
@@ -293,8 +305,6 @@ MOS_2 = {
 				province_id = 4249
 				province_id = 294
 				province_id = 4248
-				owned_by = TVE
-				owned_by = OKA
 			}
 			NOT = { owned_by = ROOT }
 		}
@@ -307,7 +317,7 @@ MOS_2 = {
 			NOT = { exists = OKA }
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { value = 10 }
 			add_prestige = 10
 			add_dip_power = 50
 			
@@ -390,22 +400,7 @@ MOS_2 = {
 			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
-				moscow_area = {
-					limit = { owned_by = ROOT }
-					add_prosperity = 50
-				}
-				novgorod_area = {
-					limit = { owned_by = ROOT }
-					add_prosperity = 50
-				}
-				kazan_area = {
-					limit = { owned_by = ROOT }
-					add_prosperity = 50
-				}
-				saratov_area = {
-					limit = { owned_by = ROOT }
-					add_prosperity = 50
-				}
+				2444 = { add_prosperity = 50 }
 			}
 			else = { add_years_of_income = 0.33 }
 		}
@@ -817,9 +812,6 @@ MOS_4 = {
 				province_id = 4147
 				province_id = 4261
 				province_id = 312
-				owned_by = YAR
-				owned_by = BLO
-				owned_by = RSO
 			}
 			NOT = { owned_by = ROOT } 
 		}
@@ -845,7 +837,12 @@ MOS_4 = {
 				add_local_autonomy = -10
 			}
 			remove_country_modifier = annexers_legacy
-			add_dip_power = 300
+			add_dip_power = 100
+			
+			change_estate_land_share = {
+				estate = all
+				share = -1.25
+			}
 		}
 	}
 	
@@ -985,7 +982,7 @@ MOS_4 = {
 			464 = {
 				change_religion = ROOT
 				change_culture = ROOT
-				add_center_of_trade_level = 1
+				create_or_add_center_of_trade_level = { level = 1 }
 			}
 		}
 	}
@@ -1011,7 +1008,7 @@ MOS_5 = {
 				NOT = {
 					estate_territory = {
 						estate = estate_nobles
-						territory = 45
+						territory = 30
 					}
 				}
 				estate_loyalty = {
