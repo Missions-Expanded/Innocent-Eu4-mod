@@ -1,4 +1,4 @@
-name="Missions Expanded"
+name="Missions Expanded Balkans"
 path="mod/missions"
 tags={
 	"Historical"

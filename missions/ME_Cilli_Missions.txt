@@ -1,0 +1,1139 @@
+cilli_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = CLI
+	}
+	has_country_shield = yes
+
+	cli_renew_celje_castle = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 1
+		trigger = {
+			if = {
+				limit = {
+					owns = 4751
+				}
+				4751 = {
+					num_of_times_improved = 5
+				}
+			}
+			else = {
+				capital_scope = {
+					num_of_times_improved = 5
+				}
+			}
+			num_of_infantry = 8
+		}
+		effect = {
+			if = {
+				limit = { owns = 4751 }
+				4751 = {
+					if = {
+						limit = {
+							NOT = { has_building = fort_15th }
+						}
+						add_building = fort_15th
+					}
+					add_permanent_province_modifier = {
+						name = cli_celje_castle
+						duration = -1
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					if = {
+						limit = {
+							NOT = { has_building = fort_15th }
+						}						
+						add_building = fort_15th
+					}
+					add_permanent_province_modifier = {
+						name = cli_celje_castle
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	cli_develop_slovenia = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_renew_celje_castle }
+		position = 2
+		trigger = {
+			OR = {
+				temple = 3
+				cathedral = 3
+			}
+		}
+		effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_building = temple
+						has_building = cathedral
+					}
+				}
+				add_province_modifier = {
+					name = cli_slovenian_faith
+					duration = 10950
+				}
+			}
+			every_owned_province = {
+				limit = {
+					culture = slovene
+				}
+				add_base_tax = 1
+			}
+			if = {
+				limit = {
+					religion = catholic
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+				}
+				if = {
+					limit = {
+						owns = 4751
+					}
+					4751 = {
+						add_cardinal = yes
+					}
+				}
+				else = {
+					capital = {
+						add_cardinal = yes
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { religion = catholic }
+				}
+				define_advisor = {
+					type = theologian
+					cost_multiplier = 0.5
+				}		
+			}
+		}
+	}
+
+	cli_generic_trade_missions = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_develop_slovenia }
+		position = 3
+		trigger = {
+			if = {
+				limit = {
+					owns = 4751
+				}
+				4751 = {
+					has_trade_building_trigger = yes
+				}
+			}
+			else = {
+				capital_scope = {
+					has_trade_building_trigger = yes
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 2
+				province_has_center_of_trade_of_level = 1
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns = 4751
+				}
+				4751 = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			else = {
+				capital_scope = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			every_owned_province = {
+				limit = {
+					province_has_center_of_trade_of_level = 1
+				}
+				add_base_production = 3
+			}
+			if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+				every_owned_province = {
+					limit = {
+						has_trade_building_trigger = yes
+					}
+					if = {
+						limit = {
+							has_building = marketplace
+						}
+						remove_building = marketplace
+						add_building = trade_depot
+					}
+					else_if = {
+						limit = {
+							has_building = trade_depot
+						}
+						remove_building = trade_depot
+						add_building = stock_exchange
+					}
+				}
+			}
+		}
+	}
+
+	cli_nourish_adriatic_trade = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_generic_trade_missions
+			cli_secure_dalmatia
+		}
+		position = 4
+		trigger = {
+			137 = { #Ragusa
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+			1308 = { #Venice
+				trade_share = {
+					country = ROOT
+					share = 25
+				}
+			}
+		}
+		effect = {
+			add_years_of_income = 1.5
+			add_country_modifier = {
+				name = cli_pearl_sea
+				duration = 7300
+			}
+		}
+	}
+
+	cli_consolidate_crown = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 5
+		trigger = {
+			crown_land_share = 50
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = {
+				value = 10
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 65
+					}
+				}
+				add_adm_power = 50
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 65
+					}
+				}
+				add_adm_power = 50
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 65
+					}
+				}
+				add_adm_power = 50
+			}
+			every_owned_province = {
+				add_local_autonomy = -10
+			}
+		}
+	}
+
+	cli_slovene_asbolutism = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_consolidate_crown }
+		position = 7
+		trigger = {
+			absolutism = 60
+		}
+		effect = {
+			add_country_modifier = {
+				name = cli_law_king
+				duration = -1
+			}
+			if = {
+				#Missins the 5% crown land
+				limit = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 70
+					}
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 70
+					}
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 70
+					}
+				}
+				add_legitimacy_equivalent = {
+					value = 25
+				}
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+			}
+		}
+	}
+}
+
+cilli_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = CLI
+	}
+	has_country_shield = yes
+
+	cli_control_croatia = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_hand_cards
+		}
+		position = 2
+		provinces_to_highlight = {
+			area = croatia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			croatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = {
+						mod = event
+					}
+				}
+				add_country_modifier = {
+					name = cli_secured_croatia
+					duration = -1
+				}
+			}
+			else = {
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					target = HUN
+				}
+			}
+		}
+	}
+
+	cli_secure_dalmatia = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_control_croatia
+		}
+		position = 3
+		provinces_to_highlight = {
+			area = east_adriatic_coast_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			east_adriatic_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			137 = { #Ragusa
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 20
+					key = cli_secured_dalmatia_trade
+				}
+			}
+			1308 = { #Venice
+				add_trade_modifier = {
+					who = ROOT
+					duration = 10950
+					power = 20
+					key = cli_secured_dalmatia_trade
+				}
+			}
+			if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+				}
+				add_years_of_income = 1
+			}
+		}
+	}
+
+	cli_bohemian_ties = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_hunyadi_threat
+		}
+		position = 5
+		trigger = {
+			if = {
+				limit = {
+					exists = BOH
+				}
+				BOH = {
+					OR = {
+						marriage_with = CLI
+						has_opinion = {
+							who = ROOT
+							value = 180
+						}
+					}
+				}
+				army_strength = {
+					who = BOH
+					value = 1.25
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					exists = BOH
+				}
+				if = {
+					limit = {
+						BOH = {
+							OR = {
+								marriage_with = CLI
+								has_opinion = {
+									who = ROOT
+									value = 180
+								}
+							}
+						}
+					}
+					add_trust = {
+						who = BOH
+						value = 25
+						mutual = yes
+					}
+					add_country_modifier = {
+						name = cli_czechs_court
+						duration = -1
+					}
+				}
+				if = {
+					limit = {
+						army_strength = {
+							who = BOH
+							value = 1.25
+						}
+					}
+					#New Casus Belli neede
+					add_casus_belli = {
+						type = cb_revoke_electorate
+						target = BOH
+					}
+				}
+			}
+		}
+	}
+
+}
+
+cilli_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CLI
+	}
+	has_country_shield = yes
+
+	cli_hand_cards = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 1
+		trigger = {
+			num_of_royal_marriages = 3
+			OR = {
+				marriage_with = HUN
+				army_strength = {
+					who = HUN
+					value = 0.5
+				}
+			}
+			OR = {
+				marriage_with = BOH
+				army_strength = {
+					who = BOH
+					value = 0.5
+				}
+			}
+		}
+		effect = {
+			add_casus_belli = {
+				type = cb_restore_personal_union
+				target = BOS
+			}
+			country_event = {
+				id = ME_Cilli_Events.1
+			}
+		}
+	}
+
+
+	cli_hungarian_regency = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_control_croatia
+		}
+		position = 3
+		trigger = {
+			OR = {
+				if = {
+					limit = {
+						exists = HUN
+					}
+					HUN = {
+						is_subject_of = ROOT
+					}
+				}
+				owns = 153
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cli_crown_arpad
+				duration = 7300
+			}
+		}
+	}
+
+	cli_hunyadi_threat = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_hungarian_regency
+			cli_depose_hercegs
+		}
+		position = 4
+		trigger = {
+			num_of_royal_marriages = 3
+			OR = {
+				marriage_with = HUN
+				army_strength = {
+					who = HUN
+					value = 0.5
+				}
+			}
+			OR = {
+				marriage_with = BOH
+				army_strength = {
+					who = BOH
+					value = 0.5
+				}
+			}
+		}
+		effect = {
+			add_casus_belli = {
+				type = cb_restore_personal_union
+				target = BOS
+			}
+			country_event = {
+				id = ME_Cilli_Events.1
+			}
+		}
+	}
+
+	cli_imperial_cilli = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_hunyadi_threat
+		}
+		position = 5
+		trigger = {
+			OR = {
+				diplomatic_reputation = 5
+				num_of_owned_provinces_with = {
+					value = 5
+					is_part_of_hre = yes
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Cilli_Events.2
+			}
+		}
+	}
+
+	cli_secure_electors = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_bohemian_ties
+			cli_imperial_cilli
+		}
+		position = 6
+		trigger = {
+			if = {
+				limit = {
+
+				}
+				calc_true_if = {
+					amount = 3
+					all_elector = {
+						preferred_emperor = ROOT
+					}
+				}
+			}
+			else = {
+				calc_true_if = {
+					amount = 3
+					all_ally = {
+						has_opinion = {
+							who = ROOT
+							value = 175
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cli_bid_crown
+				duration = 7300
+			}
+			every_elector = {
+				limit = {
+					preferred_emperor = ROOT
+				}
+				add_trust = {
+					who = ROOT
+					value = 10
+					mutual = yes
+				}
+			}
+			if = {
+				limit = {
+					calc_true_if = {
+						amount = 3
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				define_advisor = {
+					type = statesman
+					cost_multiplier = 0.50
+				}
+			}
+		}
+	}
+
+	cli_charlemagne_throne = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_secure_electors
+		}
+		position = 7
+		trigger = {
+			if = {
+				limit = {
+
+				}
+			}
+			else = {
+				is_emperor = yes
+			}
+		}
+		effect = {
+			add_dip_power = 100
+			add_imperial_influence = 5
+			if = {
+				limit = {
+					calc_true_if = {
+						amount = 7
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 21
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						amount = 6
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 18
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						amount = 5
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 15
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						amount = 4
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 12
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						amount = 3
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 9
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						amount = 2
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 6
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						amount = 1
+						all_elector = {
+							preferred_emperor = ROOT
+						}
+					}
+				}
+				add_imperial_influence = 3
+			}
+		}
+	}
+
+}
+
+cilli_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CLI
+	}
+	has_country_shield = yes
+
+	cli_union_bosnia = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_hand_cards }
+		position = 2
+		trigger = {
+			OR = {
+				all_province = {
+					is_core = BOS
+					owned_by = ROOT
+				}
+				BOS = {
+					junior_union_with = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cli_bosnian_conscription
+				duration = 5475
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				bosnia_area = {
+					add_prosperity = 20
+				}
+			}
+		}
+	}
+
+	cli_depose_hercegs = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_union_bosnia }
+		position = 3
+		trigger = {
+			OR = {
+				NOT = { exists = HRZ }
+				all_province = {
+					is_core = HRZ
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					BOS = {
+						is_subject_of = ROOT
+					}
+					all_province = {
+						is_core = HRZ
+						owned_by = BOS
+					}
+				}
+				add_trust = {
+					who = BOS
+					value = 20
+					mutual = yes
+				}
+				#In addition, Cilli will not gain the "Annexed Subjects" modifier upon annexing Bosnia.
+			}
+			else = {
+				if = {
+					limit = {
+						NOT = {
+							accepted_culture = bosnian
+						}
+					}
+					add_accepted_culture = bosnian
+				}
+				else = {
+					add_dip_power = 100
+				}
+				every_owned_province = {
+					limit = { is_core = HRZ }
+					add_local_autonomy = -15
+				}
+			}
+		}
+	}
+
+	cli_dominate_habsburgs = {
+		icon = mission_monarch_in_throne_room
+		required_missions = {
+			cli_imperial_cilli
+			cli_fall_stajerska
+		}
+		position = 6
+		trigger = {
+			if = {
+				limit = {
+					exists = HAB
+				}
+				controls  = 134
+				army_strength = {
+					who = HAB
+					value = 1
+				}
+			}
+			else = {
+				owns = 134
+			}
+		}
+		effect = {
+			add_power_projection = {
+				type = eclipsed_rival
+				amount = 25
+			}
+			134 = {
+				add_base_tax = -1
+				add_base_production = -1
+				add_base_manpower = -1
+			}
+			if = {
+				limit = {
+					owns = 4751
+				}
+				4751 = {
+					add_base_tax = 2
+					add_base_production = 2
+					add_base_manpower = 2
+				}
+			}
+			else = {
+				capital = {
+					add_base_tax = 2
+					add_base_production = 2
+					add_base_manpower = 2
+				}
+			}
+			every_owned_province = {
+				limit = {
+					culture = austrian
+				}
+				add_province_modifier = {
+					name = cli_east_march
+					duration = -1
+				}
+			}
+		}
+	}
+
+}
+
+cilli_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = CLI
+	}
+	has_country_shield = yes
+
+	cli_raise_levies = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 0.8
+			num_of_generals = 1
+		}
+		effect = {
+			carinthia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				if = {
+					limit = {
+						ROOT = {
+							OR = {
+								statesman = 1
+								spymaster = 1
+								diplomat = 1
+							}
+						}
+					}
+					add_core = ROOT
+				}
+				else = {
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = cli_carinthian_ambition
+				duration = 3650
+			}
+		}
+	}
+
+	cli_war_habsburgs = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_raise_levies }
+		position = 3
+		trigger = {
+			OR = {
+				carinthia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				war_with = HAB
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					war_with = HAB
+				}
+				add_country_modifier = {
+					name = cli_against_all_odds
+					duration = 1825
+				}
+			}
+			if ={
+				limit = {
+					statesman = 1
+					calc_true_if = {
+						amount = 1
+						any_province = {
+							area = carinthia_area
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th								
+							}
+							sieged_by = ROOT
+						}
+					}
+				}
+				HAB = {
+					country_event = {
+						id = ME_Cilli_Events.3
+					}
+				}
+			}
+		}
+	}
+
+	cli_unite_slovenians = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_war_habsburgs }
+		position = 4
+		trigger = {
+			carinthia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			inner_austria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = {
+				id = ME_Cilli_Events.4
+			}
+		}
+	}
+
+	cli_fall_stajerska = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_unite_slovenians }
+		position = 5
+		trigger = {
+			inner_austria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			austria_proper_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tirol_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					NOT = {
+						accepted_culture = austrian
+					}
+				}
+				add_accepted_culture = austrian
+			}
+			else = {
+				add_dip_power = 100
+			}
+			inner_austria_area = {
+				add_devastation = -50
+			}
+		}
+	}
+
+	cli_celje_vzpenja = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { cli_dominate_habsburgs }
+		position = 7
+		trigger = {
+			any_owned_province = {
+				OR = {
+					NOT = { unrest = 0.1 }
+					NOT = { culture = austrian }
+				}
+			}
+			if = {
+				limit = {
+					exists = HAB
+				}
+				HAB = {
+					is_subject_of = ROOT
+				}
+			}
+		}
+		effect = {
+			add_prestige = 25
+			add_splendor = 200
+			add_country_modifier = {
+				name = cli_house_celje_trimphant
+				duration = -1
+			}
+		}
+	}
+}
