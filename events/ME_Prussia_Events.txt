@@ -39,7 +39,7 @@ country_event = {
 				}
 				if = {
 					limit = {
-						is_expanded_mod_active = governments
+						is_expanded_mod_active = { mod = governments }
 					}
 					add_government_reform = dynastic_theocracy_reform
 				}
@@ -129,7 +129,7 @@ country_event = {
 		}
 		if = {
 			limit = {
-				is_expanded_mod_active = governments
+				is_expanded_mod_active = { mod = governments }
 			}
 			add_government_reform = dynastic_theocracy_reform
 		}
@@ -707,7 +707,7 @@ country_event = {
 		
 		add_years_of_income = -0.5 #The coronation was lavish
 		add_legitimacy = 10
-		add_prestige_or_monarch_power { amount = 10 }
+		add_prestige_or_monarch_power = { amount = 10 }
 	}
 	option = {
 		name = ME_Prussia_Events.13.b
@@ -778,8 +778,8 @@ country_event = {
 	fire_only_once = yes
 	trigger = {
 		had_country_flag = {
-			which = BRA_friedrichsburg
-			months = 60
+			flag = BRA_friedrichsburg
+			days = 1800
 		}
 		west_africa_coast_area = {
 			has_province_flag = BRA_friedrichsburg_province
@@ -790,15 +790,15 @@ country_event = {
 		modifier = {
 			factor = 0.5
 			had_country_flag = {
-				which = BRA_friedrichsburg
-				months = 120
+				flag = BRA_friedrichsburg
+				days = 3600
 			}
 		}
 		modifier = {
 			factor = 0.5
 			had_country_flag = {
-				which = BRA_friedrichsburg
-				months = 240
+				flag = BRA_friedrichsburg
+				days = 3600
 			}
 		}
 	}
@@ -1027,6 +1027,8 @@ country_event = {
 			name = BRA_bierziese
 			duration = 9125
 		}
+		custom_tooltip = BRA_this_will_upset_the_populace
+		#this may lead to burgher rebellion
 		country_event = { id = ME_Prussia_Events.19 days = 60 } #Bierskrieg
 	}
 	option = {
@@ -1057,7 +1059,7 @@ country_event = {
 		remove_country_modifier = BRA_bierziese
 		if = {
 			limit = { has_estate = estate_burghers }
-			give_estate_land_share_massive = { estate = estate_burghers } #5%
+			give_estate_land_share_large = { estate = estate_burghers } #3%
 		}
 	}
 	option = {
@@ -1319,14 +1321,16 @@ country_event = {
 						NOT = { primary_culture = dutch }
 						NOT = { primary_culture = flemish }
 						NOT = { primary_culture = frisian }
-						NOT = { has_country_flag = PRU_enemy }
 					}
 					OR = {
+						any_owned_province = {
+							culture_group = germanic
+						}
 						any_province = {
 							is_claim = PREV
 							culture_group = germanic
 						}
-						total_development = 200
+						total_development = 300
 					}
 				}
 				set_country_flag = PRU_enemy
@@ -1390,6 +1394,7 @@ province_event = {
 	goto = ROOT
 	
 	trigger = {
+		mission_completed = PRU_urbanization
 		owner = {
 			had_country_flag = {
 				flag = PRU_urbanisierung
@@ -1409,9 +1414,7 @@ province_event = {
 		highlight = yes
 		
 		trigger = {
-			tooltip = {
-				mission_completed = PRU_urbanization
-			}
+			mission_completed = PRU_urbanization
 		}
 		ai_chance = { factor = 100 }
 		
@@ -1611,13 +1614,18 @@ country_event = {
 		
 		trigger = {
 			exists = POL
+			PRU = {
+				ai = yes
+			}
 		}
 		custom_tooltip = BRA_get_separation_casusbelli
 		
-		add_casus_belli = {
-			casus_belli = cb_liberation_prussia
-			target = POL
-			duration = -1
+		hidden_effect = {
+			add_casus_belli = {
+				type = cb_liberate_prussia 
+				target = POL
+				months = -1
+			}
 		}
 	}
 	option = {
@@ -1633,8 +1641,8 @@ country_event = {
 				}
 			}
 			create_subject = {
-				who = PRU
-				type = vassal
+				subject = PRU
+				subject_type = vassal
 			}
 		}
 	}
@@ -1946,6 +1954,142 @@ country_event = {
 		
 	}
 }
+#controller events
+country_event = {
+	id = ME_Prussia_Events.38
+	title = ME_Prussia_Events.38.t
+	desc = ME_Prussia_Events.38.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	trigger = {
+		has_country_modifier = BRA_schwanenorden
+		NOT = { current_age = age_of_discovery }
+	}
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		remove_country_modifier = BRA_schwanenorden
+	}
+	
+	option = {
+		name = ME_Prussia_Events.9.a
+		
+		ai_chance = { factor = 100 }
+
+	}
+}
+
+country_event = {
+	id = ME_Prussia_Events.39
+	title = ME_Prussia_Events.39.t
+	desc = ME_Prussia_Events.39.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	trigger = {
+		tag = PRU
+		has_country_modifier = BRA_prussian_ambition
+	}
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	immediate = {
+		remove_country_modifier = BRA_prussian_ambition
+	}
+	
+	option = {
+		name = ME_Prussia_Events.9.a
+		
+		ai_chance = { factor = 100 }
+
+	}
+}
+
+country_event = {
+	id = ME_Prussia_Events.40
+	title = ME_Prussia_Events.39.t
+	desc = ME_Prussia_Events.39.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		add_adm_power = 100
+		add_dip_power = 100
+		add_mil_power = 100
+		add_prestige_or_monarch_power = { amount = 40 }
+		add_splendor = 20
+	}
+	
+	option = {
+		name = ME_Prussia_Events.9.a
+		
+		ai_chance = { factor = 100 }
+
+	}
+}
+
+country_event = {
+	id = ME_Prussia_Events.41
+	title = ME_Prussia_Events.39.t
+	desc = ME_Prussia_Events.39.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		inherit = PRU
+	}
+	
+	option = {
+		name = ME_Prussia_Events.9.a
+		
+		ai_chance = { factor = 100 }
+
+	}
+}
+
+country_event = {
+	id = ME_Prussia_Events.42
+	title = ME_Prussia_Events.39.t
+	desc = ME_Prussia_Events.39.d
+	picture = COURT_eventPicture
+	
+	fire_only_once = yes
+	hidden = yes
+	is_triggered_only = yes
+	
+	immediate = {
+		every_subject_country = {
+			limit = {
+				NOT = { ai = yes }
+				is_subject_of_type = defensive_pact_member
+			}
+			ROOT = {
+				inherit = PREV
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Prussia_Events.9.a
+		
+		ai_chance = { factor = 100 }
+
+	}
+}
+
+
 #If(Stiopa.SpareTime&&Stiopa->pLeadDev->Mod()->isFinished())
 #	Stiopa->pLeadDev->Mod()->AddMoreEventsfor("PRU");
 # seriously tho if I have more time, then I might add content about Otto von schiewrin, danzig gymnasium, library of the elector, krupp, royal porcelain factory, otto von schwierin.

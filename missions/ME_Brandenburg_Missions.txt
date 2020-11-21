@@ -21,29 +21,39 @@ BRA_missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			if = {
-				limit = {
-					PRU = { has_country_flag = duchy_of_prussia }
-				}
+			OR = {
 				senior_union_with = PRU
+				41 = { owned_by = ROOT }
 			}
 			has_dip_advisor = yes
 			diplomatic_reputation = 2
 		}
 		effect = {
-			if = {
-				limit = {
-					PRU = { has_country_flag = duchy_of_prussia }
-					senior_union_with = PRU
+			hidden_effect = {
+				if = {
+					limit = {
+						senior_union_with = PRU
+					}
+					country_event = { id = ME_Prussia_Events.31 } #Fate of the Prussian Duchy
 				}
-				country_event = { id = ME_Prussia_Events.31 } #Fate of the Prussian Duchy
+				else = {
+					add_country_modifier = {
+						name = BRA_prussian_legacy
+						duration = 7300
+					}
+				}
 			}
-			else = {
+			custom_tooltip = PRU_if_we_have_secured
+			tooltip = {
+				country_event = { id = ME_Prussia_Events.31 }
+			}
+			custom_tooltip = PRU_else_we_get_prussian_legacy
+			tooltip = {
 				add_country_modifier = {
 					name = BRA_prussian_legacy
 					duration = 7300
 				}
-			}
+			}		
 		}
 	}
 	BRA_renaissance = {
@@ -69,7 +79,7 @@ BRA_missions_1 = {
 				capital_scope = { 
 					add_institution_embracement = {
 						which = renaissance
-						value = 75
+						value = 40
 					}
 				}
 			}
@@ -95,9 +105,6 @@ BRA_missions_1 = {
 				name = BRA_geheimer_rat
 				duration = -1
 			}
-			add_adm_power = 25
-			add_dip_power = 25
-			add_mil_power = 25
 		}
 	}
 }
@@ -268,9 +275,12 @@ BRA_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			neumark_area = { 
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				grown_by_development = 15
+				neumark_area = { 
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {
@@ -386,6 +396,8 @@ BRA_missions_2 = {
 					power = 20
 					key = BRA_successor_to_league
 				}
+			}
+			45 = {
 				add_or_upgrade_trade_building = yes
 			}
 		}
@@ -868,13 +880,13 @@ BRA_missions_4 = {
 			OR = {
 				estate_loyalty = {
 					estate = estate_burghers
-					loyalty = 65
+					loyalty = 60
 				}
-				custom_trigger_tooltip = {
-					tooltip = BRA_dealt_with_burghers
-					has_country_flag = ME_dealt_with_berliner_unwille
-					NOT = { num_of_rebel_armies = 1 }
-				}
+				#custom_trigger_tooltip = {
+				#	tooltip = BRA_dealt_with_burghers
+				#	has_country_flag = ME_dealt_with_berliner_unwille
+				#	NOT = { num_of_rebel_armies = 1 }
+				#} #To be restored if the event replacement works lol
 				50 = {
 					owned_by = ROOT
 					num_of_times_improved = 3
@@ -1078,7 +1090,7 @@ BRA_missions_5 = {
 			OR = {
 				estate_loyalty = {
 					estate = estate_nobles
-					loyalty = 65
+					loyalty = 60
 				}
 				if = {
 					limit = {
