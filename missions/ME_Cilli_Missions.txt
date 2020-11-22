@@ -8,7 +8,7 @@ cilli_missions_1 = {
 	has_country_shield = yes
 
 	cli_renew_celje_castle = {
-		icon = mission_monarch_in_throne_room
+		icon = me_mission_generic_castle
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -27,7 +27,7 @@ cilli_missions_1 = {
 			NOT = { num_of_times_improved = 5 }
 		}
 		trigger = {
-			num_of_infantry = 8
+			army_size = 8
 			if = {
 				limit = {
 					owns = 4751
@@ -55,7 +55,7 @@ cilli_missions_1 = {
 						}
 						add_building = fort_15th
 					}
-					add_permanent_province_modifier = {
+					add_province_modifier = {
 						name = cli_celje_castle
 						duration = -1
 					}
@@ -72,7 +72,7 @@ cilli_missions_1 = {
 						}
 						add_building = fort_15th
 					}
-					add_permanent_province_modifier = {
+					add_province_modifier = {
 						name = cli_celje_castle
 						duration = -1
 					}
@@ -82,68 +82,120 @@ cilli_missions_1 = {
 	}
 
 	cli_develop_slovenia = {
-		icon = mission_monarch_in_throne_room
+		icon = mission_early_game_buildings
 		required_missions = { cli_renew_celje_castle }
 		position = 2
 		trigger = {
+			development_in_provinces = {
+				value = 40
+			}
 			OR = {
 				temple = 3
 				cathedral = 3
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = {
-					OR = {
-						has_building = temple
-						has_building = cathedral
-					}
-				}
-				add_province_modifier = {
-					name = cli_slovenian_faith
-					duration = 10950
-				}
-			}
-			every_owned_province = {
-				limit = {
-					culture = slovene
-				}
-				add_base_tax = 1
-			}
-			if = {
-				limit = {
-					religion = catholic
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 60
-					}
-				}
-				if = {
-					limit = {
-						owns = 4751
-					}
-					4751 = {
-						add_cardinal = yes
-					}
-				}
-				else = {
-					capital_scope = {
-						add_cardinal = yes
-					}
-				}
-			}
-			else = {
+			custom_tooltip = CLI_every_owned_slovene_province
+			custom_tooltip = CLI_theologian_or_cardinal
+			tooltip = {
 				define_advisor = {
 					type = theologian
 					skill = 2
 					cost_multiplier = 0.5
 				}
 			}
+			custom_tooltip = CLI_every_province_with_temple
+			tooltip = {
+				add_province_modifier = {
+					name = cli_slovenian_faith
+					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							has_building = temple
+							has_building = cathedral
+						}
+					}
+					add_province_modifier = {
+						name = cli_slovenian_faith
+						duration = 10950
+					}
+				}
+				carinthia_area = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						culture = slovene
+					}
+					add_base_tax = 1
+				}
+				if = {
+					limit = {
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = {
+							religion = catholic
+						}
+						if = {
+							limit = {
+								owns = 4751
+							}
+							if = {
+								limit = {
+									4751 = { has_cardinal = no }
+								}
+								4751 = {
+									add_cardinal = yes
+								}
+							}
+							else = {
+								define_advisor = {
+									type = theologian
+									skill = 2
+									cost_multiplier = 0.5
+								}
+							}
+						}
+						else = {
+							if = {
+								limit = {
+									capital_scope = {
+										has_cardinal = no
+									}
+								}
+								capital_scope = {
+									add_cardinal = yes
+								}
+							}
+							else = {
+								define_advisor = {
+									type = theologian
+									skill = 2
+									cost_multiplier = 0.5
+								}
+							}
+						}
+					}
+					else = {
+						define_advisor = {
+							type = theologian
+							skill = 2
+							cost_multiplier = 0.5
+						}
+					}
+				}
+			}
 		}
 	}
 
 	cli_generic_trade_missions = {
-		icon = mission_monarch_in_throne_room
+		icon = return_visby_to_the_league
 		required_missions = { cli_develop_slovenia }
 		position = 3
 		provinces_to_highlight = {
@@ -194,36 +246,31 @@ cilli_missions_1 = {
 					create_or_add_center_of_trade_level = { level = 1 }
 				}
 			}
-			every_owned_province = {
-				limit = {
-					province_has_center_of_trade_of_level = 1
-				}
-				add_base_production = 3
-			}
-			if = {
-				limit = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 60
-					}
-				}
-				every_owned_province = {
+			custom_tooltip = CLI_give_CoTs_boni
+			hidden_effect = {
+				if = {
 					limit = {
-						OR = {
-							has_building = marketplace
-							has_building = trade_depot
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
 						}
 					}
-					if = {
+					every_owned_province = {
 						limit = {
-							has_building = marketplace
+							province_has_center_of_trade_of_level = 1
+							has_trade_building_trigger = yes
 						}
-						remove_building = marketplace
-						add_building = trade_depot
+						add_base_production = 3
+						add_or_upgrade_trade_building = yes
 					}
-					else = {
-						remove_building = trade_depot
-						add_building = stock_exchange
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							province_has_center_of_trade_of_level = 1
+							has_trade_building_trigger = yes
+						}
+						add_base_production = 3
 					}
 				}
 			}
@@ -298,38 +345,42 @@ cilli_missions_1 = {
 			add_legitimacy_equivalent = {
 				value = 10
 			}
-			if = {
-				limit = {
-					has_estate = estate_burghers
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 65
+			custom_tooltip = CLI_extra_monarch_power
+			custom_tooltip = CLI_every_province_lose
+			hidden_effect = {
+				if = {
+					limit = {
+						has_estate = estate_burghers
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 65
+						}
 					}
+					add_adm_power = 50
 				}
-				add_adm_power = 50
-			}
-			if = {
-				limit = {
-					has_estate = estate_church
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 65
+				if = {
+					limit = {
+						has_estate = estate_church
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 65
+						}
 					}
+					add_adm_power = 50
 				}
-				add_adm_power = 50
-			}
-			if = {
-				limit = {
-					has_estate = estate_nobles
-					estate_loyalty = {
-						estate = estate_nobles
-						loyalty = 65
+				if = {
+					limit = {
+						has_estate = estate_nobles
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 65
+						}
 					}
+					add_adm_power = 50
 				}
-				add_adm_power = 50
-			}
-			every_owned_province = {
-				add_local_autonomy = -10
+				every_owned_province = {
+					add_local_autonomy = -10
+				}
 			}
 		}
 	}
@@ -342,33 +393,34 @@ cilli_missions_1 = {
 			absolutism = 60
 		}
 		effect = {
-			if = {
-				limit = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 70
-					}
-					estate_loyalty = {
-						estate = estate_church
-						loyalty = 70
-					}
-					estate_loyalty = {
-						estate = estate_nobles
-						loyalty = 70
-					}
-				}
-				add_legitimacy_equivalent = {
-					value = 25
-				}
-				add_adm_power = 50
-				add_dip_power = 50
-				add_mil_power = 50
-			}
+			custom_tooltip = CLI_if_every_estate
 			custom_tooltip = add_5_crown_land_share
 			hidden_effect = {
 				change_estate_land_share = {
 					estate = all
 					share = -5
+				}
+				if = {
+					limit = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 70
+						}
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 70
+						}
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 70
+						}
+					}
+					add_legitimacy_equivalent = {
+						value = 25
+					}
+					add_adm_power = 50
+					add_dip_power = 50
+					add_mil_power = 50
 				}
 			}
 			add_country_modifier = {
@@ -424,6 +476,7 @@ cilli_missions_2 = {
 					add_casus_belli = {
 						type = cb_restore_personal_union
 						target = HUN
+						months = 360
 					}
 				}
 				else = {
@@ -453,14 +506,17 @@ cilli_missions_2 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					estate_loyalty = {
-						estate = estate_burghers
-						loyalty = 60
+			custom_tooltip = CLI_give_extra_income
+			hidden_effect = {
+				if = {
+					limit = {
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
+						}
 					}
+					add_years_of_income = 1
 				}
-				add_years_of_income = 1
 			}
 			137 = { #Ragusa
 				add_trade_modifier = {
@@ -558,7 +614,7 @@ cilli_missions_2 = {
 					limit = {
 						culture = czech
 					}
-					add_years_of_separatism = -5
+					add_nationalism = -5
 				}
 				add_adm_power = 50
 			}
