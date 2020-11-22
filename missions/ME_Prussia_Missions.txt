@@ -44,6 +44,8 @@ PRU_missions_1 = {
 		required_missions = { PRU_edict_of_potsdam }
 		position = 9
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_building = cathedral }
 		}
 		trigger = {
 			cathedral = 5 
@@ -193,6 +195,8 @@ PRU_missions_1_2 = {
 		required_missions = { }
 		position = 17
 		provinces_to_highlight = {
+			owned_by = ROOT
+			local_autonomy_above_min = 15
 		}
 		trigger = {
 			NOT = { average_autonomy_above_min = 15 }
@@ -224,6 +228,8 @@ PRU_missions_1_2 = {
 		required_missions = { PRU_general_state_laws }
 		position = 19
 		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 1
 		}
 		trigger = {
 			stability = 3
@@ -330,6 +336,21 @@ PRU_missions_2 = {
 		required_missions = { PRU_furstenbund }
 		position = 11
 		provinces_to_highlight = {
+			owner = {
+				NOT = { alliance_with = ROOT }
+				if = {
+					limit = {
+						OR = {
+							has_dlc = "Emperor"
+							has_dlc = "Rights of Man"
+						}
+					}
+					is_great_power = yes
+				}
+				else = {
+					total_development = 500
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -455,12 +476,8 @@ PRU_missions_2_2 = {
 			province_id = 41
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = {
-					AND = {
-						development = 24
-						has_tax_building_trigger = yes
-					}
-				}
+				NOT = { development = 24 }
+				NOT = { has_tax_building_trigger = yes }
 			}
 		}
 		trigger = {
@@ -675,12 +692,20 @@ PRU_missions_2_2 = {
 		required_missions = { PRU_general_state_laws }
 		position = 18
 		provinces_to_highlight = {
+			province_id = 50
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
 		}
 		trigger = {
 			50 = {
 				owned_by = ROOT
 				has_building = university
 			}
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+			has_mil_advisor_2 = yes
 		}
 		effect = {
 			country_event = { id = ME_Prussia_Events.12 } #Der Zweite Akademien
@@ -691,6 +716,11 @@ PRU_missions_2_2 = {
 		required_missions = { PRU_two_academies }
 		position = 19
 		provinces_to_highlight = {
+			province_id = 50
+			OR = {
+				NOT = { base_manpower = 10 }
+				NOT = { owned_by = ROOT }
+			}
 		}
 		trigger = {
 			50 = {
@@ -944,9 +974,26 @@ PRU_missions_3 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = PRU_kantonreglement
-				duration = -1
+			custom_tooltip = PRU_every_conscription
+			tooltip = {
+				add_province_modifier = {
+					name = PRU_reglement
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							has_building = conscription_center
+							has_building = regimental_camp
+						}
+					}
+					add_province_modifier = {
+						name = PRU_reglement
+						duration = 7300
+					}
+				}
 			}
 		}
 	}
@@ -1263,7 +1310,7 @@ PRU_missions_4 = {
 	
 	
 	PRU_north_german_confederation = {
-		icon = mission_unite_home_region
+		icon = imperial_capitals
 		required_missions = { PRU_eagle_in_the_north }
 		position = 8
 		provinces_to_highlight = {
@@ -1320,6 +1367,19 @@ PRU_missions_4 = {
 				region = north_german_region
 				region = south_german_region
 			}
+			NOT = {
+				OR = {
+					area = erzgebirge_area
+					area = bohemia_area
+					area = tirol_area
+					area = moravia_area
+					area = inner_austria_area
+					area = austria_proper_area
+					area = romandie_area
+					area = carinthia_area
+					area = switzerland_area
+				}
+			}	
 			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
 		}
 		trigger = {
@@ -1328,6 +1388,19 @@ PRU_missions_4 = {
 					region = north_german_region
 					region = south_german_region
 				}
+				NOT = {
+					OR = {
+						area = erzgebirge_area
+						area = bohemia_area
+						area = tirol_area
+						area = moravia_area
+						area = inner_austria_area
+						area = austria_proper_area
+						area = romandie_area
+						area = carinthia_area
+						area = switzerland_area
+					}
+				}	
 				value = 90
 			}
 			custom_trigger_tooltip = {
@@ -1632,8 +1705,10 @@ PRU_missions_4 = {
 			has_mil_advisor_3 = yes
 		}
 		effect = {
-			set_country_flag = PRU_kanton
-			country_event = { id = flavor_brapru.36 }
+			#set_country_flag = PRU_kanton LIM FIX PLEASE THE REPLACEMENT
+			#country_event = { id = flavor_brapru.36 }
+			set_country_flag = brapru_army_reforms_3
+			country_event = { id = flavor_brapru.29 }
 			create_general = { tradition = 125 }
 		}
 	}
@@ -1642,6 +1717,11 @@ PRU_missions_4 = {
 		required_missions = { }
 		position = 13
 		provinces_to_highlight = {
+			province_id = 50
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
 		}
 		trigger = {
 			50 = {
@@ -2080,6 +2160,8 @@ PRU_missions_5 = {
 		required_missions = { }
 		position = 8
 		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 0
 		}
 		trigger = {
 			has_absolutism_equivalent = { amount = 60 }
@@ -2122,7 +2204,7 @@ PRU_missions_5 = {
 				name = PRU_GER_place_in_the_sun
 				duration = 9125
 			}
-			custom_tooltip = PRU_can_get_in_german_tree_permanently
+			#custom_tooltip = PRU_can_get_in_german_tree_permanently
 		}
 	}
 	
