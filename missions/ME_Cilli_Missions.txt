@@ -43,6 +43,7 @@ cilli_missions_1 = {
 			}
 		}
 		effect = {
+			custom_tooltip = CLI_CASTLE
 			if = {
 				limit = { owns = 4751 }
 				4751 = {
@@ -55,8 +56,11 @@ cilli_missions_1 = {
 						}
 						add_building = fort_15th
 					}
+					hidden_effect = {
+						set_province_flag = cli_castle_flag
+					}
 					add_province_modifier = {
-						name = cli_celje_castle
+						name = cli_celje_castle_tax
 						duration = -1
 					}
 				}
@@ -72,8 +76,11 @@ cilli_missions_1 = {
 						}
 						add_building = fort_15th
 					}
+					hidden_effect = {
+						set_province_flag = cli_castle_flag
+					}
 					add_province_modifier = {
-						name = cli_celje_castle
+						name = cli_celje_castle_tax
 						duration = -1
 					}
 				}
@@ -393,13 +400,17 @@ cilli_missions_1 = {
 			absolutism = 60
 		}
 		effect = {
+			add_country_modifier = {
+				name = cli_law_king
+				duration = -1
+			}
+			change_estate_land_share = {
+				estate = all
+				share = -5
+			}
 			custom_tooltip = CLI_if_every_estate
-			custom_tooltip = add_5_crown_land_share
+			#custom_tooltip = add_5_crown_land_share
 			hidden_effect = {
-				change_estate_land_share = {
-					estate = all
-					share = -5
-				}
 				if = {
 					limit = {
 						estate_loyalty = {
@@ -422,10 +433,6 @@ cilli_missions_1 = {
 					add_dip_power = 50
 					add_mil_power = 50
 				}
-			}
-			add_country_modifier = {
-				name = cli_law_king
-				duration = -1
 			}
 		}
 	}
@@ -603,9 +610,10 @@ cilli_missions_2 = {
 							value = 1.25
 						}
 					}
-					add_casus_belli = {
-						type = cb_restore_personal_union
-						target = BOH
+					emperor = {
+						country_event = {
+							id = ME_Cilli_Events.13
+						}
 					}
 				}
 			}
@@ -660,7 +668,9 @@ cilli_missions_3 = {
 			}
 			else = {
 				any_country = {
-					region = carpathia_region
+					capital_scope = {
+						region = carpathia_region
+					}
 					has_opinion = {
 						who = ROOT
 						value = 75
@@ -681,7 +691,9 @@ cilli_missions_3 = {
 			}
 			else = {
 				any_country = {
-					region = north_germany_region
+					capital_scope = {
+						region = north_german_region
+					}
 					has_opinion = {
 						who = ROOT
 						value = 75
@@ -957,6 +969,15 @@ cilli_missions_4 = {
 		icon = fight_bosnian_heresies
 		required_missions = { cli_hand_cards }
 		position = 2
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1828
+				province_id = 140
+				province_id = 3002
+				province_id = 4755
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			OR = {
 				AND = {
@@ -993,16 +1014,17 @@ cilli_missions_4 = {
 		icon = a_strong_government
 		required_missions = { cli_union_bosnia }
 		position = 3
-		trigger = {
-			AND = {
-				139 = { owned_by = ROOT }
-				1831 = { owned_by = ROOT }
-				HRZ = {
-					NOT = {
-						exists = yes
-					}
-				}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 139
+				province_id = 1831
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			139 = { country_or_non_sovereign_subject_holds = ROOT }
+			1831 = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = HRZ }
 		}
 		effect = {
 			custom_tooltip = CLI_if_bos_subject
@@ -1235,6 +1257,10 @@ cilli_missions_5 = {
 					limit = {
 						war_with = HAB
 					}
+					add_country_modifier = {
+						name = cli_against_all_odds
+						duration = 1825
+					}
 					if = {
 						limit = {
 							statesman = 1
@@ -1253,17 +1279,13 @@ cilli_missions_5 = {
 							country_event = { id = ME_Cilli_Events.6 }
 						}
 					}
-					add_country_modifier = {
-						name = cli_against_all_odds
-						duration = 1825
-					}
-				}
-				else = {
-					# ???
 				}
 			}
 			else = {
-				# ???
+				carinthia_area = {
+					add_base_tax = 1
+					add_nationalism = -5
+				}
 			}
 		}
 	}

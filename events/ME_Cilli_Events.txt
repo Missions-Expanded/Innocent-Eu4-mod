@@ -75,6 +75,7 @@ country_event = {
 	picture = COURT_eventPicture
 
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Cilli_Events.2.OPT1
@@ -119,6 +120,7 @@ country_event = {
 	picture = COURT_eventPicture
 
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Cilli_Events.3.OPT1
@@ -155,6 +157,7 @@ country_event = {
 	picture = COURT_eventPicture
 
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Cilli_Events.4.OPT1
@@ -196,6 +199,7 @@ country_event = {
 	picture = COURT_eventPicture
 
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Cilli_Events.5.OPT1
@@ -297,6 +301,7 @@ country_event = {
 	picture = COURT_eventPicture
 
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Cilli_Events.8.OPT1
@@ -377,6 +382,7 @@ country_event = {
 	picture = COURT_eventPicture
 
 	is_triggered_only = yes
+	major = yes
 
 	option = {
 		name = ME_Cilli_Events.10.OPT1
@@ -409,7 +415,7 @@ country_event = {
 	}
 }
 
-#Cilli Requests Imperial Immediacy
+#Hidden Event to remove a modifier once Cilli is no more in HRE or is the Empero
 country_event = {
 	id = ME_Cilli_Events.11
 	title = ME_Cilli_Events.11.T
@@ -436,5 +442,108 @@ country_event = {
 		name = ME_Cilli_Events.11.OPT1
 
 		ai_chance = { factor = 100 }
+	}
+}
+
+#Hidden event to swap the modifier once the fort gets updated
+province_event = {
+	id = ME_Cilli_Events.12
+	title = ME_Cilli_Events.12.T
+	desc = ME_Cilli_Events.12.D
+	picture = FORT_eventPicture
+
+	hidden = yes
+
+	fire_only_once = yes
+
+	trigger = {
+		has_province_flag = cli_castle_flag
+	}
+
+	immediate = {
+		hidden_effect = {
+			remove_province_modifier = cli_celje_castle_tax
+			add_province_modifier = {
+				name = cli_celje_castle
+				duration = -1
+			}
+		}
+	}
+
+	option = {
+		name = ME_Cilli_Events.12.OPT1
+
+		ai_chance = { factor = 100 }
+	}
+}
+
+#Imperial ties, Bohemia electorate Transfer CB
+country_event = {
+	id = ME_Cilli_Events.13
+	title = ME_Cilli_Events.13.T
+	desc = ME_Cilli_Events.13.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Cilli_Events.13.OPT1
+
+		ai_chance = { factor = 100 }
+
+		FROM = {
+			set_country_flag = emperor_claim_electorate_approved
+			add_casus_belli = {
+				type = cb_hre_claim_electorate
+				target = BOH
+			}
+		}
+	}
+
+	option = {
+		name = ME_Cilli_Events.13.OPT2
+
+		ai_chance = { factor = 100 }
+
+		FROM = {
+			add_casus_belli = {
+				type = cb_humiliate
+				target = ROOT
+			}
+			country_event = {
+				id = ME_Cilli_Events.14
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Cilli_Events.14
+	title = ME_Cilli_Events.14.T
+	desc = ME_Cilli_Events.14.D
+	picture = DIPLOMACY_eventPicture
+
+	is_triggered_only = yes
+	trigger = {
+		exists = BOH
+		emperor = {
+			capital_scope = {
+				OR = {
+					sieged_by = ROOT
+					controlled_by = ROOT
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Cilli_Events.14.OPT1
+
+		ai_chance = { factor = 100 }
+
+		add_casus_belli = {
+			type = cb_hre_claim_electorate
+			target = BOH
+		}
 	}
 }
