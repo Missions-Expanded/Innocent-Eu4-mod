@@ -1,0 +1,393 @@
+mushasha_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = MSY
+	}
+	has_country_shield = yes
+	
+	mushasha_seize_clerical_holdings = {
+		icon = mission_valencian_silk 
+		required_missions = { } 
+		position = 1 
+		trigger = { 
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				has_country_modifier = seize_clerical_holdings_modifier
+			}
+			else = {
+				capital_scope = {
+					OR = {
+						has_building = temple 
+						has_building = cathedral 
+					}
+				}
+			}
+			capital_scope = {
+				num_of_times_improved = 4 
+			}
+		}
+		effect = {
+			capital_scope = {
+				area = {
+					limit = { owned_by = ROOT }
+					add_base_tax = 1 
+				}
+			}
+			change_government_reform_progress = 50
+		}
+	}
+	
+	mushasha_up_the_tigris_river = {
+		icon = mission_steer_trade_to_bengal
+		required_missions = { mushasha_seize_clerical_holdings mushasha_believers_of_milleniarism } 
+		position = 2
+		provinces_to_highlight = {
+			province_id = 408 
+			NOT = {
+				AND = { 
+					owned_by = ROOT 
+					OR = {
+						has_building = marketplace
+						has_building = trade_depot
+						has_building = stock_exchange 
+					}
+				}
+			}
+		}
+		trigger = {
+			408 = {
+				owned_by = ROOT 
+				OR = { 
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange 
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+			}
+			OR = {
+				has_estate_privilege = estate_burghers_free_enterprise
+				mercantilism = 12 
+			}
+		}
+		effect = {
+			408 = {
+				add_province_modifier = {
+					name = mushasha_tigris_euphrates_toll_modifier 
+					duration = -1 
+				}
+			}
+			add_dip_power = 100 
+			bahrain_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mushasha_rekindling_the_islamic_flame = {
+		icon = mission_vedic_education 
+		required_missions = { mushasha_up_the_tigris_river mushasha_take_baghdad } 
+		position = 4
+		trigger = {
+			410 = {
+				is_capital = yes 
+				development = 25 
+				NOT = { num_free_building_slots = 1 }
+			}
+		}
+		effect = {
+			410 = {
+				if = {
+					limit = {
+						NOT = { has_building = cathedral } 
+					}
+					remove_building = temple 
+					add_building = cathedral 
+				}
+				else = { add_adm_power = 100 }
+				add_province_modifier = {
+					name = mushasha_centre_of_shiism_modifier 
+					duration = -1 
+				}
+			}
+		}
+	}
+}
+
+mushasha_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = MSY
+	}
+	has_country_shield = yes
+	
+	mushasha_believers_of_milleniarism = {
+		icon = mission_levantine_restoration 
+		required_missions = { } 
+		position = 1
+		trigger = {
+			army_size = 11
+			OR = {
+				has_estate_privilege = estate_church_for_the_faith
+				capital_scope = {
+					has_state_edict = edict_defensive_edict
+				}
+				monthly_mil = 9 
+			}
+		}
+		effect = {
+			create_general = { 
+				tradition = 70 
+				add_shock = 1 
+				add_fire = 1 
+			}
+		}
+	}
+	
+	mushasha_slay_the_black_sheep = {
+		icon = mission_subdue_the_afghans
+		required_missions = { mushasha_believers_of_milleniarism } 
+		position = 2 
+		provinces_to_highlight = {
+			area = basra_area 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			basra_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		} 
+		effect = {
+			add_country_modifier = {
+				name = mushasha_victory_over_jahan_shah_modifier 
+				duration = 7300 
+			}
+			add_yearly_manpower = 2
+			iraq_arabi_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			luristan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mushasha_take_baghdad = {
+		icon = mission_into_persia_2
+		required_missions = { mushasha_slay_the_black_sheep }
+		position = 3 
+		provinces_to_highlight = {
+			province_id = 410 
+			NOT = {
+				owned_by = ROOT 
+				devastation = 1 
+				local_autonomy = 25 
+			}
+		}
+		trigger = {
+			410 = {
+				owned_by = ROOT 
+				NOT = {
+					devastation = 1 
+					local_autonomy = 25 
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Mushasha_Events.1 } 
+			add_prestige = 25 
+			shahrizor_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	mushasha_the_sword_of_islam = {
+		icon = mission_subdue_rajputana
+		required_missions = { mushasha_rekindling_the_islamic_flame mushasha_take_baghdad mushasha_shahrizor_eyalet } 
+		position = 5 
+		trigger = {
+			stability = 1 
+			is_at_war = no 
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor" 
+						has_dlc = "Rights of Man" 
+					}
+				}
+				is_great_power = yes 
+			}
+			else = {
+				total_development = 350 
+			}
+		}
+		effect = {
+			custom_tooltip = MSY_ISLAMIC_WARCALL_CT 
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { mil_tech = 19 }
+					}
+					capital_scope = {
+						add_unit_construction = {
+							type = ottoman_reformed_janissary
+							amount = 20
+							speed = 0.01
+							cost = 0
+						}
+					}
+				}
+				else = {
+					capital_scope = {
+						add_unit_construction = {
+							type = ottoman_new_model
+							amount = 28
+							speed = 0.01
+							cost = 0
+						}
+					}
+				}
+			}
+			add_country_modifier = {
+				name = mushasha_sayf_al_islam_modifier 
+				duration = -1 
+			}
+		}
+	}
+}
+
+mushasha_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = MSY
+	}
+	has_country_shield = yes
+	
+	mushasha_secure_the_eastern_passage = {
+		icon = mission_fortify_rajputana 
+		required_missions = { mushasha_believers_of_milleniarism } 
+		position = 2
+		provinces_to_highlight = {
+			area = khuzestan_area 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+		}
+		trigger = { 
+			khuzestan_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			2217 = {
+				if = {
+					limit = {
+						NOT = { has_building = fort_15th }
+						NOT = { has_building = fort_16th }
+						NOT = { has_building = fort_17th }
+						NOT = { has_building = fort_18th }
+					}
+					add_building_construction = {
+						building = fort_15th
+						speed = 0.5
+						cost = 0
+					}
+				}
+				add_province_modifier = {
+					name = mushasha_passage_modifier 
+					duration = -1 
+				}
+			}
+			custom_tooltip = MSY_EASTERN_PASSAGE_CT 
+			hidden_effect = {
+				if = {
+					limit = { 
+						413 = {
+							country_or_non_sovereign_subject_holds = ROOT 
+						}
+					}
+					413 = {
+						add_province_modifier = {
+							name = mushasha_passage_modifier 
+							duration = -1 
+						}
+					}
+				}
+			}
+		}
+	}
+
+	mushasha_shahrizor_eyalet = {
+		icon = mission_viceroyalty_of_the_deccan
+		required_missions = { mushasha_take_baghdad } 
+		position = 4
+		provinces_to_highlight = {
+			area = shahrizor_area 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			shahrizor_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			country_event = { id = ME_Mushasha_Events.2 } 
+			add_mil_power = 100 
+		}
+	}
+}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
