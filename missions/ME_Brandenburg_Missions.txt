@@ -623,12 +623,15 @@ BRA_missions_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with  = {
-				OR = {
-					area = east_prussia_area
-					area = west_prussia_area
+			OR = {
+				tag = PRU
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with  = {
+					OR = {
+						area = east_prussia_area
+						area = west_prussia_area
+					}
+					value = 4
 				}
-				value = 4
 			}
 		}
 		effect = {
@@ -810,20 +813,29 @@ BRA_missions_4 = {
 		required_missions = { BRA_dominance_in_the_circle }
 		position = 3
 		provinces_to_highlight = {
-			owned_by = SAX
+			OR = {
+				owned_by = SAX
+				owned_by = THU
+			}
 			NOT = {
 				ROOT = { mission_completed = BRA_fate_of_saxony }
 			}
 		}
 		trigger = {
+			tooltip = {
+				add_dip_power = 50
+				custom_tooltip = BRA_rewards_when_alliance
+			}
+			custom_tooltip = BRA_rewards_when_alliance
 			OR = {
 				alliance_with = SAX
+				alliance_with = THU
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 					OR = {
 						area = thuringia_area
 						area = south_saxony_area
 					}
-					value = 5
+					value = 4
 				}
 			}
 		}
@@ -855,6 +867,44 @@ BRA_missions_4 = {
 							random_neighbor_province = {
 								limit = {
 									owned_by = SAX
+								}
+								add_province_modifier = {
+									name = BRA_saxon_trading_company
+									duration = 10950
+								}
+							}
+						}
+					}
+					else = {
+						add_mercantilism = 5
+					}
+				}
+				else_if = {
+					limit = {
+						alliance_with = THU
+					}
+					add_dip_power = 50
+					if = {
+						limit = {
+							any_owned_province = {
+								any_neighbor_province = {
+									owned_by = THU
+								}
+							}
+						}
+						random_owned_province = {
+							limit = {
+								any_neighbor_province = {
+									owned_by = THU
+								}
+							}
+							add_province_modifier = {
+								name = BRA_saxon_trading_company
+								duration = 10950
+							}
+							random_neighbor_province = {
+								limit = {
+									owned_by = THU
 								}
 								add_province_modifier = {
 									name = BRA_saxon_trading_company
@@ -1131,18 +1181,18 @@ BRA_missions_5 = {
 					estate = estate_nobles
 					loyalty = 60
 				}
-				if = {
-					limit = {
-						is_expanded_mod_active  = { mod = governments }
-					}
-					has_reform = order_of_the_swan_reform
-				}
 				custom_trigger_tooltip = {
 					tooltip = BRA_dealt_with_robber_barons
 					AND = {
 						has_country_flag = BRA_dealing_with_robber_barons
 						NOT = { num_of_rebel_armies = 1 }
 					}
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active  = { mod = governments }
+					}
+					has_reform = order_of_the_swan_reform
 				}
 			}
 		}
