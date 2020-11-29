@@ -36,6 +36,7 @@ FKN_Gen_Missions_2 = {
 				4715 = {
 					country_or_non_sovereign_subject_holds = ROOT
 				}
+				tag = FKN
 			}
 		}
 		effect = {
@@ -198,6 +199,7 @@ FKN_Gen_Missions_3 = {
 				79 = {
 					country_or_non_sovereign_subject_holds = ROOT
 				}
+				tag = FKN
 			}
 		}
 		effect = {
@@ -265,7 +267,7 @@ FKN_Gen_Missions_3 = {
 			legitimacy_equivalent = 90
 		}
 		effect = {
-			country_event = { id = ME_Franconian_Events.1 }
+			country_event = { id = ME_Franconia_Events.1 }
 			east_bavaria_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -384,6 +386,7 @@ FKN_Gen_Missions_4 = {
 				4717 = {
 					country_or_non_sovereign_subject_holds = ROOT
 				}
+				tag = FKN
 			}
 		}
 		effect = {
@@ -946,6 +949,7 @@ FKN_Missions_2 = {
 					}
 				}
 			}
+			clr_country_flag = FKN_CB
 			add_country_modifier = {
 				name = FKN_new_power_in_germany
 				duration = 27375
@@ -1238,6 +1242,7 @@ FKN_Missions_3 = {
 				religion = ROOT
 				cost_multiplier = 0.5
 			}
+			set_country_flag = FKN_CB
 		}
 	}
 	
@@ -1251,7 +1256,7 @@ FKN_Missions_3 = {
 		effect = {
 			custom_tooltip = FKN_first_diet_event
 			set_country_flag = FKN_diet
-			country_event = { id = ME_Franconian_Events.3 }
+			country_event = { id = ME_Franconia_Events.3 }
 		}
 	}
 	
@@ -1288,8 +1293,39 @@ FKN_Missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				OR = {
+					hre_reform_passed = emperor_rechenschaft
+					hre_reform_passed = emperor_perpetual_diet
+				}
+			}
+			else = {
+				hre_reform_passed = erbkaisertum 
+			}
+			NOT = {
+				any_country = {
+					capital_scope = { 
+						continent = europe
+					}
+					army_size = ROOT
+				}
+			}
+			num_of_cities = 50
+			is_emperor = yes
 		}
 		effect = {
+			custom_tooltip = FKN_append_and_merge
+			hidden_effect = {
+				remove_country_modifier = FKN_the_protector_2
+				remove_country_modifier = FKN_benevolent_emperor_2
+				add_country_modifier = {
+					name = FKN_final_modifier
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -1303,6 +1339,7 @@ FKN_Missions_4 = {
 		tag = FKN
 	} 
 	has_country_shield  = yes
+	
 	
 	FKN_saxony = {
 		icon = electorate_of_saxony
@@ -1379,20 +1416,42 @@ FKN_Missions_4 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Franconian_Events.4 }
+			country_event = { id = ME_Franconia_Events.4 }
 		}
 	}
 	
 	FKN_bauernkrieg = {
-		icon = conquer_franconia
+		icon = prosper_in_piedmont
 		required_missions = { FKN_reformation }
 		position = 9
 		provinces_to_highlight = {
 		}
 		trigger = {
-		 #not sure what to do here yet, need events
+			OR = {
+				is_year = 1525 #need to add more options
+				custom_trigger_tooltip = {
+					tooltip = FKN_the_imperial_incident
+					had_global_flag = {
+						flag = great_peasants_war_flag
+						days = 5475
+					}
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = FKN_end_of_the_peasants_war
+				duration = 5475
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { num_of_rebel_armies = 1 }
+					}
+					add_stability_or_adm_power = yes
+				}
+			}
+			custom_tooltip = FKN_if_no_rebel_faction
 		}
 	}
 	
@@ -1420,7 +1479,7 @@ FKN_Missions_4 = {
 			NOT = { average_unrest = 0 }
 		}
 		effect = {
-			country_event = { id = ME_Franconian_Events.2 }
+			country_event = { id = ME_Franconia_Events.2 }
 		}
 	}
 	
@@ -1591,7 +1650,7 @@ FKN_Missions_5 = {
 		}
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = ROT_protestant_enabled
+				tooltip = FKN_protestant_enabled
 				had_global_flag = {
 					flag = reformation_started
 					days = 9125
