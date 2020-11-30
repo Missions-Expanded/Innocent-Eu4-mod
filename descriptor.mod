@@ -1,5 +1,5 @@
 name="Missions Expanded"
-archive="mod/missions.zip"
+path="mod/missions"
 tags={
 	"Historical"
 	"Missions And Decisions"
@@ -8,4 +8,4 @@ tags={
 	"New Nations"
 }
 picture="ME.png"
-supported_version="1.29.*.*"
+supported_version="1.30.*.*"
