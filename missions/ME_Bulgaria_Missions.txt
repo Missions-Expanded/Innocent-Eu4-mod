@@ -3,120 +3,144 @@ bulgaria_missions_1 = {
 	generic = no 
 	ai = yes 
 	potential = {
-		
 		tag = BUL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { map_setup = map_setup_random }
 	}
 	has_country_shield = yes
 	
 	bul_rebuilding_the_kreposti = {
 		icon = fortress_switzerland
 		required_missions = {
-			bul_a_fierce_bulgaria
-		 }
-		position = 2	
+			bul_fierce_bulgaria
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1765
+				province_id = 159
+			}
+			OR = {
+				NOT = { has_building = fort_15th }
+				NOT = { has_building = fort_16th }
+				NOT = { has_building = fort_17th }
+				NOT = { has_building = fort_18th }
+			}
+		}
 		trigger = {
 			1765 = {
-				fort_level = 2
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+			159 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
 		}
-		159 = {
-			fort_level = 2
-		}
-	}
-
 		effect = {
-		1765 = {
-			add_province_modifier = {
-				name = bul_modern_bulgarian_forts
-				duration = -1
+			1765 = {
+				add_province_modifier = {
+					name = bul_kreposti_rebuilt
+					duration = 7300
+				}
 			}
-		}
-		159 = {
-			add_province_modifier = {
-				name = bul_modern_bulgarian_forts
-				duration = -1
-			}
-		}
-	}
-}
-
-bul_theodosian_walls = {
-	icon = mission_pf_cross
-	required_missions = {
-		bul_rebuilding_the_kreposti
-	 }
-	position = 3	
-	trigger = {
-		fortification_expert = 2	
-		owns_core_province = 151
-		151 = {
-			fort_level = 2
-		}
-
-}
-	effect = {
-		151 = {
-		add_province_modifier = {
-			name = bul_repaired_theodosian_walls
-			duration = -1	
+			159 = {
+				add_province_modifier = {
+					name = bul_kreposti_rebuilt
+					duration = 7300
+				}				
 			}
 		}
 	}
-}
-bul_revenge_for_vidin = {
-	icon = gory_to_the_black_army
-	required_missions = {
-		bul_theodosian_walls
-	 }
-	position = 5	
-	trigger = {	
-		grown_by_development = 300
-		army_size = HUN
-		}
 
+	bul_theodosian_wall = {
+		icon = mission_pf_cross
+		required_missions = {
+			bul_rebuilding_the_kreposti
+			bul_new_capital
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 151
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				NOT = { has_building = fort_15th }
+				NOT = { has_building = fort_16th }
+				NOT = { has_building = fort_17th }
+				NOT = { has_building = fort_18th }
+			}
+		}
+		trigger = {
+			fortification_expert = 2
+			owns_core_province = 151
+			151 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
+		}
+		effect = {
+			151 = {
+				custom_tooltip = BUL_THEODOSIAN_WALL_CANNONS
+				add_permanent_province_modifier = {
+					name = bul_repaired_theodosian_walls
+					duration = -1
+				}
+			}
+		}
+	}
 
-	effect = {
-		transdanubia_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-			add_permanent_claim = ROOT
+	bul_revenge_for_vidin = {
+		icon = gory_to_the_black_army
+		required_missions = {
+			bul_theodosian_wall
 		}
-		slovakia_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+		position = 7
+		trigger = {
+			grown_by_development = 300
+			if = {
+				limit = {
+					exists = HUN
+				}
+				army_strength = {
+					who = HUN
+					value = 1.40
+				}
 			}
-			add_permanent_claim = ROOT
-		}
-		transylvania_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+			else = {
+				any_country = {
+					capital_scope = { region = carpathia_region }
+					NOT = {
+						army_strength = {
+							who = ROOT
+							value = 0.60
+						}
+					}
+				}
 			}
-			add_permanent_claim = ROOT
 		}
-		southern_transylvania_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+		effect = {
+			carpathia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
-			add_permanent_claim = ROOT
-		}
-		alfold_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-			add_permanent_claim = ROOT
-		}
-		slavonia_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-			add_permanent_claim = ROOT
-		}
 		}
 	}
 }
@@ -126,376 +150,382 @@ bulgaria_missions_2 = {
 	generic = no 
 	ai = yes 
 	potential = {
-		
 		tag = BUL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { map_setup = map_setup_random }
 	}
 	has_country_shield = yes
 	
-	bul_a_new_capital = {
+	bul_new_capital = {
 		icon = mission_autocephalous_archbishopric
 		required_missions = {
-			bul_a_fierce_bulgaria
-		 }
+			bul_fierce_bulgaria
+		}
+		position = 4
 		provinces_to_highlight = {
 			province_id = 151
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
-		position = 2	
 		trigger = {
 			owns_core_province = 151
-	}
+		}
 		effect = {
-				country_event = { id = ME_Bulgaria_Events.1
+			country_event = {
+				id = ME_Bulgaria_Events.1
 			}
 		}
 	}
+	
 	bul_develop_the_balkans = {
-		icon = mission_african_gold
+		icon = mission_autocephalous_archbishopric
 		required_missions = {
-			bul_a_new_capital
-			bul_our_balkan_right
-		 }
+			bul_new_capital
+			bul_balkan_right
+		}
+		position = 6
 		provinces_to_highlight = {
-			OR {
-			province_id = 4173
-			province_id = 140
-			province_id = 131
-			province_id = 161
-			province_id = 148
+			OR = {
+				province_id = 4173
+				province_id = 140
+				province_id = 131
+				province_id = 161
+				province_id = 151
+				province_id = 148
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
 			}
 		}
-		position = 4	
 		trigger = {
+			stability = 2
 			4173 = {
+				owned_by = ROOT
 				development = 20
-			  }
+			}
 			140 = {
+				owned_by = ROOT
 				development = 20
 			}
 			131 = {
+				owned_by = ROOT
 				development = 20
 			}
 			161 = {
+				owned_by = ROOT
 				development = 20
 			}
 			151 = {
+				owned_by = ROOT
 				development = 20
 			}
 			148 = {
+				owned_by = ROOT
 				development = 20
 			}
-			owns_core_province = 4173
-			owns_core_province = 140
-			owns_core_province = 131
-			owns_core_province = 161
-			owns_core_province = 151
-			owns_core_province = 148
-
-	}
+		}
 		effect = {
 			4173 = {
 				add_province_modifier = {
 					name = bul_bulgarian_roads
-					duration = 7300	
+					duration = 7300
 				}
 			}
 			140 = {
-					add_province_modifier = {
-						name = bul_bulgarian_roads
-						duration = 7300
-					}
+				add_province_modifier = {
+					name = bul_bulgarian_roads
+					duration = 7300
 				}
+			}
 			131 = {
-					add_province_modifier = {
-						name = bul_bulgarian_roads
-						duration = 7300
-					}
+				add_province_modifier = {
+					name = bul_bulgarian_roads
+					duration = 7300
 				}
+			}
 			161 = {
-					add_province_modifier = {
-						name = bul_bulgarian_roads
-						duration = 7300
-					}
+				add_province_modifier = {
+					name = bul_bulgarian_roads
+					duration = 7300
 				}
+			}
 			151 = {
-					add_province_modifier = {
-						name = bul_bulgarian_roads
-						duration = 7300	
-					}
+				add_province_modifier = {
+					name = bul_bulgarian_roads
+					duration = 7300
 				}
+			}
 			148 = {
-					add_province_modifier = {
-						name = bul_bulgarian_roads
-						duration = 7300	
-					}
+				add_province_modifier = {
+					name = bul_bulgarian_roads
+					duration = 7300
 				}
 			}
 		}
-		bul_moderno_obrazovanie_i_industria = {
-			icon = mission_court_education
-			required_missions = {
-				bul_develop_the_balkans
-			 }
-			provinces_to_highlight = {
-				
-				}
-			
-			position = 5	
-			trigger = {
-				num_of_owned_provinces_with = {
-					value = 5
-					has_building = university
-					}
-					calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = mills
-						has_building = farm_estate
-						has_building = tradecompany
-						has_building = plantations
-						has_building = textile
-						has_building = weapons
-						has_building = wharf
-						has_building = furnace
-					}
-				}
-				amount = 20
-			}
-			NOT {
-				num_of_loans = 1
-			}
-			
+	}
+	
+	bul_bulgarska_modernizaciya = {
+		icon = mission_court_education
+		required_missions = {
+			bul_develop_the_balkans
 		}
-			effect = {
+		position = 7
+		trigger = {
+			university = 5
+			manufactory = 15
+			NOT = { num_of_loans = 1 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = bul_modernizing_bulgaria
+				duration = 5475
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
 				add_country_modifier = {
-					name = bul_modernizing_bulgaria
-					duration = 5475
-				
+					name = bul_innovativeness_dlc
+					duration = 7300
 				}
-				if = {
-					limit = {
-						 has_dlc = "Cradle of Civilization" 
-					 }    
-					 add_country_modifier = {
-						name = bul_innovativeness
-						duration = 7300
-					 }
+			}
+			else = {
+				add_country_modifier = {
+					name = bul_innovativeness
+					duration = 7300
 				}
-				else = {
-					add_country_modifier = {
-						name = bul_innovativenessdlc
-						duration = 7300
-						}
-						}
+			}
 		}
 	}
 }
-
-		
 
 bulgaria_missions_3 = {
 	slot = 3
 	generic = no 
 	ai = yes 
 	potential = {
-		
 		tag = BUL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { map_setup = map_setup_random }
 	}
 	has_country_shield = yes
-	
-	bul_a_fierce_bulgaria = {
+
+	bul_fierce_bulgaria = {
 		icon = protect_against_austria
 		required_missions = { }
-		provinces_to_highlight = {
-		}
-		position = 1	
+		position = 3
 		trigger = {
-			army_size_percentage = 0.80
 			is_subject = no
+			army_size_percentage = 0.80
 			num_of_generals = 1
+		}
+		effect = {
+			add_prestige = 10
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			if = {
+				limit = {
+					has_heir = no
+				}
+				define_heir = {
+					dynasty = "Asen"
+					adm = 5
+					dip = 4
+					mil = 6
+					claim = 90
+				}
+			}
+			macedonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			thrace_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wallachia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
 	}
-	effect = {
-		add_prestige = 10
-		add_adm_power = 75
-		add_dip_power = 75
-		add_mil_power = 75
-		macedonia_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-			add_permanent_claim = ROOT
-		}
-		thrace_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-			add_permanent_claim = ROOT
-		}
-		wallachia_area = {
-			limit = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-			add_permanent_claim = ROOT
-			}
-			define_heir = {
-				dynasty = "Asen"
-				adm = 5
-				dip = 4
-				mil = 6
-				max_random_adm = 5
-				max_random_dip = 4
-				max_random_mil = 6
-				claim = 80	
-			}
-		}
-	}
+
 	bul_seek_protection = {
 		icon = mission_establish_the_prikazy
-		required_missions = { 
-			bul_a_fierce_bulgaria
+		required_missions = {
+			bul_fierce_bulgaria
 		}
-		provinces_to_highlight = {
-		}
-		position = 1
-		
-			trigger = {
-				custom_trigger_tooltip = { 
-					tooltip = Bul.tooltip.1
-				religion = orthodox
-				any_country = {
-					OR = {
-					culture_group = west_slavic 
-					culture_group = east_slavic 
+		position = 4
+		trigger = {
+			religion = orthodox
+			OR = {
+				culture_group = east_slavic
+				culture_group = west_slavic
+				culture_group = south_slavic
+			}
+			any_country = {
+				OR = {
+					culture_group = east_slavic
+					culture_group = west_slavic
 					culture_group = south_slavic
-					}
-					total_development = 500 
-					religion_group = christian 
-					OR = {
-						alliance_with = ROOT
-						has_opinion = {
-							who = root
-							value = 125
-						}
-					}
-					
 				}
+				total_development = 500
+				OR = {
+					alliance_with = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
 		}
-		  }	
-		
-	effect = {
-		country_event = { id = ME_Bulgaria_Events.2
+		effect = {
+			country_event = {
+				id = ME_Bulgaria_events.2
+			}
 		}
 	}
-}
-bul_our_balkan_right = {
-	icon = mission_unite_home_region
-	required_missions = { 
-		bul_seek_protection
-		bul_land_of_the_greeks
-		bul_northern_barbarians
 
-	}
-	provinces_to_highlight = {
-		
-	}
-	position = 3	
-	trigger = {
-		custom_trigger_tooltip = { 
-			tooltip = Bul.tooltip.2
-		government_rank = 2
-		prestige = 30
-		NOT = {
+	bul_balkan_right = {
+		icon = mission_unite_home_region
+		required_missions = {
+			bul_seek_protection
+		}
+		position = 5
+		trigger = {
+			prestige = 30
+			if = {
+				limit = {
+					NOT = { has_dlc = "Common Sense" }
+				}
+				OR = {
+					government_rank = 2
+					total_development = 300
+				}
+			}
+			else = {
+				total_development = 300
+			}
 			any_country = {
 				capital_scope = {
 					region = balkan_region
 				}
-				OR = {
-					total_development = ROOT
-					army_size = ROOT
+				NOT = {
+					army_strength = {
+						who = ROOT
+						value = 1
+					}
 				}
 			}
 		}
-	}
-}
-effect = {
-	balkan_region = {
-		limit = {
-			NOT = { owned_by = ROOT }
-			NOT = { is_core = ROOT }
-		}
-		add_permanent_claim = ROOT
-	}
-		add_country_modifier = {
-			name = bul_rights_to_balkans
-			duration = 10950
-	}
-	
-}
-}
-bul_militarizacija_na_bulgarskiya_narod = {
-	icon = army_reforms
-	required_missions = { 
-		bul_our_balkan_right
-	}
-	provinces_to_highlight = {
-		
-	}
-	position = 4
-	trigger = {
-		mil = 4
-		mil_tech = 12
-		else = {
-			army_tradition = 60
-		}
-		if = {
-			limit = {
-				 has_dlc = "Cradle of Civilization" 
-			 }    
-			 army_professionalism = 0.25
-			 }
-}
 		effect = {
-		add_country_modifier = {
-			name = bul_bulgarian_militarization
-			duration = -1
-		}
 			add_country_modifier = {
-			name = bul_growing_morale
-			duration = 10950
+				name = bul_rights_to_balkans
+				duration = 10950
+			}
+			balkan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
-}
-bul_legacy_of_simeon = {
-	icon = mission_the_third_rome
-	required_missions = { 
-		bul_revenge_for_vidin
-		bul_moderno_obrazovanie_i_industria
-		bul_militarizacija_na_bulgarskiya_narod
-		bul_benefits_from_the_countryside
-	}
-	provinces_to_highlight = {
-		
-	}
-	position = 6
-	trigger = {
-		government_rank = 2
-		prestige = 75
-		grown_by_development = 300
-		OR {
-			adm = 4
-			dip = 4
-			mil = 4
+
+	bul_militarizacija_na_naroda = {
+		icon = army_reforms
+		required_missions = {
+			bul_balkan_right
 		}
-}
+		position = 6
+		trigger = {
+			MIL = 4
+			mil_tech = 12
+			if = {
+				limit = {
+					has_dlc = "Cradle Of Civilization"
+				}
+				army_professionalism = 0.25
+			}
+			else = {
+				army_tradition = 60
+			}
+		}
 		effect = {
-	add_country_modifier = {
-		name = bul_simeons_dream
-		duration = -1
+			add_country_modifier = {
+				name = bul_bulgarian_militarization
+				duration = -1
+			}
+			add_country_modifier = {
+				name = bul_growing_morale
+				duration = 10950
+			}
+		}
 	}
+
+	bul_militarizacija_na_naroda = {
+		icon = mission_the_third_rome
+		required_missions = {
+			bul_revenge_for_vidin
+			bul_militarizacija_na_naroda
+			bul_benefits_from_the_countryside
+		}
+		position = 8
+		provinces_to_highlight = {
+			region = balkan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 2
+			}
+			else = {
+				grown_by_development = 500
+			}
+			OR = {
+				ADM = 4
+				DIP = 4
+				MIL = 4
+			}
+			balkan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			set_government_rank = 3
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				override_country_name = BULGARIAN_TSARDOM
+			}
+			add_country_modifier = {
+				name = bul_simeons_dream
+				duration = -1
+			}
+			country_event = {
+				id = ME_Bulgaria_events.3
+			}
+		}
 	}
-}
 }
 
 bulgaria_missions_4 = {
@@ -503,25 +533,45 @@ bulgaria_missions_4 = {
 	generic = no 
 	ai = yes 
 	potential = {
-		
 		tag = BUL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { map_setup = map_setup_random }
 	}
 	has_country_shield = yes
-	
-	bul_land_of_the_greeks = {
+
+	bul_land_greeks = {
 		icon = dalmatian_conquest
-		required_missions = { 
-			bul_a_fierce_bulgaria
+		required_missions = {
+			bul_fierce_bulgaria
 		}
-		provinces_to_highlight = {area=macedonia_area}
-		position = 2	
+		position = 4
+		provinces_to_highlight = {
+			area = macedonia_area
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				AND = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+			}
+		}
 		trigger = {
-			macedonia_area = { 
+			macedonia_area = {
 				type = all
-				owned_by = ROOT
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					AND = {
+						owned_by = ROOT
+						is_core = ROOT
+					}
+				}
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = bul_becoming_master
+				duration = 9125
+			}
 			northern_greece_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -545,18 +595,22 @@ bulgaria_missions_5 = {
 	generic = no 
 	ai = yes 
 	potential = {
-		
 		tag = BUL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { map_setup = map_setup_random }
 	}
 	has_country_shield = yes
-	
+
 	bul_northern_barbarians = {
 		icon = mission_impaled_soldies
 		required_missions = {
-			bul_a_fierce_bulgaria
-		 }
-		provinces_to_highlight = {area=wallachia_area}
-		position = 2
+			bul_fierce_bulgaria
+		}
+		position = 4
+		provinces_to_highlight = {
+			area = wallachia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			wallachia_area = {
 				type = all
@@ -570,90 +624,134 @@ bulgaria_missions_5 = {
 			}
 		}
 	}
+
 	bul_state_funded_migracija = {
 		icon = hispaniae
 		required_missions = {
+			bul_land_greeks
 			bul_northern_barbarians
-			bul_seek_protection
-			bul_land_of_the_greeks
-		 }
-		provinces_to_highlight = { 
-			OR = {
-			area=wallachia_area
-			area=macedonia_area
-			area=thrace_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		position = 3	
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = thrace_area
+				area = wallachia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
-				wallachia_area = {
-					type = all
-					owned_by = ROOT
-				}
-				thrace_area = {
-					type = all
-					owned_by = ROOT
-				}
-				macedonia_area = {
-					type = all
-					owned_by = ROOT
-				}	
-				
+			macedonia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
 			}
-		
+			thrace_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+			wallachia_area = {
+				type = all
+				owned_by = ROOT
+				is_core = ROOT
+			}
+		}
 		effect = {
-
-			add_country_modifier = {
-				name = bul_subsidized_the_migrants
-				duration = 10950
-			}
-				macedonia_area = {
-					change_culture = bulgarian
-					}
-				thrace_area = {
-						change_culture = bulgarian
-					}
-					
-				}
-			}
-
-		bul_benefits_from_the_countryside = {
-			icon = fixed_garrison_system
-			required_missions = {
-				bul_state_funded_migracija
-				 }
-				provinces_to_highlight = {
-				}
-			position = 5	
-				trigger = {
-					OR = {
-						workshop = 10
-						counting_house = 10
-					}
-					OR = {
-						temple = 10
-						cathedral = 10
-					}
-					num_of_owned_provinces_with = {
-						trade_goods = grain 
-						base_production = 10
-						value = 3
+			macedonia_area = {
+				if = {
+					limit = {
+						owner = {
+							culture = bulgarian
 						}
 					}
-				
-			effect = {
-					add_adm_power = 200
-					add_stability = 1
-				    add_country_modifier = {
-						name = bul_monetary_benefits = {
-							duration = 10950
-					}
+					change_culture = bulgarian
 				}
-					
+				else = {
+					change_culture = ROOT
+				}
+			}
+			thrace_area = {
+				if = {
+					limit = {
+						owner = {
+							culture = bulgarian
+						}
+					}
+					change_culture = bulgarian
+				}
+				else = {
+					change_culture = ROOT
+				}
+			}
+			wallachia_area = {
+				if = {
+					limit = {
+						owner = {
+							culture = bulgarian
+						}
+					}
+					change_culture = bulgarian
+				}
+				else = {
+					change_culture = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = bul_subsidized_the_migrants
+				duration = 3650
+			}
+		}
+	}
+
+	bul_benefits_from_the_countryside = {
+		icon = fixed_garrison_system
+		required_missions = {
+			bul_state_funded_migracija
+		}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = macedonia_area
+				area = thrace_area
+				area = wallachia_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				trade_goods = grain
+				base_production = 10
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			add_adm_power = 200
+			add_country_modifier = {
+				name = bul_monetary_benefits
+				duration = 10950
+			}
 		}
 	}
 }
-
-	
-
