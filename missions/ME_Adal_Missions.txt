@@ -1,0 +1,757 @@
+adal_missions_1 = {
+	slot = 1
+	ai = yes
+	generic = no
+	potential = {
+		tag = ADA
+	}
+	has_country_shield = yes
+	
+	adal_administrate_the_muqtis = {
+		icon = mission_fatimid_caliphate
+		required_missions = { } 
+		position = 1 
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				custom_trigger_tooltip = {
+					tooltip = ada_has_used_iqta_ability_trigger
+					OR = {
+						has_country_modifier = efficient_tax_farming_modifier
+						has_country_modifier = land_acquisition_modifier
+						has_country_modifier = lenient_taxation_modifier
+					}
+				}
+			}
+			else = { crown_land_share = 35 }
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_modifier = efficient_tax_farming_modifier 
+				}
+				add_country_modifier = {
+					name = adal_zealous_tax_farming_modifier 
+					duration = 3650 
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = land_acquisition_modifier 
+				}
+				add_country_modifier = {
+					name = adal_expanded_land_acquisition_modifier
+					duration = 3650
+				}
+			}
+			else_if = {
+				limit = {
+					has_country_modifier = lenient_taxation_modifier 
+				}
+				add_country_modifier = {
+					name = adal_taxation_exemption_modifier 
+					duration = 3650 
+				}
+			}
+			else_if = {
+				NOT = { has_dlc = "Cradle of Civilization" }
+				change_government_reform_progress = 100 
+			}
+		}
+	}
+	
+	adal_cultivate_bil_and_karam = {
+		icon = mission_secure_khandesh
+		required_missions = { adal_administrate_the_muqtis adal_celebrate_hagira } 
+		position = 2
+		provinces_to_highlight = {
+			area = ifat_area 
+		}
+		trigger = {
+			1212 = {
+				owned_by = ROOT 
+				num_of_times_improved = 3 
+			}
+			ifat_area = {
+			  type = all
+			  NOT = { devastation = 1 }
+			}
+			estate_loyalty = {
+				loyalty = 60
+				estate = estate_burghers
+			}
+		}
+		effect = {
+			1212 = {
+				add_province_modifier = {
+					name = adal_rejuvenation_of_zeila_modifier 
+					duration = -1 
+				}
+			}
+		}
+	}
+	
+	adal_chief_port_of_zeila = {
+		icon = mission_shipyards_of_gujarat 
+		required_missions = { adal_cultivate_bil_and_karam }
+		position = 4 
+		provinces_to_highlight = {
+			province_id = 1212 
+			NOT = { 
+				development = 30 
+				OR = {
+					has_building = marketplace 
+					has_building = trade_depot 
+					has_building = stock_exchange
+				}
+			}
+		}
+		trigger = {
+			1212 = {
+				development = 30 
+				OR = {
+					has_building = marketplace 
+					has_building = trade_depot 
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = { 
+			1212 = {
+				custom_tooltip = adal_remove_rejuvenation_modifier_tt
+				hidden_effect = {
+					remove_province_modifier = adal_rejuvenation_of_zeila_modifier
+				}
+				add_province_modifier = {
+					name = adal_jewel_port_of_aden_modifier 
+					duration = -1 
+				}
+			}
+		}
+	}
+	
+	adal_dominate_aden_trade = {
+		icon = mission_african_trade_post 
+		required_missions = { adal_chief_port_of_zeila }
+		position = 5 
+		trigger = {
+			4346 = { is_strongest_trade_power = ROOT }
+			if = {
+				limit = { 
+					has_dlc = "Dharma" 
+				}
+				1212 = { province_has_center_of_trade_of_level = 3 }
+			}
+			else = { mercantilism = 15 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = adal_monopoli_of_adeni_goods_modifier
+				duration = 7300 
+			}
+			add_mercantilism = 3 
+		}
+	}
+}
+
+adal_missions_2 = {
+	slot = 2
+	ai = yes
+	generic = no
+	potential = {
+		tag = ADA
+	}
+	has_country_shield = yes
+	
+	adal_celebrate_hagira = {
+		icon = mission_central_asian_city
+		required_missions = { } 
+		position = 1 
+		provinces_to_highlight = {
+			province_id = 385 
+			province_id = 384
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_global_flag = advisors_expanded_mod_active
+				}
+				OR = {
+					religious_representative = 1 
+					theologian = 1 
+					inquisitor = 1 
+				}
+				384 = {
+					OR = {
+						owned_by = ROOT 
+						owner = {
+							has_opinion = {
+								who = ROOT 
+								value = 100 
+							}
+						}
+					}
+				}
+				385 = {
+					OR = {
+						owned_by = ROOT 
+						owner = {
+							has_opinion = {
+								who = ROOT 
+								value = 100 
+							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					theologian = 1 
+					inquisitor = 1
+				}
+				384 = {
+					OR = {
+						owned_by = ROOT 
+						reverse_has_opinion = {
+							who = ROOT 
+							value = 100 
+						}
+					}
+				}
+				385 = {
+					OR = {
+						owned_by = ROOT 
+						reverse_has_opinion = {
+							who = ROOT 
+							value = 100 
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					AND = {
+						has_dlc = "Cradle of Civilization" 
+						piety = 0 
+					}
+				}
+				add_piety = 0.25 
+			}
+			else_if = {
+				limit = {
+					AND = {
+						has_dlc = "Cradle of Civilization" 
+						NOT = { piety = 0 } 
+					}
+				}
+				add_piety = -0.5 
+			}
+			else_if = {
+				limit = {
+					NOT = { has_dlc = "Cradle of Civilization" }
+				}
+				add_stability_or_adm_power = yes 
+			}
+			if = {
+				limit = { 
+					NOT = { has_estate_privilege = estate_church_religious_state  }
+				}
+				set_estate_privilege = estate_church_religious_state 
+			}
+			if = {
+				limit = {
+					has_estate_privilege = estate_church_religious_state 
+				}
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = 10
+				}
+			}
+		}
+	}
+	
+	adal_islamic_jurisprudence = {
+		icon = mission_hands_praying 
+		required_missions = { adal_cultivate_bil_and_karam adal_celebrate_hagira } 
+		position = 3
+		trigger = {
+			stability = 1
+			grown_by_development = 30  
+			num_of_owned_provinces_with = {
+				value = 3
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = adal_proper_application_of_islamic_law_modifier 
+				duration = 3650 
+			}
+			add_estate_loyalty = {
+				estate = estate_dhimmi
+				loyalty = 10 
+			}
+			country_event = { id = ME_Adal_Events.1 } 
+		}
+	}
+	
+	adal_indian_maritime_commerce = {
+		icon = mission_unite_coromandel 
+		required_missions = { adal_chief_port_of_zeila } 
+		position = 5
+		provinces_to_highlight = {
+			province_id = 504 
+			province_id = 1340 
+		}
+		trigger = {
+			504 = {
+				has_merchant = PREV 
+			}
+			1340 = {
+				has_merchant = PREV 
+			}
+			num_of_light_ship = 50 
+		}
+		effect = {
+			504 = {
+				add_trade_modifier = {
+					who = ROOT
+					power = 50
+					duration = 7300
+					key = adal_mercantile_influx_modifier
+				}
+			}
+			1340 = {
+				add_trade_modifier = {
+					who = ROOT
+					power = 50
+					duration = 7300
+					key = adal_mercantile_influx_modifier
+				}
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				1212 = {
+					change_trade_goods = jade 
+					build_possible_manufactory_in_province = yes
+				}
+			}
+			else = {
+				1212 = { 
+					add_province_modifier = {
+						name = adal_foreign_merchants_in_zeila
+						duration = 9125 
+					}
+				}
+			}
+		}
+	}
+}
+	
+adal_missions_3 = {
+	slot = 3
+	ai = yes
+	generic = no
+	potential = {
+		tag = ADA
+	}
+	has_country_shield = yes	
+	
+	adal_heart_of_ethiopia = {
+		icon = mission_invade_kanem
+		required_missions = { adal_protect_against_ethiopia }
+		position = 2 
+		provinces_to_highlight = {
+			area = central_ethiopia_area 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+		}
+		trigger = {
+			central_ethiopia_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = adal_march_of_victory_modifier 
+				duration = 7300 
+			}
+		}
+	}
+	
+	adal_deal_with_the_copts = {
+		icon = mission_cope_with_refugees 
+		required_missions = { adal_heart_of_ethiopia }
+		position = 3 
+		provinces_to_highlight = {
+			area = central_ethiopia_area
+		}
+		trigger = {
+			central_ethiopia_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			custom_trigger_tooltip = {
+				tooltip = adal_tolerance_at_least_one_or_root_religion_tt
+				OR = {	
+					has_global_modifier_value = {
+						which = tolerance_heathen
+						value = 1
+					}
+					central_ethiopia_area = {
+						religion = ROOT 
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					central_ethiopia_area = { religion = ROOT }
+				}
+				add_power_projection = {
+					type = mission_rewards_power_projection
+					amount = 50
+				}
+				add_stability_or_adm_power = yes 
+			}
+			else = {
+				add_country_modifier = {
+					name = adal_coptic_cooperation_modifier 
+					duration = -1 
+				}
+				custom_tooltip = adal_tax_coptic_tt
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							religion = coptic 
+						}
+						add_base_tax = 1 
+					}
+				}
+			}
+		}
+	}
+	
+	adal_end_abyssinian_hegemony = {
+		icon = mission_restore_faith_in_the_throne
+		required_missions = { adal_deal_with_the_copts }
+		position = 4 
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = eth_owns_no_provinces_in_horn_tt
+				ETH = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							region = horn_of_africa_region 
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { government_rank = 3 }
+				}
+				set_government_rank = 3 
+			}
+			else = {
+				add_country_modifier = {
+					name = adal_ethiopian_court_influence
+					duration = 9125 
+				}
+			}
+			custom_tooltip = adal_hegemon_of_africa_ct
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = {
+							any_country = {
+								capital_scope = {
+									continent = africa
+								}
+								army_size = ROOT
+								total_development = ROOT
+							}
+						}
+					}
+					add_country_modifier = {
+						name = adal_hegemon_of_africa_modifier 
+						duration = -1 
+					}
+				}
+			}
+		}
+	}
+}
+
+adal_missions_4 = {
+	slot = 4
+	ai = yes
+	generic = no
+	potential = {
+		tag = ADA
+	}
+	has_country_shield = yes	
+	
+	adal_protect_against_ethiopia = {
+		icon = mission_conquer_sindh_mer	
+		required_missions = { } 
+		position = 1 
+		trigger = {
+			army_size_percentage = 0.9 
+			OR = {
+				num_of_allies = 3 
+				OR = {
+					reverse_has_opinion_modifier = {
+						who = ETH
+						modifier = insulted
+					}
+					reverse_has_opinion_modifier = {
+						who = ETH
+						modifier = scornfully_insulted
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = adal_masters_of_the_sahara_modifier
+				duration = 5475
+			}
+			horn_of_africa_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					num_of_allies = 3 
+				}
+				every_ally = {
+					add_trust = { 
+						who = ROOT 
+						value = 25 
+						mutual = yes 
+					}
+				}
+			}
+		}
+	}
+	
+	adal_spare_the_plains = { 
+		icon = mission_crush_delhi 
+		required_missions = { adal_protect_against_ethiopia } 
+		position = 2 
+		provinces_to_highlight = {
+			OR = {
+				area = aussa_area 
+				area = shewa_area 
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+		}
+		trigger = {
+			aussa_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			} 
+			shewa_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			shewa_area = {
+				add_nationalism = -5 
+			}
+			aussa_area = {
+				add_nationalism = -5 
+			}
+			custom_tooltip = adal_spare_the_plains_ct 
+			hidden_effect = {
+				if = {
+					limit = { 
+						aussa_area = {
+							type = all
+							is_looted = no
+							NOT = { devastation = 1 }
+						}
+						shewa_area = {
+							type = all 
+							is_looted = no 
+							NOT = { devastation = 1 }
+						}
+					}
+					add_accepted_culture = amhara 
+				}
+			}
+		}
+	}
+	
+	adal_hinnare_bushasho = {
+		icon = mission_entrepot_of_india 
+		required_missions = { adal_spare_the_plains }
+		position = 3 
+		provinces_to_highlight = {
+			area = southern_ethiopia_area 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+		}
+		trigger = {
+			southern_ethiopia_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			2758 = { num_of_times_improved = 5 } 
+		}
+		effect = {
+			2758 = {
+				change_trade_goods = gold 
+				add_province_modifier = {
+					name = adal_golden_opulence_modifier 
+					duration = 7300 
+				}
+			}
+		}
+	}
+	
+	adal_unite_the_somali_people = {
+		icon = mission_the_battle_for_raichur 
+		required_missions = { adal_hinnare_bushasho adal_dawladdii_ajuuraan }
+		position = 5 
+		provinces_to_highlight = { } 
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 40 
+				culture_group = cushitic 
+			}
+		}
+		effect = {
+			add_adm_power = 100 
+			add_dip_power = 100 
+			add_mil_power = 100 
+			custom_tooltip = adal_united_somali_people_ct 
+			hidden_effect = {
+				add_ruler_modifier = {
+					name = adal_unification_of_somalia_modifier
+					duration = -1 
+				}
+			}
+		}
+	}
+}
+
+adal_missions_5 = {
+	slot = 5
+	ai = yes
+	generic = no
+	potential = {
+		tag = ADA
+	}
+	has_country_shield = yes
+	
+	adal_storm_the_shaa = {
+		icon = mission_develop_alhambra 
+		required_missions = { } 
+		position = 1 
+		provinces_to_highlight = {
+			area = somaliland_area 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			somaliland_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = adal_shaas_royal_residence_modifier 
+				duration = 5475
+			}
+		}
+	}
+	
+	adal_marehan_military_division = {
+		icon = mission_levantine_restoration 
+		required_missions = { adal_storm_the_shaa }
+		position = 3 
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2784 
+				province_id = 2024
+				province_id = 1206
+				province_id = 2788 
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			2784 = { country_or_non_sovereign_subject_holds = ROOT }
+			2024 = { country_or_non_sovereign_subject_holds = ROOT }
+			1206 = { country_or_non_sovereign_subject_holds = ROOT }
+			2788 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			define_general = {
+				name = "Garad Ahmed bin Haribu" 
+				fire = 2
+				shock = 6
+				manuever = 3
+				siege = 2 
+			}
+			custom_tooltip = adal_professional_rangers_ct 
+			hidden_effect = {
+				if = {
+					limit = {
+						has_dlc = "Cradle of Civilization"
+						army_professionalism = 0.2
+					}
+					add_country_modifier = {
+						name = adal_marehani_rangers_modifier 
+						duration = -1 
+					}
+				}
+			}
+		}
+	}
+	
+	adal_dawladdii_ajuuraan = {
+		icon = mission_invade_mali 
+		required_missions = { adal_marehan_military_division }
+		position = 4 
+		provinces_to_highlight = {
+			OR = {
+				area = mogadishu_area 
+				area = ajuuran_area 
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			mogadishu_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			ajuuran_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = { 
+			country_event = { id = ME_Adal_Events.2 }
+		}
+	}
+}
+					
+					
