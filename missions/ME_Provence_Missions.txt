@@ -9,11 +9,11 @@ PRO_Missions_1 = {
 	has_country_shield  = yes
 	
 	PRO_baumette = {
-		icon = establish_a_standing_army
+		icon = new_st_peters_basilica
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
-			province_id = 168
+			province_id = 178
 			OR = {
 				NOT = { owned_by = ROOT }
 				devastation = 0.01
@@ -32,7 +32,7 @@ PRO_Missions_1 = {
 					loyalty = 50
 				}
 			}
-			168 = {
+			178 = {
 				owned_by = ROOT
 				NOT = { devastation = 0.01 }
 				development = 20
@@ -40,66 +40,348 @@ PRO_Missions_1 = {
 			}
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 15 }
+			178 = {
+				add_or_upgrade_tax_building = yes
+			}
 		}
 	}
 	
 	PRO_marseille = {
-		icon = establish_a_standing_army
+		icon = la_marseillaise
 		required_missions = { PRO_baumette }
 		position = 2
 		provinces_to_highlight = {
+			province_id = 201
+			OR = {
+				NOT = { base_tax = 10 }
+				NOT = { base_production = 10 }
+				NOT = { owned_by = ROOT }
+				NOT = { has_production_building_trigger = yes }
+				NOT = { has_tax_building_trigger = yes }
+				devastation = 0.01
+			}
 		}
 		trigger = {
+			201 = {
+				base_tax = 10
+				base_production = 10
+				owned_by = ROOT
+				has_production_building_trigger = yes
+				has_tax_building_trigger = yes
+				NOT = { devastation = 0.01 }
+			}
 		}
 		effect = {
+			201 = {
+			 	change_province_name = "Marseille"
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				else = {
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_country_modifier = {
+					name = PRO_splendor_of_marseille
+					duration = -1
+				}
+			}
+			else = {
+				add_legitimacy_equivalent = { amount = 15 }
+			}
 		}
 	}
 	
 	PRO_naples = {
-		icon = establish_a_standing_army
+		icon = king_of_naples
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
 		}
 		trigger = {
+			total_development = 100
 		}
 		effect = {
+			custom_tooltip = PRO_reward_if_NAP_independent
+			tooltip = {
+				add_casus_belli = {
+					target = NAP
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+			}
+			custom_tooltip = PRO_reward_if_NAP_not_independent
+			custom_tooltip = PRO_every_neapolitan
+			tooltip = {
+				apulia_area = { add_permanent_claim = ROOT }
+				naples_area = { add_permanent_claim = ROOT }
+				calabria_area = { add_permanent_claim = ROOT }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						exists = NAP
+					}
+					add_casus_belli = {
+						target = NAP
+						type = cb_restore_personal_union 
+					}
+				}
+				else = {
+					NAP = {
+						every_core_province = {
+							limit = {
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+					apulia_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					naples_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					calabria_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
 		}
 	}
 	
 	PRO_naples_2 = {
-		icon = establish_a_standing_army
+		icon = union_with_naples
 		required_missions = { PRO_naples }
 		position = 4
 		provinces_to_highlight = {
+			OR = {
+				area = calabria_area
+				area = naples_area
+				area = apulia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			calabria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			naples_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			apulia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Provence_Events.1 }
+			custom_tooltip = PRO_reward_if_ARA_independent
+			tooltip = {
+				add_casus_belli = {
+					target = ARA
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+			}
+			custom_tooltip = PRO_reward_if_ARA_not_independent
+			custom_tooltip = PRO_every_aragonese
+			tooltip = {
+				valencia_area = { add_permanent_claim = ROOT }
+				catalonia_area = { add_permanent_claim = ROOT }
+				aragon_area = { add_permanent_claim = ROOT }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						exists = ARA
+					}
+					add_casus_belli = {
+						target = ARA
+						type = cb_restore_personal_union 
+					}
+				}
+				else = {
+					ARA = {
+						every_core_province = {
+							limit = {
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+					catalonia_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					valencia_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					aragon_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
 		}
 	}
 	
 	PRO_reign_in_aragon = {
-		icon = establish_a_standing_army
+		icon = king_of_aragon
 		required_missions = { PRO_naples_2 }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				area = catalonia_area
+				area = valencia_area
+				area = aragon_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			catalonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			valencia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aragon_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Provence_Events.2 }
+			if = {
+				limit = {
+					ARA = { is_subject_of = ROOT }
+				}
+				ARA = { add_liberty_desire = -20 }
+			}
+			custom_tooltip = PRO_reward_if_FRA_independent
+			tooltip = {
+				add_casus_belli = {
+					target = FRA
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+			}
+			custom_tooltip = PRO_reward_if_FRA_not_independent
+			custom_tooltip = PRO_every_french
+			tooltip = {
+				ile_de_france_area = { add_permanent_claim = ROOT }
+				orleans_area = { add_permanent_claim = ROOT }
+				massif_central_area = { add_permanent_claim = ROOT }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						exists = FRA
+					}
+					add_casus_belli = {
+						target = FRA
+						type = cb_restore_personal_union 
+					}
+				}
+				else = {
+					FRA = {
+						every_core_province = {
+							limit = {
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+					ile_de_france_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					orleans_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					massif_central_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
 		}
 	}
 	
 	PRO_france = {
-		icon = establish_a_standing_army
+		icon = king_of_france
 		required_missions = { PRO_reign_in_aragon }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = ile_de_france_area
+				area = orleans_area
+				area = massif_central_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			ile_de_france_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			orleans_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			massif_central_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Provence_Events.3 }
 		}
 	}
 	
@@ -127,12 +409,29 @@ PRO_Missions_2 = {
 	has_country_shield  = yes
 	
 	PRO_toulon = {
-		icon = establish_a_standing_army
+		icon = toulon_dockyards
 		required_missions = { PRO_baumette }
 		position = 2
 		provinces_to_highlight = {
+			province_id = 4696
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_dock_building_trigger = yes }
+				NOT = { has_shipyard_building_trigger = yes }
+				NOT = { has_production_building_trigger = yes }
+				NOT = { base_manpower = 7 }
+				NOT = { base_production = 7 }
+			}
 		}
 		trigger = {
+			4696 = {
+				owned_by = ROOT
+				has_dock_building_trigger = yes
+				has_shipyard_building_trigger = yes
+				has_production_building_trigger = yes
+				base_production = 7
+				base_manpower = 7
+			}
 		}
 		effect = {
 		}
