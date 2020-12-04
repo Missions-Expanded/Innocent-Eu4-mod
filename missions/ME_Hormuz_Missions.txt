@@ -284,17 +284,49 @@ ORM_missions_5 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			OR = {
-				advisor = inquisitor
-				advisor = theologian 
-			}
 			estate_influence = {
 				estate = estate_church
 				influence = 20
 			}
+			if = {
+				limit = {
+					has_global_flag = advisors_expanded_mod_active
+				}
+				OR = {
+					religious_representative = 1 
+					theologian = 1 
+					inquisitor = 1
+					estate_loyalty = {
+						loyalty = 60
+						estate = estate_church
+					}
+				}
+			}
+			else = {
+				OR = {
+					inquisitor = 1 
+					theologian = 1 
+					estate_loyalty = {
+						loyalty = 60
+						estate = estate_church
+					}
+				}
+			}
 		}
 		effect = {
-			country_event = { id = ME_Hormuz_Events.2 }
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				country_event = { id = ME_Hormuz_Events.2 }
+			}
+			else = {
+				define_advisor = {
+					type = inquisitor 
+					skill = 2 
+					cost_multiplier = 0.1 
+				}
+			}
 		}
 	}
 	
@@ -328,7 +360,15 @@ ORM_missions_5 = {
 		position = 3
 		trigger = { 
 			num_of_galley = 15
-			has_flagship = yes 
+			if = {
+				limit = { 
+					has_dlc = "Golden_Century"
+				}
+				has_flagship = yes
+			}
+			else = {
+				num_of_light_ship = 20 
+			}
 		} 
 		effect = {
 			country_event = { id = ME_Hormuz_Events.3 }
