@@ -9,7 +9,7 @@ PRO_Missions_1 = {
 	has_country_shield  = yes
 	
 	PRO_baumette = {
-		icon = new_st_peters_basilica
+		icon = sponsor_the_arts
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -434,54 +434,144 @@ PRO_Missions_2 = {
 			}
 		}
 		effect = {
+			4696 = {
+				add_or_upgrade_shipyard_building = yes
+				add_or_upgrade_dock_building = yes
+			}
 		}
 	}
 	
 	PRO_future_of_maine = {
-		icon = establish_a_standing_army
+		icon = take_the_bishoprics
 		required_missions = { PRO_protect_the_duchy }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 177
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { owned_by = FRA }
+			}
 		}
 		trigger = {
+			OR = {
+				owns = 177
+				AND = {
+					177 = {
+						owned_by = FRA
+					}
+					FRA = { alliance_with = ROOT }
+				}
+			}
 		}
 		effect = {
+			brittany_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = PRO_reward_if_PRO_owns
+			tooltip = {
+				add_country_modifier = {
+					name = PRO_pushed_our_claims
+					duration = 7300
+				}
+			}
+			custom_tooltip = PRO_reward_if_FRA_owns
+			tooltip = {
+				add_trust = {
+					who = FRA
+					value = 10
+					mutual = yes
+				}
+				add_dip_power = 50
+			}
 		}
 	}
 	
 	PRO_consolidate_brittany = {
-		icon = establish_a_standing_army
+		icon = the_hundred_years_war
 		required_missions = { PRO_future_of_maine }
 		position = 5
 		provinces_to_highlight = {
+			area = brittany_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			brittany_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_adm_power = 100
+			custom_tooltip = PRO_add_breton_culture
 		}
 	}
 	
 	PRO_colonialism = {
-		icon = establish_a_standing_army
+		icon = mission_look_west
 		required_missions = { PRO_reign_in_aragon PRO_consolidate_brittany }
 		position = 6
 		provinces_to_highlight = {
+			province_id = 172
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_dock_building_trigger = yes }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { development = 20 }
+			}
 		}
 		trigger = {
+			has_institution = colonialism
+			172 = {
+				owned_by = ROOT
+				has_dock_building_trigger = yes
+				has_trade_building_trigger = yes
+				development = 20
+			}
 		}
 		effect = {
+			172 = {
+				add_province_modifier = {
+					name = PRO_pythean_school_of_cartography
+					duration = -1
+				}
+			}
+			north_atlantic_area = {
+				discover = ROOT
+			}
 		}
 	}
 	
 	PRO_roman_architecture = {
-		icon = establish_a_standing_army
+		icon = continue_the_renaissance
 		required_missions = { PRO_provencal_hegemony }
 		position = 7
 		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { has_tax_building_trigger = yes }
+			}
 		}
 		trigger = {
+			has_institution = renaissance
+			num_of_owned_provinces_with = {
+				has_trade_building_trigger = yes
+				value = 3
+			}
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 3
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PRO_renaissance_architecture
+				duration = 10950
+			}
 		}
 	}
 }
@@ -497,43 +587,159 @@ PRO_Missions_3 = {
 	has_country_shield  = yes
 	
 	PRO_protect_the_duchy = {
-		icon = establish_a_standing_army
+		icon = knights_of_the_new_world
 		required_missions = { }
 		position = 3
-		provinces_to_highlight = {
-		}
 		trigger = {
+			army_size_percentage = 0.85
+			num_of_generals = 1
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				any_ally = {
+					is_great_power = yes
+				}
+			}
 		}
 		effect = {
+			add_army_tradition_or_mil_power = { amount = 20 }
+			102 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	
 	PRO_fate_of_lorraine = {
-		icon = establish_a_standing_army
+		icon = integrate_lorraine
 		required_missions = { PRO_protect_the_duchy }
 		position = 5
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				AND = {
+					owns = 188
+					owns = 189
+				}
+				LOR = {
+					is_subject_of = ROOT
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 190
+					}
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = PRO_reward_if_LOR_integrated
+			tooltip = {
+				add_country_modifier = {
+					name = PRO_integrated_lorraine
+					duration = 7300
+				}
+				189 = {
+					add_base_tax = 2
+					add_base_production = 2
+					add_base_manpower = 2
+				}
+			}
+			custom_tooltip = PRO_reward_if_LOR_opinion
+			custom_tooltip = PRO_event_for_integration
+			hidden_effect = {
+				if = {
+					limit = {
+						owns = 188
+						owns = 189
+					}
+					add_country_modifier = {
+						name = PRO_integrated_lorraine
+						duration = 7300
+					}
+					189 = {
+						add_base_tax = 2
+						add_base_production = 2
+						add_base_manpower = 2
+					}
+				}
+				else = {
+					LOR = {
+						country_event = { id = ME_Provence_Events.4 }
+					}
+				}
+			}
 		}
 	}
 	
 	PRO_provencal_hegemony = {
-		icon = establish_a_standing_army
+		icon = spread_the_von_wettins
 		required_missions = { PRO_fate_of_lorraine PRO_consolidate_brittany PRO_eradicate_genoa }
 		position = 6
 		provinces_to_highlight = {
 		}
 		trigger = {
+			total_development = 200
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				OR = {
+					num_accepted_cultures = 3
+					is_great_power = yes
+					custom_trigger_tooltip = {
+						tooltip = PRO_strongest_power_in_france
+						NOT = {
+							any_country = {
+								capital_scope = {
+									region = france_region
+									total_development = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					num_accepted_cultures = 3
+					custom_trigger_tooltip = {
+						tooltip = PRO_strongest_power_in_france
+						NOT = {
+							any_country = {
+								capital_scope = {
+									region = france_region
+									total_development = ROOT
+								}
+							}
+						}
+					}
+				}
+			}	
 		}
 		effect = {
+			change_adm = 1
+			add_country_modifier = {
+				name = PRO_undisputed_rule
+				duration = 10950
+			}
 		}
 	}
 	
 	PRO_house_of_anjou = {
-		icon = establish_a_standing_army
+		icon = king_of_kings
 		required_missions = { PRO_french_court PRO_provencal_hegemony PRO_liberate_the_holy_lands }
 		position = 8
 		provinces_to_highlight = {
@@ -556,55 +762,127 @@ PRO_Missions_4 = {
 	has_country_shield  = yes
 	
 	PRO_maritime_base = {
-		icon = establish_a_standing_army
+		icon = expand_the_arsenal
 		required_missions = { PRO_croissant }
 		position = 2
 		provinces_to_highlight = {
+			province_id = 201
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_dock_building_trigger = yes }
+				NOT = { fort_level = 1 }
+				NOT = { base_manpower = 10 }
+			}
 		}
 		trigger = {
+			201 = {
+				owned_by = ROOT
+				has_dock_building_trigger = yes
+				fort_level = 1
+				base_manpower = 10
+			}
 		}
 		effect = {
+			201 = {
+				add_province_modifier = {
+					name = PRO_strong_fortifications
+					duration = -1
+				}
+			}
+			country_event = { id = ME_Provence_Events.5 }
 		}
 	}
 	
 	PRO_retake_nice = {
-		icon = establish_a_standing_army
+		icon = prosper_in_piedmont
 		required_missions = { PRO_protect_the_duchy }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 102
+			OR = {
+				NOT = { controlled_by = ROOT }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
 		}
 		trigger = {
+			102 = {
+				OR = {
+					controlled_by = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
+			liguria_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = PRO_justified_demands
+				duration = 3650
+			}
 		}
 	}
 	
 	PRO_eradicate_genoa = {
-		icon = establish_a_standing_army
+		icon = purely_for_commerce
 		required_missions = { PRO_retake_nice }
 		position = 5
 		provinces_to_highlight = {
+			province_id = 101
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = PRO_mercantile_duchy
+				duration = 9125
+			}
 		}
 	}
 	
 	PRO_a_merchant_fleet = {
-		icon = establish_a_standing_army
+		icon = secure_the_republic
 		required_missions = { PRO_militum_christi PRO_eradicate_genoa }
 		position = 6
 		provinces_to_highlight = {
+			province_id = 1298
+			NOT = {
+				1298 = {
+					trade_share = {
+						country = ROOT
+						share = 30
+					}
+				}
+			}
 		}
 		trigger = {
+			num_of_light_ship = 10
+			1298 = {
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PRO_provencal_trading_fleet
+				duration = 7300
+			}
 		}
 	}
 	
 	PRO_louis_ii = {
-		icon = establish_a_standing_army
+		icon = join_the_empire
 		required_missions = { PRO_provencal_hegemony }
 		position = 7
 		provinces_to_highlight = {
@@ -627,31 +905,93 @@ PRO_Missions_5 = {
 	has_country_shield  = yes
 	
 	PRO_croissant = {
-		icon = establish_a_standing_army
+		icon = league_of_the_public_weal
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-		}
 		trigger = {
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			legitimacy_equivalent = 100
 		}
 		effect = {
+			add_country_modifier = {
+				name = PRO_order_of_the_crescent
+				duration = 7300
+			}
 		}
 	}
 	
 	PRO_absolutism = {
-		icon = establish_a_standing_army
+		icon = regal_splendour
 		required_missions = { PRO_croissant }
 		position = 2
 		provinces_to_highlight = {
+			owned_by = ROOT
+			local_autonomy_above_min = 20
 		}
 		trigger = {
+			stability = 3
+			NOT = { average_autonomy_above_min = 20 }
+			OR = {
+				crown_land_share = 50
+				AND = {
+					if = {
+						limit = {
+							has_estate = estate_nobles
+						}
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 65
+						}
+					}
+					if = {
+						limit = {
+							has_estate = estate_church
+						}
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 65
+						}
+					}
+					if = {
+						limit = {
+							has_estate = estate_burghers
+						}
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 65
+						}
+					}
+					legitimacy_equivalent = 100
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PRO_provencal_control
+				duration = 7300
+			}
 		}
 	}
 	
 	PRO_papal_holdings = {
-		icon = establish_a_standing_army
+		icon = negotiate_for_avignon
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
@@ -663,7 +1003,7 @@ PRO_Missions_5 = {
 	}
 	
 	PRO_reclaim_the_holy_see = {
-		icon = establish_a_standing_army
+		icon = answer_the_roman_question
 		required_missions = { PRO_papal_holdings }
 		position = 4
 		provinces_to_highlight = {
@@ -675,7 +1015,7 @@ PRO_Missions_5 = {
 	}
 	
 	PRO_militum_christi = {
-		icon = establish_a_standing_army
+		icon = support_the_orders
 		required_missions = { PRO_reclaim_the_holy_see }
 		position = 5
 		provinces_to_highlight = {
@@ -687,7 +1027,7 @@ PRO_Missions_5 = {
 	}
 	
 	PRO_ractification = {
-		icon = establish_a_standing_army
+		icon = crusader_fleet
 		required_missions = { PRO_militum_christi }
 		position = 6
 		provinces_to_highlight = {
@@ -699,7 +1039,7 @@ PRO_Missions_5 = {
 	}
 	
 	PRO_liberate_the_holy_lands = {
-		icon = establish_a_standing_army
+		icon = jerusalem
 		required_missions = { PRO_ractification }
 		position = 7
 		provinces_to_highlight = {
