@@ -4,7 +4,13 @@ PRO_Missions_1 = {
 	ai = yes
 	potential = {
 		tag = PRO
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	} 
 	has_country_shield  = yes
 	
@@ -97,7 +103,7 @@ PRO_Missions_1 = {
 				}
 			}
 			else = {
-				add_legitimacy_equivalent = { amount = 15 }
+				add_legitimacy_equivalent = { value = 15 }
 			}
 		}
 	}
@@ -382,18 +388,101 @@ PRO_Missions_1 = {
 		}
 		effect = {
 			country_event = { id = ME_Provence_Events.3 }
+			if = {
+				limit = {
+					FRA = { is_subject_of = ROOT }
+				}
+				FRA = { add_liberty_desire = -20 }
+			}
+			add_country_modifier = {
+				name = PRO_united_the_house_of_France
+				duration = 7300
+			}
+			custom_tooltip = PRO_reward_if_HUN_independent
+			tooltip = {
+				add_casus_belli = {
+					target = HUN
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+			}
+			custom_tooltip = PRO_reward_if_HUN_not_independent
+			custom_tooltip = PRO_every_hungarian
+			tooltip = {
+				transdanubia_area = { add_permanent_claim = ROOT }
+				alfold_area = { add_permanent_claim = ROOT }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						exists = HUN
+					}
+					add_casus_belli = {
+						target = HUN
+						type = cb_restore_personal_union 
+					}
+				}
+				else = {
+					HUN = {
+						every_core_province = {
+							limit = {
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+					transdanubia_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					alfold_area = {
+						limit = {
+							NOT = { is_core = ROOT }
+							NOT = { is_permanent_claim = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
 		}
 	}
 	
-	PRO_french_court = {
-		icon = establish_a_standing_army
+	PRO_hungary = {
+		icon = king_of_hungary
 		required_missions = { PRO_france }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = transdanubia_area
+				area = alfold_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			transdanubia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			alfold_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					HUN = { is_subject_of = ROOT }
+				}
+				HUN = { add_liberty_desire = -20 }
+			}
+			country_event = { id = ME_Provence_Events.5 }
+			add_country_modifier = {
+				name = PRO_hungary_frontier
+				duration = 10950
+			}
 		}
 	}
 }
@@ -404,7 +493,13 @@ PRO_Missions_2 = {
 	ai = yes
 	potential = {
 		tag = PRO
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	} 
 	has_country_shield  = yes
 	
@@ -507,6 +602,20 @@ PRO_Missions_2 = {
 		effect = {
 			add_adm_power = 100
 			custom_tooltip = PRO_add_breton_culture
+			hidden_effect = {
+				set_country_flag = FRA_accept_breton_culture
+				if = {
+					limit = {
+						NOT = {
+							accepted_culture = breton
+						}
+					}
+					add_accepted_culture = breton
+				}
+				else = {
+					add_dip_power = 100
+				}
+			}		
 		}
 	}
 	
@@ -574,6 +683,29 @@ PRO_Missions_2 = {
 			}
 		}
 	}
+	PRO_provencal_court = {
+		icon = feast_of_pheasants
+		required_missions = { PRO_hungary }
+		position = 8
+		provinces_to_highlight = {
+			owned_by = ROOT
+			local_autonomy_above_min = 10
+		}
+		trigger = {
+			NOT = { average_autonomy_above_min = 10 }
+			OR = {
+				num_of_subjects = 4
+				num_accepted_cultures = 4
+			}
+		}
+		effect = {
+			add_legitimacy_equivalent = { value = 20 }
+			add_country_modifier = {
+				name = PRO_court_modifier
+				duration = 10950
+			}
+		}
+	}
 }
 
 PRO_Missions_3 = {
@@ -582,7 +714,13 @@ PRO_Missions_3 = {
 	ai = yes
 	potential = {
 		tag = PRO
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	} 
 	has_country_shield  = yes
 	
@@ -642,6 +780,7 @@ PRO_Missions_3 = {
 			}
 		}
 		effect = {
+			set_country_flag = PRO_event
 			custom_tooltip = PRO_reward_if_LOR_integrated
 			tooltip = {
 				add_country_modifier = {
@@ -740,13 +879,32 @@ PRO_Missions_3 = {
 	
 	PRO_house_of_anjou = {
 		icon = king_of_kings
-		required_missions = { PRO_french_court PRO_provencal_hegemony PRO_liberate_the_holy_lands }
-		position = 8
-		provinces_to_highlight = {
-		}
+		required_missions = { PRO_provencal_court PRO_provencal_hegemony PRO_the_third_temple }
+		position = 9
 		trigger = {
+			total_development = 400
+			custom_trigger_tooltip = {
+				tooltip = PRO_largest_army_in_europe
+				NOT = {
+					any_country = {
+						capital_scope = {
+							continent = europe
+						}
+						army_size = ROOT
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Common Sense"
+				}
+				government_rank = 2
+			}
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 50 }
+			custom_tooltip = PRO_unlock_decision
+			set_country_flag = PRO_form_capet
 		}
 	}
 }
@@ -757,7 +915,13 @@ PRO_Missions_4 = {
 	ai = yes
 	potential = {
 		tag = PRO
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	} 
 	has_country_shield  = yes
 	
@@ -789,7 +953,7 @@ PRO_Missions_4 = {
 					duration = -1
 				}
 			}
-			country_event = { id = ME_Provence_Events.5 }
+			country_event = { id = ME_Provence_Events.7 }
 		}
 	}
 	
@@ -886,12 +1050,108 @@ PRO_Missions_4 = {
 		required_missions = { PRO_provencal_hegemony }
 		position = 7
 		provinces_to_highlight = {
+			is_capital_of = emperor
 		}
 		trigger = {
+			OR = {
+				NOT = { hre_size = 1 }
+				is_emperor = yes
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = emperor
+					war_score = 80
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = PRO_reward_if_emperor_PRO
+			tooltip = {
+				add_country_modifier = {
+					name = PRO_sacrum_imperium_romanum
+					duration = 10950
+				}
+				add_imperial_influence = 10
+			}
+			custom_tooltip = PRO_reward_if_emperor_WAR
+			tooltip = {
+				add_country_modifier = {
+					name = PRO_overthrowing_an_emperor
+					duration = 7300
+				}
+			}
+			custom_tooltip = PRO_reward_if_emperor_NONE
+			tooltip = {
+				add_legitimacy_equivalent = { value = 10 }
+				add_prestige_or_monarch_power = { amount = 25 }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_country_modifier = {
+						name = PRO_sacrum_imperium_romanum
+						duration = 10950
+					}
+					add_imperial_influence = 10
+				}
+				else_if = {
+					limit = {
+						NOT = { hre_size = 1 }
+					}
+					add_legitimacy_equivalent = { value = 10 }
+					add_prestige_or_monarch_power = { amount = 25 }
+				}
+				else = {
+					add_country_modifier = {
+						name = PRO_overthrowing_an_emperor
+						duration = 7300
+					}
+				}
+			}
 		}
 	}
+	
+	PRO_the_third_temple = {
+		icon = jerusalem
+		required_missions = { PRO_liberate_the_holy_lands }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = palestine_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 379
+					OR = {
+						NOT = { has_tax_building_trigger = yes }
+						NOT = { religion = ROOT }
+						unrest = 0.01
+					}
+				}
+			}
+		}
+		trigger = {
+			palestine_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			379 = {
+				has_tax_building_trigger = yes
+				religion = ROOT
+				NOT = { unrest = 0.01 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = PRO_immanuel
+				duration = 7300
+			}
+			country_event = { id = ME_Provence_Events.6 }
+		}
+	}
+	
 }
 
 PRO_Missions_5 = {
@@ -900,7 +1160,13 @@ PRO_Missions_5 = {
 	ai = yes
 	potential = {
 		tag = PRO
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	} 
 	has_country_shield  = yes
 	
@@ -995,10 +1261,64 @@ PRO_Missions_5 = {
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
+			province_id = 202
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			OR = {
+				202 = { owned_by = ROOT }
+				AND = {
+					202 = { owned_by = PAP }
+					reverse_has_opinion = {
+						who = PAP
+						value = 125
+					}
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = PRO_reward_if_PAP_avignon
+			tooltip = {
+				PAP = {
+					country_event = { id = ME_Provence_Events.8 }
+				}
+			}
+			custom_tooltip = PRO_avignon_acceptance
+			custom_tooltip = PRO_reward_if_PRO_avignon
+			tooltip = {
+				add_mil_power = 100
+				202 = {
+					add_trade_modifier = {
+						who = ROOT
+						duration = 36500
+						power = 25
+						key = PRO_avignon_reclaimed
+					}
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { 
+							202 = { owned_by = ROOT }
+						}
+					}
+					PAP = { 
+						country_event = { id = ME_Provence_Events.8 } 
+					}
+				}
+				else = {
+					add_mil_power = 100
+					202 = {
+						add_trade_modifier = {
+							who = ROOT
+							duration = 36500
+							power = 25
+							key = PRO_avignon_reclaimed
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -1007,10 +1327,56 @@ PRO_Missions_5 = {
 		required_missions = { PRO_papal_holdings }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 118
 		}
 		trigger = {
+			owns = 202
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = PRO_owner_war
+					118 = {
+						owner = {
+							ROOT = {
+								is_in_war = {
+									defender_leader = PREV
+									attacker_leader = ROOT
+									war_score = 60
+								}
+							}
+						}
+					}
+				}
+				118 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = PRO_reward_if_rome_WAR
+			tooltip = {
+				202 = {
+					add_province_modifier = {
+						name = PRO_holy_see_of_avignon
+						duration = -1
+					}
+				}
+				add_mil_power = 100
+			}
+			custom_tooltip = PRO_reward_if_rome_OPINION
+			tooltip = {
+				202 = {
+					add_province_modifier = {
+						name = PRO_secondary_see_of_avignon
+						duration = -1
+					}
+				}
+				add_dip_power = 100
+			}
 		}
 	}
 	
@@ -1021,8 +1387,51 @@ PRO_Missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			stability = 1
+			OR = { 
+				num_of_cardinals = 3
+				AND = {
+					religious_unity = 0.9
+					inquisitor = 1
+				}
+			}
+			OR = {
+				reverse_has_opinion = {
+					who = PAP
+					value = 150
+				}
+				AND = {
+					total_development = PAP
+					army_size = PAP
+				}
+			}
 		}
 		effect = {
+			320 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			321 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = PRO_reestablish_the_true_faith
+				duration = 9125
+			}
+			add_papal_influence = 20
+			add_fervor = 25
+			add_church_power = 25
 		}
 	}
 	
@@ -1031,22 +1440,60 @@ PRO_Missions_5 = {
 		required_missions = { PRO_militum_christi }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				province_id = 320
+				province_id = 321
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			320 = { country_or_non_sovereign_subject_holds = ROOT }
+			321 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
+			add_papal_influence = 20
+			add_fervor = 25
+			add_church_power = 25
+			palestine_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			379 = { 
+				owner = {
+					add_spy_network_from = {
+						who = ROOT
+						value = 50
+					}
+				}
+			}
 		}
 	}
 	
 	PRO_liberate_the_holy_lands = {
-		icon = jerusalem
+		icon = shield_of_christendom
 		required_missions = { PRO_ractification }
 		position = 7
 		provinces_to_highlight = {
+			area = palestine_area
+			OR = {
+				NOT = { is_core = ROOT }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
 		}
 		trigger = {
+			palestine_area = {
+				is_core = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PRO_liberating_holy_lands
+				duration = 9125
+			}
 		}
 	}
 }
