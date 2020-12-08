@@ -39,13 +39,23 @@ albania_missions_1 = {
 			province_id = 4174
 			OR = {
 				NOT = { owned_by = ROOT }
-				devastation = 1 
+				devastation = 1
+				NOT = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		trigger = {
 			owns = 4174
 			4174 = {
 				NOT = { devastation = 1 }
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		effect = {
@@ -79,7 +89,7 @@ albania_missions_1 = {
 								has_building = stock_exchange
 							}
 						}
-						amount = 2
+						amount = 3
 					}
 				}
 			}
@@ -99,7 +109,7 @@ albania_missions_1 = {
 						has_building = stock_exchange
 					}
 				}
-				amount = 2
+				amount = 3
 			}
 		}
 		effect = {
@@ -125,32 +135,6 @@ albania_missions_1 = {
 		icon = support_the_bulk_trades
 		position = 7
 		required_missions = { alb_albanian_navy }
-		provinces_to_highlight = {
-			OR = {
-				AND = {
-					province_id = 1308
-					1308 = { #venice node
-						NOT = {
-							trade_share = {
-								country = ROOT
-								share = 50
-							}
-						}
-					}
-				}
-				AND = {
-					province_id = 137
-					137 = { #ragusa node
-						NOT = {
-							trade_share = {
-								country = ROOT
-								share = 50
-							}
-						}
-					}
-				}
-			}
-		}
 		trigger = {
 			1308 = { #venice node
 				trade_share = {
@@ -202,10 +186,7 @@ albania_missions_2 = {
 			owns = 4750
 			OR = {
 				advisor = fortification_expert
-				has_global_modifier_value = {
-					which = country_military_power
-					value = 9
-				}
+				monthly_mil = 11
 			}
 		}
 		effect = {
@@ -246,23 +227,15 @@ albania_missions_2 = {
 			has_adm_advisor_2 = yes
 			has_dip_advisor_2 = yes
 			has_mil_advisor_2 = yes
-			has_global_modifier_value = {
-				which = country_admin_power
-				value = 8
-			}
-			has_global_modifier_value = {
-				which = country_diplomatic_power
-				value = 8
-			}
-			has_global_modifier_value = {
-				which = country_military_power
-				value = 8
-			}
+			monthly_adm = 8
+			monthly_dip = 8
+			monthly_mil = 8
 		}
 		effect = {
 			define_advisor = {
 				type = theologian
 				name = "Frang Bardhi"
+				skill = 3
 				cost_multiplier = 0.25
 			}
 			if = {
@@ -290,22 +263,17 @@ albania_missions_2 = {
 			add_navy_tradition = 15
 			4754 = {
 				if = {
-					limit = {
-						OR = {
-							has_building = shipyard 
-							has_building = grand_shipyard
-						}
-					}
-					add_province_modifier = {
-						name = alb_harbor_albania
-						duration = -1
-					}
-				}
-				else = {
+					limit = { can_build = shipyard }
 					add_building_construction = {
 						building = shipyard
 						speed = 1.5
 						cost = 0
+					}
+				}
+				else = {
+					add_province_modifier = {
+						name = alb_harbor_albania
+						duration = -1
 					}
 				}
 			}
@@ -375,9 +343,11 @@ albania_missions_3 = {
 			add_war_exhaustion = -2
 			if = {
 				limit = { is_at_war = yes }
-				add_devastation = -100
+				4174 = { add_devastation = -100 }
 			}
-			else = { add_devastation = -50 }
+			else = {
+				4174 = { add_devastation = -50 }
+			}
 		}
 	}
 	
@@ -445,7 +415,10 @@ albania_missions_3 = {
 		}
 		trigger = {
 			OR = {
-				has_country_flag = wonwarTUR
+				custom_trigger_tooltip = {
+					tooltip = wonwarTUR
+					has_country_flag = wonwarTUR
+				}
 				NOT = { exists = TUR }
 			}
 			NOT = {
@@ -624,18 +597,21 @@ albania_missions_4 = {
 		required_missions = { alb_league_lezhe }
 		provinces_to_highlight = {
 			province_id = 143
-			NOT = { controlled_by = 143 }
+			NOT = { controlled_by = ROOT }
 		}
 		trigger = {
 			OR = {
 				AND = {
 					controls = 143
-					143 = {
-						owner = {
-							ROOT = {
-								war_score_against = {
-									who = PREV
-									value = 15
+					custom_trigger_tooltip = {
+						tooltip = alb_vengeance_vlore_tt
+						143 = {
+							owner = {
+								ROOT = {
+									war_score_against = {
+										who = PREV
+										value = 15
+									}
 								}
 							}
 						}
@@ -663,12 +639,10 @@ albania_missions_4 = {
 		position = 3
 		required_missions = { alb_organize_crusade }
 		trigger = {
-			OR = {
-				NOT = { exists = PAP }
-				reverse_has_opinion = {
-					who = PAP
-					value = 125
-				}
+			religion = catholic
+			reverse_has_opinion = {
+				who = PAP
+				value = 125
 			}
 			estate_loyalty = {
 				estate = estate_church
@@ -749,7 +723,8 @@ albania_missions_5 = {
 		required_missions = { alb_secure_position }
 		trigger = {
 			OR = {
-				AND = {
+				custom_trigger_tooltip = {
+					tooltip = alb_organize_crusade_tta
 					exists = HUN
 					HUN = {
 						has_opinion = {
@@ -758,7 +733,8 @@ albania_missions_5 = {
 						}
 					}
 				}
-				AND = {
+				custom_trigger_tooltip = {
+					tooltip = alb_organize_crusade_ttb
 					exists = ARA
 					ARA = {
 						has_opinion = {
@@ -769,12 +745,15 @@ albania_missions_5 = {
 				}
 				
 				NOT = { exists = TUR }
-				TUR = {
-					any_rival_country = {
-						total_development = 150
-						has_opinion = {
-							who = ROOT
-							value = 100
+				custom_trigger_tooltip = {
+					tooltip = alb_organize_crusade_ttc
+					TUR = {
+						any_rival_country = {
+							total_development = 150
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
 						}
 					}
 				}
@@ -788,14 +767,21 @@ albania_missions_5 = {
 				}
 				add_prestige = 25
 			}
-			else_if = {
-				limit = { is_rival = TUR }
-				add_country_modifier = {
-					name = alb_led_crusade
-					duration = 7300 #20 years
-				}
-			}
 			else = {
+				if = {
+					limit = { is_rival = TUR }
+					add_country_modifier = {
+						name = alb_led_crusade
+						duration = 7300 #20 years
+					}
+				}
+				else = {
+					tooltip = {
+						country_event = { #Skanderbeg Calls for Crusade
+							id = ME_Albania_Events.2
+						}
+					}
+				}
 				if = {
 					limit = {
 						exists = HUN
@@ -828,30 +814,19 @@ albania_missions_5 = {
 						}
 					}
 				}
-				if = {
-					limit = {
-						TUR = {
-							any_rival_country = {
-								total_development = 150
-								has_opinion = {
-									who = ROOT
-									value = 100
-								}
+				TUR = {
+					every_rival_country = {
+						limit = {
+							total_development = 150
+							has_opinion = {
+								who = ROOT
+								value = 100
 							}
+							NOT = { tag = HUN }
+							NOT = { tag = ARA }
 						}
-					}
-					TUR = {
-						every_rival_country = {
-							limit = {
-								total_development = 150
-								has_opinion = {
-									who = ROOT
-									value = 100
-								}
-							}
-							country_event = { #Skanderbeg Calls for Crusade
-								id = ME_Albania_Events.2
-							}
+						country_event = { #Skanderbeg Calls for Crusade
+							id = ME_Albania_Events.2
 						}
 					}
 				}
