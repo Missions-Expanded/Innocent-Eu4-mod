@@ -23,17 +23,21 @@ country_event = {
 		
 		add_stability_or_adm_power = yes
 		
+		custom_tooltip = alb_defended_christianity_tt
 		every_known_country = {
 			limit = {
+				religion_group = christian
 				knows_country = ROOT
 				OR = {
 					NOT = { exists = TUR }
 					knows_country = TUR
 				}
 			}
-			reverse_add_opinion = {
-				who = ROOT
-				modifier = alb_defended_christianity
+			hidden_effect = {
+				add_opinion = {
+					who = ROOT
+					modifier = alb_defended_christianity
+				}
 			}
 		}
 		
@@ -70,20 +74,12 @@ country_event = {
 		
 		#add_favors = 15
 		create_alliance = FROM
+		hidden_effect = { set_country_flag = joined_crusade }
 		
 		FROM = {
 			country_event = { #X Sends Their Support!
 				id = ME_Albania_Events.3
-			}
-			
-			if = {
-				limit = {
-					NOT = { has_country_modifier = alb_western_arms }
-				}
-				add_country_modifier = {
-					name = alb_western_arms
-					duration = 5475 #15 years
-				}
+				days = 1
 			}
 		}
 	}
@@ -114,6 +110,16 @@ country_event = {
 		name = ME_Albania_Events.3.a
 		
 		add_manpower = 1
+		
+		if = {
+			limit = {
+				NOT = { has_country_modifier = alb_western_arms }
+			}
+			add_country_modifier = {
+				name = alb_western_arms
+				duration = 5475 #15 years
+			}
+		}
 	}
 }
 
@@ -128,7 +134,12 @@ country_event = {
 	option = {
 		name = ME_Albania_Events.4.a
 		
-		FROM = { set_in_empire = yes }
+		FROM = {
+			country_event = { #Albania Joins the Empire!
+				id = ME_Albania_Events.8
+				days = 1
+			}
+		}
 	}
 	
 	option = {
@@ -207,4 +218,27 @@ country_event = {
 	}
 	
 	option = { }
+}
+
+country_event = {
+	id = ME_Albania_Events.8
+	title = ME_Albania_Events.8.t
+	desc = ME_Albania_Events.8.d
+	picture = DIPLOMACY_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Albania_Events.8.a
+		
+		set_in_empire = yes
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = { is_core = ROOT }
+				}
+				set_in_empire = no
+			}
+		}
+	}
 }
