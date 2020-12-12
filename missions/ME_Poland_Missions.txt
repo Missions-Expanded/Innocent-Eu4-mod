@@ -50,6 +50,10 @@ POL_Missions_1 = {
 				name = POL_papal_favour
 				duration = 7300
 			}
+			custom_tooltip = POL_if_we_have_rm
+			PAP = {
+				country_event = { id = ME_Poland_Events.3 }
+			}
 		}
 	}
 	
@@ -87,7 +91,7 @@ POL_Missions_1 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Poland_Events.1 } #Zamość
+			country_event = { id = ME_Poland_Events.2 } #Zamość
 		}
 	}
 	
@@ -109,18 +113,26 @@ POL_Missions_1 = {
 				name = POL_leave_brick
 				duration = 7300
 			}
-			every_owned_province = {
-				limit = {
-					development = 25
-					has_production_building_trigger = yes
-					has_tax_building_trigger = yes 
-				}
+			custom_tooltip = POL_extra_5_dev
+			custom_tooltip = POL_every_province_with_church
+			tooltip = {
 				add_province_modifier = {
 					name = POL_faithful_adherence
 					duration = 9125
 				}
 			}
 			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						development = 25
+						has_production_building_trigger = yes
+						has_tax_building_trigger = yes 
+					}
+					add_province_modifier = {
+						name = POL_faithful_adherence
+						duration = 9125
+					}
+				}
 				if = {
 					limit = {
 						num_of_estate_privileges = {
@@ -148,7 +160,7 @@ POL_Missions_1 = {
 		trigger = {
 			development_in_provinces = {
 				culture = polish
-				value = 400
+				value = 300
 			}
 		}
 		effect = {
@@ -162,12 +174,45 @@ POL_Missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			has_won_war_against = {
-				who = TUR
-				years = 5
+			if = {
+				limit = {
+					exists = TUR
+				}
+				has_won_war_against = {
+					who = TUR
+					years = 5
+				}
+			}
+			else = {
+				any_country = {
+					religion_group = muslim
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+							years = 5
+						}
+					}
+				}
 			}
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 20 }
+			add_country_modifier = {
+				name = POL_athelta_christi
+				duration = 10950
+			}
+			custom_tooltip = POL_if_before_1500
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { is_year = 1500 }
+					}
+					add_power_projection = {
+						type = mission_rewards_power_projection
+						amount = 25
+					}
+				}
+			}
 		}
 	}
 }
@@ -187,13 +232,20 @@ POL_Missions_2 = {
 		position = 2
 		required_missions = { POL_mission_to_pope POL_sejm_mission }
 		provinces_to_highlight = {
-			area = red_ruthenia_area
+			OR = {
+				area = red_ruthenia_area
+				province_id = 4538
+			}
 			OR = {
 				NOT = { religion = ROOT }
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			}
 		}
 		trigger = {
+			4538 = {
+				religion = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			red_ruthenia_area = {
 				type = all
 				religion = ROOT
@@ -201,11 +253,19 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
-			2961 = {
+			red_ruthenia_area = {
 				change_culture = polish
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
+				add_province_modifier = {
+					name = POL_influx_of_polish_settlers
+					duration = 10950
+				}
+			}
+			4538 = {
+				change_culture = polish
+				add_province_modifier = {
+					name = POL_influx_of_polish_settlers
+					duration = 10950
+				}
 			}
 		}
 	}
@@ -230,7 +290,12 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
-			#local dev cost
+			262 = {
+				add_province_modifier = {
+					name = POL_expansion_of_krakow
+					duration = -1
+				}
+			}
 		}
 	}
 	
@@ -258,6 +323,12 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
+			281 = {
+				add_province_modifier = {
+					name = POL_unconquered_fortress
+					duration = -1
+				}
+			}
 		}
 	}
 	
@@ -281,13 +352,26 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = {
-					trade_goods = grain
-				}
+			add_country_modifier = {
+				name = POL_foreign_merchants_in_gdansk
+				duration = -1
+			}
+			custom_tooltip = POL_every_owned_province_producing_grain
+			tooltip = {
 				add_province_modifier = {
 					name = POL_grain
 					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						trade_goods = grain
+					}
+					add_province_modifier = {
+						name = POL_grain
+						duration = 10950
+					}
 				}
 			}
 		}
@@ -308,6 +392,24 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.6 }
+			if = {
+				limit = {
+					exists = WAL
+				}
+				add_casus_belli = {
+					target = WAL
+					type = cb_vassalize_mission
+					months = -1
+				}
+			}
+			wallachia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -326,10 +428,16 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
+			custom_tooltip = POL_if_two_subjects
+			add_country_modifier = {
+				name = POL_double_trouble
+				duration = 14600
+			}
 			if = {
 				limit = {
 					WAL = { is_subject_of = ROOT }
 				}
+				
 			}
 		}
 	}
@@ -379,7 +487,7 @@ POL_Missions_3 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Poland_Events.4 }
+			country_event = { id = ME_Prussia_Events.5 }
 		}
 	}
 	
@@ -425,8 +533,34 @@ POL_Missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				war_with = TEU
+				alliance_with = DZG
+				DZG = { is_subject_of = ROOT }
+			}
 		}
 		effect = {
+			define_general = {
+				shock = 0
+				fire = 3
+				manuever = 3
+				siege = 1
+				name = "Piotr Dunin"
+			}
+			east_prussia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_prussia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -447,10 +581,22 @@ POL_Missions_4 = {
 		position = 5
 		required_missions = { POL_end_knights }
 		provinces_to_highlight = {
+			OR = {
+				province_id = 39
+				province_id = 1935
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			39 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			1935 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.7 }
 		}
 	}
 	
@@ -461,8 +607,73 @@ POL_Missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				AND = {
+					owns = 257
+					owns = 1938
+					owns = 256
+				}
+				AND = {
+					reverse_has_opinion = {
+						who = MAZ
+						value = 190
+					}
+					MAZ = { is_subject_of = ROOT }
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = POL_reward_if_MAZ_opinion
+			tooltip = {
+				if = {
+					limit = {
+						MAZ = { ai = yes }
+					}
+					country_event = { id = ME_Poland_Events.1 }
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_cost_reduction
+						duration = 9125
+					}
+				}
+			}
+			custom_tooltip = POL_reward_if_MAZ_ownership
+			tooltip = {
+				257 = { add_core = ROOT }
+				256 = { add_core = ROOT }
+				1938 = { add_core = ROOT }
+				add_dip_power = 50
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						reverse_has_opinion = {
+							who = MAZ
+							value = 190
+						}
+						MAZ = { is_subject_of = ROOT }
+					}
+					if = {
+						limit = {
+							MAZ = { ai = yes }
+						}
+						country_event = { id = ME_Poland_Events.1 }
+					}
+					else = {
+						add_country_modifier = {
+							name = POL_cost_reduction
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					257 = { add_core = ROOT }
+					256 = { add_core = ROOT }
+					1938 = { add_core = ROOT }
+					add_dip_power = 50
+				}
+			}
 		}
 	}
 	
@@ -471,10 +682,24 @@ POL_Missions_4 = {
 		position = 7
 		required_missions = { POL_relations_mazovia }
 		provinces_to_highlight = {
+			OR = {
+				owned_by = MAZ
+				AND = {
+					province_id = 257
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
+			owns = 257
+			NOT = { exists = MAZ }
 		}
 		effect = {
+			country_event = { id = flavor_pol.3473 }
+			add_country_modifier = {
+				name = "polish_ambition"
+				duration = 5475
+			}
 		}
 	}
 }
@@ -496,6 +721,9 @@ POL_Missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
 		}
 		effect = {
 		}
