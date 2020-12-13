@@ -1,0 +1,561 @@
+aju_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = AJU
+	}
+	has_country_shield = yes
+	
+	aju_ajuuraani_trade_fleet = {
+		icon = mission_grand_bengali_shipyards
+		position = 1 
+		required_missions = { } 
+		trigger = { 
+			num_of_light_ship = 7
+			OR = {
+				has_estate_privilege = estate_burghers_free_enterprise 
+				estate_loyalty = {
+					estate = estate_burghers 
+					loyalty = 60 
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = aju_powerful_admiral
+			hidden_effect = {
+				create_admiral = {
+					tradition = 50 
+					add_manuever = 3 
+				}
+			}
+			west_indian_ocean_region = {
+				discover_country = ROOT 
+			}
+			east_indian_ocean_region = {
+				discover_country = ROOT 
+			}
+			south_china_sea_region = {
+				discover_country = ROOT 
+			}
+			south_china_sea_region = {
+				discover_country = ROOT 
+			}
+			east_china_sea_region = {
+				discover_country = ROOT 
+			}
+			north_china_region = {
+				discover_country = ROOT 
+			}
+			south_china_region = {
+				discover_country = ROOT 
+			}
+		}
+	}
+	
+	aju_the_empire_of_china = {
+		icon = porcelain_from_meissen
+		position = 2 
+		required_missions = { aju_ajuuraani_trade_fleet }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					any_country = {
+						is_emperor_of_china = yes 
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					1361 = { has_merchant = ROOT }
+				}
+			}
+			else = {
+				OR = {
+					MNG = {
+						has_opinion = {
+							who = ROOT 
+							value = 100 
+						}
+					}
+					1361 = { has_merchant = ROOT }
+				}
+			}
+			if = {
+				limit = {
+					capital_scope = {
+						NOT = {	trade_goods = gold }
+					}
+				}
+				capital_scope = {
+					OR = {
+						has_building = workshop 
+						has_building = counting_house
+					}
+				}
+			}
+			grown_by_development = 25 
+		}
+		effect = {
+			country_event = { id = ME_Ajuuraan_Events.1 } 
+			add_legitimacy_equivalent = { value = 10 }
+		}
+	}
+	
+	aju_institute_kelliyo = {
+		icon = mission_found_havana 
+		position = 4 
+		required_missions = { aju_the_empire_of_china aju_jubba_and_shebelle }
+		provinces_to_highlight = { } 
+		trigger = {
+			mogadishu_area = {
+				owned_by = ROOT 
+			}
+			development_in_provinces = {
+				value = 50
+				area = mogadishu_area
+			} 
+			num_of_owned_provinces_with = {
+				AND = {
+					OR = {
+						has_building = workshop 
+						has_building = counting_house 
+					}
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain 
+					}
+				}
+				value = 5
+			}
+		}
+		effect = {
+			custom_tooltip = aju_grain_livestock_dev_tt 
+			hidden_effect = {
+				any_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = grain 
+							trade_goods = livestock
+						}
+					}
+					add_base_production = 1 
+				}
+			}
+			add_adm_power = 100 
+		}
+	}
+}
+
+aju_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = AJU
+	}
+	has_country_shield = yes
+	
+	aju_incorporate_mogadishu = {
+		icon = mission_reclaim_morocco	 
+		position = 1 
+		required_missions = { } 
+		provinces_to_highlight = { } 
+		trigger = {
+			2782 = { owned_by = ROOT }
+			1205 = { owned_by = ROOT } 
+		}
+		effect = {
+			remove_country_modifier = annexers_legacy
+			1205 = { add_center_of_trade_level = 1 } 
+		}
+	}
+	
+	aju_jubba_and_shebelle = {
+		icon = mission_advance_to_the_arabian_sea 
+		position = 3 
+		required_missions = { aju_incorporate_mogadishu }
+		provinces_to_highlight = { } 
+		trigger = {
+			2794 = {
+				num_of_times_improved = 5 
+				NOT = { devastation = 1 }
+				NOT = { unrest = 1 } 
+			}
+			if = {
+				limit = {
+					has_global_flag = advisors_expanded_mod_active
+				}
+				OR = {
+					has_idea = aju_hydraulic_empire 
+					civil_engineer = 1 
+					adm = 5 
+				}
+			}
+			else = {
+				OR = {
+					adm = 5 
+					has_idea = aju_hydraulic_empire 
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = { 
+				name = aju_monopolized_water_modifier 
+				duration = 9125 
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				2794 = {
+					add_prosperity = 100 
+				}
+			}
+			else = { add_adm_power = 100 } 
+		}
+	}
+	
+	aju_resist_western_invasions = {
+		icon = end_the_habsburgs 
+		position = 5 
+		required_missions = { aju_institute_kelliyo aju_jubba_and_shebelle aju_empire_of_architecture }
+		trigger = {
+			if = { 
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man" 
+					}
+				}
+				OR = {
+					full_idea_group = expansion_ideas
+					any_rival_country = {
+						technology_group = western 
+					}
+					is_great_power = yes 
+				}
+			}
+			else = {
+				OR = {
+					full_idea_group = expansion_ideas
+					any_rival_country = {
+						technology_group = western 
+					}
+					total_development = 500 
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = aju_ajuuraani_ingenuity_modifier
+				duration = -1 
+			}
+		}
+	}
+}
+
+aju_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = AJU
+	}
+	has_country_shield = yes					
+	
+	aju_contest_zanzibar = {
+		icon = reform_the_monte
+		position = 3
+		required_missions = { aju_city_of_pate }
+		provinces_to_highlight = { } 
+		trigger = {
+			central_swahili_coast_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			1196 = { 
+				OR = {
+					province_has_center_of_trade_of_level = 2 
+					base_production = 6 
+				}
+			}
+		}
+		effect = {
+			south_africa_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_africa_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = aju_kilwan_wealth_modifier
+				duration = 5475 
+			}
+		}
+	}
+	
+	aju_realm_of_architecture = {
+		icon = protect_against_the_turks 
+		position = 4 
+		required_missions = { aju_jubba_and_shebelle aju_contest_zanzibar }
+		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				value = 5 
+			}
+			num_of_owned_manufactory_combined_trigger = { amount = 10 }
+			num_of_owned_provinces_with = {
+				development = 25 
+				value = 3 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = aju_golden_age_of_architecture_and_art_modifier
+				duration = 18250
+			}
+			add_adm_power = 100 
+			add_dip_power = 100 
+			add_mil_power = 100 
+		}
+	}
+}
+
+aju_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = AJU
+	}
+	has_country_shield = yes
+	
+	aju_seek_military_funding = {
+		icon = mission_spoils_of_war 
+		position = 1 
+		required_missions = { }
+		trigger = {
+			army_size_percentage = 0.9 
+			OR = {
+				MAM = {
+					has_opinion = {
+						who = ROOT 
+						value = 125 
+					}
+				}
+				estate_loyalty = {
+					estate = estate_nobles 
+					loyalty = 60 
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					MAM = {
+						has_opinion = {
+							who = ROOT 
+							value = 125 
+						}
+					}
+				}
+				define_general = {
+					name = "Baybar Ustadar"
+					fire = 3
+					shock = 2 
+					manuever = 1
+					siege = 1 
+				}
+				add_historical_friend = MAM
+			}
+			else_if = {
+				limit = {
+					estate_loyalty = {
+						estate = nobles 
+						loyalty = 60 
+					}
+				}
+				add_manpower = 5 
+				add_army_tradition = 10 
+			}
+			horn_of_africa_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					is_empty = no
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_swahili_coast_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					is_empty = no
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	aju_city_of_pate = {
+		icon = mission_conquer_mewar 
+		position = 2 
+		required_missions = { aju_seek_military_funding }
+		provinces_to_highlight = { } 
+		trigger = { 
+			northern_swahili_coast_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				NOT = { devastation = 1 }
+			}
+			2796 = {
+				NOT = { local_autonomy = 30 }
+			}
+		}
+		effect = {
+			country_event = { id = ME_Ajuuraan_Events.2 }
+			mombasa_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			central_swahili_coast_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
+	aju_mnara_and_mandhry = {
+		icon = mission_into_persia_1 
+		position = 3
+		required_missions = { aju_city_of_pate }
+		provinces_to_highlight = { } 
+		trigger = {
+			mombasa_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				has_owner_religion = yes 
+			}
+		}
+		effect = {
+			country_event = { id = ME_Ajuuraan_Events.3 } 
+		}
+	}
+	
+	aju_seize_the_gold_of_africa = {
+		icon = reform_the_state
+		position = 4 
+		required_missions = { aju_contest_zanzibar aju_mnara_and_mandhry }
+		provinces_to_highlight = { } 
+		trigger = {
+			num_of_owned_provinces_with = {
+				trade_goods = gold 
+				value = 4 
+			}
+			gold_income = 30
+		}
+		effect = {
+			define_advisor = {
+				type = master_of_mint 
+				skill = 3 
+				cost_multiplier = 0.1 
+			}
+			add_country_modifier = {
+				name = aju_moderated_gold_currency_modifier
+				duration = -1 
+			}
+		}
+	}
+}
+
+aju_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = AJU
+	}
+	has_country_shield = yes			
+	
+	aju_border_in_the_horn = {
+		icon = mission_the_battle_for_raichur 
+		position = 2 
+		required_missions = { aju_seek_military_funding } 
+		provinces_to_highlight = { } 
+		trigger = {
+			majarteen_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			somaliland_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = aju_conquest_of_east_africa_modifier 
+				duration = 7300
+			}
+			add_mil_power = 50 
+		}
+	}
+	
+	aju_reap_zeila = {
+		icon = mission_crush_delhi 
+		position = 4 
+		required_missions = { aju_border_in_the_horn }
+		provinces_to_highlight = { } 
+		trigger = {
+			ifat_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_dlc = "Rights of Man" } 
+				}
+				add_treasury = 250 
+			}
+			else = {
+				add_ruler_personality = entrepreneur_personality
+			}
+			if = {
+				limit = {
+					NOT = { dip = 6 }
+				}
+				change_dip = 1 
+			}
+			else = {
+				add_dip_power = 100 
+			}
+			add_mercantilism = 3 
+		}
+	}
+}
+	
