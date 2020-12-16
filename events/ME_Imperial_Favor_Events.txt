@@ -1,0 +1,615 @@
+namespace = ME_Imperial_Favor_Events
+
+country_event = {
+	id = ME_Imperial_Favor_Events.1
+	title = ME_Imperial_Favor_Events.1.t
+	desc = ME_Imperial_Favor_Events.1.d
+	picture = DEATH_OF_HEIR_eventPicture
+	hidden = yes
+	
+	trigger = {
+		has_global_flag = ajuShopActive
+		NOT = { is_month = 1 }
+		OR = {
+			had_global_flag = { flag = janImpFvr	days = 31 }
+			NOT = { has_global_flag = janImpFvr }
+		}
+	}
+	
+	immediate = {
+		clr_global_flag = janImpFvr
+		set_global_flag = janImpFvr
+		
+		AJU = {
+			country_event = { id = ME_Imperial_Favor_Events.2	days =   0 } #January
+			country_event = { id = ME_Imperial_Favor_Events.2	days =  31 } #February
+			country_event = { id = ME_Imperial_Favor_Events.2	days =  59 } #March
+			country_event = { id = ME_Imperial_Favor_Events.2	days =  90 } #April
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 120 } #May
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 151 } #June
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 182 } #July
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 213 } #August
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 244 } #September
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 274 } #October
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 305 } #November
+			country_event = { id = ME_Imperial_Favor_Events.2	days = 335 } #December
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = {
+	id = ME_Imperial_Favor_Events.2
+	title = ME_Imperial_Favor_Events.2.t
+	desc = ME_Imperial_Favor_Events.2.d
+	picture = DEATH_OF_HEIR_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		has_global_flag = ajuShopActive
+		exists = yes
+		exists = MNG
+		NOT = { is_rival = MNG }
+		MNG = {
+			NOT = { is_rival = AJU }
+			is_emperor_of_china = yes
+		}
+	}
+	
+	immediate = {
+		#stability
+		trigger_switch = {
+			on_trigger = stability
+			 3 = { change_variable = { mingImperialFavor =  3 } }
+			 2 = { change_variable = { mingImperialFavor =  2 } }
+			 1 = { change_variable = { mingImperialFavor =  1 } }
+			-1 = { change_variable = { mingImperialFavor = -1 } }
+			-2 = { change_variable = { mingImperialFavor = -2 } }
+			-3 = { change_variable = { mingImperialFavor = -3 } }
+		}
+		
+		#opinion
+		MNG = {
+			export_to_variable = {
+				which = mngOpn
+				value = opinion
+				who = PREV
+			}
+			PREV = {
+				set_variable = {
+					which = mngOpn
+					which = PREV
+				}
+			}
+		}
+		divide_variable = { mngOpn = 40 }
+		change_variable = {
+			which = mingImperialFavor
+			which = mngOpn
+		}
+		
+		#tributary_state
+		if = {
+			limit = {
+				is_subject_of = MNG
+				is_subject_of_type = tributary_state 
+			}
+			change_variable = { mingImperialFavor = 2 }
+		}
+		
+		#diplomatic_reputation
+		export_to_variable = {
+			which = dipRep
+			value = trigger_value:diplomatic_reputation
+		}
+		divide_variable = { dipRep = 2 }
+		change_variable = {
+			which = mingImperialFavor
+			which = dipRep
+		}
+		
+		#max 2000
+		if = {
+			limit = {
+				check_variable = { mingImperialFavor = 2000 }
+			}
+			set_variable = { mingImperialFavor = 2000 }
+		}
+	}
+	
+	option = {
+		#hidden
+	}
+}
+
+country_event = {
+	id = ME_Imperial_Favor_Events.3
+	title = ME_Imperial_Favor_Events.3.t
+	desc = ME_Imperial_Favor_Events.3.d
+	picture = DEATH_OF_HEIR_eventPicture
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.advisor
+		
+		highlight = yes
+		
+		trigger = {
+			check_variable = { mingImperialFavor = 400 }
+		}
+		
+		subtract_variable = { mingImperialFavor = 400 }
+		
+		country_event = {
+			id = ME_Imperial_Favor_Events.4
+		}
+		if = {
+			limit = {
+				has_dlc = "Rule Britannia"
+			}
+			change_innovativeness = 1
+		}
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.advisorNO
+		
+		trigger = {
+			NOT = { check_variable = { mingImperialFavor = 400 } }
+		}
+		
+		custom_tooltip = ME_Imperial_Favor_Events.3.advisorNO.tta
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.estates
+		
+		highlight = yes
+		
+		trigger = {
+			check_variable = { mingImperialFavor = 400 }
+		}
+		
+		subtract_variable = { mingImperialFavor = 400 }
+		
+		add_estate_loyalty = {
+			estate = all
+			loyalty = 10
+			short = yes
+		}
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.estatesNO
+		
+		trigger = {
+			NOT = { check_variable = { mingImperialFavor = 400 } }
+		}
+		
+		custom_tooltip = ME_Imperial_Favor_Events.3.estatesNO.tta
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.manpower
+		
+		highlight = yes
+		
+		trigger = {
+			check_variable = { mingImperialFavor = 500 }
+		}
+		
+		subtract_variable = { mingImperialFavor = 500 }
+		
+		add_yearly_manpower = 1
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.manpowerNO
+		
+		trigger = {
+			NOT = { check_variable = { mingImperialFavor = 500 } }
+		}
+		
+		custom_tooltip = ME_Imperial_Favor_Events.3.manpowerNO.tta
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.legitimacy
+		
+		highlight = yes
+		
+		trigger = {
+			check_variable = { mingImperialFavor = 500 }
+		}
+		
+		subtract_variable = { mingImperialFavor = 500 }
+		
+		add_legitimacy = 10
+		add_heir_claim = 25
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.legitimacyNO
+		
+		trigger = {
+			NOT = { check_variable = { mingImperialFavor = 500 } }
+		}
+		
+		custom_tooltip = ME_Imperial_Favor_Events.3.legitimacyNO.tta
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.trade
+		
+		highlight = yes
+		
+		trigger = {
+			check_variable = { mingImperialFavor = 500 }
+			NOT = { has_country_modifier = aju_trade_china }
+		}
+		
+		subtract_variable = { mingImperialFavor = 500 }
+		
+		add_country_modifier = {
+			name = aju_trade_china
+			duration = 3650 #10 years
+		}
+		
+		add_mercantilism = 1
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.tradeNO
+		
+		trigger = {
+			OR = {
+				NOT = { check_variable = { mingImperialFavor = 500 } }
+				has_country_modifier = aju_trade_china
+			}
+		}
+		
+		custom_tooltip = ME_Imperial_Favor_Events.3.tradeNO.tta
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.3.back
+		
+		highlight = yes
+		
+		#back
+	}
+}
+
+country_event = {
+	id = ME_Imperial_Favor_Events.4
+	title = ME_Imperial_Favor_Events.4.t
+	desc = ME_Imperial_Favor_Events.4.d
+	picture = DEATH_OF_HEIR_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	
+	option = { #adm
+		ai_chance = { factor = 1 }
+		country_event = {
+			id = ME_Imperial_Favor_Events.5
+		}
+	}
+	
+	option = { #dip
+		ai_chance = { factor = 1 }
+		country_event = {
+			id = ME_Imperial_Favor_Events.6
+		}
+	}
+	
+	option = { #mil
+		ai_chance = { factor = 1 }
+		country_event = {
+			id = ME_Imperial_Favor_Events.7
+		}
+	}
+}
+
+country_event = {
+	id = ME_Imperial_Favor_Events.5
+	title = ME_Imperial_Favor_Events.5.t
+	desc = ME_Imperial_Favor_Events.5.d
+	picture = DEATH_OF_HEIR_eventPicture
+	is_triggered_only = yes
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = philosopher
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = natural_scientist
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = artist
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = treasurer
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = theologian
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = master_of_mint
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = inquisitor
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+}
+
+country_event = {
+	id = ME_Imperial_Favor_Events.6
+	title = ME_Imperial_Favor_Events.6.t
+	desc = ME_Imperial_Favor_Events.6.d
+	picture = DEATH_OF_HEIR_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = statesman
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		trigger = {
+			any_owned_province = {
+				has_port = yes
+			}
+		}
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = naval_reformer
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = trader
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = spymaster
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		trigger = {
+			num_of_colonists = 1
+		}
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = colonial_governor
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = diplomat
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		trigger = {
+			num_of_colonists = 1
+		}
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = navigator
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+}
+
+country_event = {
+	id = ME_Imperial_Favor_Events.7
+	title = ME_Imperial_Favor_Events.7.t
+	desc = ME_Imperial_Favor_Events.7.d
+	picture = DEATH_OF_HEIR_eventPicture
+	is_triggered_only = yes
+	hidden = yes
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = army_reformer
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = army_organiser
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = commandant
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = quartermaster
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = recruitmaster
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = fortification_expert
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+	
+	option = {
+		ai_chance = { factor = 1 }
+		
+		define_advisor = {
+			type = grand_captain
+			skill = 3
+			culture = jianghuai
+			religion = confucianism
+		}
+	}
+}
+
+country_event = { #broken
+	id = ME_Imperial_Favor_Events.8
+	title = ME_Imperial_Favor_Events.8.t
+	desc = ME_Imperial_Favor_Events.8.d
+	picture = DEATH_OF_HEIR_eventPicture
+	
+	trigger = {
+		has_global_flag = ajuShopActive
+		NOT = {
+			AND = {
+				exists = AJU
+				exists = MNG
+				NOT = { is_rival = MNG }
+				MNG = {
+					NOT = { is_rival = AJU }
+					is_emperor_of_china = yes
+				}
+			}
+		}
+	}
+	
+	immediate = {
+		clr_global_flag = ajuShopActive
+	}
+	
+	option = {
+		name = ME_Imperial_Favor_Events.8.a
+		
+		#end
+	}
+}
