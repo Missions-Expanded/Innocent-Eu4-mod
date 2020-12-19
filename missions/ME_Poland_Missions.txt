@@ -20,7 +20,7 @@ POL_Missions_1 = {
 					exists = PAP
 				}
 				reverse_has_opinion = {
-					who = ROOT
+					who = PAP
 					value = 100
 				}
 			}
@@ -147,7 +147,6 @@ POL_Missions_1 = {
 					}
 				}
 			}
-			#if has burgher privileges, extra 5% dev cost
 		}
 	}
 	
@@ -164,6 +163,8 @@ POL_Missions_1 = {
 			}
 		}
 		effect = {
+			custom_tooltip = POL_get_ducats_per_province
+			country_event = { id = ME_Poland_Events.11 }
 		}
 	}
 	
@@ -254,19 +255,18 @@ POL_Missions_2 = {
 		}
 		effect = {
 			red_ruthenia_area = {
-				change_culture = polish
 				add_province_modifier = {
 					name = POL_influx_of_polish_settlers
 					duration = 10950
 				}
 			}
 			4538 = {
-				change_culture = polish
 				add_province_modifier = {
 					name = POL_influx_of_polish_settlers
 					duration = 10950
 				}
 			}
+			custom_tooltip = POL_ruthenia_will_convert
 		}
 	}
 	
@@ -329,6 +329,7 @@ POL_Missions_2 = {
 					duration = -1
 				}
 			}
+			add_army_tradition_or_mil_power = { amount = 15 }
 		}
 	}
 	
@@ -409,6 +410,11 @@ POL_Missions_2 = {
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
+			}
+			add_casus_belli = {
+				target = TUR
+				type = cb_revenge_for_varna
+				months = -1
 			}
 		}
 	}
@@ -731,6 +737,10 @@ POL_Missions_4 = {
 		}
 		effect = {
 			country_event = { id = ME_Poland_Events.7 }
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 10
+			}
 		}
 	}
 	
@@ -872,36 +882,12 @@ POL_Missions_5 = {
 		}
 		trigger = {
 			OR = {
-				AND = {
-					if = {
-						limit = {
-							has_estate = estate_nobles
-						}
-						estate_loyalty = {
-							estate = estate_nobles
-							loyalty = 55
-						}
-					}
-					if = {
-						limit = {
-							has_estate = estate_church
-						}
-						estate_loyalty = {
-							estate = estate_church
-							loyalty = 55
-						}
-					}
-					if = {
-						limit = {
-							has_estate = estate_burghers
-						}
-						estate_loyalty = {
-							estate = estate_burghers
-							loyalty = 55
-						}
-					}
+				crown_land_share = 50
+				estate_loyalty = {
+					estate = all
+					loyalty = 55
 				}
-			}		
+			}
 		}
 		effect = {
 			country_event = { id = ME_Poland_Events.10 }
@@ -1003,8 +989,77 @@ POL_Missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			variable_arithmetic_trigger = {
+				custom_tooltip = POL_larger_army_than_HUN
+				export_to_variable = {
+					variable_name = BRA_HUN_Army
+					value = army_size
+					who = HUN
+				}
+				export_to_variable = {
+					variable_name = BRA_POL_Army
+					value = army_size
+					who = POL
+				}
+				multiply_variable = {
+					which = BRA_HUN_Army
+					value = 3
+				}
+				check_variable = {
+					which = BRA_POL_Army
+					which = BRA_HUN_Army
+				}
+			}
+			variable_arithmetic_trigger = {
+				custom_tooltip = POL_greater_development_than_HUN
+				export_to_variable = {
+					variable_name = BRA_HUN_Development
+					value = total_development
+					who = HUN
+				}
+				export_to_variable = {
+					variable_name = BRA_POL_Development
+					value = total_development
+					who = POL
+				}
+				multiply_variable = {
+					which = BRA_HUN_Development
+					value = 3
+				}
+				check_variable = {
+					which = BRA_POL_Development
+					which = BRA_HUN_Development
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					HUN = {
+						valid_for_personal_unions_trigger = yes
+					}
+				}
+				custom_tooltip = POL_reward_if_hungary_valid_yes
+			}
+			else = {
+				custom_tooltip = POL_reward_if_hungary_valid_no
+			}
+			tooltip = {
+				add_casus_belli = {
+					target = HUN
+					type = cb_restore_personal_union 
+				}
+				custom_tooltip = PRO_cb_lasts_for_20_years
+				custom_tooltip = POL_extra_decisions
+			}
+			custom_tooltip = POL_reward_if_hungary_invalid
+			tooltip = {
+				alfold_area = { add_permanent_claim = ROOT }
+				transdanubia_area = { add_permanent_claim = ROOT }
+				transylvania_area = { add_permanent_claim = ROOT }
+				southern_transylvania_area = { add_permanent_claim = ROOT }
+				slovakia_area = { add_permanent_claim = ROOT }
+			}
 		}
 	}
 	
@@ -1015,8 +1070,33 @@ POL_Missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				NOT = { exists = HUN }
+				HUN = { is_subject_of = ROOT }
+			}
+			alfold_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			transdanubia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			southern_transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			slovakia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.12 } 
 		}
 	}
 	
@@ -1027,6 +1107,28 @@ POL_Missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			HUN = {
+				years_in_union_under = {
+					who = ROOT
+					years = 50
+				}
+				NOT = { liberty_desire = 5 }
+				has_opinion = {
+					who = ROOT
+					value = 200
+				}
+			}
+			BOH = {
+				years_in_union_under = {
+					who = ROOT
+					years = 50
+				}
+				NOT = { liberty_desire = 5 }
+				has_opinion = {
+					who = ROOT
+					value = 200
+				}
+			}
 		}
 		effect = {
 		}
