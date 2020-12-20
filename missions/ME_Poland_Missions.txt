@@ -13,6 +13,12 @@ POL_Missions_1 = {
 		position = 1
 		required_missions = { }
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = PAP
+				}
+				owned_by = PAP
+			}
 		}
 		trigger = {
 			if = {
@@ -41,8 +47,14 @@ POL_Missions_1 = {
 					}
 				}
 			}
-			else = {
+			else_if = {
+				limit = {
+					religion = catholic
+				}
 				num_of_cardinals = 3
+			}
+			else = {
+				theologian = 1 #really?
 			}
 		}
 		effect = {
@@ -50,7 +62,26 @@ POL_Missions_1 = {
 				name = POL_papal_favour
 				duration = 7300
 			}
-			custom_tooltip = POL_if_we_have_rm
+			if = {
+				limit = {
+					any_country = {
+						culture_group = latin
+						marriage_with = ROOT
+					}
+				}	
+				custom_tooltip = POL_if_we_have_rm_yes
+				hidden_effect =	{
+					capital_scope = {
+						add_institution_embracement = {
+							which = renaissance
+							value = 30
+						}
+					}
+				}
+			}
+			else = {
+				custom_tooltip = POL_if_we_have_rm_no
+			}
 			PAP = {
 				country_event = { id = ME_Poland_Events.3 }
 			}
@@ -113,7 +144,25 @@ POL_Missions_1 = {
 				name = POL_leave_brick
 				duration = 7300
 			}
-			custom_tooltip = POL_extra_5_dev
+			if = {
+				limit = {
+					num_of_estate_privileges = {
+						estate = estate_burghers
+						value = 4
+					}
+				}
+				custom_tooltip = POL_extra_5_dev_yes
+				hidden_effect = {
+					remove_country_modifier = POL_leave_brick
+					add_country_modifier = {
+						name = POL_leave_brick_2
+						duration = 7300
+					}
+				}
+			}
+			else = {
+				custom_tooltip = POL_extra_5_dev_no
+			}
 			custom_tooltip = POL_every_province_with_church
 			tooltip = {
 				add_province_modifier = {
@@ -131,19 +180,6 @@ POL_Missions_1 = {
 					add_province_modifier = {
 						name = POL_faithful_adherence
 						duration = 9125
-					}
-				}
-				if = {
-					limit = {
-						num_of_estate_privileges = {
-							estate = estate_burghers
-							privileges = 4
-						}
-					}
-					remove_country_modifier = POL_leave_brick
-					add_country_modifier = {
-						name = POL_leave_brick_2
-						duration = 7300
 					}
 				}
 			}
@@ -164,6 +200,25 @@ POL_Missions_1 = {
 		}
 		effect = {
 			custom_tooltip = POL_get_ducats_per_province
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_owned_provinces_with = {
+							development = 30
+							value = 10
+						}
+					}
+					add_years_of_income = 1
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							development = 30
+						}
+						ROOT = { add_years_of_income = 0.1 }
+					}
+				}
+			}
 			country_event = { id = ME_Poland_Events.11 }
 		}
 	}
@@ -259,13 +314,16 @@ POL_Missions_2 = {
 					name = POL_influx_of_polish_settlers
 					duration = 10950
 				}
+				set_province_flag = POL_can_convert
 			}
 			4538 = {
 				add_province_modifier = {
 					name = POL_influx_of_polish_settlers
 					duration = 10950
 				}
+				set_province_flag = POL_can_convert
 			}
+			set_country_flag = POL_mission
 			custom_tooltip = POL_ruthenia_will_convert
 		}
 	}
@@ -695,6 +753,7 @@ POL_Missions_4 = {
 				country_event = { id = ME_Poland_Events.9 }
 			}
 			custom_tooltip = POL_rewards_if_conquest
+			custom_tooltip = POL_every_czech
 			tooltip = {
 				add_adm_power = 100
 			}
@@ -703,11 +762,6 @@ POL_Missions_4 = {
 					limit = {
 						BOH = {
 							is_subject_of = ROOT
-						}
-						OR = {
-							OPL = { is_subject_of = BOH }
-							GLG = { is_subject_of = BOH }
-							SIL = { is_subject_of = BOH }
 						}
 					}
 					country_event = { id = ME_Poland_Events.9 }
@@ -953,6 +1007,10 @@ POL_Missions_5 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_contesting_bohemia
+				duration = 9125
+			}
 			if = {
 				limit = {
 					BOH = {
@@ -970,6 +1028,7 @@ POL_Missions_5 = {
 					type = cb_restore_personal_union 
 				}
 				custom_tooltip = PRO_cb_lasts_for_20_years
+				country_event = { id = ME_Poland_Events.8 }
 			}
 			custom_tooltip = POL_reward_if_bohemia_invalid
 			tooltip = {
@@ -1068,6 +1127,14 @@ POL_Missions_5 = {
 		position = 6
 		required_missions = { POL_hungarian_diplomacy }
 		provinces_to_highlight = {
+			OR = {
+				area = alfold_area
+				area = transdanubia_area
+				area = transylvania_area
+				area = southern_transylvania_area
+				area = slovakia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			OR = {
@@ -1096,7 +1163,12 @@ POL_Missions_5 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Poland_Events.12 } 
+			country_event = { id = ME_Poland_Events.12 }
+			add_country_modifier = {
+				name = POL_knowledge_of_bibliotheca
+				duration = 7300
+			}
+			add_prestige_or_monarch_power = { amount = 20 }
 		}
 	}
 	
@@ -1131,6 +1203,10 @@ POL_Missions_5 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_cost
+				duration = -1
+			}
 		}
 	}
 }

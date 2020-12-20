@@ -132,6 +132,12 @@ country_event = {
 	desc = ME_Poland_Events.5.d
 
 	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		tag = PAP
+	}
+	
 	trigger = {
 		has_country_flag = POL_Tatar
 		is_at_war = yes
@@ -316,39 +322,6 @@ country_event = {
 		
 		ai_chance = { factor = 0.5 }
 		
-		SIL = {
-			if = {
-				limit = {
-					is_subject_of = BOH
-				}
-				create_subject = {
-					subject_type = vassal
-					subject = SIL
-				}
-			}
-		}
-		OPL = {
-			if = {
-				limit = {
-					is_subject_of = BOH
-				}
-				create_subject = {
-					subject_type = vassal
-					subject = SIL
-				}
-			}
-		}
-		GLG = {
-			if = {
-				limit = {
-					is_subject_of = BOH
-				}
-				create_subject = {
-					subject_type = vassal
-					subject = SIL
-				}
-			}
-		}
 		add_country_modifier = {
 			name = POL_recovering_piast_territories
 			duration = 7300
@@ -522,7 +495,7 @@ country_event = {
 
 country_event = {
 	id = ME_Poland_Events.12
-	title = ME_Poland_Events.12.t #The Nobles of Hungary
+	title = ME_Poland_Events.12.t #A Puppet King
 	picture = MERCHANT_TALKING_eventPicture
 	desc = ME_Poland_Events.12.d
 
@@ -533,7 +506,48 @@ country_event = {
 		
 		ai_chance = { factor = 0.5 }
 		
-		
+		if = {
+			limit = {
+				senior_union_with = HUN 
+			}
+			HUN = {
+				random_owned_province = {
+					pretender_rebels = 2
+				}
+				random_owned_province = {
+					pretender_rebels = 1
+				}
+			}
+		}
+		else = {
+			random_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						area = alfold_area
+						area = transdanubia_area
+						area = transylvania_area
+						area = southern_transylvania_area
+						area = slovakia_area
+					}
+					pretender_rebels = 2
+				}
+			}
+			random_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						area = alfold_area
+						area = transdanubia_area
+						area = transylvania_area
+						area = southern_transylvania_area
+						area = slovakia_area
+					}
+					pretender_rebels = 2
+				}
+			}
+		}
+		custom_tooltip = POL_gain_1_monarch_point
 	}
 	
 	option = {
@@ -541,6 +555,131 @@ country_event = {
 		
 		ai_chance = { factor = 0.5 }
 		
+		add_country_modifier = {
+			name = POL_own_things
+			duration = 9125
+		}
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.13
+	title = ME_Poland_Events.13.t #Revenge for Varna
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.13.d
+
+	is_triggered_only = yes
+	major = yes
+	major_trigger = { 
+		has_country_flag = POL_recipient
+	}
+	
+	option = {
+		name = ME_Poland_Events.13.a 
 		
+		ai_chance = { factor = 0.1 }
+		
+		FROM = {
+			add_treasury = 300
+		}
+		add_curia_treasury = -300
+	}
+	option = {
+		name = ME_Poland_Events.13.b
+		
+		ai_chance = { factor = 0.9 }
+		
+		
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.14
+	title = ME_Poland_Events.14.t #Revenge for Varna - the main event
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.14.d
+
+	trigger = {
+		tag = POL
+		mission_completed = POL_moldavia
+		has_dlc = "Emperor"
+		is_in_war = {
+			casus_belli = cb_revenge_for_varna
+		}
+	}
+	
+	fire_only_once = yes
+	option = {
+		name = ME_Poland_Events.14.a 
+		
+		ai_chance = { factor = 0.5 }
+		
+		set_country_flag = POL_recipient
+		PAP = {
+			if = {
+				limit = {
+					
+					NOT = { alliance_with = TUR }
+				}
+				country_event = { id = ME_Poland_Events.13 }
+			}
+		}
+	}
+	option = {
+		name = ME_Poland_Events.14.b
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_prestige_or_monarch_power = { amount = 20 }
+	}
+}
+
+province_event = {
+	id = ME_Poland_Events.15
+	title = ME_Poland_Events.15.t #Conversion to Polish
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.15.d
+
+	goto = ROOT 
+
+	trigger = {
+		owner = {
+			has_country_flag = POL_mission
+		}
+		has_province_flag = POL_can_convert
+	}
+	
+	mean_time_to_happen = {
+		months = 480
+		modifier = {
+			factor = 0.75
+			owner = { stability = 1 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { stability = 2 }
+		}
+		modifier = {
+			factor = 0.75
+			owner = { stability = 3 }
+		}
+		modifier = {
+			factor = 0.5
+			ROOT = {
+				religion = owner
+			}
+		}
+		modifier = {
+			factor = 0.75
+			NOT = { unrest = 0 }
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.15.a 
+		
+		ai_chance = { factor = 0.1 }
+		
+		change_culture = polish
 	}
 }
