@@ -294,6 +294,7 @@ country_event = {
 				duration = 9125
 			}
 		}
+		set_country_flag = POL_extra_reward
 		custom_tooltip = POL_extra_mission_reward
 		tooltip = {
 			BOH = { add_liberty_desire = -25 }
@@ -350,6 +351,44 @@ country_event = {
 		
 		ai_chance = { factor = 0.5 }
 		
+		hidden_effect = {
+			if = {
+				limit = {
+					num_of_estate_privileges = {
+						estate = estate_nobles
+						value = 1
+					}
+				}
+				if = {
+					limit = {
+						num_of_estate_privileges = {
+							estate = estate_nobles
+							value = 2
+						}
+					}
+					if = {
+						limit = {
+							num_of_estate_privileges = {
+								estate = estate_nobles
+								value = 3
+							}
+						}
+						if = {
+							limit = {
+								num_of_estate_privileges = {
+									estate = estate_nobles
+									value = 4
+								}
+							}
+							add_mil_power = 25
+						}
+						add_mil_power = 25
+					}
+					add_mil_power = 25
+				}
+				add_mil_power = 25
+			}
+		}
 		custom_tooltip = POL_25_mil_power_per_privilege
 		add_country_modifier = {
 			name = POL_privileges_confirmed
@@ -363,6 +402,11 @@ country_event = {
 		ai_chance = { factor = 0.5 }
 		
 		custom_tooltip = POL_ten_percent_autonomy
+		hidden_effect = {
+			every_owned_province = {
+				add_local_autonomy = -10
+			}
+		}
 		add_stability_or_adm_power = yes
 		add_adm_power = 50
 		add_dip_power = 50
@@ -490,6 +534,17 @@ country_event = {
 				duration = 10950
 			}
 		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					trade_goods = cloth
+				}
+				add_province_modifier = {
+					name = POL_cloth_reinforced
+					duration = 10950
+				}
+			}
+		}
 	}
 }
 
@@ -582,7 +637,15 @@ country_event = {
 		FROM = {
 			add_treasury = 300
 		}
-		add_curia_treasury = -300
+		if = {
+			limit = {
+				has_dlc = "Emperor"
+			}
+			add_curia_treasury = -300
+		}
+		else = {
+			add_treasury = -300
+		}
 	}
 	option = {
 		name = ME_Poland_Events.13.b
@@ -618,7 +681,6 @@ country_event = {
 		PAP = {
 			if = {
 				limit = {
-					
 					NOT = { alliance_with = TUR }
 				}
 				country_event = { id = ME_Poland_Events.13 }
@@ -681,5 +743,86 @@ province_event = {
 		ai_chance = { factor = 0.1 }
 		
 		change_culture = polish
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.16
+	title = ME_Poland_Events.16.t #Rej
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.16.d
+
+	trigger = {
+		had_country_flag = {
+			flag = POL_polish_renaissance
+			days = 46000
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	fire_only_once = yes
+	
+	option = {
+		name = ME_Poland_Events.16.a 
+		
+		ai_chance = { factor = 0.5 }
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = POL_completed_renaissance_mission
+				has_country_flag = POL_polish_renaissance
+			}
+		}
+		clr_country_flag = POL_polish_renaissance
+		set_country_flag = POL_polish_renaissance_2
+		add_country_modifier = {
+			name = POL_geese
+			duration = 46000
+		}
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.17
+	title = ME_Poland_Events.17.t #Kochanowski
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.17.d
+
+	trigger = {
+		had_country_flag = {
+			flag = POL_polish_renaissance_2
+			days = 46000
+		}
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	fire_only_once = yes
+	
+	option = {
+		name = ME_Poland_Events.17.a
+	
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = POL_completed_renaissance_mission
+				has_country_flag = POL_polish_renaissance_2
+			}
+		}
+		clr_country_flag = POL_polish_renaissance_2
+		define_advisor = {
+			type = artist
+			name = "Jan Kochanowski"
+			skill = 3
+			culture = ROOT
+			religion = ROOT
+			cost_multiplier = 0.33
+		}
 	}
 }
