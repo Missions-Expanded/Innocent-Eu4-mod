@@ -64,11 +64,76 @@ PRU_missions_1 = {
 			}
 		}
 	}
+}
+
+PRU_missions_1_vassal = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRU
+		has_country_modifier = PRU_vassal_play
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	PRU_zollverein = {
+		icon = dominant_economy
+		required_missions = { }
+		position = 10
+		trigger = {
+			calc_true_if = {
+				all_subject_country = {
+					has_divert_trade = yes
+				}
+				amount = 2
+			}
+			OR = {
+				trader = 1
+				has_dip_advisor_3 = yes
+			}
+		}
+		effect = {
+			custom_tooltip = PRU_every_subject
+			set_country_flag = PRU_vassal_goods
+		}
+	}
+	
+	PRU_constitution = {
+		icon = standardize_relazioni
+		required_missions = { PRU_zollverein PRU_august }
+		position = 11
+		trigger = {
+			calc_true_if = {
+				all_subject_country = {
+					NOT = { liberty_desire = 5 }
+					is_subject_of_type = prussian_vassal
+				}
+				amount = 3
+			}
+			has_adm_advisor_3 = yes
+		}
+		effect = {
+			set_country_flag = PRU_vassal_more
+			custom_tooltip = PRU_amount_of_prussian_vassal
+		}
+	}
+}
+
+PRU_missions_1_2 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRU
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
 	
 	PRU_austria = {
 		icon = the_viennese_waltz
 		required_missions = { PRU_furstenbund }
-		position = 11
+		position = 12
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -101,69 +166,10 @@ PRU_missions_1 = {
 			}
 		}
 		effect = {
-			custom_tooltip = PRU_unlocks_decision
-			#unlocks decision 'Custodian of Germany'
-			
+			country_event = { id = ME_Prussia_Events.25 }
 		}
 	}
-}
 
-PRU_missions_1_coalition = {
-	slot = 1
-	generic = no
-	ai = yes
-	potential = {
-		tag = PRU
-		has_country_flag = PRU_in_war
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
-	PRU_onto_victory = {
-		icon = military_self_reliance
-		required_missions = { PRU_austria }
-		position = 13
-		provinces_to_highlight = {
-		}
-		trigger = {
-			OR = {
-				war_score = 30
-				NOT = { defensive_pact_member = 1 }
-			}
-		}
-		effect = {
-			if = {
-				limit = { defensive_pact_member = 1 }
-				hidden_effect = {
-					every_subject_country = {
-						limit = {
-							is_subject_of_type = defensive_pact_member
-						}
-						add_army_tradition_or_mil_power = { amount = 25 }
-					}
-				}
-				custom_tooltip = PRU_every_member
-				tooltip = {
-					add_army_tradition_or_mil_power = { amount = 25 }
-				}
-			}
-			else = {
-				add_mil_power = 50
-			}
-		}
-	}
-}
-
-PRU_missions_1_2 = {
-	slot = 1
-	generic = no
-	ai = yes
-	potential = {
-		tag = PRU
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
 	PRU_konigsberg_observatory = {
 		icon = mission_early_game_buildings
 		required_missions = { PRU_konigsberg }
@@ -305,11 +311,86 @@ PRU_missions_2 = {
 			country_event = { id = ME_Prussia_Events.32 }
 		}
 	}
+}
+
+PRU_missions_2_vassal = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRU
+		has_country_modifier = PRU_vassal_play
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+	
+	PRU_august = {
+		icon = catholic_confraternity
+		required_missions = { }
+		position = 10
+		trigger = {
+			calc_true_if = {
+				all_ally = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				all_subject_country = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			custom_tooltip = PRU_every_germanic_ally_subject
+			hidden_effect = {
+				every_ally = {
+					limit = {
+						culture_group = germanic
+					}
+					add_trust = {
+						who = ROOT
+						value = 25
+						mutual = yes
+					}
+				}
+				every_subject_country = {
+					limit = {
+						culture_group = germanic
+					}
+					add_trust = {
+						who = ROOT
+						value = 25
+						mutual = yes
+					}
+				}
+			}
+			add_country_modifier = {
+				name = PRU_treaties_of_august
+				duration = 9125
+			}
+		}
+	}
+}
+
+PRU_missions_2_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = PRU
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
 	
 	PRU_furstenbund = {
 		icon = mission_alliances
 		required_missions = { }
-		position = 10
+		position = 11
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -341,7 +422,7 @@ PRU_missions_2 = {
 	PRU_diplomatic_revolution = {
 		icon = concert_of_europe
 		required_missions = { PRU_furstenbund }
-		position = 11
+		position = 12
 		provinces_to_highlight = {
 			owner = {
 				NOT = { alliance_with = ROOT }
@@ -391,93 +472,6 @@ PRU_missions_2 = {
 			}
 		}
 	}
-}
-
-PRU_missions_2_coalition = {
-	slot = 2
-	generic = no
-	ai = yes
-	potential = {
-		tag = PRU
-		has_country_flag = PRU_in_war
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
-	PRU_zollverein = {
-		icon = dominant_economy
-		required_missions = { PRU_austria }
-		position = 12
-		provinces_to_highlight = {
-			owner = {
-				is_subject_of_type = defensive_pact_member
-				NOT = {
-					has_opinion = {
-						who = ROOT
-						value = 125
-					}
-					NOT = { liberty_desire = 10 }
-				}
-			}
-		}
-		trigger = {
-			OR = {
-				NOT = { defensive_pact_member = 1 }
-				AND = {
-					calc_true_if = {
-						all_subject_country = {
-							is_subject_of_type = defensive_pact_member
-							has_opinion = {
-								who = ROOT
-								value = 125
-							}
-							NOT = { liberty_desire = 10 }
-						}
-					}
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					defensive_pact_member = 1
-				}
-				hidden_effect = {
-					every_subject_country = {
-						limit = {
-							is_subject_of_type = defensive_pact_member
-						}
-						add_country_modifier = {
-							name = PRU_zollverein_modifier
-							duration = 9125
-						}
-					}
-				}
-				custom_tooltip = PRU_every_member
-				tooltip = {
-					add_country_modifier = {
-						name = PRU_zollverein_modifier
-						duration = 9125
-					}
-				}
-			}
-			else = {
-				add_adm_power = 50
-			}
-		}
-	}
-}
-
-PRU_missions_2_2 = {
-	slot = 2
-	generic = no
-	ai = yes
-	potential = {
-		tag = PRU
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-	}
-	has_country_shield = yes
-	
 	PRU_konigsberg = {
 		icon = develop_konigsberg
 		required_missions = { }
@@ -766,6 +760,8 @@ PRU_missions_2_2 = {
 					duration = -1
 				}
 			}
+			set_country_flag = PRU_vassal_tradition
+			custom_tooltip = PRU_every_vassal_kriegsakademie
 		}
 	}
 }
@@ -970,50 +966,34 @@ PRU_missions_3 = {
 		}
 	}
 	
-	PRU_canton_system = {
+	PRU_france = {
 		icon = mission_assemble_an_army
-		required_missions = { PRU_army_reform }
+		required_missions = { PRU_furstenbund }
 		position = 12
-		provinces_to_highlight = {
-			owned_by = ROOT
-			OR = {
-				NOT = { has_building = conscription_center }
-				NOT = { has_building = regimental_camp }
-			}
-		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				OR = {
-					has_building = conscription_center
-					has_building = regimental_camp
-					base_manpower = 7
-				}
-				value = 10
-			}
-		}
-		effect = {
-			custom_tooltip = PRU_every_conscription
-			tooltip = {
-				add_province_modifier = {
-					name = PRU_reglement
-					duration = 7300
-				}
-			}
-			hidden_effect = {
-				every_owned_province = {
-					limit = {
-						OR = {
-							has_building = conscription_center
-							has_building = regimental_camp
-						}
-					}
-					add_province_modifier = {
-						name = PRU_reglement
-						duration = 7300
-					}
-				}
-			}
-		}
+            if = {
+                limit = {
+                    NOT = { has_country_flag = PRU_TARGET_INITIALIZED }
+                }
+                FRA = {
+                    custom_trigger_tooltip = {
+                        tooltip = PRU_po_enforced
+                        has_country_flag = PRU_po_enforced_flag
+                    }
+                }
+            }
+            else = {
+                event_target:ME_PRU_FRANCE_TARGET = {
+                    custom_trigger_tooltip = {
+                        tooltip = PRU_po_enforced
+                        has_country_flag = PRU_po_enforced_flag
+                    }
+                }
+            }
+        }
+        effect = {
+            country_event = { id = ME_Prussia_Events.24 }
+        }
 	}
 	
 	PRU_humboldt = {
@@ -1728,7 +1708,23 @@ PRU_missions_4 = {
 				name = PRU_general_staff_modifier
 				duration = -1
 			}
-			add_army_tradition_or_mil_power = { amount = 20 }
+			if = {
+				limit = {
+					NOT = { has_country_modifier = PRU_vassal_play }
+				}
+				add_army_tradition_or_mil_power = { amount = 20 }
+			}
+			else = {
+				add_army_tradition_or_mil_power = { amount = 10 }
+				custom_tooltip = PRU_for_every_vassal
+				hidden_effect = {
+					every_subject_country = {
+						ROOT = {
+							add_army_tradition_or_mil_power = { amount = 5 }
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -2052,6 +2048,27 @@ PRU_missions_4 = {
 			custom_tooltip = PRU_YEARS_INCOME
 			tooltip = {
 				add_years_of_income = 0.1
+			}
+			if = {
+				limit = {
+					has_country_modifier = PRU_vassal_play
+				}
+				custom_tooltip = PRU_free_trade_vassal
+				hidden_effect = {
+					every_subject_country = {
+						limit = {
+							is_subject_of_type = prussian_vassal
+						}
+						ROOT = {
+							set_variable = {
+								which = PRU_money_to_add
+								value = 0
+							}
+							export_to_variable = {
+							}
+						}
+					}
+				}
 			}
 			hidden_effect = {
 				if = {
