@@ -510,6 +510,32 @@ RHN_missions_4 = {
         icon = industrialized_rhineland
         required_missions = { RHN_copper_foundries }
         position = 11
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					AND = {
+						province_id = 1762
+						OR = {
+							NOT = { owned_by = ROOT }
+							NOT = { development = 25 }
+						}
+					}
+					trade_goods = optics
+				}
+			}
+			else = {
+				AND = {
+					province_id = 1762
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { development = 25 }
+					}
+				}
+			}
+		}
         trigger = {
             if = {
 				limit = {
@@ -520,18 +546,27 @@ RHN_missions_4 = {
 						trade_goods = optics
 					}
 					1762 = {
+						owned_by = ROOT
 						development = 25
 					}
 				}
 			}
 			else = {
 				1762 = {
+					owned_by = ROOT
 					development = 25
 				}
 			}
         }
         effect = {
-            country_event = { id = ME_Rhenish_Events.2 }
+            custom_tooltip = RHN_unlock_optic_event
+			custom_tooltip = RHN_one_of_the_provinces
+			tooltip = {
+				add_province_modifier = {
+					name = RHN_optics
+					duration = -1
+				}
+			}
         }
     }
 	
@@ -540,10 +575,17 @@ RHN_missions_4 = {
         required_missions = { RHN_optics RHN_manufactories }
         position = 12
         trigger = {
-            has_institution = printing_press
+			
         }
         effect = {
             country_event = { id = ME_Rhenish_Events.2 }
+			custom_tooltip = RHN_every_forest
+			tooltip = {
+				add_province_modifier = {
+					name = RHN_supplying_the_industry
+					duration = 10950
+				}
+			}
         }
     }
 	
@@ -551,8 +593,49 @@ RHN_missions_4 = {
         icon = industrialized_rhineland
         required_missions = { RHN_moselle RHN_german_tin }
         position = 13
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					ROOT = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+				}
+				AND = {
+					OR = {
+						trade_goods = jewellery
+						trade_goods = silver
+						trade_goods = gold
+						trade_goods = gems
+						trade_goods = amber
+						trade_goods = jade
+						trade_goods = pearls
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
+			else = {
+				AND = {
+					trade_goods = gold
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { development = 30 }
+					}
+				}
+			}
+		}
         trigger = {
-            has_institution = printing_press
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				jewellery = 1
+			}
+			else = {
+				any_owned_province = {
+					trade_goods = gold
+					development = 30
+				}
+			}
         }
         effect = {
             country_event = { id = ME_Rhenish_Events.2 }
@@ -618,11 +701,51 @@ RHN_missions_5 = {
         icon = industrialized_rhineland
         required_missions = { RHN_copper_foundries }
         position = 11
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_expanded_mod_active = { mod = trade_goods }
+					province_id = 4768
+					OR = {
+						NOT = { num_of_times_improved = 3 }
+						NOT = { owned_by = ROOT }
+					}
+				}
+				AND = {
+					province_id = 81
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { num_of_times_improved = 10 }
+					}
+				}
+			}
+		}
         trigger = {
-            has_institution = printing_press
+			81 = {
+				num_of_times_improved = 10
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				4768 = {
+					num_of_times_improved = 3
+				}
+			}
         }
         effect = {
-            country_event = { id = ME_Rhenish_Events.2 }
+			country_event = { id = ME_Rhenish_Events.6 } #convert 81 into Zinc/Copper
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				4768 = {
+					build_possible_manufactory_in_province = yes
+				}
+			}
+			1757 = {
+				add_core = yes
+			}
         }
     }
 	
@@ -630,11 +753,30 @@ RHN_missions_5 = {
         icon = industrialized_rhineland
         required_missions = { RHN_zinc }
         position = 12
+		provinces_to_highlight = {
+			province_id = 1757
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 50
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
         trigger = {
-            has_institution = printing_press
+            1757 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
+				NOT = { local_autonomy = 50 }
+			}
         }
         effect = {
-            country_event = { id = ME_Rhenish_Events.2 }
+            1757 = {
+				add_province_modifier = {
+					name = RHN_sole_source_of_tin
+					duration = -1
+				}
+			}
         }
     }
 }

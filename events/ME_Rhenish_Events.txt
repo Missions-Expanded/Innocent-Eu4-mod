@@ -131,8 +131,8 @@ country_event = {
 
 country_event = {
 	id = ME_Rhenish_Events.4 #Sell Optics outside
-	title = ME_Rhenish_Events.3.t
-	desc = ME_Rhenish_Events.3.d
+	title = ME_Rhenish_Events.4.t
+	desc = ME_Rhenish_Events.4.d
 	picture = RELIGION_eventPicture
 	
 	is_triggered_only = yes
@@ -142,27 +142,315 @@ country_event = {
 			scale = "navy_size"
 			3 = yes
 			global_trigger = "capital_scope = { continent = europe }"
-			event_target_name = "RHN_target"
+			event_target_name = "Rhineland_target"
+		}
+		hidden_effect = {
+			event_target:Rhineland_target_1 = {
+				export_to_variable = {
+					which = Rhineland_years_of_income
+					value = years_of_income
+				}
+			}
+			event_target:Rhineland_target_2 = {
+				export_to_variable = {
+					which = Rhineland_years_of_income
+					value = years_of_income
+				}
+			}
+			event_target:Rhineland_target_3 = {
+				export_to_variable = {
+					which = Rhineland_years_of_income
+					value = years_of_income
+				}
+			}
 		}
 	}
 	
 	option = {
-		name = "ME_Rhenish_Events.3.a" #Offer it to GB
+		name = "ME_Rhenish_Events.4.a" #Offer it to first fc
 		
 		ai_chance = { factor = 50 }
 		
-		event_target:RHN_target_1 = {
+		custom_tooltip = RHN_offer_to_sell_optics_1
+		tooltip = {
+			event_target:Rhineland_target_1 = {
+				add_country_modifier = {
+					name = RHN_hessian_optics
+					duration = 9125
+				}
+			}
+		}
+		
+		event_target:Rhineland_target_1 = {
 			country_event = { id = ME_Rhenish_Events.5 }
 		}
 	}
 	
 	option = {
-		name = "ME_Rhenish_Events.3.b" #Offer it to SPA
+		name = "ME_Rhenish_Events.4.b" #Offer it to second fc
 		
 		ai_chance = { factor = 50 }
 		
-		event_target:RHN_target_2 = {
+		custom_tooltip = RHN_offer_to_sell_optics_2
+		tooltip = {
+			event_target:Rhineland_target_1 = {
+				add_country_modifier = {
+					name = RHN_hessian_optics
+					duration = 9125
+				}
+			}
+		}
+		
+		event_target:Rhineland_target_2 = {
 			country_event = { id = ME_Rhenish_Events.5 }
 		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.4.c" #Offer it to third fc
+		
+		ai_chance = { factor = 50 }
+		
+		custom_tooltip = RHN_offer_to_sell_optics_3
+		tooltip = {
+			event_target:Rhineland_target_1 = {
+				add_country_modifier = {
+					name = RHN_hessian_optics
+					duration = 9125
+				}
+			}
+		}
+		
+		event_target:Rhineland_target_3 = {
+			country_event = { id = ME_Rhenish_Events.5 }
+		}
+		custom_tooltip = RHN_if_they_deny
+	}
+	after = {
+		event_target:Rhineland_target_1 = {
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+		event_target:Rhineland_target_2 = {
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+		event_target:Rhineland_target_3 = {
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.5 #Event to buy
+	title = ME_Rhenish_Events.5.t
+	desc = ME_Rhenish_Events.5.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			export_to_variable = {
+				which = Rhineland_years_of_income
+				value = years_of_income
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.5.a" #Offer it to first fc
+		
+		ai_chance = {
+			factor = 4
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_rival
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_outraged
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = {
+					has_opinion = {
+						who = FROM
+						amount = -150
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_hostile
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					has_opinion = {
+						who = FROM
+						amount = -50
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					has_opinion = {
+						who = FROM
+						amount = -100
+					}
+				}
+			}
+		}
+		
+		custom_tooltip = RHN_pay_ducats
+		add_country_modifier = {
+			name = RHN_hessian_optics
+			duration = 9125
+		}
+		hidden_effect = {
+			while = {
+				limit = {
+					check_variable = {
+						which = Rhineland_years_of_income
+						value = 10
+					}
+				}
+				FROM = {
+					add_treasury = 10
+				}
+				ROOT = {
+					add_treasury = -10
+				}
+				change_variable = {
+					which = Rhineland_years_of_income
+					value = -10
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = Rhineland_years_of_income
+						value = 1
+					}
+				}
+				FROM = {
+					add_treasury = 1
+				}
+				ROOT = {
+					add_treasury = -1
+				}
+				change_variable = {
+					which = Rhineland_years_of_income
+					value = -1
+				}
+			}
+			while = {
+				limit = {
+					check_variable = {
+						which = Rhineland_years_of_income
+						value = 0.1
+					}
+				}
+				FROM = {
+					add_treasury = 0.1
+				}
+				ROOT = {
+					add_treasury = -0.1
+				}
+				change_variable = {
+					which = Rhineland_years_of_income
+					value = -0.1
+				}
+			}
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.5.b" #Offer it to second fc
+		
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_friendly
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					ai_attitude = {
+						who = ROOT
+						attitude = attitude_ally
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				has_opinion = {
+					who = FROM
+					amount = 200
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_opinion = {
+					who = FROM
+					amount = 150
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_opinion = {
+					who = FROM
+					amount = 100
+				}
+			}
+			modifier = {
+				factor = 0.5
+				has_opinion = {
+					who = FROM
+					amount = 50
+				}
+			}
+		}
+		hidden_effect = {
+			set_variable = {
+				which = Rhineland_years_of_income
+				value = 0
+			}
+		}
+		add_prestige_or_monarch_power = { amount = 10 }
 	}
 }
