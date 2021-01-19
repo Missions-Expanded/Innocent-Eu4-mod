@@ -1,6 +1,88 @@
-generic_rhenish_missions_1 = {
+BRG_Missions_1 = {
 	slot = 1
-	generic = yes
+	generic = no
+	ai = yes
+	potential = {
+		primary_culture = hessian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = BRG
+	}
+	has_country_shield = yes
+	
+	BRG_succession_of_kleves = {
+		icon = spread_the_von_wettins
+		required_missions = { rhn_generic_fc }
+		position = 2
+		trigger = {
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					ai = no
+				}
+				num_of_generals = 1
+			}
+		}
+		effect = {
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = every_border_rhenish_province_tooltip
+			add_country_modifier = {
+				name = rhn_generic_fc_mission_modifier
+				duration = 10950
+			}
+		}
+	}
+	
+	BRG_gelre = {
+		icon = adjust_the_general_means
+		required_missions = { rhn_generic_expand }
+		position = 4
+		trigger = {
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					ai = no
+				}
+				num_of_generals = 1
+			}
+		}
+		effect = {
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = every_border_rhenish_province_tooltip
+			add_country_modifier = {
+				name = rhn_generic_fc_mission_modifier
+				duration = 10950
+			}
+		}
+	}
+}
+
+generic_rhenish_missions_2 = {
+	slot = 2
+	generic = no
 	ai = yes
 	potential = {
 		primary_culture = hessian
@@ -14,13 +96,14 @@ generic_rhenish_missions_1 = {
 			tag = PAL
 			tag = KLE
 			tag = BRG
+			tag = RHN
 			AND = {
 				tag = KOL
 				has_country_flag = Cologne_Rheinland
 			}
 		}
 	}
-	has_country_shield  = yes
+	has_country_shield = no
 	
 	rhn_generic_fc = {
 		icon = mission_build_up_to_force_limit
@@ -59,8 +142,8 @@ generic_rhenish_missions_1 = {
 	
 	rhn_generic_expand = {
 		icon = mission_cannons_firing
-		required_missions = { rhn_generic_fc rhn_generic_treasury }
-		position = 2
+		required_missions = { rhn_generic_fc }
+		position = 3
 		trigger = {
 			grown_by_development = 25
 			NOT = { average_autonomy_above_min = 25 }
@@ -78,140 +161,10 @@ generic_rhenish_missions_1 = {
 		}
 	}
 	
-	rhn_generic_allies = {
-		icon = mission_alliances
-		required_missions = { rhn_generic_expand }
-		position = 3
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = building_alliances.tooltip
-				num_of_allies = 2
-				calc_true_if = {
-					all_ally = {
-						has_opinion = {
-							who = ROOT
-							value = 150
-						}
-					}
-					amount = 2
-				}
-			}
-		}
-		effect = {
-			hidden_effect = {
-				if = {
-					limit = {
-						mission_completed = rhn_generic_recover
-					}
-					every_province = {
-						limit = {
-							culture = hessian
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-				}
-			}
-			custom_tooltip = rhn_mission_completed_recover
-			add_country_modifier = {
-				name = "influential_diplomacy"
-				duration = 9125
-			}
-		}
-	}
-	
-	rhn_generic_approval = {
-		icon = me_mission_crown_hre
-		required_missions = { rhn_generic_allies }
-		position = 4
-		trigger = {
-			OR = {
-				is_emperor = yes
-				emperor = {
-					has_opinion = {
-						who = ROOT
-						value = 100
-					}
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "rhn_imperial_approval"
-				duration = 9125
-			}
-		}
-	}
-}
-
-generic_rhenish_missions_2 = {
-	slot = 2
-	generic = yes
-	ai = yes
-	potential = {
-		primary_culture = hessian
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		OR = {
-			tag = MAI
-			tag = TRI
-			tag = FRN
-			tag = HES
-			tag = NSA
-			tag = PAL
-			tag = KLE
-			tag = BRG
-			AND = {
-				tag = KOL
-				has_country_flag = Cologne_Rheinland
-			}
-		}
-	}
-	has_country_shield  = yes
-	
-	rhn_generic_recover = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { rhn_generic_expand }
-		position = 3
-		provinces_to_highlight = {
-			owned_by = ROOT
-			devastation = 0.01
-		}
-		trigger = {
-			manpower_percentage = 0.6
-			all_owned_province = {
-				NOT = { devastation = 0.01 }
-			}
-			NOT = { war_exhaustion = 0.5 }
-		}
-		effect = {
-			hidden_effect = {
-				if = {
-					limit = {
-						mission_completed = rhn_generic_allies
-					}
-					every_province = {
-						limit = {
-							culture = hessian
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-				}
-			}
-			custom_tooltip = rhn_mission_completed_allies
-			add_country_modifier = {
-				name = "rhn_generic_recovered"
-				duration = 9125
-			}
-		}
-	}
-	
 	rhn_generic_unite_rhineland = {
 		icon = mission_unite_home_region
-		required_missions = { rhn_generic_allies rhn_generic_recover }
-		position = 4
+		required_missions = { rhn_generic_expand }
+		position = 5
 		provinces_to_highlight = {
 			OR = {
 				area = lower_rhineland_area
@@ -261,7 +214,7 @@ generic_rhenish_missions_2 = {
 
 generic_rhenish_missions_3 = {
 	slot = 3
-	generic = yes
+	generic = no
 	ai = yes
 	potential = {
 		primary_culture = hessian
@@ -275,59 +228,87 @@ generic_rhenish_missions_3 = {
 			tag = PAL
 			tag = KLE
 			tag = BRG
+			tag = RHN
 			AND = {
 				tag = KOL
 				has_country_flag = Cologne_Rheinland
 			}
 		}
 	}
-	has_country_shield  = yes
+	has_country_shield = no
 	
-	rhn_generic_marketplace = {
-		icon = mission_market_place_with_asian_traders
+	
+	rhn_generic_allies = {
+		icon = mission_alliances
 		required_missions = { }
-		position = 1
+		position = 2
 		trigger = {
-			OR = {
-				marketplace = 1
-				trade_depot = 1
-				stock_exchange = 1
-			}
-		}
-		effect = {
-			capital_scope = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = 5475
-					power = 15
-					key = RHN_Visits
+			custom_trigger_tooltip = {
+				tooltip = building_alliances.tooltip
+				num_of_allies = 2
+				calc_true_if = {
+					all_ally = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+					amount = 2
 				}
 			}
 		}
-	}
-	
-	rhn_generic_workshop = {
-		icon = mission_early_game_buildings
-		required_missions = { rhn_generic_treasury rhn_generic_marketplace rhn_generic_church }
-		position = 2
-		trigger = {
-			OR = {
-				workshop = 1
-				counting_house = 1
-			}
-		}
 		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = rhn_generic_recover
+					}
+					every_province = {
+						limit = {
+							culture = hessian
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			custom_tooltip = rhn_mission_completed_recover
 			add_country_modifier = {
-				name = rhn_generic_production_sector_expanding
+				name = "influential_diplomacy"
 				duration = 9125
 			}
 		}
 	}
+	
+	rhn_generic_approval = {
+		icon = me_mission_crown_hre
+		required_missions = { rhn_generic_allies rhn_generic_expand }
+		position = 4
+		trigger = {
+			OR = {
+				is_emperor = yes
+				emperor = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = "rhn_imperial_approval"
+				duration = 9125
+			}
+		}
+	}
+	
 }
 
 generic_rhenish_missions_4 = {
 	slot = 4
-	generic = yes
+	generic = no
 	ai = yes
 	potential = {
 		primary_culture = hessian
@@ -341,105 +322,15 @@ generic_rhenish_missions_4 = {
 			tag = PAL
 			tag = KLE
 			tag = BRG
+			tag = RHN
 			AND = {
 				tag = KOL
 				has_country_flag = Cologne_Rheinland
 			}
 		}
 	}
-	has_country_shield  = yes
-	
-	rhn_generic_church = {
-		icon = mission_european_church
-		required_missions = { }
-		position = 1
-		trigger = {
-			OR = {
-				temple = 1
-				cathedral = 1
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = rhn_devout
-				duration = 7300
-			}
-		}
-	}
-	
-	rhn_generic_reformation = {
-		icon = mission_luther_theses
-		required_missions = { rhn_generic_church }
-		position = 2
-		trigger = {
-			OR = {
-				religion = protestant
-				religion = reformed
-				AND = {
-					religion = catholic
-					check_variable = { which = num_converted_religion value = 1 }
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = RHN_generic_faith
-				duration = 9125
-			}
-		}
-	}
-	
-	rhn_generic_act = {
-		icon = mission_hands_praying
-		required_missions = { rhn_generic_reformation }
-		position = 3
-		trigger = {
-			OR = {
-				custom_trigger_tooltip = {
-					tooltip = obj_force_converted_tooltip
-					has_country_flag = force_converted
-				}
-				is_defender_of_faith = yes
-			}
-		}
-		effect = {
-			every_neighbor_country = {
-				limit = {
-					religion = ROOT
-				}
-				add_opinion = {
-					who = ROOT 
-					modifier = rhn_acting_for_the_faith
-				}
-			}
-		}
-	}
-}
+	has_country_shield  = no
 
-generic_rhenish_missions_5 = {
-	slot = 5
-	generic = yes
-	ai = yes
-	potential = {
-		primary_culture = hessian
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		OR = {
-			tag = MAI
-			tag = TRI
-			tag = FRN
-			tag = HES
-			tag = NSA
-			tag = PAL
-			tag = KLE
-			tag = BRG
-			AND = {
-				tag = KOL
-				has_country_flag = Cologne_Rheinland
-			}
-		}
-	}
-	has_country_shield  = yes
-	
 	rhn_generic_embrace_renaissance = {
 		icon = me_mission_renaissance
 		required_missions = { }
@@ -466,51 +357,253 @@ generic_rhenish_missions_5 = {
 				name = rhn_a_renaissance_court
 				duration = 9125
 			}
+			define_advisor = {
+				type = muscovy_architect
+				name = "Alessandro Pasqualini"
+				skill = 1
+				culture = 4730
+				religion = 4730
+				cost_multiplier = 0.4
+				location = 4730
+			}
+		}
+	}
+}
+
+BRG_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		primary_culture = hessian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = BRG
+	}
+	has_country_shield = yes
+	
+	BRG_freiburg = {
+		icon = shift_the_balance
+		required_missions = { rhn_generic_allies }
+		position = 3
+		trigger = {
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					ai = no
+				}
+				num_of_generals = 1
+			}
+		}
+		effect = {
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = every_border_rhenish_province_tooltip
+			add_country_modifier = {
+				name = rhn_generic_fc_mission_modifier
+				duration = 10950
+			}
+		}
+	}
+}
+
+generic_rhenish_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		primary_culture = hessian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MAI
+			tag = TRI
+			tag = FRN
+			tag = HES
+			tag = NSA
+			tag = PAL
+			tag = KLE
+			tag = BRG
+			tag = RHN
+			AND = {
+				tag = KOL
+				has_country_flag = Cologne_Rheinland
+			}
+		}
+	}
+	has_country_shield  = no
+	
+	rhn_generic_deving_capital = {
+		icon = take_the_bishoprics
+		required_missions = { }
+		position = 4
+		trigger = {
+			OR = {
+				workshop = 1
+				counting_house = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = rhn_generic_production_sector_expanding
+				duration = 9125
+			}
 		}
 	}
 	
-	rhn_generic_press = {
-		icon = me_mission_man_in_library
+	rhn_generic_workshop = {
+		icon = mission_early_game_buildings
+		required_missions = { rhn_generic_deving_capital }
+		position = 5
+		trigger = {
+			OR = {
+				workshop = 1
+				counting_house = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = rhn_generic_production_sector_expanding
+				duration = 9125
+			}
+		}
+	}
+}
+
+generic_rhenish_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		primary_culture = hessian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MAI
+			tag = TRI
+			tag = FRN
+			tag = HES
+			tag = NSA
+			tag = PAL
+			tag = KLE
+			tag = BRG
+			AND = {
+				tag = KOL
+				has_country_flag = Cologne_Rheinland
+			}
+		}
+	}
+	has_country_shield  = no
+	
+	rhn_generic_reformation = {
+		icon = mission_luther_theses
+		required_missions = { rhn_generic_embrace_renaissance }
+		position = 2
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				AND = {
+					religion = catholic
+					check_variable = { which = num_converted_religion value = 1 }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RHN_generic_faith
+				duration = 9125
+			}
+		}
+	}
+}
+
+BRG_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		primary_culture = hessian
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = BRG
+	}
+	has_country_shield = yes
+	
+	BRG_geheimer_rat = {
+		icon = catholic_confraternity
 		required_missions = { rhn_generic_splendid }
 		position = 3
 		trigger = {
-			has_institution = printing_press
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					ai = no
+				}
+				num_of_generals = 1
+			}
 		}
 		effect = {
-			country_event = { id = ME_Rhenish_Events.2 }
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = every_border_rhenish_province_tooltip
+			add_country_modifier = {
+				name = rhn_generic_fc_mission_modifier
+				duration = 10950
+			}
 		}
 	}
 	
-	rhn_generic_press_and_the_Faith = {
-		icon = mission_religious
-		required_missions = { rhn_generic_press rhn_generic_act }
-		position = 4
+	BRG_exert_influence = {
+		icon = connect_further_austria
+		required_missions = { rhn_generic_deving_capital }
+		position = 5
 		trigger = {
-			has_institution = printing_press
-			is_religion_enabled = protestant
-			all_owned_province = {
-				printing_press = 100
-			}
+			army_size_percentage = 0.9
 			if = {
 				limit = {
-					has_dlc = "Mandate of Heaven"
+					ai = no
 				}
-				capital_scope = {
-					has_state_edict = edict_religion_enforced
-				}
-			}
-			else = {
-				capital_scope = {
-					development = 15
-					OR = {
-						has_building = courthouse
-						has_building = town_hall
-					}
-				}
+				num_of_generals = 1
 			}
 		}
 		effect = {
-			country_event = { id = ME_Rhenish_Events.3 }
+			hidden_effect = {
+				every_province = {
+					limit = {
+						any_neighbor_province = {
+							owned_by = ROOT
+						}
+						culture = hessian
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = every_border_rhenish_province_tooltip
+			add_country_modifier = {
+				name = rhn_generic_fc_mission_modifier
+				duration = 10950
+			}
 		}
 	}
 }
