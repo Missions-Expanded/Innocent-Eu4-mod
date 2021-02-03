@@ -1,4 +1,5 @@
 namespace = ME_Rhenish_Events
+namespace = estate_industrial_events
 
 country_event = {
 	id = ME_Rhenish_Events.1
@@ -452,5 +453,1008 @@ country_event = {
 			}
 		}
 		add_prestige_or_monarch_power = { amount = 10 }
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.6 #Zinc
+	title = ME_Rhenish_Events.6.t
+	desc = ME_Rhenish_Events.6.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.6.a" #Embrace the zinc
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			81 = { change_trade_goods = zinc }
+		}
+		else = {
+			81 = { change_trade_goods = copper }
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.6.b" #Screw coal!
+		
+		ai_chance = { factor = 0 } #AI likes zinc. 
+		
+		add_years_of_owned_provinces_production_income = {
+			years = 10
+			trigger = {
+				province_id = 81
+			}
+			custom_tooltip = RHN_81_income
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.7 #Leather
+	title = ME_Rhenish_Events.7.t
+	desc = ME_Rhenish_Events.7.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			random_owned_province = {
+				limit = {
+					trade_goods = leather
+					has_manufactory_trigger = yes
+				}
+				save_event_target_as = leather_province
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					trade_goods = livestock
+					has_manufactory_trigger = yes
+				}
+				save_event_target_as = leather_province
+			}
+		}
+	}
+	option = {
+		name = "ME_Rhenish_Events.7.a" #Leather
+		
+		ai_chance = { factor = 1 }
+		
+		event_target:leather_province = {
+			add_permanent_province_modifier = {
+				name = RHN_livestock
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			custom_tooltip = RHN_every_livestock_and_leather
+		}
+		else = {
+			custom_tooltip = RHN_every_livestock
+		}
+		tooltip = {
+			add_province_modifier = {
+				name = RHN_livestock_in_demand
+				duration = 10950
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				europe = {
+					limit = {
+						OR = {
+							trade_goods = leather
+							trade_goods = livestock
+						}
+					}
+					add_province_modifier = {
+						name = RHN_livestock_in_demand
+						duration = 10950
+					}
+				}
+			}
+			else = {
+				europe = {
+					limit = {
+						trade_goods = livestock
+					}
+					add_province_modifier = {
+						name = RHN_livestock_in_demand
+						duration = 10950
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.8 #Early Coal
+	title = ME_Rhenish_Events.8.t
+	desc = ME_Rhenish_Events.8.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.8.a" #Embrace the coal
+		
+		ai_chance = { factor = 1 }
+		
+		82 = {
+			change_trade_goods = coal
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				add_country_modifier = {
+					name = RHN_coal_debuff_tge #-50% trade value 8 ducats -> 4
+					duration = 36500
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = RHN_coal_debuff #-60% trade value 8 ducats -> 4
+					duration = 36500
+				}
+			}
+		}
+		1878 = {
+			change_trade_goods = coal
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				add_country_modifier = {
+					name = RHN_coal_debuff_tge #-50% trade value 8 ducats -> 4
+					duration = 36500
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = RHN_coal_debuff #-60% trade value 8 ducats -> 4
+					duration = 36500
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.8.b" #Screw coal!
+		
+		ai_chance = { factor = 0 } #AI likes coal. 
+		
+		82 = {
+			add_country_modifier = {
+				name = RHN_coal_industry_coexisting
+				duration = 36500
+			}
+		}
+		1878 = {
+			add_country_modifier = {
+				name = RHN_coal_industry_coexisting
+				duration = 36500
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.9 #Advanced Faceting
+	title = ME_Rhenish_Events.9.t
+	desc = ME_Rhenish_Events.9.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	
+	immediate = {
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			random_owned_province = {
+				limit = {
+					trade_goods = jewellery
+				}
+				save_event_target_as = diamond_province
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					trade_goods = gold
+					development = 30
+				}
+				save_event_target_as = diamond_province
+			}
+		}
+		random_province = {
+			limit = {
+				has_province_modifier = diamond_district
+			}
+			save_event_target_as = old_diamond_province
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.9.a" #Advanced Faceting
+		
+		ai_chance = { factor = 1 }
+		
+		event_target:diamond_province = {
+			add_permanent_province_modifier = {
+                name = diamond_district
+                duration = -1
+            }
+		}
+		add_prestige_or_monarch_power = { amount = 50 }
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.10 #Flavor Event for Cleves. 
+	title = ME_Rhenish_Events.10.t
+	desc = ME_Rhenish_Events.10.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		culture_group = germanic
+	}
+	
+	trigger = {
+		tag = KLE
+		government = monarchy
+		exists = BRG
+		BRG = {
+			ai = yes
+			is_at_war = no
+			government = monarchy
+			is_subject = no
+			NOT = { num_of_cities = 5 }
+		}
+		is_year = 1500
+	}
+	option = {
+		name = "ME_Rhenish_Events.10.a" #
+		
+		ai_chance = { factor = 1 }
+		
+		inherit = BRG
+		override_country_name = BRGKLE
+		add_legitimacy = 10
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.11 #Repurposing Moselle Valley
+	title = ME_Rhenish_Events.11.t
+	desc = ME_Rhenish_Events.11.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.11.a" #Embrace woodworking
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			1760 = {
+				change_trade_goods = woodworking
+			}
+			80 = {
+				change_trade_goods = woodworking
+			}
+		}
+		custom_tooltip = RHN_every_forest
+		tooltip = {
+			add_province_modifier = {
+				name = RHN_supplying_the_industry
+				duration = 10950
+			}
+		}
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						has_terrain = forest
+						has_terrain = woods
+					}
+				}
+				add_province_modifier = {
+					name = RHN_supplying_the_industry
+					duration = 10950
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.11.b" #Increase Agricultural Production
+		
+		ai_chance = { factor = 0.1 } #AI likes coal. 
+		
+		1760 = {
+			build_possible_manufactory_in_province = yes
+		}
+		80 = {
+			build_possible_manufactory_in_province = yes
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.12 #Site for a Bronze Bell
+	title = ME_Rhenish_Events.12.t
+	desc = ME_Rhenish_Events.12.d
+	picture = RELIGION_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "ME_Rhenish_Events.12.a" #Embrace woodworking
+		
+		ai_chance = { factor = 1 }
+		
+		capital_scope = {
+			add_great_project = RHN_grand_bell
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.12.b" #Frankfurt
+		
+		ai_chance = { factor = 2 } #
+		
+		trigger = {
+			1876 = {
+				owned_by = ROOT
+			}
+		}
+		
+		1876 = {
+			add_great_project = RHN_grand_bell
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.12.c" #Aachen
+		
+		ai_chance = { factor = 2 } #
+		
+		trigger = {
+			1878 = {
+				owned_by = ROOT
+			}
+		}
+		
+		
+		1878 = {
+			add_great_project = RHN_grand_bell
+		}
+	}
+	after = {
+		set_country_flag = RHN_bell
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.13 #Speed up bell
+	title = ME_Rhenish_Events.13.t
+	desc = ME_Rhenish_Events.13.d
+	picture = RELIGION_eventPicture
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	trigger = {
+		has_country_flag = RHN_bell
+		any_owned_province = {
+			trade_goods = bronze
+			base_production = 5
+		}
+		any_owned_province = {
+			has_construction = canal
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.13.a" #Ye go ahead
+		
+		ai_chance = { factor = 5 }
+		
+		if = {
+			limit = {
+				any_owned_province = {
+					trade_goods = bronze
+					base_production = 5
+				}
+				any_owned_province = {
+					has_construction = canal
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_construction = canal
+				}
+				add_construction_progress = 0.1
+			}
+			random_owned_province = {
+				limit = {
+					trade_goods = bronze
+					base_production = 5
+				}
+				add_base_production = -4
+			}
+		}
+	}
+	
+	option = {
+		name = "ME_Rhenish_Events.13.b" #Frankfurt
+		
+		ai_chance = { factor = 0 } #
+		
+		add_adm_power = 50
+	}
+	
+}
+
+country_event = {
+	id = estate_industrial_events.1 #reapply give governmental loans
+	title = estate_industrial_events.1.t
+	desc = estate_industrial_events.1.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.1.a" 
+		
+		ai_chance = { factor = 0 }
+		
+		reapply_estate_privilege = { privilege = estate_industrial_give_governmental_loans }
+	}
+	
+	option = {
+		name = "estate_industrial_events.1.b"
+		
+		ai_chance = { factor = 1 }
+		
+		remove_estate_privilege = estate_industrial_give_governmental_loans
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.2 #reapply give governmental loans
+	title = estate_industrial_events.2.t
+	desc = estate_industrial_events.2.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.2.a" 
+		
+		ai_chance = { factor = 0 }
+		
+		reapply_estate_privilege = { privilege = estate_industrial_land_appropriation }
+	}
+	
+	option = {
+		name = "estate_industrial_events.2.b"
+		
+		ai_chance = { factor = 1 }
+		
+		remove_estate_privilege = estate_industrial_land_appropriation
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.3
+	title = estate_industrial_events.3.t
+	desc = estate_industrial_events.3.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		has_estate = estate_industrial
+		had_country_flag = {
+			flag = estate_industrial_agenda_flag
+			days = 1925
+		}
+		ai = no
+		NOT = { has_any_active_estate_agenda = yes }
+	}
+	
+	immediate = {
+		hidden_effect = {
+			clear_estate_agenda_cache = ROOT
+			generate_estate_agenda = estate_industrial
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.3.a" #Advisor
+		
+		ai_chance = { factor = 33 }
+		
+		start_estate_agenda = estate_industrial
+	}
+	after = {
+		clr_country_flag = estate_industrial_agenda_flag
+		set_country_flag = estate_industrial_agenda_flag
+		clear_estate_agenda_cache = ROOT
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.4
+	title = estate_industrial_events.4.t
+	desc = estate_industrial_events.4.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	immediate = {
+		random_owned_province = {
+			limit = {
+				NOT = { has_production_building_trigger = yes }
+			}
+			add_building_construction = {
+				building = workshop
+				speed = 0.5
+				cost = 0
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.4.a" #Advisor
+		
+		ai_chance = { factor = 33 }
+		
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.5
+	title = estate_industrial_events.5.t #controller event
+	desc = estate_industrial_events.5.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	hidden = yes
+	mean_time_to_happen = {
+		months = 60
+	}
+	trigger = {
+		has_estate = estate_industrial
+	}
+	
+	option = {
+		name = "estate_industrial_events.5.a" 
+		
+		ai_chance = { factor = 1 }
+		
+		random_list = { #church
+			1 = {
+				trigger = {
+					has_estate = estate_church
+					estate_territory = {
+						estate = estate_church
+						territory = 1
+					}
+				}
+				random_owned_province = {
+					save_event_target_as = estate_industrial_event_target
+				}
+				random_owned_province = {
+					limit = {
+						has_tax_building_trigger = yes
+						NOT = { has_production_building_trigger = yes }
+					}
+					save_event_target_as = estate_industrial_event_target
+				}
+				event_target:estate_industrial_event_target = {
+					province_event = { id = estate_industrial_events.6 }
+				}
+			}
+			1 = {
+				trigger = {
+					has_estate = estate_nobles
+				}
+				country_event = { id = estate_industrial_events.7 }
+			}
+			1 = {
+				trigger = {
+					has_estate = estate_burghers
+				}
+				country_event = { id = estate_industrial_events.8 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.9 }
+			}
+			1 = {
+				trigger = {
+					any_owned_province = {
+						NOT = { has_manufactory_trigger = yes }
+					}
+				}
+				random_owned_province = {
+					limit = {
+						NOT = {
+							has_manufactory_trigger = yes
+						}
+					}
+					province_event = { id = estate_industrial_events.10 }
+				}
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.11 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.12 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.13 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.14 }
+			}
+			1 = {
+				country_event = { id = estate_industrial_events.15 }
+			}
+		}
+	}
+}
+
+province_event = {
+	id = estate_industrial_events.6
+	title = estate_industrial_events.6.t #Clergy vs Industrial
+	desc = estate_industrial_events.6.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	goto = ROOT
+	
+	is_triggered_only = yes #triggers in the controller event
+	
+	option = {
+		name = "estate_industrial_events.6.a" 
+		
+		ai_chance = { factor = 1 }
+		
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_industrial
+				loyalty = 10
+			}
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -20
+			}
+			change_estate_land_share = {
+				estate = estate_church
+				share = -1
+			}
+			change_estate_land_share = {
+				estate = estate_industrial
+				share = 1
+			}
+		}
+		if = {
+			limit = {
+				has_tax_building_trigger = yes
+				NOT = { has_production_building_trigger = yes }
+			}
+			custom_tooltip = estate_industrial_remove_church_add_workshop
+			hidden_effect = {
+				if = {
+					limit = {
+						has_building = cathedral
+					}
+					remove_building = cathedral
+					add_building = counting_house
+				}
+				else_if = {
+					limit = {
+						has_building = temple
+					}
+					remove_building = temple
+					add_building = workshop
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.6.b" 
+		
+		ai_chance = { factor = 1 }
+		
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+		}
+		if = {
+			limit = {
+				religion = owner
+			}
+			add_province_modifier = {
+				name = RHN_churches_own
+				duration = 7300
+			}
+		}
+		else = {
+			add_province_modifier = {
+				name = RHN_churches_not_own
+				duration = 7300
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.6.c" 
+		
+		ai_chance = { factor = 1 }
+		
+		owner = {
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = -10
+			}
+			add_estate_loyalty = {
+				estate = estate_industrial
+				loyalty = -10
+			}
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.7
+	title = estate_industrial_events.7.t
+	desc = estate_industrial_events.7.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.7.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -5
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = RHN_curbed_the_nobles
+			influence = -5
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.7.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_nobles
+			desc = RHN_oppression_of_industrialists
+			influence = 10
+			duration = 5475
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.8
+	title = estate_industrial_events.8.t
+	desc = estate_industrial_events.8.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		random_owned_province = {
+			save_event_target_as = estate_industrial_event_target
+		}
+		random_owned_province = {
+			limit = {
+				development = 10
+			}
+			save_event_target_as = estate_industrial_event_target
+		}
+		random_owned_province = {
+			limit = {
+				development = 20
+			}
+			save_event_target_as = estate_industrial_event_target
+		}
+	}
+	option = {
+		name = "estate_industrial_events.8.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+		add_estate_influence_modifier = {
+			estate = estate_burghers
+			desc = RHN_burgher
+			influence = -10
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.8.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 15
+		}
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_favored_burghers
+			influence = -10
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.8.c"
+		
+		trigger = {
+			has_estate_privilege = estate_industrial_establish_industrial_parks
+			hidden_trigger = {
+				estate_territory = {
+					estate = estate_burghers
+					territory = 3
+				}
+			}
+		}
+		highlight = yes
+		
+		ai_chance = { factor = 33 }
+		
+		
+		event_target:estate_industrial_event_target = {
+			add_province_modifier = {
+				name = RHN_industrial_park
+				duration = 5475
+			}
+			change_estate_land_share = {
+				estate = estate_burghers
+				share = -3
+			}
+			change_estate_land_share = {
+				estate = estate_industrial
+				share = 3
+			}
+		}
+	}
+}
+
+country_event = {
+	id = estate_industrial_events.9
+	title = estate_industrial_events.9.t
+	desc = estate_industrial_events.9.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = "estate_industrial_events.9.a"
+		
+		ai_chance = { factor = 33 }
+		
+		add_years_of_income = -1
+		add_estate_loyalty = {
+			estate = estate_industrial
+			loyalty = 15
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.9.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_estate_influence_modifier = {
+			estate = estate_industrial
+			desc = RHN_ruined_company
+			influence = -15
+			duration = 5475
+		}
+		add_country_modifier = {
+			name = RHN_company_in_ruin
+			duration = 730
+		}
+	}
+}
+
+province_event = {
+	id = estate_industrial_events.10
+	title = estate_industrial_events.10.t
+	desc = estate_industrial_events.10.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	is_triggered_only = yes
+	
+	goto = ROOT
+
+	option = {
+		name = "estate_industrial_events.10.a"
+		
+		ai_chance = { factor = 33 }
+		
+		build_possible_manufactory_in_province = yes
+		owner = {
+			change_estate_land_share = {
+				estate = estate_industrial
+				share = 3
+			}
+			add_estate_influence_modifier = {
+				estate = estate_industrial
+				desc = RHN_investments
+				influence = 10
+				duration = 5475
+			}
+		}
+	}
+	
+	option = {
+		name = "estate_industrial_events.10.b"
+		
+		ai_chance = { factor = 33 }
+		
+		add_province_modifier = {
+			name = RHN_own_plans
+			duration = 5475
+		}
 	}
 }
