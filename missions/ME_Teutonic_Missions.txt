@@ -19,19 +19,60 @@ TEU_Missions_1 = {
 		required_missions = { TEU_fc }
 		position = 2
 		provinces_to_highlight = {
-			owned_by = POL
-			NOT = {
+			if = {
+				limit = {
+					exists = POL
+				}
+				owned_by = POL
+				NOT = {
+					has_won_war_against = {
+						who = POL
+					}
+					prestige = POL
+				}
+			}
+			else_if = {
+				limit = {
+					exists = PLC
+				}
+				owned_by = PLC
+				NOT = {
+					has_won_war_against = {
+						who = PLC
+					}
+					prestige = PLC
+				}
+			}
+			else = {
+				province_id = 4524
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = POL
+				}
 				has_won_war_against = {
 					who = POL
 				}
 				prestige = POL
 			}
-		}
-		trigger = {
-			has_won_war_against = {
-				who = POL
+			else_if = {
+				limit = {
+					exists = PLC
+				}
+				has_won_war_against = {
+					who = POL
+				}
+				prestige = POL
 			}
-			prestige = POL
+			else = {
+				4524 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			
 		}
 		effect = {
 			country_event = { id = ME_Teutonic_Order_Events.1 } #Poland bad Teutonic Order Good
@@ -562,11 +603,57 @@ TEU_Missions_3 = {
 		required_missions = { TEU_solidify_relations }
 		position = 3
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				owned_by = emperor
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						culture_group = germanic
+					}
+				}
+				culture_group = germanic
+			}
 		}
 		trigger = {
-			reverse_has_opinion = {
-				who = emperor
-				value = 100
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				emperor = {
+					has_opinion = {
+						who = root
+						value = 100
+					}
+					has_opinion_modifier = {
+						who = root
+						modifier = insulted
+					}
+					has_opinion_modifier = {
+						who = root
+						modifier = scornfully_insulted
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					any_country = {
+						culture_group = germanic
+					}
+				}
+				any_country = {
+					culture_group = germanic
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+			else = {
+				prestige = 50
 			}
 		}
 		effect = {
@@ -1060,4 +1147,4 @@ TEU_Missions_5 = {
 	}
 }
 
-#EVENT ABOUT THE LIVONIAN BISHOPS TOO MUCH INFLUENCE
+#EVENT ABOUT THE LIVONIAN BISHOPS TOO MUCH INFLUENCE?
