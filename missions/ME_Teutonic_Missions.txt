@@ -3,8 +3,14 @@ TEU_Missions_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		#has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = TEU
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
 	}
 	has_country_shield = yes
 
@@ -189,8 +195,14 @@ TEU_Missions_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		#has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = TEU
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
 	}
 	has_country_shield = yes
 
@@ -378,8 +390,14 @@ TEU_Missions_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		#has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = TEU
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
 	}
 	has_country_shield = yes
 
@@ -402,21 +420,139 @@ TEU_Missions_3 = {
 			}
 		}
 		trigger = {
-			reverse_has_opinion = {
-				who = LIV
-				value = 150
+			OR  ={
+				AND = {
+					reverse_has_opinion = {
+						who = LIV
+						value = 150
+					}
+					alliance_with = LIV
+				}
+				num_of_owned_provinces_with = {
+					OR = {
+						area = curonia_area 
+						area = livonia_area
+						is_core = LIV
+					}
+					value = 3
+				}
 			}
-			alliance_with = LIV
 		}
 		effect = {
-			add_trust = {
-				who = LIV
-				value = 10
-				mutual = yes
+			if = {
+				limit = {
+					reverse_has_opinion = {
+						who = LIV
+						value = 150
+					}
+					alliance_with = LIV
+				}
+				custom_tooltip = TEU_reward_if_ally_yes
+				hidden_effect = {
+					add_trust = {
+						who = LIV
+						value = 10
+						mutual = yes
+					}
+					add_country_modifier = {
+						name = TEU_diplomacy
+						duration = 9125
+					}
+				}
 			}
-			add_country_modifier = {
-				name = TEU_diplomacy
-				duration = 9125
+			else = {
+				custom_tooltip = TEU_reward_if_ally
+			}
+			
+			tooltip = {
+				add_trust = {
+					who = LIV
+					value = 10
+					mutual = yes
+				}
+				add_country_modifier = {
+					name = TEU_diplomacy
+					duration = 9125
+				}
+			}
+			
+			if = {
+				limit = {
+					NOT = {
+						reverse_has_opinion = {
+							who = LIV
+							value = 150
+						}
+						alliance_with = LIV
+					}
+					num_of_owned_provinces_with = {
+						OR = {
+							area = curonia_area 
+							area = livonia_area
+							is_core = LIV
+						}
+						value = 3
+					}
+				}
+				custom_tooltip = TEU_reward_if_war_yes
+				hidden_effect = {
+					add_country_modifier = {
+						name = TEU_conquest_of_livonia
+						duration = 7300
+					}
+					curonia_area = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					livonia_area = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					estonia_ingria_area = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			else = {
+				custom_tooltip = TEU_reward_if_war
+			}
+			
+			tooltip = {
+				add_country_modifier = {
+					name = TEU_conquest_of_livonia
+					duration = 7300
+				}
+				curonia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				livonia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				estonia_ingria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 			}
 		}
 	}
@@ -536,8 +672,14 @@ TEU_Missions_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		#has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = TEU
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
 	}
 	has_country_shield = yes
 
@@ -653,6 +795,12 @@ TEU_Missions_4 = {
 					duration = -1
 				}
 			}
+			41 = {
+				add_province_modifier = {
+					name = TEU_seat_of_schaeffer
+					duration = -1
+				}
+			}
 			define_advisor = {
 				type = trader
 				skill = 2
@@ -668,8 +816,21 @@ TEU_Missions_4 = {
 		required_missions = { TEU_religious_Foundations }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				religion = hussite
+				religion = protestant 
+				religion = reformed
+			}
 		}
 		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				custom_trigger_tooltip = {
+					tooltip = obj_force_converted_tooltip
+					has_country_flag = force_converted
+				}
+			}
 		}
 		effect = {
 			if = {
@@ -723,8 +884,14 @@ TEU_Missions_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		#has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		tag = TEU
+		OR  ={
+			tag = TEU
+			AND = {
+				was_tag = TEU
+				tag = PRU
+				NOT = { has_country_flag = use_paradox_missions }
+			}
+		}
 	}
 	has_country_shield = yes
 
