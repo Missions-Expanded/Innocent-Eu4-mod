@@ -17,13 +17,7 @@ me_venice_missions_1 = {
 				#tag = ITA
 			}
 		}
-		OR = {
-			NOT = { has_dlc = "Emperor" }
-			AND = {
-				has_dlc = "Emperor"
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -35,13 +29,23 @@ me_venice_missions_1 = {
 		position = 2
 		provinces_to_highlight = {
 			OR = {
-				province_id = 220
-				province_id = 2988
-				province_id = 213
-			}			
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				AND = {
+					OR = {
+						province_id = 220
+						province_id = 2988
+					}					
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				AND = {
+					province_id = 213
+					OR = {
+						local_autonomy = 20
+						NOT = { owned_by = ROOT }
+					}
+				}
 			}
 		}
 		trigger = {
@@ -75,50 +79,26 @@ me_venice_missions_1 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						has_dlc = "Res Publica"
-						faction_in_power = mr_traders
-					}
-					random_list = {
-						33 = {
-							213 = {
-								create_or_add_center_of_trade_level = { level = 1 }
+						OR = {
+							AND = {
+								has_dlc = "Res Publica"
+								faction_in_power = mr_traders
 							}
-						}
-						33 = {
-							220 = {
-								create_or_add_center_of_trade_level = { level = 1 }
-							}
-						}
-						33 = {
-							2988 = {
-								create_or_add_center_of_trade_level = { level = 1 }
-							}
-						}
-					}
-				}
-				else = {
-					if = {
-						limit = {
 							estate_loyalty = {
 								estate = estate_burghers
 								loyalty = 60
 							}
 						}
-						33 = {
-							213 = {
-								create_or_add_center_of_trade_level = { level = 1 }
+					}
+					random_owned_province = {
+						limit = {
+							OR = {
+								province_id = 213
+								province_id = 220
+								province_id = 2988
 							}
 						}
-						33 = {
-							220 = {
-								create_or_add_center_of_trade_level = { level = 1 }
-							}
-						}
-						33 = {
-							2988 = {
-								create_or_add_center_of_trade_level = { level = 1 }
-							}
-						}
+						create_or_add_center_of_trade_level = { level = 1 }
 					}
 				}
 			}
@@ -189,7 +169,6 @@ me_venice_missions_1 = {
 							NOT = { owned_by = ROOT }
 						}
 						add_core = ROOT
-						add_permanent_claim = ROOT
 					}
 				}
 			}
@@ -203,9 +182,13 @@ me_venice_missions_1 = {
 		position = 4
 		provinces_to_highlight = {
 			province_id = 321
-			NOT = { owned_by = ROOT }
-			NOT = { is_core = ROOT }
-			NOT = { unrest = 1 }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				unrest = 1
+				NOT = { has_shipyard_building_trigger = yes }
+				NOT = { has_dock_building_trigger = yes }
+			}
 		}
 		trigger = {
 			321 = {
@@ -220,40 +203,8 @@ me_venice_missions_1 = {
 		}
 		effect = {
 			321 = {
-				if = {
-					limit = { has_building = shipyard }
-					if = {
-						limit = { NOT = { has_building = dock } }
-						add_building_construction = {
-							building = dock
-							speed = 0.5
-							cost = 0
-						}
-					}
-					remove_building = shipyard
-					add_building_construction = {
-						building = grand_shipyard
-						speed = 0.5
-						cost = 0
-					}
-				}
-				if = {
-					limit = { has_building = dock }
-					if = {
-						limit = { NOT = { has_building = shipyard } }
-						add_building_construction = {
-							building = shipyard
-							speed = 0.5
-							cost = 0
-						}
-					}
-					remove_building = dock
-					add_building_construction = {
-						building = drydock
-						speed = 0.5
-						cost = 0
-					}
-				}
+				add_or_upgrade_dock_building = yes
+				add_or_upgrade_shipyard_building = yes 
 				add_base_production = 2
 				add_nationalism = -5
 			}
@@ -293,17 +244,17 @@ me_venice_missions_1 = {
 					has_merchant = ROOT
 				}
 			}
-			any_country = {
-				1308 = {
-					trade_share = {
-						share = 1
-						country = PREV
-					}
-				}
+			custom_trigger_tooltip = {
+				tooltip = VEN_DISCOVER_INDIA_ROUTES_TT
 				NOT = {
-					naval_strength = {
-						who = ROOT
-						value = 1
+					any_country = {
+						1308 = {
+							trade_share = {
+								share = 5
+								country = PREV
+							}
+						}
+						navy_size = ROOT
 					}
 				}
 			}
@@ -320,142 +271,192 @@ me_venice_missions_1 = {
 		}
 	}
 	
-	ven_prelude_of_the_arsenal = {
+	ven_arsenal = {
 		icon = new_pilings
 		required_missions = { }
 		position = 6
+		provinces_to_highlight = {
+			province_id = 112
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 1 }
+			}
+		}
 		trigger = {
 			navy_size_percentage = 1
 			num_of_galley = 10
-			sailors_percentage = 0.4
+			112 = {
+				owned_by = ROOT
+				num_of_times_improved = 1 
+			}
 		}
 		effect = {
-			add_navy_tradition = 25
-			112 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = shipyard
-				}
-			}
-			1774 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = shipyard
-				}
-			}
-			4729 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = shipyard
-				}
+			add_yearly_sailors = 1
+			add_province_modifier = {
+				name = ven_arsenal_modifier_1
+				duration = -1
 			}
 		}
 	}
 	
-	ven_expanding_the_arsenal = {
-		icon = me_mission_venice_city
+	ven_grow_the_arsenal = {
+		icon = expand_the_arsenal
 		required_missions = {
-			ven_prelude_of_the_arsenal
+			ven_arsenal
 		}
 		position = 7
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_dock_building_trigger = yes }
+			NOT = { has_shipyard_building_trigger = yes }
+		}
 		trigger = {
-			navy_size = 40
-			OR = {
-				shipyard = 5
-				grand_shipyard = 5
+			142 = {
+				owned_by = ROOT
+				OR = {
+					has_dock_building_trigger = yes
+					has_shipyard_building_trigger = yes
+				}
 			}
-			OR = {
-				dock = 5
-				drydock = 5
+			num_of_owned_provinces_with = {
+				OR = {
+					has_dock_building_trigger = yes
+					has_shipyard_building_trigger = yes
+				}
+				value = 5
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = ven_ventian_grandeur
-				duration = 36500
+			add_dip_power = 50
+			custom_tooltip = VEN_EXPANDING_THE_ARSENAL_TT
+			tooltip = {
+				add_or_upgrade_shipyard_building = yes
+			}
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_dock_building_trigger = yes
+							has_shipyard_building_trigger = yes
+						}
+						NOT = { has_province_flag = VEN_mission_effect_handler }
+					}
+					set_province_flag = VEN_mission_effect_handler
+					add_or_upgrade_shipyard_building = yes
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_dock_building_trigger = yes
+							has_shipyard_building_trigger = yes
+						}
+						NOT = { has_province_flag = VEN_mission_effect_handler }
+					}
+					set_province_flag = VEN_mission_effect_handler
+					add_or_upgrade_shipyard_building = yes
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_dock_building_trigger = yes
+							has_shipyard_building_trigger = yes
+						}
+						NOT = { has_province_flag = VEN_mission_effect_handler }
+					}
+					set_province_flag = VEN_mission_effect_handler
+					add_or_upgrade_shipyard_building = yes
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_dock_building_trigger = yes
+							has_shipyard_building_trigger = yes
+						}
+						NOT = { has_province_flag = VEN_mission_effect_handler }
+					}
+					set_province_flag = VEN_mission_effect_handler
+					add_or_upgrade_shipyard_building = yes
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_dock_building_trigger = yes
+							has_shipyard_building_trigger = yes
+						}
+						NOT = { has_province_flag = VEN_mission_effect_handler }
+					}
+					set_province_flag = VEN_mission_effect_handler
+					add_or_upgrade_shipyard_building = yes
+				}
+				every_owned_province = { clr_province_flag = VEN_mission_effect_handler }
 			}
 		}
 	}
 
-	ven_venetian_merchant_fleet = {
-		icon = me_mission_venice_navy
+	ven_galley = {
+		icon = me_mission_venice_small_ship_in_port
 		required_missions = {
-			ven_expanding_the_arsenal
-			ven_wooden_walls_of_venice
+			ven_grow_the_arsenal
+			ven_arsenal_innovations
 		}
 		position = 8
+		provinces_to_highlight = {
+			owner = {
+				num_of_galley = ROOT
+			}
+		}
 		trigger = {
-			num_of_light_ship = 50
-			OR = {
-				AND = {
-					exists = MAM
-					num_of_light_ship = MAM
-				}
-				AND = {
-					exists = ARA
-					num_of_light_ship = ARA
-				}
-				AND = {
-					exists = GEN
-					num_of_light_ship = GEN
-				}
-				AND = {
-					exists = TUR
-					num_of_light_ship = TUR
-				}
-				AND = {
-					NOT = { exists = MAM }
-					NOT = { exists = ARA }
-					NOT = { exists = GEN }
-					NOT = { exists = TUR }
-				}
-			}
-			137 = {
-				trade_share = {
-					country = ROOT
-					share = 10
-				}
-			}
-			358 = {
-				trade_share = {
-					country = ROOT
-					share = 10
+			num_of_galley = 40
+			custom_trigger_tooltip = {
+				tooltip = VEN_GALLEY_TT
+				NOT = {
+					any_country = {
+						num_of_galley = ROOT
+					}
 				}
 			}
 		}
 		effect = {
+			create_admiral = {
+				tradition = 80
+			}
 			add_country_modifier = {
-				name = ven_venetian_merchant_fleet_modifier
-				duration = 9125
+				name = ven_protectors_of_mediterranean
+				duration = 7300
 			}
 		}
 	}
 
-	ven_mediterranean_admirality = {
-		icon = mission_establish_high_seas_navy
+	ven_venetian_peace = {
+		icon = purely_for_commerce
 		required_missions = {
-			ven_venetian_merchant_fleet
+			ven_galley
 		}
 		position = 9
 		trigger = {
-			num_of_admirals = 4
-			navy_size = 100
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				num_of_admirals_with_traits = 1
+			}
+			else = {
+				num_of_admirals = 1
+			}
+			navy_size = 80
+			custom_trigger_tooltip = {
+				tooltip = VEN_VENETIAN_PEACE_TRIGGER_TT
+				NOT = {	
+					any_country = {
+						navy_size = ROOT
+					}
+				}
+			}
 		}
 		effect = {
+			add_stability_or_adm_power = yes
 			add_country_modifier = {
-				name = ven_admirality_school
+				name = ven_venetian_peace_modifier
 				duration = 36500
 			}
 		}
@@ -474,20 +475,14 @@ me_venice_missions_2 = {
 				OR = {
 					tag = LVN
 					AND = {
-							tag = VEN
-							has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+						tag = VEN
+						has_country_flag = lvn_without_fe #this is needed if you don't have FE active
 					}
 				}
 				#tag = ITA
 			}
 		}
-		OR = {
-			NOT = { has_dlc = "Emperor" }
-			AND = {
-				has_dlc = "Emperor"
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
@@ -500,6 +495,10 @@ me_venice_missions_2 = {
 		trigger = {
 			137 = {
 				is_strongest_trade_power = ROOT
+				trade_share = {
+					country = ROOT
+					share = 25
+				}
 			}
 		}
 		effect = {
@@ -575,17 +574,17 @@ me_venice_missions_2 = {
 				type = all
 				owned_by = ROOT
 			}
-			any_country = {
-				1308 = {
-					trade_share = {
-						share = 1
-						country = PREV
-					}
-				}
+			custom_trigger_tooltip = {
+				tooltip = VEN_DISCOVER_INDIA_ROUTES_TT
 				NOT = {
-					naval_strength = {
-						who = ROOT
-						value = 1
+					any_country = {
+						1308 = {
+							trade_share = {
+								share = 5
+								country = PREV
+							}
+						}
+						navy_size = ROOT
 					}
 				}
 			}
@@ -600,11 +599,14 @@ me_venice_missions_2 = {
 			}
 		}
 		effect = {
-			random_owned_province = {
-				limit = {
-					area = apulia_area
+			custom_tooltip = VEN_ADRIATIC_COASTLINE_TT
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						area = apulia_area
+					}
+					create_or_add_center_of_trade_level = { level = 1 }
 				}
-				create_or_add_center_of_trade_level = { level = 1 }
 			}
 		}
 	}
@@ -618,9 +620,8 @@ me_venice_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				value = 1
-				area = malabar_area
+			malabar_area = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -636,8 +637,16 @@ me_venice_missions_2 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						has_dlc = "Res Publica"
-						faction_in_power = mr_traders
+						OR = {
+							AND = {
+								has_dlc = "Res Publica"
+								faction_in_power = mr_traders
+							}
+							estate_loyalty = {
+								estate = estate_burghers
+								loyalty = 60
+							}
+						}
 					}
 					random_owned_province = {
 						limit = {
@@ -656,77 +665,36 @@ me_venice_missions_2 = {
 						add_nationalism = -5
 					}
 				}
-				else = {
-					if = {
-						limit = {
-							estate_loyalty = {
-								estate = estate_burghers
-								loyalty = 60
-							}
-						}
-						random_owned_province = {
-							limit = {
-								area = malabar_area
-								has_port = yes
-							}
-							light_ship = ROOT
-							light_ship = ROOT
-							light_ship = ROOT
-						}
-						random_owned_province = {
-							limit = {
-								area = malabar_area
-							}
-							add_base_production = 2
-							add_nationalism = -5
-						}
-					}
-				}
 			}
 		}
 	}
 
-	ven_wooden_walls_of_venice = {
-		icon = me_mission_venice_small_ship_in_port
+	ven_arsenal_innovations = {
+		icon = catholic_confraternity
 		required_missions = {
-			ven_prelude_of_the_arsenal
+			ven_arsenal
 		}
 		position = 7
 		trigger = {
-			num_of_galley = 20
-			OR = {
-				AND = {
-					exists = MAM
-					num_of_galley = MAM
-				}
-				AND = {
-					exists = ARA
-					num_of_galley = ARA
-				}
-				AND = {
-					exists = GEN
-					num_of_galley = GEN
-				}
-				AND = {
-					NOT = { exists = MAM }
-					NOT = { exists = ARA }
-					NOT = { exists = GEN }
-				}
+			112 = {
+				owned_by = ROOT
+				num_of_times_improved = 10
+				has_dock_building_trigger = yes
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = ven_venetian_wood
-				duration = -1
-			}
-			add_country_modifier = {
-				name = ven_timber_surplus
-				duration = 10950
+			112 = {
+				remove_province_modifier = ven_arsenal_modifier_1
+				add_province_modifier = {
+					name = ven_arsenal_modifier_2
+					duration = -1
+				}
+				add_or_upgrade_dock_building = yes
 			}
 		}
 	}
 
-	ven_house_of_visconti = {
+	ven_milan = {
 		icon = seize_lombardy
 		required_missions = {
 			ven_republican_army 
@@ -743,9 +711,9 @@ me_venice_missions_2 = {
 			}
 		}
 		effect = {
-			add_years_of_income = 0.33
+			add_prestige_or_monarch_power = { amount = 10 }
 			add_country_modifier = {
-				name = ven_victory_over_milan
+				name = ven_milan_modifier
 				duration = 9125
 			}
 		}
@@ -764,20 +732,14 @@ me_venice_missions_3 = {
 				OR = {
 					tag = LVN
 					AND = {
-							tag = VEN
-							has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+						tag = VEN
+						has_country_flag = lvn_without_fe #this is needed if you don't have FE active
 					}
 				}
 				#tag = ITA
 			}
 		}
-		OR = {
-			NOT = { has_dlc = "Emperor" }
-			AND = {
-				has_dlc = "Emperor"
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 
@@ -863,28 +825,12 @@ me_venice_missions_3 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
-				OR = {
-					local_autonomy = 20
-					NOT = { has_province_modifier = trade_post_modifier }
-				}
 			}
 		}
 		trigger = {
 			101 = {
 				is_core = ROOT
 				owned_by = ROOT
-				if = {
-					limit = {
-						has_dlc = "Res Publica"
-					}
-					OR = {
-						has_province_modifier = trade_post_modifier
-						NOT = { local_autonomy = 20 }
-					}
-				}
-				else = {
-					NOT = { local_autonomy = 20 }
-				}
 			}
 		}
 		effect = {
@@ -930,16 +876,8 @@ me_venice_missions_3 = {
 		}
 		effect = {
 			285 = {
-				if = {
-					limit = {
-						province_has_center_of_trade_of_level = 3
-					}
-					add_base_production = 4
-				}
-				else = {
-					create_or_add_center_of_trade_level = {
-						level = 1
-					}
+				create_or_add_center_of_trade_level = {
+					level = 1
 				}
 			}
 			add_country_modifier = {
@@ -1098,13 +1036,30 @@ me_venice_missions_3 = {
 		required_missions = { }
 		position = 8
 		trigger = {
-			army_size_percentage = 1
-			army_size = 20
-			manpower_percentage = 0.5
+			army_size_percentage = 0.9
+			num_of_generals = 1
 		}
 		effect = {
 			create_general = {
 				tradition = 60
+			}
+			if = {
+				limit = {
+					exists = MLO
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MLO
+				}
+			}
+			if = {
+				limit = {
+					exists = GEN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = GEN
+				}
 			}
 			lombardy_area = {
 				limit = {
@@ -1131,20 +1086,13 @@ me_venice_missions_3 = {
 				name = ven_all_world_against
 				duration = 9125
 			}
-			if = {
-				limit = {
-					has_dlc = "Res Publica"
-					faction_in_power = mr_aristocrats
-				}
-				add_army_tradition = 15
-			}
 		}
 	}
 
 	ven_stato_terra = {
 		icon = expand_the_terraferma
 		required_missions = {
-			ven_house_of_visconti
+			ven_milan
 			ven_republican_army
 			ven_emilia_romagna
 		}
@@ -1157,10 +1105,8 @@ me_venice_missions_3 = {
 			}
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				OR = {
-					unrest = 0.1
-					devastation = 1
-				}
+				unrest = 0.1
+				devastation = 1
 			}
 		}
 		trigger = {
@@ -1218,20 +1164,14 @@ me_venice_missions_4 = {
 				OR = {
 					tag = LVN
 					AND = {
-							tag = VEN
-							has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+						tag = VEN
+						has_country_flag = lvn_without_fe #this is needed if you don't have FE active
 					}
 				}
 				#tag = ITA
 			}
 		}
-		OR = {
-			NOT = { has_dlc = "Emperor" }
-			AND = {
-				has_dlc = "Emperor"
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
@@ -1246,8 +1186,15 @@ me_venice_missions_4 = {
 				AND = {
 					province_id = 3003
 					OR = {
-						NOT = { has_building = fort_15th }
-						NOT = { has_building = coastal_defence }
+						AND = {
+							NOT = { has_building = coastal_defence }
+							NOT = { has_building = naval_battery } 
+							NOT = { has_building = fort_15th }
+							NOT = { has_building = fort_16th } 
+							NOT = { has_building = fort_17th }
+							NOT = { has_building = fort_18th } 
+						}
+						NOT = { owned_by = ROOT }
 					}
 				}
 				AND = {
@@ -1279,7 +1226,11 @@ me_venice_missions_4 = {
 						owned_by = ROOT
 						OR = {
 							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
 							has_building = coastal_defence
+							has_building = naval_battery
 						}
 					}
 					add_province_modifier = {
@@ -1407,8 +1358,8 @@ me_venice_missions_4 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			owns_core_province = 388
-			num_of_owned_provinces_with = {
+			owns_or_non_sovereign_subject_of = 388
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 3
 				OR = {
 					area = tihama_al_yemen_area
@@ -1424,36 +1375,15 @@ me_venice_missions_4 = {
 			}
 			388 = {
 				add_nationalism = -5
-				if = {
-					limit = {
-						NOT = { has_building = shipyard }
-					}
-					add_building_construction = {
-						building = shipyard
-						speed = 0.5
-						cost = 0
-					}
-				}
-				else_if = {
-					limit = {
-						NOT = { has_building = grand_shipyard }
-					}
-					remove_building = shipyard
-					add_building_construction = {
-						building = grand_shipyard
-						speed = 0.5
-						cost = 0
-					}
-				}
-				else = { add_base_production = 4 }
+				add_or_upgrade_shipyard_building = yes
 			}
 		}
 	}
 	
-	ven_developing_trade = {
+	ven_develop_venetia = {
 		icon = medici_bank_ledgers
 		required_missions = {
-			ven_develop_venezia
+			ven_venice
 		}
 		position = 7
 		provinces_to_highlight = {
@@ -1480,25 +1410,24 @@ me_venice_missions_4 = {
 			}
 		}
 		trigger = {
-			owns = 4174
-			owns = 108
-			owns = 130
-			4174 = {
-				development = 10
-				has_trade_building_trigger = yes
+			venetia_area = {
+				type = all
+				num_of_times_improved = 3
 			}
-			108 = {
-				development = 25
-				has_trade_building_trigger = yes
-			}
-			130 = {
-				development = 10
-				has_trade_building_trigger = yes
+			development_in_provinces = {
+				area = venetia_area
+				value = 90
 			}
 		}
 		effect = {
-			add_years_of_income = 2
-			add_mercantilism = 5
+			add_years_of_income = 1
+			add_adm_power = 50
+			venetia_area = {
+				add_province_modifier = {
+					name = ven_prosperity
+					duration = 9125
+				}
+			}
 		}
 	}
 
@@ -1568,25 +1497,19 @@ me_venice_missions_5 = {
 				OR = {
 					tag = LVN
 					AND = {
-							tag = VEN
-							has_country_flag = lvn_without_fe #this is needed if you don't have FE active
+						tag = VEN
+						has_country_flag = lvn_without_fe #this is needed if you don't have FE active
 					}
 				}
 				#tag = ITA
 			}
 		}
-		OR = {
-			NOT = { has_dlc = "Emperor" }
-			AND = {
-				has_dlc = "Emperor"
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox
-			}
-		}
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
 	
-	ven_last_roman_bastion = {
-		icon = me_mission_venice_crush_byzantium
+	ven_byz = {
+		icon = take_constantinople
 		required_missions = {
 			ven_armada
 		}
@@ -1596,32 +1519,21 @@ me_venice_missions_5 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
-				local_autonomy = 20
 			}
 		}
 		trigger = {
-			owns_core_province = 151
 			151 = {
-				if = {
-					limit = {
-						has_dlc = "Res Publica"
-					}
-					OR = {
-						has_province_modifier = trade_post_modifier
-						NOT = { local_autonomy = 20 }
-					}
-				}
-				else = {
-					NOT = { local_autonomy = 20 }
-				}
+				owned_by = ROOT
+				is_core = ROOT
 			}
 		}
 		effect = {
-			add_adm_power = 100
 			151 = {
-				add_province_modifier = {
-					name = ven_reclaimed_constantinople
+				add_trade_modifier = {
+					who = ROOT
 					duration = -1
+					power = 15
+					key = ven_gateway_to_the_east
 				}
 			}
 			thrace_area = {
@@ -1645,7 +1557,6 @@ me_venice_missions_5 = {
 		icon = personal_diplomacy
 		position = 3
 		required_missions = {
-			
 		}
 		provinces_to_highlight = {
 			owned_by = MAM
@@ -1673,8 +1584,8 @@ me_venice_missions_5 = {
 		}
 	}
 
-	ven_the_delta = {
-		icon = me_mission_venice_crush_mamluks
+	ven_mamluks = {
+		icon = control_the_means_of_transaction
 		required_missions = {
 			ven_negotiate_mamluks
 		}
@@ -1698,6 +1609,9 @@ me_venice_missions_5 = {
 					type = all
 					country_or_non_sovereign_subject_holds = ROOT
 				}
+				4316 = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 			else = {
 				358 = {
@@ -1705,9 +1619,12 @@ me_venice_missions_5 = {
 					if = {
 						limit = { has_dlc = "Res Publica" }
 						OR = {
-							has_province_modifier = trade_post_modifier
-							num_of_times_improved = 2
-						}
+                            has_province_modifier = trade_post_modifier
+                            AND = {
+								has_trade_building_trigger = yes
+								base_production = 8
+							}
+                        }
 					}
 					else = {
 						num_of_times_improved = 2
@@ -1739,12 +1656,20 @@ me_venice_missions_5 = {
 			delta_area = {
 				limit = { owned_by = ROOT }
 				add_province_modifier = {
-					name = ven_venetian_trade_practices_modifier
-					duration = 7300
+					name = ven_venetian_factories
+					duration = 10950
 				}
 			}
-			country_event = {
-				id = ME_Venice_Events.17
+			4316 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = ven_venetian_factories
+						duration = 10950
+					}
+				}
 			}
 		}
 	}
@@ -1752,7 +1677,7 @@ me_venice_missions_5 = {
 	ven_red_shores = {
 		icon = overseas_empire
 		required_missions = {
-			ven_the_delta
+			ven_mamluks
 		}
 		position = 5
 		provinces_to_highlight = {
@@ -1821,47 +1746,33 @@ me_venice_missions_5 = {
 		}
 	}
 	
-	ven_develop_venezia = {
+	ven_venice = {
 		icon = expand_the_arsenal
 		required_missions = { }
 		position = 6
 		provinces_to_highlight = {
 			province_id = 112
 			OR = {
-				NOT = { is_capital_of = ROOT }
-				AND = {
-					NOT = { has_building = temple }
-					NOT = { has_building = cathedral }
-				}
+				NOT = { has_tax_building_trigger = yes }
 				NOT = { has_trade_building_trigger = yes }
+				NOT = { owned_by = ROOT }
 			}
 		}
 		trigger = {
-			num_of_light_ship = 15
-			monthly_income = 25
-			capital = 112
 			112 = {
-				OR = {
-					has_tax_building_trigger = yes
-				}
+				owned_by = ROOT
+				has_tax_building_trigger = yes
 				has_trade_building_trigger = yes
 			}
 		}
 		effect = {
-			add_years_of_income = 0.33
+			add_adm_power = 50
 			112 = {
-				add_base_production = 3
-				if = {
-					limit = {
-						NOT = { has_building = trade_depot }
-						NOT = { has_building = stock_exchange }
-					}
-					remove_building = marketplace
-					add_building = trade_depot
+				add_province_modifier = {
+					name = ven_a_new_age
+					duration = -1
 				}
-				else = {
-					add_scaled_local_dip_power = 10
-				}
+				add_or_create_center_of_trade = { level = 1 }
 			}
 		}
 	}
@@ -1869,121 +1780,160 @@ me_venice_missions_5 = {
 	ven_la_serenissima = {
 		icon = develop_naples
 		required_missions = {
-			ven_develop_venezia
+			ven_venice
 		}
 		position = 7
 		provinces_to_highlight = {
+			province_id = 112
 			OR = {
-				AND = {
-					area = venetia_area
-					OR = {
-						NOT = { owned_by = ROOT }
-						is_state = no
-						AND = {
-							has_dlc = "Mandate of Heaven"
-							is_prosperous = no
-						}
-						AND = {
-							NOT = { has_dlc = "Mandate of Heaven" }
-							NOT = { development = 15 }
-						}
-					}
-				}
-				AND = {
-					province_id = 112
-					OR = {
-						NOT = { owned_by = ROOT }
-						NOT = { development = 30 }
-					}
-				}
+				NOT = { owned_by = ROOT }
+				NOT = { development = 35 }
+				NOT = { num_of_buildings_in_province = 4 }
+				NOT = { renaissance = 100 }
 			}
 		}
 		trigger = {
-			owns = 112
-			112 = {
-				development = 30
-			}
-			venetia_area = {
-				type = all
+			112 = {	
 				owned_by = ROOT
-				is_state = yes
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
-					custom_trigger_tooltip = {
-						tooltip = IS_PROSPEROUS
-						is_prosperous = yes
-					}
-				}
-				else = {
-					development = 15
-				}
+				development = 35
+				num_of_buildings_in_province = 4
+				renaissance = 100
 			}
 		}
 		effect = {
 			112 = {
-				if = {
-					limit = {
-						NOT = { has_building = stock_exchange }
-					}
-					remove_building = trade_depot
-					add_building = stock_exchange
-				}
-			}
-			venetia_area = {
+				add_prosperity = 100 
+				add_or_upgrade_tax_building = yes
+				add_or_upgrade_trade_building = yes
 				add_province_modifier = {
-					name = ven_la_serenissima_modifier
-					duration = 7300
+					name = ven_a_golden_century_for_venice
+					duration = 36500
 				}
 			}
 		}
 	}
 	
-	ven_glass_of_venice = {
-		icon = bohemian_crystal
+	ven_paper_of_venetia = {
+		icon = standardize_relazioni
 		required_missions = {
-			ven_developing_trade
+			ven_develop_venetia
 			ven_la_serenissima
 		}
 		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4729
+				province_id = 1774
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_production_building_trigger = yes }
+			}
+		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				value = 2
-				trade_goods = glass
-				development = 30
+			4729 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			1774 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			development_in_provinces = {
+				OR = {
+					province_id = 4729
+					province_id = 1774
+				}
+				value = 50
 			}
 		}
 		effect = {
-			add_years_of_income = 0.5
-			every_owned_province = {
-				limit = {
-					trade_goods = glass
+			4729 = {
+				add_institution_embracement = {
+					which = printing_press
+					value = 50
 				}
-				add_province_modifier = {
-					name = ven_increased_glass_production
-					duration = 9125
+			}
+			1774 = {
+				add_institution_embracement = {
+					which = printing_press
+					value = 50
 				}
+			}
+			add_country_modifier = {
+				name = ven_spread_of_ideas
+				duration = 7300
 			}
 		}
 	}
 	
-	ven_masters_of_glass = {
-		icon = me_mission_venice_people_talking
+	ven_vetro_veneziano = {
+		icon = bohemian_crystal
 		required_missions = {
-			ven_glass_of_venice
+			ven_paper_of_venetia
 		}
 		position = 9
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					ROOT = {
+						NOT = {
+							production_leader = {
+								trade_goods = glass
+							}
+							trading_bonus = {
+								trade_goods = glass
+								value = yes
+							}
+						}
+					}
+				}
+				trade_goods = glass
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						NOT = {
+							development_in_provinces = {
+								trade_goods = glass
+								value = 50
+							}
+						}
+					}
+				}
+				trade_goods = glass
+				owned_by = ROOT
+			}
+			else = {
+				province_id = 112
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { has_manufactory_trigger = yes }
+				}
+			}
+		}					
 		trigger = {
 			production_leader = {
 				trade_goods = glass
 			}
+			trading_bonus = {
+				trade_goods = glass
+				value = yes
+			}
+			112 = {
+				owned_by = ROOT
+				has_manufactory_trigger = yes
+			}
+			development_in_provinces = {
+				trade_goods = glass
+				value = 50
+			}
 		}
 		effect = {
-			add_years_of_income = 1
+			add_prestige_or_monarch_power = { amount = 40 }
 			add_country_modifier = {
-				name = ven_abundance_construction_glass
-				duration = 5475
+				name = ven_glass
+				duration = 9125
 			}
 		}
 	}
