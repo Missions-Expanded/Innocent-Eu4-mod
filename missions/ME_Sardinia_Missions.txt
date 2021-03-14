@@ -38,9 +38,12 @@ sardinia_missions_1 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { base_manpower = 5 }
-				NOT = { has_building = coastal_defence }
-				NOT = { has_shipyard_building_trigger = yes }
-				NOT = { has_dock_building_trigger = yes }
+				AND = {
+					NOT = { has_building = coastal_defence }
+					NOT = { has_building = naval_battery }
+					NOT = { has_shipyard_building_trigger = yes }
+					NOT = { has_dock_building_trigger = yes }
+				}
 			}
 		}
 		trigger = {
@@ -100,15 +103,27 @@ sardinia_missions_1 = {
 		provinces_to_highlight = {
 			area = corsica_sardinia_area
 			OR = {
+				NOT = { owned_by = ROOT }
 				AND = {
 					NOT = { has_building = coastal_defence }
 					NOT = { has_building = naval_battery }
 				}
-				NOT = { fort_level = 2 } 
+				NOT = { fort_level = 2 }
+			}
+			NOT = {
+				corsica_sardinia_area = {
+					owned_by = ROOT
+					OR = {
+						has_building = coastal_defence
+						has_building = naval_battery
+					}
+					fort_level = 2
+				}
 			}
 		}
 		trigger = {
 			corsica_sardinia_area = {
+				owned_by = ROOT
 				OR = {
 					has_building = coastal_defence
 					has_building = naval_battery
@@ -133,7 +148,7 @@ sardinia_missions_1 = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
-				add_permanent_claim = ROOT				
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -158,16 +173,16 @@ sardinia_missions_1 = {
 		trigger = {
 			341 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				NOT = { devastation = 1 }				
+				NOT = { devastation = 1 }
 			}
 			338 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				NOT = { devastation = 1 }				
+				NOT = { devastation = 1 }
 			}
 			if = {
 				limit = {
 					any_country = {
-						primary_culture = berber
+						culture_group = maghrebi
 					}
 				}
 				custom_trigger_tooltip = {
@@ -179,7 +194,7 @@ sardinia_missions_1 = {
 								trade_share = {
 									country = PREV
 									share = 5
-								}	
+								}
 							}
 							naval_strength = {
 								who = ROOT
@@ -221,16 +236,6 @@ sardinia_missions_1 = {
 			sar_strongholds_piracy
 			sar_malta
 		}
-		provinces_to_highlight = {
-			OR = {
-				province_id = 341
-				province_id = 338
-			}
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				devastation = 1
-			}
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = LVN_MEDITERRANEAN_PIRACY_1298_TT
@@ -240,7 +245,7 @@ sardinia_missions_1 = {
 							trade_share = {
 								country = PREV
 								share = 5
-							}	
+							}
 						}
 						naval_strength = {
 							who = ROOT
@@ -256,7 +261,7 @@ sardinia_missions_1 = {
 			#				trade_share = {
 			#					country = PREV
 			#					share = 5
-			#				}    
+			#				}
 			#			}
 			#		}
 			#		NOT = {
@@ -309,23 +314,19 @@ sardinia_missions_2 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			OR = {
-				diplomatic_reputation = 2
-				DIP = 4
-				if = {
-					limit = {
-						exists = GEN
-					}
+			if = {
+				limit = {
+					exists = GEN
+					exists = PIS
+				}
+				OR = {
+					diplomatic_reputation = 2
+					DIP = 4
 					GEN = {
 						has_opinion = {
 							who = ROOT
 							value = 125
 						}
-					}
-				}
-				if = {
-					limit = {
-						exists = PIS
 					}
 					PIS = {
 						has_opinion = {
@@ -334,7 +335,44 @@ sardinia_missions_2 = {
 						}
 					}
 				}
-				else = {
+			}
+			else_if = {
+				limit = {
+					exists = PIS
+				}
+				OR = {
+					diplomatic_reputation = 2
+					DIP = 4
+					PIS = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = GEN
+				}
+				OR = {
+					diplomatic_reputation = 2
+					DIP = 4
+					GEN = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { owns = 115 }
+				}
+				OR = {
+					diplomatic_reputation = 2
+					DIP = 4
 					115 = {
 						owner = {
 							has_opinion = {
@@ -343,6 +381,12 @@ sardinia_missions_2 = {
 							}
 						}
 					}
+				}
+			}
+			else = {
+				OR = {
+					diplomatic_reputation = 2
+					DIP = 4
 				}
 			}
 		}
@@ -365,21 +409,22 @@ sardinia_missions_2 = {
 		trigger = {
 			OR = {
 				navy_size_percentage = 0.50
-				OR = {
-					if = {
-						limit = {
-							exists = PIS
-						}
-						alliance_with = PIS
-					}
-					else_if = {
-						115 = {
-							owner = {
-								alliance_with = ROOT
-							}
-						}
-					}
+				AND = {
+					exists = GEN
 					alliance_with = GEN
+				}
+				AND = {
+					exists = PIS
+					alliance_with = PIS
+				}
+				AND = {
+					NOT = { exists = PIS }
+					NOT = { owns = 115 }
+					115 = {
+						owner = {
+							alliance_with = ROOT
+						}
+					}
 				}
 			}
 		}
@@ -462,16 +507,14 @@ sardinia_missions_2 = {
 						}
 						add_permanent_claim = ROOT
 					}
-				}				
+				}
 				if = {
 					limit = {
 						NOT = { alliance_with = GEN }
-						OR = {
-							NOT = { alliance_with = PIS }
-							115 = {
-								owner = {
-									NOT = { alliance_with = ROOT }
-								}
+						NOT = { alliance_with = PIS }
+						115 = {
+							owner = {
+								NOT = { alliance_with = ROOT }
 							}
 						}
 					}
@@ -541,10 +584,13 @@ sardinia_missions_2 = {
 			western_sicily_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
-			}			
+			}
 		}
 		effect = {
 			sicily_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 				add_province_modifier = {
 					name = sar_beauty_sicily
 					duration = 9125
@@ -555,7 +601,7 @@ sardinia_missions_2 = {
 					name = sar_beauty_sicily
 					duration = 9125
 				}
-			}			
+			}
 		}
 	}
 
@@ -622,6 +668,13 @@ sardinia_missions_3 = {
 			sar_gain_independence
 		}
 		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				unrest = 1
+				devastation = 1
+			}
+		}
 		trigger = {
 			stability = 1
 			all_owned_province = {
@@ -645,14 +698,15 @@ sardinia_missions_3 = {
 		}
 		position = 4
 		provinces_to_highlight = {
-			if = {
-				limit = {
+			OR = {
+				AND = {
 					ROOT = { alliance_with = GEN }
+					province_id = 102
 				}
-				province_id = 102
-			}
-			else = {
-				province_id = 101
+				AND = {
+					ROOT = { NOT = { alliance_with = GEN } }
+					province_id = 101
+				}
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -716,32 +770,6 @@ sardinia_missions_3 = {
 			sar_conchistu_piemonte
 		}
 		position = 8
-		provinces_to_highlight = {
-			OR = {
-				AND = {
-					area = piedmont_area
-					NOT = {
-						ROOT = {
-							development_in_provinces = {
-								value = 80
-								area = piedmont_area
-							}
-						}
-					}
-				}
-				AND = {
-					area = corsica_sardinia_area
-					NOT = {
-						ROOT = {
-							development_in_provinces = {
-								value = 50
-								area = corsica_sardinia_area
-							}
-						}
-					}
-				}
-			}
-		}
 		trigger = {
 			development_in_provinces = {
 				value = 80
@@ -760,9 +788,7 @@ sardinia_missions_3 = {
 			}
 			if = {
 				limit = {
-					NOT = {
-						tag = SPI
-					}
+					NOT = { tag = SPI }
 				}
 				set_country_flag = spi_without_spi
 				swap_non_generic_missions = yes
@@ -804,6 +830,7 @@ sardinia_missions_4 = {
 		icon = seize_sardinia
 		required_missions = { }
 		trigger = {
+			stability = 1 #TODO do not lock out player vassal
 			if = {
 				limit = { is_subject = yes }
 				army_size_percentage = 0.9
@@ -902,7 +929,6 @@ sardinia_missions_4 = {
 					}
 				}
 			}
-			stability = 1 #TODO do not lock out player vassal
 		}
 		effect = {
 			if = {
@@ -946,10 +972,6 @@ sardinia_missions_4 = {
 			sar_judike_sardu
 		}
 		position = 3
-		provinces_to_highlight = {
-			renaissance = 100
-			NOT = { owned_by = ROOT }
-		}
 		trigger = {
 			has_institution = renaissance
 			OR = {
@@ -982,12 +1004,12 @@ sardinia_missions_4 = {
 			}
 		}
 		trigger = {
+			has_adm_advisor_2 = yes
 			127 = {
 				owned_by = ROOT
 				NOT = { devastation = 1 }
 				NOT = { unrest = 1 }
 			}
-			has_adm_advisor_2 = yes
 		}
 		effect = {
 			127 = {

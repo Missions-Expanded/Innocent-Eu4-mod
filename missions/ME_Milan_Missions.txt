@@ -32,10 +32,6 @@ milan_missions_1 = {
 		required_missions = {
 		}
 		position = 1
-		provinces_to_highlight = {
-			culture = swiss
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -87,19 +83,27 @@ milan_missions_1 = {
 			1876 = {
 				has_merchant = ROOT
 			}
-			calc_true_if = {
-				amount = 3
-				all_elector = {
-					has_opinion = {
-						who = ROOT
-						value = 125
+			if = {
+				limit = {
+					hre_size = 1
+				}
+				calc_true_if = {
+					amount = 3
+					all_elector = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
 					}
 				}
-			}
-			emperor = {
-				has_opinion = {
-					who = ROOT
-					value = 125
+				OR = {
+					is_emperor = yes
+					emperor = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
 				}
 			}
 		}
@@ -164,6 +168,10 @@ milan_missions_1 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mlo_genoan_trade_school
+				duration = 7300
+			}
 			1298 = {
 				add_trade_modifier = {
 					who = ROOT
@@ -171,10 +179,6 @@ milan_missions_1 = {
 					power = 10
 					key = mlo_genoan_trade_school
 				}
-			}
-			add_country_modifier = {
-				name = mlo_genoan_trade_school
-				duration = 7300
 			}
 			piedmont_area = {
 				limit = {
@@ -320,29 +324,62 @@ milan_missions_1 = {
 		}
 		position = 9
 		provinces_to_highlight = {
-			province_id = 101
+			OR = {
+				AND = {
+					province_id = 101
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { province_has_center_of_trade_of_level = 3 }
+						NOT = { has_trade_building_trigger = yes }
+						NOT = { has_tax_building_trigger = yes }
+						NOT = { has_production_building_trigger = yes }
+					}
+				}
+				AND = {
+					area = liguria_area
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Rights of Man"
+							is_prosperous = no
+						}
+						AND = {
+							NOT = { has_dlc = "Rights of Man" }
+							OR = {
+								devastation = 1
+								unrest = 1
+								local_autonomy = 20
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			101 = {
 				owned_by = ROOT
 				province_has_center_of_trade_of_level = 3
 				has_trade_building_trigger = yes
-				OR = {
-					has_tax_building_trigger = yes
+				has_tax_building_trigger = yes
+				has_production_building_trigger = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
 				}
-				OR = {
-					has_production_building_trigger = yes
+				liguria_area = {
+					type = all
+					owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = IS_PROSPEROUS
+						is_prosperous = yes
+					}
 				}
 			}
-			liguria_area = {
-				type = all
-				if = {
-					limit = {
-						has_dlc = "Rights of Man"
-					}
-					prosperity = 100
-				}
-				else = {
+			else = {
+				liguria_area = {
+					type = all
+					owned_by = ROOT
 					NOT = { devastation = 1 }
 					NOT = { unrest = 1 }
 					NOT = { local_autonomy = 20 }
@@ -353,16 +390,16 @@ milan_missions_1 = {
 			}
 		}
 		effect = {
-			101 = {
-				add_province_modifier = {
-					name = mlo_world_trade_center
-					duration = -1
-				}
-			}
 			custom_tooltip = MLO_WORLD_TRADE_CENTER_TT
 			tooltip = {
 				add_country_modifier = {
 					name = mlo_share_dasnke_lov
+					duration = -1
+				}
+			}
+			101 = {
+				add_province_modifier = {
+					name = mlo_world_trade_center
 					duration = -1
 				}
 			}
@@ -453,9 +490,7 @@ milan_missions_2 = {
 							alliance_with = TUR
 						}
 					}
-					country_event = {
-						id = ME_Milan_Events.1
-					}
+					country_event = { id = ME_Milan_Events.1 }
 				}
 				else_if = {
 					limit = {
@@ -468,23 +503,6 @@ milan_missions_2 = {
 					}
 					FRA = {
 						set_country_flag = milan_sided_fra
-						add_country_modifier = {
-							name = mlo_lombard_free_militia
-							duration = -1
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						alliance_with = ENG
-					}
-					set_country_flag = milan_sided_eng
-					add_country_modifier = {
-						name = mlo_english_naval_admirals
-						duration = -1
-					}
-					ENG = {
-						set_country_flag = milan_sided_eng
 						add_country_modifier = {
 							name = mlo_lombard_free_militia
 							duration = -1
@@ -510,6 +528,23 @@ milan_missions_2 = {
 				}
 				else_if = {
 					limit = {
+						alliance_with = ENG
+					}
+					set_country_flag = milan_sided_eng
+					add_country_modifier = {
+						name = mlo_english_naval_admirals
+						duration = -1
+					}
+					ENG = {
+						set_country_flag = milan_sided_eng
+						add_country_modifier = {
+							name = mlo_lombard_free_militia
+							duration = -1
+						}
+					}
+				}
+				else_if = {
+					limit = {
 						alliance_with = DAN
 					}
 					set_country_flag = milan_sided_dan
@@ -519,6 +554,23 @@ milan_missions_2 = {
 					}
 					DAN = {
 						set_country_flag = milan_sided_dan
+						add_country_modifier = {
+							name = mlo_lombard_free_militia
+							duration = -1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						alliance_with = PLC
+					}
+					set_country_flag = milan_sided_pol
+					add_country_modifier = {
+						name = mlo_importing_cossack_horses
+						duration = -1
+					}
+					PLC = {
+						set_country_flag = milan_sided_pol
 						add_country_modifier = {
 							name = mlo_lombard_free_militia
 							duration = -1
@@ -561,31 +613,14 @@ milan_missions_2 = {
 				}
 				else_if = {
 					limit = {
-						alliance_with = PLC
-					}
-					set_country_flag = milan_sided_pol
-					add_country_modifier = {
-						name = mlo_importing_cossack_horses
-						duration = -1
-					}
-					PLC = {
-						set_country_flag = milan_sided_pol
-						add_country_modifier = {
-							name = mlo_lombard_free_militia
-							duration = -1
-						}
-					}
-				}
-				else_if = {
-					limit = {
-						alliance_with = ARA
+						alliance_with = SPA
 					}
 					set_country_flag = milan_sided_spa
 					add_country_modifier = {
 						name = mlo_spanish_inquisitors
 						duration = -1
 					}
-					ARA = {
+					SPA = {
 						set_country_flag = milan_sided_spa
 						add_country_modifier = {
 							name = mlo_lombard_free_militia
@@ -612,14 +647,14 @@ milan_missions_2 = {
 				}
 				else_if = {
 					limit = {
-						alliance_with = SPA
+						alliance_with = ARA
 					}
 					set_country_flag = milan_sided_spa
 					add_country_modifier = {
 						name = mlo_spanish_inquisitors
 						duration = -1
 					}
-					SPA = {
+					ARA = {
 						set_country_flag = milan_sided_spa
 						add_country_modifier = {
 							name = mlo_lombard_free_militia
@@ -693,27 +728,39 @@ milan_missions_2 = {
 			}
 		}
 	}
-	
+
 	mlo_holy_see = {
 		icon = control_the_vatican
 		required_missions = {
 			mlo_foreign_affiliation
 		}
 		position = 2
+		provinces_to_highlight = {
+			province_id = 118
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { religion = catholic }
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
 					religion = catholic
 				}
-				OR = {
-					AND = {
-						has_country_modifier = the_statue_in_restraint_of_appeals
-						owns = 118
+				if = {
+					limit = {
+						exists = PAP
 					}
-					AND = {
-						is_papal_controller = yes
-						if = {
-							limit = { exists = PAP }
+					OR = {
+						AND = {
+							has_country_modifier = the_statue_in_restraint_of_appeals
+							owns = 118
+						}
+						AND = {
+							OR = {
+								is_defender_of_faith = yes
+								is_papal_controller = yes
+							}
 							PAP = {
 								has_opinion = {
 									who = ROOT
@@ -721,6 +768,16 @@ milan_missions_2 = {
 								}
 							}
 						}
+					}
+				}
+				else = {
+					OR = {
+						AND = {
+							has_country_modifier = the_statue_in_restraint_of_appeals
+							owns = 118
+						}
+						is_defender_of_faith = yes
+						is_papal_controller = yes
 					}
 				}
 			}
@@ -731,7 +788,10 @@ milan_missions_2 = {
 		effect = {
 			if = {
 				limit = {
-					is_papal_controller = yes
+					OR = {
+						is_papal_controller = yes
+						is_defender_of_faith = yes
+					}
 				}
 				if = {
 					limit = {
@@ -795,24 +855,24 @@ milan_missions_2 = {
 			}
 		}
 		effect = {
-			tuscany_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
+			add_accepted_culture = romagnan
 			add_country_modifier = {
 				name = mlo_lombard_reunification
 				duration = 5475
 			}
-			add_accepted_culture = romagnan
 			hidden_effect = {
 				add_country_modifier = {
 					name = mlo_lombard_reunification_culture
 					duration = -1
 					hidden = yes
 				}
+			}
+			tuscany_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
@@ -851,9 +911,14 @@ milan_missions_2 = {
 		position = 5
 		provinces_to_highlight = {
 			province_id = 104
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 40 }
+			}
 		}
 		trigger = {
 			104 = {
+				owned_by = ROOT
 				development = 40
 			}
 			custom_trigger_tooltip = {
@@ -899,9 +964,6 @@ milan_missions_2 = {
 			mlo_consolidate_italy
 		}
 		position = 9
-		provinces_to_highlight = {
-			province_id = 104
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MILAN_POLITICAL_OPPORTUNITY_CHOICE_EMPEROR_TT
@@ -925,12 +987,10 @@ milan_missions_2 = {
 					}
 					if = {
 						limit = {
-							alliance_with = ARA
+							alliance_with = SPA
 						}
-						ARA = {
-							country_event = {
-								id = ME_Milan_Events.5
-							}
+						SPA = {
+							country_event = { id = ME_Milan_Events.5 }
 						}
 					}
 					else_if = {
@@ -938,16 +998,15 @@ milan_missions_2 = {
 							alliance_with = CAS
 						}
 						CAS = {
-							country_event = {
-								id = ME_Milan_Events.5
-							}
+							country_event = { id = ME_Milan_Events.5 }
 						}
 					}
-					else = {
-						SPA = {
-							country_event = {
-								id = ME_Milan_Events.5
-							}
+					else_if = {
+						limit = {
+							alliance_with = ARA
+						}
+						ARA = {
+							country_event = { id = ME_Milan_Events.5 }
 						}
 					}
 				}
@@ -961,7 +1020,7 @@ milan_missions_2 = {
 					add_country_modifier = {
 						name = mlo_passing_imperial_traditions
 						duration = -1
-					}					
+					}
 				}
 				else = {
 					add_country_modifier = {
@@ -1019,6 +1078,7 @@ milan_missions_3 = {
 			}
 		}
 		effect = {
+			add_army_tradition_or_mil_power = { amount = 10 }
 			if = {
 				limit = {
 					exists = VEN
@@ -1044,7 +1104,7 @@ milan_missions_3 = {
 						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
-				} 
+				}
 			}
 			emilia_romagna_area = {
 				limit = {
@@ -1060,7 +1120,6 @@ milan_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			add_army_tradition_or_mil_power = { amount = 10 }
 		}
 	}
 
@@ -1140,18 +1199,71 @@ milan_missions_3 = {
 			mlo_disobbedisco
 		}
 		position = 8
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = liguria_area
+					NOT = {
+						liguria_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+				AND = {
+					area = piedmont_area
+					NOT = {
+						piedmont_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+				AND = {
+					area = lombardy_area
+					NOT = {
+						lombardy_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+				AND = {
+					area = po_valley_area
+					NOT = {
+						po_valley_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+				AND = {
+					area = venetia_area
+					NOT = {
+						venetia_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
 		trigger = {
 			army_size_percentage = 0.5
 			if = {
 				limit = {
-					has_dlc = "Rights of Man"
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
 				}
 				is_great_power = yes
-				total_development = 500
 			}
-			else = {
-				total_development = 500
-			}
+			total_development = 500
 			prestige = 75
 			liguria_area = {
 				owned_by = ROOT
@@ -1175,12 +1287,10 @@ milan_missions_3 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Milan_Events.2
-			}
+			country_event = { id = ME_Milan_Events.2 }
 		}
 	}
-	
+
 	mlo_glory_milan = {
 		icon = milan_victorious
 		required_missions = {
@@ -1191,10 +1301,16 @@ milan_missions_3 = {
 		trigger = {
 			if = {
 				limit = {
-					has_dlc = "Rights of Man"
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
 				}
 				OR = {
-					NOT = { great_power_rank = 3 }
+					AND = {
+						is_great_power = yes
+						NOT = { great_power_rank = 3 }
+					}
 					custom_trigger_tooltip = {
 						tooltip = MILAN_GLORY_MILAN_TRIGGER_TT
 						NOT = {
@@ -1414,6 +1530,7 @@ milan_missions_4 = {
 		required_missions = { }
 		position = 1
 		trigger = {
+			legitimacy_equivalent = 90
 			OR = {
 				is_year = 1500
 				custom_trigger_tooltip = {
@@ -1421,7 +1538,6 @@ milan_missions_4 = {
 					has_country_flag = ambrosian_republic_completely_resolved
 				}
 			}
-			legitimacy_equivalent = 90
 		}
 		effect = {
 			add_country_modifier = {
@@ -1536,7 +1652,10 @@ milan_missions_4 = {
 				province_id = 4739
 				province_id = 107
 			}
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
 		trigger = {
 			owns_core_province = 4739
@@ -1594,15 +1713,6 @@ milan_missions_4 = {
 			}
 		}
 		effect = {
-			110 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
 			venetia_area = {
 				add_province_modifier = {
 					name = mlo_serenissima_dealt
@@ -1614,6 +1724,15 @@ milan_missions_4 = {
 				add_country_modifier = {
 					name = mlo_smuggling_ottoman_artillery
 					duration = -1
+				}
+			}
+			110 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			hidden_effect = {
@@ -1709,9 +1828,23 @@ milan_missions_5 = {
 		icon = mlo_renaissance_city
 		required_missions = { }
 		position = 1
+		provinces_to_highlight = {
+			area = lombardy_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 10 }
+			}
+			NOT = {
+				lombardy_area = {
+					owned_by = ROOT
+					num_of_times_improved = 10
+				}
+			}
+		}
 		trigger = {
 			has_institution = renaissance
 			lombardy_area = {
+				owned_by = ROOT
 				num_of_times_improved = 10
 			}
 		}
@@ -1740,15 +1873,11 @@ milan_missions_5 = {
 			num_of_owned_provinces_with = {
 				value = 5
 				base_production = 10
-				OR = {
-					has_production_building_trigger = yes
-				}
+				has_production_building_trigger = yes
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Milan_Events.3
-			}
+			country_event = { id = ME_Milan_Events.3 }
 		}
 	}
 
@@ -1794,7 +1923,7 @@ milan_missions_5 = {
 			}
 		}
 	}
-	
+
 	mlo_venetian_expertises = {
 		icon = control_the_means_of_transaction
 		required_missions = {
@@ -1844,7 +1973,7 @@ milan_missions_5 = {
 			}
 		}
 	}
-	
+
 	mlo_maritime_traditions = {
 		icon = expand_the_arsenal
 		required_missions = {
@@ -1852,6 +1981,15 @@ milan_missions_5 = {
 		}
 		position = 8
 		trigger = {
+			num_of_galley = 20
+			OR = {
+				dock = 5
+				drydock = 5
+			}
+			OR = {
+				shipyard = 5
+				grand_shipyard = 5
+			}
 			custom_trigger_tooltip = {
 				tooltip = MLO_MARITIME_TRADITIONS_TRIGGER_TT
 				NOT = {
@@ -1862,15 +2000,6 @@ milan_missions_5 = {
 						navy_size = ROOT
 					}
 				}
-			}
-			num_of_galley = 20
-			OR = {
-				dock = 5
-				drydock = 5
-			}
-			OR = {
-				shipyard = 5
-				grand_shipyard = 5
 			}
 		}
 		effect = {
@@ -1898,4 +2027,4 @@ milan_missions_5 = {
 			}
 		}
 	}
-}	
+}
