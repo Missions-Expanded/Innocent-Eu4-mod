@@ -35,6 +35,9 @@ SardiniPiedmont_missions_1 = {
 		position = 9
 		required_missions = {
 		}
+		provinces_to_highlight = {
+			owned_by = PAP
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -132,21 +135,22 @@ SardiniPiedmont_missions_1 = {
 						duration = 7300
 					}
 				}
-				else = {
-					if = {
-						limit = {
-							religious_ideas = 1
-						}
-						add_country_modifier = {
-							name = spi_pious_ruling
-							duration = 9125
-						}
+				if = {
+					limit = {
+						religious_ideas = 1
 					}
-					else = {
-						add_country_modifier = {
-							name = spi_progressive_society
-							duration = 9125
-						}
+					add_country_modifier = {
+						name = spi_pious_ruling
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = {
+						humanist_ideas = 1
+					}
+					add_country_modifier = {
+						name = spi_progressive_society
+						duration = 9125
 					}
 				}
 			}
@@ -160,6 +164,13 @@ SardiniPiedmont_missions_1 = {
 			spi_artistical_resurgence
 		}
 		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2986
+				province_id = 103
+			}
+			NOT = { has_building = university }
+		}
 		trigger = {
 			2986 = {
 				owned_by = ROOT
@@ -190,6 +201,27 @@ SardiniPiedmont_missions_1 = {
 			spi_northern_meddling
 		}
 		position = 12
+		provinces_to_highlight = {
+			OR = {
+				if = {
+					limit = {
+						hre_size = 1
+					}
+					OR = {
+						owned_by = HAB
+						owned_by = emperor
+					}
+				}
+				else_if = {
+					limit = { exists = HAB }
+					owned_by = HAB
+				}
+				if = {
+					limit = { exists = FRA }
+					owned_by = FRA
+				}
+			}
+		}	
 		trigger = {
 			if = {
 				limit = {
@@ -206,13 +238,19 @@ SardiniPiedmont_missions_1 = {
 					total_development = HAB
 				}
 			}
-			else = {
+			else_if = {
+				limit = {
+					exists = HAB
+				}
 				OR = {
 					has_won_war_against = {
 						who = HAB
 					}
 					total_development = HAB
 				}
+			}
+			else = {
+				NOT = { exists = HAB }
 			}
 			if = {
 				limit = {
@@ -227,31 +265,35 @@ SardiniPiedmont_missions_1 = {
 			}
 		}
 		effect = {
-			add_prestige = 15
-			add_army_tradition = 10
+			add_prestige_or_monarch_power = { amount = 15 }
+			add_army_tradition_or_mil_power = { amount = 10 }
 		}
 	}
 
 	spi_barbarians_italy = {
-		icon = up_the_adige
+		icon = end_the_habsburgs
 		required_missions = {
 			spi_imperial_powerness
 			spi_lombardo_veneto
 		}
 		position = 13
 		trigger = {
-			any_province = {
-				OR = {
-					area = piedmont_area
-					area = lombardy_area
-					area = po_valley_area
-					area = venetia_area
-					area = emilia_romagna_area
-					area = liguria_area
-				}
-				owner = {
-					culture_group = latin
-					is_subject = no
+			custom_trigger_tooltip = {
+				tooltip = SPI_NO_BARBAR_TT
+				NOT = {
+					any_province = {
+						OR = {
+							area = piedmont_area
+							area = lombardy_area
+							area = po_valley_area
+							area = venetia_area
+							area = emilia_romagna_area
+							area = liguria_area
+						}
+						owner = {
+							NOT = { culture_group = latin }
+						}
+					}
 				}
 			}
 		}
@@ -306,7 +348,6 @@ SardiniPiedmont_missions_2 = {
 			has_adm_advisor_3 = yes
 			has_dip_advisor_3 = yes
 			has_mil_advisor_3 = yes
-			
 		}
 		effect = {
 			add_country_modifier = {
@@ -322,18 +363,29 @@ SardiniPiedmont_missions_2 = {
 			spi_regia_armata_sarda
 		}
 		position = 11
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owned_by = MLO
+					MLO = { army_size = ROOT }
+				}
+				AND = {
+					owned_by = LVN
+					LVN = { army_size = ROOT }
+				}
+				AND = {
+					owned_by = VEN
+					VEN = { army_size = ROOT }
+				}
+			}
+		}		
 		trigger = {
 			if = {
 				limit = {
 					exists = MLO
 				}
 				MLO = {
-					NOT = {
-						army_strength = {
-							who = ROOT
-							value = 1
-						}
-					}
+					NOT = { army_size = ROOT }
 				}
 			}
 			if = {
@@ -341,12 +393,7 @@ SardiniPiedmont_missions_2 = {
 					exists = VEN
 				}
 				VEN = {
-					NOT = {
-						army_strength = {
-							who = ROOT
-							value = 1
-						}
-					}
+					NOT = { army_size = ROOT }
 				}
 			}
 			if = {
@@ -354,12 +401,7 @@ SardiniPiedmont_missions_2 = {
 					exists = LVN
 				}
 				LVN = {
-					NOT = {
-						army_strength = {
-							who = ROOT
-							value = 1
-						}
-					}
+					NOT = { army_size = ROOT }
 				}
 			}
 		}
@@ -420,6 +462,16 @@ SardiniPiedmont_missions_2 = {
 			spi_northern_meddling
 		}
 		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 104
+				province_id = 112
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			owns_core_province = 104
 			owns_core_province = 112
@@ -526,6 +578,14 @@ SardiniPiedmont_missions_3 = {
 				area = piedmont_area
 				area = liguria_area
 				area = corsica_sardinia_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				devastation = 1
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { prosperity = 50 }
+				}
 			}
 		}
 		trigger = {
@@ -650,7 +710,7 @@ SardiniPiedmont_missions_3 = {
 	}
 
 	spi_fall_dukedom = {
-		icon = establish_a_standing_army
+		icon = tuscan_birthright
 		position = 11
 		required_missions = {
 			spi_regia_armata_sarda
@@ -683,21 +743,22 @@ SardiniPiedmont_missions_3 = {
 		}
 		position = 13
 		trigger = {
-			NOT = {
-				any_country = {
-					culture_group = latin
-					capital_scope = {
-						region = italy_region
-					}
-					army_strength = {
-						who = ROOT
-						value = 1
+			custom_trigger_tooltip = {
+				tooltip = LVN_CONQUEST_OF_ROME_TRIGGER_TT #TODO - MAKE A UNITED ONE
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			118 = { add_core = ROOT }
+			complete_conquest_of_rome_missions = yes
 		}
 	}	
 }
@@ -749,14 +810,17 @@ SardiniPiedmont_missions_4 = {
 			}
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { has_shipyard_building_trigger = yes }
-				NOT = { has_dock_building_trigger = yes }
+				AND = {
+					NOT = { has_shipyard_building_trigger = yes }
+					NOT = { has_dock_building_trigger = yes }
+				}
+				NOT = { development = 30 }
 			}
 		}
 		trigger = {
 			102 = {
 				owned_by = ROOT
-				base_production = 15
+				development = 30
 				OR = {
 					has_shipyard_building_trigger = yes
 					has_dock_building_trigger = yes
@@ -764,7 +828,7 @@ SardiniPiedmont_missions_4 = {
 			}
 			101 = {
 				owned_by = ROOT
-				base_production = 15
+				development = 30
 				OR = {
 					has_shipyard_building_trigger = yes
 					has_dock_building_trigger = yes
@@ -772,7 +836,7 @@ SardiniPiedmont_missions_4 = {
 			}
 			127 = {
 				owned_by = ROOT
-				base_production = 15
+				development = 30
 				OR = {
 					has_shipyard_building_trigger = yes
 					has_dock_building_trigger = yes
@@ -788,7 +852,7 @@ SardiniPiedmont_missions_4 = {
 	}
 
 	spi_fall_thousand_sigil = {
-		icon = establish_a_standing_army
+		icon = union_with_naples
 		position = 12
 		required_missions = {
 			spi_port_modernization
@@ -851,13 +915,16 @@ SardiniPiedmont_missions_5 = {
 			num_of_owned_manufactory_trigger = { amount = 10 }
 		}
 		effect = {
-			every_owned_province = {
-				limit = {
-					has_manufactory_trigger = yes
-				}
-				add_province_modifier = {
-					name = spi_industrialisaton_sprint
-					duration = 5475
+			custom_tooltip = SPI_MANU_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_manufactory_trigger = yes
+					}
+					add_province_modifier = {
+						name = spi_industrialisaton_sprint
+						duration = 5475
+					}
 				}
 			}
 		}
@@ -873,10 +940,7 @@ SardiniPiedmont_missions_5 = {
 			province_id = 2986
 			OR = {
 				NOT = { num_of_times_improved = 5 }
-				OR = {
-					NOT = { has_building = workshop }
-					NOT = { has_building = counting_house }
-				}
+				NOT = { has_production_building_trigger = yes }
 				devastation = 1
 			}
 		}
@@ -884,10 +948,7 @@ SardiniPiedmont_missions_5 = {
 			treasury = 500
 			2986 = {
 				num_of_times_improved = 5
-				OR = {
-					has_building = workshop
-					has_building = counting_house
-				}
+				has_production_building_trigger = yes
 				NOT = { devastation = 1 }
 			}
 		}
@@ -899,7 +960,7 @@ SardiniPiedmont_missions_5 = {
 	}
 
 	spi_conquest_sicily = {
-		icon = establish_a_standing_army
+		icon = danubian_power
 		position = 12
 		required_missions = {
 			spi_port_modernization
@@ -910,6 +971,7 @@ SardiniPiedmont_missions_5 = {
 				area = sicily_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { province_id = 226 }
 		}
 		trigger = {
 			western_sicily_area = {
@@ -917,10 +979,11 @@ SardiniPiedmont_missions_5 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			sicily_area = {
-				NOT = {
-					province_id = 126
+				type = all
+				OR = {
+					NOT = { province_id = 126 }
+					country_or_non_sovereign_subject_holds = ROOT
 				}
-				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {

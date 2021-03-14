@@ -219,12 +219,14 @@ LombardyVenetia_missions_2 = {
 				has_terrain = mountain
 				has_terrain = hills
 			}
-			NOT = { owned_by = ROOT }
 			OR = {
-				NOT = { has_building = fort_15th }
-				NOT = { has_building = fort_16th }
-				NOT = { has_building = fort_17th }
-				NOT = { has_building = fort_18th }
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 			}
 		}
 		trigger = {
@@ -497,6 +499,7 @@ LombardyVenetia_missions_3 = {
 			}
 		}
 		effect = {
+			add_legitimacy_equivalent = { amount = 10 }
 			emilia_romagna_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -562,25 +565,22 @@ LombardyVenetia_missions_3 = {
 		}
 		position = 13
 		trigger = {
-			NOT = {
-				any_country = {
-					culture_group = latin
-					capital_scope = {
-						region = italy_region
-					}
-					army_strength = {
-						who = ROOT
-						value = 1
+			custom_trigger_tooltip = {
+				tooltip = LVN_CONQUEST_OF_ROME_TRIGGER_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			118 = { add_core = ROOT }
-			hidden_effect = {
-				complete_mission = gen_conquest_of_rome
-				complete_mission = spi_conquest_of_rome
-			}
+			complete_conquest_of_rome_missions = yes
 		}
 	}
 }
@@ -615,11 +615,10 @@ LombardyVenetia_missions_4 = {
 				province_id = 101
 				province_id = 112
 			}
-			NOT = { owned_by = ROOT }
-			NOT = { base_production = 15 }
 			OR = {
-				NOT = { has_building = shipyard }
-				NOT = { has_building = grand_shipyard }
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 15 }
+				NOT = { has_shipyard_building_trigger = yes }
 			}
 		}
 		trigger = {
@@ -630,18 +629,12 @@ LombardyVenetia_missions_4 = {
 			101 = {
 				owned_by = ROOT
 				base_production = 15
-				OR = {
-					has_building = shipyard
-					has_building = grand_shipyard
-				}
+				has_shipyard_building_trigger = yes
 			}
 			112 = {
 				owned_by = ROOT
 				base_production = 15
-				OR = {
-					has_building = grand_shipyard
-					has_building = shipyard
-				}
+				has_shipyard_building_trigger = yes
 			}
 		}
 		effect = {
@@ -670,21 +663,20 @@ LombardyVenetia_missions_4 = {
 			if = {
 				limit = {
 					any_country = {
-						primary_culture = berber
+						culture_group = maghrebi
 					}
 				}
-				any_country = {
-					primary_culture = berber
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1298_MAGHREBI_TT
+					NOT = {
+						any_country = {
+							culture_group = maghrebi #NO COUNTRY THAT HAS MAGHREBI CULTURE HAS BOTH 5% TRADE SHARE AND NAVY BETTER THAN 50% OF OURS
 							1298 = {
 								trade_share = {
 									country = PREV
 									share = 5
 								}	
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -692,18 +684,17 @@ LombardyVenetia_missions_4 = {
 						}
 					}
 				}
-				any_country = {
-					primary_culture = berber
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1308_MAGHREBI_TT
+					NOT = {
+						any_country = {
+							culture_group = maghrebi
 							1308 = {
 								trade_share = {
 									country = PREV
 									share = 5
 								}	
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -713,17 +704,16 @@ LombardyVenetia_missions_4 = {
 				}
 			}
 			else = {
-				any_country = {
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1298_TT
+					NOT = {
+						any_country = { #NO COUNTRY HAS BOTH 5% TRADE SHARE AND NAVY BETTER THAN 50% OF OURS
 							1298 = {
 								trade_share = {
 									country = PREV
 									share = 5
 								}	
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -731,17 +721,16 @@ LombardyVenetia_missions_4 = {
 						}
 					}
 				}
-				any_country = {
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1308_TT
+					NOT = {
+						any_country = {
 							1308 = {
 								trade_share = {
 									country = PREV
 									share = 5
 								}	
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -754,10 +743,7 @@ LombardyVenetia_missions_4 = {
 				limit = {
 					exists = TUR
 				}
-				naval_strength = {
-					who = TUR
-					value = 1
-				}
+				navy_size = TUR
 			}
 		}
 		effect = {
@@ -775,52 +761,6 @@ LombardyVenetia_missions_4 = {
 							}
 							add_permanent_claim = ROOT
 						}
-					}
-				}
-			}
-			if = {
-				limit = {
-					OR = {
-						any_country = {
-							primary_culture = berber
-							OR = {
-								1308 = {
-									trade_share = {
-										country = PREV
-										share = 5
-									}	
-								}
-								naval_strength = {
-									who = ROOT
-									value = 0.5
-								}
-							}
-						}
-						any_country = {
-							primary_culture = berber
-							OR = {
-								1298 = {
-									trade_share = {
-										country = PREV
-										share = 5
-									}	
-								}
-								naval_strength = {
-									who = ROOT
-									value = 0.5
-								}
-							}
-						}
-					}
-				}
-				341 = {
-					every_trade_node_member_province = {
-						limit = {
-							NOT = { is_core = ROOT }
-							NOT = { owned_by = ROOT }
-							has_port = yes
-						}
-						add_permanent_claim = ROOT
 					}
 				}
 			}
@@ -867,14 +807,11 @@ LombardyVenetia_missions_5 = {
 				area = po_valley_area
 				area = venetia_area
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				AND = {
 					NOT = { base_production = 12 }
-					OR = {
-						NOT = { has_building = workshop }
-						NOT = { has_building = counting_house }
-					}
+					NOT = { has_production_building_trigger = yes }
 				}
 				AND = {
 					NOT = { has_manufactory_trigger = yes }
@@ -908,10 +845,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -925,10 +859,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -942,10 +873,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -959,10 +887,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -976,10 +901,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -990,18 +912,34 @@ LombardyVenetia_missions_5 = {
 			}
 		}
 		effect = {
-			custom_tooltip = DARSENA_LVN_TT
-			tooltip = {
-				add_province_modifier = {
-					name = lvn_darsena
-					duration = -1
+			if = {
+				limit = {
+					NOT = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+				}
+				custom_tooltip = INDUSTRIALISATION_LVN_NON_TGE_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_industrialisation_sprint
+						duration = 18250
+					}
 				}
 			}
-			custom_tooltip = INDUSTRIALISATION_LVN_TT
-			tooltip = {
-				add_province_modifier = {
-					name = lvn_industrialisation_sprint
-					duration = 18250
+			else = {
+				custom_tooltip = DARSENA_LVN_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_darsena
+						duration = -1
+					}
+				}
+				custom_tooltip = INDUSTRIALISATION_LVN_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_industrialisation_sprint
+						duration = 18250
+					}
 				}
 			}
 			hidden_effect = {
