@@ -1152,70 +1152,72 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
-		if = {
-			limit = {
-				hre_size = 1
-			}
+		hidden_effect = {
 			if = {
 				limit = {
-					exists = HAB
+					hre_size = 1
 				}
 				if = {
 					limit = {
-						HAB = { is_emperor = yes }
+						exists = HAB
 					}
-					HAB = {
-						save_global_event_target_as = ME_PRU_EMPEROR_TARGET
-						set_country_flag = ME_PRU_a_target
+					if = {
+						limit = {
+							HAB = { is_emperor = yes }
+						}
+						HAB = {
+							save_global_event_target_as = ME_PRU_EMPEROR_TARGET
+							set_country_flag = ME_PRU_a_target
+						}
+					}
+					else_if = {
+						limit = {
+							emperor = { total_development = HAB }
+						}
+						emperor = {
+							save_global_event_target_as = ME_PRU_EMPEROR_TARGET
+							set_country_flag = ME_PRU_a_target
+						}
+					}
+					else = {
+						HAB = {
+							save_global_event_target_as = ME_PRU_EMPEROR_TARGET
+							set_country_flag = ME_PRU_a_target
+						}
 					}
 				}
-				else_if = {
-					limit = {
-						emperor = { total_development = HAB }
-					}
+				else = {
 					emperor = {
 						save_global_event_target_as = ME_PRU_EMPEROR_TARGET
 						set_country_flag = ME_PRU_a_target
 					}
 				}
-				else = {
-					HAB = {
-						save_global_event_target_as = ME_PRU_EMPEROR_TARGET
-						set_country_flag = ME_PRU_a_target
-					}
-				}
 			}
-			else = {
-				emperor = {
+			else_if = {
+				limit = {
+					exists = HAB
+				}
+				HAB = {
 					save_global_event_target_as = ME_PRU_EMPEROR_TARGET
 					set_country_flag = ME_PRU_a_target
 				}
 			}
-		}
-		else_if = {
-			limit = {
-				exists = HAB
-			}
-			HAB = {
-				save_global_event_target_as = ME_PRU_EMPEROR_TARGET
-				set_country_flag = ME_PRU_a_target
-			}
-		}
-		else = { } #Mission completed by empire dismantled
-		random_country = { #Pick strongest french country
-			limit = {
-				culture_group = french
-				NOT = {
-					any_country = {
-						culture_group = french
-						total_development = PREV
+			else = { } #Mission completed by empire dismantled
+			random_country = { #Pick strongest french country
+				limit = {
+					culture_group = french
+					NOT = {
+						any_country = {
+							culture_group = french
+							total_development = PREV
+						}
 					}
 				}
+				save_global_event_target_as = ME_PRU_FRANCE_TARGET
+				set_country_flag = ME_PRU_a_target
 			}
-			save_global_event_target_as = ME_PRU_FRANCE_TARGET
-			set_country_flag = ME_PRU_a_target
+			set_country_flag = PRU_TARGET_INITIALIZED
 		}
-		set_country_flag = PRU_TARGET_INITIALIZED
 	}
 	option = {
 		name = ME_Prussia_Events.23.a #Ok
@@ -1241,25 +1243,24 @@ country_event = {
 	
 	major = yes
 	major_trigger = {
-		has_country_flag = PRU_TARGET_INITIALIZED
+		continent = europe
 	}
 	option = {
 		name = ME_Prussia_Events.24.a #Ok
 		
 		ai_chance = { factor = 100 }
 		
-		FROM = {
-			create_subject = {
-				subject_type = defensive_pact_member 
-				subject = ROOT
-			}
+		define_advisor = {
+			type = diplomat
+			skill = 3
+			culture = ROOT
+			religion = ROOT
+			cost_multiplier = 0.5
 		}
-	}
-	option = {
-		name = ME_Prussia_Events.24.b #Ok
-		
-		ai_chance = { factor = 0 }
-		
+		add_country_modifier = {
+			name = PRU_scourge_of_the_west_defeated
+			duration = 10950
+		}
 	}
 }
 
