@@ -61,12 +61,13 @@ country_event = {
 			limit = {
 				is_part_of_hre = yes
 				religion = protestant
+				NOT = { has_country_flag = HES_member }
 			}
 			set_country_flag = HES_invited
-			country_event = { id = ME_Hesse_Events.2 days = 1 random = 360 }
+			country_event = { id = ME_Hesse_Events.2 days = 30 random = 330 }
 		}
 		emperor = {
-			country_event = { id = ME_Hesse_Events.3 days = 365 }
+			country_event = { id = ME_Hesse_Events.3 days = 730 }
 		}
 		HES_league_tooltip = yes
 	}
@@ -145,37 +146,78 @@ country_event = {
 	major_trigger = {
 		is_part_of_hre = yes
 	}
+	
+	trigger = {
+		any_country = {
+			has_country_flag = HES_member
+		}
+		is_emperor = yes
+	}
+	
+	immediate = {
+		set_country_flag = HES_emperor
+	}
 	option = {
 		name = "ME_Hesse_Events.3.a"
 		
 		ai_chance = { factor = 100 }
 		
+		set_global_flag = HES_war
 		every_country = {
 			limit = {
 				has_country_flag = HES_member
 			}
 			custom_tooltip = HES_is_part
 		}
-		random_country = {
+		if = {
 			limit = {
-				has_country_flag = HES_leader
-			}
-			ROOT = {
-				declare_war_with_cb = {
-					who = PREV
-					casus_belli = cb_hesse_schmalkaldic_war
+				any_country = {
+					has_country_flag = HES_leader
 				}
 			}
-			hidden_effect = {
-				every_country = {
-					limit = {
-						has_country_flag = HES_member
+			random_country = {
+				limit = {
+					has_country_flag = HES_leader
+				}
+				ROOT = {
+					declare_war_with_cb = {
+						who = PREV
+						casus_belli = cb_hesse_schmalkaldic_war
 					}
-					join_all_defensive_wars_of = PREV
+				}
+				hidden_effect = {
+					every_country = {
+						limit = {
+							has_country_flag = HES_member
+						}
+						join_all_defensive_wars_of = PREV
+					}
 				}
 			}
 		}
-		custom_tooltip = HES_if_we_win
+		else = {
+			random_country = {
+				limit = {
+					has_country_flag = HES_member
+				}
+				set_country_flag = HES_leader #the leader stopped existing, get a new one for PO
+				ROOT = {
+					declare_war_with_cb = {
+						who = PREV
+						casus_belli = cb_hesse_schmalkaldic_war
+					} #Emp declare war
+				}
+				hidden_effect = {
+					every_country = {
+						limit = {
+							has_country_flag = HES_member
+						}
+						join_all_defensive_wars_of = PREV
+					} #force all nations that declared to be side of the schmalkaldic war to join the war
+				}
+			}
+		}
+		custom_tooltip = HES_if_we_win #tooltips
 		tooltip = {
 			HES_loss_effect = yes
 		}
@@ -194,6 +236,37 @@ country_event = {
 	}
 }
 
+country_event = {
+	id = ME_Hesse_Events.4
+	title = ME_Hesse_Events.4.t #Empire loss
+	desc = ME_Hesse_Events.4.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		has_global_flag = HES_war
+		is_at_war = no
+		has_country_flag = HES_emperor
+	}
+	
+	major = yes
+	major_trigger = {
+		is_part_of_hre = yes
+	}
+	
+	option = {
+		name = "ME_Hesse_Events.4.a"
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HES_we_have_not_enforced_peace
+		HES_victory_effect = yes
+		HES_disband_league = yes
+	}
+}
 
 country_event = {
 	id = ME_Hesse_Events.5
@@ -207,6 +280,7 @@ country_event = {
 	major_trigger = {
 		is_part_of_hre = yes
 	}
+	fire_only_once = yes
 	
 	option = {
 		name = "ME_Hesse_Events.5.a"
@@ -214,6 +288,28 @@ country_event = {
 		ai_chance = { factor = 1 }
 		
 		HES_loss_effect = yes
+		HES_disband_league = yes
+	}
+}
+
+country_event = {
+	id = ME_Hesse_Events.6
+	title = ME_Hesse_Events.6.t #Emperor Stops Existing event
+	desc = ME_Hesse_Events.6.d
+	picture = IMPORTANT_STATUE_eventPicture
+	
+	hidden = yes
+	
+	trigger = {
+		always = no
+	}
+	
+	
+	option = {
+		name = "ME_Hesse_Events.6.a"
+		
+		ai_chance = { factor = 1 }
+		
 		HES_disband_league = yes
 	}
 }
