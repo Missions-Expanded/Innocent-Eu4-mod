@@ -1014,6 +1014,16 @@ country_event = {
 		
 		start_estate_agenda = estate_industrial
 	}
+	
+	option = {
+		name = "estate_industrial_events.3.b" #I don't wanna
+		
+		ai_chance = { factor = 33 }
+		
+		clr_country_flag = estate_industrial_agenda_flag
+		set_country_flag = estate_industrial_agenda_flag
+	}
+	
 	after = {
 		clr_country_flag = estate_industrial_agenda_flag
 		set_country_flag = estate_industrial_agenda_flag
@@ -1683,5 +1693,899 @@ country_event = {
 			duration = 5475
 		}
 		add_corruption = 2
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.16
+	title = RHN_Blast_furnaces_decision_title
+	desc = {
+	   trigger = { has_country_modifier = RHN_blast_furnace_cost }
+	   desc = RHN_Blast_furnaces_decision_tt2
+	}
+	desc = {
+	   trigger = { NOT = { has_country_modifier = RHN_blast_furnace_cost } }
+	   desc = RHN_Blast_furnaces_decision_tt1
+	}
+	picture = CITY_VIEW_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				counter = 0
+			}
+			
+			clr_country_flag = target1
+			clr_country_flag = target2
+			clr_country_flag = target3
+			clr_country_flag = target4
+			clr_country_flag = target5
+			clr_country_flag = target6
+			clr_country_flag = target7
+			clr_country_flag = target8
+			clr_country_flag = target9
+			
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = hesse_area
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = palatinate_area
+						AND = {
+							ROOT = { has_country_flag = RHN_westphalia }
+							OR = {
+								area = westphalia_area
+								area = north_westphalia_area
+							}
+						}
+					}
+					NOT = {	has_building = blast_furnace }
+					NOT = { has_construction = core }
+					NOT = { has_construction = building }
+					NOT = { has_construction = great_project }
+					NOT = { has_construction = canal }
+					NOT = { has_construction = culture }
+					NOT = { has_construction = missionary }
+				}
+				
+				ROOT = {
+					change_variable = {
+						counter = 1
+					}
+					set_variable = {
+						which = page
+						which = counter
+					}
+					change_variable = {
+						page = 8
+					}
+					divide_variable = {
+						page = 9000
+					}
+					multiply_variable = {
+						page = 1000
+					}
+				}
+				set_variable = {
+					which = page
+					which = PREV
+				}
+				ROOT = {
+					set_variable = {
+						which = max_page
+						which = page
+					}
+					set_variable = {
+						which = page
+						which = current_page
+					}
+				}
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = page
+							which = PREV
+						}
+					}
+					ROOT = {
+							 if = { limit = { NOT = { has_country_flag = target1 } } set_country_flag = target1 PREV = { save_event_target_as = target1 } }
+						else_if = { limit = { NOT = { has_country_flag = target2 } } set_country_flag = target2 PREV = { save_event_target_as = target2 } }
+						else_if = { limit = { NOT = { has_country_flag = target3 } } set_country_flag = target3 PREV = { save_event_target_as = target3 } }
+						else_if = { limit = { NOT = { has_country_flag = target4 } } set_country_flag = target4 PREV = { save_event_target_as = target4 } }
+						else_if = { limit = { NOT = { has_country_flag = target5 } } set_country_flag = target5 PREV = { save_event_target_as = target5 } }
+						else_if = { limit = { NOT = { has_country_flag = target6 } } set_country_flag = target6 PREV = { save_event_target_as = target6 } }
+						else_if = { limit = { NOT = { has_country_flag = target7 } } set_country_flag = target7 PREV = { save_event_target_as = target7 } }
+						else_if = { limit = { NOT = { has_country_flag = target8 } } set_country_flag = target8 PREV = { save_event_target_as = target8 } }
+						else_if = { limit = { NOT = { has_country_flag = target9 } } set_country_flag = target9 PREV = { save_event_target_as = target9 } }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.back
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 3
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						which = 1
+					}
+				}
+				set_variable = {
+					which = current_page
+					which = max_page
+				}
+			}
+			else = {
+				subtract_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.17
+				days = 0
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.next
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 2
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						which = max_page
+					}
+				}
+				set_variable = {
+					current_page = 1
+				}
+			}
+			else = {
+				change_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.17
+				days = 0
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target1
+		goto = target1
+		
+		trigger = {
+			has_country_flag = target1
+		}
+		
+		event_target:target1 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target2
+		goto = target2
+		
+		trigger = {
+			has_country_flag = target2
+		}
+		
+		event_target:target2 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target3
+		goto = target3
+		
+		trigger = {
+			has_country_flag = target3
+		}
+		
+		event_target:target3 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target4
+		goto = target4
+		
+		trigger = {
+			has_country_flag = target4
+		}
+		
+		event_target:target4 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target5
+		goto = target5
+		
+		trigger = {
+			has_country_flag = target5
+		}
+		
+		event_target:target5 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target6
+		goto = target6
+		
+		trigger = {
+			has_country_flag = target6
+		}
+		
+		event_target:target6 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target7
+		goto = target7
+		
+		trigger = {
+			has_country_flag = target7
+		}
+		
+		event_target:target7 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target8
+		goto = target8
+		
+		trigger = {
+			has_country_flag = target8
+		}
+		
+		event_target:target8 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target9
+		goto = target9
+		
+		trigger = {
+			has_country_flag = target9
+		}
+		
+		event_target:target9 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Rhenish_Events.17
+	title = RHN_Blast_furnaces_decision_title
+	desc = {
+	   trigger = { has_country_modifier = RHN_blast_furnace_cost }
+	   desc = RHN_Blast_furnaces_decision_tt2
+	}
+	desc = {
+	   trigger = { NOT = { has_country_modifier = RHN_blast_furnace_cost } }
+	   desc = RHN_Blast_furnaces_decision_tt1
+	}
+	picture = CITY_VIEW_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_variable = {
+				counter = 0
+			}
+			
+			clr_country_flag = target1
+			clr_country_flag = target2
+			clr_country_flag = target3
+			clr_country_flag = target4
+			clr_country_flag = target5
+			clr_country_flag = target6
+			clr_country_flag = target7
+			clr_country_flag = target8
+			clr_country_flag = target9
+			
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = hesse_area
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = palatinate_area
+						AND = {
+							ROOT = { has_country_flag = RHN_westphalia }
+							OR = {
+								area = westphalia_area
+								area = north_westphalia_area
+							}
+						}
+					}
+					NOT = {	has_building = blast_furnace }
+					NOT = { has_construction = core }
+					NOT = { has_construction = building }
+					NOT = { has_construction = great_project }
+					NOT = { has_construction = canal }
+					NOT = { has_construction = culture }
+					NOT = { has_construction = missionary }
+				}
+				
+				ROOT = {
+					change_variable = {
+						counter = 1
+					}
+					set_variable = {
+						which = page
+						which = counter
+					}
+					change_variable = {
+						page = 8
+					}
+					divide_variable = {
+						page = 9000
+					}
+					multiply_variable = {
+						page = 1000
+					}
+				}
+				set_variable = {
+					which = page
+					which = PREV
+				}
+				ROOT = {
+					set_variable = {
+						which = max_page
+						which = page
+					}
+					set_variable = {
+						which = page
+						which = current_page
+					}
+				}
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = page
+							which = PREV
+						}
+					}
+					ROOT = {
+							 if = { limit = { NOT = { has_country_flag = target1 } } set_country_flag = target1 PREV = { save_event_target_as = target1 } }
+						else_if = { limit = { NOT = { has_country_flag = target2 } } set_country_flag = target2 PREV = { save_event_target_as = target2 } }
+						else_if = { limit = { NOT = { has_country_flag = target3 } } set_country_flag = target3 PREV = { save_event_target_as = target3 } }
+						else_if = { limit = { NOT = { has_country_flag = target4 } } set_country_flag = target4 PREV = { save_event_target_as = target4 } }
+						else_if = { limit = { NOT = { has_country_flag = target5 } } set_country_flag = target5 PREV = { save_event_target_as = target5 } }
+						else_if = { limit = { NOT = { has_country_flag = target6 } } set_country_flag = target6 PREV = { save_event_target_as = target6 } }
+						else_if = { limit = { NOT = { has_country_flag = target7 } } set_country_flag = target7 PREV = { save_event_target_as = target7 } }
+						else_if = { limit = { NOT = { has_country_flag = target8 } } set_country_flag = target8 PREV = { save_event_target_as = target8 } }
+						else_if = { limit = { NOT = { has_country_flag = target9 } } set_country_flag = target9 PREV = { save_event_target_as = target9 } }
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.back
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 3
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						which = 1
+					}
+				}
+				set_variable = {
+					which = current_page
+					which = max_page
+				}
+			}
+			else = {
+				subtract_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.16
+				days = 0
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.next
+		highlight = yes
+		
+		trigger = {
+			hidden_trigger = {
+				check_variable = {
+					which = max_page
+					value = 2
+				}
+			}
+		}
+		
+		hidden_effect = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = current_page
+						which = max_page
+					}
+				}
+				set_variable = {
+					current_page = 1
+				}
+			}
+			else = {
+				change_variable = {
+					current_page = 1
+				}
+			}
+			country_event = {
+				id = ME_Rhenish_Events.16
+				days = 0
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target1
+		goto = target1
+		
+		trigger = {
+			has_country_flag = target1
+		}
+		
+		event_target:target1 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target2
+		goto = target2
+		
+		trigger = {
+			has_country_flag = target2
+		}
+		
+		event_target:target2 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target3
+		goto = target3
+		
+		trigger = {
+			has_country_flag = target3
+		}
+		
+		event_target:target3 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target4
+		goto = target4
+		
+		trigger = {
+			has_country_flag = target4
+		}
+		
+		event_target:target4 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target5
+		goto = target5
+		
+		trigger = {
+			has_country_flag = target5
+		}
+		
+		event_target:target5 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target6
+		goto = target6
+		
+		trigger = {
+			has_country_flag = target6
+		}
+		
+		event_target:target6 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target7
+		goto = target7
+		
+		trigger = {
+			has_country_flag = target7
+		}
+		
+		event_target:target7 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target8
+		goto = target8
+		
+		trigger = {
+			has_country_flag = target8
+		}
+		
+		event_target:target8 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Rhenish_Events.16.a.target9
+		goto = target9
+		
+		trigger = {
+			has_country_flag = target9
+		}
+		
+		event_target:target9 = {
+			if = {
+				limit = {
+					has_country_modifier = RHN_blast_furnace_cost
+				}
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 0.75
+				}
+			}
+			else = {
+				add_building_construction = {
+					building = blast_furnace
+					speed = 1
+					cost = 1
+				}
+			}
+		}
 	}
 }
