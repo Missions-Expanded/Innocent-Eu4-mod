@@ -1,0 +1,479 @@
+WES_Generic_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_army = {
+		icon = establish_a_standing_army
+		required_missions = { WES_forcelimit }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manpower_building_trigger = yes }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				OR = {
+					army_professionalism = 0.1
+					army_tradition = 30
+					num_of_mercenaries = 1
+				}
+			}
+			else = {
+				OR = {
+					army_tradition = 30
+					num_of_mercenaries = 1
+				}
+			}
+			any_owned_province = {
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = WES_army
+			}
+		}
+	}
+	
+	WES_rhineland = {
+		icon = mission_eastern_european_city
+		required_missions = { WES_secure_westphalia }
+		position = 4
+		trigger = {
+			owns_core_province = 82
+			OR = {
+				NOT = { exists = KOL }
+				AND = {
+					total_development = KOL
+					has_won_war_against = {
+						country = KOL
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = WES_seized_the_title
+				duration = 10950
+			}
+		}
+	}
+}
+
+WES_Generic_Missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+
+	WES_forcelimit = {
+		icon = expand_the_swiss_guard
+		required_missions = { }
+		position = 1
+		trigger = {
+			army_size_percentage = 0.9
+			manpower_percentage = 0.2
+		}
+		effect = {
+			add_army_tradition_or_mil_power = { amount = 10 }
+			custom_tooltip = WES_claim_on_all
+			hidden_effect = {
+				every_province = {
+					limit = {
+						culture = hannoverian
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	
+	WES_secure_westphalia = {
+		icon = mission_eastern_european_city
+		required_missions = { WES_forcelimit }
+		position = 3
+		provinces_to_highlight = {
+			culture = hannoverian
+			NOT = { owned_by = ROOT }
+			NOT = {
+				ROOT = {
+					num_of_owned_provinces_with = {
+						value = 4 #out of 9
+						culture = hannoverian
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 4 #out of 9
+				culture = hannoverian
+			}
+		}
+		effect = {
+			#Add special CB on Cologne for Westphalian lands
+			if = {
+				limit = {
+					exists = KOL
+				}
+				add_casus_belli = {
+					target = KOL
+					type = cb_expel_cologne
+				}
+			}
+			else = {
+				add_core = 82
+			}
+		}
+	}
+	
+	WES_westphalia = {
+		icon = mission_eastern_european_city
+		required_missions = { WES_rhineland WES_secure_westphalia }
+		position = 5
+		trigger = {
+			owns_core_province = 82	# Westfalen
+			owns_core_province = 86	# Munster
+			OR = {
+				owns_core_province = 69	# Dortmund
+				owns_core_province = 2971	# Hoya
+			}
+			OR = {
+				owns_core_province = 2972	# Paderborn
+				owns_core_province = 4775	# Lippe/Lippstadt/Bielefeld
+			}
+			num_of_owned_provinces_with = {
+				value = 6 #out of 9 #nice
+				culture = hannoverian
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_country_modifier = {
+				name = WES_consolidation_of_westphalia
+				duration = 9125
+			}
+		}
+	}
+}
+
+WES_Generic_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_city_fortifications = {
+		icon = mission_eastern_european_city
+		required_missions = { WES_forcelimit WES_expand_city }
+		position = 2
+		trigger = {
+		}
+		effect = {
+		}
+	}
+	
+	WES_renaissance = {
+		icon = mission_eastern_european_city
+		required_missions = { }
+		position = 3
+		trigger = {
+			has_institution = renaissance
+			if = {
+				limit = {
+					OR = {
+						tag = CLB
+						tag = OLD
+						tag = RVA
+						tag = PAD
+						tag = OSN
+					}
+				}
+				capital_scope = {
+					num_of_buildings_in_province = 2
+				}
+			}
+			else = {
+				has_adm_advisor = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						tag = CLB
+						tag = OLD
+						tag = RVA
+						tag = PAD
+						tag = OSN
+					}
+				}
+				define_advisor = {
+					type = muscovy_architect
+					religion = ROOT
+					culture = ROOT
+					skill = 1
+					cost_multiplier = 0.5
+				}
+				capital_scope = {
+					province_event = { id = ME_Westphalian_Events.1 } #build either town hall, castle or church
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = WES_renaissance #-10% adm advisor cost_multiplier
+					duration = 9125
+				}
+				#add prestige for every year before 1500 that the mission is taken?
+			}
+		}
+	}
+	
+	WES_reformation = {
+		icon = victor_for_the_true_faith
+		required_missions = { WES_renaissance }
+		position = 4
+		trigger = {
+			OR = {
+				religion = protestant
+				religion = reformed
+				religion = catholic
+			}
+			OR = {
+				is_all_concessions_in_council_taken = yes
+			}
+		}
+		effect = {
+			custom_tooltip = WES_if_catholic
+			tooltip = {
+				custom_tooltip = WES_if_we_are_first_catholic_yes
+				define_advisor = {
+					name = "Johannes Gropper"
+					culture = hannoverian
+					religion = ROOT
+					type = theologian
+					skill = 2
+					cost_multiplier = 0.5
+				}
+			}
+			custom_tooltip = WES_if_not_catholic
+			tooltip = {
+				add_country_modifier = {
+					name = WES_lippstadt_cathechism
+					duration = 9125
+				}
+				custom_tooltip = WES_if_we_are_first_protestant_yes
+				tooltip = {
+					define_advisor = {
+						name = "Johann Westermann"
+						culture = hannoverian
+						religion = ROOT
+						type = theologian
+						skill = 2
+						cost_multiplier = 0.5
+					}
+				}
+			}
+		}
+	}
+}
+
+WES_Generic_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_expand_city = {
+		icon = mission_eastern_european_city
+		required_missions = { }
+		position = 1
+		trigger = {
+			capital_scope = {
+				num_of_times_improved = 5
+			}
+		}
+		effect = {
+		}
+	}
+	
+	WES_rathaus = {
+		icon = mission_eastern_european_city
+		required_missions = { WES_expand_city }
+		position = 3
+		trigger = {
+			capital_scope = {
+				development = 20
+				has_courthouse_building_trigger = yes
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_or_upgrade_courthouse_building = yes
+			}
+		}
+	}
+	
+	WES_assert_control = {
+		icon = mission_eastern_european_city
+		required_missions = { WES_estates WES_reformation }
+		position = 5
+		trigger = {
+		}
+		effect = {
+		}
+	}
+}
+
+WES_Generic_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_religion = {
+		icon = show_piety
+		required_missions = { WES_expand_city }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_tax_building_trigger = yes }
+		}
+		trigger = {
+			any_owned_province = {
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				country_event = { id = ME_Westphalian_Events.1 } #Pick a Catholic Bonus
+			}
+			else = {
+				add_adm_power = 50
+				add_church_power = 50
+				add_fervor = 50
+			}
+		}
+	}
+	
+	WES_estates = {
+		icon = appease_the_estates
+		required_missions = { }
+		position = 4
+		trigger = {
+			OR = {
+				crown_land_share = 40
+				AND = {
+					if = {
+						limit = {
+							has_estate = estate_burghers
+						}
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 55
+						}
+					}
+					if = {
+						limit = {
+							has_estate = estate_church
+						}
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 55
+						}
+					}
+					if = {
+						limit = {
+							has_estate = estate_nobles
+						}
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 55
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			
+		}
+	}
+}
