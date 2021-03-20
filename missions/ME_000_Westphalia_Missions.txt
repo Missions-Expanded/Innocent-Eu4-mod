@@ -1,4 +1,4 @@
-WES_Generic_Missions_1 = {
+WES_Generic_Missions_1_1 = {
 	slot = 1
 	generic = no
 	ai = yes
@@ -49,13 +49,98 @@ WES_Generic_Missions_1 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = WES_army
+				name = WES_army_modifier
+				duration = 9125
+			}
+			custom_tooltip = WES_extrabonus
+			tooltip = {
+				add_yearly_manpower = 1
+			}
+			
+			if = {
+				limit = {
+					tag = OLD #oldenburg gets claims on Denmark for their missions
+				}
+				custom_tooltip = WES_get_claim_on_every_province_of_denmark
+				hidden_effect = {
+					DAN = {
+						every_core_province = {
+							limit = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+							add_permanent_claim = ROOT
+						}
+					}
+				}
 			}
 		}
 	}
+}
+
+OLD_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		tag = OLD
+	}
+	has_country_shield = yes
+	
+	OLD_Denmark = {
+		icon = unite_the_wittelsbachs
+		required_missions = { WES_army }
+		position = 3
+		provinces_to_highlight = {
+			is_core = DAN
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				is_core = DAN
+				value = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = OLD_valiant_claimant
+				duration = 9125
+			}
+			custom_tooltip = OLD_if_denmark_is_valid
+			tooltip = {
+				add_casus_belli = {
+					target = DAN
+					type = cb_restore_personal_union
+					months = -1
+				}
+			}
+		}
+	}
+}
+	
+WES_Generic_Missions_1_2 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
 	
 	WES_rhineland = {
-		icon = mission_eastern_european_city
+		icon = take_the_bishoprics
 		required_missions = { WES_secure_westphalia }
 		position = 4
 		trigger = {
@@ -65,7 +150,7 @@ WES_Generic_Missions_1 = {
 				AND = {
 					total_development = KOL
 					has_won_war_against = {
-						country = KOL
+						who = KOL
 					}
 				}
 			}
@@ -75,6 +160,7 @@ WES_Generic_Missions_1 = {
 				name = WES_seized_the_title
 				duration = 10950
 			}
+			add_prestige_or_monarch_power = { amount = 20 }
 		}
 	}
 }
@@ -122,7 +208,7 @@ WES_Generic_Missions_2 = {
 	}
 	
 	WES_secure_westphalia = {
-		icon = mission_eastern_european_city
+		icon = mission_unite_home_region
 		required_missions = { WES_forcelimit }
 		position = 3
 		provinces_to_highlight = {
@@ -157,11 +243,12 @@ WES_Generic_Missions_2 = {
 			else = {
 				add_core = 82
 			}
+			custom_tooltip = WES_lose_nationalism
 		}
 	}
 	
 	WES_westphalia = {
-		icon = mission_eastern_european_city
+		icon = westphalian_conquest
 		required_missions = { WES_rhineland WES_secure_westphalia }
 		position = 5
 		trigger = {
@@ -190,7 +277,89 @@ WES_Generic_Missions_2 = {
 	}
 }
 
-WES_Generic_Missions_3 = {
+WES_Generic_Missions_3_1 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			#tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_city_fortifications = {
+		icon = fortress_switzerland
+		required_missions = { WES_forcelimit WES_expand_city }
+		position = 2
+		trigger = {
+			OR = {
+				fortification_expert = 1
+				capital_scope = {
+					base_manpower = 7
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = WES_unconquered_capital
+				duration = 10950
+			}
+			if = {
+				limit = {
+					tag = OLD
+					owns = 55
+				}
+				55 = {
+					add_province_modifier = {
+						name = OLD_vri_jade
+						duration = 18250
+					}
+				}
+			}
+		}
+	}
+}
+
+PAD_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAD
+	}
+	has_country_shield = yes
+	
+	PAD_paderborner = {
+		icon = negotiate_for_avignon
+		required_missions = { WES_forcelimit }
+		position = 2
+		trigger = {
+			army_tradition = 50
+			prestige = 60
+		}
+		effect = {
+			create_general = {
+				tradition = 80
+			}
+			add_country_modifier = {
+				name = PAD_paderborner
+				duration = 7300
+			}
+		}
+	}
+}
+
+WES_Generic_Missions_3_2 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -210,20 +379,14 @@ WES_Generic_Missions_3 = {
 	}
 	has_country_shield = yes
 	
-	WES_city_fortifications = {
-		icon = mission_eastern_european_city
-		required_missions = { WES_forcelimit WES_expand_city }
-		position = 2
-		trigger = {
-		}
-		effect = {
-		}
-	}
-	
 	WES_renaissance = {
-		icon = mission_eastern_european_city
+		icon = fund_the_monasteries
 		required_missions = { }
 		position = 3
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { num_of_buildings_in_province = 2 }
+		}
 		trigger = {
 			has_institution = renaissance
 			if = {
@@ -271,8 +434,34 @@ WES_Generic_Missions_3 = {
 					name = WES_renaissance #-10% adm advisor cost_multiplier
 					duration = 9125
 				}
-				#add prestige for every year before 1500 that the mission is taken?
-			}
+				custom_tooltip = WES_has_taken_the_mission
+				tooltip = {
+					define_advisor = {
+						type = artist
+						name = "Rudolph von Langen"
+						skill = 1
+						cost_multiplier = 0.5
+						culture = ROOT
+						religion = ROOT
+					}
+				}
+				hidden_effect = {
+					if = {
+						limit = {
+							NOT = { has_global_flag = WES_renaissance_advisor }
+						}
+						define_advisor = {
+							type = artist
+							name = "Rudolph von Langen"
+							skill = 1
+							cost_multiplier = 0.5
+							culture = ROOT
+							religion = ROOT
+						}
+					}
+				}
+				set_global_flag = WES_renaissance_advisor
+			}	
 		}
 	}
 	
@@ -293,7 +482,11 @@ WES_Generic_Missions_3 = {
 		effect = {
 			custom_tooltip = WES_if_catholic
 			tooltip = {
-				custom_tooltip = WES_if_we_are_first_catholic_yes
+				add_country_modifier = {
+					name = WES_catholic_book
+					duration = 9125
+				}
+				custom_tooltip = WES_if_we_are_first_catholic
 				define_advisor = {
 					name = "Johannes Gropper"
 					culture = hannoverian
@@ -309,23 +502,62 @@ WES_Generic_Missions_3 = {
 					name = WES_lippstadt_cathechism
 					duration = 9125
 				}
-				custom_tooltip = WES_if_we_are_first_protestant_yes
-				tooltip = {
-					define_advisor = {
-						name = "Johann Westermann"
-						culture = hannoverian
-						religion = ROOT
-						type = theologian
-						skill = 2
-						cost_multiplier = 0.5
+				custom_tooltip = WES_if_we_are_first_protestant
+				define_advisor = {
+					name = "Johann Westermann"
+					culture = hannoverian
+					religion = ROOT
+					type = theologian
+					skill = 2
+					cost_multiplier = 0.5
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						religion = catholic
 					}
+					if = {
+						limit = {
+							NOT = { has_global_flag = WES_religion_catholic }
+						}
+						define_advisor = {
+							name = "Johannes Gropper"
+							culture = hannoverian
+							religion = ROOT
+							type = theologian
+							skill = 2
+							cost_multiplier = 0.5
+						}
+					}
+					set_global_flag = WES_religion_catholic
+				}
+				else = {
+					add_country_modifier = {
+						name = WES_lippstadt_cathechism
+						duration = 9125
+					}
+					if = {
+						limit = {
+							NOT = { has_global_flag = WES_religion_non_catholic }
+						}
+						define_advisor = {
+							name = "Johann Westermann"
+							culture = hannoverian
+							religion = ROOT
+							type = theologian
+							skill = 2
+							cost_multiplier = 0.5
+						}
+					}
+					set_global_flag = WES_religion_non_catholic
 				}
 			}
 		}
 	}
 }
 
-WES_Generic_Missions_4 = {
+WES_Generic_Missions_4_1 = {
 	slot = 4
 	generic = no
 	ai = yes
@@ -334,7 +566,7 @@ WES_Generic_Missions_4 = {
 		OR = {
 			tag = MUN
 			tag = SOE
-			tag = PAD
+			#tag = PAD #irrigation and University
 			tag = RVA
 			tag = LPP
 			tag = CLB
@@ -355,11 +587,17 @@ WES_Generic_Missions_4 = {
 			}
 		}
 		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = WES_tax
+					duration = 9125
+				}
+			}
 		}
 	}
 	
 	WES_rathaus = {
-		icon = mission_eastern_european_city
+		icon = sway_cologne
 		required_missions = { WES_expand_city }
 		position = 3
 		trigger = {
@@ -369,25 +607,83 @@ WES_Generic_Missions_4 = {
 			}
 		}
 		effect = {
+			add_adm_power = 25
+			add_dip_power = 25
+			add_mil_power = 25
 			capital_scope = {
 				add_or_upgrade_courthouse_building = yes
 			}
 		}
 	}
+}
+
+PAD_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAD
+	}
+	has_country_shield = yes
 	
-	WES_assert_control = {
-		icon = mission_eastern_european_city
-		required_missions = { WES_estates WES_reformation }
-		position = 5
+	PAD_irrigation = {
+		icon = public_works
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 2972
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_buildings_in_province = 3 }
+			}
+		}
 		trigger = {
+			2972 = {
+				owned_by = ROOT
+				num_of_buildings_in_province = 3
+			}
 		}
 		effect = {
+			add_adm_power = 25
+			2972 = {
+				add_province_modifier = {
+					name = PAD_irrigation_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	PAD_university = {
+		icon = leiden_university
+		required_missions = { PAD_irrigation }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 2972
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				devastation = 1
+			}
+		}
+		trigger = {
+			2972 = {
+				owned_by = ROOT
+				development = 20
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			2972 = {
+				add_or_upgrade_university_building = yes
+			}
+			change_innovativeness = 3
 		}
 	}
 }
 
-WES_Generic_Missions_5 = {
-	slot = 5
+WES_Generic_Missions_4_2 = {
+	slot = 4
 	generic = no
 	ai = yes
 	potential = {
@@ -396,6 +692,92 @@ WES_Generic_Missions_5 = {
 			tag = MUN
 			tag = SOE
 			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_assert_control = {
+		icon = all_bases_covered
+		required_missions = { WES_estates WES_reformation }
+		position = 5
+		trigger = {
+			NOT = { average_autonomy_above_min = 10 }
+			NOT = {
+				any_owned_province = {
+					unrest = 0
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = WES_control_regained
+				duration = 9125
+			}
+		}
+	}
+}
+
+PAD_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = PAD
+	}
+	has_country_shield = yes
+	
+	
+	PAD_dom = {
+		icon = mission_european_church
+		required_missions = { PAD_irrigation }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 2972
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
+		}
+		trigger = {
+			2972 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				country_event = { id = ME_Westphalian_Events.1 } #Pick a Catholic Bonus
+			}
+			else = {
+				add_adm_power = 50
+				add_church_power = 50
+				add_fervor = 50
+			}
+			2972 = {
+				add_or_upgrade_tax_building = yes
+			}
+		}
+	}
+}
+
+WES_Generic_Missions_5_1 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
 			tag = RVA
 			tag = LPP
 			tag = CLB
@@ -433,6 +815,27 @@ WES_Generic_Missions_5 = {
 			}
 		}
 	}
+}
+
+WES_Generic_Missions_5_2 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			tag = PAD
+			tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
 	
 	WES_estates = {
 		icon = appease_the_estates
@@ -473,7 +876,7 @@ WES_Generic_Missions_5 = {
 			}
 		}
 		effect = {
-			
+			country_event = { id = ME_Westphalian_Events.1 }
 		}
 	}
 }
