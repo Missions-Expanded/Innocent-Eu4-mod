@@ -287,7 +287,7 @@ WES_Generic_Missions_3_1 = {
 			tag = MUN
 			tag = SOE
 			#tag = PAD
-			tag = RVA
+			#tag = RVA
 			tag = LPP
 			tag = CLB
 			tag = OLD
@@ -354,6 +354,43 @@ PAD_Missions_3 = {
 			add_country_modifier = {
 				name = PAD_paderborner
 				duration = 7300
+			}
+		}
+	}
+}
+
+RVA_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RVA
+	}
+	has_country_shield = yes
+	
+	RVA_as_firm_as_dortmund = {
+		icon = fortress_switzerland #more like fortress dortmund
+		required_missions = { WES_forcelimit }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 69
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+		}
+		trigger = {
+			69 = {
+				owned_by = ROOT
+				fort_level = 2
+			}
+		}
+		effect = {
+			69 = {
+				add_province_modifier = {
+					name = RVA_as_firm_as_dortmund_modifier
+					duration = -1
+				}
 			}
 		}
 	}
@@ -567,7 +604,7 @@ WES_Generic_Missions_4_1 = {
 			tag = MUN
 			tag = SOE
 			#tag = PAD #irrigation and University
-			tag = RVA
+			#tag = RVA
 			tag = LPP
 			tag = CLB
 			tag = OLD
@@ -682,6 +719,78 @@ PAD_Missions_4 = {
 	}
 }
 
+RVA_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = RVA
+	}
+	has_country_shield = yes
+	
+	RVA_new_guilds = {
+		icon = return_visby_to_the_league
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 69
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+			}
+		}
+		trigger = {
+			69 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_adm_power = 25
+			69 = {
+				add_province_modifier = {
+					name = RVA_new_guilds_created
+					duration = 9125
+				}
+			}
+		}
+	}
+	
+	RVA_return_the_heyday = {
+		icon = dominant_economy
+		required_missions = { RVA_new_guilds }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 69
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { development = 20 }
+					NOT = { province_has_center_of_trade_of_level = 2 }
+				}
+			}
+		}
+		trigger = {
+			69 = {
+				owned_by = ROOT
+				OR = {
+					development = 20
+					province_has_center_of_trade_of_level = 2
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = RVA_a_new_heyday
+				duration = 10950
+			}
+			capital_scope = {
+				add_prosperity = 100
+			}
+		}
+	}
+}
+	
 WES_Generic_Missions_4_2 = {
 	slot = 4
 	generic = no
@@ -718,6 +827,54 @@ WES_Generic_Missions_4_2 = {
 			add_country_modifier = {
 				name = WES_control_regained
 				duration = 9125
+			}
+		}
+	}
+}
+
+WES_Generic_Missions_5_1 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = MUN
+			tag = SOE
+			#tag = RVA
+			tag = LPP
+			tag = CLB
+			tag = OLD
+			tag = OSN
+			tag = WES
+		}
+	}
+	has_country_shield = yes
+	
+	WES_religion = {
+		icon = show_piety
+		required_missions = { WES_expand_city }
+		position = 2
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_tax_building_trigger = yes }
+		}
+		trigger = {
+			any_owned_province = {
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					religion = catholic
+				}
+				country_event = { id = ME_Westphalian_Events.1 } #Pick a Catholic Bonus
+			}
+			else = {
+				add_adm_power = 50
+				add_church_power = 50
+				add_fervor = 50
 			}
 		}
 	}
@@ -763,41 +920,39 @@ PAD_Missions_5 = {
 				add_fervor = 50
 			}
 			2972 = {
+				add_province_modifier = {
+					name = PAD_libori
+					duration = -1
+				}
 				add_or_upgrade_tax_building = yes
 			}
 		}
 	}
 }
 
-WES_Generic_Missions_5_1 = {
+RVA_Missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-		OR = {
-			tag = MUN
-			tag = SOE
-			tag = RVA
-			tag = LPP
-			tag = CLB
-			tag = OLD
-			tag = OSN
-			tag = WES
-		}
+		tag = RVA
 	}
 	has_country_shield = yes
 	
-	WES_religion = {
+	RVA_church = {
 		icon = show_piety
-		required_missions = { WES_expand_city }
+		required_missions = { RVA_new_guilds }
 		position = 2
 		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_tax_building_trigger = yes }
+			province_id = 69
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
 		}
 		trigger = {
-			any_owned_province = {
+			69 = {
+				owned_by = ROOT
 				has_tax_building_trigger = yes
 			}
 		}
@@ -812,6 +967,9 @@ WES_Generic_Missions_5_1 = {
 				add_adm_power = 50
 				add_church_power = 50
 				add_fervor = 50
+			}
+			69 = {
+				add_or_upgrade_tax_building = yes
 			}
 		}
 	}
