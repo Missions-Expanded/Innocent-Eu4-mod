@@ -241,3 +241,229 @@ country_event = {
 		add_mil_power = 25
 	}
 }
+
+country_event = {
+	id = ME_Teutonic_Order_Events.4 #Event chain about Gotland for Denmark
+	title = ME_Teutonic_Order_Events.4.t
+	desc = ME_Teutonic_Order_Events.4.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	fire_only_once = yes
+	mean_time_to_happen = {
+		months = 12
+	}
+	trigger = {
+		tag = DAN
+		NOT = { num_of_rebel_controlled_provinces = 1 }
+		25 = {
+			country_or_non_sovereign_subject_holds = ROOT
+		}
+	}
+	
+	major = yes
+	major_trigger = {
+		NOT = { has_global_flag = TEU_denied }
+		OR = {
+			45 = {
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			1926 = {
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Teutonic_Order_Events.4.a
+		
+		ai_chance = { factor = 4 } #40%
+	
+		add_adm_power = -50
+		add_years_of_income = -0.5
+	}
+	
+	option = {
+		name = ME_Teutonic_Order_Events.4.b
+		
+		ai_chance = { factor = 3 } #30%
+	
+		25 = {
+			if = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				if = {
+					limit = {
+						owner = { is_subject_of = ROOT }
+					}
+					owner = {
+						add_liberty_desire = 50
+					}
+				}
+				cede_province = GOT
+			}
+		}
+		GOT = {
+			if = {
+				limit = {
+					is_subject_of = ROOT
+				}
+				ROOT = { grant_independence = GOT }
+			}
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				change_government = republic
+				add_government_reform = pirate_republic_reform
+			}
+			add_country_modifier = {
+				name = TEU_return_of_the_victual_brothers
+				duration = -1
+			}
+		}
+		add_truce_with = GOT
+	}
+	
+	option = {
+		name = ME_Teutonic_Order_Events.4.c
+		
+		ai_chance = { factor = 3 } #30%
+	
+		trigger = {
+			exists = TEU
+			NOT = { has_global_flag = TEU_denied } 
+		}
+		set_country_flag = TEU_FROM_flag
+		TEU = {
+			country_event = { id = ME_Teutonic_Order_Events.5 days = 30 }
+		}
+		custom_tooltip = TEU_if_TEU_Accepts
+		tooltip = {
+			add_treasury = 150
+			TEU = { add_treasury = -150 }
+			25 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					if = {
+						limit = {
+							owner = { is_subject_of = ROOT }
+						}
+						owner = {
+							add_liberty_desire = 50
+						}
+					}
+					cede_province = GOT
+				}
+			}
+			GOT = {
+				if = {
+					limit = {
+						is_subject_of = ROOT
+					}
+					ROOT = { grant_independence = GOT }
+				}
+			}
+			TEU = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					create_subject = {
+						subject = GOT
+						subject_type = fief_subject
+					}
+				}
+				else = {
+					create_subject = {
+						subject = GOT
+						subject_type = vassal
+					}
+				}
+			}
+		}
+	}
+}
+
+
+country_event = {
+	id = ME_Teutonic_Order_Events.5
+	title = ME_Teutonic_Order_Events.5.t
+	desc = ME_Teutonic_Order_Events.5.d
+	picture = ELECTION_REPUBLICAN_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		has_country_flag = TEU_FROM_flag
+	}
+		
+	option = {
+		name = ME_Teutonic_Order_Events.5.a
+		
+		ai_chance = { factor = 1 }
+	
+		FROM = { add_treasury = 150 }
+		add_treasury = -150
+		FROM = {
+			25 = {
+				if = {
+					limit = {
+						country_or_non_sovereign_subject_holds = FROM
+					}
+					if = {
+						limit = {
+							owner = { is_subject_of = FROM }
+						}
+						owner = {
+							add_liberty_desire = 50
+						}
+					}
+					cede_province = GOT
+				}
+			}
+			GOT = {
+				if = {
+					limit = {
+						is_subject_of = FROM
+					}
+					FROM = { grant_independence = GOT }
+				}
+			}
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = subjects }
+			}
+			create_subject = {
+				subject = GOT
+				subject_type = fief_subject
+			}
+		}
+		else = {
+			create_subject = {
+				subject = GOT
+				subject_type = vassal
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Teutonic_Order_Events.5.b
+		
+		ai_chance = { factor = 0 }
+		
+		FROM = { 
+			country_event = { id = ME_Teutonic_Order_Events.4 }
+		}
+	}
+}
