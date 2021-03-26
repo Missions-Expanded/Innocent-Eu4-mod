@@ -67,16 +67,16 @@ country_event = { #Commissioning the Fra Mauro Map
 	title = ME_Venice_Events.6.T
 	desc = {
 		trigger = {
-		  tag = VEN
+			tag = VEN
 		}
 		desc = ME_Venice_Events.6.D.V
-	  }
-	  desc = {
+	}
+	desc = {
 		trigger = {
-		  tag = POR
+			tag = POR
 		}
 		desc = ME_Venice_Events.6.D.P
-	  }
+	}
 	picture = COURT_eventPicture
 	
 	major = yes
@@ -370,15 +370,6 @@ country_event = { # Trade Treaty with the Mamluks
 			}
 			add_permanent_claim = ROOT
 		}
-		4316 = {
-			if = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-		}
 		MAM = {
 			add_opinion = {
 				who = FROM
@@ -400,7 +391,7 @@ country_event = { # An Ambassador From Venice
 	option = {
 		name = ME_Venice_Events.10.OPT1
 		ai_chance = {
-			factor = 50
+			factor = 25
 			modifier = {
 				factor = 2
 				OR = {
@@ -458,8 +449,29 @@ country_event = { # An Ambassador From Venice
 	option = {
 		name = ME_Venice_Events.10.OPT2
 		ai_chance = {
-			factor = 50
-			
+			factor = 75
+			modifier = {
+				factor = 2
+				OR = {
+					NOT = { alliance_with = FROM }
+					FROM = {
+						OR = {
+							NOT = {
+								naval_strength = {
+									who = ROOT
+									value = 1
+								}
+							}
+							NOT = {
+								army_strength = {
+									who = ROOT
+									value = 1
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		add_prestige = 5
 		FROM = {
@@ -493,13 +505,13 @@ country_event = { # Treaty with the Mamluks!
 			}
 			create_alliance = MAM
 		}
-		custom_tooltip = VEN_MAM_TRADE_ALLIACE
-		hidden_effect = {
-			add_country_modifier = {
-				name = ven_mam_trade_alliance
-				duration = -1
-			}
-		}
+		#custom_tooltip = VEN_MAM_TRADE_ALLIACE
+		#hidden_effect = {
+		#	add_country_modifier = {
+		#		name = ven_mam_trade_alliance
+		#		duration = -1
+		#	}
+		#}
 	}
 }
 
@@ -623,14 +635,9 @@ country_event = {
 			}
 		}
 		
-		if = {
-			limit = {
-				is_subject = yes
-			}
-			overlord = {
-				ROOT = {
-					grant_independence = yes
-				}
+		overlord = {
+			ROOT = {
+				grant_independence = yes
 			}
 		}
 		FROM = {
@@ -711,7 +718,7 @@ country_event = { # Passage in the Red Sea
 	option = {
 		name = ME_Venice_Events.16.OPT1
 		ai_chance = {
-			factor = 99
+			factor = 50
 		}
 		
 		2315 = {
@@ -723,9 +730,46 @@ country_event = { # Passage in the Red Sea
 	option = {
 		name = ME_Venice_Events.16.OPT2
 		ai_chance = {
-			factor = 1
+			factor = 50
 		}
 		
-		break_alliance_with = { who = FROM }
+		FROM = {
+			country_event = {
+				id = ME_Venice_Events.13
+			}
+		}
+	}
+}
+
+country_event = { #Glass in Alexandria
+	id = ME_Venice_Events.17
+	title = ME_Venice_Events.17.T
+	desc = ME_Venice_Events.17.D
+	picture = TRADEGOODS_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Venice_Events.17.OPT1
+		ai_chance = {
+			factor = 50
+		}
+
+		358 = {
+			change_trade_goods = glass
+		}
+		change_price = {
+			trade_goods = glass
+			key = ven_the_delta_price_modifier
+			value = 0.1
+			duration = -1
+		}
+	}
+
+	option = {
+		name = ME_Venice_Events.17.OPT2
+		ai_chance = {
+			factor = 50
+		}
 	}
 }
