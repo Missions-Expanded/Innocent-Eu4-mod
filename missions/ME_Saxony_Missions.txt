@@ -81,10 +81,75 @@ saxony_missions_slot_1 = {
 		}
 	}
 
-	saxony_integrate_poland = {
-		icon = mission_partition_poland
+	saxony_unite_the_thrones = {
+		icon = mission_restore_faith_in_the_throne
 		position = 9
 		required_missions = { saxony_the_polish_prerogative }
+		provinces_to_highlight = {
+			region = poland_region
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 15
+						region = poland_region
+					}
+				}
+			}
+			NOT = { exists = PLC }
+			NOT = { exists = POL }
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = PLC
+				}
+				overlord_of = PLC
+				PLC = {
+					NOT = { liberty_desire = 50 }
+					custom_trigger_tooltip = {
+						tooltip = SAX_IS_SUBJECT_FOR_AT_LEAST_50_YEARS
+						years_in_vassalage_under = {
+							who = ROOT
+							years = 50
+							all_subject_country = yes
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = POL
+				}
+				overlord_of = POL
+				POL = {
+					NOT = { liberty_desire = 50 }
+					custom_trigger_tooltip = {
+						tooltip = SAX_IS_SUBJECT_FOR_AT_LEAST_50_YEARS
+						years_in_vassalage_under = {
+							who = ROOT
+							years = 50
+							all_subject_country = yes
+						}
+					}
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 15
+					region = poland_region
+				}
+			}
+		}
+		effect = {
+			replace_country_modifier = { remove = saxony_the_polish_prerogative_modifier add = saxony_unite_the_thrones_modifier time = 7300 }
+		}
+	}
+
+	saxony_integrate_poland = {
+		icon = mission_partition_poland
+		position = 10
+		required_missions = { saxony_unite_the_thrones }
 		provinces_to_highlight = {
 			region = poland_region
 			NOT = { owned_by = ROOT }
@@ -107,6 +172,7 @@ saxony_missions_slot_1 = {
 		}
 		effect = {
 			add_prestige = 20
+			add_accepted_culture = polish
 			add_country_modifier = {
 				name = saxony_integrate_poland_modifier_1
 				duration = -1
@@ -374,7 +440,10 @@ saxony_missions_slot_2 = {
 			province_id = 62
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = stock_exchange }
+				AND = {
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
 			}
 		}
 		trigger = {
@@ -389,7 +458,10 @@ saxony_missions_slot_2 = {
 			}
 			owns = 62
 			62 = {
-				has_building = stock_exchange
+				OR = {
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
 			}
 		}
 		effect = {
@@ -595,6 +667,10 @@ saxony_missions_slot_2 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = saxony_the_saxon_polish_union_modifier
+				duration = 3650
+			}
 			if = {
 				limit = {
 					exists = PLC
@@ -602,7 +678,7 @@ saxony_missions_slot_2 = {
 				}
 				add_casus_belli = {
 					target = PLC
-					type = cb_restore_personal_union
+					type = cb_restore_personal_union_saxony_poland
 				}
 			}
 			else_if = {
@@ -612,7 +688,7 @@ saxony_missions_slot_2 = {
 				}
 				add_casus_belli = {
 					target = POL
-					type = cb_restore_personal_union
+					type = cb_restore_personal_union_saxony_poland
 				}
 			}
 			else = {
@@ -653,32 +729,12 @@ saxony_missions_slot_2 = {
 					exists = PLC
 				}
 				overlord_of = PLC
-				PLC = {
-					custom_trigger_tooltip = {
-						tooltip = SAX_IS_SUBJECT_FOR_AT_LEAST_50_YEARS
-						years_in_vassalage_under = {
-							who = ROOT
-							years = 50
-							all_subject_country = yes
-						}
-					}
-				}
 			}
 			else_if = {
 				limit = {
 					exists = POL
 				}
 				overlord_of = POL
-				POL = {
-					custom_trigger_tooltip = {
-						tooltip = SAX_IS_SUBJECT_FOR_AT_LEAST_50_YEARS
-						years_in_vassalage_under = {
-							who = ROOT
-							years = 50
-							all_subject_country = yes
-						}
-					}
-				}
 			}
 			else = {
 				wielkopolska_area = {
@@ -694,7 +750,7 @@ saxony_missions_slot_2 = {
 		effect = {
 			add_country_modifier = {
 				name = saxony_the_polish_prerogative_modifier
-				duration = 3650
+				duration = 5475
 			}
 			if = {
 				limit = {
@@ -1021,8 +1077,12 @@ saxony_missions_slot_3 = {
 		effect = {
 			add_inflation = -3
 			add_country_modifier = {
-				name = saxony_saxon_coinage_modifier
+				name = saxony_saxon_coinage_modifier_1
 				duration = 5475
+			}
+			add_country_modifier = {
+				name = saxony_saxon_coinage_modifier_2
+				duration = -1
 			}
 		}
 	}
