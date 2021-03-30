@@ -1,44 +1,292 @@
 namespace = ME_Italy_Events
 
+#Monumento dei Quattro Mori
 country_event = {
 	id = ME_Italy_Events.1
-	title = ME_Italy_Events.1.t
-	desc = ME_Italy_Events.1.d
-	picture = BORDER_TENSION_eventPicture
+	title = ME_Italy_Events.1.T
+	desc = ME_Italy_Events.1.D
+	picture = GOOD_WITH_MONARCH_eventPicture
 
 	fire_only_once = yes
-	is_triggered_only = yes
+	
+	trigger = {
+		OR = {
+			AND = {
+				tag = ITA
+				mission_completed = ita_lands_pirates
+			}
+			AND = {
+				OR = {
+					#tag = LAN
+					#tag = FLO
+				}
+				#mission_completed = 
+			}
+		}
+		owns_core_province = 115
+	}
+
+	mean_time_to_happen = {
+		years = 10
+	}
 	
 	option = {
-		name = ME_Italy_Events.1.a
+		name = ME_Italy_Events.1.OPT1
 		
 		ai_chance = { factor = 0.33 }
 		
-		add_country_modifier = {
-			name = italy_discipline
-			duration = 9125
+		add_splendor = 100
+		115 = {
+			add_permanent_province_modifier = {
+				name = ita_monumento_quattro_mori
+				duration = -1
+			}
+		}
+	}
+}
+
+#Fitting Capital
+country_event = {
+	id = ME_Italy_Events.2
+	title = ME_Italy_Events.2.T
+	desc = ME_Italy_Events.2.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		tag = ITA
+		is_at_war = no
+		stability = 1
+		owns_core_province = 103
+		owns_core_province = 116
+		owns_core_province = 118
+	}
+
+	mean_time_to_happen = {
+		years = 10
+	}
+	
+	option = {
+		name = ME_Italy_Events.2.OPT1
+		
+		ai_chance = { factor = 0.33 }
+
+		set_capital = 118
+		118 = {
+			add_province_modifier = {
+				name = ita_center_newfoudned_state
+				duration = -1
+			}
 		}
 	}
 	
 	option = {
-		name = ME_Italy_Events.1.b
+		name = ME_Italy_Events.2.OPT2
 		
 		ai_chance = { factor = 0.33 }
-		
-		add_country_modifier = {
-			name = italy_power
-			duration = 9125
+
+		set_capital = 103
+		103 = {
+			add_province_modifier = {
+				name = ita_center_newfoudned_state
+				duration = -1
+			}
 		}
 	}
 	
 	option = {
-		name = ME_Italy_Events.1.c
+		name = ME_Italy_Events.2.OPT3
+		
+		ai_chance = { factor = 0.33 }
+
+		set_capital = 116
+		116 = {
+			add_province_modifier = {
+				name = ita_center_newfoudned_state
+				duration = -1
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Italy_Events.2.OPT4
+		
+		ai_chance = { factor = 0.33 }
+
+		capital_scope = {
+			add_province_modifier = {
+				name = ita_center_newfoudned_state
+				duration = -1
+			}
+		}
+	}
+}
+
+#A New State
+country_event = {
+	id = ME_Italy_Events.3
+	title = ME_Italy_Events.3.T
+	desc = ME_Italy_Events.3.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		tag = ITA
+		stability = 2
+		NOT = { is_at_war = yes }
+	}
+
+	mean_time_to_happen = {
+		years = 25
+	}
+
+	immediate = {
+		hidden_effect = {
+			clr_country_flag = ita_republican_matter
+		}
+	}
+	
+	option = {
+		name = ME_Italy_Events.3.OPT1
+		
+		ai_chance = { factor = 0.33 }
+
+		if = {
+			limit = {
+				NOT = { government = republic }
+			}
+			change_government = republic
+			add_stability = -1
+		}
+		add_government_reform = constitutional_republic_reform
+	}
+	
+	option = {
+		name = ME_Italy_Events.3.OPT2
+		
+		ai_chance = { factor = 0.33 }
+
+		if = {
+			limit = {
+				NOT = { government = monarchy }
+			}
+			change_government = monarchy
+			add_stability = -1
+		}
+		add_government_reform = autocracy_reform
+		add_government_reform = parliamentary_reform
+	}
+	
+	option = {
+		name = ME_Italy_Events.3.OPT3
+		
+		ai_chance = { factor = 0.33 }
+
+		custom_tooltip = ITA_REPUBLICAN_PROBLEMS_TT
+	}
+}
+
+#Republican Matter
+country_event = {
+	id = ME_Italy_Events.4
+	title = ME_Italy_Events.4.T
+	desc = ME_Italy_Events.4.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	fire_only_once = yes
+	
+	trigger = {
+		tag = ITA
+		OR = {
+			current_age = age_of_absolutism
+			is_year = 1600
+		}
+	}
+
+	mean_time_to_happen = {
+		years = 10
+	}
+	
+	option = {
+		name = ME_Italy_Events.4.OPT1
 		
 		ai_chance = { factor = 0.33 }
 		
-		add_country_modifier = {
-			name = italy_morale
-			duration = 9125
+		custom_tooltip = ITA_REPUBLICAN_MATTER_TT
+		set_country_flag = ita_republican_matter
+	}
+}
+
+#Giovine Italia
+province_event = {
+	id = ME_Italy_Events.5
+	title = ME_Italy_Events.5.T
+	desc = ME_Italy_Events.5.D
+	picture = DEBATE_REPUBLICAN_eventPicture
+
+	mean_time_to_happen = {
+		months = 2
+	}
+
+	trigger = {
+		owned_by = ITA
+		owner = {
+			has_country_flag = ita_republican_matter
+			NOT = { has_reform = parliamentary_reform }
+		}
+		region = italy_region
+		NOT = { area = western_sicily_area }
+		NOT = { area = sicily_area }
+		NOT = { area = calabria_area }
+		NOT = { area = apulia_area }
+		NOT = { area = naples_area }
+		NOT = { has_province_flag = ita_republican_rebellion_3 }
+	}
+
+	option = {
+		name = ME_Italy_Events.5.OPT1
+
+		spawn_rebels = {
+			size = 3
+			type = ita_republican_rebels
+			leader = yes
+		}
+	}
+}
+
+#Monarchy Aider
+province_event = {
+	id = ME_Italy_Events.6
+	title = ME_Italy_Events.6.T
+	desc = ME_Italy_Events.6.D
+	picture = DEBATE_REPUBLICAN_eventPicture
+
+	trigger = {
+		owned_by = ITA
+		owner = {
+			has_country_flag = ita_republican_matter
+			NOT = { has_reform = constitutional_republic_reform }
+		}
+		region = italy_region
+		OR = {
+			area = western_sicily_area
+			area = sicily_area
+			area = calabria_area
+			area = apulia_area
+			area = naples_area
+		}
+		NOT = { has_province_flag = ita_monarchy_rebellion_3 }
+	}
+
+	option = {
+		name = ME_Italy_Events.6.OPT1
+
+		spawn_rebels = {
+			size = 3
+			type = ita_monarchy_rebels
+			leader = yes
 		}
 	}
 }
