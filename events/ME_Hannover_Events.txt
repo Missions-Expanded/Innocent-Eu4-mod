@@ -6,7 +6,6 @@ country_event = {
 	desc = ME_Hannover_Events.1.d
 	picture = BORDER_TENSION_eventPicture
 
-	fire_only_once = yes
 	is_triggered_only = yes
 	
 	option = {
@@ -14,13 +13,44 @@ country_event = {
 		
 		ai_chance = { factor = 1 }
 		
-		1874 = {
-			change_trade_goods = naval_supplies
-			add_province_modifier = {
-				name = han_lumber
-				duration = -1
+		neumark_area = {
+			limit = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cede_province = BRA
+		}
+		mittelmark_area = {
+			limit = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			cede_province = BRA
+		}
+		BRA = {
+			define_ruler = {
+				dynasty = "Askanier"
+				adm = 5
+				dip = 4
+				mil = 4
+				age = 20
+				claim = 95
 			}
 		}
+		if = {
+			limit = {
+				has_dlc = "Art of War"
+			}
+			create_subject = {
+				subject = BRA
+				subject_type = march
+			}
+		}
+		else = {
+			create_subject = {
+				subject = BRA
+				subject_type = vassal
+			}
+		}
+		custom_tooltip = HAN_as_long_as
 	}
 	
 	option = {
@@ -28,93 +58,129 @@ country_event = {
 		
 		ai_chance = { factor = 0 }
 		
-		add_prestige = 5
 	}
-	
 }
+
 country_event = {
 	id = ME_Hannover_Events.2
 	title = ME_Hannover_Events.2.t
 	desc = ME_Hannover_Events.2.d
 	picture = BORDER_TENSION_eventPicture
 
-	fire_only_once = yes
 	is_triggered_only = yes
 	
-	option = { #cash
+	option = {
 		name = ME_Hannover_Events.2.a
 		
-		ai_chance = { factor = 0.5 }
+		ai_chance = { factor = 1 }
 		
-		add_years_of_income = -2
-		weser_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		braunschweig_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		53 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		56 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		1931 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
+		custom_tooltip = HAN_this_will_take_40_years
+		set_country_flag = HAN_40_year_stud
 	}
 	
-	option = { #military
+	option = {
 		name = ME_Hannover_Events.2.b
 		
-		ai_chance = { factor = 0.5 }
+		ai_chance = { factor = 0 }
 		
-		add_yearly_manpower = -3
-		weser_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
+		add_years_of_income = -2
+		custom_tooltip = HAN_this_will_take_20_years
+		set_country_flag = HAN_20_year_stud
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.3
+	title = ME_Hannover_Events.3.t
+	desc = ME_Hannover_Events.3.d
+	picture = BORDER_TENSION_eventPicture
+
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		tag = HAN
+		owns = 4772
+		OR = {
+			had_country_flag = {
+				flag = HAN_20_year_stud
+				days = 7300
 			}
-		}
-		braunschweig_area = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		53 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		56 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
-			}
-		}
-		1931 = {
-			add_province_modifier = {
-				name = han_roads
-				duration = -1
+			had_country_flag = {
+				flag = HAN_40_year_stud
+				days = 14600
 			}
 		}
 	}
 	
+	option = {
+		name = ME_Hannover_Events.3.a
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				owns = 4772
+			}
+			4772 = {
+				add_province_modifier = {
+					name = HAN_stud
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					change_trade_goods = horses
+				}
+			}
+		}
+		else = {
+			random_owned_province = {
+				add_province_modifier = {
+					name = HAN_stud
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					change_trade_goods = horses
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Hannover_Events.4
+	title = ME_Hannover_Events.4.t
+	desc = ME_Hannover_Events.4.d
+	picture = BORDER_TENSION_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Hannover_Events.4.a
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HAN_unlock_electorship_mission
+		add_country_modifier = {
+			name = HAN_salic_law_abolished
+			duration = -1
+		}
+	}
+	
+	option = {
+		name = ME_Hannover_Events.4.b
+		
+		ai_chance = { factor = 0 }
+		
+		add_country_modifier = {
+			name = HAN_salic_law_dynasty
+			duration = -1
+		}
+	}
 }
