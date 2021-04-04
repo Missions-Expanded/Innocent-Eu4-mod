@@ -23,8 +23,17 @@ HAN_gen_missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				has_adm_advisor = yes
+				has_dip_advisor = yes
+				has_mil_advisor = yes
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HAN_advisor_board
+				duration = 10950
+			}
 		}
 	}
 	
@@ -35,6 +44,8 @@ HAN_gen_missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_institution = renaissance
+			
 		}
 		effect = {
 		}
@@ -76,15 +87,22 @@ HAN_gen_missions_2 = {
 		required_missions = { HAN_army }
 		position = 2
 		provinces_to_highlight = {
+			area = weser_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				area = weser_area
+				value = 3
+			}
 		}
 		effect = {
+			
 		}
 	}
 	
 	HAN_church = {
-		icon = the_viennese_waltz
+		icon = italian_riches
 		required_missions = { HAN_weser HAN_renaissance }
 		position = 3
 		provinces_to_highlight = {
@@ -121,8 +139,56 @@ HAN_gen_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				army_size_percentage = 0.85
+				num_of_generals = 1
+			}
 		}
 		effect = {
+			weser_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			holstein_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			braunschweig_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_saxony_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			neumark_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			45 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -131,8 +197,15 @@ HAN_gen_missions_3 = {
 		required_missions = { HAN_army }
 		position = 2
 		provinces_to_highlight = {
+			OR = {
+				province_id = 57
+				province_id = 53
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			57 = { country_or_non_sovereign_subject_holds = ROOT }
+			53 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
 		}
@@ -226,26 +299,83 @@ HAN_gen_missions_4 = {
 	has_country_shield = yes
 
 	HAN_north = {
-		icon = the_viennese_waltz
+		icon = defend_the_city
 		required_missions = { HAN_army }
 		position = 2
 		provinces_to_highlight = {
+			OR = {
+				area = holstein_area
+				province_id = 44
+				province_id = 45
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			OR = {
+				holstein_area = {
+					owned_by = ROOT
+				}
+				owns = 45
+				owns = 44
+			}
 		}
 		effect = {
+			
 		}
 	}
 	
 	HAN_old_salt_road = {
-		icon = the_viennese_waltz
+		icon = return_visby_to_the_league
 		required_missions = { HAN_north HAN_city }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				province_id = 45
+				province_id = 53
+				province_id = 1857
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_production_building_trigger = yes }
+				NOT = { has_trade_building_trigger = yes }
+			}
 		}
 		trigger = {
+			45 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
+			}
+			53 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+				has_production_building_trigger = yes
+			}
+			1857 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
+			}
 		}
 		effect = {
+			45 = {
+				add_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+			53 = {
+				add_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
+			1857 = {
+				add_province_modifier = {
+					name = HAN_old_salt_road_modifier
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -269,36 +399,53 @@ HAN_gen_missions_5 = {
 	has_country_shield = yes
 	
 	HAN_entrepot = {
-		icon = the_viennese_waltz
+		icon = the_london_steelyard
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			owned_by = ROOT
+			province_has_center_of_trade_of_level = 1
+			NOT = { has_trade_building_trigger = yes }
 		}
 		trigger = {
+			any_owned_province = {
+				province_has_center_of_trade_of_level = 1
+				has_trade_building_trigger = yes
+			}
 		}
 		effect = {
 		}
 	}
 	
 	HAN_city = {
-		icon = the_viennese_waltz
+		icon = public_works
 		required_missions = { HAN_entrepot }
 		position = 2
 		provinces_to_highlight = {
 		}
 		trigger = {
+			capital_scope = {
+				num_of_times_improved = 10
+				num_of_buildings_in_province = 3
+			}
 		}
 		effect = {
 		}
 	}
 	
 	HAN_control_trade = {
-		icon = the_viennese_waltz
+		icon = expand_the_confederacy
 		required_missions = { HAN_city }
 		position = 4
 		provinces_to_highlight = {
 		}
 		trigger = {
+			45 = {
+				trade_share = {
+					country = ROOT
+					share = 20
+				}
+			}
 		}
 		effect = {
 		}

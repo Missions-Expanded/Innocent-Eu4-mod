@@ -130,6 +130,10 @@ HAN_missions_1 = {
 		}
 		trigger = {
 			farm_estate = 3
+			has_global_modifier_value = {
+				which = cavalry_power
+				value = 0.5
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -157,7 +161,10 @@ HAN_missions_1 = {
 				}
 				AND = {
 					army_size = FRA
-					has_won_war_against = { who = FRA }
+					OR = {
+						has_won_war_against = { who = FRA }
+						FRA = { is_subject_of = ROOT }
+					}
 				} 
 			}
 		}
@@ -188,7 +195,7 @@ HAN_missions_1 = {
 				}
 				reverse_has_opinion = {
 					who = GBR
-					amount = 175
+					value = 175
 				}
 			}
 			else_if = {
@@ -197,7 +204,7 @@ HAN_missions_1 = {
 				}
 				reverse_has_opinion = {
 					who = ENG
-					amount = 175
+					value = 175
 				}
 			}
 			else = {
@@ -207,7 +214,7 @@ HAN_missions_1 = {
 					}
 					has_opinion = {
 						who = ROOT
-						amount = 175
+						value = 175
 					}
 				}
 			}
@@ -289,9 +296,12 @@ HAN_missions_2 = {
 				army_size = 40
 				army_size_percentage = 0.9
 			}
-			
 		}
 		effect = {
+			add_country_modifier = {
+				name = HAN_the_guard_of_hanover
+				duration = 7300
+			}
 		}
 	}
 	
@@ -300,6 +310,18 @@ HAN_missions_2 = {
 		required_missions = { HAN_guard }
 		position = 10
 		provinces_to_highlight = {
+			if =  {
+				limit = {
+					any_country = {
+						primary_culture = saxon
+						army_size = ROOT
+					}
+				}
+				owner = {
+					primary_culture = saxon
+					army_size = ROOT
+				}
+			}	
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -358,6 +380,13 @@ HAN_missions_2 = {
 			}
 		}
 		effect = {
+			define_advisor = {
+				type = army_reformer
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
 		}
 	}
 	
@@ -384,7 +413,7 @@ HAN_missions_2 = {
 		provinces_to_highlight = {
 			owned_by = ROOT
 			OR = {
-				NOT = { num_of_owned_provinces_with = 3 }
+				NOT = { num_of_times_improved = 3 }
 				NOT = { has_production_building_trigger = yes }
 			}
 		}
@@ -417,6 +446,7 @@ HAN_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			#ascanian?
 		}
 		effect = {
 		}
@@ -427,7 +457,18 @@ HAN_missions_3 = {
 		required_missions = { HAN_guard }
 		position = 8
 		provinces_to_highlight = {
-		}
+			OR = {
+				AND = {
+					area = jutland_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					area = holstein_area
+					owned_by = ROOT
+					NOT = { fort_level = 2 }
+				}
+			}
+		}	
 		trigger = {
 			OR = {
 				jutland_area = {
@@ -441,6 +482,65 @@ HAN_missions_3 = {
 			}
 		}
 		effect = {
+			custom_tooltip = HAN_if_by_conquest
+			tooltip = {
+				add_country_modifier = {
+					name = HAN_conquest_of_denmark
+					duration = 9125
+				}
+				4149 = {	
+					add_trade_modifier = {
+						who = ROOT
+						duration = 10950
+						power = 20
+						key = HAN_control_meant_to_last
+					}
+				}
+			}
+			custom_tooltip = HAN_if_by_fort
+			tooltip = {
+				custom_tooltip = HAN_random_province_that_fulfills_the_fort_req
+				add_province_modifier = {
+					name = HAN_extra_fortifications
+					duration = -1
+				}
+				add_mil_power = 50
+			}
+			hidden_effect = {
+				if = {	
+					limit = {
+						jutland_area = {
+							type = all
+							owned_by = ROOT
+						}
+					}
+					add_country_modifier = {
+						name = HAN_conquest_of_denmark
+						duration = 9125
+					}
+					4149 = {	
+						add_trade_modifier = {
+							who = ROOT
+							duration = 10950
+							power = 20
+							key = HAN_control_meant_to_last
+						}
+					}
+				}
+				else = {
+					add_mil_power = 50
+					random_owned_province = {
+						limit = {
+							area = holstein_area
+							fort_level = 2
+						}
+						add_province_modifier = {
+							name = HAN_extra_fortifications
+							duration = -1
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -451,8 +551,47 @@ HAN_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				is_emperor = yes
+				NOT = { hre_size = 1 }
+			}
 		}
 		effect = {
+			custom_tooltip = HAN_if_by_emperorship
+			tooltip = {
+				add_dip_power = 50
+				add_ruler_modifier = {
+					name = HAN_the_house_of_hanover_is_triumphant
+					duration = -1
+				}
+			}
+			custom_tooltip = HAN_if_by_dismantlement
+			tooltip = {
+				add_mil_power = 50
+				add_country_modifier = {
+					name = HAN_the_state_of_hanover_is_triumphant
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_ruler_modifier = {
+						name = HAN_the_house_of_hanover_is_triumphant
+						duration = -1
+					}
+					add_dip_power = 50
+				}
+				else = {
+					add_country_modifier = {
+						name = HAN_the_state_of_hanover_is_triumphant
+						duration = 9125
+					}
+					add_mil_power = 50
+				}
+			}
 		}
 	}
 	
@@ -463,8 +602,24 @@ HAN_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				senior_union_with = BAV
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					OR = {
+						area = upper_bavaria_area
+						area = lower_bavaria_area
+						area = east_bavaria_area
+					}
+					value = 8
+				}
+			}
 		}
 		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = HAN_diplo_bonus_two
+				duration = -1
+			}
 		}
 	}
 
@@ -473,10 +628,55 @@ HAN_missions_3 = {
 		required_missions = { HAN_rivalry }
 		position = 13
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = PRU
+				}
+				owned_by = PRU
+			}
+			else_if = {
+				limit = {
+					exists = BRA
+				}
+				owned_by = BRA
+			}
+			else = {
+				province_id = 50
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					exists = PRU
+				}
+				army_size = PRU
+				OR = {
+					has_won_war_against = { who = PRU }
+					PRU = { is_subject_of = ROOT }
+				}
+			}
+			else_if = {
+				limit = {
+					exists = BRA
+				}
+				army_size = BRA
+				OR = {
+					has_won_war_against = { who = BRA }
+					BRA = { is_subject_of = ROOT }
+				}
+			}
+			else = {
+				owns_core_province = 50
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HAN_prussian_traditions
+				duration = 5475
+			}
+			create_general = { tradition = 80 }
 		}
 	}
 	
@@ -485,6 +685,8 @@ HAN_missions_3 = {
 		required_missions = { HAN_support_trade HAN_agrarian_economy }
 		position = 15
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manufactory_trigger = yes }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -493,6 +695,10 @@ HAN_missions_3 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HAN_new_technology_brings_new_thoughts
+				duration = 9125
+			}
 		}
 	}
 }
@@ -512,10 +718,23 @@ HAN_missions_4 = {
 		required_missions = { HAN_hanover }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				area = westphalia_area
+				area = north_westphalia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = westphalia_area
+					area = north_westphalia_area
+				}
+				value = 4
+			}
 		}
 		effect = {
+			add_accepted_culture_or_dip_power = { culture = hanovierian }
 		}
 	}
 	
@@ -524,10 +743,43 @@ HAN_missions_4 = {
 		required_missions = { HAN_rhineland }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = upper_franconia_area
+				area = franconia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = upper_franconia_area
+					area = franconia_area
+				}
+				value = 5
+			}
 		}
 		effect = {
+			east_bavaria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_bavaria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_bavaria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -536,10 +788,25 @@ HAN_missions_4 = {
 		required_missions = { HAN_franken HAN_swabia }
 		position = 8
 		provinces_to_highlight = {
+			OR = {
+				area = upper_bavaria_area
+				area = lower_bavaria_area
+				area = east_bavaria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = upper_bavaria_area
+					area = lower_bavaria_area
+					area = east_bavaria_area
+				}
+				value = 8
+			}
 		}
 		effect = {
+		
 		}
 	}
 	
@@ -550,8 +817,24 @@ HAN_missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					government = monarchy
+				}
+				num_of_royal_marriages = 5
+			}
+			else = {
+				num_of_allies = 5
+			}
 		}
 		effect = {
+			define_advisor = {
+				type = statesman
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
 		}
 	}
 	
@@ -560,8 +843,22 @@ HAN_missions_4 = {
 		required_missions = { HAN_dynastic_games }
 		position = 11
 		provinces_to_highlight = {
+			owner = {
+				NOT = { tag = ROOT }
+				is_part_of_hre = yes
+				total_development = ROOT
+			}
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = HAN_we_have_most_dev_in_HRE
+				NOT = {
+					any_country = {
+						is_part_of_hre = yes
+						total_development = ROOT
+					}
+				}
+			}
 		}
 		effect = {
 			custom_tooltip = HAN_if_a_unified_BAV_nation_exists
@@ -570,10 +867,11 @@ HAN_missions_4 = {
 			every_country = {
 				limit = {
 					primary_culture = bavarian
+					NOT = { tag = BAV }
 				}
 				reverse_add_casus_belli = {
 					target = ROOT
-					type = cb_vassalize
+					type = cb_vassalization
 					months = 10000
 				}
 			}
@@ -602,7 +900,7 @@ HAN_missions_4 = {
 					junior_union_with = ROOT
 					has_opinion = {
 						who = ROOT
-						amount = 150
+						value = 150
 					}
 					NOT = { liberty_desire = 10 }
 				}
@@ -656,22 +954,63 @@ HAN_missions_4 = {
 		required_missions = { }
 		position = 14
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owned_by = ROOT
+					NOT = { has_trade_building_trigger = yes }
+					NOT = {
+						ROOT = {
+							num_of_owned_provinces_with = {
+								has_trade_building_trigger = yes
+								value = 3
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 45
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { has_trade_building_trigger = yes }
+					}
+				}
+			}	
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_trade_building_trigger = yes
+				value = 3
+			}
+			45 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+				has_trade_building_trigger = yes
+			}
 		}
-		effect = {
+		effect = {	
+			45 = {
+				add_or_upgrade_trade_building = yes
+			}
+			define_advisor = {
+				type = trader
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
 		}
 	}
 	
 	HAN_mint = {
-		icon = reform_the_state
+		icon = medici_bank_ledgers
 		required_missions = { HAN_support_trade }
 		position = 16
-		provinces_to_highlight = {
-		}
 		trigger = {
+			monthly_income = 50
+			NOT = { num_of_loans = 1 }
+			NOT = { inflation = 0.1 }
 		}
 		effect = {
+			country_event = { id = ME_Hannover_Events.6 }
 		}
 	}
 }
@@ -691,10 +1030,76 @@ HAN_missions_5 = {
 		required_missions = { HAN_westphalia }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = north_rhine_area
+				area = lower_rhineland_area
+				area = palatinate_area
+				area = hesse_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = north_rhine_area
+					area = lower_rhineland_area
+					area = palatinate_area
+					area = hesse_area
+				}
+				value = 13
+			}
 		}
 		effect = {
+			1876 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 25
+					key = HAN_down_the_weser
+				}
+			}
+			alsace_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_rhineland_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_swabia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_swabia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			franconia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_franconia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -703,10 +1108,47 @@ HAN_missions_5 = {
 		required_missions = { HAN_rhineland }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = upper_rhineland_area
+				area = alsace_area
+				area = lower_swabia_area
+				area = upper_swabia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = upper_rhineland_area
+					area = alsace_area
+					area = lower_swabia_area
+					area = upper_swabia_area
+				}
+				value = 10
+			}
 		}
 		effect = {
+			east_bavaria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_bavaria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_bavaria_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -715,6 +1157,8 @@ HAN_missions_5 = {
 		required_missions = { }
 		position = 8
 		provinces_to_highlight = {
+			owned_by = ROOT
+			unrest = 0
 		}
 		trigger = {
 			stability = 3
@@ -730,10 +1174,56 @@ HAN_missions_5 = {
 		required_missions = { HAN_salic_law }
 		position = 9
 		provinces_to_highlight = {
+			owner = {
+				NOT = { tag = ROOT }
+				is_elector = yes
+				prestige = ROOT
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					is_elector = yes
+				}
+				is_elector = yes
+			}
+			else = {
+				OR = {
+					emperor = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					is_emperor = yes
+				}
+				NOT = { num_of_electors = 7 }
+				all_elector = {
+					NOT = { prestige = ROOT }
+				}
+			}		
 		}
 		effect = {
+			if = {
+				limit = {
+					NOT = { is_elector = yes }
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					elector = yes
+				}
+				else = {
+					emperor = {
+						country_event = { id = ME_Hannover_Events.8 }
+					}
+				}
+			} 
+			add_country_modifier = {
+				name = HAN_electoral_dignity
+				duration = 7300
+			}
 		}
 	}
 	
@@ -744,8 +1234,41 @@ HAN_missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					exists = GBR
+				}
+				total_development = GBR
+				army_strength = {
+					who = GBR
+					value = 2
+				}
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				total_development = ENG
+				army_strength = {
+					who = ENG
+					value = 2
+				}
+			}
+			else = {
+				army_size = 40
+				num_of_transport = 20
+			}
 		}
 		effect = {
+			custom_tooltip = HAN_if_a_GBR_or_ENG_nation_exists
+			custom_tooltip = HAN_perma_claims_on_ENG_and_GBR_core_land
+			home_counties_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -756,8 +1279,18 @@ HAN_missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				senior_union_with = ENG
+				senior_union_with = GBR
+				owns_core_province = 236
+			}
 		}
 		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = HAN_diplo_bonus_three
+				duration = -1
+			}
 		}
 	}
 	
@@ -768,8 +1301,20 @@ HAN_missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_light_ship = 10
+			45 = {
+				has_most_province_trade_power = ROOT
+			}
 		}
-		effect = {
+		effect = {	
+			add_years_of_income = 1
+			custom_tooltip = HAN_if_we_have_trader_cut_some_dip_cost
+			tooltip = {
+				add_country_modifier = {
+					name = HAN_dip_cost_cut
+					duration = 7300
+				}
+			}
 		}
 	}
 }
