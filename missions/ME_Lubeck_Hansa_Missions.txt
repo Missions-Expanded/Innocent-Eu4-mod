@@ -35,6 +35,10 @@ HNS_missions_1 = {
 		}
 		effect = {
 			#LAWS OF WISBUY
+			add_country_modifier = {
+				name = HNS_laws_of_visby
+				duration = -1
+			}
 		}
 	}
 	
@@ -43,8 +47,17 @@ HNS_missions_1 = {
 		required_missions = { }
 		position = 10
 		trigger = {
+			OR = {
+				num_of_heavy_ship = 10
+				heavy_ship_fraction = 0.1
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HNS_navy_ready_for_high_seas_ventures
+				duration = 7300
+			}
+			create_explorer = { tradition = 60 } #Adam Brand?!
 		}
 	}
 	
@@ -52,9 +65,24 @@ HNS_missions_1 = {
 		icon = medici_bank_ledgers
 		required_missions = { HNS_high_seas_navy HNS_combat_the_decline }
 		position = 11
+		provinces_to_highlight = {
+			area = newfoundland_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
+			newfoundland_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = {
+						has_dlc = "Rights of Man"
+					}
+					has_production_building_trigger = yes
+				}
+			}
 		}
 		effect = {
+			#Event - where to import fishe? Scania or some other port? (Yarmouth?)
 		}
 	}
 	
@@ -62,10 +90,44 @@ HNS_missions_1 = {
 		icon = medici_bank_ledgers
 		required_missions = { HNS_newfoundland }
 		position = 12
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 1516
+					ROOT = {
+						NOT = {
+							1516 = {
+								trade_share = {
+									country = ROOT
+									share = 33
+								}
+							}
+						}
+					}
+				}
+				AND = {
+					colonial_region = colonial_eastern_america
+					province_trade_power = 10
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
 		trigger = {
-			#Own new york, control caribbean trade
+			1516 = {
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				colonial_region = colonial_eastern_america
+				province_trade_power = 20
+				value = 3
+			}
 		}
 		effect = {
+			#hanseatic merchants in america price change event
+			#furs
 		}
 	}
 	
@@ -74,8 +136,18 @@ HNS_missions_1 = {
 		required_missions = { HNS_coast_of_ivory }
 		position = 13
 		trigger = {
+			1466 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HNS_monopolized_imports
+				duration = -1
+			}
 		}
 	}
 	
@@ -114,8 +186,26 @@ HNS_missions_2 = {
 		required_missions = { HNS_restore_trade_links }
 		position = 6
 		trigger = {
+			OR = {
+				AND = {
+					45 = {
+						trade_share = {
+							country = ROOT
+							share = 25
+						}
+					}
+					1926 = {
+						trade_share = {
+							country = ROOT
+							share = 25
+						}
+					}
+				}
+				num_of_galley = 10
+			}
 		}
 		effect = {
+			#Cores on the Baltic Kontors?
 		}
 	}
 	
@@ -144,6 +234,7 @@ HNS_missions_2 = {
 		required_missions = { HNS_economic_might }
 		position = 10
 		trigger = {
+			#Privateer colonials, trade power colonial, trade power englis hchannel
 		}
 		effect = {
 		}
@@ -194,6 +285,8 @@ HNS_missions_2 = {
 		required_missions = { HNS_krantor }
 		position = 17
 		trigger = {
+			num_of_transport = 40
+			num_of_light_ship = 40
 		}
 		effect = {
 		}
@@ -224,8 +317,10 @@ HNS_missions_3 = {
 		required_missions = { }
 		position = 5
 		trigger = {
+			num_of_light_ship = 15
 		}
 		effect = {
+			country_event = { id = ME_Hansa_Events.1 } #Initiate Kontors
 		}
 	}
 	
@@ -254,6 +349,7 @@ HNS_missions_3 = {
 		required_missions = { HNS_economic_might }
 		position = 11
 		trigger = {
+			num_of_merchants = 10
 		}
 		effect = {
 		}
@@ -274,8 +370,14 @@ HNS_missions_3 = {
 		required_missions = { }
 		position = 14
 		trigger = {
+			45 = {
+				has_courthouse_building_trigger = yes
+			}
 		}
 		effect = {
+			45 = {
+				add_or_upgrade_courthouse_building = yes
+			}
 		}
 	}
 	
