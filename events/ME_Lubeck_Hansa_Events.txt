@@ -13,64 +13,31 @@ country_event = { #Establish Outposts
 	
 	immediate = {
 		hidden_effect = {
+			set_global_flag = HNS_age_of_hansa
+			set_country_flag = HNS_age_of_hansa_country
 			ROOT = {
 				save_global_event_target_as = target_HANSA
 			}
 			33 = {
-				add_province_triggered_modifier = HNS_kontor 
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 			43 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 			25 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 			38 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 			236 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 			90 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 			23 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
+				create_hanseatic_outpost = yes
 			}
 		}
 	}
@@ -455,17 +422,7 @@ country_event = { #Hanseatic Fish Route
 				name = HNS_yarmouth_market
 				duration = -1
 			}
-		}
-		custom_tooltip = HNS_make_yarmouth_a_kontor
-		hidden_effect = {
-			1860 = {
-				add_province_triggered_modifier = HNS_kontor
-				add_permanent_province_modifier = {
-					name = HNS_icon_gray
-					duration = -1
-					hidden = yes
-				}
-			}
+			create_hanseatic_outpost = yes
 		}
 	}
 	
@@ -586,11 +543,89 @@ country_event = { #North Sea - Conquest or Peace?
 	}
 }
 
+country_event = { #Decline of the Hansa
+	id = ME_Hansa_Events.8
+	title = ME_Hansa_Events.8.t
+	desc = ME_Hansa_Events.8.d
+	picture = SHIP_SAILING_eventPicture
 
+	trigger = {
+		has_country_flag = HNS_age_of_hansa_country
+		NOT = { has_country_flag = HNS_disable_decline }
+		has_institution = colonialism
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		hidden_effect = {
+			every_province = {
+				limit = {
+					OR = {
+						has_province_flag = HNS_activated
+						has_province_flag = HNS_deactivated
+					}
+					owner = { 
+						NOT = { tag = ROOT }
+					}
+				}
+				owner = {
+					add_opinion = {
+						who = ROOT
+						modifier = hns_hansa_decline
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.8.a
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			has_institution = colonialism
+		}
+		highlight = yes
+		
+		custom_tooltip = HNS_lose_10_opinion_with_all_contractors
+	}
+	
+}
 
+country_event = { #Growth of Lothian
+	id = ME_Hansa_Events.9
+	title = ME_Hansa_Events.9.t
+	desc = ME_Hansa_Events.9.d
+	picture = SHIP_SAILING_eventPicture
 
-
-
+	trigger = {
+		has_country_flag = HNS_age_of_hansa_country
+		is_year = 1600
+		has_institution = colonialism
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = ME_Hansa_Events.9.a
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			has_institution = colonialism
+			is_year = 1600
+		}
+		highlight = yes
+		
+		248 = { create_hanseatic_outpost = yes }
+	}
+}
 
 
 
