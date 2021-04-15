@@ -5,10 +5,10 @@ mantua_mission_1 = {
 	potential = {
 		OR = {
 			tag = MAN
-			AND = {
-				was_tag = MAN
-				#tag = ITA
-			}
+			#AND = {
+			#	was_tag = MAN
+			#	tag = ITA
+			#}
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -84,9 +84,12 @@ mantua_mission_1 = {
 		icon = control_the_means_of_transaction
 		required_missions = { man_po_valley }
 		position = 6
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			venetia_area = {
-				NOT = { province_id = 112 }
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -100,14 +103,21 @@ mantua_mission_1 = {
 		icon = nuova_promissione_ducale
 		required_missions = { man_conquest_venetia }
 		position = 7
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			owns = 112
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VEN }
 				overlord_of = VEN
 				VEN = {
 					NOT = {
-						any_province { region = italy_region }
+						any_province = { region = italy_region }
 					}
 				}
 			}
@@ -147,9 +157,12 @@ mantua_mission_2 = {
 			calc_true_if = {
 				amount = 2
 				all_country = {
-					army_strength = {
-						who = ROOT
-						value = 1.5
+					OR = {
+						army_strength = {
+							who = ROOT
+							value = 1.5
+						}
+						total_development = ROOT
 					}
 					OR = {
 						alliance_with = ROOT
@@ -449,9 +462,12 @@ mantua_mission_3 = {
 		icon = all_roads_lead_to_milan
 		required_missions = { man_po_valley }
 		position = 6
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			lombardy_area = {
-				NOT = { province_id = 104 }
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -465,11 +481,25 @@ mantua_mission_3 = {
 		icon = italian_riches
 		required_missions = { man_war_lombardy }
 		position = 7
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			owns = 104
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = MLO }
 				overlord_of = MLO
+				MLO = {
+					NOT = {
+						any_province = {
+							region = italy_region
+						}
+					}
+				}
 			}
 		}
 		effect = {
@@ -825,9 +855,18 @@ mantua_mission_5 = {
 		position = 4
 		trigger = {
 			PAP = {
-				has_opinion = {
-					who = ROOT
-					value = 125
+				OR = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+					is_rival = ROOT
+					NOT = {
+						has_opinion = {
+							who = ROOT
+							value = -50
+						}
+					}
 				}
 			}
 		}
