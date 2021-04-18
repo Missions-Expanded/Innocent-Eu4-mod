@@ -468,7 +468,7 @@ PRU_missions_2_2 = {
 					all_ally = {
 						is_great_power = yes
 					}
-					amount = 2
+					amount = 3
 				}
 			}
 			else = {
@@ -476,9 +476,10 @@ PRU_missions_2_2 = {
 					all_ally = {
 						total_development = 500
 					}
-					amount = 2
+					amount = 3
 				}
 			}
+			has_dip_advisor_3 = yes
 		}
 		effect = {
 			add_dip_power = 100
@@ -496,16 +497,23 @@ PRU_missions_2_2 = {
 			province_id = 41
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				AND = {
-					NOT = { development = 24 }
-					NOT = { has_tax_building_trigger = yes }
-				}
+				NOT = { development = 24 }
+				NOT = { has_tax_building_trigger = yes }
 			}
 		}
 		trigger = {
 			41 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				OR = {
+				if = {
+					limit = {
+						ai = yes
+					}
+					OR = {
+						development = 24
+						has_tax_building_trigger = yes
+					}
+				}
+				else = {
 					development = 24
 					has_tax_building_trigger = yes
 				}
@@ -590,16 +598,29 @@ PRU_missions_2_2 = {
 						area = north_westphalia_area
 					}
 					OR = {
-						NOT = { owned_by = ROOT }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 						NOT = {
-							development_in_provinces = {
-								OR = {
-									area = north_rhine_area
-									area = lower_rhineland_area
-									area = westphalia_area
-									area = north_westphalia_area
+							OR = {
+								development_in_provinces = {
+									OR = {
+										area = north_rhine_area
+										area = lower_rhineland_area
+										area = westphalia_area
+										area = north_westphalia_area
+									}
+									value = 200
 								}
-								value = 200
+								any_subject_country = {
+									development_in_provinces = {
+										OR = {
+											area = north_rhine_area
+											area = lower_rhineland_area
+											area = westphalia_area
+											area = north_westphalia_area
+										}
+										value = 100
+									}
+								}
 							}
 						}
 					}
@@ -611,27 +632,43 @@ PRU_missions_2_2 = {
 					}
 					OR = {
 						NOT = { has_production_building_trigger = yes }
-						NOT = { owned_by = ROOT }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 					}
 				}
 			}
 		}
 		trigger = {
-			development_in_provinces = {
-				OR = {
-					area = north_rhine_area
-					area = lower_rhineland_area
-					area = westphalia_area
-					area = north_westphalia_area
+			OR = {
+				development_in_provinces = {
+					OR = {
+						area = north_rhine_area
+						area = lower_rhineland_area
+						area = westphalia_area
+						area = north_westphalia_area
+					}
+					value = 200
 				}
-				value = 200
+				custom_trigger_tooltip = {
+					tooltip = PRU_100_dev_in_rhineland
+					any_subject_country = {
+						development_in_provinces = {
+							OR = {
+								area = north_rhine_area
+								area = lower_rhineland_area
+								area = westphalia_area
+								area = north_westphalia_area
+							}
+							value = 100
+						}
+					}
+				}
 			}
 			69 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				has_production_building_trigger = yes
 			}
 			83 = {
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 				has_production_building_trigger = yes
 			}
 		}
@@ -656,18 +693,36 @@ PRU_missions_2_2 = {
 			}
 			custom_tooltip = PRU_rhenish_provs_get_free_manus
 			hidden_effect = {
-				every_owned_province = {
+				if = {
 					limit = {
-						has_manufactory_trigger = yes
-						OR = {
-							area = westphalia_area
-							area = north_westphalia_area
-							area = lower_rhineland_area
-							area = north_rhine_area
+						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+							has_manufactory_trigger = yes
+							OR = {
+								area = westphalia_area
+								area = north_westphalia_area
+								area = lower_rhineland_area
+								area = north_rhine_area
+							}
+							value = 10
 						}
 					}
-					ROOT = {
-						add_years_of_income = 0.2
+					add_years_of_income = 2
+				}
+				else = {
+					every_province = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							has_manufactory_trigger = yes
+							OR = {
+								area = westphalia_area
+								area = north_westphalia_area
+								area = lower_rhineland_area
+								area = north_rhine_area
+							}
+						}
+						ROOT = {
+							add_years_of_income = 0.2
+						}
 					}
 				}
 			}
@@ -815,16 +870,19 @@ PRU_missions_3 = {
 				}
 				OR = {
 					prestige = 50
-					army_size_percentage = 0.8					
+					army_size_percentage = 0.9					
 					army_professionalism = 0.2
+					army_size = 30
 				}
 			}
 			else = {
 				OR = {
 					prestige = 50
-					army_size_percentage = 0.8					
+					army_size = 30
+					army_size_percentage = 0.9					
 				}
 			}
+			total_development = 300
 		}
 		effect = {
 			country_event = { id = ME_Prussia_Events.29 }
@@ -1589,7 +1647,7 @@ PRU_missions_4 = {
 				custom_tooltip = PRU_GIVE_OUT_MANPOWER_DEV_20_YES
 			}
 			else = {
-				custom_tooltip = PRU_GIVE_OUT_MANPOWER_DEV_20
+				custom_tooltip = PRU_GIVE_OUT_MANPOWER_DEV_20 #now 10
 			}
 			hidden_effect = { #good lord
 				if = { #forgive me
@@ -1644,51 +1702,6 @@ PRU_missions_4 = {
 						}
 						add_base_manpower = 1
 					}
-					random_owned_province = {
-						limit = {
-							OR = {
-								trade_goods = grain
-								trade_goods = livestock
-							}
-						}
-						add_base_manpower = 1
-					}
-					random_owned_province = { #7
-						limit = {
-							OR = {
-								trade_goods = grain
-								trade_goods = livestock
-							}
-						}
-						add_base_manpower = 1
-					}
-					random_owned_province = {
-						limit = {
-							OR = {
-								trade_goods = grain
-								trade_goods = livestock
-							}
-						}
-						add_base_manpower = 1
-					}
-					random_owned_province = { #9
-						limit = {
-							OR = {
-								trade_goods = grain
-								trade_goods = livestock
-							}
-						}
-						add_base_manpower = 1
-					}
-					random_owned_province = {
-						limit = {
-							OR = {
-								trade_goods = grain
-								trade_goods = livestock
-							}
-						}
-						add_base_manpower = 1
-					}
 				} #another 10 times
 				random_owned_province = { #1
 					limit = {
@@ -1735,52 +1748,7 @@ PRU_missions_4 = {
 					}
 					add_base_manpower = 1
 				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							trade_goods = grain
-							trade_goods = livestock
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = { #7
-					limit = {
-						OR = {
-							trade_goods = grain
-							trade_goods = livestock
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							trade_goods = grain
-							trade_goods = livestock
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = { #9
-					limit = {
-						OR = {
-							trade_goods = grain
-							trade_goods = livestock
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							trade_goods = grain
-							trade_goods = livestock
-						}
-					}
-					add_base_manpower = 1
-				}
-		}
+			}
 		}
 	}
 	
@@ -1996,6 +1964,7 @@ PRU_missions_4 = {
 				NOT = { owned_by = ROOT }
 				NOT = { has_trade_building_trigger = yes }
 				local_autonomy_above_min = 10
+				NOT = { num_of_times_improved = 10 }
 			}
 		}
 		trigger = {
@@ -2003,16 +1972,19 @@ PRU_missions_4 = {
 			OR = {
 				44 = {
 					owned_by = ROOT
+					num_of_times_improved = 10
 					has_trade_building_trigger = yes
 					NOT = { local_autonomy_above_min = 10 }
 				}
 				1858 = {
 					owned_by = ROOT
+					num_of_times_improved = 10
 					has_trade_building_trigger = yes
 					NOT = { local_autonomy_above_min = 10 }
 				}
 				43 = {
 					owned_by = ROOT
+					num_of_times_improved = 10
 					has_trade_building_trigger = yes
 					NOT = { local_autonomy_above_min = 10 }
 				}

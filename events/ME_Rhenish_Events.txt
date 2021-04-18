@@ -189,6 +189,7 @@ country_event = {
 		event_target:Rhineland_target_1 = {
 			country_event = { id = ME_Rhenish_Events.5 }
 		}
+		custom_tooltip = RHN_if_they_deny
 	}
 	
 	option = {
@@ -198,7 +199,7 @@ country_event = {
 		
 		custom_tooltip = RHN_offer_to_sell_optics_2
 		tooltip = {
-			event_target:Rhineland_target_1 = {
+			event_target:Rhineland_target_2 = {
 				add_country_modifier = {
 					name = RHN_hessian_optics
 					duration = 9125
@@ -209,6 +210,7 @@ country_event = {
 		event_target:Rhineland_target_2 = {
 			country_event = { id = ME_Rhenish_Events.5 }
 		}
+		custom_tooltip = RHN_if_they_deny
 	}
 	
 	option = {
@@ -218,7 +220,7 @@ country_event = {
 		
 		custom_tooltip = RHN_offer_to_sell_optics_3
 		tooltip = {
-			event_target:Rhineland_target_1 = {
+			event_target:Rhineland_target_3 = {
 				add_country_modifier = {
 					name = RHN_hessian_optics
 					duration = 9125
@@ -604,41 +606,49 @@ country_event = {
 		ai_chance = { factor = 1 }
 		
 		82 = {
+			set_province_flag = RHN_coal_debuff
 			change_trade_goods = coal
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
 				}
-				add_province_modifier = {
-					name = RHN_coal_debuff_tge #-50% trade value 8 ducats -> 4
-					duration = 36500
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff_tge #-20% trade value 5 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
 				}
 			}
 			else = {
-				add_province_modifier = {
-					name = RHN_coal_debuff #-60% trade value 8 ducats -> 4
-					duration = 36500
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff #-60% trade value 10 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
 				}
 			}
 		}
 		1878 = {
+			set_province_flag = RHN_coal_debuff
 			change_trade_goods = coal
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
 				}
-				add_province_modifier = {
-					name = RHN_coal_debuff_tge #-50% trade value 8 ducats -> 4
-					duration = 36500
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff_tge #-20% trade value 5 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
 				}
 			}
 			else = {
-				add_province_modifier = {
-					name = RHN_coal_debuff #-60% trade value 8 ducats -> 4
-					duration = 36500
+				add_permanent_province_modifier = {
+					name = RHN_coal_debuff #-60% trade value 10 ducats -> 4
+					desc = RHN_until_enlightenment
+					duration = -1
 				}
 			}
 		}
+		set_country_flag = RHN_cant_get_coal
+		custom_tooltip = RHN_no_trading_in_bonus
 	}
 	
 	option = {
@@ -671,31 +681,33 @@ country_event = {
 	major = yes
 	
 	immediate = {
-		if = {
-			limit = {
-				is_expanded_mod_active = { mod = trade_goods }
-			}
-			random_owned_province = {
+		hidden_effect = {
+			if = {
 				limit = {
-					trade_goods = jewellery
+					is_expanded_mod_active = { mod = trade_goods }
 				}
-				save_event_target_as = diamond_province
+				random_owned_province = {
+					limit = {
+						trade_goods = jewellery
+					}
+					save_event_target_as = diamond_province
+				}
 			}
-		}
-		else = {
-			random_owned_province = {
+			else = {
+				random_owned_province = {
+					limit = {
+						trade_goods = gold
+						development = 30
+					}
+					save_event_target_as = diamond_province
+				}
+			}
+			random_province = {
 				limit = {
-					trade_goods = gold
-					development = 30
+					has_province_modifier = diamond_district
 				}
-				save_event_target_as = diamond_province
+				save_event_target_as = old_diamond_province
 			}
-		}
-		random_province = {
-			limit = {
-				has_province_modifier = diamond_district
-			}
-			save_event_target_as = old_diamond_province
 		}
 	}
 	
@@ -866,24 +878,22 @@ country_event = {
 	}
 }
 
-country_event = {
+province_event = {
 	id = ME_Rhenish_Events.13 #Speed up bell
 	title = ME_Rhenish_Events.13.t
 	desc = ME_Rhenish_Events.13.d
 	picture = RELIGION_eventPicture
 	
 	mean_time_to_happen = {
-		months = 60
+		months = 1
 	}
+	
+	hidden = yes
+	
 	trigger = {
-		has_country_flag = RHN_bell
-		any_owned_province = {
-			trade_goods = bronze
-			base_production = 5
-		}
-		any_owned_province = {
-			has_construction = canal
-		}
+		has_province_flag = RHN_coal_debuff
+		trade_goods = coal
+		has_institution = enlightenment
 	}
 	
 	option = {
@@ -891,38 +901,9 @@ country_event = {
 		
 		ai_chance = { factor = 5 }
 		
-		if = {
-			limit = {
-				any_owned_province = {
-					trade_goods = bronze
-					base_production = 5
-				}
-				any_owned_province = {
-					has_construction = canal
-				}
-			}
-			random_owned_province = {
-				limit = {
-					has_construction = canal
-				}
-				add_construction_progress = 0.1
-			}
-			random_owned_province = {
-				limit = {
-					trade_goods = bronze
-					base_production = 5
-				}
-				add_base_production = -4
-			}
-		}
-	}
-	
-	option = {
-		name = "ME_Rhenish_Events.13.b" #Frankfurt
-		
-		ai_chance = { factor = 0 } #
-		
-		add_adm_power = 50
+		clr_province_flag = RHN_coal_debuff
+		remove_province_modifier = RHN_coal_debuff
+		remove_province_modifier = RHN_coal_debuff_tge
 	}
 	
 }
@@ -1308,22 +1289,25 @@ country_event = {
 	is_triggered_only = yes
 	
 	immediate = {
-		random_owned_province = {
-			save_event_target_as = estate_industrial_event_target
-		}
-		random_owned_province = {
-			limit = {
-				development = 10
+		hidden_effect = {
+			random_owned_province = {
+				save_event_target_as = estate_industrial_event_target
 			}
-			save_event_target_as = estate_industrial_event_target
-		}
-		random_owned_province = {
-			limit = {
-				development = 20
+			random_owned_province = {
+				limit = {
+					development = 10
+				}
+				save_event_target_as = estate_industrial_event_target
 			}
-			save_event_target_as = estate_industrial_event_target
+			random_owned_province = {
+				limit = {
+					development = 20
+				}
+				save_event_target_as = estate_industrial_event_target
+			}
 		}
 	}
+	
 	option = {
 		name = "estate_industrial_events.8.a"
 		
@@ -1378,20 +1362,19 @@ country_event = {
 		
 		ai_chance = { factor = 33 }
 		
-		
 		event_target:estate_industrial_event_target = {
 			add_province_modifier = {
 				name = RHN_industrial_park
 				duration = 5475
 			}
-			change_estate_land_share = {
-				estate = estate_burghers
-				share = -3
-			}
-			change_estate_land_share = {
-				estate = estate_industrial
-				share = 3
-			}
+		}
+		change_estate_land_share = {
+			estate = estate_burghers
+			share = -3
+		}
+		change_estate_land_share = {
+			estate = estate_industrial
+			share = 3
 		}
 	}
 }
@@ -1806,6 +1789,18 @@ country_event = {
 		}
 	}
 	
+	after = {
+		if = {
+			limit = {
+				has_country_flag = RHN_Blast_furnaces_decision
+			}
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+		else = {
+			set_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
 	option = {
 		name = ME_Rhenish_Events.16.a.back
 		highlight = yes
@@ -1841,6 +1836,8 @@ country_event = {
 				id = ME_Rhenish_Events.17
 				days = 0
 			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
 		}
 	}
 	
@@ -1878,6 +1875,8 @@ country_event = {
 				id = ME_Rhenish_Events.17
 				days = 0
 			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
 		}
 	}
 	
@@ -2253,6 +2252,18 @@ country_event = {
 		}
 	}
 	
+	after = {
+		if = {
+			limit = {
+				has_country_flag = RHN_Blast_furnaces_decision
+			}
+			clr_country_flag = RHN_Blast_furnaces_decision
+		}
+		else = {
+			set_country_flag = RHN_Blast_furnaces_decision
+		}
+	}
+	
 	option = {
 		name = ME_Rhenish_Events.16.a.back
 		highlight = yes
@@ -2288,6 +2299,8 @@ country_event = {
 				id = ME_Rhenish_Events.16
 				days = 0
 			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
 		}
 	}
 	
@@ -2325,6 +2338,8 @@ country_event = {
 				id = ME_Rhenish_Events.16
 				days = 0
 			}
+			
+			clr_country_flag = RHN_Blast_furnaces_decision
 		}
 	}
 	
