@@ -12,13 +12,58 @@ POR_missions_1 = {
 		position = 1
 		required_missions = { }
 		provinces_to_highlight = {
-			#
+			OR = {
+				province_id = 227
+				province_id = 231
+				province_id = 232
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
 		}
 		trigger = {
-			#
+			num_of_cardinals = 3
+			227 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			231 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			232 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			NOT = { is_at_war = yes }
+			NOT = { has_any_disaster = yes }
+			stability = 1
+			religion_group = christian
 		}
 		effect = {
-			#
+			add_estate_loyalty = {
+				estate = estate_church
+				loyalty = 10
+			}
+			227 = {
+				add_province_modifier = {
+					name = por_helping_poor
+					duration = 5475 #15 years
+				}
+			}
+			231 = {
+				add_province_modifier = {
+					name = por_helping_poor
+					duration = 5475 #15 years
+				}
+			}
+			232 = {
+				add_province_modifier = {
+					name = por_helping_poor
+					duration = 5475 #15 years
+				}
+			}
 		}
 	}
 	por_virtous_mission = {
@@ -29,13 +74,36 @@ POR_missions_1 = {
 			por_para_estreito
 		}
 		provinces_to_highlight = {
-			#
+			OR = {
+				province_id = 334
+				province_id = 1751
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { religion = catholic }
+			}
 		}
 		trigger = {
-			#
+			religion = catholic
+			334 = {
+				owned_by = ROOT
+				religion = catholic
+			}
+			1751 = {
+				owned_by = ROOT
+				religion = catholic
+			}
 		}
 		effect = {
-			#
+			add_papal_influence = 10
+			334 = {
+				if = {
+					limit = {
+						NOT = { has_building = cathedral }
+					}
+					add_building = cathedral
+				}
+			}
 		}
 	}
 	por_propagar_fe = {
@@ -43,13 +111,87 @@ POR_missions_1 = {
 		position = 4
 		required_missions = { por_continent_atlantic }
 		provinces_to_highlight = {
-			#
+			country_or_non_sovereign_subject_holds = ROOT
+			region = brazil_region
+			OR = {
+				AND = {
+					NOT = { religion = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 15
+								region = brazil_region
+								religion = ROOT
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { has_tax_building_trigger = yes }
+					ROOT = {
+						if = {
+							limit = { has_dlc = "Rights of Man" }
+							NOT = {
+								num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+									value = 10
+									region = brazil_region
+									has_tax_building_trigger = yes
+								}
+							}
+						}
+						else = {
+							NOT = {
+								num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+									value = 2
+									region = brazil_region
+									has_tax_building_trigger = yes
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
-			#
+			OR = {
+				religion = reformed
+				religion = protestant
+				religion = catholic
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 15
+				region = brazil_region
+				religion = ROOT
+			}
+			any_subject_country = {
+				is_colonial_nation = yes
+				capital_scope = { region = brazil_region }
+				num_of_owned_provinces_with = {
+					value = 15
+					region = brazil_region
+				}
+			}
+			if = {
+				limit = { has_dlc = "Rights of Man" }
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 10
+					region = brazil_region
+					has_tax_building_trigger = yes
+				}
+			}
+			else = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 2
+					region = brazil_region
+					has_tax_building_trigger = yes
+				}
+			}
 		}
 		effect = {
-			#
+			add_country_modifier = {
+				name = por_world_faith
+				duration = -1 #wip
+			}
 		}
 	}
 	por_leal_forte = {
@@ -59,14 +201,44 @@ POR_missions_1 = {
 			por_propagar_fe
 			por_rio_ouro
 		}
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			if = {
+				limit = { has_dlc = "Rights of Man" }
+				any_subject_country = {
+					is_colonial_nation = yes
+					capital_scope = { region = brazil_region }
+					NOT = { liberty_desire = 30 }
+					total_development = ROOT
+					any_owned_province = {
+						region = brazil_region
+						development = 10
+					}
+				}
+			}
+			else = {
+				any_subject_country = {
+					is_colonial_nation = yes
+					capital_scope = { region = brazil_region }
+					NOT = { liberty_desire = 30 }
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+					army_size = 40
+				}
+				OR = {
+					advisor = colonial_governor
+					advisor = diplomat
+					advisor = statesman
+				}
+			}
 		}
 		effect = {
-			#
+			country_event = { #The Royal Decision
+				id = ME_Portugal_Events.1
+				days = 0
+				tooltip = por_leal_forte_tt
+			}
 		}
 	}
 	por_ciudada_ruinas = {
@@ -74,13 +246,32 @@ POR_missions_1 = {
 		position = 6
 		required_missions = { }
 		provinces_to_highlight = {
-			#
+			province_id = 227
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+				has_province_modifier = earthquake
+			}
 		}
 		trigger = {
-			#
+			has_country_flag = por_earthquake_227
+			227 = {
+				owned_by = ROOT
+				development = 25
+				NOT = { has_province_modifier = earthquake }
+			}
 		}
 		effect = {
-			#
+			227 = {
+				add_province_modifier = {
+					name = por_earthquake_investments
+					duration = 5475 #15 years
+				}
+				if = {
+					limit = { has_dlc = "Mandate of Heaven" }
+					add_prosperity = 25
+				}
+			}
 		}
 	}
 	por_cities_home = {
@@ -88,13 +279,36 @@ POR_missions_1 = {
 		position = 7
 		required_missions = { por_ciudada_ruinas }
 		provinces_to_highlight = {
-			#
+			OR = {
+				province_id = 231
+				province_id = 232
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 20 }
+				NOT = { has_production_building_trigger = yes }
+			}
 		}
 		trigger = {
-			#
+			231 = {
+				owned_by = ROOT
+				development = 20
+				has_production_building_trigger = yes
+			}
+			232 = {
+				owned_by = ROOT
+				development = 20
+				has_production_building_trigger = yes
+			}
 		}
 		effect = {
-			#
+			every_owned_province = {
+				limit = { continent = europe }
+				add_province_modifier = {
+					name = por_invested_cities
+					duration = 5475 #15 years
+				}
+			}
 		}
 	}
 	por_vinho_portugues = {
@@ -102,13 +316,36 @@ POR_missions_1 = {
 		position = 8
 		required_missions = { por_cities_home }
 		provinces_to_highlight = {
-			#
+			owned_by = ROOT
+			trade_goods = wine
+			OR = {
+				NOT = { has_production_building_trigger = yes }
+				NOT = { has_building = farm_estate }
+			}
 		}
 		trigger = {
-			#
+			development_in_provinces = {
+				value = 20
+				trade_goods = wine
+			}
+			all_owned_province = {
+				OR = {
+					NOT = { trade_goods = wine }
+					AND = {
+						has_production_building_trigger = yes
+						has_building = farm_estate
+					}
+				}
+			}
 		}
 		effect = {
-			#
+			every_owned_province = {
+				limit = { trade_goods = wine }
+				add_province_modifier = {
+					name = por_wine_production
+					duration = 9125 #25 years
+				}
+			}
 		}
 	}
 	por_capital_comercio = {
@@ -119,10 +356,16 @@ POR_missions_1 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Prov 227 has a lvl 3 CoT.
+			# or
+			# 1. prov 227 has has 30 local trade power
+			# 2. Portugal has atleast 50% of the tradepower in the Sevilla trade node
+			# 3.Prov 227 has atleast 35 dev.
+			# 4. Own prov 227
 		}
 		effect = {
-			#
+			# Bonus; Prov 227 gets local modifier "Trade capital of the world" Granting +50%  local tax modifier and +5% trade efficiency  
+			# and +15% naval force limit modifier (forever)
 		}
 	}
 	por_vontade_rei = {
@@ -133,10 +376,12 @@ POR_missions_1 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Has atleast 50 absolutism.
+			# 2. Has atleast 35% crownlands.
+			# 3. Stability atleast 2
 		}
 		effect = {
-			#
+			#Bonus; Gain modifier "Royal absolutism" granting Monarch power cost -5% and -0.05 autonomy change for 20 years.
 		}
 	}
 }
