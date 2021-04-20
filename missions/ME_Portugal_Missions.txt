@@ -234,7 +234,7 @@ POR_missions_1 = {
 			}
 		}
 		effect = {
-			country_event = { #The Royal Decision
+			country_event = { #A Royal Decree
 				id = ME_Portugal_Events.1
 				days = 0
 				tooltip = por_leal_forte_tt
@@ -353,35 +353,55 @@ POR_missions_1 = {
 		position = 9
 		required_missions = { por_vinho_portugues }
 		provinces_to_highlight = {
-			#
+			province_id = 227
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { province_has_center_of_trade_of_level = 3 }
+					NOT = { province_trade_power = 30 }
+				}
+				NOT = { development = 35 }
+			}
 		}
 		trigger = {
-			# 1. Prov 227 has a lvl 3 CoT.
-			# or
-			# 1. prov 227 has has 30 local trade power
-			# 2. Portugal has atleast 50% of the tradepower in the Sevilla trade node
-			# 3.Prov 227 has atleast 35 dev.
-			# 4. Own prov 227
+			227 = {
+				owned_by = ROOT
+				OR = {
+					province_has_center_of_trade_of_level = 3
+					province_trade_power = 30
+				}
+				development = 35
+			}
+			1293 = { #Sevilla
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
 		}
 		effect = {
-			# Bonus; Prov 227 gets local modifier "Trade capital of the world" Granting +50%  local tax modifier and +5% trade efficiency  
-			# and +15% naval force limit modifier (forever)
+			227 = {
+				add_province_modifier = {
+					name = por_trade_capital
+					duration = -1
+				}
+			}
 		}
 	}
 	por_vontade_rei = {
 		icon = icon_wip
 		position = 10
 		required_missions = { por_treacherous_nobility }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			# 1. Has atleast 50 absolutism.
-			# 2. Has atleast 35% crownlands.
-			# 3. Stability atleast 2
+			absolutism = 50
+			crown_land_share = 35
+			stability = 2
 		}
 		effect = {
-			#Bonus; Gain modifier "Royal absolutism" granting Monarch power cost -5% and -0.05 autonomy change for 20 years.
+			add_country_modifier = {
+				name = por_royal_absolutism
+				duration = 7300 #20 years
+			}
 		}
 	}
 }
