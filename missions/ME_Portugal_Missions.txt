@@ -418,14 +418,33 @@ POR_missions_2 = {
 		icon = icon_wip
 		position = 1
 		required_missions = { }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			navy_size_percentage = 1
+			OR = {
+				num_of_heavy_ship = 5
+				num_of_light_ship = 7
+			}
+			OR = {
+				num_of_admirals = 1
+				num_of_explorers = 1
+				num_of_generals = 1
+			}
+			army_size = 12
 		}
 		effect = {
-			#
+			334 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT	}
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = por_renewed_navy
+				duration = 3650 #10 years
+			}
 		}
 	}
 	por_para_estreito = {
@@ -433,27 +452,66 @@ POR_missions_2 = {
 		position = 2
 		required_missions = { por_preparar_aramadas }
 		provinces_to_highlight = {
-			#
+			province_id = 334
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			#
+			NOT = { is_at_war = yes }
+			owns = 334
+			religion = catholic
 		}
 		effect = {
-			#
+			334 = {
+				add_province_modifier = {
+					name = por_trade_investments
+					duration = 5475 #15 years
+				}
+			}
+			add_country_modifier = {
+				name = por_intensifying_conversion
+				duration = 3650 #10 years
+			}
 		}
 	}
 	por_continent_atlantic = {
 		icon = icon_wip
 		position = 3
 		required_missions = { por_encarar_mar }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 5
+				region = brazil_region
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 1
+				region = brazil_region
+				province_has_center_of_trade_of_level = 1
+			}
+			1531 = { #Brazil
+				is_strongest_trade_power = ROOT
+			}
 		}
 		effect = {
-			#
+			every_owned_province = {
+				limit = { region = brazil_region }
+				add_province_modifier = {
+					name = por_crown_investments
+					duration = 3650 #10 years
+				}
+			}
+			every_subject_country = {
+				limit = {
+					NOT = { subject_type = tributary_state }
+					any_owned_province = { region = brazil_region }
+				}
+				every_owned_province = {
+					limit = { region = brazil_region }
+					add_province_modifier = {
+						name = por_crown_investments
+						duration = 3650 #10 years
+					}
+				}
+			}
 		}
 	}
 	por_rio_ouro = {
@@ -461,13 +519,55 @@ POR_missions_2 = {
 		position = 4
 		required_missions = { por_continent_atlantic }
 		provinces_to_highlight = {
-			#
+			OR = {
+				AND = {
+					area = minas_gerais_area
+					owner = {
+						OR = {
+							NOT = { is_subject_of = ROOT }
+							NOT = { is_colonial_nation = yes }
+							capital_scope = {
+								NOT = { region = brazil_region }
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 765
+					OR = {
+						NOT = { development = 15 }
+						NOT = { has_production_building_trigger = yes }
+					}
+				}
+			}
 		}
 		trigger = {
-			#
+			any_subject_country = {
+				is_colonial_nation = yes
+				capital_scope = { region = brazil_region }
+				minas_gerais_area = {
+					type = all
+					owned_by = PREV
+				}
+			}
+			765 = {
+				development = 15
+				has_production_building_trigger = yes
+			}
 		}
 		effect = {
-			#
+			765 = {
+				if = {
+					limit = {
+						NOT = { trade_goods = gold }
+					}
+					change_trade_goods = gold
+				}
+				add_province_modifier = {
+					name = por_increase_funding
+					duration = -1 #wip
+				}
+			}
 		}
 	}
 	por_city_slavers = {
@@ -478,10 +578,15 @@ POR_missions_2 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. owns prov 1177
+			# 2. prov 1177 has a Market or a Trade Depot or a Stock exchange building
+			# 3. Prov 1177 has a Castle or a Bastion or a Star fort or a Fortress building.
 		}
 		effect = {
-			#
+			# Bonus; grant permanent claims on all provinces in the Central Swahilli coast, Quelimane and Mozambique regions.
+			# Bonus; Grant permanent claims on prov 2030
+			# Bonus; prov 1177 gets 2 dev in each category.
+			# Bonus; Gains event "Vasco Da Gama in India"
 		}
 	}
 	por_fortuna_oriental = {
@@ -492,10 +597,14 @@ POR_missions_2 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Owns all provinces in the Kanada and Malabar Area.
+			# 2.Has atleast 30% trade power in the Deccan trade node.
+			# 3.Has a trader in the Deccan trade Node
 		}
 		effect = {
-			#
+			# Bonus; grants Permanent claim on prov 2999
+			# Bonus; grants Permanent claim on prov 596
+			 # Bonus;Grants permanent claims on all Provinces in the North Lanka and South Lanka area.
 		}
 	}
 	por_treacherous_nobility = {
@@ -506,10 +615,12 @@ POR_missions_2 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Is at peace.
+			# 2. Stability at least 2.
+			# 3. Has 33% or more crownlands.
 		}
 		effect = {
-			#
+			#Bonus; Gain event "Snakes Wrapped around a Throne".
 		}
 	}
 	por_renovar_gestao = {
@@ -520,10 +631,13 @@ POR_missions_2 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Stability is atleast 1
+			# 2. Has No corruption.
+			# 3. Burghers have atleast 45 Loyalty.
+			# 4. Nobility has 33% or less lands.
 		}
 		effect = {
-			#
+			#Bonus; Gain modifier "Royal Meritocracy" granting -25% advisor cost and -10% State maintenence cost for 20 years.
 		}
 	}
 }
