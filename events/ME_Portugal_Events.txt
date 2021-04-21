@@ -11,20 +11,78 @@ country_event = {
 	option = {
 		name = ME_Portugal_Events.1.a
 		
-		# Option 1: Let us form the Kingdom of Brazil!
-		# [Colony subject will be released]
-		# [Colony subject will Become Brazil]
-		# [Brazil will become the lesser partner of a PU with Portugal]
-		# [Brazil will gains -20% Liberty desire for 25 years]
-		# [Gain +15 tarrifs from Brazil]
-		# [AI has 90% chance of picking this option]
+		ai_chance = { factor = 9 }
+		
+		random_subject_country = {
+			limit = {
+				is_colonial_nation = yes
+				capital_scope = { region = brazil_region }
+				NOT = { liberty_desire = 30 }
+			}
+			grant_independence = yes
+			
+			#brazil_nation decision
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { is_former_colonial_nation = yes }
+					}
+					ROOT = { save_event_target_as = old_tag_target }
+				}
+			}
+			change_tag = BRZ
+			if = {
+				limit = {
+					NOT = { is_former_colonial_nation = yes }
+				}
+				restore_old_nation_on_formation_effect = yes
+				remove_non_electors_emperors_from_empire_effect = yes
+			}
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			if = {
+				limit = {
+					culture_group = iberian
+					NOT = { primary_culture = brazilian }
+				}
+				change_primary_culture = brazilian
+			}
+			colonial_brazil = {
+				limit = {
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = BRZ
+			}
+			add_country_modifier = {
+				name = "centralization_modifier"
+				duration = 7300
+			}
+			add_prestige = 25
+			if = {
+				limit = { has_custom_ideas = no }
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+			set_country_flag = changed_from_colonial_nation
+			
+			ROOT = { create_union = PREV }
+			add_country_modifier = {
+				name = por_became_brazil
+				duration = 9125 #25 years
+			}
+			add_tariff_value = 0.15 #wip
+		}
 	}
 	
 	option = {
 		name = ME_Portugal_Events.1.b
 		
-		# [Colony will gain +20% Liberty desire]
-		# [AI has 10% of picking this option]
+		ai_chance = { factor = 1 }
+		
+		add_liberty_desire = 20
 	}
 }
 
@@ -32,10 +90,10 @@ country_event = {
 	id = ME_Portugal_Events.2
 	title = ME_Portugal_Events.2.t
 	desc = ME_Portugal_Events.2.d
-	picture = WIP_eventPicture
+	picture = REVOLUTION_eventPicture
 	
-	fire_only_once = yes
 	hidden = yes
+	fire_only_once = yes
 	
 	mean_time_to_happen = { months = 30 }
 	
