@@ -764,3 +764,468 @@ pick_best_tag = {
 		set_country_flag = $event_target_name$_exclude
 	}
 }
+
+#halve estate territory and distribute to other estates
+halve_estate_land_share = {
+	hidden_effect = {
+		if = {
+			limit = {
+				has_estate = $estate$
+				
+				estate_territory = {
+					estate = $estate$
+					territory = 2
+				}
+				
+				calc_true_if = {
+					amount = 2
+					
+					has_estate = estate_brahmins
+					has_estate = estate_church
+					has_estate = estate_maratha
+					has_estate = estate_nobles
+					has_estate = estate_vaisyas
+					has_estate = estate_burghers
+					has_estate = estate_cossacks
+					has_estate = estate_nomadic_tribes
+					has_estate = estate_dhimmi
+					has_estate = estate_jains
+					has_estate = estate_rajput
+					has_estate = estate_maya
+				}
+			}
+			
+			export_territory_to_variable = {
+				estate = $estate$
+			}
+			export_to_variable = {
+				which = crownland_territory
+				value = trigger_value:crown_land_share
+			}
+			
+			if = {
+				limit = {
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = ct_temp
+							value = trigger_value:crown_land_share
+						}
+						change_variable = {
+							which = ct_temp
+							which = $estate$_territory
+						}
+						NOT = {
+							check_variable = {
+								which = ct_temp
+								value = 96
+							}
+						}
+					}
+				}
+				
+				set_variable = {
+					which = half_territory
+					which = crownland_territory
+				}
+				subtract_variable = {
+					which = half_territory
+					value = 100
+				}
+				multiply_variable = {
+					which = half_territory
+					which = $estate$_territory
+				}
+				multiply_variable = {
+					which = var_2cn
+					which = crownland_territory
+				}
+				multiply_variable = {
+					which = var_2cn
+					value = 2
+				}
+				change_variable = {
+					which = var_2cn
+					which = $estate$_territory
+				}
+				subtract_variable = {
+					which = var_2cn
+					value = 200
+				}
+				divide_variable = {
+					which = half_territory
+					which = var_2cn
+				}
+				set_variable = {
+					which = $estate$_half_territory
+					which = half_territory
+				}
+				
+				while = {
+					limit = {
+						check_variable = {
+							which = $estate$_half_territory
+							value = 0
+						}
+					}
+					change_estate_land_share = {
+						estate = $estate$
+						share = -1
+					}
+					subtract_variable = {
+						which = $estate$_half_territory
+						value = 1
+					}
+				}
+				
+				set_variable = {
+					which = $estate$_half_territory
+					which = half_territory
+				}
+				
+				while = {
+					limit = {
+						check_variable = {
+							which = $estate$_half_territory
+							value = 0
+						}
+					}
+					change_estate_land_share = {
+						estate = all
+						share = 1
+					}
+					subtract_variable = {
+						which = $estate$_half_territory
+						value = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+export_territory_to_variable = {
+	hidden_effect = {
+		if = { limit = { estate_territory = { estate = $estate$	territory = 50 } }
+			if = { limit = { estate_territory = { estate = $estate$	territory = 75 } }
+				if = { limit = { estate_territory = { estate = $estate$	territory = 87.5 } }
+					if = { limit = { estate_territory = { estate = $estate$	territory = 93.75 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 96.875 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 98.4375 } }
+								set_variable = { which = $estate$_territory	value = 99 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 97 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 95.3125 } }
+								set_variable = { which = $estate$_territory	value = 96 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 94 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 90.625 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 92.1875 } }
+								set_variable = { which = $estate$_territory	value = 93 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 91 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 89.0625 } }
+								set_variable = { which = $estate$_territory	value = 90 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 88 }
+							}
+						}
+					}
+				}
+				else = {
+					if = { limit = { estate_territory = { estate = $estate$	territory = 81.25 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 84.375 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 85.9375 } }
+								set_variable = { which = $estate$_territory	value = 86 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 85 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 82.8125 } }
+								set_variable = { which = $estate$_territory	value = 83 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 82 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 78.125 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 79.6875 } }
+								set_variable = { which = $estate$_territory	value = 80 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 79 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 76.5625 } }
+								set_variable = { which = $estate$_territory	value = 77 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 75 }
+							}
+						}
+					}
+				}
+			}
+			else = {
+				if = { limit = { estate_territory = { estate = $estate$	territory = 62.5 } }
+					if = { limit = { estate_territory = { estate = $estate$	territory = 68.75 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 71.875 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 73.4375 } }
+								set_variable = { which = $estate$_territory	value = 74 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 72 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 70.3125 } }
+								set_variable = { which = $estate$_territory	value = 71 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 69 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 65.625 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 67.1875 } }
+								set_variable = { which = $estate$_territory	value = 68 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 66 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 64.0625 } }
+								set_variable = { which = $estate$_territory	value = 65 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 63 }
+							}
+						}
+					}
+				}
+				else = {
+					if = { limit = { estate_territory = { estate = $estate$	territory = 56.25 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 59.375 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 60.9375 } }
+								set_variable = { which = $estate$_territory	value = 61 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 60 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 57.8125 } }
+								set_variable = { which = $estate$_territory	value = 58 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 57 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 53.125 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 54.6875 } }
+								set_variable = { which = $estate$_territory	value = 55 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 54 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 51.5625 } }
+								set_variable = { which = $estate$_territory	value = 52 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 50 }
+							}
+						}
+					}
+				}
+			}
+		}
+		else = {
+			if = { limit = { estate_territory = { estate = $estate$	territory = 25 } }
+				if = { limit = { estate_territory = { estate = $estate$	territory = 37.5 } }
+					if = { limit = { estate_territory = { estate = $estate$	territory = 43.75 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 46.875 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 48.4375 } }
+								set_variable = { which = $estate$_territory	value = 49 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 47 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 45.3125 } }
+								set_variable = { which = $estate$_territory	value = 46 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 44 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 40.625 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 42.1875 } }
+								set_variable = { which = $estate$_territory	value = 43 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 41 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 39.0625 } }
+								set_variable = { which = $estate$_territory	value = 40 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 38 }
+							}
+						}
+					}
+				}
+				else = {
+					if = { limit = { estate_territory = { estate = $estate$	territory = 31.25 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 34.375 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 35.9375 } }
+								set_variable = { which = $estate$_territory	value = 36 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 35 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 32.8125 } }
+								set_variable = { which = $estate$_territory	value = 33 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 32 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 28.125 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 29.6875 } }
+								set_variable = { which = $estate$_territory	value = 30 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 29 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 26.5625 } }
+								set_variable = { which = $estate$_territory	value = 27 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 25 }
+							}
+						}
+					}
+				}
+			}
+			else = {
+				if = { limit = { estate_territory = { estate = $estate$	territory = 12.5 } }
+					if = { limit = { estate_territory = { estate = $estate$	territory = 18.75 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 21.875 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 23.4375 } }
+								set_variable = { which = $estate$_territory	value = 24 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 22 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 20.3125 } }
+								set_variable = { which = $estate$_territory	value = 21 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 19 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 15.625 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 17.1875 } }
+								set_variable = { which = $estate$_territory	value = 18 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 16 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 14.0625 } }
+								set_variable = { which = $estate$_territory	value = 15 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 13 }
+							}
+						}
+					}
+				}
+				else = {
+					if = { limit = { estate_territory = { estate = $estate$	territory = 6.25 } }
+						if = { limit = { estate_territory = { estate = $estate$	territory = 9.375 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 10.9375 } }
+								set_variable = { which = $estate$_territory	value = 11 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 10 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 7.8125 } }
+								set_variable = { which = $estate$_territory	value = 8 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 7 }
+							}
+						}
+					}
+					else = {
+						if = { limit = { estate_territory = { estate = $estate$	territory = 3.125 } }
+							if = { limit = { estate_territory = { estate = $estate$	territory = 4.6875 } }
+								set_variable = { which = $estate$_territory	value = 5 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 4 }
+							}
+						}
+						else = {
+							if = { limit = { estate_territory = { estate = $estate$	territory = 1.5625 } }
+								set_variable = { which = $estate$_territory	value = 2 }
+							}
+							else = {
+								set_variable = { which = $estate$_territory	value = 1 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
