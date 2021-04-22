@@ -435,7 +435,7 @@ POR_missions_2 = {
 			334 = {
 				if = {
 					limit = {
-						NOT = { is_permanent_claim = ROOT	}
+						NOT = { is_permanent_claim = ROOT }
 						NOT = { is_core = ROOT }
 					}
 					add_permanent_claim = ROOT
@@ -575,18 +575,60 @@ POR_missions_2 = {
 		position = 6
 		required_missions = { por_fim_mundo }
 		provinces_to_highlight = {
-			#
+			province_id = 1177
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { fort_level = 1 }
+			}
 		}
 		trigger = {
-			# 1. owns prov 1177
-			# 2. prov 1177 has a Market or a Trade Depot or a Stock exchange building
-			# 3. Prov 1177 has a Castle or a Bastion or a Star fort or a Fortress building.
+			1177 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+				fort_level = 1
+			}
 		}
 		effect = {
-			# Bonus; grant permanent claims on all provinces in the Central Swahilli coast, Quelimane and Mozambique regions.
-			# Bonus; Grant permanent claims on prov 2030
-			# Bonus; prov 1177 gets 2 dev in each category.
-			# Bonus; Gains event "Vasco Da Gama in India"
+			central_swahili_coast_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			quelimane_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mozambique_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			2030 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			1177 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			country_event = { #Vasco Da Gama in India
+				id = ME_Portugal_Events.3
+				days = 0
+			}
 		}
 	}
 	por_fortuna_oriental = {
@@ -594,50 +636,103 @@ POR_missions_2 = {
 		position = 8
 		required_missions = { por_foothold_india }
 		provinces_to_highlight = {
-			#
+			OR = {
+				area = kanara_area
+				area = malabar_area
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			# 1. Owns all provinces in the Kanada and Malabar Area.
-			# 2.Has atleast 30% trade power in the Deccan trade node.
-			# 3.Has a trader in the Deccan trade Node
+			kanara_area = {
+				type = all
+				owned_by = ROOT
+			}
+			malabar_area = {
+				type = all
+				owned_by = ROOT
+			}
+			1948 = { #deccan
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+				has_merchant = ROOT
+			}
 		}
 		effect = {
-			# Bonus; grants Permanent claim on prov 2999
-			# Bonus; grants Permanent claim on prov 596
-			 # Bonus;Grants permanent claims on all Provinces in the North Lanka and South Lanka area.
+			2999 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			596 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			lanka_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_lanka_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	por_treacherous_nobility = {
 		icon = icon_wip
 		position = 9
 		required_missions = { }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			# 1. Is at peace.
-			# 2. Stability at least 2.
-			# 3. Has 33% or more crownlands.
+			NOT = { is_at_war = yes }
+			stability = 2
+			crown_land_share = 33
 		}
 		effect = {
-			#Bonus; Gain event "Snakes Wrapped around a Throne".
+			country_event = { #Snakes Wrapped around a Throne
+				id = ME_Portugal_Events.4
+				days = 0
+			}
 		}
 	}
 	por_renovar_gestao = {
 		icon = icon_wip
 		position = 10
 		required_missions = { por_treacherous_nobility }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			# 1. Stability is atleast 1
-			# 2. Has No corruption.
-			# 3. Burghers have atleast 45 Loyalty.
-			# 4. Nobility has 33% or less lands.
+			stability = 1
+			NOT = { corruption = 0.01 }
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 45
+			}
+			NOT = {
+				estate_territory = {
+					estate = estate_nobles
+					territory = 33
+				}
+			}
 		}
 		effect = {
-			#Bonus; Gain modifier "Royal Meritocracy" granting -25% advisor cost and -10% State maintenence cost for 20 years.
+			add_country_modifier = {
+				name = por_royal_meritocracy
+				duration = 7300 #20 years
+			}
 		}
 	}
 }
