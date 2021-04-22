@@ -749,14 +749,21 @@ POR_missions_3 = {
 		icon = icon_wip
 		position = 2
 		required_missions = { }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			has_idea_group = exploration_ideas
+			has_idea = quest_for_the_new_world
+			num_of_explorers = 1
+			sailors_percentage = 0.5
 		}
 		effect = {
-			#
+			capital_scope = {
+				add_unit_construction = {
+					type = heavy_ship
+					amount = 3
+					speed = 0.5
+					cost = 0
+				}
+			}
 		}
 	}
 	por_naval_bases = {
@@ -764,13 +771,52 @@ POR_missions_3 = {
 		position = 3
 		required_missions = { por_encarar_mar }
 		provinces_to_highlight = {
-			#
+			OR = {
+				province_id = 1111
+				province_id = 1096
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_shipyard_building_trigger = yes }
+			}
 		}
 		trigger = {
-			#
+			num_of_explorers = 1
+			OR = {
+				1111 = {
+					owned_by = ROOT
+					has_shipyard_building_trigger = yes
+				}
+				1096 = {
+					owned_by = ROOT
+					has_shipyard_building_trigger = yes
+				}
+			}
 		}
 		effect = {
-			#
+			add_country_modifier = {
+				name = por_supply_bases
+				duration = 3650 #10 years
+			}
+			brazil_region = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1111 = {
+				if = {
+					limit = { has_building = shipyard }
+					add_building = grand_shipyard
+				}
+			}
+			1096 = {
+				if = {
+					limit = { has_building = shipyard }
+					add_building = grand_shipyard
+				}
+			}
 		}
 	}
 	por_faith_kongo = {
@@ -778,13 +824,45 @@ POR_missions_3 = {
 		position = 4
 		required_missions = { por_golden_coast }
 		provinces_to_highlight = {
-			#
+			region = kongo_region
+			kongo_region = {
+				type = all
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { religion_group = christian }
+				}
+			}
 		}
 		trigger = {
-			#
+			kongo_region = {
+				owned_by = ROOT
+				religion_group = christian
+			}
+			papal_influence = 25
 		}
 		effect = {
-			#
+			KON = {
+				if = {
+					limit = {
+						NOT = { has_country_flag = kongo_allows_missionaries }
+					}
+					country_event = {
+						id = flavor_kon.1
+						days = 0
+					}
+				}
+			}
+			# For every province that is (insert religion of portugal that is christian) and is not owned by portugal
+			#portugal gains +0.10 diplo reputation and either +0.20 yearly papal influence or +1 church influence.
+			kongo_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					religion_group = christian
+				}
+				ROOT = { #wip
+					add_papal_influence = 0.2
+				}
+			}
 		}
 	}
 	por_fim_mundo = {
@@ -792,27 +870,69 @@ POR_missions_3 = {
 		position = 5
 		required_missions = { por_ponta_africa }
 		provinces_to_highlight = {
-			#
+			province_id = 1177
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			#
+			calc_true_if = {
+				amount = 5
+				south_africa_region = {
+					type = all
+					has_discovered = ROOT 
+				}
+			}
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 5
+					region = south_africa_region
+				}
+				owns = 1177
+			}
 		}
 		effect = {
-			#
+			1201 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = por_intensify_exploring
+				duration = 5475 #15 years
+			}
 		}
 	}
 	por_skilled_sailing = {
 		icon = icon_wip
 		position = 6
 		required_missions = { por_fim_mundo }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = achievement_magellans_voyage_tooltip
+					has_country_flag = circumnavigation_first
+				}
+				num_of_heavy_ship = 20
+			}
+			europe = { country_or_non_sovereign_subject_holds = ROOT }
+			asia = { country_or_non_sovereign_subject_holds = ROOT }
+			africa = { country_or_non_sovereign_subject_holds = ROOT }
+			north_america = { country_or_non_sovereign_subject_holds = ROOT }
+			south_america = { country_or_non_sovereign_subject_holds = ROOT }
+			oceania = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
-			#
+			add_country_modifier = {
+				name = por_experts_sailing
+				duration = 9125 #25 years
+			}
+			add_country_modifier = {
+				name = por_voyage_expertise
+				duration = -1
+			}
 		}
 	}
 	por_foothold_india = {
@@ -820,13 +940,44 @@ POR_missions_3 = {
 		position = 7
 		required_missions = { por_onwards_india }
 		provinces_to_highlight = {
-			#
+			province_id = 2030
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 1 }
+				NOT = { has_trade_building_trigger = yes }
+			}
 		}
 		trigger = {
-			#
+			2030 = {
+				owned_by = ROOT
+				fort_level = 1
+				has_trade_building_trigger = yes
+			}
 		}
 		effect = {
-			#
+			kanara_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			malabar_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			596 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	por_gems_spices = {
@@ -834,13 +985,58 @@ POR_missions_3 = {
 		position = 8
 		required_missions = { por_foothold_india }
 		provinces_to_highlight = {
-			#
+			OR = {
+				area = lanka_area
+				area = south_lanka_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 4 }
+			}
 		}
 		trigger = {
-			#
+			lanka_area = {
+				type = all
+				owned_by = ROOT
+				base_production = 4
+			}
+			south_lanka_area = {
+				type = all
+				owned_by = ROOT
+				base_production = 4
+			}
+			lanka_area = { has_manufactory_trigger = yes }
+			south_lanka_area = { has_manufactory_trigger = yes }
 		}
 		effect = {
-			#
+			lanka_area = {
+				limit = { trade_goods = spices }
+				add_province_modifier = {
+					name = por_spice_trade
+					duration = 3650 #10 years
+				}
+			}
+			south_lanka_area = {
+				limit = { trade_goods = spices }
+				add_province_modifier = {
+					name = por_spice_trade
+					duration = 3650 #10 years
+				}
+			}
+			lanka_area = {
+				limit = { trade_goods = gems }
+				add_province_modifier = {
+					name = por_gems_nations
+					duration = 3650 #10 years
+				}
+			}
+			south_lanka_area = {
+				limit = { trade_goods = gems }
+				add_province_modifier = {
+					name = por_gems_nations
+					duration = 3650 #10 years
+				}
+			}
 		}
 	}
 	por_beautiful_island = {
@@ -848,13 +1044,31 @@ POR_missions_3 = {
 		position = 9
 		required_missions = { por_birthplace_silk }
 		provinces_to_highlight = {
-			#
+			area = taiwan_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			#
+			taiwan_area = {
+				type = all
+				owned_by = ROOT
+			}
+			taiwan_area = { has_dock_building_trigger = yes }
+			taiwan_area = { has_shipyard_building_trigger = yes }
 		}
 		effect = {
-			#
+			random_owned_province = { #wip
+				limit = {
+					area = taiwan_area
+					has_shipyard_building_trigger = yes
+				}
+				add_unit_construction = {
+					type = heavy_ship
+					amount = 5
+					speed = 0.5
+					cost = 0
+				}
+			}
+			add_yearly_sailors = 1
 		}
 	}
 }
