@@ -625,9 +625,14 @@ POR_missions_2 = {
 				add_base_production = 2
 				add_base_manpower = 2
 			}
-			country_event = { #Vasco Da Gama in India
-				id = ME_Portugal_Events.3
-				days = 0
+			if = {
+				limit = {
+					NOT = { has_country_flag = por_disable_vasco }
+				}
+				country_event = {
+					id = flavor_por.11
+					days = 0
+				}
 			}
 		}
 	}
@@ -872,13 +877,21 @@ POR_missions_3 = {
 		provinces_to_highlight = {
 			province_id = 1177
 			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						region = south_africa_region
+					}
+				}
+			}
 		}
 		trigger = {
 			calc_true_if = {
 				amount = 5
 				south_africa_region = {
 					type = all
-					has_discovered = ROOT 
+					has_discovered = ROOT
 				}
 			}
 			OR = {
@@ -1085,28 +1098,127 @@ POR_missions_4 = {
 		icon = icon_wip
 		position = 1
 		required_missions = { }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			NOT = { has_regency = yes }
+			OR = {
+				AND = {
+					alliance_with = ENG
+					reverse_has_opinion = {
+						who = ENG
+						value = 150
+					}
+				}
+				AND = {
+					alliance_with = FRA
+					reverse_has_opinion = {
+						who = FRA
+						value = 150
+					}
+				}
+				any_ally = {
+					is_great_power = yes
+					NOT = { tag = CAS }
+					NOT = { tag = SPA }
+				}
+				num_of_allies = 3
+			}
 		}
 		effect = {
-			#
+			galicia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = por_enhanced_diplomacy
+				duration = 3650 #10 years
+			}
 		}
 	}
 	por_golden_coast = {
 		icon = icon_wip
 		position = 3
 		required_missions = { por_encarar_mar }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			calc_true_if = {
+				amount = 7
+				guinea_region = {
+					type = all
+					has_discovered = ROOT
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				region = guinea_region
+			}
+			num_of_owned_provinces_with = {
+				value = 1
+				region = guinea_region
+				province_has_center_of_trade_of_level = 1
+			}
+			num_of_owned_provinces_with = {
+				value = 1
+				region = guinea_region
+				fort_level = 1
+			}
 		}
 		effect = {
-			#
+			1466 = { #ivory coast
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475 #15 years
+					power = 20
+					key = por_merchant_fleets
+				}
+			}
+			random_owned_province = {
+				limit = {
+					region = guinea_region
+					guinea_region = {
+						type = all
+						OR = {
+							NOT = { owned_by = ROOT }
+							variable_arithmetic_trigger = {
+								export_to_variable = {
+									which = por_dev_this
+									value = development
+								}
+								export_to_variable = {
+									which = por_dev_prev
+									value = development
+									who = PREV
+								}
+								check_variable = {
+									which = por_dev_prev
+									which = por_dev_this
+								}
+							}
+						}
+					}
+				}
+				if = {
+					limit = { has_building = fort_17th }
+					add_building = fort_18th
+				}
+				else_if = {
+					limit = { has_building = fort_16th }
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = { has_building = fort_15th }
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = { NOT = { has_building = fort_18th } }
+					add_building = fort_15th
+				}
+				add_province_modifier = {
+					name = por_elmina_castle
+					duration = 9125 #25 years
+				}
+			}
 		}
 	}
 	por_ponta_africa = {
@@ -1114,27 +1226,84 @@ POR_missions_4 = {
 		position = 4
 		required_missions = { por_golden_coast }
 		provinces_to_highlight = {
-			#
+			OR = {
+				province_id = 1097
+				province_id = 1306
+				province_id = 1098
+				province_id = 1174
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { owns = 1097 }
+				NOT = { owns = 1306 }
+				NOT = { owns = 1098 }
+				NOT = { owns = 1174 }
+			}
 		}
 		trigger = {
-			#
+			num_of_explorers = 1
+			OR = {
+				owns = 1097
+				owns = 1306
+				owns = 1098
+				owns = 1174
+			}
 		}
 		effect = {
-			#
+			add_country_modifier = {
+				name = por_push_south
+				duration = 3650 #10 years
+			}
 		}
 	}
 	por_onwards_india = {
 		icon = icon_wip
 		position = 6
 		required_missions = { por_ponta_africa }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			calc_true_if = {
+				amount = 5
+				south_africa_region = {
+					type = all
+					has_discovered = ROOT
+				}
+			}
+			num_of_explorers = 1
+			any_owned_province = { region = south_africa_region }
 		}
 		effect = {
-			#
+			set_country_flag = por_sale_goa
+			if = {
+				limit = { #wip
+					2030 = { has_discovered = ROOT }
+				}
+				country_event = { #Sale of Goa
+					id = ME_Portugal_Events.5
+					days = 0
+					tooltip = por_onwards_india_tt
+				}
+			}
+			else = {
+				2030 = {
+					if = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			596 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			set_country_flag = por_disable_vasco
 		}
 	}
 	por_city_straits = {
@@ -1142,13 +1311,58 @@ POR_missions_4 = {
 		position = 7
 		required_missions = { por_onwards_india }
 		provinces_to_highlight = {
-			#
+			province_id = 596
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { province_has_center_of_trade_of_level = 2 }
+				NOT = { development = 20 }
+			}
 		}
 		trigger = {
-			#
+			596 = {
+				owned_by = ROOT
+				province_has_center_of_trade_of_level = 2
+				development = 20
+			}
 		}
 		effect = {
-			#
+			668 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			596 = {
+				add_province_modifier = {
+					name = por_sound_toll
+					duration = 9125 #25 years
+				}
+				if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = grand_shipyard
+				}
+				if = {
+					limit = { has_building = fort_17th }
+					add_building = fort_18th
+				}
+				else_if = {
+					limit = { has_building = fort_16th }
+					add_building = fort_17th
+				}
+				else_if = {
+					limit = { has_building = fort_15th }
+					add_building = fort_16th
+				}
+				else_if = {
+					limit = { NOT = { has_building = fort_18th } }
+					add_building = fort_15th
+				}
+			}
 		}
 	}
 	por_birthplace_silk = {
@@ -1156,13 +1370,81 @@ POR_missions_4 = {
 		position = 8
 		required_missions = { por_city_straits }
 		provinces_to_highlight = {
-			#
+			province_id = 668
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 1 }
+				if = {
+					limit = { has_dlc = "Dharma" }
+					NOT = { province_has_center_of_trade_of_level = 2 }
+				}
+				else = {
+					1371 = { #canton
+						NOT = { has_trader = ROOT }
+					}
+				}
+				NOT = { development = 20 }
+			}
 		}
 		trigger = {
-			#
+			668 = {
+				owned_by = ROOT
+				fort_level = 1
+				if = {
+					limit = { has_dlc = "Dharma" }
+					province_has_center_of_trade_of_level = 2
+				}
+				else = {
+					1371 = { #canton
+						has_trader = ROOT
+					}
+				}
+				development = 20
+			}
 		}
 		effect = {
-			#
+			668 = {
+				if = {
+					limit = {
+						NOT = { trade_goods = silk }
+					}
+					change_trade_goods = silk
+				}
+				add_province_modifier = {
+					name = por_port_east
+					duration = -1 #wip
+				}
+			}
+			sulawesi_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_sulawesi_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = por_gain_trader
+				duration = -1 #wip
+			}
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Dharma"
+						has_dlc = "Wealth of Nations"
+					}
+				}
+				add_country_modifier = {
+					name = por_company_governing
+					duration = 9125 #25 years
+				}
+			}
 		}
 	}
 	por_rising_sun = {
@@ -1170,13 +1452,42 @@ POR_missions_4 = {
 		position = 9
 		required_missions = { por_birthplace_silk }
 		provinces_to_highlight = {
-			#
+			province_id = 1020
+			NOT = { has_discovered = ROOT }
 		}
 		trigger = {
-			#
+			calc_true_if = {
+				amount = 5
+				japan_region = {
+					type = all
+					has_discovered = ROOT
+				}
+			}
+			calc_true_if = {
+				amount = 3
+				japan_region = {
+					type = all
+					has_discovered = ROOT
+					is_capital = yes
+				}
+			}
+			1020 = { has_discovered = ROOT }
 		}
 		effect = {
-			#
+			if = {
+				limit = { exists = JAP }
+				country_event = { #Dealing with the Shogun
+					id = ME_Portugal_Events.7
+					days = 0
+				}
+			}
+			else = {
+				country_event = { #Choosing our champion
+					id = ME_Portugal_Events.11
+					days = 0
+					tooltip = por_rising_sun_tt
+				}
+			}
 		}
 	}
 	por_tassalocracia_portuguesa = {
@@ -1191,10 +1502,16 @@ POR_missions_4 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Portugal has atleast 50 Light ships
+			# 2.Portugal has atleast 20 Heavy ships/
+			# 3.Portugal atleast has 33% trade power in the Mallaca,Corromandel,Zanzibar,Cape of Good Hope and Ivory Coast trade nodes.
 		}
 		effect = {
-			#
+			# Bonus; Gain +20 Navy tradition.
+			# Bonus; Gain 10 Mercantalism.
+			# Bonus; Gain +50 Power Projection.
+			# Bonus; Gain modifier "Imperial Navy" granting +20% Heavy and Light ship combat ability for 50 years.
+			# Bonus;Gain +2 traders
 		}
 	}
 }
