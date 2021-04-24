@@ -1,0 +1,123 @@
+# End of Castilian Civil War
+########################################
+# Civil War in Castile
+# Mix of Castilian Civil Wars involving
+# nobles and outside intervention
+########################################
+
+namespace = castilian_civil_war
+
+country_event = {
+	id = castilian_civil_war.100
+	title = "castilian_civil_war.100.t"
+	desc = "castilian_civil_war.100.d"
+	picture = CIVIL_WAR_eventPicture
+
+	major = yes
+	
+	is_triggered_only = yes
+	
+	mean_time_to_happen = {
+		days = 1
+	}
+
+	option = {
+		name = "castilian_civil_war.100.a" # Aragon Triumphs
+		trigger = {
+			OR = {
+				AND = {
+					has_country_flag = cas_aragon_candidate
+					NOT = { has_country_flag = cas_civil_war_rebels_won }
+				}
+				AND = {
+					has_country_flag = cas_portugal_candidate
+					has_country_flag = cas_civil_war_rebels_won
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = cas_civil_war_rebels_won
+			}
+			add_stability = -1
+		}
+		if = {
+			limit = {
+				has_opinion_modifier = {
+					modifier = cas_civil_war_interferance
+					who = ARA
+				}
+			}
+			remove_opinion = {
+				who = ARA
+				modifier = cas_civil_war_interferance
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = cas_civil_war_rebels_won }
+			}
+			add_stability_or_adm_power = yes
+		}
+		add_opinion = {
+			who = ARA
+			modifier = cas_civil_war_winner
+		}
+		ARA = {
+			add_opinion = {
+				who = CAS
+				modifier = cas_civil_war_winner
+			}
+		}
+	}
+	option = {
+		name = "castilian_civil_war.100.b" # Portugal Triumphs
+		trigger = {
+			OR = {
+				AND = {
+					has_country_flag = cas_portugal_candidate
+					NOT = { has_country_flag = cas_civil_war_rebels_won }
+				}
+				AND = {
+					has_country_flag = cas_aragon_candidate
+					has_country_flag = cas_civil_war_rebels_won
+				}
+			}
+		}
+		if = {
+			limit = {
+				has_country_flag = cas_civil_war_rebels_won
+			}
+			add_stability = -1
+		}
+		if = {
+			limit = {
+				has_opinion_modifier = {
+					modifier = cas_civil_war_interferance
+					who = POR
+				}
+			}
+			remove_opinion = {
+				who = POR
+				modifier = cas_civil_war_interferance
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = cas_civil_war_rebels_won }
+			}
+			add_stability_or_adm_power = yes
+		}
+		add_opinion = {
+			who = POR
+			modifier = cas_civil_war_winner
+		}
+		POR = {
+			add_opinion = {
+				who = CAS
+				modifier = cas_civil_war_winner
+			}
+			set_country_flag = por_war_won
+		}
+	}
+}

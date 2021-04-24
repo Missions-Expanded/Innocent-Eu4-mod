@@ -241,6 +241,17 @@ POR_missions_1 = {
 			}
 		}
 	}
+}
+POR_missions_1b = {
+	slot = 1
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		tag = POR
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		227 = { has_province_flag = por_earthquake_227 }
+	}
 	por_ciudada_ruinas = {
 		icon = mission_early_game_buildings
 		position = 6
@@ -248,14 +259,15 @@ POR_missions_1 = {
 		provinces_to_highlight = {
 			province_id = 227
 			OR = {
+				NOT = { has_province_flag = por_earthquake_227 }
 				NOT = { owned_by = ROOT }
 				NOT = { development = 25 }
 				has_province_modifier = earthquake
 			}
 		}
 		trigger = {
-			has_country_flag = por_earthquake_227
 			227 = {
+				#has_province_flag = por_earthquake_227
 				owned_by = ROOT
 				development = 25
 				NOT = { has_province_modifier = earthquake }
@@ -385,22 +397,6 @@ POR_missions_1 = {
 					name = por_trade_capital
 					duration = -1
 				}
-			}
-		}
-	}
-	por_vontade_rei = {
-		icon = icon_wip
-		position = 10
-		required_missions = { por_treacherous_nobility }
-		trigger = {
-			absolutism = 50
-			crown_land_share = 35
-			stability = 2
-		}
-		effect = {
-			add_country_modifier = {
-				name = por_royal_absolutism
-				duration = 7300 #20 years
 			}
 		}
 	}
@@ -1084,6 +1080,22 @@ POR_missions_3 = {
 			add_yearly_sailors = 1
 		}
 	}
+	por_vontade_rei = { #moved from slot 1
+		icon = icon_wip
+		position = 10
+		required_missions = { por_treacherous_nobility }
+		trigger = {
+			absolutism = 50
+			crown_land_share = 35
+			stability = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = por_royal_absolutism
+				duration = 7300 #20 years
+			}
+		}
+	}
 }
 POR_missions_4 = {
 	slot = 4
@@ -1574,13 +1586,103 @@ POR_missions_5 = {
 		position = 1
 		required_missions = { }
 		provinces_to_highlight = {
-			#
+			OR = {
+				area = galicia_area
+				area = leon_area
+				area = castille_area
+				area = lower_andalucia_area
+				area = upper_andalucia_area
+				area = toledo_area
+				area = asturias_area
+				area = basque_country
+				area = extremadura_area
+			}
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = { has_country_flag = por_war_won }
+			}
 		}
 		trigger = {
-			#
+			custom_trigger_tooltip = {
+				tooltip = por_chaos_await_tt1
+				CAS = { has_country_flag = had_cas_civil_war }
+			}
+			religion = catholic
+			NOT = { has_regency =  yes }
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = por_chaos_await_tt2
+					has_country_flag = por_war_won
+				}
+				AND = {
+					galicia_area = {
+						type = all
+						owned_by = ROOT
+					}
+					leon_area = {
+						type = all
+						owned_by = ROOT
+					}
+					castille_area = {
+						type = all
+						owned_by = ROOT
+					}
+					lower_andalucia_area = {
+						type = all
+						owned_by = ROOT
+					}
+					upper_andalucia_area = {
+						type = all
+						owned_by = ROOT
+					}
+					toledo_area = {
+						type = all
+						owned_by = ROOT
+					}
+					asturias_area = {
+						type = all
+						owned_by = ROOT
+					}
+					basque_country = {
+						type = all
+						owned_by = ROOT
+					}
+					extremadura_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
 		}
 		effect = {
-			#
+			if = {
+				limit = { has_country_flag = por_war_won }
+				add_casus_belli = {
+					target = CAS
+					type = cb_restore_personal_union
+					months = 120 #wip
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							area = galicia_area
+							area = leon_area
+							area = castille_area
+							area = lower_andalucia_area
+							area = upper_andalucia_area
+							area = toledo_area
+							area = asturias_area
+							area = basque_country
+							area = extremadura_area
+						}
+					}
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
 		}
 	}
 	por_mundi_nostrum = {
@@ -1590,14 +1692,43 @@ POR_missions_5 = {
 			por_friends_pyrenees
 			por_chaos_await
 		}
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			#
+			NOT = { num_of_loans = 1 }
+			stability = 1
+			legitimacy_equivalent = 90
+			if = {
+				limit = {
+					CAS = { is_subject_of = ROOT }
+				}
+				CAS = {
+					NOT = { liberty_desire = 10 }
+				}
+			}
 		}
 		effect = {
-			#
+			custom_tooltip = por_mundi_nostrum_tt
+			set_country_flag = por_form_lusitania
+			valencia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			catalonia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			baleares_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	por_verdadeiro_imperio = {
@@ -1608,10 +1739,18 @@ POR_missions_5 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Is Lusitania
+			custom_trigger_tooltip = {
+				tooltip = por_verdadeiro_imperio_tt
+				has_country_flag = por_lusitania_formed
+			}
+			# 2. All provinces in the Valencia,Catalonia and Beleares areas are owned by root
+			# 3. Provinces 213 and 220 are atleast 22 dev.
 		}
 		effect = {
-			#
+			# Bonus; Provinces 213 and 220 gain Shipyard building.
+			# Bonus;  all provinces in areas Valencia,Catalonia and Beleares gain local modifier 'Portugese trade techniques' gaining +25% local trade power for 10 years 
+			# Bonus; Grant perm claims on  Westerm Mediterranean Islands.
 		}
 	}
 	por_rival_republics = {
@@ -1622,10 +1761,13 @@ POR_missions_5 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Has more Galleys than Genoa and Venice
+			# 2. Has atleast 30 Galleys.
+			# 3. Has atleast 25% of the tradepower in the Genoa trade Node.
 		}
 		effect = {
-			#
+			# Bonus; Grant +15% Galley combat ability for aslong as you have more Galleys than Genoa or Venice.
+			# Bonus; Grant +1 Merchant aslong as you have atleast 25% trade power in the Genoa trade node.
 		}
 	}
 	por_glittering_coast = {
@@ -1636,10 +1778,15 @@ POR_missions_5 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Owns all provinces in the Swahillia coast Area.
+			# 2.Prov 1196 has a Castle or a Bastion or a Star Fort or a Fortress.
+			# 3.Prov 1196 has a market or a Trade Depot or a Stock exchange.
+			# 4. Portugal has the most trade power in the Zanzibar trade Node.
 		}
 		effect = {
-			#
+			# Bonus; The Trade center in prov 1196 gets upgraded by one level, 
+			# if it is already level three then another trade center will appear in prov 1177.
+			# Bonus; Prov 1196 will gain local modifier "Gold Mine" providing +2 local goods produced for 20 years.
 		}
 	}
 	por_shipyards_east = {
@@ -1650,10 +1797,17 @@ POR_missions_5 = {
 			#
 		}
 		trigger = {
-			#
+			# 1.Owns all provinces in the Quelimane and Mozambique area.
+			# 2.Prov 1186 and 1195 have a shipyard.
 		}
 		effect = {
-			#
+			# Bonus; Prov 1186 and 1195 gain local modifer "Major Shipyards" granting +50% repair time and +20% colonial range for 20 years.
+			# If the Nobles have more than 60% loyalty, start the construction of 2 castles in prov 1186 and 1195 for 0% of the cost and 50% of the time. (priority 1)
+			# OR
+			# if the Clergy has more than 60% loyalty, (do the same but for churches) (priority 2)
+			# OR
+			# If the burghers has more than 60% loyalty (do the same but for shipyard) (priority 3)
+			# (If these buildings are already built,upgrade them. If they are at max, then do nothing. if 2 estates have more than 60% loyalty,then
 		}
 	}
 	por_island_shores = {
@@ -1664,10 +1818,13 @@ POR_missions_5 = {
 			#
 		}
 		trigger = {
-			#
+			# 1.Owns prov 2999
+			# 2.Has a trader in the Basra trade Node
+			# 3.Prov 2999  has Fort building
+			# 4.prov 2999 has a coastal defence or naval battery building.
 		}
 		effect = {
-			#
+			#Bonus;  Gain Trade modifier in Basra trade Node "Increased Investments" providing +10 trade power for 10 years.
 		}
 	}
 	por_origin_spice = {
@@ -1678,10 +1835,12 @@ POR_missions_5 = {
 			#
 		}
 		trigger = {
-			#
+			# 1. Owns all provinces the South and North Sulawesi region.
+			# 2. Has atleast 33% of all the trade in the The Mollucas trade node
 		}
 		effect = {
-			#
+			# Bonus; Gain +2 diplomatic reputation "Master of Spices" for 20 years.
+			# Bonus; Gain a year's worth of Income.
 		}
 	}
 }
