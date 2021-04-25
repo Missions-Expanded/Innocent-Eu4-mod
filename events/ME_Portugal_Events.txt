@@ -1258,14 +1258,8 @@ country_event = {
 	trigger = {
 		has_country_flag = por_anglo_company
 		OR = {
-			current_age = age_of_discovery
-			current_age = age_of_reformation
-		}
-		OR = {
 			AND = {
-				all_ally = {
-					NOT = { has_country_flag = por_anglo_company }
-				}
+				NOT = { has_country_modifier = por_anglo_company_triggered_modifier }
 				NOT = {
 					is_variable_equal = {
 						which = por_colony_count
@@ -1273,155 +1267,70 @@ country_event = {
 					}
 				}
 			}
-			any_ally = {
-				has_country_flag = por_anglo_company
-				if = { limit = { colony = 8 }
-					if = { limit = { colony = 12 }
-						ROOT = {
-							NOT = {
-								is_variable_equal = {
-									which = por_colony_count
-									value = 12
-								}
-							}
-						}
-					}
-					else = {
-						if = { limit = { colony = 10 }
-							if = { limit = { colony = 11 }
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 11
-										}
-									}
-								}
-							}
-							else = {
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 10
-										}
-									}
-								}
-							}
-						}
-						else = {
-							if = { limit = { colony = 9 }
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 9
-										}
-									}
-								}
-							}
-							else = {
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 8
-										}
-									}
-								}
-							}
-						}
-					}
+			AND = {
+				OR = {
+					current_age = age_of_discovery
+					current_age = age_of_reformation
 				}
-				else = {
-					if = { limit = { colony = 4 }
-						if = { limit = { colony = 6 }
-							if = { limit = { colony = 7 }
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 7
-										}
-									}
-								}
-							}
-							else = {
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 6
-										}
-									}
-								}
-							}
+				any_ally = {
+					has_country_flag = por_anglo_company
+					if = { limit = { colony = 8 }
+						if = { limit = { colony = 12 }
+							ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 12 } } }
 						}
 						else = {
-							if = { limit = { colony = 5 }
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 5
-										}
-									}
+							if = { limit = { colony = 10 }
+								if = { limit = { colony = 11 }
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 11 } } }
+								}
+								else = {
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 10 } } }
 								}
 							}
 							else = {
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 4
-										}
-									}
+								if = { limit = { colony = 9 }
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 9 } } }
+								}
+								else = {
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 8 } } }
 								}
 							}
 						}
 					}
 					else = {
-						if = { limit = { colony = 2 }
-							if = { limit = { colony = 3 }
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 3
-										}
-									}
+						if = { limit = { colony = 4 }
+							if = { limit = { colony = 6 }
+								if = { limit = { colony = 7 }
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 7 } } }
+								}
+								else = {
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 6 } } }
 								}
 							}
 							else = {
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 2
-										}
-									}
+								if = { limit = { colony = 5 }
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 5 } } }
+								}
+								else = {
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 4 } } }
 								}
 							}
 						}
 						else = {
-							if = { limit = { colony = 1 }
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 1
-										}
-									}
+							if = { limit = { colony = 2 }
+								if = { limit = { colony = 3 }
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 3 } } }
+								}
+								else = {
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 2 } } }
 								}
 							}
 							else = {
-								ROOT = {
-									NOT = {
-										is_variable_equal = {
-											which = por_colony_count
-											value = 0
-										}
-									}
+								if = { limit = { colony = 1 }
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 1 } } }
+								}
+								else = {
+									ROOT = { NOT = { is_variable_equal = { which = por_colony_count value = 0 } } }
 								}
 							}
 						}
@@ -1432,7 +1341,114 @@ country_event = {
 	}
 	
 	immediate = {
-		#
+		if = {
+			limit = {
+				NOT = { has_country_modifier = por_anglo_company_triggered_modifier }
+			}
+			set_variable = {
+				which = por_colony_count
+				value = 0
+			}
+		}
+		else = {
+			random_ally = {
+				limit = {
+					has_country_flag = por_anglo_company
+				}
+				if = { limit = { colony = 8 }
+					if = { limit = { colony = 12 }
+						ROOT = { set_variable = { which = por_colony_count value = 12 } }
+					}
+					else = {
+						if = { limit = { colony = 10 }
+							if = { limit = { colony = 11 }
+								ROOT = { set_variable = { which = por_colony_count value = 11 } }
+							}
+							else = {
+								ROOT = { set_variable = { which = por_colony_count value = 10 } }
+							}
+						}
+						else = {
+							if = { limit = { colony = 9 }
+								ROOT = { set_variable = { which = por_colony_count value = 9 } }
+							}
+							else = {
+								ROOT = { set_variable = { which = por_colony_count value = 8 } }
+							}
+						}
+					}
+				}
+				else = {
+					if = { limit = { colony = 4 }
+						if = { limit = { colony = 6 }
+							if = { limit = { colony = 7 }
+								ROOT = { set_variable = { which = por_colony_count value = 7 } }
+							}
+							else = {
+								ROOT = { set_variable = { which = por_colony_count value = 6 } }
+							}
+						}
+						else = {
+							if = { limit = { colony = 5 }
+								ROOT = { set_variable = { which = por_colony_count value = 5 } }
+							}
+							else = {
+								ROOT = { set_variable = { which = por_colony_count value = 4 } }
+							}
+						}
+					}
+					else = {
+						if = { limit = { colony = 2 }
+							if = { limit = { colony = 3 }
+								ROOT = { set_variable = { which = por_colony_count value = 3 } }
+							}
+							else = {
+								ROOT = { set_variable = { which = por_colony_count value = 2 } }
+							}
+						}
+						else = {
+							if = { limit = { colony = 1 }
+								ROOT = { set_variable = { which = por_colony_count value = 1 } }
+							}
+							else = {
+								ROOT = { set_variable = { which = por_colony_count value = 0 } }
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = por_colony_count
+						value = 2
+					}
+				}
+			}
+			set_variable = {
+				which = por_colony_count_var
+				value = 0
+			}
+		}
+		else = {
+			set_variable = {
+				which = por_colony_count_var
+				which = por_colony_count
+			}
+			subtract_variable = {
+				which = por_colony_count_var
+				value = 1
+			}
+		}
+		
+		por_colony_count_update_mod = {
+			mod = por_colony_count
+			var = por_colony_count_var
+			scope = country
+		}
 	}
 	
 	option = {

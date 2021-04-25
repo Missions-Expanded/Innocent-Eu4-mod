@@ -1224,8 +1224,56 @@ export_territory_to_variable = {
 	}
 }
 
+por_colony_count_update_mod = { #mod #var #scope
+    if = {
+        limit = {
+            OR = {
+                check_variable = { which = $var$ value = 1 }
+                has_$scope$_modifier = $mod$_disp
+            }
+        }
+        if = {
+            limit = {
+                check_variable = { which = $var$ value = 1 }
+            }
+			###_dispN
+            set_variable = { which = $mod$_disp1 which = $var$ }
+            set_variable = { which = $mod$_disp1 value = 5 }
+            set_variable = { which = $mod$_disp2 which = $var$ }
+            set_variable = { which = $mod$_disp2 value = 0.05 }
+			###_dispN
+            add_$scope$_modifier = {
+                name = $mod$_disp
+                duration = -1
+            }
+        }
+        else = {
+            remove_$scope$_modifier = $mod$_disp
+            set_variable = { which = $mod$_disp value = 0 }
+        }
+		###num
+        update_mod_helper = { mod=$mod$ var=$var$ scope=$scope$ num=8 }
+        update_mod_helper = { mod=$mod$ var=$var$ scope=$scope$ num=4 }
+        update_mod_helper = { mod=$mod$ var=$var$ scope=$scope$ num=2 }
+        update_mod_helper = { mod=$mod$ var=$var$ scope=$scope$ num=1 }
+		###num
+    }
+}
 
-
-
-
+update_mod_helper = {
+    if = {
+        limit = {
+            check_variable = { which = $var$ value = $num$ }
+        }
+        subtract_variable = { which = $var$ value = $num$ }
+        add_$scope$_modifier = {
+            name = $mod$_$num$
+            duration = -1
+            hidden = yes
+        }
+    }
+    else = {
+        remove_$scope$_modifier = $mod$_$num$
+    }
+}
 
