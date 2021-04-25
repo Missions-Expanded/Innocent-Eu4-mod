@@ -1223,7 +1223,9 @@ POR_missions_4 = {
 					add_building = fort_16th
 				}
 				else_if = {
-					limit = { NOT = { has_building = fort_18th } }
+					limit = {
+						NOT = { has_building = fort_18th }
+					}
 					add_building = fort_15th
 				}
 				add_province_modifier = {
@@ -1371,7 +1373,9 @@ POR_missions_4 = {
 					add_building = fort_16th
 				}
 				else_if = {
-					limit = { NOT = { has_building = fort_18th } }
+					limit = {
+						NOT = { has_building = fort_18th }
+					}
 					add_building = fort_15th
 				}
 			}
@@ -1736,38 +1740,129 @@ POR_missions_5 = {
 		position = 3
 		required_missions = { por_mundi_nostrum }
 		provinces_to_highlight = {
-			#
+			OR = {
+				AND = {
+					OR = {
+						area = catalonia_area
+						area = beieras_area
+						area = valencia_area
+					}
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					OR = {
+						province_id = 213
+						province_id = 220
+					}
+					NOT = { development = 22 }
+				}
+			}
 		}
 		trigger = {
-			# 1. Is Lusitania
 			custom_trigger_tooltip = {
 				tooltip = por_verdadeiro_imperio_tt
 				has_country_flag = por_lusitania_formed
 			}
-			# 2. All provinces in the Valencia,Catalonia and Beleares areas are owned by root
-			# 3. Provinces 213 and 220 are atleast 22 dev.
+			catalonia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			beieras_area = {
+				type = all
+				owned_by = ROOT
+			}
+			valencia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			213 = { development = 22 }
+			220 = { development = 22 }
 		}
 		effect = {
-			# Bonus; Provinces 213 and 220 gain Shipyard building.
-			# Bonus;  all provinces in areas Valencia,Catalonia and Beleares gain local modifier 'Portugese trade techniques' gaining +25% local trade power for 10 years 
-			# Bonus; Grant perm claims on  Westerm Mediterranean Islands.
+			213 = {
+				if = {
+					limit = { has_building = shipyard }
+					add_building = grand_shipyard
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = shipyard
+				}
+			}
+			220 = {
+				if = {
+					limit = { has_building = shipyard }
+					add_building = grand_shipyard
+				}
+				else_if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
+					add_building = shipyard
+				}
+			}
+			catalonia_area = {
+				add_province_modifier = {
+					name = por_trade_techniques
+					duration = 3650 #10 years
+				}
+			}
+			beieras_area = {
+				add_province_modifier = {
+					name = por_trade_techniques
+					duration = 3650 #10 years
+				}
+			}
+			valencia_area = {
+				add_province_modifier = {
+					name = por_trade_techniques
+					duration = 3650 #10 years
+				}
+			}
+			western_mediterrenean_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	por_rival_republics = {
 		icon = icon_wip
 		position = 4
 		required_missions = { por_verdadeiro_imperio }
-		provinces_to_highlight = {
-			#
-		}
 		trigger = {
-			# 1. Has more Galleys than Genoa and Venice
-			# 2. Has atleast 30 Galleys.
-			# 3. Has atleast 25% of the tradepower in the Genoa trade Node.
+			if = {
+				limit = { exists = GEN }
+				num_of_galley = GEN
+			}
+			if = {
+				limit = { exists = VEN }
+				num_of_galley = VEN
+			}
+			num_of_galley = 30
+			1298 = { #genua
+				trade_share = {
+					country = ROOT
+					share = 25
+				}
+			}
 		}
 		effect = {
-			# Bonus; Grant +15% Galley combat ability for aslong as you have more Galleys than Genoa or Venice.
-			# Bonus; Grant +1 Merchant aslong as you have atleast 25% trade power in the Genoa trade node.
+			set_country_flag = por_rival_republics
+			tooltip = {
+				add_country_modifier = {
+					name = por_rival_republics1
+					duration = -1
+				}
+				add_country_modifier = {
+					name = por_rival_republics2
+					duration = -1
+				}
+			}
 		}
 	}
 	por_glittering_coast = {
@@ -1775,18 +1870,50 @@ POR_missions_5 = {
 		position = 5
 		required_missions = { por_ponta_africa }
 		provinces_to_highlight = {
-			#
+			OR = {
+				AND = {
+					area = central_swahili_coast_area
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					province_id = 1196
+					OR = {
+						NOT = { fort_level = 1 }
+						NOT = { has_trade_building_trigger = yes }
+					}
+				}
+			}
 		}
 		trigger = {
-			# 1. Owns all provinces in the Swahillia coast Area.
-			# 2.Prov 1196 has a Castle or a Bastion or a Star Fort or a Fortress.
-			# 3.Prov 1196 has a market or a Trade Depot or a Stock exchange.
-			# 4. Portugal has the most trade power in the Zanzibar trade Node.
+			central_swahili_coast_area = {
+				type = all
+				owned_by = ROOT
+			}
+			1196 = {
+				fort_level = 1
+				has_trade_building_trigger = yes
+			}
+			1448 = { #zanzibar
+				is_strongest_trade_power = ROOT
+			}
+			
 		}
 		effect = {
-			# Bonus; The Trade center in prov 1196 gets upgraded by one level, 
-			# if it is already level three then another trade center will appear in prov 1177.
-			# Bonus; Prov 1196 will gain local modifier "Gold Mine" providing +2 local goods produced for 20 years.
+			1196 = {
+				if = {
+					limit = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+					add_center_of_trade_level = 1
+				}
+				else = {
+					1177 = { center_of_trade = 1 }
+				}
+				add_province_modifier = {
+					name = por_gold_mine
+					duration = 7300 #20 years
+				}
+			}
 		}
 	}
 	por_shipyards_east = {
@@ -1794,20 +1921,264 @@ POR_missions_5 = {
 		position = 6
 		required_missions = { por_glittering_coast }
 		provinces_to_highlight = {
-			#
+			OR = {
+				AND = {
+					OR = {
+						area = quelimane_area
+						area = mozambique_area
+					}
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					OR = {
+						province_id = 1186
+						province_id = 1195
+					}
+					NOT = { has_shipyard_building_trigger = yes }
+				}
+			}
 		}
 		trigger = {
-			# 1.Owns all provinces in the Quelimane and Mozambique area.
-			# 2.Prov 1186 and 1195 have a shipyard.
+			quelimane_area = {
+				type = all
+				owned_by = ROOT
+			}
+			mozambique_area = {
+				type = all
+				owned_by = ROOT
+			}
+			1186 = { has_shipyard_building_trigger = yes }
+			1195 = { has_shipyard_building_trigger = yes }
 		}
 		effect = {
-			# Bonus; Prov 1186 and 1195 gain local modifer "Major Shipyards" granting +50% repair time and +20% colonial range for 20 years.
-			# If the Nobles have more than 60% loyalty, start the construction of 2 castles in prov 1186 and 1195 for 0% of the cost and 50% of the time. (priority 1)
-			# OR
-			# if the Clergy has more than 60% loyalty, (do the same but for churches) (priority 2)
-			# OR
-			# If the burghers has more than 60% loyalty (do the same but for shipyard) (priority 3)
-			# (If these buildings are already built,upgrade them. If they are at max, then do nothing. if 2 estates have more than 60% loyalty,then
+			1186 = {
+				add_province_modifier = {
+					name = por_major_shipyards
+					duration = 7300 #20 years
+				}
+			}
+			1195 = {
+				add_province_modifier = {
+					name = por_major_shipyards
+					duration = 7300 #20 years
+				}
+			}
+			if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					OR = {
+						1186 = {
+							NOT = { has_building = fort_18th }
+						}
+						1195 = {
+							NOT = { has_building = fort_18th }
+						}
+					}
+				}
+				1186 = {
+					if = {
+						limit = { has_building = fort_17th }
+						add_building_construction = {
+							building = fort_18th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = { has_building = fort_16th }
+						add_building_construction = {
+							building = fort_17th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = { has_building = fort_15th }
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = fort_18th }
+						}
+						add_building_construction = {
+							building = fort_15th
+							speed = 0.5
+							cost = 0
+						}
+					}
+				}
+				1195 = {
+					if = {
+						limit = { has_building = fort_17th }
+						add_building_construction = {
+							building = fort_18th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = { has_building = fort_16th }
+						add_building_construction = {
+							building = fort_17th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = { has_building = fort_15th }
+						add_building_construction = {
+							building = fort_16th
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = fort_18th }
+						}
+						add_building_construction = {
+							building = fort_15th
+							speed = 0.5
+							cost = 0
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+					OR = {
+						1186 = {
+							NOT = { has_building = cathedral }
+						}
+						1195 = {
+							NOT = { has_building = cathedral }
+						}
+					}
+				}
+				1186 = {
+					if = {
+						limit = { has_building = temple }
+						add_building_construction = {
+							building = cathedral
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = cathedral }
+						}
+						add_building_construction = {
+							building = temple
+							speed = 0.5
+							cost = 0
+						}
+					}
+				}
+				1195 = {
+					if = {
+						limit = { has_building = temple }
+						add_building_construction = {
+							building = cathedral
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = cathedral }
+						}
+						add_building_construction = {
+							building = temple
+							speed = 0.5
+							cost = 0
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_burghers
+						loyalty = 60
+					}
+					OR = {
+						1186 = {
+							NOT = { has_building = stock_exchange }
+						}
+						1195 = {
+							NOT = { has_building = stock_exchange }
+						}
+					}
+				}
+				1186 = {
+					if = {
+						limit = { has_building = trade_depot }
+						add_building_construction = {
+							building = stock_exchange
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = { has_building = marketplace }
+						add_building_construction = {
+							building = trade_depot
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = stock_exchange }
+						}
+						add_building_construction = {
+							building = marketplace
+							speed = 0.5
+							cost = 0
+						}
+					}
+				}
+				1195 = {
+					if = {
+						limit = { has_building = trade_depot }
+						add_building_construction = {
+							building = stock_exchange
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = { has_building = marketplace }
+						add_building_construction = {
+							building = trade_depot
+							speed = 0.5
+							cost = 0
+						}
+					}
+					else_if = {
+						limit = {
+							NOT = { has_building = stock_exchange }
+						}
+						add_building_construction = {
+							building = marketplace
+							speed = 0.5
+							cost = 0
+						}
+					}
+				}
+			}
 		}
 	}
 	por_island_shores = {
@@ -1815,16 +2186,38 @@ POR_missions_5 = {
 		position = 7
 		required_missions = { por_onwards_india }
 		provinces_to_highlight = {
-			#
+			province_id = 2999
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 1 }
+				AND = {
+					NOT = { has_building = coastal_defence }
+					NOT = { has_building = naval_battery }
+				}
+			}
 		}
 		trigger = {
-			# 1.Owns prov 2999
-			# 2.Has a trader in the Basra trade Node
-			# 3.Prov 2999  has Fort building
-			# 4.prov 2999 has a coastal defence or naval battery building.
+			2999 = {
+				owned_by = ROOT
+				fort_level = 1
+				OR = {
+					has_building = coastal_defence
+					has_building = naval_battery
+				}
+			}
+			1335 = { #basra
+				has_merchant = ROOT
+			}
 		}
 		effect = {
-			#Bonus;  Gain Trade modifier in Basra trade Node "Increased Investments" providing +10 trade power for 10 years.
+			1335 = { #basra
+				add_trade_modifier = {
+					who = ROOT
+					duration = 3650 #10 years
+					power = 10
+					key = por_increased_investments
+				}
+			}
 		}
 	}
 	por_origin_spice = {
@@ -1832,15 +2225,34 @@ POR_missions_5 = {
 		position = 9
 		required_missions = { por_birthplace_silk }
 		provinces_to_highlight = {
-			#
+			OR = {
+				area = sulawesi_area
+				area = south_sulawesi_area
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			# 1. Owns all provinces the South and North Sulawesi region.
-			# 2. Has atleast 33% of all the trade in the The Mollucas trade node
+			sulawesi_area = {
+				type = all
+				owned_by = ROOT
+			}
+			south_sulawesi_area = {
+				type = all
+				owned_by = ROOT
+			}
+			1357 = { #the_moluccas
+				trade_share = {
+					country = ROOT
+					share = 33
+				}
+			}
 		}
 		effect = {
-			# Bonus; Gain +2 diplomatic reputation "Master of Spices" for 20 years.
-			# Bonus; Gain a year's worth of Income.
+			add_country_modifier = {
+				name = por_master_spices
+				duration = 7300 #20 years
+			}
+			add_years_of_income = 1
 		}
 	}
 }
