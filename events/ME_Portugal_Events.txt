@@ -1223,6 +1223,7 @@ country_event = {
 				duration = -1
 			}
 		}
+		custom_tooltip = desc_por_anglo_company_triggered_modifier
 	}
 }
 
@@ -1238,12 +1239,13 @@ country_event = {
 		name = ME_Portugal_Events.18.a
 		
 		set_country_flag = por_anglo_company
-		tooltip = { #wip
+		tooltip = {
 			add_country_modifier = {
 				name = por_anglo_company
 				duration = -1
 			}
 		}
+		custom_tooltip = desc_por_anglo_company_triggered_modifier
 	}
 }
 
@@ -1450,6 +1452,255 @@ country_event = {
 	}
 	
 	option = {
+		#
+	}
+}
+
+country_event = {
+	id = ME_Portugal_Events.20
+	title = ME_Portugal_Events.20.t
+	desc = ME_Portugal_Events.20.d
+	picture = wip_eventPicture
+	
+	mean_time_to_happen = {
+		months = 24
+	}
+	
+	trigger = {
+		religion = catholic
+		num_of_cardinals = 3
+		OR = {
+			papal_influence = 25
+			is_papal_controller = yes
+		}
+		NOT = { is_at_war = yes }
+		343 = {
+			owner = {
+				NOT = { religion_group = christian }
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Portugal_Events.20.a
+		
+		343 = {
+			owner = { save_global_event_target_as = por_crusade_target }
+		}
+		
+		PAP = {
+			country_event = { #An Emmisary from the Portugese
+				id = ME_Portugal_Events.21
+				days = 0
+				tooltip = ME_Portugal_Events.20.a.tt
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Portugal_Events.20.b
+		
+		ai_chance = { factor = 0 }
+		
+		estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+	}
+}
+
+country_event = {
+	id = ME_Portugal_Events.21
+	title = ME_Portugal_Events.21.t
+	desc = ME_Portugal_Events.21.d
+	picture = wip_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Portugal_Events.21.a
+		
+		FROM = {
+			country_event = { #A divine day
+				id = ME_Portugal_Events.22
+				days = 0
+			}
+		}
+		every_known_country = {
+			limit = {
+				capital_scope = { region = iberia_region }
+				NOT = { tag = FROM }
+				religion = catholic
+			}
+			country_event = { #An upcoming Crusade
+				id = ME_Portugal_Events.23
+				days = 0
+			}
+		}
+		
+		add_opinion = {
+			who = FROM
+			modifier = por_blessed_efforts
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = por_blessed_efforts
+		}
+	}
+	
+	option = {
+		name = ME_Portugal_Events.21.b
+		
+		reverse_add_opinion = {
+			who = FROM
+			modifier = por_rejected_offer
+		}
+	}
+}
+
+country_event = {
+	id = ME_Portugal_Events.22
+	title = ME_Portugal_Events.22.t
+	desc = ME_Portugal_Events.22.d
+	picture = wip_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Portugal_Events.22.a
+		
+		custom_tooltip = ME_Portugal_Events.22.a.tt
+		set_country_flag = por_crusade_partner
+		add_casus_belli = {
+			target = event_target:por_crusade_target
+			type = cb_vassalize_mission
+			months = 120 #wip
+		}
+		
+		#wip
+		#[All nations in a war with Portugal against portugal_crusade_target gain a bonus similar to the crusade ones.]
+		#[Once the war is declared, every nation that picked option 3 in "An upcoming Crusade" will join in the war if Portugal is only at war with portugal_crusade_target and its allies]
+		#[Once declared and in the war, the nations will get the ducats from the curia treasury.]		
+		#[Portugal and all of the other participants will get 100 ducats substracted from the curia treasury]
+		#[If spain joins, spain will get 300 ducats]
+	}
+}
+
+country_event = {
+	id = ME_Portugal_Events.23
+	title = ME_Portugal_Events.23.t
+	desc = ME_Portugal_Events.23.d
+	picture = wip_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Portugal_Events.23.a
+		
+		trigger = { manpower = 1 }
+		
+		if = {
+			limit = { manpower = 5 }
+			add_manpower = -5
+			POR = { add_manpower = 5 }
+			add_papal_influence = 5
+		}
+		else_if = {
+			limit = { manpower = 4 }
+			add_manpower = -4
+			POR = { add_manpower = 4 }
+			add_papal_influence = 4
+		}
+		else_if = {
+			limit = { manpower = 3 }
+			add_manpower = -3
+			POR = { add_manpower = 3 }
+			add_papal_influence = 3
+		}
+		else_if = {
+			limit = { manpower = 2 }
+			add_manpower = -2
+			POR = { add_manpower = 2 }
+			add_papal_influence = 2
+		}
+		else_if = {
+			limit = { manpower = 1 }
+			add_manpower = -1
+			POR = { add_manpower = 1 }
+			add_papal_influence = 1
+		}
+		else = {
+			custom_tooltip = ME_Portugal_Events.23.e
+			add_prestige = -5
+		}
+	}
+	
+	option = {
+		name = ME_Portugal_Events.23.b
+		
+		add_treasury = -300
+		POR = { add_treasury = 300 }
+		add_papal_influence = 5
+	}
+	
+	option = {
+		name = ME_Portugal_Events.23.c
+		
+		trigger = {
+			event_target:por_crusade_target = {
+				if = {
+					limit = { has_dlc = "Rights of Man" }
+					any_ally = {
+						is_great_power = yes
+					}
+				}
+				else = {
+					OR = {
+						alliance_with = MAM
+						alliance_with = TUR
+					}
+				}
+			}
+		}
+		
+		custom_tooltip = ME_Portugal_Events.23.c.tt
+		set_country_flag = por_crusade_partner
+		add_papal_influence = 10
+	}
+	
+	option = {
+		name = ME_Portugal_Events.23.e
+		
+		add_prestige = -5
+	}
+}
+
+country_event = {
+	id = ME_Portugal_Events.24
+	title = ME_Portugal_Events.24.t
+	desc = ME_Portugal_Events.24.d
+	picture = wip_eventPicture
+	
+	option = {
+		name = ME_Portugal_Events.24.a
+		
+		#
+	}
+}
+
+country_event = {
+	id = ME_Portugal_Events.25
+	title = ME_Portugal_Events.25.t
+	desc = ME_Portugal_Events.25.d
+	picture = wip_eventPicture
+	
+	trigger = {
+		#
+	}
+	
+	option = {
+		name = ME_Portugal_Events.25.a
+		
 		#
 	}
 }
