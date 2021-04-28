@@ -39,37 +39,29 @@ naples_missions_1 = {
 		position = 1
 		trigger = {
 			OR = {
-				OR = {
-					alliance_with = PAP
-					AND = {
-						has_opinion = {
-							who = PAP
-							value = 150
-						}
-						PAP = {
-							has_opinion = {
-								who = ROOT
-								value = 150
-							}
-						}
+				alliance_with = PAP
+				is_rival = PAP
+				AND = {
+					has_opinion = {
+						who = PAP
+						value = 125
+					}
+					reverse_has_opinion = {
+						who = PAP
+						value = 125
 					}
 				}
-				OR = {
-					is_rival = PAP
-					AND = {
-						NOT = {
-							has_opinion = {
-								who = PAP
-								value = -100
-							}
+				AND = {
+					NOT = {
+						has_opinion = {
+							who = PAP
+							value = -100
 						}
-						NOT = {
-							PAP = {
-								has_opinion = {
-									who = ROOT
-									value = -100
-								}
-							}
+					}
+					NOT = {
+						reverse_has_opinion = {
+							who = ROOT
+							value = -100
 						}
 					}
 				}
@@ -132,7 +124,19 @@ naples_missions_1 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						alliance_with = PAP
+						OR = {
+							alliance_with = PAP
+							AND = {
+								has_opinion = {
+									who = PAP
+									value = 125
+								}
+								reverse_has_opinion = {
+									who = PAP
+									value = 125
+								}
+							}
+						}
 					}
 					add_country_modifier = {
 						name = nap_dominus_vobiscum
@@ -183,7 +187,7 @@ naples_missions_1 = {
 			}
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy = 15
 			western_sicily_area = {
 				if = {
 					limit = { has_dlc = "Mandate of Heaven" }
@@ -1509,10 +1513,21 @@ naples_missions_4 = {
 			}
 		}
 		effect = {
-			random_owned_province = {
-				limit = { area = apulia_area }
-				add_base_production = 2
-				create_or_add_center_of_trade_level = { level = 1 }
+			if = {
+				limit = {
+					owns = 122
+				}
+				122 = {
+					add_base_production = 2
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			else = {
+				random_owned_province = {
+					limit = { area = apulia_area }
+					add_base_production = 2
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
 			}
 			add_country_modifier = {
 				name = nap_dominating_adriatic
@@ -1681,16 +1696,33 @@ naples_missions_5 = {
 		}
 		position = 2
 		trigger = {
-			121 = {
-				owned_by = ROOT
-				has_building = university
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = great_monuments }
+				}
+				121 = {
+					owned_by = ROOT
+				}
+			}
+			else = {
+				121 = {
+					owned_by = ROOT
+					has_building = university
+				}
 			}
 		}
 		effect = {
 			add_prestige = 10
-			add_country_modifier = {
-				name = nap_federico_II
-				duration = -1
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = great_monuments }
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = nap_federico_II
+					duration = -1
+				}
 			}
 		}
 	}
