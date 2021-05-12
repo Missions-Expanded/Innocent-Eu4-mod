@@ -10,6 +10,7 @@ country_event = {
 	fire_only_once = yes
 	
 	trigger = {
+		NOT = { is_expanded_mod_active = { mod = great_monuments } }
 		OR = {
 			AND = {
 				tag = ITA
@@ -17,10 +18,10 @@ country_event = {
 			}
 			AND = {
 				OR = {
-					#tag = LAN
-					#tag = FLO
+					tag = LAN
+					tag = FLO
 				}
-				#mission_completed = 
+				mission_completed = tus_strongholds_piracy
 			}
 		}
 		owns_core_province = 115
@@ -134,12 +135,18 @@ country_event = {
 	
 	trigger = {
 		tag = ITA
-		stability = 2
+		stability = 1
 		NOT = { is_at_war = yes }
+		had_country_flag = {
+			flag = ita_republican_matter
+			days = 5475
+		}
+		NOT = { num_of_rebel_controlled_provinces = 1 }
+		NOT = { num_of_rebel_armies = 1 }
 	}
 
 	mean_time_to_happen = {
-		years = 25
+		years = 15
 	}
 
 	immediate = {
@@ -175,7 +182,6 @@ country_event = {
 			change_government = monarchy
 			add_stability = -1
 		}
-		add_government_reform = autocracy_reform
 		add_government_reform = parliamentary_reform
 	}
 	
@@ -185,6 +191,13 @@ country_event = {
 		ai_chance = { factor = 0.33 }
 
 		custom_tooltip = ITA_REPUBLICAN_PROBLEMS_TT
+		hidden_effect = {
+			set_country_flag = ita_republican_matter
+			italy_region = {
+				clr_province_flag = ita_republican_rebellion_3
+				clr_province_flag = ita_monarchy_rebellion_3
+			}
+		}
 	}
 }
 
@@ -201,6 +214,7 @@ country_event = {
 		tag = ITA
 		OR = {
 			current_age = age_of_absolutism
+			current_age = age_of_revolutions
 			is_year = 1600
 		}
 	}
@@ -212,7 +226,7 @@ country_event = {
 	option = {
 		name = ME_Italy_Events.4.OPT1
 		
-		ai_chance = { factor = 0.33 }
+		ai_chance = { factor = 1 }
 		
 		custom_tooltip = ITA_REPUBLICAN_MATTER_TT
 		set_country_flag = ita_republican_matter
@@ -220,73 +234,129 @@ country_event = {
 }
 
 #Giovine Italia
-province_event = {
+country_event = {
 	id = ME_Italy_Events.5
 	title = ME_Italy_Events.5.T
 	desc = ME_Italy_Events.5.D
 	picture = DEBATE_REPUBLICAN_eventPicture
 
-	mean_time_to_happen = {
-		months = 2
+	trigger = {
+		tag = ITA
+		any_owned_province = {
+			region = italy_region
+			NOT = { area = western_sicily_area }
+			NOT = { area = sicily_area }
+			NOT = { area = calabria_area }
+			NOT = { area = apulia_area }
+			NOT = { area = naples_area }
+			NOT = { area = lazio_area }
+			NOT = { area = corsica_sardinia_area }
+			NOT = { area = central_italy_area }
+			NOT = { has_province_flag = ita_republican_rebellion_3 }
+		}
+		has_country_flag = ita_republican_matter
+		OR = {
+			NOT = { government = republic }
+			AND = {
+				government = republic
+				NOT = { has_reform = constitutional_republic_reform }
+			}
+		}
 	}
 
-	trigger = {
-		owned_by = ITA
-		owner = {
-			has_country_flag = ita_republican_matter
-			NOT = { has_reform = parliamentary_reform }
-		}
-		region = italy_region
-		NOT = { area = western_sicily_area }
-		NOT = { area = sicily_area }
-		NOT = { area = calabria_area }
-		NOT = { area = apulia_area }
-		NOT = { area = naples_area }
-		NOT = { has_province_flag = ita_republican_rebellion_3 }
+	mean_time_to_happen = {
+		months = 6
 	}
 
 	option = {
 		name = ME_Italy_Events.5.OPT1
 
-		spawn_rebels = {
-			size = 3
-			type = ita_republican_rebels
-			leader = yes
+		random_owned_province = {
+			limit = {
+				region = italy_region
+				NOT = { area = western_sicily_area }
+				NOT = { area = sicily_area }
+				NOT = { area = calabria_area }
+				NOT = { area = apulia_area }
+				NOT = { area = naples_area }
+				NOT = { area = lazio_area }
+				NOT = { area = corsica_sardinia_area }
+				NOT = { area = central_italy_area }
+			}
+			hidden_effect = {
+				set_province_flag = ita_republican_rebellion_3
+			}
+			spawn_rebels = {
+				size = 3
+				type = ita_republican_rebels
+				leader = "Jacopo Ruffini"
+			}
 		}
 	}
 }
 
 #Monarchy Aider
-province_event = {
+country_event = {
 	id = ME_Italy_Events.6
 	title = ME_Italy_Events.6.T
 	desc = ME_Italy_Events.6.D
 	picture = DEBATE_REPUBLICAN_eventPicture
 
 	trigger = {
-		owned_by = ITA
-		owner = {
-			has_country_flag = ita_republican_matter
-			NOT = { has_reform = constitutional_republic_reform }
+		tag = ITA
+		any_owned_province = {
+			region = italy_region
+			OR = {
+				area = western_sicily_area
+				area = sicily_area
+				area = calabria_area
+				area = apulia_area
+				area = naples_area
+				area = lazio_area
+				area = corsica_sardinia_area
+				area = central_italy_area
+			}
+			NOT = { has_province_flag = ita_monarchy_rebellion_3 }
 		}
-		region = italy_region
+		has_country_flag = ita_republican_matter
 		OR = {
-			area = western_sicily_area
-			area = sicily_area
-			area = calabria_area
-			area = apulia_area
-			area = naples_area
+			NOT = { government = monarchy }
+			AND = {
+				government = monarchy
+				NOT = { has_reform = parliamentary_reform }
+			}
 		}
-		NOT = { has_province_flag = ita_monarchy_rebellion_3 }
+	}
+
+	mean_time_to_happen = {
+		months = 6
 	}
 
 	option = {
 		name = ME_Italy_Events.6.OPT1
 
-		spawn_rebels = {
-			size = 3
-			type = ita_monarchy_rebels
-			leader = yes
+		random_owned_province = {
+			limit = {
+				region = italy_region
+				OR = {
+					area = western_sicily_area
+					area = sicily_area
+					area = calabria_area
+					area = apulia_area
+					area = naples_area
+					area = lazio_area
+					area = corsica_sardinia_area
+					area = central_italy_area
+				}
+				NOT = { has_province_flag = ita_monarchy_rebellion_3 }
+			}
+			hidden_effect = {
+				set_province_flag = ita_monarchy_rebellion_3
+			}
+			spawn_rebels = {
+				size = 3
+				type = ita_monarchy_rebels
+			}
 		}
 	}
 }
@@ -303,14 +373,13 @@ country_event = {
 	trigger = {
 		tag = ITA
 		owns_core_province = 2979
-		is_year = 1710
 		2979 = {
 			NOT = { trade_goods = gold }
 		}
 	}
 
 	mean_time_to_happen = {
-		years = 5
+		years = 10
 	}
 
 	option = {

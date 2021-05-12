@@ -620,6 +620,13 @@ italy_missions_2 = {
 				name = ita_colonial_adventures
 				duration = 18250
 			}
+			guinea_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -741,7 +748,7 @@ italy_missions_2 = {
 				army_tradition = 80
 			}
 			army_size = 100
-			legitimacy = 50
+			legitimacy_equivalent = 75
 		}
 		effect = {
 			add_country_modifier = {
@@ -1222,11 +1229,14 @@ italy_missions_3 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			341 = {
-				all_trade_node_member_province = {
-					OR = {
-						NOT = { has_port = yes }
-						owned_by = ROOT
+			custom_trigger_tooltip = {
+				tooltip = ITA_lands_pirates_TT
+				341 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { has_port = yes }
+							owned_by = ROOT
+						}
 					}
 				}
 			}
@@ -1575,83 +1585,97 @@ italy_missions_3 = {
 						trade_goods = grain
 						trade_goods = livestock
 						trade_goods = fish
-						trade_goods = livestock
 						trade_goods = rice
 						trade_goods = olive_oil
 						trade_goods = cheese
 						trade_goods = potato
 					}
 					OR = {
-						NOT = { owned_by = ROOT }
-						AND = {
-							NOT = { development = 15 }
-							NOT = { has_production_building_trigger = yes }
-						}
-						NOT = { has_building = farm_estate }
+						NOT = { development = 20 }
+						NOT = { has_production_building_trigger = yes }
+						NOT = { has_manufactory_trigger = yes }
 					}
 				}
 			}
 		}
 		trigger = {
-			italy_region = {
-				type = all
-				owned_by = ROOT
-			}
-			italy_region = {
-				type = all
-				OR = {
-					has_terrain = farmlands
-					has_terrain = grasslands
-					trade_goods = grain
-					trade_goods = livestock
-					trade_goods = fish
-					trade_goods = livestock
-					trade_goods = rice
-					trade_goods = olive_oil
-					trade_goods = cheese
-					trade_goods = potato
+			custom_trigger_tooltip = {
+				tooltip = ITA_GRANARY_ITALY_TT
+				italy_region = {
+					type = all
+					owned_by = ROOT
 				}
-				owned_by = ROOT
-				OR = {
-					AND = {
-						development = 15
-						has_production_building_trigger = yes
+				italy_region = {
+					type = all
+					OR = {
+						NOT = {
+							has_terrain = farmlands
+							has_terrain = grasslands
+							trade_goods = grain
+							trade_goods = livestock
+							trade_goods = fish
+							trade_goods = rice
+							trade_goods = olive_oil
+							trade_goods = cheese
+							trade_goods = potato
+						}
+						AND = {
+							OR = {
+								development = 20
+								has_production_building_trigger = yes
+								has_manufactory_trigger = yes
+							}
+							owned_by = ROOT
+						}
 					}
-					has_building = farm_estate
 				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = ita_supporting_newfounded_state
-				duration = -1
-			}
-			every_owned_province = {
+			if = {
 				limit = {
-					region = italy_region
-					OR = {
-						has_terrain = farmlands
-						has_terrain = grasslands
-						trade_goods = grain
-						trade_goods = livestock
-						trade_goods = fish
-						trade_goods = livestock
-						trade_goods = rice
-						trade_goods = olive_oil
-						trade_goods = cheese
-						trade_goods = potato
-					}
-					OR = {
-						AND = {
-							development = 15
-							has_production_building_trigger = yes
-						}
-						has_manufactory_trigger = yes
+					NOT = {
+						is_expanded_mod_active = { mod = great_monuments }
 					}
 				}
+				add_country_modifier = {
+					name = ita_supporting_newfounded_state
+					duration = -1
+				}
+			}
+			custom_tooltip = ITA_Bolstering_Production_TT
+			tooltip = {
 				add_province_modifier = {
 					name = ita_bolstering_production
 					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						region = italy_region
+						OR = {
+							has_terrain = farmlands
+							has_terrain = grasslands
+							trade_goods = grain
+							trade_goods = livestock
+							trade_goods = fish
+							trade_goods = livestock
+							trade_goods = rice
+							trade_goods = olive_oil
+							trade_goods = cheese
+							trade_goods = potato
+						}
+						OR = {
+							development = 20
+							has_production_building_trigger = yes
+							has_manufactory_trigger = yes
+						}
+					}
+					add_province_modifier = {
+						name = ita_bolstering_production
+						duration = -1
+					}
 				}
 			}
 		}
@@ -2002,15 +2026,17 @@ italy_missions_4 = {
 		}
 		trigger = {
 			languedoc_area = {
+				type = all
 				OR = {
 					NOT = { has_port = yes }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 			provence_area = {
+				type = all
 				OR = {
 					NOT = { has_port = yes }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 		}
@@ -2019,7 +2045,7 @@ italy_missions_4 = {
 		}
 	}
 
-	ita_mediterranean_coast = {
+	ita_mediterranean_trade_centers = {
 		icon = mission_mare_nostrum
 		required_missions = {
 			ita_western_mediterranean
@@ -2043,50 +2069,169 @@ italy_missions_4 = {
 				area = palestine_area
 				area = aydin_area
 				area = hudavendigar_area
-				province_id = 4316
 				province_id = 151
-				province_id = 4779
-				province_id = 4705
-				province_id = 1751
-				province_id = 4561
-				province_id = 335
 			}
 			has_port = yes
-			NOT = { province_is_on_an_island = yes }
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			province_has_center_of_trade_of_level = 1
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = ITA_MEDITERRANEAN_COAST_TT
-				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-					value = 50
-					OR = {
-						any_trade_node_member_province = { province_id = 341 } #tunis
-						any_trade_node_member_province = { province_id = 1295 } #valencia
-						any_trade_node_member_province = { province_id = 1298 } #genoa
-						any_trade_node_member_province = { province_id = 1308 } #venice
-						any_trade_node_member_province = { province_id = 137 } #ragusa
-						any_trade_node_member_province = { province_id = 377 } #aleppo
-						area = upper_andalucia_area
-						area = toledo_area
-						area = algiers_area
-						area = barbary_coast_area
-						area = cyrenaica_area
-						area = delta_area
-						area = palestine_area
-						area = aydin_area
-						area = hudavendigar_area
-						province_id = 4316
-						province_id = 151
-						province_id = 4779
-						province_id = 4705
-						province_id = 1751
-						province_id = 4561
-						province_id = 335
+				tooltip = ita_mediterranean_trade_centers_TT
+				341 = { #tunis
+					all_trade_node_member_province = {
+						if = {
+							limit = {
+								has_port = yes
+								province_has_center_of_trade_of_level = 1
+							}
+							owned_by = ROOT
+						}
+						else = { always = yes }
 					}
-					has_port = yes
-					NOT = { province_is_on_an_island = yes }
 				}
+				1295 = { #valencia
+					all_trade_node_member_province = {
+						if = {
+							limit = {
+								has_port = yes
+								province_has_center_of_trade_of_level = 1
+							}
+							owned_by = ROOT
+						}
+						else = { always = yes }
+					}
+				}
+				1298 = { #genoa
+					all_trade_node_member_province = {
+						if = {
+							limit = {
+								has_port = yes
+								province_has_center_of_trade_of_level = 1
+							}
+							owned_by = ROOT
+						}
+						else = { always = yes }
+					}
+				}
+				1308 = { #venice
+					all_trade_node_member_province = {
+						if = {
+							limit = {
+								has_port = yes
+								province_has_center_of_trade_of_level = 1
+							}
+							owned_by = ROOT
+						}
+						else = { always = yes }
+					}
+				}
+				137 = { #ragusa
+					all_trade_node_member_province = {
+						if = {
+							limit = {
+								has_port = yes
+								province_has_center_of_trade_of_level = 1
+							}
+							owned_by = ROOT
+						}
+						else = { always = yes }
+					}
+				}
+				377 = { #aleppo
+					all_trade_node_member_province = {
+						if = {
+							limit = {
+								has_port = yes
+								province_has_center_of_trade_of_level = 1
+							}
+							owned_by = ROOT
+						}
+						else = { always = yes }
+					}
+				}
+				upper_andalucia_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				toledo_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				algiers_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				barbary_coast_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				cyrenaica_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				delta_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				palestine_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				aydin_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				hudavendigar_area = {
+					OR = {
+						NOT = {
+							has_port = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						owned_by = ROOT
+					}
+				}
+				owns = 151
 			}
 		}
 		effect = {
@@ -2099,7 +2244,7 @@ italy_missions_4 = {
 	ita_mare_nostrum = {
 		icon = mission_aragonese_navy
 		required_missions = {
-			ita_mediterranean_coast
+			ita_mediterranean_trade_centers
 			ita_city_alexandria
 		}
 		position = 23
@@ -2109,7 +2254,7 @@ italy_missions_4 = {
 			}
 			1295 = { #Valencia
 			is_strongest_trade_power = ROOT
-		}
+			}
 			341 = { #Tunis
 				is_strongest_trade_power = ROOT
 			}
@@ -2442,11 +2587,14 @@ italy_missions_5 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			137 = {
-				any_trade_node_member_province = {
-					OR = {
-						NOT = { has_port = yes }
-						NOT = { owned_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = ITA_blooded_shores_TT
+				137 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { has_port = yes }
+							owned_by = ROOT
+						}
 					}
 				}
 			}
@@ -2530,23 +2678,31 @@ italy_missions_5 = {
 		trigger = {
 			aydin_area = {
 				type = all
-				NOT = { has_port = yes }
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				OR = {
+					NOT = { has_port = yes }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 			hudavendigar_area = {
 				type = all
-				NOT = { has_port = yes }
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				OR = {
+					NOT = { has_port = yes }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 			germiyan_area = {
 				type = all
-				NOT = { has_port = yes }
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				OR = {
+					NOT = { has_port = yes }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 			cukurova_area = {
 				type = all
-				NOT = { has_port = yes }
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				OR = {
+					NOT = { has_port = yes }
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {
@@ -2793,33 +2949,40 @@ italy_missions_5 = {
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = arsenale_marittimo_militare }
+				NOT = { has_building = drydock }
+				NOT = { has_building = grand_shipyard }
 			}
 		}
 		trigger = {
 			122 = {
 				owned_by = ROOT
-				has_building = arsenale_marittimo_militare
+				has_building = drydock
+				has_building = grand_shipyard
 			}
 			124 = {
 				owned_by = ROOT
-				has_building = arsenale_marittimo_militare
+				has_building = drydock
+				has_building = grand_shipyard
 			}
 			125 = {
 				owned_by = ROOT
-				has_building = arsenale_marittimo_militare
+				has_building = drydock
+				has_building = grand_shipyard
 			}
 			127 = {
 				owned_by = ROOT
-				has_building = arsenale_marittimo_militare
+				has_building = drydock
+				has_building = grand_shipyard
 			}
 			2982 = {
 				owned_by = ROOT
-				has_building = arsenale_marittimo_militare
+				has_building = drydock
+				has_building = grand_shipyard
 			}
 			2983 = {
 				owned_by = ROOT
-				has_building = arsenale_marittimo_militare
+				has_building = drydock
+				has_building = grand_shipyard
 			}
 		}
 		effect = {
