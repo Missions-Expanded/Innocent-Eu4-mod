@@ -102,6 +102,7 @@ HSA_missions_1 = {
 				name = HSA_trade_routes_modifier
 				duration = 10950
 			}
+			add_mercantilism = 5
 		}
 	}
 	
@@ -246,10 +247,24 @@ HSA_missions_2 = {
 		required_missions = { HSA_in_defense }
 		position = 3
 		provinces_to_highlight = {
+			owner = {
+				is_enemy = ROOT
+			}
 		}
 		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = obj_humiliate_rival_tooltip
+					has_country_flag = humiliated_rival
+				}
+				total_development = 1000
+			}
+			power_projection = 25	
+			army_tradition = 40
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 25 }
+			create_general = { tradition = 75 }
 		}
 	}
 	
@@ -290,34 +305,51 @@ HSA_missions_2 = {
 		}
 		trigger = {
 			45 = {
-				owned_by = ROOT
-				has_trade_building_trigger = yes
-			}
-			53 = {
-				OR = {
-					owner = {
-						OR = {
-							alliance_with = ROOT
-							is_in_trade_league_with = ROOT
-						}
-					}
+				custom_trigger_tooltip = {
+					tooltip = HSA_owned_and_trade_building
 					AND = {
 						has_trade_building_trigger = yes
 						owned_by = ROOT
 					}
 				}
 			}
-			1857 = {
+			53 = {
 				OR = {
-					owner = {
-						OR = {
-							alliance_with = ROOT
-							is_in_trade_league_with = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HSA_owner_in_league_or_allied
+						owner = {
+							OR = {
+								alliance_with = ROOT
+								is_in_trade_league_with = ROOT
+							}
 						}
 					}
-					AND = {
-						has_trade_building_trigger = yes
-						owned_by = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HSA_owned_and_trade_building
+						AND = {
+							has_trade_building_trigger = yes
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			1857 = {
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_owner_in_league_or_allied
+						owner = {
+							OR = {
+								alliance_with = ROOT
+								is_in_trade_league_with = ROOT
+							}
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = HSA_owned_and_trade_building
+						AND = {
+							has_trade_building_trigger = yes
+							owned_by = ROOT
+						}
 					}
 				}
 			}
@@ -367,8 +399,17 @@ HSA_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				statesman = 1
+				diplomatic_reputation = 2
+			}
+			republican_tradition = 90
+			
 		}
 		effect = {
+			add_dip_power = 50
+			custom_tooltip = HNS_hansetage
+			set_country_flag = HNS_hansetage
 		}
 	}
 	
@@ -379,8 +420,27 @@ HSA_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			45 = {
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+			calc_true_if = {
+				all_country = {
+					OR = {
+						alliance_with = ROOT
+						is_in_trade_league_with = ROOT
+					}
+				}
+				amount = 10
+			}
 		}
 		effect = {
+			add_legitimacy_equivalent = { value = 10 }
+			custom_tooltip = HNS_decision_for_hansa
+			set_country_flag = HNS_decision
+			custom_tooltip = HNS_we_may_inherit_bremen_and_hamburg
 		}
 	}
 }
@@ -407,8 +467,23 @@ HSA_missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			calc_true_if = {
+				all_country = {
+					OR = {
+						alliance_with = ROOT
+						is_in_trade_league_with = ROOT
+					}
+				}
+				amount = 6
+			}
+			
 		}
 		effect = {
+			add_country_modifier = {
+				name = HSA_hansa_renewed
+				duration = -1
+			}
+			add_stability_or_adm_power = yes
 		}
 	}
 	
@@ -417,10 +492,81 @@ HSA_missions_4 = {
 		required_missions = { HSA_grow_the_league }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				province_id = 1876
+				province_id = 69
+				province_id = 85
+			}
+			NOT = {
+				owner = {
+					OR = {
+						is_in_trade_league_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			OR = {
+				diplomat = 2
+				AND = {
+					1876 = {
+						custom_trigger_tooltip = {
+							tooltip = HSA_in_league_or_100_opinion
+							owner = {
+								OR = {
+									tag = ROOT
+									is_in_trade_league_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 150
+									}
+								}
+							}
+						}
+					}
+					69 = {
+						custom_trigger_tooltip = {
+							tooltip = HSA_in_league_or_100_opinion
+							owner = {
+								OR = {
+									tag = ROOT
+									is_in_trade_league_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 150
+									}
+								}
+							}
+						}
+					}
+					85 = {
+						custom_trigger_tooltip = {
+							tooltip = HSA_in_league_or_100_opinion
+							owner = {
+								OR = {
+									tag = ROOT
+									is_in_trade_league_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 150
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = HSA_channeling_goods_through_rhine
+				duration = 9125
+			}
 		}
 	}
 	
@@ -429,11 +575,83 @@ HSA_missions_4 = {
 		required_missions = { HSA_grow_our_fleet }
 		position = 4
 		provinces_to_highlight = {
+			OR = {
+				province_id = 46
+				province_id = 47
+				province_id = 1858
+			}
+			NOT = {
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
 		}
 		trigger = {
-			
+			46 = {
+				custom_trigger_tooltip = {
+					tooltip = HSA_in_league_or_100_opinion
+					owner = {
+						OR = {
+							tag = ROOT
+							is_in_trade_league_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+					}
+				}
+			}
+			47 = {
+				custom_trigger_tooltip = {
+					tooltip = HSA_in_league_or_100_opinion
+					owner = {
+						OR = {
+							tag = ROOT
+							is_in_trade_league_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+					}
+				}
+			}
+			1858 = {
+				custom_trigger_tooltip = {
+					tooltip = HSA_in_league_or_100_opinion
+					owner = {
+						OR = {
+							tag = ROOT
+							is_in_trade_league_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			45 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 15
+					key = HSA_wendish_charter
+				}
+			}
+			add_country_modifier = {
+				name = HSA_trade_with_the_wends
+				duration = 9125
+			}
 		}
 	}
 }
@@ -458,10 +676,32 @@ HSA_missions_5 = {
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { development = 20 }
+					NOT = { num_of_times_improved = 5 }	
+				}
+			}
 		}
 		trigger = {
+			45 = {
+				owned_by = ROOT
+				OR = {
+					development = 20
+					num_of_times_improved = 3
+				}
+			}
 		}
 		effect = {
+			45 = {
+				add_or_upgrade_trade_building = yes
+			}
+			add_country_modifier = {
+				name = HNS_cot
+				duration = -1
+			}
 		}
 	}
 	
@@ -470,10 +710,28 @@ HSA_missions_5 = {
 		required_missions = { HSA_heart_of_the_league }
 		position = 2
 		provinces_to_highlight = {
+			province_id = 45
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { renaissance = 100 }
+				NOT = { num_of_buildings_in_province = 3 }
+			}
 		}
 		trigger = {
+			45 = {
+				num_of_buildings_in_province = 3
+				renaissance = 100
+				owned_by = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HSA_gothic
+				duration = 9125
+			}
+			45 = {
+				add_prosperity = 100
+			}
 		}
 	}
 	
@@ -490,6 +748,11 @@ HSA_missions_5 = {
 			}
 		}
 		effect = {
+			add_years_of_income = 0.25
+			add_country_modifier = {
+				name = HSA_serene_seas_await
+				duration = 9125
+			}
 		}
 	}
 	
@@ -497,12 +760,22 @@ HSA_missions_5 = {
 		icon = me_mission_venice_ship_in_port
 		required_missions = { HSA_grow_our_fleet }
 		position = 5
-		provinces_to_highlight = {
-		}
 		trigger = {
-			
+			num_of_light_ship = 20
+			num_of_galley = 10
 		}
 		effect = {
+			add_country_modifier = {
+				name = HSA_to_bring_peace
+				duration = 10950
+			}
+			define_advisor = {
+				type = naval_reformer
+				skill = 1
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
 		}
 	}
 }
