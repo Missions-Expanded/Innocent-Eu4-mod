@@ -1,4 +1,4 @@
-HNS_Generic_missions_1 = {
+HNS_Generic_missions_1_secede = {
 	slot = 1
 	generic = no 
 	ai = yes
@@ -15,8 +15,23 @@ HNS_Generic_missions_1 = {
 		required_missions = { HNS_secede_from_the_league }
 		position = 2
 		trigger = {
+			power_projection = 15
+			army_tradition = 20
+			navy_size = HSA
+			army_size = HSA
+			has_won_war_against = {
+				who = HSA
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = HNS_supremacy_of_the_new_league
+				duration = 10950
+			}
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 15
+			}
 		}
 	}
 	
@@ -31,7 +46,95 @@ HNS_Generic_missions_1 = {
 	}
 }
 
-HNS_Generic_missions_2 = {
+HNS_Generic_missions_1 = {
+	slot = 1
+	generic = no 
+	ai = yes
+	potential = {
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+
+	HNS_leverage_deals = {
+		icon = medici_bank_ledgers
+		required_missions = { }
+		position = 4
+		trigger = {
+			
+		}
+		effect = {
+		}
+	}
+	
+	HNS_new_trade_deal = {
+		icon = interest_of_holland
+		required_missions = { HNS_leverage_deals }
+		position = 6
+		provinces_to_highlight = {
+			owner = {
+				NOT = { alliance_with = ROOT }
+				home_trade_node = {
+					trade_share = {
+						country = PREV
+						share = 10
+					}
+				}
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				all_ally = {
+					custom_trigger_tooltip = {
+						tooltip = HSA_10_percent_trade_share
+						home_trade_node = {
+							trade_share = {
+								country = PREV
+								share = 10
+							}
+						}
+					}
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			custom_tooltip = HSA_every_trade_node_fulfilling_conditions
+			tooltip = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 15
+					key = HSA_new_trade_deals
+				}
+			}
+			hidden_effect = {
+				every_ally = {
+					limit = {
+						home_trade_node = {
+							trade_share = {
+								country = PREV
+								share = 10
+							}
+						}
+					}
+					home_trade_node_effect_scope = {
+						add_trade_modifier = {
+							who = ROOT
+							duration = 9125
+							power = 15
+							key = HSA_new_trade_deals
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+HNS_Generic_missions_2_secede = {
 	slot = 2
 	generic = no 
 	ai = yes
@@ -93,6 +196,19 @@ HNS_Generic_missions_2 = {
 			}
 		}
 		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = HNS_struggle_for_recognition
+				duration = 9125
+			}
+			custom_tooltip = HNS_lubeck_no_trade
+			tooltip = {
+				add_country_modifier = {
+					name = HNS_eclipsed_lubeck
+					duration = 7300
+				}
+			}
+			#If Lubeck is ded (trade wise) give sum bonus
 		}
 	}
 }
@@ -120,18 +236,37 @@ HNS_Generic_missions_3 = {
 		}
 	}
 	
-	HNS_pennant = {
+	HNS_leadership = {
 		icon = medici_bank_ledgers
-		required_missions = { }
+		required_missions = { HNS_our_roots }
 		position = 4
 		trigger = {
+			45 = {
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+			calc_true_if = {
+				all_country = {
+					OR = {
+						alliance_with = ROOT
+						is_in_trade_league_with = ROOT
+					}
+				}
+				amount = 10
+			}
 		}
 		effect = {
+			add_legitimacy_equivalent = { value = 10 }
+			custom_tooltip = HNS_decision_for_hansa
+			set_country_flag = HNS_decision
+			custom_tooltip = HNS_we_may_inherit_bremen_and_hamburg
 		}
 	}
 }
 
-HNS_Generic_missions_4 = {
+HNS_Generic_missions_4_loyal = {
 	slot = 4
 	generic = no 
 	ai = yes
@@ -164,7 +299,7 @@ HNS_Generic_missions_4 = {
 	}
 }
 
-HNS_Generic_missions_5 = {
+HNS_Generic_missions_5_loyal = {
 	slot = 5
 	generic = no 
 	ai = yes
@@ -197,3 +332,55 @@ HNS_Generic_missions_5 = {
 	}
 	
 }
+
+HNS_Generic_missions_5 = {
+	slot = 5
+	generic = no 
+	ai = yes
+	potential = {
+		OR = {
+			tag = HAM
+			tag = BRE
+		}
+	}
+	has_country_shield = yes
+	
+	HNS_entrepot = {
+		icon = medici_bank_ledgers
+		required_missions = { }
+		position = 4
+		trigger = {
+		}
+		effect = {
+		}
+	}
+	
+	HNS_renaissance = {
+		icon = levee_the_arno
+		required_missions = { HNS_entrepot }
+		position = 6
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { renaissance = 100 }
+				NOT = { num_of_buildings_in_province = 3 }
+			}
+		}
+		trigger = {
+			capital_scope = {
+				num_of_buildings_in_province = 3
+				renaissance = 100
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = HSA_gothic
+				duration = 9125
+			}
+			capital_scope = {
+				add_prosperity = 100
+			}
+		}
+	}
