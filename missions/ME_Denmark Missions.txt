@@ -33,7 +33,7 @@ denmark_missions_1 = {
 	}
 
 	dan_danish_royal_navy = {
-		icon = reform_bergordnung
+		icon = mission_galleys_in_port
 		required_missions = { dan_pirate_king }
 		position = 4
 		trigger = {
@@ -70,7 +70,7 @@ denmark_missions_1 = {
 	}
 
 	dan_terra_mariana = {
-		icon = reform_bergordnung
+		icon = mission_sea_battles
 		required_missions = {
 			dan_danish_royal_navy
 			dan_reclaim_garda
@@ -127,7 +127,7 @@ denmark_missions_1 = {
 	}
 
 	dan_southern_ports = {
-		icon = reform_bergordnung
+		icon = mission_teutonic_knights
 		required_missions = {
 			dan_terra_mariana
 		}
@@ -847,7 +847,7 @@ denmark_missions_3 = {
 		icon = unite_the_wittelsbachs
 		required_missions = {
 			dan_german_connections
-			dam_wittelsbachs_denmark
+			dan_wittelsbachs_denmark
 		}
 		position = 4
 		trigger = {
@@ -1005,41 +1005,34 @@ denmark_missions_3 = {
 							who = ROOT
 							value = 120
 						}
-					}
-					OR = {
-						vassal_of = ROOT
-						dynasty = ROOT
+						OR = {
+							vassal_of = ROOT
+							dynasty = ROOT
+						}
 					}
 				}
 				custom_trigger_tooltip = {
 					tooltip = emp_hab_spread_dynasties_trigger_tooltip
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = europe }
+					europe = {
+						owner = { dynasty = ROOT }
 					}
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = asia }
+					asia = {
+						owner = { dynasty = ROOT }
 					}
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = africa }
+					africa = {
+						owner = { dynasty = ROOT }
 					}
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = north_america }
+					north_america = {
+						owner = { dynasty = ROOT }
 					}
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = south_america }
+					south_america = {
+						owner = { dynasty = ROOT }
 					}
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = oceania }
+					oceania = {
+						owner = { dynasty = ROOT }
 					}
-					any_country = {
-						dynasty = ROOT
-						any_owned_province = { continent = island_check_provinces }
+					island_check_provinces = {
+						owner = { dynasty = ROOT }
 					}
 				}
 			}
@@ -1048,6 +1041,132 @@ denmark_missions_3 = {
 			add_country_modifier = {
 				name = dan_widespread_dynasty
 				duration = 18250
+			}
+		}
+	}
+
+	dan_stable_kalmar = {
+		icon = mission_have_two_subjects
+		required_missions = {  }
+		position = 10
+		trigger = {
+			NOT = {
+				any_subject_country = {
+					liberty_desire = 10
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_stable_kalmar
+				duration = 18250
+			}
+		}
+	}
+
+	dan_allievate_our_supremacy = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { dan_stable_kalmar }
+		position = 12
+		trigger = {
+			is_year = 1550
+			stability = 3
+			NOT = { unrest = 0 }
+			if = {
+				limit = {
+					exists = NOR
+				}
+				NOR = {
+					religion = ROOT
+					religious_unity = 1
+				}
+			}
+			if = {
+				limit = {
+					exists = SWE
+				}
+				NOR = {
+					religion = ROOT
+					religious_unity = 1
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_superior_norseman
+				duration = 18250
+			}
+		}
+	}
+
+	dan_norwegian_crown = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { dan_allievate_our_supremacy }
+		position = 14
+		provinces_to_highlight = {
+			region = scandinavia_region
+			is_core = NOR
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { exists = NOR }
+			scandinavia_region = {
+				is_core = NOR
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_norwegian_tradition
+				duration = -1
+			}
+		}
+	}
+
+	dan_swedish_crown = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { dan_norwegian_crown }
+		position = 16
+		provinces_to_highlight = {
+			region = scandinavia_region
+			is_core = SWE
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			NOT = { exists = SWE }
+			scandinavia_region = {
+				is_core = SWE
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_swedish_tradition
+				duration = -1
+			}
+		}
+	}
+
+	dan_formalize_union = {
+		icon = mission_monarch_in_throne_room
+		required_missions = { dan_swedish_crown }
+		position = 18
+		provinces_to_highlight = {
+			region = scandinavia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			scandinavia_region = {
+				type = all
+				owned_by = ROOT
+			}
+			prestige = 80
+			legitimacy_equivalent = 100
+			total_development = 600
+		}
+		effect = {
+			country_event = {
+				id = ME_Denmark_Events.12
 			}
 		}
 	}
@@ -1062,6 +1181,393 @@ denmark_missions_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
+
+	dan_wittelsbachs_denmark = {
+		icon = mission_hanseatic_city
+		required_missions = {  }
+		position = 3
+		provinces_to_highlight = {
+			owned_by = ROOT
+			controlled_by = REB
+		}
+		trigger = {
+			stability = 3
+			prestige = 25
+			NOT = { num_of_rebel_controlled_provinces = 1 }
+			NOT = { num_of_rebel_armies = 1 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_wittelsbachs_approved
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = dan_german_king
+				duration = 14600
+			}
+			if = {
+				limit = {
+					exists = STE
+				}
+				add_casus_belli = {
+					type = cb_vassalize_mission
+					target = STE
+				}
+			}
+			if = {
+				limit = {
+					exists = WOL
+				}
+				add_casus_belli = {
+					type = cb_vassalize_mission
+					target = WOL
+				}
+			}
+			if = {
+				limit = {
+					exists = POM
+				}
+				add_casus_belli = {
+					type = cb_vassalize_mission
+					target = POM
+				}
+			}
+			hinter_pommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vorpommern_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	dan_danish_pomerania = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_wittelsbachs_denmark }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = hinter_pommern_area
+				area = vorpommern_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			hinter_pommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			vorpommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_pomeranian_conquest
+				duration = 18250
+			}
+			if = {
+				limit = {
+					exists = MKL
+				}
+				add_casus_belli = {
+					type = cb_annex
+					target = MKL
+				}
+			}
+			if = {
+				limit = {
+					exists = HSA
+				}
+				add_casus_belli = {
+					type = cb_annex
+					target = HSA
+				}
+			}
+			mecklenburg_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	dan_our_bitter_rivals = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_danish_pomerania }
+		position = 7
+		provinces_to_highlight = {
+			area = mecklenburg_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			mecklenburg_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_swayed_hansa
+				duration = 10950
+			}
+			weser_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	dan_crush_hansa = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_our_bitter_rivals }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = weser_area
+				area = lower_saxony_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			weser_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lower_saxony_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_dominating_hansa
+				duration = -1
+			}
+		}
+	}
+
+	dan_divine_turmoil = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_renaessance }
+		position = 11
+		trigger = {
+			is_religion_enabled = reformed
+			is_religion_enabled = protestant
+		}
+		effect = {
+			country_event = {
+				id = ME_Denmark_Events.13
+			}
+		}
+	}
+
+	dan_one_true_faith = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_divine_turmoil }
+		position = 13
+		trigger = {
+			religious_unity = 0.99
+			OR = {
+				AND ={
+					religion = catholic
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+					papal_influence = 50
+					inquisitor = 1
+					stability = 3
+				}
+				AND = {
+					OR = {
+						religion = protestant
+						religion = reformed
+					}
+					stability = 3
+					legitimacy_equivalent = 99
+					prestige = 40
+					OR = {
+						fervor = 50
+						church_power = 50
+					}
+				}
+				AND = {
+					OR = {
+						religion = protestant
+						religion = reformed
+					}
+					is_defender_of_faith = yes
+					OR = {
+						fervor = 25
+						church_power = 25
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = dan_one_true_faith_TT
+			hidden_effect = {
+				if = {
+					limit = {
+						religion = catholic
+					}
+					add_country_modifier = {
+						name = dan_catholic_denmark
+						duration = -1
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = dan_ordinatio_ecclesiastica_regnorum_daniae
+						duration = 36500
+					}
+				}
+			}
+			add_country_modifier = {
+				name = dan_matter_religion
+				duration = 18250
+			}
+		}
+	}
+
+	dan_sword_god = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_one_true_faith }
+		position = 15
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_force_converted_tooltip
+				has_country_flag = force_converted
+			}
+			OR = {
+				AND = {
+					hre_leagues_enabled = yes
+					OR = {
+						is_emperor = yes
+						AND = {
+							emperor = {
+								is_in_war = { casus_belli = cb_religious_league }
+							}
+							NOT = { in_league = protestant }
+							NOT = { in_league = catholic }
+						}
+					}
+				}
+				in_league = protestant
+				in_league = catholic
+				if = {
+					limit = { 
+						has_dlc = "Art of War"
+					}
+					is_year = 1631
+					custom_trigger_tooltip = {
+						tooltip = evangelica_union_no_TT
+						NOT = { has_global_flag = evangelical_union_happened }
+					}
+				}
+				else = {
+					is_year = 1631
+					custom_trigger_tooltip = {
+						tooltip = evangelica_union_catholic_league_no_TT
+						OR = {
+							NOT = { has_country_flag = catholic_league }
+							NOT = { has_country_flag = evangelical_union }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = dan_sword_god_TT
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							AND = {
+								hre_leagues_enabled = yes
+								is_emperor = yes
+							}
+							in_league = protestant
+							in_league = catholic
+						}
+					}
+					country_event = {
+						id = ME_Denmark_Events.100
+					}
+				}
+				if = {
+					limit = {
+						is_year = 1631
+						NOT = { has_global_flag = evangelical_union_happened }
+					}
+					if = {
+						limit = {
+							religion = catholic
+						}
+						add_country_modifier = {
+							name = dan_catholic_supremacy_over_europe
+							duration = -1
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = dan_our_own_faith
+							duration = -1
+						}
+					}
+				}
+				if = {
+					limit = {
+						AND = {
+							emperor = {
+								is_in_war = { casus_belli = cb_religious_league }
+							}
+							NOT = { in_league = protestant }
+							NOT = { in_league = catholic }
+						}
+					}
+					add_country_modifier = {
+						name = dan_danish_neutrality
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+
+	dan_righteous_faith = {
+		icon = mission_hanseatic_city
+		required_missions = { dan_sword_god }
+		position = 17
+		trigger = {
+		}
+		effect = {
+		}
+	}
 }
 
 denmark_missions_5 = {
@@ -1073,4 +1579,309 @@ denmark_missions_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
+
+	dan_repossession = {
+		icon = mercenary_companies
+		required_missions = {  }
+		position = 2
+		trigger = {
+			SCO = {
+				has_been_insulted_by_root = yes
+				has_spy_network_from = {
+					who = ROOT
+					value = 20
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_renewed_interest_over_british_isles
+				duration = 10950
+			}
+			highlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lowlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			4364 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			253 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	dan_invade_scotts = {
+		icon = mercenary_companies
+		required_missions = { dan_repossession }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = highlands_area
+				area = lowlands_area
+				province_id = 4364
+				province_id = 253
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			highlands_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lowlands_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4364 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			253 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_danelaw_ambitions
+				duration = 7300
+			}
+			highlands_area = {
+				add_nationalism = -5
+			}
+			lowlands_area = {
+				add_nationalism = -5
+			}
+			4364 = {
+				add_nationalism = -5
+			}
+			253 = {
+				add_nationalism = -5
+			}
+		}
+	}
+
+	dan_legacy_cnut_great = {
+		icon = mercenary_companies
+		required_missions = { dan_invade_scotts }
+		position = 6
+		trigger = {
+			army_size_percentage = 1
+			navy_size_percentage = 1
+			naval_strength = {
+				who = ENG
+				value = 1
+			}
+			army_strength = {
+				who = ENG
+				value = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_invasion_force_ready
+				duration = 1825
+			}
+			east_anglia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_midlands_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			yorkshire_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			scottish_marches_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	dan_fourth_attempt = {
+		icon = mercenary_companies
+		required_missions = { dan_legacy_cnut_great }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = east_anglia_area
+				area = east_midlands_area
+				area = yorkshire_area
+				area = scottish_marches_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			east_anglia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_midlands_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			yorkshire_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			scottish_marches_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Denmark_Events.14
+			}
+		}
+	}
+
+	dan_renaessance = {
+		icon = mercenary_companies
+		required_missions = {  }
+		position = 10
+		trigger = {
+			has_institution = renaissance
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_renaissance_denmark
+				duration = 10950
+			}
+		}
+	}
+
+	dan_curtail_nobility = {
+		icon = mercenary_companies
+		required_missions = { dan_renaessance }
+		position = 12
+		trigger = {
+			crown_land_share = 50
+			OR = {
+				NOT = {
+					estate_influence = {
+						estate = estate_church
+						influence = 20
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 20
+					}
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_burghers
+						influence = 20
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_curtailed_nobilty
+				duration = 7300
+			}
+		}
+	}
+
+	dan_authority_over_all = {
+		icon = mercenary_companies
+		required_missions = { dan_curtail_nobility }
+		position = 14
+		trigger = {
+			absolutism = 50
+			is_year = 1650
+			government = monarchy
+			is_free_or_tributary_trigger = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_crowned_by_god
+				duration = -1
+			}
+		}
+	}
+
+	dan_danish_enlightenment = {
+		icon = mercenary_companies
+		required_missions = { dan_authority_over_all }
+		position = 16
+		trigger = {
+			has_institution = enlightenment
+			OR = {
+				innovativeness = 60
+				NOT = { has_dlc = "Rule Britannia" }
+			}
+			has_adm_advisor_3 = yes
+			has_dip_advisor_3 = yes
+			has_mil_advisor_3 = yes
+			monthly_adm = 9
+			monthly_dip = 9
+			monthly_mil = 9
+			university = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_technological_breakthrough
+				duration = 18250
+			}
+			country_event = {
+				id = ME_Denmark_Events.15
+			}
+		}
+	}
+
+	dan_competent_government = {
+		icon = mercenary_companies
+		required_missions = { dan_danish_enlightenment }
+		position = 18
+		trigger = {
+			government_reform_progress = 9
+		}
+		effect = {
+			add_country_modifier = {
+				name = dan_effective_administration
+				duration = -1
+			}
+		}
+	}
 }
