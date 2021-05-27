@@ -8,10 +8,12 @@ LIT_missions_1 = {
 	has_country_shield = yes
 	
 	LIT_quell_the_tatars = {
-		icon = edict_of_potsdam
+		icon = mission_consolidate_the_state
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			owned_by = CRI
+			NOT = { is_claim = ROOT }
 		}
 		trigger = {
 			OR = {
@@ -56,7 +58,7 @@ LIT_missions_1 = {
 	
 	
 	LIT_defeat_crimean = {
-		icon = edict_of_potsdam
+		icon = mission_weather_the_troubles
 		required_missions = { LIT_quell_the_tatars LIT_centralize }
 		position = 2
 		provinces_to_highlight = {
@@ -80,6 +82,11 @@ LIT_missions_1 = {
 			}
 		}
 		effect = {
+			add_estate_loyalty = {
+				estate = estate_cossacks
+				loyalty = 20
+			}
+			add_army_tradition_or_mil_power = { amount = 10 }
 			astrakhan_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -126,7 +133,7 @@ LIT_missions_1 = {
 	}
 	
 	LIT_legacy_of_tokhtamysh = {
-		icon = edict_of_potsdam
+		icon = mission_break_the_tatar_yoke
 		required_missions = { LIT_defeat_crimean }
 		position = 4
 		provinces_to_highlight = {
@@ -200,6 +207,7 @@ LIT_missions_1 = {
 			}
 		}
 		effect = {
+			
 			1936 = {
 				if = {
 					limit = { country_or_non_sovereign_subject_holds = ROOT }
@@ -259,8 +267,18 @@ LIT_missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = LIT_protestant_enabled
+				had_global_flag = {
+					flag = reformation_started
+					days = 9125
+				}
+			}
+			has_institution = printing_press
+			is_ahead_of_time_in_tech = { type = any }
 		}
 		effect = {
+			country_event = { id = ME_Lithuania_Events.2 } #Reformer books
 		}
 	}
 	
@@ -272,19 +290,22 @@ LIT_missions_1 = {
 			owned_by = ROOT
 			NOT = { has_port = yes }
 			province_has_center_of_trade_of_level = 1
-			NOT = { has_production_building_trigger = yes }
+			NOT = { has_trade_building_trigger = yes }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				province_has_center_of_trade_of_level = 1
-				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
 				NOT = { has_port = yes } 
 				value = 3
 			}
 		}
 		effect = {
-			280 = {
+			add_country_modifier = {
+				name = LIT_tending_the_markets
+				duration = 9125
 			}
+			add_mercantilism = 2
 		}
 	}
 	
@@ -360,7 +381,7 @@ LIT_missions_2 = {
 	has_country_shield = yes
 	
 	LIT_centralize = {
-		icon = edict_of_potsdam
+		icon = mission_conquer_moscow
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -405,7 +426,7 @@ LIT_missions_2 = {
 	}
 	
 	LIT_kiev = {
-		icon = edict_of_potsdam
+		icon = mission_cathedral_cities
 		required_missions = { LIT_centralize }
 		position = 3
 		provinces_to_highlight = {
@@ -435,7 +456,7 @@ LIT_missions_2 = {
 	}
 	
 	LIT_settling_ruthenia = {
-		icon = edict_of_potsdam
+		icon = mission_reconquer_vologda
 		required_missions = { LIT_kiev }
 		position = 4
 		provinces_to_highlight = {
@@ -449,11 +470,12 @@ LIT_missions_2 = {
 			}
 		}
 		effect = {
+			
 		}
 	}
 	
 	LIT_settle_the_steppe = {
-		icon = edict_of_potsdam
+		icon = mission_advance_to_the_dnieper
 		required_missions = { LIT_legacy_of_tokhtamysh }
 		position = 5
 		provinces_to_highlight = {
@@ -469,8 +491,22 @@ LIT_missions_2 = {
 		required_missions = { LIT_the_knights }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = estonia_ingria_area
+				area = curonia_area
+				area = livonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = estonia_ingria_area
+					area = curonia_area
+					area = livonia_area
+				}
+				value = 7
+			}
 		}
 		effect = {
 		}
@@ -582,10 +618,13 @@ LIT_missions_3 = {
 	has_country_shield = yes
 	
 	LIT_ruthenian_majority = {
-		icon = edict_of_potsdam
+		icon = mission_land_of_churches
 		required_missions = { LIT_interests LIT_centralize }
 		position = 2
 		provinces_to_highlight = {
+			culture_group = east_slavic
+			owned_by = ROOT
+			NOT = { accepted_culture = ROOT } 
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -622,11 +661,16 @@ LIT_missions_3 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = LIT_support_of_ruthenian_people
+				duration = 9125
+			}
+			#Events for ruthenian advisors?
 		}
 	}
 	
 	LIT_chancery_slavonic = {
-		icon = edict_of_potsdam
+		icon = mission_establish_the_prikazy
 		required_missions = { LIT_ruthenian_majority }
 		position = 4
 		provinces_to_highlight = {
@@ -649,19 +693,21 @@ LIT_missions_3 = {
 	}
 	
 	LIT_symbiosis = {
-		icon = edict_of_potsdam
+		icon = mission_rule_ruthenia
 		required_missions = { LIT_chancery_slavonic LIT_settling_ruthenia LIT_ruthenia }
 		position = 5
 		provinces_to_highlight = {
 		}
 		trigger = {
+			
 		}
 		effect = {
+			#Convert to orthodox choice
 		}
 	}
 	
 	LIT_the_knights = {
-		icon = edict_of_potsdam
+		icon = mission_teutonic_knights
 		required_missions = { }
 		position = 6
 		provinces_to_highlight = {
@@ -669,8 +715,11 @@ LIT_missions_3 = {
 		trigger = {
 			OR = {
 				alliance_with = POL
-				east_prussia_area = {
-					is_claim = ROOT
+				custom_trigger_tooltip = {
+					tooltip = LIT_claim_in_east_prussia
+					east_prussia_area = {
+						is_claim = ROOT
+					}
 				}
 				army_strength = {
 					who = TEU
@@ -765,6 +814,15 @@ LIT_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			NOT = {
+				any_owned_province = {
+					culture = polish
+					OR = {
+						nationalism = 5
+						local_autonomy_above_min = 10
+					}
+				}
+			}
 		}
 		effect = {
 		}
@@ -799,6 +857,10 @@ LIT_missions_3 = {
 			}
 		}
 		effect = {
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 15
+			}
 		}
 	}
 	
@@ -809,6 +871,7 @@ LIT_missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			stability = 3
 			has_reform_on_level = 4
 		}
 		effect = {
@@ -830,7 +893,7 @@ LIT_missions_4 = {
 	has_country_shield = yes
 	
 	LIT_interests = {
-		icon = edict_of_potsdam
+		icon = mission_conquer_tver
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -849,9 +912,6 @@ LIT_missions_4 = {
 			}
 		}
 		effect = {
-			#if by relations, gib vassalization reasons and dip rep
-			#if by autonomy, apply modifier to ruthenians
-			#if by army strength - some offensive modifier - CCR?
 			pskov_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -894,11 +954,31 @@ LIT_missions_4 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			custom_tooltip = LIT_mission_relation
+			tooltip = {
+				add_country_modifier = {
+					name = LIT_peaceful_resolutions
+					duration = 10950
+				}
+				add_dip_power = 50
+			}
+			custom_tooltip = LIT_mission_autonomy
+			tooltip = {
+				custom_tooltip = LIT_every_ruthenian_province
+				
+			}
+			custom_tooltip = LIT_mission_strength
+			tooltip = {
+				add_country_modifier = {
+					name = LIT_questioning_the_muscovite_growth
+					duration = 9125
+				}
+			}
 		}
 	}
 	
 	LIT_moskva = {
-		icon = edict_of_potsdam
+		icon = mission_defeat_muscovy
 		required_missions = { LIT_interests }
 		position = 2
 		provinces_to_highlight = {
@@ -914,12 +994,23 @@ LIT_missions_4 = {
 	}
 	
 	LIT_ruthenia = {
-		icon = edict_of_potsdam
+		icon = mission_russian_patriarchatee
 		required_missions = { LIT_no_more_threat LIT_moskva }
 		position = 4
 		provinces_to_highlight = {
+			culture_group = east_slavic
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = LIT_all_east_slavic
+				NOT = {
+					any_province = {
+						culture_group = east_slavic
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+			}
 		}
 		effect = {
 		}
@@ -968,6 +1059,10 @@ LIT_missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_estate_agendas_completed = {
+				value = 3
+				estate = estate_nobles
+			}
 		}
 		effect = {
 		}
@@ -982,9 +1077,15 @@ LIT_missions_4 = {
 		trigger = {
 			has_adm_advisor_2 = yes
 			NOT = { average_autonomy_above_min = 10 }
-			
+			stability = 1
+			NOT = { average_unrest = 0 }
 		}
 		effect = {
+			add_adm_power = 100
+			add_country_modifier = {
+				name = LIT_casimirs_code
+				duration = 19250
+			}
 		}
 	}
 	
@@ -995,6 +1096,11 @@ LIT_missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.1
+			}
+			num_of_infantry = 40
 		}
 		effect = {
 		}
@@ -1026,10 +1132,23 @@ LIT_missions_5 = {
 	has_country_shield = yes
 	
 	LIT_novgorod = {
-		icon = edict_of_potsdam
+		icon = mission_conquer_novgorod
 		required_missions = { LIT_interests }
 		position = 2
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = NOV
+				}
+				OR = {
+					owned_by = NOV
+					province_id = 310
+				}
+			}
+			else = {
+				province_id = 310
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			if = {
@@ -1041,26 +1160,34 @@ LIT_missions_5 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = LIT_novgorod_in_sphere
+				duration = 10950
+			}
+			310 = {
+				set_local_autonomy = 0
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
 		}
 	}
 	
 	LIT_no_more_threat = {
-		icon = edict_of_potsdam
+		icon = mission_novgorod_the_great
 		required_missions = { LIT_novgorod LIT_moskva }
 		position = 3
 		provinces_to_highlight = {
 			owner = {
 				culture_group = east_slavic
-				total_development = 150
+				total_development = 100
 			}
 		}
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = LIT_no_east_slavic_country_150_dev
+				tooltip = LIT_no_east_slavic_country_100_dev
 				NOT = {
 					any_country = {
 						culture_group = east_slavic
-						total_development = 150
+						total_development = 100
 					}
 				}
 			}
@@ -1082,6 +1209,12 @@ LIT_missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				reverse_has_opinion = {
+					who = POL
+					value = 200
+				}
+			}
 		}
 		effect = {
 		}
@@ -1160,7 +1293,7 @@ LIT_missions_5 = {
 	}
 	
 	LIT_cossack_corps = {
-		icon = edict_of_potsdam
+		icon = mission_recruit_the_cossacks
 		required_missions = { LIT_army_census }
 		position = 13
 		provinces_to_highlight = {
