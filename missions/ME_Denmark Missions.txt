@@ -208,13 +208,29 @@ denmark_missions_1 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						greenland_area = {
+						1104 = {
 							NOT = { country_or_non_sovereign_subject_holds = ROOT }
 						}
 					}
-					owner = {
-						country_event = {
-							id = ME_Denmark_Events.6
+					1104 = {
+						owner = {
+							country_event = {
+								id = ME_Denmark_Events.100
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						1105 = {
+							NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						}
+					}
+					1105 = {
+						owner = {
+							country_event = {
+								id = ME_Denmark_Events.101
+							}
 						}
 					}
 				}
@@ -1456,100 +1472,179 @@ denmark_missions_4 = {
 		required_missions = { dan_one_true_faith }
 		position = 15
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = obj_force_converted_tooltip
-				has_country_flag = force_converted
-			}
-			OR = {
-				AND = {
-					hre_leagues_enabled = yes
-					OR = {
-						is_emperor = yes
-						AND = {
-							emperor = {
-								is_in_war = { casus_belli = cb_religious_league }
+			if = {
+				limit = {
+					has_dlc = "Art of War"
+				}
+				OR = {
+					AND = {
+						hre_leagues_enabled = yes
+						OR = {
+							is_emperor = yes
+							AND = {
+								emperor = {
+									is_in_war = { casus_belli = cb_religious_league }
+								}
+								NOT = { in_league = protestant }
+								NOT = { in_league = catholic }
 							}
-							NOT = { in_league = protestant }
-							NOT = { in_league = catholic }
 						}
 					}
+					in_league = protestant
+					in_league = catholic
+					hre_religion_treaty = yes
+					hre_religion_locked = yes
+					NOT = { hre_size = 1 }
 				}
-				in_league = protestant
-				in_league = catholic
-				if = {
-					limit = { 
-						has_dlc = "Art of War"
-					}
-					is_year = 1631
-					custom_trigger_tooltip = {
-						tooltip = evangelica_union_no_TT
-						NOT = { has_global_flag = evangelical_union_happened }
-					}
-				}
-				else = {
-					is_year = 1631
-					custom_trigger_tooltip = {
-						tooltip = evangelica_union_catholic_league_no_TT
+			}
+			else = {
+				OR = {
+					NOT = { hre_size = 1 }
+					has_country_flag = catholic_league
+					has_country_flag = evangelical_union
+					AND = {
 						OR = {
-							NOT = { has_country_flag = catholic_league }
-							NOT = { has_country_flag = evangelical_union }
+							current_age = age_of_absolutism
+							current_age = age_of_revolutions
+						}
+						OR = {
+							is_emperor = yes
+							has_won_war_against = {
+								who = emperor
+								max_years_since = 5
+							}
+							AND = {
+								alliance_with = emperor
+								OR = {
+									any_elector = {
+										is_subject_of = ROOT
+									}
+									any_elector = {
+										ROOT = {
+											has_won_war_against = {
+												who = PREV
+												max_years_since = 5
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 		effect = {
-			custom_tooltip = dan_sword_god_TT
-			hidden_effect = {
-				if = {
-					limit = {
-						OR = {
-							AND = {
-								hre_leagues_enabled = yes
-								is_emperor = yes
-							}
-							in_league = protestant
-							in_league = catholic
-						}
-					}
-					country_event = {
-						id = ME_Denmark_Events.100
-					}
+			if = {
+				limit = {
+					has_dlc = "Art of War"
 				}
-				if = {
-					limit = {
-						is_year = 1631
-						NOT = { has_global_flag = evangelical_union_happened }
+				custom_tooltip = dan_sword_god_DLC_TT
+				hidden_effect = {
+					if = {
+						limit = {
+							OR = {
+								AND = {
+									hre_leagues_enabled = yes
+									is_emperor = yes
+								}
+								in_league = protestant
+								in_league = catholic
+							}
+						}
+						set_country_flag = dan_enable_gott_mit_uns
 					}
 					if = {
 						limit = {
-							religion = catholic
+							hre_religion_treaty = yes
 						}
 						add_country_modifier = {
-							name = dan_catholic_supremacy_over_europe
+							name = dan_eius_regio_cuius_religio
 							duration = -1
 						}
 					}
-					else = {
+					if = {
+						limit = {
+							OR = {
+								AND = {
+									emperor = {
+										is_in_war = { casus_belli = cb_religious_league }
+									}
+									NOT = { in_league = protestant }
+									NOT = { in_league = catholic }
+								}
+								hre_religion_locked = yes
+							}
+						}
 						add_country_modifier = {
-							name = dan_our_own_faith
-							duration = -1
+							name = dan_danish_neutrality
+							duration = 7300
 						}
 					}
 				}
-				if = {
-					limit = {
-						AND = {
-							emperor = {
-								is_in_war = { casus_belli = cb_religious_league }
+			}
+			else = {
+				custom_tooltip = dan_sword_god_TT
+				hidden_effect = {
+					if = {
+						limit = {
+							OR = {
+								has_country_flag = catholic_league
+								has_country_flag = evangelical_union
 							}
-							NOT = { in_league = protestant }
-							NOT = { in_league = catholic }
+						}
+						set_country_flag = dan_enable_descendent_god_fury
+					}
+					if = {
+						limit = {
+							AND = {
+								OR = {
+									current_age = age_of_absolutism
+									current_age = age_of_revolutions
+								}
+								OR = {
+									is_emperor = yes
+									AND = {
+										alliance_with = emperor
+										OR = {
+											any_elector = {
+												is_subject_of = ROOT
+											}
+											any_elector = {
+												ROOT = {
+													has_won_war_against = {
+														who = PREV
+														max_years_since = 5
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						add_country_modifier = {
+							name = dan_imperial_europe
+							duration = -1
 						}
 					}
-					add_country_modifier = {
-						name = dan_danish_neutrality
-						duration = 7300
+					if = {
+						limit = {
+							AND = {
+								OR = {
+									current_age = age_of_absolutism
+									current_age = age_of_revolutions
+								}
+								has_won_war_against = {
+									who = emperor
+									max_years_since = 5
+								}
+							}
+						}
+						add_country_modifier = {
+							name = dan_defiant
+							duration = 14600
+						}
 					}
 				}
 			}
@@ -1561,8 +1656,131 @@ denmark_missions_4 = {
 		required_missions = { dan_sword_god }
 		position = 17
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Art of War"
+				}
+				OR = {
+					if = {
+						limit = {
+							religion = catholic
+						}
+						is_in_war = {
+							casus_belli = cb_religious_league
+							defender_leader = emperor
+							war_score = 33
+						}
+					}
+					else = {
+						is_in_war = {
+							casus_belli = cb_religious_league
+							defender_leader = emperor
+							war_score = 33
+						}
+					}
+					hre_religion_locked = yes
+					hre_religion_treaty = yes
+					NOT = { hre_size = 1 }
+				}
+			}
+			else = {
+				OR = {
+					is_emperor = yes
+					NOT = { hre_size = 1 }
+					AND = {
+						has_won_war_against = {
+							who = emperor
+							max_years_since = 10
+						}
+						emperor = {
+							NOT = { religion = ROOT }
+						}
+					}
+					custom_trigger_tooltip = {
+						tooltip = obj_force_converted_tooltip
+						has_country_flag = force_converted
+					}
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_dlc = "Art of War"
+				}
+				custom_tooltip = dan_righteous_faith_DLC_TT
+				hidden_effect = {
+					if = {
+						limit = {
+							OR = {
+								hre_religion_locked = yes
+								hre_religion_treaty = yes
+								NOT = { hre_size = 1 }
+							}
+							emperor = {
+								NOT = { religion = ROOT }
+							}
+						}
+						add_country_modifier = {
+							name = dan_down_unholy_empire
+							duration = -1
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								hre_religion_locked = yes
+								hre_religion_treaty = yes
+								NOT = { hre_size = 1 }
+							}
+							emperor = { religion = ROOT }
+						}
+						add_country_modifier = {
+							name = dan_catholic_romans
+							duration = -1
+						}
+					}
+					else = {
+						country_event = {
+							id = ME_Denmark_Events.16
+						}
+					}
+				}
+			}
+			else = {
+				custom_tooltip = dan_righteous_faith_TT
+				hidden_effect = {
+					if = {
+						limit = {
+							is_emperor = yes
+						}
+						add_country_modifier = {
+							name = dan_our_faith
+							duration = -1
+						}
+					}
+					else_if = {
+						limit = {
+							AND = {
+								has_won_war_against = {
+									who = emperor
+									max_years_since = 10
+								}
+								emperor = {
+									NOT = { religion = ROOT }
+								}
+							}
+						}
+						add_country_modifier = {
+							name = dan_down_unholy_empire
+							duration = -1
+						}
+					}
+					else = {
+						set_country_flag = dan_enable_god_cleansing_fire
+					}
+				}
+			}
 		}
 	}
 }
