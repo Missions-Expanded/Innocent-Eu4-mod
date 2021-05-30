@@ -187,7 +187,7 @@ LIT_missions_1 = {
 	}
 	
 	LIT_integrate_the_tatars = {
-		icon = edict_of_potsdam
+		icon = develop_naples
 		required_missions = { LIT_legacy_of_tokhtamysh }
 		position = 6
 		provinces_to_highlight = {
@@ -248,7 +248,7 @@ LIT_missions_1 = {
 	}
 	
 	LIT_renaissance = {
-		icon = edict_of_potsdam
+		icon = florentine_renaissance
 		required_missions = { }
 		position = 7
 		provinces_to_highlight = {
@@ -268,7 +268,7 @@ LIT_missions_1 = {
 	}
 	
 	LIT_reformer_books = {
-		icon = edict_of_potsdam
+		icon = geneva_conventions
 		required_missions = { LIT_renaissance LIT_an_eye_to_the_west }
 		position = 9
 		provinces_to_highlight = {
@@ -293,7 +293,7 @@ LIT_missions_1 = {
 	}
 	
 	LIT_inland_markets = {
-		icon = edict_of_potsdam
+		icon = mission_market_place_with_asian_traders
 		required_missions = { }
 		position = 11
 		provinces_to_highlight = {
@@ -320,7 +320,7 @@ LIT_missions_1 = {
 	}
 	
 	LIT_sluck_sashes = {
-		icon = edict_of_potsdam
+		icon = mission_noble_council
 		required_missions = { LIT_inland_markets }
 		position = 12
 		provinces_to_highlight = {
@@ -354,7 +354,7 @@ LIT_missions_1 = {
 		required_missions = { LIT_fortify_ruthenia }
 		position = 14
 		provinces_to_highlight = {
-			
+			owned_by = TUR
 		}
 		trigger = {
 			if = {
@@ -508,9 +508,14 @@ LIT_missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				region = pontic_steppe_region
+				accepted_culture = ROOT
+				value = 5
+			}
 		}
 		effect = {
-			country_event = { id = ME_Lithuania_Events.3 } #reducing cossack influence
+			country_event = { id = ME_Lithuania_Events.3 } #waning cossack influence
 		}
 	}
 	
@@ -537,30 +542,73 @@ LIT_missions_2 = {
 			}
 		}
 		effect = {
+			add_army_tradition_or_mil_power = { amount = 25 }
 		}
 	}
 	
 	LIT_an_eye_to_the_west = {
-		icon = edict_of_potsdam
+		icon = subiaco_press
 		required_missions = { LIT_defeat_teutons }
 		position = 8
 		provinces_to_highlight = {
 		}
 		trigger = {
+			any_ally = {
+				is_great_power = yes
+				has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
 		}
 		effect = {
+			add_dip_power = 50
+			add_country_modifier = {
+				name = LIT_an_eye_to_the_west
+				duration = 9125
+			}
 		}
 	}
 	
 	LIT_jesuits = {
-		icon = edict_of_potsdam
+		icon = mission_establish_jesuit_missions
 		required_missions = { LIT_an_eye_to_the_west LIT_reformer_books }
 		position = 10
 		provinces_to_highlight = {
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_convert_10_provinces_tooltip
+				check_variable = { which = num_converted_religion value = 10 }
+			}
+			OR = {
+				theologian = 1
+				inquisitor = 1
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = LIT_jesuit_education
+				duration = 9125
+			}
+			custom_tooltip = LIT_every_province_above_15_dev
+			tooltip = {
+				add_province_modifier = {
+					name = LIT_major_jesuit_school
+					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						development = 15
+					}
+					add_province_modifier = {
+						name = LIT_major_jesuit_school
+						duration = 10950
+					}
+				}
+			}
 		}
 	}
 	
@@ -624,14 +672,22 @@ LIT_missions_2 = {
 	}
 	
 	LIT_bulwark_of_christanity = {
-		icon = edict_of_potsdam
+		icon = chivalry_is_not_dead
 		required_missions = { LIT_fortify_ruthenia }
 		position = 15
 		provinces_to_highlight = {
 		}
 		trigger = {
+			at_war_with_religious_enemy = yes
+			has_border_with_religious_enemy = perhaps
+			is_defender_of_faith = yes
+			religious_unity = 0.7
 		}
 		effect = {
+			add_country_modifier = {
+				name = LIT_fidei_defensor
+				duration = 9125
+			}
 		}
 	}
 }
@@ -652,7 +708,11 @@ LIT_missions_3 = {
 		provinces_to_highlight = {
 			culture_group = east_slavic
 			owned_by = ROOT
-			NOT = { accepted_culture = ROOT } 
+			NOT = {	
+				ROOT = {
+					accepted_culture = PREV
+				}
+			}
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -820,6 +880,17 @@ LIT_missions_3 = {
 			}
 		}
 		effect = {
+			create_general = { tradition = 80 }
+			samogitia_area = {
+				add_province_modifier = {
+					name = LIT_local_nobles_pleased
+					duration = 9125
+				}
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
 		}
 	}
 	
@@ -828,6 +899,11 @@ LIT_missions_3 = {
 		required_missions = { LIT_defeat_teutons }
 		position = 8
 		provinces_to_highlight = {
+			province_id = 272
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 30 }
+			}
 		}
 		trigger = {
 			272 = {
@@ -836,7 +912,12 @@ LIT_missions_3 = {
 			}
 		}
 		effect = {
+			change_innovativeness = 3
 			272 = {
+				add_province_modifier = {
+					name = LIT_university_of_vilnius
+					duration = -1
+				}
 				add_or_upgrade_university_building = yes
 			}
 		}
@@ -865,7 +946,7 @@ LIT_missions_3 = {
 	
 	LIT_szlachta_vs_boyars = {
 		icon = edict_of_potsdam
-		required_missions = { LIT_expand_the_privileges LIT_integrate_the_poles }
+		required_missions = { LIT_boyars LIT_integrate_the_poles }
 		position = 11
 		provinces_to_highlight = {
 		}
@@ -1058,23 +1139,31 @@ LIT_missions_4 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = LIT_lord_of_ruthenia
+				duration = 9125
+			}
 		}
 	}
 	
 	LIT_jagiellonian_restoration = {
-		icon = edict_of_potsdam
+		icon = jageillonian_union
 		required_missions = { LIT_turmoil_in_poland }
 		position = 6
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				senior_union_with = POL
+				POL = { dynasty = "Jagiellon" }
+			}
 		}
 		effect = {
 		}
 	}
 	
 	LIT_union_of_lublin = {
-		icon = edict_of_potsdam
+		icon = me_mission_poland_lublin
 		required_missions = { LIT_jagiellonian_restoration LIT_defeat_teutons }
 		position = 8
 		provinces_to_highlight = {
@@ -1086,7 +1175,7 @@ LIT_missions_4 = {
 	}
 	
 	LIT_bohemia = {
-		icon = edict_of_potsdam
+		icon = reformatio_sigismundi
 		required_missions = { LIT_union_of_lublin }
 		position = 9
 		provinces_to_highlight = {
@@ -1141,7 +1230,7 @@ LIT_missions_4 = {
 	}
 	
 	LIT_army_reforms = {
-		icon = edict_of_potsdam
+		icon = the_russian_campaign
 		required_missions = { LIT_army_census }
 		position = 13
 		provinces_to_highlight = {
@@ -1154,11 +1243,16 @@ LIT_missions_4 = {
 			num_of_infantry = 40
 		}
 		effect = {
+			add_yearly_manpower = 1
+			add_country_modifier = {
+				name = LIT_army_reform_modifier
+				duration = 1825
+			}
 		}
 	}
 	
 	LIT_fierce_hussars = {
-		icon = edict_of_potsdam
+		icon = mission_conquer_5_states
 		required_missions = { LIT_army_reforms }
 		position = 15
 		provinces_to_highlight = {
@@ -1166,9 +1260,19 @@ LIT_missions_4 = {
 		trigger = {
 			OR = {
 				num_of_cavalry = 40
+				cavalry_fraction = 0.5
+			}
+			has_global_modifier_value = {
+				which = cavalry_power
+				value = 0.15
 			}
 		}
 		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = LIT_hussars
+				duration = -1
+			}
 		}
 	}
 }
@@ -1265,14 +1369,53 @@ LIT_missions_5 = {
 					who = POL
 					value = 200
 				}
+				custom_trigger_tooltip = {
+					tooltip = LIT_union_with_pol
+					OR = {
+						senior_union_with = POL
+						junior_union_with = POL
+					}
+				}
+				army_strength = {
+					who = POL
+					value = 3
+				}
 			}
 		}
 		effect = {
+			define_advisor = {
+				type = diplomat
+				skill = 1
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.5
+			}
+			custom_tooltip = POL_cb
+			tooltip = {
+				add_casus_belli = {
+					target = POL
+					type = cb_restore_personal_union
+					months = -1
+				}
+			}
+			if = {
+				limit = {
+					exists = POL
+					valid_for_personal_unions_trigger = yes
+				}
+				hidden_effect = {
+					add_casus_belli = {
+						target = POL
+						type = cb_restore_personal_union
+						months = -1
+					}
+				}
+			}
 		}
 	}
 	
 	LIT_diplomacy = {
-		icon = edict_of_potsdam
+		icon = control_the_church
 		required_missions = { LIT_turmoil_in_poland }
 		position = 6
 		provinces_to_highlight = {
@@ -1285,11 +1428,22 @@ LIT_missions_5 = {
 			}
 		}
 		effect = {
+			capital_scope = {
+				add_institution_embracement = {
+					which = renaissance
+					value = 30
+				}
+				add_cardinal = yes
+			}
+			add_country_modifier = {
+				name = LIT_pope_opinion
+				duration = 7300
+			}
 		}
 	}
 	
 	LIT_kingdom_of_lithuania = {
-		icon = edict_of_potsdam
+		icon = kingdom_of_lombardy
 		required_missions = { LIT_jagiellonian_restoration LIT_diplomacy }
 		position = 7
 		provinces_to_highlight = {
