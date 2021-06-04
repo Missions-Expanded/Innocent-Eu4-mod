@@ -1,36 +1,72 @@
 namespace = ME_France_Events
 
+#A staple port
 country_event = {
 	id = ME_France_Events.1
-	title = ME_France_Events.1.t
-	desc = ME_France_Events.1.d
-	picture = DIPLOMACY_eventPicture
+	title = ME_France_Events.1.T
+	desc = ME_France_Events.1.D
+	picture = CITY_DEVELOPMENT_eventPicture
 
 	is_triggered_only = yes
 
 	option = {
-		name = ME_France_Events.1.a
-		
+		name = ME_France_Events.1.OPT1
+		ai_chance = { factor = 1 }
+
+		101 = {
+			add_province_modifier = {
+				name = fra_etape
+				duration = -1
+			}
+		}
+	}
+}
+
+#The Neapolitan Question
+country_event = {
+	id = ME_France_Events.2
+	title = ME_France_Events.2.T
+	desc = ME_France_Events.2.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.2.OPT1		
+		ai_chance = { factor = 50 }
 		trigger = {
-			exists = PRO
-			NOT = { overlord_of = PRO }
+			hidden_trigger = {
+				exists = NAP
+				NAP = { is_subject = no }
+			}
 		}
 		
-		ai_chance = { factor = 1 }
-		
 		add_casus_belli = {
-			target = PRO
+			target = NAP
 			type = cb_restore_personal_union
 			months = 120
 		}
+		custom_tooltip = france_declare_restoration_nap_TT
+		hidden_effect = {
+			every_country = {
+				limit = {
+					culture_group = latin
+					capital_scope = {
+						region = italy_region
+					}
+				}
+				country_event = {
+					id = ME_France_Events.3
+				}
+			}
+		}
 	}
-	
+
 	option = {
-		name = ME_France_Events.1.b
+		name = ME_France_Events.2.OPT2		
+		ai_chance = { factor = 50 }
 		
-		ai_chance = { factor = 0.5 }
-		
-		178 = {
+		120 = {
 			if = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -39,7 +75,21 @@ country_event = {
 				add_permanent_claim = ROOT
 			}
 		}
-		provence_area = {
+		apulia_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		naples_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		calabria_area = {
 			limit = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
@@ -49,344 +99,831 @@ country_event = {
 	}
 }
 
+#A Cry for Help
 country_event = {
-	id = ME_France_Events.2
-	title = ME_France_Events.2.t
-	desc = ME_France_Events.2.d
+	id = ME_France_Events.3
+	title = ME_France_Events.3.T
+	desc = ME_France_Events.3.D
+	picture = ITALIAN_wars_eventPicture
+
+	is_triggered_only = yes
+	trigger = {
+		FRA = {
+			is_in_war = {
+				defender_leader = NAP
+				casus_belli = cb_restore_personal_union
+			}
+		}
+	}
+
+	option = {
+		name = ME_France_Events.3.OPT1
+		ai_chance = { factor = 50 }
+		
+		join_all_defensive_wars_of = NAP
+	}
+
+	option = {
+		name = ME_France_Events.3.OPT2
+		ai_chance = { factor = 50 }
+		
+	}
+}
+
+#A Bulgar's request
+country_event = {
+	id = ME_France_Events.4
+	title = ME_France_Events.4.T
+	desc = ME_France_Events.4.D
 	picture = DIPLOMACY_eventPicture
 
 	is_triggered_only = yes
 
 	option = {
-		name = ME_France_Events.2.a
+		name = ME_France_Events.4.OPT1
+		ai_chance = { factor = 50 }
 		
-		add_prestige = 60
+		release = BUL
+		balkan_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = BUL
+			cede_province = BUL
+		}
+		balkan_region = {
+			limit = {
+				owned_by = TUR
+				NOT = { is_core = BUL }
+				NOT = { owned_by = BUL }
+			}
+			add_permanent_claim = BUL
+		}
+	}
+
+	option = {
+		name = ME_France_Events.4.OPT2
+		ai_chance = { factor = 50 }
+		trigger = {
+			hidden_trigger = {
+				exists = TUR
+			}
+		}
+		
+		add_casus_belli = {
+			type = cb_crusade
+			target = TUR
+		}
+	}
+}
+
+#Château of the Loire Valley
+country_event = {
+	id = ME_France_Events.5
+	title = ME_France_Events.5.T
+	desc = ME_France_Events.5.D
+	picture = FORT
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.5.OPT1
+		ai_chance = { factor = 1 }
+		
 		if = {
 			limit = {
-				hre_size = 1
+				has_dlc = "Mandate of Heaven"
 			}
-			emperor = {
-				custom_tooltip = FRA_EMPEROR_NEGATIVE_EFFECTS_TT
-				hidden_effect = {
-					country_event = { id = ME_France_Events.3 }
+			add_country_modifier = {
+				name = fra_chateau_loire_valley_dlc
+				duration = -1
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = fra_chateau_loire_valley
+				duration = -1
+			}
+		}
+	}
+}
+
+#Reigning over the Dutch
+country_event = {
+	id = ME_France_Events.6
+	title = ME_France_Events.6.T
+	desc = ME_France_Events.6.D
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.6.OPT1
+		ai_chance = { factor = 50 }
+
+		release = NED
+		low_countries_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = NED
+			cede_province = NED
+		}
+		NED = {
+			override_country_name = Batavian_republic
+			set_government_and_rank = {
+				government = republic
+				rank = 2
+			}
+			hidden_effect = {
+				capital_scope = {
+					build_to_forcelimit = {
+						infantry = 0.7
+						cavalry = 0.1
+						artillery = 0.2
+					}
+				}
+				add_years_of_income = 1
+				add_yearly_manpower = 1
+				add_yearly_sailors = 1
+			}
+		}
+		create_subject = {
+			subject_type = client_vassal
+			subject = NED
+		}
+	}
+
+	option = {
+		name = ME_France_Events.6.OPT1
+		ai_chance = { factor = 50 }
+
+		low_countries_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			spawn_rebels = {
+				size = 3
+				type = nationalist_rebels
+				friend = NED
+			}
+		}
+	}
+}
+
+#The Twin Ports
+country_event = {
+	id = ME_France_Events.7
+	title = ME_France_Events.7.T
+	desc = ME_France_Events.7.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.7.OPT1
+		ai_chance = { factor = 1 }
+
+		add_country_modifier = {
+			name = fra_grand_finistere_naval_base
+			duration = -1
+		}
+		add_country_modifier = {
+			name = fra_grand_toulon_naval_base
+			duration = -1
+		}
+	}
+}
+
+#The shores of North Africa
+country_event = {
+	id = ME_France_Events.8
+	title = ME_France_Events.8.T
+	desc = ME_France_Events.8.D
+	picture = MILITARY_CAMP_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events..OPT1
+		ai_chance = { factor = 1 }
+
+		albania_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		macedonia_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		bulgaria_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		algiers_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		barbary_coast_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		high_plains_area = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+
+#Antoine Lavoisier
+country_event = {
+	id = ME_France_Events.9
+	title = ME_France_Events.9.T
+	desc = ME_France_Events.9.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.9.OPT1
+		ai_chance = { factor = 1 }
+
+		add_adm_power = 50
+		add_dip_power = 50
+		if = {
+			limit = {
+				has_dlc = "Rule Britannia"
+			}
+			change_innovativeness = 6
+		}
+		else = {
+			add_prestige = 20
+		}
+		define_advisor = {
+			type = natural_scientist
+			culture = ROOT
+			cost_multiplier = 0.5
+			skill = 2
+		}
+	}
+}
+
+#Reigning over the Italians
+country_event = {
+	id = ME_France_Events.10
+	title = ME_France_Events.10.T
+	desc = ME_France_Events.10.D
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.10.OPT1
+		ai_chance = { factor = 50 }
+
+		release = ITA
+		italy_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = ITA
+			cede_province = ITA
+		}
+		ITA = {
+			override_country_name = Italian_republic
+			set_government_and_rank = {
+				government = republic
+				rank = 2
+			}
+			hidden_effect = {
+				capital_scope = {
+					build_to_forcelimit = {
+						infantry = 0.7
+						cavalry = 0.1
+						artillery = 0.2
+					}
+				}
+				add_years_of_income = 1
+				add_yearly_manpower = 1
+				add_yearly_sailors = 1
+			}
+		}
+		create_subject = {
+			subject_type = client_vassal
+			subject = ITA
+		}
+	}
+
+	option = {
+		name = ME_France_Events.10.OPT1
+		ai_chance = { factor = 50 }
+
+		italy_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			spawn_rebels = {
+				size = 3
+				type = nationalist_rebels
+				friend = ITA
+			}
+		}
+	}
+}
+
+#Company of the American Islands
+country_event = {
+	id = ME_France_Events.11
+	title = ME_France_Events.11.T
+	desc = ME_France_Events.11.D
+	picture = COLONIZATION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.11.OPT1
+		ai_chance = { factor = 1 }
+
+		
+		if = {
+			limit = {
+				has_dlc = "Golden Century"
+			}
+			add_country_modifier = {
+				name = fra_rush_to_the_carribean_dlc
+				duration = 18250
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = fra_rush_to_the_carribean
+				duration = 7300
+			}
+		}
+	}
+}
+
+#Chateaux de Versailles
+country_event = {
+	id = ME_France_Events.12
+	title = ME_France_Events.12.T
+	desc = ME_France_Events.12.D
+	picture = FORTIFIED_CITY_WITH_CARAVAN_OUTSIDE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.12.OPT1
+		ai_chance = { factor = 1 }
+
+		add_country_modifier = {
+			name = fra_prestige_versailles
+			duration = 36500
+		}
+	}
+}
+
+#A new lingua franca
+country_event = {
+	id = ME_France_Events.13
+	title = ME_France_Events.13.T
+	desc = ME_France_Events.13.D
+	picture = CULTURE_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.13.OPT1
+		ai_chance = { factor = 1 }
+
+		add_country_modifier = {
+			name = fra_french_lingua_franca
+			duration = -1
+		}
+	}
+}
+
+#The Confederation of the Rhine
+country_event = {
+	id = ME_France_Events.14
+	title = ME_France_Events.14.T
+	desc = ME_France_Events.14.D
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.14.OPT1
+		ai_chance = { factor = 50 }
+
+		release = GER
+		north_rhine_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = GER
+			cede_province = GER
+		}
+		lower_rhineland_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = GER
+			cede_province = GER
+		}
+		palatinate_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = GER
+			cede_province = GER
+		}
+		hesse_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = GER
+			cede_province = GER
+		}
+		upper_rhineland_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = GER
+			cede_province = GER
+		}
+		lower_swabia_area = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = GER
+			cede_province = GER
+		}
+		GER = {
+			override_country_name = Rhine_Confederation
+			set_government_and_rank = {
+				government = republic
+				rank = 2
+			}
+			hidden_effect = {
+				capital_scope = {
+					build_to_forcelimit = {
+						infantry = 0.7
+						cavalry = 0.1
+						artillery = 0.2
+					}
+				}
+				add_years_of_income = 1
+				add_yearly_manpower = 1
+				add_yearly_sailors = 1
+			}
+		}
+		create_subject = {
+			subject_type = client_vassal
+			subject = GER
+		}
+	}
+
+	option = {
+		name = ME_France_Events.14.OPT1
+		ai_chance = { factor = 50 }
+
+		low_countries_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			spawn_rebels = {
+				size = 3
+				type = nationalist_rebels
+				friend = GER
+			}
+		}
+	}
+}
+
+#Le Havre
+country_event = {
+	id = ME_France_Events.15
+	title = ME_France_Events.15.T
+	desc = ME_France_Events.15.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.15.OPT1
+		ai_chance = { factor = 1 }
+
+		add_country_modifier = {
+			name = fra_investing_navy
+			duration = 7300
+		}
+		167 = {
+			rename_capital = "Le Havre"
+			add_province_modifier = {
+				name = fra_port_city
+				duration = -1
+			}
+		}
+	}
+}
+
+#A staple port
+country_event = {
+	id = ME_France_Events.16
+	title = ME_France_Events.16.T
+	desc = ME_France_Events.16.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.16.OPT1
+		ai_chance = { factor = 1 }
+
+		british_isles_region = {
+			limit = {
+				OR = {
+					is_core = ENG
+					is_core = GBR
+				}
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		if = {
+			limit = {
+				exists = SCO
+			}
+			SCO = {
+				add_opinion = {
+					who = ROOT
+					modifier = fra_reassured_auld_alliance
+				}
+				reverse_add_opinion = {
+					who = ROOT
+					modifier = fra_reassured_auld_alliance
 				}
 			}
 		}
 	}
 }
 
+#The Glorious Baguette
 country_event = {
-	id = ME_France_Events.3
-	title = ME_France_Events.3.t
-	desc = ME_France_Events.3.d
-	picture = DIPLOMACY_eventPicture
-
-	is_triggered_only = yes
-	
-	trigger = {
-		is_emperor = yes
-	}
-
-	option = {
-		name = ME_France_Events.3.a
-		
-		add_imperial_influence = -15
-		add_country_modifier = {
-			name = fra_illegitmate_emperor
-			duration = 10950
-		}
-		add_legitimacy_equivalent = { value = -25 }
-		add_prestige = -40
-	}
-}
-
-country_event = {
-	id = ME_France_Events.4
-	title = ME_France_Events.4.t
-	desc = ME_France_Events.4.d
-	picture = DIPLOMACY_eventPicture
+	id = ME_France_Events.17
+	title = ME_France_Events.17.T
+	desc = ME_France_Events.17.D
+	picture = FARMING_eventPicture
 
 	is_triggered_only = yes
 
 	option = {
-		name = ME_France_Events.4.a
-		
-		ai_chance = { factor = 1 }
-		
-		104 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		107 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		1862 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		109 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		108 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		1774 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		111 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		113 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		106 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		105 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		114 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		4730 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		4740 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		4739 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		4729 = {
-			cede_province = ITA
-			add_core = ITA
-		}
-		create_subject = {
-			subject = ITA
-			subject_type = client_vassal
-		}
-	}
-	
-	option = {
-		name = ME_France_Events.4.b
-		
-		ai_chance = { factor = 0 }
-	}
-}
-
-country_event = {
-	id = ME_France_Events.5
-	title = ME_France_Events.5.t
-	desc = ME_France_Events.5.d
-	picture = DIPLOMACY_eventPicture
-
-	is_triggered_only = yes
-
-	option = {
-		name = ME_France_Events.5.a
-
-		ai_chance = { factor = 1 }
-		
-		lower_rhineland_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		upper_rhineland_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		palatinate_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		hesse_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		westphalia_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		thuringia_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		franconia_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		lower_swabia_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		upper_swabia_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		lower_bavaria_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		upper_bavaria_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		upper_franconia_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		north_rhine_area = {
-			cede_province = GER
-			add_core = GER
-		}
-		create_subject = {
-			subject = GER
-			subject_type = client_vassal
-		}
-	}
-	
-	option = {
-		name = ME_France_Events.5.b
-		
-		ai_chance = { factor = 0 }
-	}
-}
-
-country_event = {
-	id = ME_France_Events.6
-	title = ME_France_Events.6.t
-	desc = ME_France_Events.6.d
-	picture = DIPLOMACY_eventPicture
-
-	is_triggered_only = yes
-
-	option = {
-		name = ME_France_Events.6.a
-		
-		ai_chance = { factor = 1 }
-		
-		frisia_area = {
-			cede_province = NED
-			add_core = NED
-		}
-		holland_area = {
-			cede_province = NED
-			add_core = NED
-		}
-		north_brabant_area = {
-			cede_province = NED
-			add_core = NED
-		}
-		create_subject = {
-			subject = NED
-			subject_type = client_vassal
-		}
-	}
-	
-	option = {
-		name = ME_France_Events.6.b
-		
-		ai_chance = { factor = 0 }
-	}
-}
-
-country_event = {
-	id = ME_France_Events.7
-	title = ME_France_Events.7.t
-	desc = ME_France_Events.7.d
-	picture = DIPLOMACY_eventPicture
-
-	is_triggered_only = yes
-
-	option = {
-		name = ME_France_Events.7.a
-		
+		name = ME_France_Events.17.OPT1
 		ai_chance = { factor = 1 }
 
-		wielkopolska_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		malopolska_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		mazovia_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		west_prussia_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		central_poland_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		kuyavia_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		sandomierz_area = {
-			cede_province = MAZ
-			add_core = MAZ
-		}
-		create_subject = {
-			subject = MAZ
-			subject_type = client_vassal
-		}
-	}
-	
-	option = {
-		name = ME_France_Events.7.b
-		
-		ai_chance = { factor = 0 }
-	}
-}
-
-country_event = {
-	id = ME_France_Events.8
-	title = ME_France_Events.8.t
-	desc = ME_France_Events.8.d
-	picture = DIPLOMACY_eventPicture
-
-	is_triggered_only = yes
-
-	option = {
-		name = ME_France_Events.8.a
-		
-		ai_chance = { factor = 1 }
-
-		iberia_region = {
+		every_owned_province = {
 			limit = {
-				NOT = { area = beieras_area }
-				NOT = { area = alentejo_area }
-				NOT = { area = macaronesia_area }
+				trade_goods = grain
 			}
-			cede_province = SPA
-			add_core = SPA
-		}
-		create_subject = {
-			subject = SPA
-			subject_type = client_vassal
+			add_province_modifier = {
+				name = fra_baguette_frenzy
+				duration = -1
+			}
 		}
 	}
-	
+}
+
+#Reigning over the Poles
+country_event = {
+	id = ME_France_Events.18
+	title = ME_France_Events.18.T
+	desc = ME_France_Events.18.D
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
 	option = {
-		name = ME_France_Events.8.b
-		
-		ai_chance = { factor = 0 }
+		name = ME_France_Events.18.OPT1
+		ai_chance = { factor = 50 }
+
+		release = POL
+		poland_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			add_core = POL
+			cede_province = POL
+		}
+		POL = {
+			override_country_name = DUCHY_WARSAW
+			set_government_and_rank = {
+				government = republic
+				rank = 2
+			}
+			hidden_effect = {
+				capital_scope = {
+					build_to_forcelimit = {
+						infantry = 0.7
+						cavalry = 0.1
+						artillery = 0.2
+					}
+				}
+				add_years_of_income = 1
+				add_yearly_manpower = 1
+				add_yearly_sailors = 1
+			}
+		}
+		create_subject = {
+			subject_type = client_vassal
+			subject = POL
+		}
+	}
+
+	option = {
+		name = ME_France_Events.18.OPT1
+		ai_chance = { factor = 50 }
+
+		poland_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			spawn_rebels = {
+				size = 3
+				type = nationalist_rebels
+				friend = POL
+			}
+		}
+	}
+}
+
+#Pondichery
+country_event = {
+	id = ME_France_Events.19
+	title = ME_France_Events.19.T
+	desc = ME_France_Events.19.D
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.19.OPT1
+		ai_chance = { factor = 1 }
+
+		540 = {
+			rename_capital = "Pondicherry"
+			change_trade_goods = gems
+			create_or_add_center_of_trade_level = { level = 1 }
+			add_province_modifier = {
+				name = fra_india_trade_center
+				duration = -1
+			}
+		}
+	}
+}
+
+#Sparks of Independence
+country_event = {
+	id = ME_France_Events.20
+	title = ME_France_Events.20.T
+	desc = ME_France_Events.20.D
+	picture = REVOLUTION_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.20.OPT1
+		ai_chance = { factor = 50 }
+
+		if = {
+			limit = {
+				exists = ENG
+			}
+			ENG = {
+				every_subject_country = {
+					limit = { is_colonial_nation = yes }
+					add_country_modifier = {
+						name = fra_promise_independence
+						duration = 36500
+					}
+				}
+			}
+			add_casus_belli = {
+				type = cb_liberation
+				target = ENG
+			}
+		}
+		else = {
+			GBR = {
+				every_subject_country = {
+					limit = { is_colonial_nation = yes }
+					add_country_modifier = {
+						name = fra_promise_independence
+						duration = 36500
+					}
+				}
+			}
+			add_casus_belli = {
+				type = cb_liberation
+				target = GBR
+			}
+		}
+	}
+
+	option = {
+		name = ME_France_Events.20.OPT1
+		ai_chance = { factor = 50 }
+
+		low_countries_region = {
+			limit = {
+				owned_by = ROOT
+			}
+			spawn_rebels = {
+				size = 3
+				type = nationalist_rebels
+				friend = NED
+			}
+		}
+	}
+}
+
+#The Burgundian Throne
+country_event = {
+	id = ME_France_Events.21
+	title = ME_France_Events.21.T
+	desc = ME_France_Events.21.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.21.OPT1
+		ai_chance = { factor = 1 }
+
+		custom_tooltip = FRENCH_ENVOY_BURGUNDY
+		BUR = {
+			country_event = {
+				id = ME_France_Events.22
+			}
+		}
+	}
+}
+
+#A French envoy
+country_event = {
+	id = ME_France_Events.22
+	title = ME_France_Events.22.T
+	desc = ME_France_Events.22.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_France_Events.22.OPT1
+		ai_chance = { factor = 50 }
+
+		kill_heir = yes
+		set_ruler_flag = mary_is_heir
+		if = {
+			limit = {
+				is_rival = FROM
+			}
+			remove_rival = FROM
+			FROM = { remove_rival = ROOT }
+		}
+		add_opinion = {
+			who = FROM
+			modifier = fra_french_influence_inside_burgundy
+		}
+		reverse_add_opinion = {
+			who = FROM
+			modifier = fra_french_influence_inside_burgundy
+		}
+	}
+
+	option = {
+		name = ME_France_Events.22.OPT3
+		ai_chance = { factor = 50 }
+
+		custom_tooltip = FRENCH_INVASION
 	}
 }
