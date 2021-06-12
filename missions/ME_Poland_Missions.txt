@@ -276,30 +276,79 @@ POL_Missions_1 = {
 	}
 	
 	POL_establish_autoramenty = {
-		icon = me_mission_poland_lublin
+		icon = army_reforms
 		position = 8
 		required_missions = { }
 		provinces_to_highlight = {
 		}
 		trigger = {
 			OR = {
-				num_of_mercenaries = 30
+				num_of_mercenaries = 20
 				army_size = 60
 			}
 		}
 		effect = {
+			add_mil_power = 25
+			custom_tooltip = POL_if_completed_by_mercenaries
+			tooltip = {
+				add_country_modifier = {
+					name = POL_autorament_cudzoziemski
+					duration = 10950
+				}
+				#event to get 10 mercenary infantry in capital???
+			}
+			custom_tooltip = POL_if_completed_by_army_size
+			tooltip = {
+				add_country_modifier = {
+					name = POL_autorament_narodowy
+					duration = 10950
+				}
+			}
 		}
 	}
 	
-	POL_wojsko_komputowe = {
+	POL_wojsko_komputowe = { #changed to kwarciane
 		icon = me_mission_poland_lublin
 		position = 9
 		required_missions = { POL_establish_autoramenty }
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_manpower_building_trigger = yes
+				value = 10
+			}
+			OR = {
+				recruitmaster = 1
+				has_mil_advisor_2 = yes
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					owns = 4525
+				}
+				4525 = {
+					tooltip = {
+						add_province_modifier = {
+							name = POL_skarb_rawski
+							duration = -1
+						}
+					}
+					province_event = { id = ME_Poland_Events.19 } #Skarb Rawski
+				}
+			}
+			else = {
+				capital_scope = {
+					tooltip = {
+						add_province_modifier = {
+							name = POL_skarb_rawski
+							duration = -1
+						}
+					}
+					province_event = { id = ME_Poland_Events.19 } #Skarb Rawski
+				}
+			}
 		}
 	}
 	
@@ -310,8 +359,14 @@ POL_Missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			army_tradition = 80
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.1
+			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.20 } #order orla bialego
 		}
 	}
 	
@@ -322,8 +377,15 @@ POL_Missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			262 = {
+				owned_by = ROOT
+				development = 30
+			}
 		}
 		effect = {
+			262 = {
+				add_or_upgrade_university_building = yes
+			}
 		}
 	}
 	
@@ -346,8 +408,35 @@ POL_Missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods } 
+				}
+				development_in_provinces = {
+					trade_goods = amber
+					value = 50
+				}
+			}
+			else = {
+				development_in_provinces = {
+					OR = {
+						province_id = 43
+						province_id = 39
+						province_id = 41
+					}
+					value = 50
+				}
+			}
+			262 = {
+				trade_share ={
+					country = ROOT
+					share = 60
+				}
+			}
 		}
 		effect = {
+		
+			custom_tooltip = POL_if_we_have_wroclaw
 		}
 	}
 	
@@ -358,6 +447,29 @@ POL_Missions_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				development = 20
+				has_production_building_trigger = yes
+				has_manufactory_trigger = yes
+				OR = {
+					trade_goods = jewellery
+					trade_goods = gems
+					trade_goods = amber
+					trade_goods = dyes
+					trade_goods = indigo_dye
+				}
+				value = 3
+			}
+			num_of_owned_provinces_with = {
+				development = 25
+				has_production_building_trigger = yes
+				has_manufactory_trigger = yes
+				OR = {
+					trade_goods = cloth
+					trade_goods = wine
+				}
+				value = 3
+			}
 		}
 		effect = {
 		}
@@ -622,6 +734,14 @@ POL_Missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = estonia_ingria_area
+					area = curonia_area
+					area = livonia_area
+				}
+				value = 6
+			}
 		}
 		effect = {
 			define_general = {
@@ -631,6 +751,8 @@ POL_Missions_2 = {
 				siege = 1
 				name = "Jan Karol Chodkiewicz"
 			}
+			
+			add_army_tradition_or_mil_power = { amount = 10 }
 		}
 	}
 	
@@ -641,8 +763,22 @@ POL_Missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				num_of_heavy_ship = 3
+				num_of_galley = 10
+			}
+			num_of_light_ship = 10
 		}
 		effect = {
+			define_admiral = {
+				shock = 3
+				fire = 4
+				manuever = 3
+				name = "Arend Dickmann"
+			}
+			
+			add_navy_tradition = 10
+			custom_tooltip = POL_special_cb_on_sweden
 		}
 	}
 	
@@ -653,8 +789,16 @@ POL_Missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_won_war_against = {
+				who = SWE
+				max_years_since = 10
+			}
 		}
 		effect = {
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 10
+			}
 		}
 	}
 	
@@ -665,6 +809,11 @@ POL_Missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			257 = {
+				development = 40
+				higher_development_than = 295
+				higher_development_than = 266
+			}
 		}
 		effect = {
 		}
@@ -677,8 +826,20 @@ POL_Missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			257 = {
+				owned_by = ROOT
+				has_building = university
+			}
+			num_of_estate_agendas_completed = {
+				estate = estate_nobles
+				value = 10
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_magnate_education
+				duration = 7300
+			}
 		}
 	}
 	
@@ -690,8 +851,20 @@ POL_Missions_2 = {
 		}
 		trigger = {
 			is_ahead_of_time_in_tech = { type = all }
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 25
+			}
 		}
 		effect = {
+			257 = {
+				add_province_modifier = {
+					name = POL_zaluski_library
+					duration = -1
+				}
+			}
 		}
 	}
 	
@@ -821,6 +994,9 @@ POL_Missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			owns = 272
+			owns = 280
+			NOT = { exists = LIT }
 		}
 		effect = {
 		}
@@ -833,6 +1009,38 @@ POL_Missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = LIT_employs_east_slavic
+				OR = {
+					employed_advisor = {
+						culture = russian 
+					}
+					employed_advisor = {
+						culture = novgorodian 
+					}
+					employed_advisor = {
+						culture = ryazanian 
+					}
+					employed_advisor = {
+						culture = byelorussian 
+					}
+					employed_advisor = {
+						culture = ruthenian
+					}
+					employed_advisor = {
+						culture = karelian 
+					}
+				}
+			}
+			calc_true_if = {
+				accepted_culture = russian
+				accepted_culture = novgorodian
+				accepted_culture = byelorussian
+				accepted_culture = ryazanian
+				accepted_culture = ruthenian
+				accepted_culture = karelian
+				amount = 2
+			}
 		}
 		effect = {
 		}
@@ -845,8 +1053,23 @@ POL_Missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			272 = {
+				owned_by = ROOT
+				development = 30
+			}
+			num_of_estate_agendas_completed = {
+				estate = estate_church
+				value = 5
+			}
 		}
 		effect = {
+			272 = {
+				add_province_modifier = {
+					name = POL_university_of_vilnius
+					duration = -1
+				}
+				add_or_upgrade_university_building = yes
+			}
 		}
 	}
 	
@@ -857,6 +1080,8 @@ POL_Missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			43 = {
+			}
 		}
 		effect = {
 		}
@@ -869,6 +1094,10 @@ POL_Missions_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_manufactory_trigger = yes
+				value = 10
+			}
 		}
 		effect = {
 		}
@@ -879,8 +1108,14 @@ POL_Missions_3 = {
 		position = 16
 		required_missions = { POL_industrialization }
 		provinces_to_highlight = {
+			trade_goods = coal
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				trade_goods = coal
+				has_building = furnace
+				value = 2
+			}
 		}
 		effect = {
 		}
@@ -1179,6 +1414,11 @@ POL_Missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				culture_group = east_slavic
+				development = 30
+				value = 5
+			}
 		}
 		effect = {
 		}
@@ -1189,8 +1429,17 @@ POL_Missions_4 = {
 		position = 11
 		required_missions = { POL_frontier_ruthenia }
 		provinces_to_highlight = {
+			province_id = 280
+			OR = {
+				NOT = { development = 35 }
+				NOT = { num_of_buildings_in_province = 4 }
+			}
 		}
 		trigger = {
+			280 = {
+				development = 35
+				num_of_buildings_in_province = 4
+			}
 		}
 		effect = {
 		}
@@ -1213,8 +1462,14 @@ POL_Missions_4 = {
 		position = 14
 		required_missions = { POL_bulwark }
 		provinces_to_highlight = {
+			region = balkan_region
+			country_or_non_sovereign_subject_holds = ROOT
 		}
 		trigger = {
+			balkan_region = {
+				type = all
+				NOT = { country_or_non_sovereign_subject_holds = TUR }
+			}
 		}
 		effect = {
 		}
@@ -1228,13 +1483,15 @@ POL_Missions_4 = {
 		}
 		trigger = {
 			development_in_provinces = {
-				value = 100
+				value = 150
 				OR = {
 					trade_goods = grain
 					trade_goods = livestock
 				}
 				OR = {
 					region = ruthenia_region
+					area = zaporizhia_area
+					area = yedisan_area
 				}
 			}
 		}
@@ -1723,21 +1980,35 @@ POL_Missions_5 = {
 	}
 	
 	POL_warsaw_confederation = {
-		icon = me_mission_poland_lublin
+		icon = peace_in_europe
 		position = 11
 		required_missions = { }
 		provinces_to_highlight = {
 		}
 		trigger = {
-			
+			custom_trigger_tooltip = {
+				tooltip = POL_1_tolerance_heretic
+				has_global_modifier_value = {
+					which = tolerance_heretic
+					value = 1
+				}
+			}
+			any_ally = {
+				NOT = { religion = ROOT }
+				has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.21 } #Konfederacja Warszawska
 		}
 	}
 	
 	
 	POL_unitary_church = {
-		icon = me_mission_poland_lublin
+		icon = eastern_catholicization
 		position = 12
 		required_missions = { POL_warsaw_confederation }
 		provinces_to_highlight = {
@@ -1745,18 +2016,49 @@ POL_Missions_5 = {
 		trigger = {
 		}
 		effect = {
+			custom_tooltip = POL_east_slavic_provinces
+			set_country_flag = POL_unitary_church_flag
 		}
 	}
 	
 	POL_gaude_mater_polonia = {
-		icon = me_mission_poland_lublin
+		icon = spread_piety
 		position = 13
 		required_missions = { POL_bulwark POL_unitary_church }
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					ROOT = {
+						NOT = { cathedral = 20 }
+					}
+					owned_by = ROOT
+					NOT = { has_building = cathedral }
+				}
+				AND = {
+					ROOT = {
+						NOT = { religious_unity = 0.75 }
+						owned_by = ROOT
+						NOT = { religion = ROOT }
+					}
+				}
+			}
 		}
 		trigger = {
+			cathedral = 20
+			custom_trigger_tooltip = {
+				tooltip = POL_5_tolerance_own
+				has_global_modifier_value = {
+					which = tolerance_own
+					value = 5
+				}
+			}
+			religious_unity = 0.75
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_rejoice_mother_poland
+				duration = 10950
+			}
 		}
 	}
 	
@@ -1765,8 +2067,26 @@ POL_Missions_5 = {
 		position = 14
 		required_missions = { }
 		provinces_to_highlight = {
+			province_is_in_trade_node = { node = kiev }
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { owned_by = ROOT }
+			}
 		}
 		trigger = {
+			280 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
+			num_of_owned_provinces_with = {
+				province_is_in_trade_node = { node = kiev }
+				province_has_center_of_trade_of_level = 1
+				has_trade_building_trigger = yes
+				value = 2
+			}
 		}
 		effect = {
 		}
