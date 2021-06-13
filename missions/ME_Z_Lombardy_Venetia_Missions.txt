@@ -89,6 +89,7 @@ LombardyVenetia_missions_1 = {
 				OR = {
 					has_won_war_against = {
 						who = FRA
+						max_years_since = 50
 					}
 					total_development = FRA
 				}
@@ -104,29 +105,37 @@ LombardyVenetia_missions_1 = {
 					total_development = emperor
 					has_won_war_against = {
 						who = HAB
+						max_years_since = 50
+					}
+					total_development = HAB
+				}
+			}
+			else_if = {
+				limit = {
+					exists = HAB
+				}
+				OR = {
+					has_won_war_against = {
+						who = HAB
+						max_years_since = 50
 					}
 					total_development = HAB
 				}
 			}
 			else = {
-				if = {
-					limit = {
-						exists = HAB
-					}
-					OR = {
-						has_won_war_against = {
-							who = HAB
-						}
-						total_development = HAB
-					}
-				}
+				total_development = 500
 			}
 		}
 		effect = {
 			add_adm_power = 100
 			add_dip_power = 100
 			add_mil_power = 100
-			add_splendor = 100
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 100
+			}
 		}
 	}
 }
@@ -169,7 +178,7 @@ LombardyVenetia_missions_2 = {
 			}
 		}
 		trigger = {
-			OR ={
+			OR = {
 				has_mil_advisor_3 = yes
 				MIL = 6
 			}
@@ -187,9 +196,7 @@ LombardyVenetia_missions_2 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Lombardy_Venetia_Events.2
-			}
+			country_event = { id = ME_Lombardy_Venetia_Events.2 }
 			104 = {
 				add_permanent_province_modifier = {
 					name = lvn_teulie
@@ -219,16 +226,47 @@ LombardyVenetia_missions_2 = {
 				has_terrain = mountain
 				has_terrain = hills
 			}
-			NOT = { owned_by = ROOT }
 			OR = {
-				NOT = { has_building = fort_15th }
-				NOT = { has_building = fort_16th }
-				NOT = { has_building = fort_17th }
-				NOT = { has_building = fort_18th }
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						OR = {
+							area = emilia_romagna_area
+							area = liguria_area
+							area = lombardy_area
+							area = piedmont_area
+							area = po_valley_area
+							area = venetia_area
+						}
+						OR = {
+							has_terrain = mountain
+							has_terrain = hills
+						}
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+				}
 			}
 		}
 		trigger = {
 			army_size_percentage = 1
+			OR = {
+				army_professionalism = 0.33
+				army_tradition = 50
+			}
 			num_of_owned_provinces_with = {
 				value = 3
 				OR = {
@@ -247,15 +285,12 @@ LombardyVenetia_missions_2 = {
 					has_building = fort_15th
 					has_building = fort_16th
 					has_building = fort_17th
-					has_building = fort_18th					
+					has_building = fort_18th
 				}
-			}
-			OR = {
-				army_professionalism = 0.33
-				army_tradition = 50
 			}
 		}
 		effect = {
+			add_prestige = 10
 			if = {
 				limit = {
 					exists = FRA
@@ -325,10 +360,71 @@ LombardyVenetia_missions_3 = {
 			ven_stato_terra
 		}
 		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = lombardy_area
+				area = po_valley_area
+				area = venetia_area
+			}
+			OR = {
+				AND = {
+					ROOT = { tag = MLO }
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							NOT = { prosperity = 50 }
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							OR = {
+								devastation = 1
+								unrest = 0.1
+								local_autonomy = 10
+							}
+						}
+					}
+				}
+				AND = {
+					ROOT = { NOT = { tag = MLO } }
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							NOT = { prosperity = 50 }
+						}
+					}
+					OR = {
+						AND = {
+							ROOT = {
+								overlord_of = MLO
+							}
+							OR = {
+								NOT = { owned_by = MLO }
+								devastation = 1
+								unrest = 0.1
+								local_autonomy = 10
+							}
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							OR = {
+								devastation = 1
+								unrest = 0.1
+								local_autonomy = 10
+							}
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
-					has_dlc = "Rights of Man"
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
 				}
 				is_great_power = yes
 			}
@@ -340,65 +436,43 @@ LombardyVenetia_missions_3 = {
 				limit = {
 					tag = MLO
 				}
-				lombardy_area = {
-					type = all
-					if = {
-						limit = {
-							ROOT = {
-								has_dlc = "Rights of Man"
-							}
-						}
-						prosperity = 50
-						owned_by = ROOT
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
 					}
-					else = {
+					lombardy_area = {
+						type = all
+						owned_by = ROOT
+						prosperity = 50
+					}
+					po_valley_area = {
+						type = all
+						owned_by = ROOT
+						prosperity = 50
+					}
+					venetia_area = {
+						type = all
+						owned_by = ROOT
+						prosperity = 50
+					}
+				}
+				else = {
+					lombardy_area = {
+						type = all
 						owned_by = ROOT
 						NOT = { devastation = 1 }
 						NOT = { unrest = 0.1 }
 						NOT = { local_autonomy = 10 }
 					}
-				}
-				po_valley_area = {
-					type = all
-					if = {
-						limit = {
-							ROOT = {
-								has_dlc = "Rights of Man"
-							}
-						}
-						prosperity = 50
-						owned_by = ROOT
-					}
-					else = {
+					po_valley_area = {
+						type = all
 						owned_by = ROOT
 						NOT = { devastation = 1 }
 						NOT = { unrest = 0.1 }
 						NOT = { local_autonomy = 10 }
 					}
-				}
-				venetia_area = {
-					type = all
-					if = {
-						limit = {
-							ROOT = {
-								has_dlc = "Rights of Man"
-							}
-						}
-						OR = {
-							prosperity = 50
-							owned_by = ROOT
-							AND = {
-								owned_by = VEN
-								ROOT = {
-									overlord_of = VEN
-								}
-								NOT = { devastation = 1 }
-								NOT = { unrest = 0.1 }
-								NOT = { local_autonomy = 10 }
-							}
-						}
-					}
-					else = {
+					venetia_area = {
+						type = all
 						owned_by = ROOT
 						NOT = { devastation = 1 }
 						NOT = { unrest = 0.1 }
@@ -407,87 +481,82 @@ LombardyVenetia_missions_3 = {
 				}
 			}
 			else = {
-				lombardy_area = {
-					type = all
-					if = {
-						limit = {
-							ROOT = {
-								has_dlc = "Rights of Man"
-							}
-						}
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					lombardy_area = {
+						type = all
 						OR = {
-							prosperity = 50
-							owned_by = ROOT
 							AND = {
-								owned_by = MLO
+								owned_by = ROOT
+								prosperity = 50
+							}
+							AND = {
 								ROOT = {
 									overlord_of = MLO
 								}
+								owned_by = MLO
 								NOT = { devastation = 1 }
 								NOT = { unrest = 0.1 }
 								NOT = { local_autonomy = 10 }
 							}
 						}
 					}
-					else = {
+					po_valley_area = {
+						type = all
+						OR = {
+							AND = {
+								owned_by = ROOT
+								prosperity = 50
+							}
+							AND = {
+								ROOT = {
+									overlord_of = MLO
+								}
+								owned_by = MLO
+								NOT = { devastation = 1 }
+								NOT = { unrest = 0.1 }
+								NOT = { local_autonomy = 10 }
+							}
+						}
+					}
+					venetia_area = {
+						type = all
+						OR = {
+							AND = {
+								owned_by = ROOT
+								prosperity = 50
+							}
+							AND = {
+								ROOT = {
+									overlord_of = MLO
+								}
+								owned_by = MLO
+								NOT = { devastation = 1 }
+								NOT = { unrest = 0.1 }
+								NOT = { local_autonomy = 10 }
+							}
+						}
+					}
+				}
+				else = {
+					lombardy_area = {
+						type = all
 						owned_by = ROOT
 						NOT = { devastation = 1 }
 						NOT = { unrest = 0.1 }
 						NOT = { local_autonomy = 10 }
 					}
-				}
-				po_valley_area = {
-					type = all
-					if = {
-						limit = {
-							ROOT = {
-								has_dlc = "Rights of Man"
-							}
-						}
-						OR = {
-							prosperity = 50
-							owned_by = ROOT
-							AND = {
-								owned_by = MLO
-								ROOT = {
-									overlord_of = MLO
-								}
-								NOT = { devastation = 1 }
-								NOT = { unrest = 0.1 }
-								NOT = { local_autonomy = 10 }
-							}
-						}
-					}
-					else = {
+					po_valley_area = {
+						type = all
 						owned_by = ROOT
 						NOT = { devastation = 1 }
 						NOT = { unrest = 0.1 }
 						NOT = { local_autonomy = 10 }
 					}
-				}
-				venetia_area = {
-					type = all
-					if = {
-						limit = {
-							ROOT = {
-								has_dlc = "Rights of Man"
-							}
-						}
-						OR = {
-							prosperity = 50
-							owned_by = ROOT
-							AND = {
-								owned_by = VEN
-								ROOT = {
-									overlord_of = VEN
-								}
-								NOT = { devastation = 1 }
-								NOT = { unrest = 0.1 }
-								NOT = { local_autonomy = 10 }
-							}
-						}
-					}
-					else = {
+					venetia_area = {
+						type = all
 						owned_by = ROOT
 						NOT = { devastation = 1 }
 						NOT = { unrest = 0.1 }
@@ -497,6 +566,16 @@ LombardyVenetia_missions_3 = {
 			}
 		}
 		effect = {
+			add_legitimacy_equivalent = { value = 10 }
+			if = {
+				limit = {
+					OR = {
+						overlord_of = VEN
+						overlord_of = MLO
+					}
+				}
+				country_event = { id = ME_Lombardy_Venetia_Events.1 }
+			}
 			emilia_romagna_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -539,17 +618,6 @@ LombardyVenetia_missions_3 = {
 				}
 				add_permanent_claim = ROOT
 			}
-			if = {
-				limit = {
-					OR = {
-						overlord_of = VEN
-						overlord_of = MLO
-					}
-				}
-				country_event = {
-					id = ME_Lombardy_Venetia_Events.1
-				}
-			}
 		}
 	}
 
@@ -562,25 +630,22 @@ LombardyVenetia_missions_3 = {
 		}
 		position = 13
 		trigger = {
-			NOT = {
-				any_country = {
-					culture_group = latin
-					capital_scope = {
-						region = italy_region
-					}
-					army_strength = {
-						who = ROOT
-						value = 1
+			custom_trigger_tooltip = {
+				tooltip = LVN_CONQUEST_OF_ROME_TRIGGER_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			118 = { add_core = ROOT }
-			hidden_effect = {
-				complete_mission = gen_conquest_of_rome
-				complete_mission = spi_conquest_of_rome
-			}
+			complete_conquest_of_rome_missions = yes
 		}
 	}
 }
@@ -615,33 +680,26 @@ LombardyVenetia_missions_4 = {
 				province_id = 101
 				province_id = 112
 			}
-			NOT = { owned_by = ROOT }
-			NOT = { base_production = 15 }
 			OR = {
-				NOT = { has_building = shipyard }
-				NOT = { has_building = grand_shipyard }
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 15 }
+				NOT = { has_shipyard_building_trigger = yes }
 			}
 		}
 		trigger = {
-			OR ={
+			OR = {
 				has_mil_advisor_3 = yes
 				MIL = 6
 			}
 			101 = {
 				owned_by = ROOT
 				base_production = 15
-				OR = {
-					has_building = shipyard
-					has_building = grand_shipyard
-				}
+				has_shipyard_building_trigger = yes
 			}
 			112 = {
 				owned_by = ROOT
 				base_production = 15
-				OR = {
-					has_building = grand_shipyard
-					has_building = shipyard
-				}
+				has_shipyard_building_trigger = yes
 			}
 		}
 		effect = {
@@ -669,22 +727,27 @@ LombardyVenetia_missions_4 = {
 		trigger = {
 			if = {
 				limit = {
+					exists = TUR
+				}
+				navy_size = TUR
+			}
+			if = {
+				limit = {
 					any_country = {
-						primary_culture = berber
+						culture_group = maghrebi
 					}
 				}
-				any_country = {
-					primary_culture = berber
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1298_MAGHREBI_TT
+					NOT = {
+						any_country = {
+							culture_group = maghrebi #NO COUNTRY THAT HAS MAGHREBI CULTURE HAS BOTH 5% TRADE SHARE AND NAVY BETTER THAN 50% OF OURS
 							1298 = {
 								trade_share = {
 									country = PREV
 									share = 5
-								}	
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -692,18 +755,17 @@ LombardyVenetia_missions_4 = {
 						}
 					}
 				}
-				any_country = {
-					primary_culture = berber
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1308_MAGHREBI_TT
+					NOT = {
+						any_country = {
+							culture_group = maghrebi
 							1308 = {
 								trade_share = {
 									country = PREV
 									share = 5
-								}	
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -713,17 +775,16 @@ LombardyVenetia_missions_4 = {
 				}
 			}
 			else = {
-				any_country = {
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1298_TT
+					NOT = {
+						any_country = { #NO COUNTRY HAS BOTH 5% TRADE SHARE AND NAVY BETTER THAN 50% OF OURS
 							1298 = {
 								trade_share = {
 									country = PREV
 									share = 5
-								}	
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
@@ -731,32 +792,22 @@ LombardyVenetia_missions_4 = {
 						}
 					}
 				}
-				any_country = {
-					OR = {
-						NOT = {
+				custom_trigger_tooltip = {
+					tooltip = LVN_MEDITERRANEAN_PIRACY_1308_TT
+					NOT = {
+						any_country = {
 							1308 = {
 								trade_share = {
 									country = PREV
 									share = 5
-								}	
+								}
 							}
-						}
-						NOT = {
 							naval_strength = {
 								who = ROOT
 								value = 0.5
 							}
 						}
 					}
-				}
-			}
-			if = {
-				limit = {
-					exists = TUR
-				}
-				naval_strength = {
-					who = TUR
-					value = 1
 				}
 			}
 		}
@@ -767,6 +818,14 @@ LombardyVenetia_missions_4 = {
 				}
 				TUR = {
 					capital_scope = {
+						if = {
+							limit = {
+								NOT = { is_core = ROOT }
+								NOT = { owned_by = ROOT }
+								has_port = yes
+							}
+							add_permanent_claim = ROOT
+						}
 						area = {
 							limit = {
 								NOT = { is_core = ROOT }
@@ -778,59 +837,13 @@ LombardyVenetia_missions_4 = {
 					}
 				}
 			}
-			if = {
-				limit = {
-					OR = {
-						any_country = {
-							primary_culture = berber
-							OR = {
-								1308 = {
-									trade_share = {
-										country = PREV
-										share = 5
-									}	
-								}
-								naval_strength = {
-									who = ROOT
-									value = 0.5
-								}
-							}
-						}
-						any_country = {
-							primary_culture = berber
-							OR = {
-								1298 = {
-									trade_share = {
-										country = PREV
-										share = 5
-									}	
-								}
-								naval_strength = {
-									who = ROOT
-									value = 0.5
-								}
-							}
-						}
-					}
-				}
-				341 = {
-					every_trade_node_member_province = {
-						limit = {
-							NOT = { is_core = ROOT }
-							NOT = { owned_by = ROOT }
-							has_port = yes
-						}
-						add_permanent_claim = ROOT
-					}
-				}
-			}
 			add_country_modifier = {
 				name = lvn_challenging_berbers
 				duration = 9125
 			}
 		}
 	}
-	
+
 }
 
 LombardyVenetia_missions_5 = {
@@ -867,14 +880,11 @@ LombardyVenetia_missions_5 = {
 				area = po_valley_area
 				area = venetia_area
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				AND = {
 					NOT = { base_production = 12 }
-					OR = {
-						NOT = { has_building = workshop }
-						NOT = { has_building = counting_house }
-					}
+					NOT = { has_production_building_trigger = yes }
 				}
 				AND = {
 					NOT = { has_manufactory_trigger = yes }
@@ -891,10 +901,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -908,10 +915,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -925,10 +929,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -942,10 +943,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -959,10 +957,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -976,10 +971,7 @@ LombardyVenetia_missions_5 = {
 					OR = {
 						AND = {
 							base_production = 12
-							OR = {
-								has_building = workshop
-								has_building = counting_house
-							}
+							has_production_building_trigger = yes
 						}
 						AND = {
 							has_manufactory_trigger = yes
@@ -990,18 +982,32 @@ LombardyVenetia_missions_5 = {
 			}
 		}
 		effect = {
-			custom_tooltip = DARSENA_LVN_TT
-			tooltip = {
-				add_province_modifier = {
-					name = lvn_darsena
-					duration = -1
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = DARSENA_LVN_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_darsena
+						duration = -1
+					}
+				}
+				custom_tooltip = INDUSTRIALISATION_LVN_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_industrialisation_sprint
+						duration = 18250
+					}
 				}
 			}
-			custom_tooltip = INDUSTRIALISATION_LVN_TT
-			tooltip = {
-				add_province_modifier = {
-					name = lvn_industrialisation_sprint
-					duration = 18250
+			else = {
+				custom_tooltip = INDUSTRIALISATION_LVN_NON_TGE_TT
+				tooltip = {
+					add_province_modifier = {
+						name = lvn_industrialisation_sprint
+						duration = 18250
+					}
 				}
 			}
 			hidden_effect = {

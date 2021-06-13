@@ -77,7 +77,7 @@ savoy_missions_1 = {
 		effect = {
 			add_country_modifier = {
 				name = sav_encourage_artistic1
-				duration = 3650
+				duration = 7300
 			}
 			add_country_modifier = {
 				name = sav_encourage_artistic2
@@ -93,17 +93,25 @@ savoy_missions_1 = {
 			sav_artistic_literature
 		}
 		trigger = {
-			adm_tech = 10
-			dip_tech = 10
 			natural_scientist = 1
-			ADM = 3
-			DIP = 3
-			university = 1
+			OR = {
+				AND = {
+					adm_tech = 10
+					dip_tech = 10
+				}
+				AND = {
+					ADM = 3
+					DIP = 3
+				}
+				any_owned_province = {
+					development = 30
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
 				name = sav_early_enlightenment
-				duration = 3650
+				duration = 7300
 			}
 		}
 	}
@@ -115,9 +123,27 @@ savoy_missions_1 = {
 			sav_ducal_library
 		}
 		trigger = {
-			OR = {
-				innovativeness = 20
-				adm_tech = 15
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					innovativeness = 20
+					adm_tech = 15
+					num_of_owned_provinces_with = {
+						development = 30
+						value = 3
+					}
+				}
+			}
+			else = {
+				OR = {
+					adm_tech = 15
+					num_of_owned_provinces_with = {
+						development = 30
+						value = 3
+					}
+				}
 			}
 		}
 		effect = {
@@ -137,18 +163,17 @@ savoy_missions_1 = {
 		provinces_to_highlight = {
 			province_id = 205
 			OR = {
+				NOT = { owned_by = ROOT }
 				NOT = { base_tax = 10 }
-				NOT = { has_building = courthouse }
-				NOT = { has_building = town_hall }
+				NOT = { has_building = university }
+				NOT = { has_courthouse_building_trigger = yes }
 			}
 		}
 		trigger = {
-			adm_tech = 10
 			205 = {
-				OR = {
-					has_building = courthouse
-					has_building = town_hall
-				}
+				owned_by = ROOT
+				has_building = university
+				has_courthouse_building_trigger = yes
 				base_tax = 10
 			}
 		}
@@ -210,6 +235,26 @@ savoy_missions_2 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					exists = MLO
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = MLO
+					months = 300
+				}
+			}
+			if = {
+				limit = {
+					exists = GEN
+				}
+				add_casus_belli = {
+					type = cb_italy_humiliation_rivals
+					target = GEN
+					months = 300
+				}
+			}
 			piedmont_area = {
 				add_province_modifier = {
 					name = sav_piedmont_unified
@@ -233,24 +278,61 @@ savoy_missions_2 = {
 			sav_piedmont_united
 			sav_french_meddlings
 		}
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_capital_of = ROOT
+					OR = {
+						NOT = { renaissance = 100 }
+						NOT = { num_of_times_improved = 5 }
+					}
+				}
+				AND = {
+					area = piedmont_area
+					OR = {
+						NOT = { owned_by = ROOT }
+						AND = {
+							has_dlc = "Mandate of Heaven"
+							NOT = { prosperity = 100 }
+						}
+						AND = {
+							NOT = { has_dlc = "Mandate of Heaven" }
+							devastation = 1
+						}
+					}
+				}
+			}
+		}
 		trigger = {
+			total_development = 100
 			capital_scope = {
 				num_of_times_improved = 5
 				renaissance = 100
 			}
-			total_development = 100
-			marketplace = 2
-			temple = 2
-			piedmont_area = {
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				piedmont_area = {
+					type = all
+					owned_by = ROOT
 					prosperity = 100
 				}
-				else = {
+			}
+			else = {
+				piedmont_area = {
+					type = all
+					owned_by = ROOT
 					NOT = { devastation = 1 }
 				}
+			}
+			num_of_owned_provinces_with = {
+				has_trade_building_trigger = yes
+				value = 2
+			}
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 2
 			}
 		}
 		effect = {
@@ -258,9 +340,7 @@ savoy_missions_2 = {
 			add_dip_power = 100
 			add_mil_power = 100
 			add_prestige = 10
-			country_event = {
-				id = ME_Savoy_Events.2
-			}
+			country_event = { id = ME_Savoy_Events.2 }
 		}
 	}
 
@@ -268,33 +348,38 @@ savoy_missions_2 = {
 		icon = alpine_defenses
 		position = 4
 		required_missions = { sav_renaissance_capital }
-		trigger = {
-			capital_scope = {
-				base_manpower = 10
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { base_manpower = 10 }
+				NOT = { fort_level = 2 }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { has_state_edict = edict_defensive_edict }
+					ROOT = {
+						NOT = { fortification_expert = 1 }
+					}
 				}
 			}
+		}
+		trigger = {
 			if = {
 				limit = {
 					has_dlc = "Mandate of Heaven"
 				}
 				OR = {
+					fortification_expert = 1
 					capital_scope = {
 						has_state_edict = edict_defensive_edict
-					}
-					ROOT = {
-						fortification_expert = 1
 					}
 				}
 			}
 			else = {
-				ROOT = {
-					fortification_expert = 1
-				}
+				fortification_expert = 1
+			}
+			capital_scope = {
+				base_manpower = 10
+				fort_level = 2
 			}
 		}
 		effect = {
@@ -315,7 +400,6 @@ savoy_missions_2 = {
 			sav_militarian_independence
 		}
 		trigger = {
-			current_age = age_of_reformation
 			if = {
 				limit = {
 					religion = catholic
@@ -323,10 +407,24 @@ savoy_missions_2 = {
 				inquisitor = 1
 				has_country_modifier = counter_reformation
 			}
+			else_if = {
+				limit = {
+					religion = protestant
+					has_dlc = "Common Sense"
+				}
+				church_power = 50
+			}
+			else_if = {
+				limit = {
+					religion = reformed
+					has_dlc = "Wealth of Nations"
+				}
+				fervor = 50
+			}
 			else = {
 				OR = {
-					church_power = 100
-					fervor = 100
+					religious_ideas = 3
+					humanist_ideas = 3
 				}
 			}
 		}
@@ -364,10 +462,24 @@ savoy_missions_2 = {
 				}
 				papal_influence = 50
 			}
+			else_if = {
+				limit = {
+					religion = protestant
+					has_dlc = "Common Sense"
+				}
+				church_power = 100
+			}
+			else_if = {
+				limit = {
+					religion = reformed
+					has_dlc = "Wealth of Nations"
+				}
+				fervor = 100
+			}
 			else = {
 				OR = {
-					church_power = 100
-					fervor = 100
+					religious_ideas = 5
+					humanist_ideas = 5
 				}
 			}
 		}
@@ -427,35 +539,50 @@ savoy_missions_3 = {
 		position = 1
 		required_missions = { }
 		trigger = {
-			OR = {
-				AND = {
-					if = {
-						limit = {
-							exists = FRA
-						}
+			if = {
+				limit = {
+					exists = FRA
+				}
+				OR = {
+					AND = {
 						FRA = {
 							has_opinion = {
 								who = ROOT
 								value = 150
 							}
-							trust = {
-								who = ROOT
-								value = 60
+						}
+						NOT = { is_part_of_hre = yes }
+					}
+					AND = {
+						FRA = {
+							has_been_insulted_by_root = yes
+						}
+						army_size_percentage = 0.9
+						OR = {
+							is_emperor = yes
+							emperor = {
+								has_opinion = {
+									who = ROOT
+									value = 150
+								}
 							}
 						}
 					}
-					NOT = { is_year = 1489 }
-					NOT = { is_part_of_hre = yes }
 				}
-				AND = {
-					FRA = {
-						has_been_insulted_by_root = yes
-					}
-					army_size_percentage = 1
-					emperor = {
-						has_opinion = {
-							who = ROOT
-							value = 150
+			}
+			else = {
+				OR = {
+					NOT = { is_part_of_hre = yes }
+					AND = {
+						army_size_percentage = 0.9
+						OR = {
+							is_emperor = yes
+							emperor = {
+								has_opinion = {
+									who = ROOT
+									value = 150
+								}
+							}
 						}
 					}
 				}
@@ -492,6 +619,15 @@ savoy_missions_3 = {
 						duration = 7300
 					}
 				}
+			}
+			4720 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
 			}
 			liguria_area = {
 				limit = {
@@ -534,6 +670,7 @@ savoy_missions_3 = {
 		required_missions = { sav_genoan_monopoly }
 		trigger = {
 			NOT = { num_of_mercenaries = 1 }
+			army_size_percentage = 0.8
 			if = {
 				limit = {
 					has_dlc = "Cradle of Civilization"
@@ -546,12 +683,9 @@ savoy_missions_3 = {
 			else = {
 				army_tradition = 40
 			}
-			army_size_percentage = 1
 		}
 		effect = {
-			country_event = {
-				id = ME_Savoy_Events.4
-			}
+			country_event = { id = ME_Savoy_Events.4 }
 			if = {
 				limit = {
 					has_dlc = "Cradle of Civilization"
@@ -604,8 +738,6 @@ savoy_missions_3 = {
 			sav_conquest_sardinia
 		}
 		position = 8
-		provinces_to_highlight = {
-		}
 		trigger = {
 			development_in_provinces = {
 				value = 80
@@ -614,46 +746,6 @@ savoy_missions_3 = {
 			development_in_provinces = {
 				value = 50
 				area = corsica_sardinia_area
-			}
-			piedmont_area = {
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
-					OR = {
-						AND = {
-							country_or_non_sovereign_subject_holds = ROOT
-							NOT = { devastation = 1 }
-						}
-						AND = {
-							prosperity = 50
-							owned_by = ROOT
-						}
-					}
-				}
-				else = {
-					NOT = { devastation = 1 }
-				}
-			}
-			corsica_sardinia_area = {
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
-					OR = {
-						AND = {
-							country_or_non_sovereign_subject_holds = ROOT
-							NOT = { devastation = 1 }
-						}
-						AND = {
-							prosperity = 50
-							owned_by = ROOT
-						}
-					}
-				}
-				else = {
-					NOT = { devastation = 1 }
-				}
 			}
 		}
 		effect = {
@@ -664,9 +756,7 @@ savoy_missions_3 = {
 			}
 			if = {
 				limit = {
-					NOT = {
-						tag = SPI
-					}
+					NOT = { tag = SPI }
 				}
 				set_country_flag = spi_without_spi
 				swap_non_generic_missions = yes
@@ -721,6 +811,7 @@ savoy_missions_4 = {
 			owns = 4720
 		}
 		effect = {
+			add_prestige_or_monarch_power = { amount = 10 }
 			romandie_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -740,7 +831,7 @@ savoy_missions_4 = {
 		}
 		provinces_to_highlight = {
 			area = romandie_area
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			romandie_area = {
@@ -749,6 +840,7 @@ savoy_missions_4 = {
 			}
 		}
 		effect = {
+			add_army_tradition_or_mil_power = { amount = 20 }
 			west_burgundy_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -762,7 +854,7 @@ savoy_missions_4 = {
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}			
+			}
 		}
 	}
 
@@ -777,7 +869,7 @@ savoy_missions_4 = {
 				area = west_burgundy_area
 				area = bourgogne_area
 			}
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			west_burgundy_area = {
@@ -790,9 +882,7 @@ savoy_missions_4 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Savoy_Events.3
-			}
+			country_event = { id = ME_Savoy_Events.3 }
 			languedoc_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -822,7 +912,7 @@ savoy_missions_4 = {
 				area = languedoc_area
 				area = savoy_dauphine_area
 			}
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			languedoc_area = {
@@ -848,6 +938,13 @@ savoy_missions_4 = {
 		required_missions = {
 			sav_reveng_against_france
 		}
+		provinces_to_highlight = {
+			OR = {
+				area = piedmont_area
+				area = romandie_area
+			}
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			accepted_culture = swiss
 			if = {
@@ -861,6 +958,14 @@ savoy_missions_4 = {
 			}
 			else = {
 				army_tradition = 60
+			}
+			romandie_area = {
+				type = all
+				owned_by = ROOT
+			}
+			piedmont_area = {
+				type = all
+				owned_by = ROOT
 			}
 		}
 		effect = {
@@ -920,11 +1025,11 @@ savoy_missions_5 = {
 		required_missions = { }
 		trigger = {
 			num_of_galley = 15
+			navy_tradition = 20
 			OR = {
 				dock = 3
 				drydock = 3
 			}
-			navy_tradition = 20
 		}
 		effect = {
 			add_country_modifier = {
@@ -940,24 +1045,29 @@ savoy_missions_5 = {
 		required_missions = { sav_defend_coast }
 		trigger = {
 			num_of_light_ship = 20
-			mercantilism = 20
+			navy_size_percentage = 0.85
+			if = {
+				limit = {
+					has_dlc = "Wealth of Nations"
+				}
+				mercantilism = 20
+			}
 			if = {
 				limit = {
 					has_dlc = "Golden Century"
 				}
 				has_flagship = yes
 			}
-			navy_size_percentage = 1
 			1298 = {
 				is_strongest_trade_power = ROOT
 			}
 		}
 		effect = {
+			add_mercantilism = 10
 			add_country_modifier = {
 				name = sav_mercantile_hegemony
 				duration = 7300
 			}
-			add_mercantilism = 10
 		}
 	}
 
@@ -965,30 +1075,26 @@ savoy_missions_5 = {
 		icon = take_the_bishoprics
 		position = 5
 		required_missions = { }
+		provinces_to_highlight = {
+			province_id = 4720
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_tax = 10 }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { fort_level = 2 }
+			}
+		}
 		trigger = {
 			4720 = {
+				owned_by = ROOT
 				base_tax = 10
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
+				has_tax_building_trigger = yes
+				fort_level = 2
 			}
 		}
 		effect = {
 			4720 = {
-				if = {
-					limit = {
-						has_building = temple
-					}
-					remove_building = temple
-					add_building = cathedral
-				}
+				add_or_upgrade_tax_building = yes
 				add_province_modifier = {
 					name = sav_religious_castle
 					duration = 3650
@@ -1006,12 +1112,7 @@ savoy_missions_5 = {
 				value = 4
 				is_core = ROOT
 				has_terrain = mountain
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-				}
+				fort_level = 2
 			}
 		}
 		effect = {
@@ -1043,8 +1144,18 @@ savoy_missions_5 = {
 		icon = glory_to_turin
 		position = 8
 		required_missions = { sav_fortify_alps }
+		provinces_to_highlight = {
+			province_id = 103
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 5 }
+				NOT = { has_building = university }
+				devastation = 1
+			}
+		}
 		trigger = {
 			103 = {
+				owned_by = ROOT
 				num_of_times_improved = 5
 				has_building = university
 				NOT = { devastation = 1 }
