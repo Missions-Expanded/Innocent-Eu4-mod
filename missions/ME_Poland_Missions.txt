@@ -92,7 +92,7 @@ POL_Missions_1 = {
 	}
 	
 	POL_embrace_renaissance = {
-		icon = friends_in_high_places
+		icon = me_mission_poland_copernicus
 		position = 2
 		required_missions = { POL_mission_to_pope }
 		provinces_to_highlight = {
@@ -308,10 +308,12 @@ POL_Missions_1 = {
 	}
 	
 	POL_wojsko_komputowe = { #changed to kwarciane
-		icon = me_mission_poland_lublin
+		icon = mission_noble_council
 		position = 9
 		required_missions = { POL_establish_autoramenty }
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manpower_building_trigger = yes }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -353,7 +355,7 @@ POL_Missions_1 = {
 	}
 	
 	POL_order_of_the_white_eagle = {
-		icon = me_mission_poland_lublin
+		icon = dreams_of_grandeur
 		position = 11
 		required_missions = { POL_wojsko_komputowe }
 		provinces_to_highlight = {
@@ -371,10 +373,15 @@ POL_Missions_1 = {
 	}
 	
 	POL_jagiellonian_university = {
-		icon = me_mission_poland_lublin
+		icon = interest_of_holland
 		position = 12
 		required_missions = { POL_warszawa }
 		provinces_to_highlight = {
+			province_id = 262
+			OR = { 
+				NOT = { development = 30 }
+				NOT = { owned_by = ROOT }
+			}
 		}
 		trigger = {
 			262 = {
@@ -384,28 +391,87 @@ POL_Missions_1 = {
 		}
 		effect = {
 			262 = {
+				add_province_modifier = {
+					name = POL_jagiellonian_university_modifier
+					duration = -1
+				}
 				add_or_upgrade_university_building = yes
+			}
+			add_country_modifier = {
+				name = POL_leading_jagiellonian_university
+				duration = 10950
 			}
 		}
 	}
 	
 	POL_szkola_rycerska = {
-		icon = me_mission_poland_lublin
+		icon = me_mission_poland_corps_of_cadets
 		position = 13
 		required_missions = { POL_collegium_nobili }
 		provinces_to_highlight = {
+			province_id = 262
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_forcelimit_building_trigger = yes }
+				NOT = { has_manpower_building_trigger = yes }
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_professionalism = 0.25
+			}
+			else = {
+				army_tradition = 60
+			}
+			has_mil_advisor_3 = yes
+			262 = {
+				owned_by = ROOT
+				has_forcelimit_building_trigger = yes
+				has_manpower_building_trigger = yes
+			}
 		}
 		effect = {
+			262 = {
+				add_province_modifier = {
+					name = POL_corps_of_cadets
+					duration = -1
+				}
+			}
+			define_general = {
+				shock = 3
+				fire = 4
+				manuever = 5
+				siege = 1
+				name = "Tadeusz Kosciuszko"
+			}
+			#Event instead to do advisor vs general
 		}
 	}
 	
 	POL_new_amber_coast = {
-		icon = me_mission_poland_lublin
+		icon = develop_konigsberg
 		position = 14
 		required_missions = { }
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_expanded_mod_active = { mod = trade_goods }
+					trade_goods = amber
+				}
+				AND = {
+					NOT = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					OR = {
+						province_id = 43
+						province_id = 39
+						province_id = 41
+					}
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -435,16 +501,101 @@ POL_Missions_1 = {
 			}
 		}
 		effect = {
-		
+			add_years_of_income = 0.5
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods } 
+				}
+				custom_tooltip = POL_every_province_with_amber
+				tooltip = {
+					add_province_modifier = {
+						name = POL_demand_for_amber
+						duration = 9125
+					}
+				}
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							trade_goods = amber
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+			}
+			else = {
+				43 = {
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+				41 = {
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+				39 = {
+					if = {
+						limit = {
+							owned_by = ROOT
+						}
+						add_province_modifier = {
+							name = POL_demand_for_amber
+							duration = 9125
+						}
+					}
+				}
+			}
 			custom_tooltip = POL_if_we_have_wroclaw
 		}
 	}
 	
 	POL_exquisite_exports = {
-		icon = me_mission_poland_lublin
+		icon = mission_high_income
 		position = 16
 		required_missions = { POL_new_amber_coast }
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 4545
+					OR = {
+						NOT = { has_production_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+						NOT = { has_manufactory_trigger = yes }
+					}
+				}
+				AND = {
+					owned_by = ROOT
+					NOT = { province_id = 4545}
+					OR = {
+						trade_goods = jewellery
+						trade_goods = gems
+						trade_goods = amber
+						trade_goods = cloth
+						trade_goods = dyes
+					}
+					OR = {
+						NOT = { has_production_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+						NOT = { has_manufactory_trigger = yes }
+						NOT = { development = 20 }
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -455,21 +606,39 @@ POL_Missions_1 = {
 					trade_goods = jewellery
 					trade_goods = gems
 					trade_goods = amber
-					trade_goods = dyes
-					trade_goods = indigo_dye
-				}
-				value = 3
-			}
-			num_of_owned_provinces_with = {
-				development = 25
-				has_production_building_trigger = yes
-				has_manufactory_trigger = yes
-				OR = {
 					trade_goods = cloth
-					trade_goods = wine
+					trade_goods = dyes
 				}
 				value = 3
 			}
+			4545 = {
+				has_production_building_trigger = yes
+				owned_by = ROOT
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_sluck_sashes
+				duration = 10950
+			}
+			
+			add_country_modifier = {
+				name = POL_world_renowned
+				duration = 5475
+			}
+			
+			add_years_of_income = 0.5
+		}
+	}
+	
+	POL_konstytucja = {
+		icon = me_mission_poland_may_constitution
+		required_missions = { POL_deal_with_the_liberum  }
+		position = 17
+		provinces_to_highlight = {
+		}
+		trigger = {
 		}
 		effect = {
 		}
@@ -728,10 +897,16 @@ POL_Missions_2 = {
 	}
 	
 	POL_inflanty = {
-		icon = me_mission_poland_lublin
+		icon = mission_conquer_riga
 		position = 8
 		required_missions = { POL_union_of_lublin }
 		provinces_to_highlight = {
+			OR = {
+				area = estonia_ingria_area
+				area = curonia_area
+				area = livonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -757,7 +932,7 @@ POL_Missions_2 = {
 	}
 	
 	POL_sea_commission = {
-		icon = me_mission_poland_lublin
+		icon = mission_heart_of_the_hansa
 		position = 9
 		required_missions = { POL_establish_autoramenty POL_inflanty }
 		provinces_to_highlight = {
@@ -783,15 +958,22 @@ POL_Missions_2 = {
 	}
 	
 	POL_swedish_deluge = {
-		icon = me_mission_poland_lublin
+		icon = mission_scandinavian_port_authority
 		position = 10
 		required_missions = { POL_sea_commission }
 		provinces_to_highlight = {
+			owned_by = SWE
 		}
 		trigger = {
-			has_won_war_against = {
-				who = SWE
-				max_years_since = 10
+			OR = {
+				has_won_war_against = {
+					who = SWE
+					max_years_since = 10
+				}
+				AND = {
+					NOT = { exists = SWE }
+					owns = 1
+				}
 			}
 		}
 		effect = {
@@ -799,14 +981,43 @@ POL_Missions_2 = {
 				type = mission_rewards_power_projection
 				amount = 10
 			}
+			
+			add_country_modifier = {
+				name = POL_dominium_maris_baltici
+				duration = -1
+			}
 		}
 	}
 	
 	POL_warszawa = {
-		icon = me_mission_poland_lublin
+		icon = public_works
 		position = 11
 		required_missions = { }
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 257
+					NOT = { development = 40 }
+				}
+				AND = {
+					OR = {
+						province_id = 295
+						province_id = 257
+					}
+					NOT = {
+						257 = { higher_development_than = 295 }
+					}
+				}
+				AND = {
+					OR = {
+						province_id = 266
+						province_id = 257
+					}
+					NOT = {
+						257 = { higher_development_than = 266 }
+					}
+				}
+			}
 		}
 		trigger = {
 			257 = {
@@ -816,14 +1027,22 @@ POL_Missions_2 = {
 			}
 		}
 		effect = {
+			257 = {
+				add_province_modifier = {
+					name = POL_splendor_of_the_capital
+					duration = 10950
+				}
+			}
 		}
 	}
 	
 	POL_collegium_nobili = {
-		icon = me_mission_poland_lublin
+		icon = me_mission_protect_throne
 		position = 12
 		required_missions = { POL_warszawa }
 		provinces_to_highlight = {
+			province_id = 257
+			NOT = { has_building = university }
 		}
 		trigger = {
 			257 = {
@@ -873,8 +1092,35 @@ POL_Missions_2 = {
 		position = 15
 		required_missions = { POL_industrialization POL_new_amber_coast }
 		provinces_to_highlight = {
+			
 		}
 		trigger = {
+			# Mission will be changed
+		}
+		effect = {
+		}
+	}
+	
+	POL_deal_with_the_liberum = {
+		icon = victor_for_the_true_faith
+		required_missions = { }
+		position = 16
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+	
+	POL_strengthen_royal_power = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_deal_with_the_liberum  }
+		position = 17
+		provinces_to_highlight = {
+		}
+		trigger = {
+			absolutism = 50
 		}
 		effect = {
 		}
@@ -992,6 +1238,16 @@ POL_Missions_3 = {
 		position = 7
 		required_missions = { POL_end_knights }
 		provinces_to_highlight = {
+			OR = {
+				owned_by = LIT
+				AND = {
+					OR = {
+						province_id = 272
+						province_id = 280
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			owns = 272
@@ -999,63 +1255,86 @@ POL_Missions_3 = {
 			NOT = { exists = LIT }
 		}
 		effect = {
+			add_casus_belli = {
+				target = LIV
+				type = cb_livonian_wars 
+			}
+			add_country_modifier = {
+				name = POL_golden_age_of_a_power
+				duration = -1
+			}
+			add_stability_or_adm_power = yes
 		}
 	}
 	
 	POL_culture_mission = {
-		icon = me_mission_poland_lublin
+		icon = mission_russian_patriarchatee
 		position = 9
 		required_missions = { POL_union_of_lublin }
 		provinces_to_highlight = {
-		}
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = LIT_employs_east_slavic
-				OR = {
-					employed_advisor = {
-						culture = russian 
+			OR = {
+				AND = {
+					culture = lithuanian
+					NOT = {
+						ROOT = {
+							accepted_culture = lithuanian
+						}
 					}
-					employed_advisor = {
-						culture = novgorodian 
-					}
-					employed_advisor = {
-						culture = ryazanian 
-					}
-					employed_advisor = {
-						culture = byelorussian 
-					}
-					employed_advisor = {
-						culture = ruthenian
-					}
-					employed_advisor = {
-						culture = karelian 
+				}
+				AND = {
+					culture = russian
+					culture = novgorodian
+					culture = byelorussian
+					culture = ryazanian
+					culture = ruthenian
+					culture = karelian
+					NOT = {
+						ROOT = {
+							OR = {
+								accepted_culture = russian
+								accepted_culture = novgorodian
+								accepted_culture = byelorussian
+								accepted_culture = ryazanian
+								accepted_culture = ruthenian
+								accepted_culture = karelian
+							}
+						}
 					}
 				}
 			}
-			calc_true_if = {
+		}
+		trigger = {
+			accepted_culture = lithuanian
+			OR = {
 				accepted_culture = russian
 				accepted_culture = novgorodian
 				accepted_culture = byelorussian
 				accepted_culture = ryazanian
 				accepted_culture = ruthenian
 				accepted_culture = karelian
-				amount = 2
 			}
+			NOT = { average_autonomy_above_min = 40 }
 		}
 		effect = {
+			
 		}
 	}
 	
 	POL_vilnius_university = {
-		icon = me_mission_poland_lublin
+		icon = pontifical_universities
 		position = 11
 		required_missions = { POL_culture_mission }
 		provinces_to_highlight = {
+			province_id = 272
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+			}
 		}
 		trigger = {
 			272 = {
 				owned_by = ROOT
-				development = 30
+				development = 25
 			}
 			num_of_estate_agendas_completed = {
 				estate = estate_church
@@ -1081,6 +1360,9 @@ POL_Missions_3 = {
 		}
 		trigger = {
 			43 = {
+				province_has_center_of_trade_of_level = 2
+				has_trade_building_trigger = yes
+				has_shipyard_building_trigger = yes
 			}
 		}
 		effect = {
@@ -1092,6 +1374,8 @@ POL_Missions_3 = {
 		position = 14
 		required_missions = { POL_eye_to_the_world }
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manufactory_trigger = yes }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -1396,36 +1680,98 @@ POL_Missions_4 = {
 	}
 	
 	POL_cossacks = {
-		icon = me_mission_poland_lublin
+		icon = mission_recruit_the_cossacks
 		position = 8
 		required_missions = { POL_union_of_lublin }
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_estate_agendas_completed = {
+				value = 2
+				estate = estate_cossacks
+			}
+			num_of_cossacks = 10
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.18 }
+		}
+	}
+	
+	
+	POL_secure_ukraina = {
+		icon = mission_cathedral_cities
+		required_missions = { POL_muscovy POL_cossacks }
+		position = 9
+		provinces_to_highlight = {
+			province_id = 280
+			OR = {
+				NOT = { fort_level = 4 }
+				NOT = { base_manpower = 7 }
+			}
+		}
+		trigger = {
+			280 = {
+				fort_level = 4
+				base_manpower = 7
+			}
+		}
+		effect = {
+			add_dip_power = 50
+			add_mil_power = 50
+			280 = {
+				add_province_modifier = {
+					name = POL_protecting_the_flank
+					duration = -1
+				}
+			}
 		}
 	}
 	
 	POL_frontier_ruthenia = {
-		icon = me_mission_poland_lublin
+		icon = mission_land_of_churches
 		position = 10
 		required_missions = { POL_culture_mission }
 		provinces_to_highlight = {
+			culture_group = east_slavic
+			owned_by = ROOT
+			NOT = { development = 25 }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				culture_group = east_slavic
-				development = 30
+				development = 25
 				value = 5
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_settle_the_east
+				duration = 9125
+			}
+			custom_tooltip = POL_every_province_with_east_slavic_dev
+			tooltip = {
+				add_province_modifier = {
+					name = POL_growing_aglomeration
+					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						culture_group = east_slavic
+						development = 25
+					}
+					add_province_modifier = {
+						name = POL_growing_aglomeration
+						duration = 10950
+					}
+				}
+			}
 		}
 	}
 	
 	POL_restore_kiev = {
-		icon = me_mission_poland_lublin
+		icon = mission_restore_kiev
 		position = 11
 		required_missions = { POL_frontier_ruthenia }
 		provinces_to_highlight = {
@@ -1442,36 +1788,93 @@ POL_Missions_4 = {
 			}
 		}
 		effect = {
+			280 = {
+				add_province_modifier = {
+					name = LIT_kiev_modifier
+					duration = -1
+				}
+			}
 		}
 	}
 	
 	POL_bulwark = {
-		icon = me_mission_poland_lublin
+		icon = me_mission_poland_sobieski
 		position = 12
 		required_missions = { }
 		provinces_to_highlight = {
+			continent = europe
+			owner = {
+				religion_group = muslim
+			}
 		}
 		trigger = {
+			OR = {
+				is_defender_of_faith = yes
+				any_ally = {
+					religion_group = christian
+				}
+			}
+			if = {
+				limit = {
+					exists = TUR
+				}
+				has_won_war_against = {
+					who = TUR
+					years = 5
+				}
+			}
+			else = {
+				any_country = {
+					religion_group = muslim
+					ROOT = {
+						has_won_war_against = {
+							who = PREV
+							years = 5
+						}
+					}
+				}
+			}
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 5
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_fidei_defensor
+				duration = 9125
+			}
 		}
 	}
 	
 	POL_free_the_balkans = {
-		icon = me_mission_poland_lublin
+		icon = protectors_of_christendom
 		position = 14
 		required_missions = { POL_bulwark }
 		provinces_to_highlight = {
 			region = balkan_region
-			country_or_non_sovereign_subject_holds = ROOT
+			owner = {
+				religion_group = muslim
+			}
 		}
 		trigger = {
 			balkan_region = {
 				type = all
-				NOT = { country_or_non_sovereign_subject_holds = TUR }
+				NOT = {
+					owner = {
+						religion_group = muslim
+					}
+				}
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_defeated_the_ottoman_empire
+				duration = 10950
+			}
+			
+			add_papal_influence = 50
+			add_army_tradition_or_mil_power = { amount = 30 }
 		}
 	}
 	
@@ -1480,6 +1883,15 @@ POL_Missions_4 = {
 		position = 15
 		required_missions = { POL_expanding_our_influences POL_industrialization }
 		provinces_to_highlight = {
+			OR = {
+				trade_goods = grain
+				trade_goods = livestock
+			}
+			OR = {
+				region = ruthenia_region
+				area = zaporizhia_area
+				area = yedisan_area
+			}
 		}
 		trigger = {
 			development_in_provinces = {
@@ -1494,6 +1906,35 @@ POL_Missions_4 = {
 					area = yedisan_area
 				}
 			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = POL_growing_population
+				duration = 10950
+			}
+			custom_tooltip = POL_distribute_10_manpower
+		}
+	}
+	
+	POL_printing_press = {
+		icon = victor_for_the_true_faith
+		required_missions = { }
+		position = 16
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+	
+	POL_support_barok = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_printing_press }
+		position = 17
+		provinces_to_highlight = {
+		}
+		trigger = {
 		}
 		effect = {
 		}
@@ -1979,6 +2420,84 @@ POL_Missions_5 = {
 		}
 	}
 	
+	POL_muscovy = {
+		icon = mission_defeat_muscovy
+		required_missions = { }
+		position = 8
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = RUS
+				}
+				army_size = RUS
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+					MOS = {
+						army_size = NOV
+					}
+				}
+				army_size = MOS
+			}
+			else_if = {
+				limit = {
+					exists = NOV
+				}
+				army_size = NOV
+			}
+			else = {
+				NOT = {
+					any_country = {
+					}
+				}
+			}
+		}
+		effect = {
+		}
+	}
+	
+	POL_russia = {
+		icon = mission_dethrone_the_rurikovichs
+		required_missions = { POL_muscovy }
+		position = 9
+		provinces_to_highlight = {
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = RUS
+				}
+				OR = {
+					senior_union_with = RUS
+					AND = {
+						NOT = { 
+							exists = MOS
+							exists = RUS
+						}
+						owns = 295
+					}
+				}
+			}
+			else = {
+				OR = {
+					senior_union_with = MOS
+					AND = {
+						NOT = { 
+							exists = MOS
+							exists = RUS
+						}
+						owns = 295
+					}
+				}
+			}
+		}
+		effect = {
+		}
+	}
+	
 	POL_warsaw_confederation = {
 		icon = peace_in_europe
 		position = 11
@@ -2012,10 +2531,60 @@ POL_Missions_5 = {
 		position = 12
 		required_missions = { POL_warsaw_confederation }
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owned_by = ROOT
+					religion = orthodox
+					unrest = 1
+				}
+				AND = {
+					province_id = 280
+					OR = {
+						NOT = { has_tax_building_trigger = yes }
+						NOT = { owned_by = ROOT }
+					}
+				}
+			}
+			
 		}
 		trigger = {
+			mission_completed = POL_culture_mission
+			280 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = LIT_employs_east_slavic
+				OR = {
+					employed_advisor = {
+						culture = russian 
+					}
+					employed_advisor = {
+						culture = novgorodian 
+					}
+					employed_advisor = {
+						culture = ryazanian 
+					}
+					employed_advisor = {
+						culture = byelorussian 
+					}
+					employed_advisor = {
+						culture = ruthenian
+					}
+					employed_advisor = {
+						culture = karelian 
+					}
+				}
+			}
+			NOT = {
+				any_owned_province = {
+					religion = orthodox
+					unrest = 1
+				}
+			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.30 } #Union of brest
 			custom_tooltip = POL_east_slavic_provinces
 			set_country_flag = POL_unitary_church_flag
 		}
@@ -2063,15 +2632,29 @@ POL_Missions_5 = {
 	}
 	
 	POL_expanding_our_influences = {
-		icon = me_mission_poland_lublin
+		icon = mission_develop_nevas_port
 		position = 14
 		required_missions = { }
 		provinces_to_highlight = {
-			province_is_in_trade_node = { node = kiev }
 			province_has_center_of_trade_of_level = 1
 			OR = {
 				NOT = { has_trade_building_trigger = yes }
 				NOT = { owned_by = ROOT }
+			}
+			OR = {
+				area = lithuania_area
+				area = podlasie_area
+				area = volhynia_area
+				area = pripyat_area
+				area = minsk_area
+				area = white_ruthenia_area
+				area = smolensk_area
+				area = chernigov_area
+				area = west_dniepr_area
+				area = east_dniepr_area
+				area = oka_area
+				area = sloboda_ukraine_area
+				area = podolia_volhynia_area
 			}
 		}
 		trigger = {
@@ -2082,13 +2665,35 @@ POL_Missions_5 = {
 				}
 			}
 			num_of_owned_provinces_with = {
-				province_is_in_trade_node = { node = kiev }
 				province_has_center_of_trade_of_level = 1
 				has_trade_building_trigger = yes
+				custom_trigger_tooltip = {
+					tooltip = POL_is_in_kiev_node
+					OR = {
+						area = lithuania_area
+						area = podlasie_area
+						area = volhynia_area
+						area = pripyat_area
+						area = minsk_area
+						area = white_ruthenia_area
+						area = smolensk_area
+						area = chernigov_area
+						area = west_dniepr_area
+						area = east_dniepr_area
+						area = oka_area
+						area = sloboda_ukraine_area
+						area = podolia_volhynia_area
+					}
+				}		
 				value = 2
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_reaching_new_markets
+				duration = 9125
+			}
+			add_mercantilism = 2
 		}
 	}
 	
@@ -2096,6 +2701,18 @@ POL_Missions_5 = {
 		icon = me_mission_poland_lublin
 		position = 16
 		required_missions = { POL_expanding_our_influences }
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+
+	POL_enlightenment = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_printing_press }
+		position = 17
 		provinces_to_highlight = {
 		}
 		trigger = {

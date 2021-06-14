@@ -950,6 +950,110 @@ province_event = {
 
 	is_triggered_only = yes
 	
+	option = {
+		name = ME_Poland_Events.22.a
+	
+		ai_chance = { factor = 1 }
+		
+		change_religion = catholic
+	}
+}
+
+province_event = {
+	id = ME_Poland_Events.23
+	title = ME_Poland_Events.23.t #Province Converts to Catholic Ungracefully
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.23.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Poland_Events.23.a
+	
+		ai_chance = { factor = 1 }
+		
+		random = {
+			chance = 50
+			
+			spawn_rebels = {
+				size = 1
+				type = orthodox_rebels 
+			}
+		}
+		
+		change_religion = catholic
+		
+		owner = {
+			add_country_modifier = {
+				name = POL_displeased_orthodox
+				duration = 1825
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.23.b
+	
+		ai_chance = { factor = 1 }
+		
+		add_unrest = -1
+	}
+}
+
+province_event = {
+	id = ME_Poland_Events.24
+	title = ME_Poland_Events.24.t #Province Converts to Catholic and orthodox migrate
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.24.d
+
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		owns = event_target:POL_ortho_province
+	}
+	
+	immediate = {
+		random_province = {
+			limit = {
+				religion = orthodox
+			}
+			save_event_target_as = POL_ortho_province
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.24.a
+	
+		ai_chance = { factor = 1 }
+		
+		
+		event_target:POL_ortho_province = {
+			add_base_tax = 1
+		}
+		add_base_tax = -1
+		change_religion = catholic
+	}
+	
+	option = {
+		name = ME_Poland_Events.24.b
+	
+		ai_chance = { factor = 1 }
+		
+		add_unrest = -1
+	}
+}
+
+province_event = {
+	id = ME_Poland_Events.25
+	title = ME_Poland_Events.25.t #Controller Event for the prev 3
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.25.d
+
+	mean_time_to_happen = {
+		months = 12
+	}
+	
 	trigger = {
 		owner = { has_country_flag = POL_unitary_church_flag }
 		religion = orthodox	
@@ -959,10 +1063,288 @@ province_event = {
 	}
 	
 	option = {
-		name = ME_Poland_Events.22.a
+		name = ME_Poland_Events.25.a
 	
 		ai_chance = { factor = 1 }
 		
-		change_religion = catholic
+		random_list = {
+			150 = {
+				province_event = { id = ME_Poland_Events.22 }
+			}
+			25 = {
+				province_event = { id = ME_Poland_Events.23 }
+			}
+			25 = {
+				province_event = { id = ME_Poland_Events.24 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.26
+	title = ME_Poland_Events.26.t #Union of Brest
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.26.d
+
+	major = yes
+	major_trigger = {
+		capital_scope = {
+			continent = europe
+		}
+	}
+	is_triggered_only = yes
+	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+				}
+				save_event_target_as = POL_orthodox_target_1
+			}
+			
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					any_neighbor_province = {
+						religion = catholic
+					}
+				}
+				save_event_target_as = POL_orthodox_target_1
+			}
+			
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					NOT = { province_id = event_target:POL_orthodox_target_1 }
+				}
+				save_event_target_as = POL_orthodox_target_2
+			}
+			
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					NOT = { province_id = event_target:POL_orthodox_target_1 }
+					any_neighbor_province = {
+						religion = catholic
+					}	
+				}
+				save_event_target_as = POL_orthodox_target_2
+			}
+			
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					NOT = { province_id = event_target:POL_orthodox_target_1 }
+					NOT = { province_id = event_target:POL_orthodox_target_2 }
+				}
+				save_event_target_as = POL_orthodox_target_3
+			}
+			
+			random_owned_province = {
+				limit = {
+					religion = orthodox
+					NOT = { province_id = event_target:POL_orthodox_target_1 }
+					NOT = { province_id = event_target:POL_orthodox_target_2 }
+					any_neighbor_province = {
+						religion = catholic
+					}	
+				}
+				save_event_target_as = POL_orthodox_target_3
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.26.a
+	
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = POL_east_slavic_provinces
+		
+		event_target:POL_orthodox_target_1 = { change_religion = catholic }
+		event_target:POL_orthodox_target_2 = { change_religion = catholic }
+		event_target:POL_orthodox_target_3 = { change_religion = catholic }
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.27
+	title = ME_Poland_Events.27.t #Migration of Cossacks
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.27.d
+
+	trigger = {
+		tag = event_target:POL_overlord_of_sicz
+		exists = ZAZ
+		ZAZ = {
+			NOT = {
+				any_neighbor_country = {
+					culture_group = tartar	
+				}
+			}
+		}
+	}
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					any_neighbor_country = {
+						culture_group = tartar	
+					}
+					
+				}
+				set_country_flag = POL_migrate_enabled
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owner = {
+								culture_group = tartar
+							}
+						}
+					}
+					save_event_target_as = POL_cossack_target_1
+				}
+				
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owner = {
+								culture_group = tartar
+							}
+						}
+						calc_true_if = {
+							all_neighbor_province = {
+								any_neighbor_province = {
+									owner = {
+										culture_group = tartar
+									}
+								}
+							}
+							amount = 1
+						}
+					}
+					save_event_target_as = POL_cossack_target_1
+				}
+				
+				random_owned_province = {
+					limit = {
+						any_neighbor_province = {
+							owner = {
+								culture_group = tartar
+							}
+						}
+						calc_true_if = {
+							all_neighbor_province = {
+								owned_by = ROOT
+								any_neighbor_province = {
+									owner = {
+										culture_group = tartar
+									}
+								}
+							}
+							amount = 2
+						}
+					}
+					save_event_target_as = POL_cossack_target_1
+				}
+				
+				event_target:POL_cossack_target_1 = {
+					random_neighbor_province = {
+						limit = {
+							owned_by = ROOT
+						}
+						save_event_target_as = POL_cossack_target_2
+					}
+					
+					random_neighbor_province = {
+						limit = {
+							owned_by = ROOT
+							any_neighbor_province = {
+								owner = {
+									culture_group = tartar
+								}
+							}
+						}
+						save_event_target_as = POL_cossack_target_2
+					}
+					
+					random_neighbor_province = {
+						limit = {
+							owned_by = ROOT
+							NOT = { province_id = event_target:POL_cossack_target_2 }
+						}
+						save_event_target_as = POL_cossack_target_3
+					}
+					
+					random_neighbor_province = {
+						limit = {
+							owned_by = ROOT
+							NOT = { province_id = event_target:POL_cossack_target_2 }
+							any_neighbor_province = {
+								owner = {
+									culture_group = tartar
+								}
+							}
+						}
+						save_event_target_as = POL_cossack_target_3
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.27.a
+	
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			has_country_flag = POL_migrate_enabled
+		}
+		tooltip = {
+			inherit = ZAZ
+			event_target:POL_cossack_target_1 = { cede_province = ZAZ }
+			event_target:POL_cossack_target_2 = { cede_province = ZAZ }
+			event_target:POL_cossack_target_3 = { cede_province = ZAZ }
+		}
+		
+		hidden_effect = {
+			ZAZ = {
+				every_owned_province = {
+					set_province_flag = ZAZ_legacy
+				}
+			}
+			
+			event_target:POL_cossack_target_1 = { cede_province = ZAZ }
+			event_target:POL_cossack_target_2 = { cede_province = ZAZ }
+			event_target:POL_cossack_target_3 = { cede_province = ZAZ }
+			
+			ZAZ = {
+				every_owned_province = {
+					limit = { has_province_flag = ZAZ_legacy }
+					clr_country_flag = ZAZ_legacy
+					cede_province = ROOT
+					if = {
+						limit = { is_core = ZAZ }
+						add_core = ROOT
+						remove_core = ZAZ
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.27.b
+	
+		ai_chance = { factor = 1 }
+		
+		inherit = ZAZ
+	}
+	
+	after = {
+		clr_country_flag = POL_migrate_enabled
 	}
 }
