@@ -520,7 +520,7 @@ LIT_missions_2 = {
 	}
 	
 	LIT_livonian_wars = {
-		icon = edict_of_potsdam
+		icon = mission_recruit_streltsy
 		required_missions = { LIT_the_knights }
 		position = 7
 		provinces_to_highlight = {
@@ -543,6 +543,11 @@ LIT_missions_2 = {
 		}
 		effect = {
 			add_army_tradition_or_mil_power = { amount = 25 }
+			
+			add_country_modifier  = {
+				name = LIT_heroes
+				duration = 7300
+			}
 		}
 	}
 	
@@ -818,7 +823,8 @@ LIT_missions_3 = {
 		effect = {
 			add_casus_belli = {
 				target = LIV
-				type = cb_livonian_wars 
+				type = cb_livonian_wars
+				months = 600
 			}
 			east_prussia_area = {
 				limit = {
@@ -924,10 +930,16 @@ LIT_missions_3 = {
 	}
 	
 	LIT_integrate_the_poles = {
-		icon = edict_of_potsdam
+		icon = fund_the_monasteries
 		required_missions = { LIT_union_of_lublin }
 		position = 9
 		provinces_to_highlight = {
+			owned_by = ROOT
+			culture = polish
+			OR = {
+				nationalism = 5
+				local_autonomy_above_min = 10
+			}
 		}
 		trigger = {
 			NOT = {
@@ -954,10 +966,22 @@ LIT_missions_3 = {
 		required_missions = { LIT_boyars LIT_integrate_the_poles }
 		position = 11
 		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				trade_goods = livestock
+				trade_goods = grain
+			}
+			NOT = { has_building = farm_estate }
 		}
 		trigger = {
+			employed_advisor = {
+				culture = polish
+			}
+			farm_estate = 5
+			accepted_culture = polish
 		}
 		effect = {
+			country_event = { id = ME_Lithuania_Events.11 }
 		}
 	}
 	
@@ -1175,10 +1199,28 @@ LIT_missions_4 = {
 		required_missions = { LIT_jagiellonian_restoration LIT_defeat_teutons }
 		position = 8
 		provinces_to_highlight = {
+			OR = {
+				owned_by = POL
+				AND = {
+					OR = {
+						province_id = 257
+						province_id = 262
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
+			owns = 257
+			owns = 262
+			NOT = { exists = POL }
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_golden_age_of_a_power
+				duration = -1
+			}
+			add_stability_or_adm_power = yes
 		}
 	}
 	
@@ -1213,7 +1255,50 @@ LIT_missions_4 = {
 			}
 		}
 		effect = {
-			
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_estate_privileges = {
+							estate = estate_nobles
+							value = 1
+						}
+					}
+					if = {
+						limit = {
+							num_of_estate_privileges = {
+								estate = estate_nobles
+								value = 2
+							}
+						}
+						if = {
+							limit = {
+								num_of_estate_privileges = {
+									estate = estate_nobles
+									value = 3
+								}
+							}
+							if = {
+								limit = {
+									num_of_estate_privileges = {
+										estate = estate_nobles
+										value = 4
+									}
+								}
+								add_mil_power = 25
+							}
+							add_mil_power = 25
+						}
+						add_mil_power = 25
+					}
+					add_mil_power = 25
+				}
+			}
+			custom_tooltip = POL_25_mil_power_per_privilege
+		
+			add_country_modifier = {
+				name = LIT_support_of_the_boyars
+				duration = 9125
+			}
 		}
 	}
 	
@@ -1486,15 +1571,43 @@ LIT_missions_5 = {
 		required_missions = { LIT_union_of_lublin }
 		position = 9
 		provinces_to_highlight = {
+			OR = {
+				area = alfold_area
+				area = transdanubia_area
+				area = transylvania_area
+				area = southern_transylvania_area
+				area = slovakia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			OR = {
+				NOT = { exists = HUN }
+				HUN = { is_subject_of = ROOT }
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = alfold_area
+					area = transdanubia_area
+					area = transylvania_area
+					area = southern_transylvania_area
+					area = slovakia_area
+				}
+				value = 20
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_knowledge_of_bibliotheca
+				duration = 7300
+			}
+			
+			add_army_tradition_or_mil_power = { amount = 20 }
 		}
 	}
 	
 	LIT_please_the_nobles = {
-		icon = edict_of_potsdam
+		icon = prosper_in_piedmont
 		required_missions = { LIT_boyars }
 		position = 11
 		provinces_to_highlight = {
