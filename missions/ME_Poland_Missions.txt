@@ -6,7 +6,10 @@ POL_Missions_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
 	}  
 	has_country_shield  = yes
@@ -239,7 +242,6 @@ POL_Missions_1 = {
 				}
 				has_won_war_against = {
 					who = TUR
-					years = 5
 				}
 			}
 			else = {
@@ -248,7 +250,6 @@ POL_Missions_1 = {
 					ROOT = {
 						has_won_war_against = {
 							who = PREV
-							years = 5
 						}
 					}
 				}
@@ -469,22 +470,66 @@ POL_Missions_1 = {
 		trigger = {
 			if = {
 				limit = {
-					is_expanded_mod_active = { mod = trade_goods } 
+					calc_true_if = {
+						owns = 43
+						owns = 39
+						owns = 41
+						amount = 2
+					}
 				}
-				development_in_provinces = {
-					trade_goods = amber
-					value = 50
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					development_in_provinces = {
+						trade_goods = amber
+						value = 50
+					}
+				}
+				else = {
+					development_in_provinces = {
+						OR = {
+							province_id = 43
+							province_id = 39
+							province_id = 41
+						}
+						value = 50
+					}
 				}
 			}
 			else = {
-				development_in_provinces = {
-					OR = {
-						province_id = 43
-						province_id = 39
-						province_id = 41
-					}
-					value = 50
+				43 = { 
+					country_or_non_sovereign_subject_holds = ROOT
 				}
+				41 = { 
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				39 = { 
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = POL_50_dev
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = area_var
+							value = development
+							who = 43
+						}
+						export_to_variable = {
+							which = province_41
+							value = development
+							who = 41
+						}
+						change_variable = { which = area_var which = province_41 }
+						export_to_variable = {
+							which = province_39
+							value = development
+							who = 39
+						}
+						change_variable = { which = area_var which = province_39 }
+						check_variable = { which = area_var value = 50 }
+					}
+				}	
 			}
 			262 = {
 				trade_share ={
@@ -494,6 +539,14 @@ POL_Missions_1 = {
 			}
 		}
 		effect = {
+			262 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 25
+					key = POL_goods_flow_north
+				}
+			}
 			add_years_of_income = 0.5
 			if = {
 				limit = {
@@ -507,9 +560,10 @@ POL_Missions_1 = {
 					}
 				}
 				hidden_effect = {
-					every_owned_province = {
+					every_province = {
 						limit = {
 							trade_goods = amber
+							country_or_non_sovereign_subject_holds = ROOT
 						}
 						add_province_modifier = {
 							name = POL_demand_for_amber
@@ -522,7 +576,7 @@ POL_Missions_1 = {
 				43 = {
 					if = {
 						limit = {
-							owned_by = ROOT
+							country_or_non_sovereign_subject_holds = ROOT
 						}
 						add_province_modifier = {
 							name = POL_demand_for_amber
@@ -533,7 +587,7 @@ POL_Missions_1 = {
 				41 = {
 					if = {
 						limit = {
-							owned_by = ROOT
+							country_or_non_sovereign_subject_holds = ROOT
 						}
 						add_province_modifier = {
 							name = POL_demand_for_amber
@@ -544,7 +598,7 @@ POL_Missions_1 = {
 				39 = {
 					if = {
 						limit = {
-							owned_by = ROOT
+							country_or_non_sovereign_subject_holds = ROOT
 						}
 						add_province_modifier = {
 							name = POL_demand_for_amber
@@ -704,7 +758,10 @@ POL_Missions_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
 	} 
 	has_country_shield  = yes
@@ -1299,7 +1356,7 @@ POL_Missions_2 = {
 	}
 }
 
-POL_Missions_3 = {
+POL_Missions_3_1 = {
 	slot = 3
 	generic = no
 	ai = yes
@@ -1307,7 +1364,10 @@ POL_Missions_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
 	}  
 	has_country_shield  = yes
@@ -1382,10 +1442,83 @@ POL_Missions_3 = {
 						}
 						add_permanent_claim = ROOT
 					}
+					set_country_flag = POL_piast
+					swap_non_generic_missions = yes
 				}
 			}
 		}
 	}
+}
+
+POL_Missions_3_Piast = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_nitra = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_sejm_mission }
+		position = 2
+		provinces_to_highlight = {
+			area = slovakia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			slovakia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}	
+		}
+		effect = {
+		}
+	}
+	
+	POL_morawy = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_nitra POL_reconquer_silesia }
+		position = 3
+		provinces_to_highlight = {
+			area = moravia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			moravia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}	
+		}
+		effect = {
+		}
+	}
+}
+
+POL_Missions_3_2 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
 	
 	POL_end_knights = {
 		icon = mission_teutonic_knights
@@ -1531,17 +1664,17 @@ POL_Missions_3 = {
 			province_id = 272
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { development = 25 }
+				NOT = { development = 30 }
 			}
 		}
 		trigger = {
 			272 = {
 				owned_by = ROOT
-				development = 25
+				development = 30
 			}
 			num_of_estate_agendas_completed = {
 				estate = estate_church
-				value = 5
+				value = 4
 			}
 		}
 		effect = {
@@ -1587,6 +1720,9 @@ POL_Missions_3 = {
 			}
 			
 			custom_tooltip = 10_base_tax_distributed_among_farm_estates
+			hidden_effect = {
+				POL_distribute_10_tax = yes
+			}
 		}
 	}
 	
@@ -1644,15 +1780,19 @@ POL_Missions_3 = {
 	}
 }
 
-POL_Missions_4 = {
+POL_Missions_4_Jagiellon = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = POL_piast }
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
 	}  
 	has_country_shield  = yes
@@ -1682,6 +1822,54 @@ POL_Missions_4 = {
 			}
 		}
 	}
+}
+
+POL_Missions_4_Piast = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_reconquer_silesia = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_rada_krolewska POL_sejm_mission }
+		position = 2
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+
+}
+
+POL_Missions_4_1 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
 	
 	POL_zwiazek_pruski = {
 		icon = return_visby_to_the_league
@@ -1699,7 +1887,7 @@ POL_Missions_4 = {
 				alliance_with = DNZ
 				DNZ = { is_subject_of = ROOT }
 				west_prussia_area = {
-					owned_by = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
 					type = all
 				}
 			}
@@ -1749,37 +1937,53 @@ POL_Missions_4 = {
 			}
 		}
 	}
+}
+	
+POL_Missions_4_Jagiellon_2 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = POL_piast }
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
 	
 	POL_bohemian_PU = {
 		icon = hussite_regency
 		position = 4
 		required_missions = { POL_bohemian_diplomacy }
 		provinces_to_highlight = {
+			OR = {
+				area = bohemia_area
+				area = moravia_area
+				area = silesia_area
+				area = lusatia_area
+				area = erzgebirge_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			OR = {
 				NOT = { exists = BOH }
 				BOH = { is_subject_of = ROOT }
-			}
-			bohemia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			moravia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			silesia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			lusatia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			erzgebirge_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			}	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = bohemia_area
+					area = moravia_area
+					area = silesia_area
+					area = lusatia_area
+					area = erzgebirge_area
+				}
+				value = 15
 			}
 		}
 		effect = {
@@ -1805,15 +2009,72 @@ POL_Missions_4 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						BOH = {
-							is_subject_of = ROOT
-						}
+						senior_union_with = BOH
 					}
 					country_event = { id = ME_Poland_Events.9 }
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							OR = {
+								culture = czech
+								culture = silesian
+							}
+						}
+						add_nationalism = -10
+					}
+					add_adm_power = 100
 				}
 			}
 		}
 	}
+}
+
+POL_Missions_4_Piast_2 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
+	
+	POL_beyond_the_oder = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_morze }
+		position = 4
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+}
+
+POL_Missions_4_2 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	}  
+	has_country_shield  = yes
 	
 	POL_curonia = {
 		icon = overseas_empire
@@ -1943,7 +2204,10 @@ POL_Missions_4 = {
 				name = "polish_ambition"
 				duration = 5475
 			}
-			remove_country_modifier = annexers_legacy
+			custom_tooltip = POL_remove_annexed_subjects
+			hidden_effect = {
+				remove_country_modifier = annexers_legacy
+			}
 		}
 	}
 	
@@ -2006,12 +2270,12 @@ POL_Missions_4 = {
 		provinces_to_highlight = {
 			culture_group = east_slavic
 			owned_by = ROOT
-			NOT = { development = 25 }
+			NOT = { development = 20 }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				culture_group = east_slavic
-				development = 25
+				development = 20
 				value = 5
 			}
 		}
@@ -2031,7 +2295,7 @@ POL_Missions_4 = {
 				every_owned_province = {
 					limit = {
 						culture_group = east_slavic
-						development = 25
+						development = 20
 					}
 					add_province_modifier = {
 						name = POL_growing_aglomeration
@@ -2049,13 +2313,13 @@ POL_Missions_4 = {
 		provinces_to_highlight = {
 			province_id = 280
 			OR = {
-				NOT = { development = 35 }
+				NOT = { development = 30 }
 				NOT = { num_of_buildings_in_province = 4 }
 			}
 		}
 		trigger = {
 			280 = {
-				development = 35
+				development = 30
 				num_of_buildings_in_province = 4
 			}
 		}
@@ -2088,7 +2352,7 @@ POL_Missions_4 = {
 				}
 				has_won_war_against = {
 					who = TUR
-					years = 5
+					max_years_since = 5
 				}
 			}
 			else = {
@@ -2097,9 +2361,17 @@ POL_Missions_4 = {
 					ROOT = {
 						has_won_war_against = {
 							who = PREV
-							years = 5
+							max_years_since = 5
 						}
 					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = POL_occupied_ankara
+				OR = {
+					owns = 326
+					controls = 326
+					has_global_flag = POL_occupied_moscow_flag
 				}
 			}
 			num_of_owned_provinces_with = {
@@ -2182,6 +2454,10 @@ POL_Missions_4 = {
 				duration = 10950
 			}
 			custom_tooltip = POL_distribute_10_manpower
+			
+			hidden_effect = {
+				POL_distribute_10_manpower = yes
+			}
 		}
 	}
 	
@@ -2201,7 +2477,12 @@ POL_Missions_4 = {
 		trigger = {
 			43 = {
 				owned_by = ROOT
-				province_has_center_of_trade_of_level = 2
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					province_has_center_of_trade_of_level = 2
+				}
 				has_trade_building_trigger = yes
 				has_shipyard_building_trigger = yes
 			}
@@ -2280,7 +2561,7 @@ POL_Missions_4 = {
 	}
 }
 
-POL_Missions_5 = {
+POL_Missions_5_1 = {
 	slot = 5
 	generic = no
 	ai = yes
@@ -2288,7 +2569,10 @@ POL_Missions_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 		OR = {
 			tag = POL
-			tag = PLC
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
 		}
 	} 
 	has_country_shield  = yes
@@ -2408,12 +2692,31 @@ POL_Missions_5 = {
 			country_event = { id = ME_Poland_Events.10 }
 		}
 	}
+}
+
+POL_Missions_5_Jagiellon = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		NOT = { has_country_flag = POL_piast }
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
 	
 	POL_bohemian_diplomacy = {
 		icon = hungarian_union
 		position = 3
 		required_missions = { POL_reinforce_jagiellons }
 		provinces_to_highlight = {
+			owned_by = BOH
 		}
 		trigger = {
 			OR = {
@@ -2551,6 +2854,7 @@ POL_Missions_5 = {
 		position = 4
 		required_missions = { POL_bohemian_diplomacy }
 		provinces_to_highlight = {
+			owned_by = HUN
 		}
 		trigger = {
 			variable_arithmetic_trigger = {
@@ -2690,25 +2994,15 @@ POL_Missions_5 = {
 				NOT = { exists = HUN }
 				HUN = { is_subject_of = ROOT }
 			}
-			alfold_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			transdanubia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			transylvania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			southern_transylvania_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			slovakia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = alfold_area
+					area = transdanubia_area
+					area = transylvania_area
+					area = southern_transylvania_area
+					area = slovakia_area
+				}
+				value = 20
 			}
 		}
 		effect = {
@@ -2726,29 +3020,62 @@ POL_Missions_5 = {
 		position = 7
 		required_missions = { POL_hungarian_PU }
 		provinces_to_highlight = {
-		}
-		trigger = {
-			HUN = {
-				years_in_union_under = {
-					who = ROOT
-					years = 50
-				}
-				NOT = { liberty_desire = 5 }
-				has_opinion = {
-					who = ROOT
-					value = 200
+			OR = {
+				owned_by = HUN
+				owned_by = BOH
+			}
+			NOT = {
+				owner = {
+					years_in_union_under = {
+						who = ROOT
+						years = 50
+					}
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
 				}
 			}
-			BOH = {
-				years_in_union_under = {
-					who = ROOT
-					years = 50
+		}			
+		trigger = {
+			if = {
+				limit = {
+					exists = HUN
 				}
-				NOT = { liberty_desire = 5 }
-				has_opinion = {
-					who = ROOT
-					value = 200
+				HUN = {
+					years_in_union_under = {
+						who = ROOT
+						years = 50
+					}
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
 				}
+			}
+			else = {
+				owns = 153
+			}
+			if = {
+				limit = {
+					exists = BOH
+				}
+				BOH = {
+					years_in_union_under = {
+						who = ROOT
+						years = 50
+					}
+					NOT = { liberty_desire = 5 }
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+			}
+			else = {
+				owns = 266
 			}
 		}
 		effect = {
@@ -2758,6 +3085,77 @@ POL_Missions_5 = {
 			}
 		}
 	}
+}
+
+POL_Missions_5_Piast = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		has_country_flag = POL_piast
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
+	
+	POL_morze = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_reconquer_silesia }
+		position = 3
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+	
+	POL_lusatia = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_morze }
+		position = 5
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+	
+	POL_a_show_of_strength = {
+		icon = victor_for_the_true_faith
+		required_missions = { POL_lusatia }
+		position = 7
+		provinces_to_highlight = {
+		}
+		trigger = {
+		}
+		effect = {
+		}
+	}
+}
+	
+POL_Missions_5_2 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = POL
+			AND = {
+				tag = PLC
+				was_tag = POL
+			}
+		}
+	} 
+	has_country_shield  = yes
 	
 	POL_muscovy = {
 		icon = me_mission_poland_bathory
@@ -2985,8 +3383,11 @@ POL_Missions_5 = {
 		position = 11
 		required_missions = { }
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = ROOT }
 		}
 		trigger = {
+			is_religion_enabled = reformed
 			custom_trigger_tooltip = {
 				tooltip = POL_1_tolerance_heretic
 				has_global_modifier_value = {
@@ -2994,13 +3395,7 @@ POL_Missions_5 = {
 					value = 1
 				}
 			}
-			any_ally = {
-				NOT = { religion = ROOT }
-				has_opinion = {
-					who = ROOT
-					value = 100
-				}
-			}
+			religious_unity = 0.75
 		}
 		effect = {
 			country_event = { id = ME_Poland_Events.21 } #Konfederacja Warszawska
@@ -3144,7 +3539,7 @@ POL_Missions_5 = {
 			280 = {
 				trade_share = {
 					country = ROOT
-					share = 90
+					share = 75
 				}
 			}
 			num_of_owned_provinces_with = {
@@ -3177,6 +3572,15 @@ POL_Missions_5 = {
 				duration = 9125
 			}
 			add_mercantilism = 2
+			
+			262 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 25
+					key = POL_goods_flow_west
+				}
+			}
 		}
 	}
 	

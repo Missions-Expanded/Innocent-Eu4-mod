@@ -7,6 +7,10 @@ country_event = {
 	desc = ME_Poland_Events.1.d
 
 	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		is_neighbor_of = POL
+	}
 	
 	option = {
 		name = ME_Poland_Events.1.a
@@ -14,18 +18,38 @@ country_event = {
 		ai_chance = { factor = 0.5 }
 		
 		4525 = {
-			cede_province = ROOT
-			add_core = ROOT
+			if = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				owner = {
+					add_liberty_desire = 5
+				}
+				cede_province = ROOT
+				add_core = ROOT
+			}
 		}
 		1940 = {
-			cede_province = ROOT
-			add_core = ROOT
+			if = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				owner = {
+					add_liberty_desire = 5
+				}
+				cede_province = ROOT
+				add_core = ROOT
+			}
 		}
+		
+		
 	}
 	option = {
-		name = ME_Poland_Events.1.a
+		name = ME_Poland_Events.1.b
 		
 		ai_chance = { factor = 0.5 }
+		
+		add_adm_power = 50
 	}
 }
 
@@ -48,6 +72,11 @@ country_event = {
 			add_base_production = 3
 			add_base_manpower = 2
 		}
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = 5
+		}
 	}
 	option = {
 		name = ME_Poland_Events.2.a
@@ -55,8 +84,8 @@ country_event = {
 		ai_chance = { factor = 0.5 }
 	
 		4538 = {
-			add_base_tax = 2
-			add_base_production = 2
+			add_base_tax = 1
+			add_base_production = 1
 			add_base_manpower = 1
 		}
 	}
@@ -236,7 +265,7 @@ country_event = {
 		}
 		highlight = yes
 		
-		add_years_of_income = -1
+		add_years_of_income = -0.75
 		add_yearly_manpower = 1
 		add_country_modifier = {
 			name = POL_lisowczycy
@@ -287,7 +316,28 @@ country_event = {
 		
 		ai_chance = { factor = 0.5 }
 		
+		trigger = {
+			BOH = { ai = yes }
+		}
 		
+		add_yearly_manpower = -0.5
+		BOH = {
+			random_owned_province = {
+				spawn_rebels = {
+					type = noble_rebels
+					size = 2
+					friend = FROM
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.8.c
+		
+		ai_chance = { factor = 0.5 }
+		
+		add_yearly_manpower = 0.25
 	}
 }
 
@@ -298,6 +348,10 @@ country_event = {
 	desc = ME_Poland_Events.9.d
 
 	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		continent = europe
+	}
 	
 	option = {
 		name = ME_Poland_Events.9.a 
@@ -599,6 +653,12 @@ country_event = {
 			}
 		}
 	}
+	
+	after = {
+		every_owned_province = {
+			clr_country_flag = POL_target 
+		}
+	}
 }
 
 country_event = {
@@ -620,10 +680,16 @@ country_event = {
 			}
 			HUN = {
 				random_owned_province = {
-					pretender_rebels = 2
+					spawn_rebels = {
+						type = pretender_rebels
+						size = 2
+					}
 				}
 				random_owned_province = {
-					pretender_rebels = 1
+					spawn_rebels = {
+						type = pretender_rebels
+						size = 2
+					}
 				}
 			}
 		}
@@ -638,7 +704,10 @@ country_event = {
 						area = southern_transylvania_area
 						area = slovakia_area
 					}
-					pretender_rebels = 2
+					spawn_rebels = {
+						type = pretender_rebels
+						size = 2
+					}
 				}
 			}
 			random_province = {
@@ -651,11 +720,17 @@ country_event = {
 						area = southern_transylvania_area
 						area = slovakia_area
 					}
-					pretender_rebels = 2
+					spawn_rebels = {
+						type = pretender_rebels
+						size = 2
+					}
 				}
 			}
 		}
-		custom_tooltip = POL_gain_1_monarch_point
+		add_country_modifier = {
+			name = POL_extra_power_dip
+			duration = 9125
+		}
 	}
 	
 	option = {
@@ -700,13 +775,23 @@ country_event = {
 			add_treasury = -300
 		}
 	}
+	
 	option = {
 		name = ME_Poland_Events.13.b
 		
+		ai_chance = { factor = 0.5 }
+		
+		join_all_offensive_wars_of = FROM
+	}
+	
+	option = {
+		name = ME_Poland_Events.13.c
+		
 		ai_chance = { factor = 0.9 }
 		
-		
+		add_prestige = -50
 	}
+	
 }
 
 country_event = {
@@ -718,7 +803,7 @@ country_event = {
 	trigger = {
 		tag = POL
 		mission_completed = POL_moldavia
-		has_dlc = "Emperor"
+		#has_dlc = "Emperor"
 		is_in_war = {
 			casus_belli = cb_revenge_for_varna
 		}
@@ -737,6 +822,12 @@ country_event = {
 					NOT = { alliance_with = TUR }
 				}
 				country_event = { id = ME_Poland_Events.13 }
+			}
+		}
+		hidden_effect = {
+			remove_casus_belli = {
+				target = TUR
+				type = cb_revenge_for_varna
 			}
 		}
 	}
@@ -1001,7 +1092,7 @@ country_event = {
 	option = {
 		name = ME_Poland_Events.18.a
 	
-		ai_chance = { factor = 1 }
+		ai_chance = { factor = 0 }
 		
 		add_country_modifier = {
 			name = POL_cossack_sich_grows
@@ -1014,14 +1105,30 @@ country_event = {
 	
 		ai_chance = { factor = 1 }
 		
-		trigger = { has_country_flag = POL_migrate_enabled }
-		event_target:POL_cossack_target_1 = { cede_province = ZAZ }
-		event_target:POL_cossack_target_2 = { cede_province = ZAZ }
-		event_target:POL_cossack_target_3 = { cede_province = ZAZ }
+		trigger = {
+			has_country_flag = POL_migrate_enabled
+			OR = {
+				NOT = { exists = ZAZ }
+				ZAZ = { is_subject_of = ROOT }
+			}
+		}
+		
+		custom_tooltip = POL_sicz_bonus
+		
+		event_target:POL_cossack_target_1 = { transfer_ZAZ_province = yes }
+		event_target:POL_cossack_target_2 = { transfer_ZAZ_province = yes }
+		event_target:POL_cossack_target_3 = { transfer_ZAZ_province = yes }
 		create_subject = {
 			subject_type = cossack_vassal
 			subject = ZAZ
 		}
+		hidden_effect = {
+			ROOT = {
+				save_global_event_target_as = POL_overlord_of_sicz
+			}
+		}
+		
+		custom_tooltip = POL_other_nations_get_a_cb
 	}
 	after = { clr_country_flag = POL_migrate_enabled }
 }
@@ -1043,11 +1150,11 @@ province_event = {
 	
 		ai_chance = { factor = 1 }
 		
+		THIS = { save_global_event_target_as = POL_rawa_province }
 		custom_tooltip = POL_rawa
 		owner = {
 			set_country_flag = POL_recipient
 		}
-		hidden_effect = { save_global_event_target_as = POL_rawa_province }
 	}
 	
 }
@@ -1106,12 +1213,179 @@ country_event = {
 		}
 	}
 	
+	immediate = {
+		hidden_effect = {
+			random_owned_province = {
+				limit = {
+					NOT = { religion = protestant }
+				}
+				save_event_target_as = POL_protestant_religion_1
+			}
+			
+			43 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					save_event_target_as = POL_protestant_religion_1
+				}
+			}
+			
+			event_target:POL_protestant_religion_1 = {
+				random_neighbor_province = {
+					limit = {
+						owned_by = ROOT
+					}
+					save_event_target_as = POL_protestant_religion_2
+				}
+			}
+			
+			event_target:POL_protestant_religion_1 = {
+				random_neighbor_province = {
+					limit = {
+						owned_by = ROOT
+						NOT = { religion = protestant }
+					}
+					save_event_target_as = POL_protestant_religion_2
+				}
+			}
+			
+			1841 = {
+				if = {
+					limit = {
+						43 = { province_id = event_target:POL_protestant_religion_1 }
+						owned_by = ROOT
+					}
+					save_event_target_as = POL_protestant_religion_2
+				}
+			}
+			
+			random_owned_province = {
+				limit = {
+					NOT = { religion = reformed }
+				}
+				save_event_target_as = POL_reformed_religion_1
+			}
+			
+			260 = {
+				if = {
+					limit = {
+						owned_by = ROOT
+					}
+					save_event_target_as = POL_reformed_religion_1
+				}
+			}
+			
+			event_target:POL_reformed_religion_1 = {
+				random_neighbor_province = {
+					limit = {
+						owned_by = ROOT
+					}
+					save_event_target_as = POL_reformed_religion_2
+				}
+			}
+			
+			event_target:POL_reformed_religion_1 = {
+				random_neighbor_province = {
+					limit = {
+						owned_by = ROOT
+						NOT = { religion = reformed }
+					}
+					save_event_target_as = POL_reformed_religion_2
+				}
+			}
+			
+			259 = {
+				if = {
+					limit = {
+						260 = { province_id = event_target:POL_reformed_religion_1 }
+						owned_by = ROOT
+					}
+					save_event_target_as = POL_reformed_religion_2
+				}
+			}
+		}
+	}
 	option = {
 		name = ME_Poland_Events.21.a
 	
 		ai_chance = { factor = 1 }
 		
+		event_target:POL_protestant_religion_1 = {
+			if = {
+				limit = {
+					NOT = { religion = protestant }
+				}
+				change_religion = protestant
+			}
+			add_province_modifier = {
+				name = POL_religious_minority
+				duration = 18250
+			}
+			
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
 		
+		event_target:POL_protestant_religion_2 = {
+			if = {
+				limit = {
+					NOT = { religion = protestant }
+				}
+				change_religion = protestant
+			}
+			add_province_modifier = {
+				name = POL_religious_minority
+				duration = 18250
+			}
+			
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+		
+		event_target:POL_reformed_religion_1 = {
+			if = {
+				limit = {
+					NOT = { religion = reformed }
+				}
+				change_religion = reformed
+			}
+			add_province_modifier = {
+				name = POL_religious_minority
+				duration = 18250
+			}
+			
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+		
+		event_target:POL_reformed_religion_2 = {
+			if = {
+				limit = {
+					NOT = { religion = reformed }
+				}
+				change_religion = reformed
+			}
+			add_province_modifier = {
+				name = POL_religious_minority
+				duration = 18250
+			}
+			
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.21.b
+	
+		ai_chance = { factor = 1 }
+		
+		add_stability_or_adm_power = yes
 	}
 }
 
@@ -1191,7 +1465,7 @@ province_event = {
 			limit = {
 				religion = orthodox
 			}
-			save_event_target_as = POL_ortho_province
+			hidden_effect = { save_event_target_as = POL_ortho_province }
 		}
 	}
 	
@@ -1224,8 +1498,10 @@ province_event = {
 	desc = ME_Poland_Events.25.d
 
 	mean_time_to_happen = {
-		months = 12
+		months = 90
 	}
+	
+	is_mtth_scaled_to_size = 1
 	
 	trigger = {
 		owner = { has_country_flag = POL_unitary_church_flag }
@@ -1234,6 +1510,7 @@ province_event = {
 			accepted_culture = ROOT
 		}
 	}
+	hidden = yes
 	
 	option = {
 		name = ME_Poland_Events.25.a
@@ -1608,7 +1885,7 @@ country_event = {
 	
 		ai_chance = { factor = 1 }
 		
-		FROM = {
+		event_target:POL_Peace_Recipient = {
 			every_owned_province = {
 				add_devastation = 10
 				remove_loot = {
@@ -1622,8 +1899,14 @@ country_event = {
 				type = mission_rewards_power_projection
 				amount = 40
 			}
+			remove_casus_belli = {
+				target = event_target:POL_Peace_Recipient
+				type = cb_poland_deluge
+			}
 		}
+		clear_global_event_target = POL_Peace_Recipient
 	}
+
 }
 
 country_event = {
@@ -1730,5 +2013,90 @@ country_event = {
 		ai_chance = { factor = 0 }
 		
 		add_mil_power = 5
+	}
+}
+
+province_event = {
+	id = ME_Poland_Events.33
+	title = ME_Poland_Events.28.t #hidden flag
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.28.d
+
+	mean_time_to_happen = {
+		days = 1
+	}
+	
+	fire_only_once = yes
+	hidden = yes
+	
+	trigger = {
+		province_id = 326
+		controller = {
+			OR = {
+				tag = POL
+				tag = PLC
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Poland_Events.28.a
+	
+		ai_chance = { factor = 1 }
+		
+		set_global_flag = POL_occupied_ankara_flag
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.34
+	title = ME_Poland_Events.34.t #Vassalize Danzig
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.34.d
+
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	fire_only_once = yes
+	
+	trigger = {
+		mission_completed = POL_zwiazek_pruski
+		alliance_with = DNZ
+		DNZ = { ai = yes }
+	}
+	
+	option = {
+		name = ME_Poland_Events.34.a
+	
+		ai_chance = { factor = 1 }
+		
+		vassalize = DNZ
+	}
+}
+
+country_event = {
+	id = ME_Poland_Events.35 #Heir Needed
+	title = ME_Poland_Events.35.t
+	picture = MERCHANT_TALKING_eventPicture
+	desc = ME_Poland_Events.35.d
+
+	hidden = yes
+	fire_only_once = yes
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	trigger = {
+		has_country_modifier = POL_bohemian_knights
+		senior_union_with = BOH
+	}
+	
+	option = {
+		name = ME_Poland_Events.35.a 
+		
+		ai_chance = { factor = 0.5 }
+		
+		remove_country_modifier = POL_bohemian_knights
 	}
 }
