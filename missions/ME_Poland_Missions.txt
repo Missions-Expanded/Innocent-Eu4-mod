@@ -1403,13 +1403,13 @@ POL_Missions_3_1 = {
 					name = POL_a_piast_ruler
 					duration = -1
 				}
-				silesia_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+				silesia_area = { add_permanent_claim = ROOT }
+				slovakia_area = { add_permanent_claim = ROOT }
+				moravia_area = { add_permanent_claim = ROOT }
+				lusatia_area = { add_permanent_claim = ROOT }
+				bohemia_area = { add_permanent_claim = ROOT }
+				neumark_area = { add_permanent_claim = ROOT }
+				hinter_pommern_area = { add_permanent_claim = ROOT }
 			}
 			
 			hidden_effect = {
@@ -1442,6 +1442,48 @@ POL_Missions_3_1 = {
 						}
 						add_permanent_claim = ROOT
 					}
+					slovakia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					moravia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					lusatia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					bohemia_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					neumark_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+					hinter_pommern_area = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
 					set_country_flag = POL_piast
 					swap_non_generic_missions = yes
 				}
@@ -1468,7 +1510,7 @@ POL_Missions_3_Piast = {
 	has_country_shield  = yes
 	
 	POL_nitra = {
-		icon = victor_for_the_true_faith
+		icon = fight_bosnian_heresies
 		required_missions = { POL_sejm_mission }
 		position = 2
 		provinces_to_highlight = {
@@ -1476,30 +1518,48 @@ POL_Missions_3_Piast = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			slovakia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				area = slovakia_area
+				value = 4
+			}
 		}
 		effect = {
+			1772 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 15
+					key = POL_slovakia
+				}
+			}
+			add_accepted_culture_or_dip_power = { culture = slovak }
 		}
 	}
 	
 	POL_morawy = {
-		icon = victor_for_the_true_faith
+		icon = moravian_arms
 		required_missions = { POL_nitra POL_reconquer_silesia }
 		position = 3
 		provinces_to_highlight = {
-			area = moravia_area
+			OR = {
+				area = moravia_area
+				area = bohemia_area
+			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			moravia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}	
+			moravia_area = { country_or_non_sovereign_subject_holds = ROOT }
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = moravia_area
+					area = bohemia_area
+				}
+				value = 3
+			}
 		}
 		effect = {
+			country_event = { id = ME_Poland_Events.37 } #Crown yourself as King of Bohemia?
+			add_accepted_culture_or_dip_power = { culture = czech }
 		}
 	}
 }
@@ -1842,14 +1902,25 @@ POL_Missions_4_Piast = {
 	has_country_shield  = yes
 	
 	POL_reconquer_silesia = {
-		icon = victor_for_the_true_faith
+		icon = take_silesia
 		required_missions = { POL_rada_krolewska POL_sejm_mission }
 		position = 2
 		provinces_to_highlight = {
+			area = silesia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			silesia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_unity_with_silesia
+				duration = -1
+			}
+			silesia_area = { add_nationalism = -10 }
 		}
 	}
 
@@ -2048,14 +2119,35 @@ POL_Missions_4_Piast_2 = {
 	has_country_shield  = yes
 	
 	POL_beyond_the_oder = {
-		icon = victor_for_the_true_faith
+		icon = mission_advance_to_the_dnieper
 		required_missions = { POL_morze }
 		position = 4
 		provinces_to_highlight = {
+			OR = {
+				area = mittelmark_area
+				area = vorpommern_area
+				area = mecklenburg_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = mittelmark_area
+					area = vorpommern_area
+					area = mecklenburg_area
+				}
+				value = 10
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_recovering_the_grody_of_the_march
+				duration = 10950
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
 		}
 	}
 }
@@ -3105,38 +3197,123 @@ POL_Missions_5_Piast = {
 	has_country_shield  = yes
 	
 	POL_morze = {
-		icon = victor_for_the_true_faith
+		icon = mission_look_west
 		required_missions = { POL_reconquer_silesia }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 43
+						province_id = 2997
+					}
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					OR = {
+						area = neumark_area
+						area = hinter_pommern_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
 		}
 		trigger = {
+			43 = { owned_by = ROOT }
+			2997 = { owned_by = ROOT }
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = neumark_area
+					area = hinter_pommern_area
+				}
+				value = 4
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_access_to_sea_regained
+				duration = 10950
+			}
+			
+			add_country_modifier = {
+				name = POL_west
+				duration = 9125
+			}
+			
+			custom_tooltip = POL_tuchola_and_gdansk
+			43 = { set_province_flag = POL_tuchola_and_gdansk }
+			2997 = { set_province_flag = POL_tuchola_and_gdansk }
+			
+			
+			mecklenburg_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mittelmark_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vorpommern_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
 	POL_lusatia = {
-		icon = victor_for_the_true_faith
+		icon = claim_the_borderlands
 		required_missions = { POL_morze }
 		position = 5
 		provinces_to_highlight = {
+			area = lusatia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			lusatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_reconquests_in_the_west
+				duration = 9125
+			}
+			add_accepted_culture_or_dip_power = { culture = sorbian }
 		}
 	}
 	
 	POL_a_show_of_strength = {
-		icon = victor_for_the_true_faith
+		icon = lead_the_empire
 		required_missions = { POL_lusatia }
 		position = 7
 		provinces_to_highlight = {
+			is_part_of_hre = yes
 		}
 		trigger = {
+			OR = {
+				NOT = { hre_size = 1 }
+				has_won_war_against = {
+					who = emperor
+					max_years_since = 5
+				}
+				is_emperor = yes
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = POL_dominance_over_hre
+				duration = -1
+			}
 		}
 	}
 }
