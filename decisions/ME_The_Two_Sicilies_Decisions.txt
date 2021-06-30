@@ -159,22 +159,10 @@ country_decisions = {
 				tag = NAP
 				tag = SIC
 			}
-			if = {
-				limit = {
-					tag = NAP
-				}
-				is_vassal = no
-				exists = SIC
-				SIC = { is_vassal = no }
-			}
-			else_if = {
-				limit = {
-					tag = SIC
-				}
-				is_vassal = no
-				exists = NAP
-				NAP = { is_vassal = no }
-			}
+			exists = SIC
+			SIC = { is_subject = no }
+			NAP = { is_subject = no }
+			exists = NAP
 			OR = {
 				NOT = { has_country_flag = tts_crowns_request_sent }
 				had_country_flag = {
@@ -203,8 +191,7 @@ country_decisions = {
 			else_if = {
 				limit = {
 					tag = SIC
-				}
-				
+				}				
 				has_opinion = {
 					who = NAP
 					value = 150
@@ -319,22 +306,45 @@ country_decisions = {
 			}
 		}
 		effect = {
-			custom_tooltip = tts_pizza_TIME_PROVINCE_BONUS_TOOLTIP
-			hidden_effect = {
-				italy_region = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
-						OR = {
-							trade_goods = grain
-							trade_goods = livestock
-							trade_goods = cheese
-							trade_goods = tomato
-							trade_goods = olive_oil
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = tts_pizza_TIME_PROVINCE_BONUS_TOOLTIP_TGE
+				hidden_effect = {
+					italy_region = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = grain
+								trade_goods = livestock
+								trade_goods = cheese
+								trade_goods = tomato
+								trade_goods = olive_oil
+							}
+						}
+						add_permanent_province_modifier = {
+							name = tts_margherita_tge
+							duration = -1
 						}
 					}
-					add_province_modifier = {
-						name = tts_margherita
-						duration = -1
+				}
+			}
+			else = {
+				custom_tooltip = tts_pizza_TIME_PROVINCE_BONUS_TOOLTIP
+				hidden_effect = {
+					italy_region = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+							OR = {
+								trade_goods = grain
+								trade_goods = livestock
+							}
+						}
+						add_permanent_province_modifier = {
+							name = tts_margherita
+							duration = -1
+						}
 					}
 				}
 			}
