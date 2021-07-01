@@ -1,8 +1,731 @@
-#########
-#Made by claivin for Missions Extended Mod
-#########
-
 namespace = ME_Lubeck_Events
+namespace = ME_Hansa_Events
+
+country_event = { #Establish Outposts
+	id = ME_Hansa_Events.1
+	title = ME_Hansa_Events.1.t
+	desc = ME_Hansa_Events.1.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	
+	immediate = {
+		hidden_effect = {
+			set_global_flag = HNS_age_of_hansa
+			set_country_flag = HNS_age_of_hansa_country
+			ROOT = {
+				save_global_event_target_as = target_HANSA
+			}
+			33 = {
+				create_hanseatic_outpost = yes
+			}
+			43 = {
+				create_hanseatic_outpost = yes
+			}
+			25 = {
+				create_hanseatic_outpost = yes
+			}
+			38 = {
+				create_hanseatic_outpost = yes
+			}
+			236 = {
+				create_hanseatic_outpost = yes
+			}
+			90 = {
+				create_hanseatic_outpost = yes
+			}
+			23 = {
+				create_hanseatic_outpost = yes
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.1.a
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HNS_kontor_tooltip
+	}
+}
+
+country_event = { #Hansetage of [Current year]
+	id = ME_Hansa_Events.2
+	title = ME_Hansa_Events.2.t
+	desc = ME_Hansa_Events.2.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		OR = {
+			AND = {
+				has_dlc = "Mare Nostrum"
+				is_in_trade_league_with = ROOT
+			}
+			AND = {
+				NOT = { has_dlc = "Mare Nostrum" }
+				alliance_with = ROOT
+				NOT = { num_of_cities = 2 }
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.2.a
+		
+		ai_chance = { factor = 1 }
+		
+		#Resolve internal disputes (improve relation modifier)
+		add_country_modifier = {
+			name = HNS_resolve_disputes
+			duration = 3650
+		}
+		custom_tooltip = HNS_every_trade_league_member
+		tooltip = {
+			add_country_modifier = {
+				name = HNS_resolve_disputes
+				duration = 3650
+			}
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							has_dlc = "Mare Nostrum"
+							is_in_trade_league_with = ROOT
+						}
+						AND = {
+							NOT = { has_dlc = "Mare Nostrum" }
+							alliance_with = ROOT
+							NOT = { num_of_cities = 2 }
+						}
+					}
+				}
+				add_country_modifier = {
+					name = HNS_resolve_disputes
+					duration = 3650
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Hansa_Events.2.b
+		
+		ai_chance = { factor = 1 }
+		
+		#Gain More trade power in Brugges #bargain with the flemish
+		90 = {
+			add_trade_modifier = {
+				who = ROOT
+				duration = 3650
+				power = 10
+				key = HNS_bargaining_with_flamands
+			}
+		}
+		custom_tooltip = HNS_every_trade_league_member
+		tooltip = {
+			custom_tooltip = HNS_GET_5_TRADE_POWER_AND_PROVIDE
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							has_dlc = "Mare Nostrum"
+							is_in_trade_league_with = ROOT
+						}
+						AND = {
+							NOT = { has_dlc = "Mare Nostrum" }
+							alliance_with = ROOT
+							NOT = { num_of_cities = 2 }
+						}
+					}
+				}
+				90 = {
+					add_trade_modifier = {
+						who = PREV
+						duration = 3650
+						power = 5
+						key = HNS_bargaining_with_flamands
+					}
+					add_trade_modifier = {
+						who = ROOT
+						duration = 3650
+						power = 5
+						key = HNS_bargaining_with_flamands
+					}
+				}
+			}
+		}
+	}
+
+	option = {
+		name = ME_Hansa_Events.2.c
+		
+		ai_chance = { factor = 1 }
+		
+		#recruit a represenative (statesman for lubeck)
+		define_advisor = {
+			type = statesman
+			skill = 1
+			culture = ROOT
+			religion = ROOT
+			cost_multiplier = 0.4
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.2.e
+		
+		ai_chance = { factor = 1 }
+		
+		#Recruit ships
+		capital_scope = {
+			add_unit_construction = {
+				type = light_ship
+				amount = 5
+				speed = 0.1
+				cost = 0
+			}
+		}
+		add_navy_tradition = 10
+		custom_tooltip = HNS_every_trade_league_member
+		tooltip = {
+			add_country_modifier = {
+				name = HNS_ships
+				duration = 3650
+			}
+			add_navy_tradition = 10
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							has_dlc = "Mare Nostrum"
+							is_in_trade_league_with = ROOT
+						}
+						AND = {
+							NOT = { has_dlc = "Mare Nostrum" }
+							alliance_with = ROOT
+							NOT = { num_of_cities = 2 }
+						}
+					}
+				}
+				add_country_modifier = {
+					name = HNS_ships
+					duration = 3650
+				}
+				add_navy_tradition = 10
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.2.f
+		
+		ai_chance = { factor = 1 }
+		
+		#Prepare for War
+		add_country_modifier = {
+			name = "glut_of_mercs"
+			duration = 3650
+			hidden = yes
+		}
+		add_country_modifier = {
+			name = HNS_mercs
+			duration = 3650
+		}
+		custom_tooltip = generic_more_mercs_available_tt
+		custom_tooltip = HNS_every_trade_league_member
+		tooltip = {
+			add_country_modifier = {
+				name = HNS_mercs
+				duration = 3650
+			}
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							has_dlc = "Mare Nostrum"
+							is_in_trade_league_with = ROOT
+						}
+						AND = {
+							NOT = { has_dlc = "Mare Nostrum" }
+							alliance_with = ROOT
+							NOT = { num_of_cities = 2 }
+						}
+					}
+				}
+				add_country_modifier = {
+					name = HNS_mercs
+					duration = 3650
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.2.g
+		
+		ai_chance = { factor = 1 }
+		
+		add_years_of_income = 1
+		add_country_modifier = {
+			name = HNS_prospering_times
+			duration = 3650
+		}
+		if = {
+			limit = { has_dlc = "Mandate of Heaven" }
+			custom_tooltip = HNS_capital_get_50_prosperity
+		}
+		#New Laws to Prosper (some money, trade eff)
+		custom_tooltip = HNS_every_trade_league_member
+		tooltip = {
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				custom_tooltip = HNS_capital_get_50_prosperity
+			}
+			add_country_modifier = {
+				name = HNS_prospering_times
+				duration = 3650
+			}
+		}
+		hidden_effect = {
+			capital_scope = { add_prosperity = 50 }
+			every_country = {
+				limit = {
+					OR = {
+						AND = {
+							has_dlc = "Mare Nostrum"
+							is_in_trade_league_with = ROOT
+						}
+						AND = {
+							NOT = { has_dlc = "Mare Nostrum" }
+							alliance_with = ROOT
+							NOT = { num_of_cities = 2 }
+						}
+					}
+				}
+				capital_scope = { add_prosperity = 50 }
+				add_country_modifier = {
+					name = HNS_prospering_times
+					duration = 3650
+				}
+			}
+		}
+	}
+}
+
+country_event = { #The Sound
+	id = ME_Hansa_Events.3
+	title = ME_Hansa_Events.3.t
+	desc = ME_Hansa_Events.3.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		OR = {
+			1926 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			45 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			1269 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Hansa_Events.3.a
+		
+		ai_chance = { factor = 1 }
+		
+		add_years_of_income = 1
+		custom_tooltip = HNS_nothing_changes
+	}
+	
+	option = {
+		name = ME_Hansa_Events.3.b
+		
+		ai_chance = { factor = 1 }
+		
+		12 = { remove_province_modifier = sound_toll }
+		12 = {
+			add_permanent_province_modifier = {
+				name = HNS_sound_toll_no_more
+				duration = -1
+			}
+		}
+	}
+}
+
+country_event = { #Hanseatic Fish Route
+	id = ME_Hansa_Events.4
+	title = ME_Hansa_Events.4.t
+	desc = ME_Hansa_Events.4.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		OR = {
+			1926 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			45 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			1269 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.4.a
+		
+		ai_chance = { factor = 1 }
+		
+		1860 = {
+			add_permanent_province_modifier = {
+				name = HNS_yarmouth_market
+				duration = -1
+			}
+			create_hanseatic_outpost = yes
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.4.b
+		
+		ai_chance = { factor = 1 }
+		
+		if = {
+			limit = {
+				6 = { has_province_modifier = skanemarket }
+			}
+			custom_tooltip = HNS_skane_market
+		}
+		else = {
+			custom_tooltip = HNS_skane_market_bring_back
+			6 = { change_trade_goods = fish }
+		}
+		hidden_effect = {
+			6 = {
+				remove_province_modifier = skanemarket 
+				add_permanent_province_modifier = {
+					name = HNS_skane_market
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Hanseatic Merchants in America
+	id = ME_Hansa_Events.5
+	title = ME_Hansa_Events.5.t
+	desc = ME_Hansa_Events.5.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	major = yes
+	
+	option = {
+		name = ME_Hansa_Events.5.a
+		
+		ai_chance = { factor = 1 }
+		
+		add_years_of_income = 2
+		change_price = {
+			trade_goods = fur
+			key = HSA_merchants
+			value = 0.25
+			duration = -1
+		}
+		change_price = {
+			trade_goods = fish
+			key = HSA_merchants
+			value = 0.2
+			duration = -1
+		}
+	}
+}
+
+country_event = { #Baltic - Conquest or Peace?
+	id = ME_Hansa_Events.6
+	title = ME_Hansa_Events.6.t
+	desc = ME_Hansa_Events.6.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Hansa_Events.6.a
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HNS_get_cores_baltic
+	}
+	
+	option = {
+		name = ME_Hansa_Events.6.b
+		
+		ai_chance = { factor = 1 }
+		
+		add_mercantilism = 5
+		add_country_modifier = {
+			name = HNS_peace_baltic
+			duration = 10950
+		}
+	}
+}
+
+country_event = { #North Sea - Conquest or Peace?
+	id = ME_Hansa_Events.7
+	title = ME_Hansa_Events.7.t
+	desc = ME_Hansa_Events.7.d
+	picture = SHIP_SAILING_eventPicture
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Hansa_Events.7.a
+		
+		ai_chance = { factor = 1 }
+		
+		custom_tooltip = HNS_get_cores_north_sea
+		set_country_flag = HNS_get_cores_on_new_thingies
+	}
+	
+	option = {
+		name = ME_Hansa_Events.7.b
+		
+		ai_chance = { factor = 1 }
+		
+		add_mercantilism = 5
+		add_country_modifier = {
+			name = HNS_peace_north_sea
+			duration = 10950
+		}
+	}
+}
+
+country_event = { #Decline of the Hansa
+	id = ME_Hansa_Events.8
+	title = ME_Hansa_Events.8.t
+	desc = ME_Hansa_Events.8.d
+	picture = SHIP_SAILING_eventPicture
+
+	trigger = {
+		has_country_flag = HNS_age_of_hansa_country
+		NOT = { has_country_flag = HNS_disable_decline }
+		has_institution = colonialism
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	immediate = {
+		hidden_effect = {
+			every_province = {
+				limit = {
+					OR = {
+						has_province_flag = HNS_activated
+						has_province_flag = HNS_deactivated
+					}
+					owner = { 
+						NOT = { tag = ROOT }
+					}
+				}
+				owner = {
+					add_opinion = {
+						who = ROOT
+						modifier = hns_hansa_decline
+					}
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.8.a
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			has_institution = colonialism
+		}
+		highlight = yes
+		
+		custom_tooltip = HNS_lose_10_opinion_with_all_contractors
+	}
+	
+}
+
+country_event = { #Growth of Lothian
+	id = ME_Hansa_Events.9
+	title = ME_Hansa_Events.9.t
+	desc = ME_Hansa_Events.9.d
+	picture = SHIP_SAILING_eventPicture
+
+	trigger = {
+		has_country_flag = HNS_age_of_hansa_country
+		is_year = 1600
+		has_institution = colonialism
+	}
+	
+	mean_time_to_happen = {
+		months = 60
+	}
+	
+	option = {
+		name = ME_Hansa_Events.9.a
+		
+		ai_chance = { factor = 1 }
+		
+		trigger = {
+			has_institution = colonialism
+			is_year = 1600
+		}
+		highlight = yes
+		
+		248 = { create_hanseatic_outpost = yes }
+	}
+}
+
+province_event = { #Direct Control
+	id = ME_Hansa_Events.10
+	title = ME_Hansa_Events.10.t
+	desc = ME_Hansa_Events.10.d
+	picture = SHIP_SAILING_eventPicture
+
+	trigger = {
+		is_hanseatic_port = yes
+		owned_by = event_target:target_HANSA
+	}
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	goto = ROOT
+	
+	option = {
+		name = ME_Hansa_Events.10.a
+		
+		ai_chance = { factor = 1 }
+		
+		remove_hanseatic_outpost = yes
+	}
+}
+
+country_event = { # [Root.GetName] secedes from the League
+	id = ME_Hansa_Events.11
+	title = ME_Hansa_Events.11.t
+	desc = ME_Hansa_Events.11.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	major_trigger = {
+		OR = {
+			1926 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			45 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+			1269 = { 
+				trade_share = {
+					country = ROOT
+					share = 1
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Hansa_Events.11.a
+		
+		ai_chance = { factor = 1 }
+		
+		country_event = { id = ME_Hansa_Events.12 }
+	}
+}
+
+country_event = { # Emergence of a New League
+	id = ME_Hansa_Events.12
+	title = ME_Hansa_Events.12.t
+	desc = ME_Hansa_Events.12.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Hansa_Events.12.a
+		
+		ai_chance = { factor = 1 }
+			
+		add_government_reform = merchants_reform 
+		custom_tooltip = HNS_in_order_to_finish_tree
+	}
+	
+	option = {
+		name = ME_Hansa_Events.12.b
+		
+		ai_chance = { factor = 1 }
+		
+		add_republican_tradition = 10
+	}
+}
+
+
+
+
+
+
+
 
 country_event = { #norway kontor
 	id = ME_Lubeck_Events.1
@@ -681,3 +1404,4 @@ country_event = { # mediterranian control
 		}
 	}
 }
+
