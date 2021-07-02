@@ -202,7 +202,7 @@ POL_Missions_1 = {
 		trigger = {
 			development_in_provinces = {
 				culture = polish
-				value = 500
+				value = 450
 			}
 		}
 		effect = {
@@ -535,7 +535,7 @@ POL_Missions_1 = {
 			262 = {
 				trade_share ={
 					country = ROOT
-					share = 45
+					share = 40
 				}
 			}
 		}
@@ -1000,9 +1000,11 @@ POL_Missions_2 = {
 					WAL = { is_subject_of = ROOT }
 					MOL = { is_subject_of = ROOT }
 				}
-				add_country_modifier = {
-					name = POL_double_trouble
-					duration = 14600
+				hidden_effect = {
+					add_country_modifier = {
+						name = POL_double_trouble
+						duration = 14600
+					}
 				}
 			}
 		}
@@ -2478,6 +2480,9 @@ POL_Missions_4_2 = {
 				duration = 9125
 			}
 			add_mil_power = 50
+			
+			set_country_flag = POL_Custom_Cb_flag
+			custom_tooltip = POL_gain_cb_on_ottos
 		}
 	}
 	
@@ -2528,16 +2533,35 @@ POL_Missions_4_2 = {
 			}
 		}
 		trigger = {
-			development_in_provinces = {
-				value = 175
-				OR = {
-					trade_goods = grain
-					trade_goods = livestock
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
 				}
-				OR = {
-					region = ruthenia_region
-					area = zaporizhia_area
-					area = yedisan_area
+				development_in_provinces = {
+					value = 175
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 250
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
 				}
 			}
 		}
@@ -2549,7 +2573,14 @@ POL_Missions_4_2 = {
 			custom_tooltip = POL_distribute_10_manpower
 			
 			hidden_effect = {
-				POL_distribute_10_manpower = yes
+				for = {
+					amount = 10
+					effect = "
+						random_owned_province = {
+							add_base_manpower = 1
+						}
+					"
+				}
 			}
 		}
 	}
