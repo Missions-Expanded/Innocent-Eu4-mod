@@ -1283,21 +1283,22 @@ country_event = {
 				has_age_ability = ab_free_war_taxes
 			}
 		}
-		option = {
-			name = ME_France_Events.34.OPT1
-			add_country_modifier = {
-				name = fra_the_taille
-				duration = -1
-			}
-			custom_tooltip = the_taille_tt
-			set_country_flag = tax_peasants
-		}
-		option = {
-			name = ME_France_Events.34.OPT2
-			add_prestige = 1
-		}
 	}
-
+	option = {
+		name = ME_France_Events.34.OPT1
+		add_country_modifier = {
+			name = fra_the_taille
+			duration = -1
+		}
+		custom_tooltip = the_taille_tt
+		set_country_flag = tax_peasants
+	}
+	option = {
+		name = ME_France_Events.34.OPT2
+		add_prestige = 1
+	}
+}
+	
 #To bleed a peasant dry
 country_event = {
 	id = ME_France_Events.35
@@ -1313,6 +1314,7 @@ country_event = {
 	}
 	option = {
 		name = ME_France_Events.35.OPT1
+		custom_tooltip = abolish_taille_tt
 		remove_country_modifier = fra_the_taille
 	}
 	option = {
@@ -1352,9 +1354,9 @@ country_event = {
 	}
 	option = {
 		name = ME_France_Events.36.OPT2
-				203 = {
+		203 = {
 			add_province_modifier = {
-				name = invest_lyon
+				name = fra_invest_lyon
 				duration = -1
 			}
 		}
@@ -1362,3 +1364,135 @@ country_event = {
 }
 
 #The Enemy of my Enemy
+country_event = {
+	id = ME_France_Events.37
+	title = ME_France_Events.37.T
+	desc = ME_France_Events.37.D
+	picture = DIPLOMACY_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = FRA
+		TUR = {
+			alliance_with = FRA
+		}
+		HAB = {
+			is_rival = FRA
+			is_rival = TUR
+			is_emperor = yes
+		}
+	}
+	option = {
+		name = ME_France_Events.37.OPT1
+		FRA = {
+			add_historical_friend = TUR
+		}
+		TUR = {
+			add_historical_friend = FRA
+		}
+		custom_tooltip = capitulations_ottoman_tt
+		set_country_flag = fra_tur_alliance
+		hidden_effect = {
+			add_trade_modifier = {
+				who = ROOT
+				duration = -1
+				power = 20
+				key = fra_capitulations_ottoman
+			}
+		}
+	}
+}
+
+#Hidden event to remove trade modifier
+country_event = {
+	id = ME_France_Events.38
+	title = ME_France_Events.38.T
+	desc = ME_France_Events.38.D
+	picture = DIPLOMACY_eventPicture
+	hidden = yes
+	immediate_effect = {
+		remove_trade_modifier = {
+			who = ROOT
+			key = fra_capitulations_ottoman
+		}
+		clr_country_flag = fra_tur_alliance
+	}
+	fire_only_once = yes
+	trigger = {
+		tag = FRA
+		has_country_flag = fra_tur_alliance
+		FRA = {
+			NOT = { alliance_with = TUR }
+		}
+	}
+}
+
+#Importing Crisis
+country_event = {
+	id = ME_France_Events.39
+	title = ME_France_Events.39.T
+	desc = ME_France_Events.39.D
+	picture = OVEREXTENSION_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = FRA
+		has_institution = colonialism
+		any_subject_country = {
+			is_colonial_nation = yes
+		}
+		any_subject_country = {
+			is_colonial_nation = yes
+			capital_scope = {
+				OR = {
+					continent = north_america
+					continent = south_america
+				}
+			}
+			tariff_value = 0.30
+		}
+	}
+	option = {
+		name = ME_France_Events.39.OPT1
+		add_inflation = 3
+		add_tariff_value = 0.05
+	}
+}
+
+#A Good King
+country_event = {
+	id = ME_France_Events.40
+	title = ME_France_Events.40.T
+	desc = ME_France_Events.40.D
+	picture = GOOD_WITH_MONARCH_eventPicture
+	fire_only_once = yes
+	trigger = {
+		tag = FRA
+		FRA = {
+			religion = catholic
+			ruler_religion = catholic
+		}
+		NOT = { religious_unity = 50 }
+		#One additional trigger regarding the unity through fate disaster which will be added once the disaster is coded.#
+	}
+	option = {
+		name = ME_France_Events.40.OPT1
+		kill_ruler = yes
+		kill_heir = yes
+		define_ruler = {
+			name = "Henry"
+			adm = 3
+			dip = 3
+			mil = 3
+			religion = reformed
+			claim = 90
+			male = yes
+			age = 18
+		}
+		add_ruler_personality = tolerant_personality
+	}
+	option = {
+		name = ME_France_Events.40.OPT2
+		add_country_modifier = {
+			name = fra_favored_customs
+			duration = 17800
+		}
+	}
