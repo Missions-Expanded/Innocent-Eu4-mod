@@ -779,17 +779,29 @@ country_event = { # FROM wants to become the trade league leader
 			name = HNS_second_in_command
 			duration = -1
 		}
+		
 		hidden_effect = {
 			every_country = {
 				limit = {
 					is_in_trade_league_with = ROOT
 				}
-				join_trade_league = FROM
+				set_country_flag = HNS_new_league
 			}
+		}
+		add_government_reform = oligarchy_reform 
+		FROM = {
+			add_government_reform = merchants_reform
+			hidden_effect = { save_global_event_target_as = HNS_new_trade_league_leader }
 		}
 		FROM = {
 			custom_tooltip = HNS_hansetage
 			set_country_flag = HNS_hansetage
+		}
+		hidden_effect = {
+			country_event = {
+				id = ME_Hansa_Events.18
+				days = 3
+			}
 		}
 	}
 	
@@ -931,5 +943,35 @@ country_event = { # FROM requests membership
 		ai_chance = { factor = 0 }
 		
 		add_prestige = -25
+	}
+}
+
+country_event = { # A New Kontor
+	id = ME_Hansa_Events.18
+	title = ME_Hansa_Events.18.t
+	desc = ME_Hansa_Events.18.d
+	picture = SHIP_SAILING_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	option = {
+		name = ME_Hansa_Events.18.a
+		
+		ai_chance = { factor = 1 }
+		
+		event_target:HNS_new_trade_league_leader = {
+			hidden_effect = {
+				every_country = {
+					limit = {
+						has_country_flag = HNS_new_league
+					}
+					event_target:HNS_new_trade_league_leader = {
+						join_trade_league = PREV
+					}
+					clr_country_flag = HNS_new_league
+				}
+			}
+		}
 	}
 }
