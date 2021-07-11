@@ -34,7 +34,7 @@ country_decisions = {
 			}
 			any_owned_province = {
 				trade_goods = naval_supplies
-				has_building = shipyard
+				has_shipyard_building_trigger = yes
 			}
 		}
 		effect = {
@@ -53,7 +53,16 @@ country_decisions = {
 		potential = {
 			NOT = { has_country_flag = mr_magistrate_galley_flag }
 			OR = {
-				tag = VEN
+				OR = {
+					tag = VEN
+					AND = {
+						was_tag = VEN
+						OR = {
+							tag = LVN
+							has_country_flag = lvn_without_fe
+						}
+					}
+				}
 				tag = GEN
 				tag = PIS
 			}
@@ -63,7 +72,18 @@ country_decisions = {
 				AND = {
 					if = {
 						limit = {
-							ROOT = { tag = VEN }
+							ROOT = { 
+								OR = {
+									tag = VEN
+									AND = {
+										was_tag = VEN
+										OR = {
+											tag = LVN
+											has_country_flag = lvn_without_fe
+										}
+									}
+								}
+							}
 						}
 						province_id = 112
 					}
@@ -77,29 +97,19 @@ country_decisions = {
 						province_id = 115
 					}
 					OR = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
 						NOT = { base_production = 15 }
-						OR = {
-							NOT = { has_building = shipyard }
-							NOT = { has_building = grand_shipyard }
-						}
-						OR = {
-							NOT = { has_building = dock }
-							NOT = { has_building = drydock }
-						}
+						NOT = { has_shipyard_building_trigger = yes }
+						NOT = { has_dock_building_trigger = yes }
 					}
 				}
 				AND = {
-					base_production = 10
 					OR = {
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
+						NOT = { base_production = 10 }
+						NOT = { has_shipyard_building_trigger = yes }
+						NOT = { has_dock_building_trigger = yes }
 					}
-					OR = {
-						NOT = { has_building = dock }
-						NOT = { has_building = drydock }
-					}
+					owned_by = ROOT
+					has_port = yes
 				}
 			}
 		}
@@ -107,19 +117,24 @@ country_decisions = {
 			mercantilism = 40
 			years_of_income = 2
 			if = {
-				limit = { tag = VEN }
+				limit = {
+					OR = {
+						tag = VEN
+						AND = {
+							was_tag = VEN
+							OR = {
+								tag = LVN
+								has_country_flag = lvn_without_fe
+							}
+						}
+					}
+				}
 				owns_core_province = 112
 				112 = {
 					base_production = 15
 					OR = {
-						OR = {
-							has_building = shipyard
-							has_building = grand_shipyard
-						}
-						OR = {
-							has_building = dock
-							has_building = drydock
-						}
+						has_shipyard_building_trigger = yes
+						has_dock_building_trigger = yes
 					}
 				}
 			}
@@ -129,14 +144,8 @@ country_decisions = {
 				101 = {
 					base_production = 15
 					OR = {
-						OR = {
-							has_building = shipyard
-							has_building = grand_shipyard
-						}
-						OR = {
-							has_building = dock
-							has_building = drydock
-						}
+						has_shipyard_building_trigger = yes
+						has_dock_building_trigger = yes
 					}
 				}
 			}
@@ -145,28 +154,16 @@ country_decisions = {
 				115 = {
 					base_production = 15
 					OR = {
-						OR = {
-							has_building = shipyard
-							has_building = grand_shipyard
-						}
-						OR = {
-							has_building = dock
-							has_building = drydock
-						}
+						has_shipyard_building_trigger = yes
+						has_dock_building_trigger = yes
 					}
 				}
 			}
 			num_of_owned_provinces_with = {
 				value = 10
 				base_production = 10
-				OR = {
-					has_building = shipyard
-					has_building = grand_shipyard
-				}
-				OR = {
-					has_building = dock
-					has_building = drydock
-				}
+				has_shipyard_building_trigger = yes
+				has_dock_building_trigger = yes
 			}
 		}
 		effect = {
