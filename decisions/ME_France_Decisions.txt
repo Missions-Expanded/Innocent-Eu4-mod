@@ -1,0 +1,243 @@
+country_decisions = {
+	me_fra_establish_the_plantation_economy = {
+		ai_will_do = {
+			factor = 1
+		}
+		potential = {
+			tag = FRA
+			has_institution = colonialism
+			any_subject_country = {
+				is_colonial_nation_of = FRA
+				capital_scope = {
+					region = carribeans_region
+				}
+			}
+		}
+		allow = {
+			any_subject_country = {
+				is_colonial_nation_of = FRA
+				capital_scope = {
+					region = carribeans_region
+				}
+				total_development = 100
+				num_of_owned_provinces = {
+					value = 2
+					trade_goods = sugar
+					base_production = 5
+					has_manufactory_trigger = yes
+				}
+				num_of_owned_provinces = {
+					value = 2
+					trade_goods = tobacco
+					base_production = 5
+					has_manufactory_trigger = yes
+				}
+				num_of_owned_provinces = {
+					value = 2
+					trade_goods = cotton
+					base_production = 5
+					has_manufactory_trigger = yes
+				}
+				#CARRIBEAN TRADE NODE ID = 1516
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_the_plantation_economy
+				duration = -1
+			}
+			add_tariff_value = 0.1
+			add_liberty_desire = 10
+		}
+	}
+}
+
+country_decisions = {
+	me_fra_dirigiste_reforms = {
+		potential = {
+			tag = FRA
+			has_institution = global_trade
+		}
+		allow = {
+			mercantilism = 30
+			num_of_owned_provinces = {
+				value = 20
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+			num_of_owned_provinces = {
+				value = 20
+				OR = {
+					has_building = market
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dirigiste
+				duration = -1
+			}
+		}
+	}
+}
+
+country_decisions = {
+	me_fra_continental_system = {
+		potential = {
+			tag = FRA
+			current_age = age_of_revolution
+		}
+		allow = {
+			OR = {
+				num_of_subjects = 3
+				client_state = 2
+			}
+			OR = {
+				any_rival_country = {
+					total_development = 800
+				}
+				calc_true_if = {
+					amount = 2
+					all_rival_country = {
+						total_development = 600
+					}
+				}
+		effect = {
+			custom_tooltip = nullify_embargo_malice_tt
+			add_country_modifier = {
+				name = counter_embargo
+				duration = -1
+			}
+		}
+	}
+}
+
+country_decisions = {
+	me_fra_end_hre = {
+		potential = {
+			tag = FRA
+			#Add event flag here#
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = fra_electors_as_vassals_tt
+				calc_true_if = {
+					all_electors = {
+						is_subject_of = FRA
+					}
+					amount = 4
+				}
+			}
+			if = {
+				limit = {
+					FRA = {
+						religion = catholic
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = fra_pope_conversion_tt
+					check_variable = {
+						which = num_converted_religion
+						value = 30
+					}
+				}
+			}
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = fra_fight_reformation_tt
+					if = {
+						limit = {
+							has_dlc = "Art of War"
+						}
+						FRA = {
+							religion = catholic
+						}
+						custom_trigger_tooltip = {
+							tooltip = obj_religious_league_war_on_winning_side_tooltip
+							FRA = {
+								has_country_flag = religious_league_war_on_winning_side
+							}
+						}
+						hre_religion = catholic
+						all_countries_including_self = {
+							is_part_of_hre = yes
+							religion = catholic
+						}
+					}
+					else = {
+						FRA = {
+							religion = catholic
+						}
+						custom_trigger_tooltip = {
+							tooltip = obj_force_converted_tooltip
+							FRA = {
+								has_country_flag = force_converted
+							}
+						}
+						all_countries_including_self = {
+							is_part_of_hre = yes
+							religion = catholic
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = fra_support_reformation_tt
+					if = {
+						limit = {
+							has_dlc = "Art of War"
+						}
+						FRA = {
+							NOT = { religion = catholic }
+						}
+						custom_trigger_tooltip = {
+							tooltip = obj_religious_league_war_on_winning_side_tooltip
+							FRA = {
+								has_country_flag = religious_league_war_on_winning_side
+							}
+						}
+						hre_religion = FRA
+						all_countries_including_self = {
+							is_part_of_hre = yes
+							religion = FRA
+						}
+					}
+					else = {
+						FRA = {
+							NOT = { religion = catholic }
+						}
+						custom_trigger_tooltip = {
+							tooltip = obj_force_converted_tooltip
+							FRA = {
+								has_country_flag = force_converted
+							}
+						}
+						all_countries_including_self = {
+							is_part_of_hre = yes
+							religion = FRA
+						}
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = fra_dealt_with_ottomans
+				NOT = {
+					balkan_region = {
+						country_or_non_sovereign_subject_holds = TUR
+					}
+				}
+			}
+			is_emperor = yes
+		}
+		effect = {
+			custom_tooltip = fra_fate_of_hre
+			country_event = {
+				id = end_of_a_dream
+			}
+		}
+	}
+}
+						
