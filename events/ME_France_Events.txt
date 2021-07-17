@@ -179,7 +179,7 @@ country_event = {
 	id = ME_France_Events.5
 	title = ME_France_Events.5.T
 	desc = ME_France_Events.5.D
-	picture = FORT
+	picture = GREAT_BUILDING_eventPicture
 
 	is_triggered_only = yes
 
@@ -1393,11 +1393,13 @@ country_event = {
 		custom_tooltip = capitulations_ottoman_tt
 		set_country_flag = fra_tur_alliance
 		hidden_effect = {
-			add_trade_modifier = {
-				who = ROOT
-				duration = -1
-				power = 20
-				key = fra_capitulations_ottoman
+			1516 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 20
+					key = fra_capitulations_ottoman
+				}
 			}
 		}
 	}
@@ -1410,7 +1412,7 @@ country_event = {
 	desc = ME_France_Events.38.D
 	picture = DIPLOMACY_eventPicture
 	hidden = yes
-	immediate_effect = {
+	immediate = {
 		remove_trade_modifier = {
 			who = ROOT
 			key = fra_capitulations_ottoman
@@ -1472,7 +1474,10 @@ country_event = {
 			ruler_religion = catholic
 		}
 		NOT = { religious_unity = 50 }
-		#One additional trigger regarding the unity through fate disaster which will be added once the disaster is coded.#
+		has_country_flag = tolerance_fra_flag
+	}
+	immediate = {
+		clr_country_flag = tolerance_fra_flag
 	}
 	option = {
 		name = ME_France_Events.40.OPT1
@@ -1513,7 +1518,7 @@ country_event = {
 	trigger = {
 		has_country_flag = henry_on_throne
 	}
-	immediate_effect = {
+	immediate = {
 		clr_country_flag = henry_on_throne
 	}
 	option = {
@@ -1549,7 +1554,7 @@ country_event = {
 	id = ME_France_Events.42
 	title = ME_France_Events.42.T
 	desc = ME_France_Events.42.D
-	picture = ADVISOR_eventPicture
+	picture = HRE_eventPicture
 	is_triggered_only = yes
 	option = {
 		name = ME_France_Events.42.OPT1
@@ -1561,5 +1566,435 @@ country_event = {
 			name = fra_a_new_promise
 			duration = -1
 		}
+	}
+}
+
+#Disaster A New Dilemma
+country_event = {
+	id = ME_France_Events.43
+	title = ME_France_Events.43.T
+	desc = ME_France_Events.43.D
+	picture = PRINCE_BISHOP_RESIGN_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.43.OPT1
+		custom_tooltip = huguenots_converting_modifier_tt
+		while = {
+			limit = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						has_province_flag = reformed_from_disaster_flag
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_owner_religion = yes
+					NOT = { has_province_flag = reformed_from_disaster_flag }
+				}
+				set_province_flag = reformed_from_disaster_flag
+				change_religion = reformed
+				add_province_modifier = {
+					name = fra_rise_of_huguenots
+					duration = -1
+				}
+			}
+		}
+		set_country_flag = new_dilemma_fla
+	}
+}
+
+#The Huguenots
+country_event = {
+	id = ME_France_Events.44
+	title = ME_France_Events.44.T
+	desc = ME_France_Events.44.D
+	picture = WAR_OF_THE_ROSES_eventPicture
+	trigger = {
+		had_country_flag = {
+			flag = new_dilemma_flag
+			days = 730
+		}
+	}
+	immediate = {
+		clr_country_flag = new_dilemma_flag
+	}
+	option = {
+		name = ME_France_Events.44.OPT1
+		set_country_flag = tolerance_in_france_flag
+		add_country_modifier = {
+			name = fra_tolerance_in_france
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_France_Events.44.OPT2
+		set_country_flag = prosecution_in_france_flag
+		add_country_modifier = {
+			name = fra_prosecution_in_france
+			duration = -1
+		}
+	}
+}
+
+#IF CONVERSION, The Growth of Calvinism in France
+country_event = {
+	id = ME_France_Events.45
+	title = ME_France_Events.45.T
+	desc = ME_France_Events.45.D
+	picture = BORDER_TENSION_eventPicture
+	trigger = {
+		had_country_flag = {
+			flag = prosecution_in_france_flag
+			days = 730
+		}
+	}
+	option = {
+		name = ME_France_Events.45.OPT1
+		set_country_flag = calvinism_in_france_flag
+		add_country_modifier = {
+			name = fra_calvinist_resistance
+			duration = -1
+		}
+		add_country_modifier = {
+			name = fra_forceful_conversion
+			duration = -1
+		}
+		4112 = {
+			spawn_rebels = {
+				type = reformed_rebels
+				size = 2
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						NOT = { religion = ROOT }
+					}
+				}
+			}
+			custom_tooltip = five_provinces_reformed_tt
+			while = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 5
+						NOT = { religion = ROOT }
+						has_province_flag = reformed_from_disaster_flag
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					religion = ROOT
+					NOT = { has_province_flag = reformed_from_disaster_flag }
+				}
+				change_religion = reformed
+				set_province_flag = reformed_from_disaster_flag
+			}
+		}
+	}
+}
+
+#The Final Solution
+country_event = {
+	id = ME_France_Events.46
+	title = ME_France_Events.46.T
+	desc = ME_France_Events.46.D
+	picture = RELIGIOUS_TURMOIL_eventPicture
+	trigger = {
+		had_country_flag = {
+			flag = calvinism_in_france_flag
+			days = 120
+		}
+	}
+	option = {
+		name = ME_France_Events.46.OPT1
+		custom_tooltip = provinces_lose_dev_tt
+		clr_country_flag = calvinism_in_france_flag 
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = { religion = catholic }
+				}
+				add_base_tax = -1
+				add_base_production = -1
+				add_base_manpower = -1
+			}
+		}
+	}
+}
+
+#Unity Through Faith (conversion version)
+country_event = {
+	id = ME_France_Events.46
+	title = ME_France_Events.46.T
+	desc = ME_France_Events.46.D
+	picture = WOUNDED_SOLDIERS_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.46.OPT1
+		remove_country_modifier = fra_prosecution_in_france
+		remove_country_modifier = fra_forceful_conversion
+		remove_country_modifier = fra_calvinist_resistance
+		clr_country_flag = prosecution_in_france_flag
+		set_country_flag = war_of_religion_end
+		add_country_modifier = {
+			name = fra_french_catholic_supremacy
+			duration = -1
+		}
+		add_stability = 2
+	}
+}
+
+#IF Tolerant, The Papal Response
+country_event = {
+	id = ME_France_Events.47
+	title = ME_France_Events.47.T
+	desc = ME_France_Events.47.D
+	picture = ACCUSATION_eventPicture
+	trigger = {
+		had_country_flag = {
+			flag = tolerance_in_france_flag
+			days = 730
+		}
+	}
+	option = {
+		name = ME_France_Events.47.OPT1
+		excommunicate = FRA
+		add_country_modifier = {
+			name = fra_sour_with_pope
+			duration = -1
+		}
+		add_opinion = {
+			who = PAP
+			modifier = fra_angered_pap
+		}
+		add_country_modifier = {
+			name = fra_evangelical_influx
+			duration = -1
+		}
+		custom_tooltip = opinion_with_pro_ref_tt
+		hidden_effect = {
+			add_opinion = {
+				who = {
+					all_country = {
+						religion = reformed
+						religion = protestant
+					}
+				}
+				modifier = fra_bastion_for_christianity
+			}
+		}
+	}
+}
+
+#Unity Through Faith (tolerance version)
+country_event = {
+	id = ME_France_Events.48
+	title = ME_France_Events.48.T
+	desc = ME_France_Events.48.D
+	picture = CATHOLIC_RULERS_PRAYING_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.48.OPT1
+		remove_country_modifier = fra_sour_with_pope
+		remove_country_modifier = fra_evangelical_influx
+		remove_opinion = {
+			who = PAP
+			modifier = angered_pap
+		}
+		custom_tooltip = remove_opinion_with_pro_ref_tt
+		hidden_effect = {
+			remove_opinion = {
+				who = {
+					all_country = {
+						religion = reformed
+						religion = protestant
+					}
+				}
+				modifier = bastion_for_christianity
+			}
+		}				
+		clr_country_flag = tolerance_in_france_flag
+		set_country_flag = war_of_religion_end
+		set_country_flag = tolerance_fra_flag
+		add_country_modifier = {
+			name = fra_religious_tolerance
+			duration = -1
+		}
+		add_stability = 2
+	}
+}
+
+#Hidden Event for Disaster End
+country_event = {
+	id = ME_France_Events.49
+	title = ME_France_Events.49.T
+	desc = ME_France_Events.49.D
+	picture = CATHOLIC_RULERS_PRAYING_eventPicture
+	hidden = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = {
+				AND = {
+					has_country_flag = prosecution_in_france_flag
+					all_owned_province = {
+						religion = FRA
+					}
+				}
+			}
+			country_event = {
+				id = ME_France_Events.47
+				days = 1
+			}
+		}
+		else_if = {
+			limit = {
+				AND = {
+					has_country_flag = tolerance_in_france_flag
+					OR = {
+						had_country_flag = {
+							flag = tolerance_in_france_flag
+							days = 1825
+						}
+						humanist_ideas = 3
+						has_disaster = religious_turmoil
+						has_disaster = french_war_of_religions
+					}
+				}
+			}
+			country_event = {
+				id = ME_France_Events.48
+				days = 1
+			}
+		}		
+	option = {
+		name = ME_France_Events.49.OPT1
+	}
+}
+
+#Normandy Reclaimed
+country_event = {
+	id = ME_France_Events.50
+	title = ME_France_Events.50.T
+	desc = ME_France_Events.50.D
+	picture = FORT_eventPicture
+	fire_only_once = yes
+	trigger = {
+		normandy_area = {
+			type = all
+			country_or_non_sovereign_subject_holds = ROOT
+		}
+	}
+	option = {
+		name = ME_France_Events.50.OPT1
+		add_prestige = 5
+	}
+}
+
+#Tree-lined highways
+country_event = {
+	id = ME_France_Events.51
+	title = ME_France_Events.51.T
+	desc = ME_France_Events.51.D
+	picture = COMET_SIGHTED_eventPicture
+	fire_only_once = yes
+	mean_time_to_happen = {
+		months = 100
+	}
+	trigger = {
+		is_year = 1500
+	}
+	option = {
+		name = ME_France_Events.51.OPT1
+		add_country_modifier = {
+			name = fra_tree_lined_highways
+			duration = -1
+		}
+	}
+}
+
+#Pont Neuf
+country_event = {
+	id = ME_France_Events.52
+	title = ME_France_Events.52.T
+	desc = ME_France_Events.52.D
+	picture = GREAT_BUILDING_eventPicture
+	fire_only_once = yes
+	mean_time_to_happen = {
+		months = 5
+	}
+	trigger = {
+		ROOT = {
+			prestige = 90
+		}
+	}
+	option = {
+		name = ME_France_Events.52.OPT1
+		add_country_modifier = {
+			name = fra_pont_neuf
+			duration = -1
+		}
+	}
+}
+
+#Artistic Side
+country_event = {
+	id = ME_France_Events.53
+	title = ME_France_Events.53.T
+	desc = ME_France_Events.53.D
+	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
+	trigger = {
+		has_institution = renaissance
+		has_adm_advisor = yes
+		has_dip_advisor = yes
+		has_mil_advisor = yes
+		num_of_owned_provinces_with = {
+			value = 5
+			num_of_times_improved_by_owner = 1
+		}
+	}
+	option = {
+		name = ME_France_Events.53.OPT1
+		add_country_modifier = {
+			name = fra_artistic_haven
+			duration = -1
+		}
+		if = {
+			limit = {
+				advisor = artist
+			}
+			define_advisor = {
+				type = artist
+				skill = 3
+				discount = yes
+			}
+		}
+	}
+}
+
+#The Southern Provinces
+country_event = {
+	id = ME_France_Events.54
+	title = ME_France_Events.54.T
+	desc = ME_France_Events.54.D
+	picture = SIEGE_eventPicture
+	fire_only_once = yes
+	trigger = {
+		174 = {
+			country_or_non_sovereign_subject_holds = ROOT
+		}
+		173 = {
+			country_or_non_sovereign_subject_holds = ROOT
+		}
+	}
+	option = {
+		name = ME_France_Events.54.OPT1
+		add_prestige = 5
 	}
 }
