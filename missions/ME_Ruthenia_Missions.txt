@@ -377,6 +377,7 @@ UKR_Missions_Gen_3 = {
 			tag = UKR
 		}
 		effect = {
+			country_event = { id = ME_Ruthenia_Events.4 }
 			podlasie_area = {
 				limit = {
 					NOT = { is_permanent_claim = ROOT }
@@ -620,14 +621,34 @@ UKR_Missions_1 = {
 	has_country_shield  = yes
 	
 	UKR_poland = {
-		icon = mission_rule_ruthenia
+		icon = jageillonian_union
 		required_missions = { UKR_counterstrike }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = central_poland_area
+				area = malopolska_area
+				area = sandomierz_area
+				area = mazovia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = central_poland_area
+					area = malopolska_area
+					area = sandomierz_area
+					area = mazovia_area
+				}
+				value = 12
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = UKR_dynastic_claims
+				duration = 9125
+			}
 			east_prussia_area = {
 				limit = {
 					NOT = { is_permanent_claim = ROOT }
@@ -643,8 +664,24 @@ UKR_Missions_1 = {
 		required_missions = { UKR_poland UKR_lithuania }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				area = curonia_area
+				area = livonia_area
+				area = estonia_ingria_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = east_prussia_area
+					area = curonia_area
+					area = livonia_area
+					area = estonia_ingria_area
+				}
+				value = 12
+			}
 		}
 		effect = {
 		}
@@ -663,12 +700,28 @@ UKR_Missions_1 = {
 	}
 	
 	UKR_new_social_class = {
-		icon = mission_rule_ruthenia
+		icon = promote_urbanization
 		required_missions = { }
 		position = 10
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 60
+				}
+				num_of_estate_privileges = {
+					estate = estate_burghers
+					value = 3
+				}
+			}
+			else = {
+				#TODO#
+			}
 		}
 		effect = {
 		}
@@ -704,10 +757,34 @@ UKR_Missions_1 = {
 		required_missions = { UKR_develop_metropolitan_law }
 		position = 15
 		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				NOT = { development = 35 }
+				NOT = { num_of_buildings_in_province = 5 }
+			}
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				development = 35
+				num_of_buildings_in_province = 5
+				value = 5
+			}
 		}
 		effect = {
+			define_advisor = {
+				type = muscovy_architect
+				skill = 2
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.25
+			}
+			custom_tooltip = UKR_every_area
+			tooltip = {
+				add_province_modifier = {
+					name = UKR_metropolitan_area
+					duration = 9125
+				}
+			}
 		}
 	}
 }
@@ -723,20 +800,30 @@ UKR_Missions_2 = {
 	has_country_shield  = yes
 	
 	UKR_counterstrike = {
-		icon = mission_rule_ruthenia
+		icon = polish_diplomacy
 		required_missions = { UKR_fate_of_ruthenia }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				country_or_non_sovereign_subject_holds = POL
+				country_or_non_sovereign_subject_holds = LIT
+			}
 		}
 		trigger = {
+			army_size = 40
+			OR = {
+				has_won_war_against = { who = POL }
+				has_won_war_against = { who = LIT }
+				AND = {
+					NOT = { exists = POL }
+					NOT = { exists = LIT }
+				}
+			}
 		}
 		effect = {
-			east_prussia_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = UKR_fighting_back
+				duration = 7300
 			}
 			livonia_area = {
 				limit = {
@@ -767,11 +854,35 @@ UKR_Missions_2 = {
 		required_missions = { UKR_counterstrike }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = lithuania_area
+				area = samogitia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = lithuania_area
+					area = samogitia_area
+				}
+				value = 5
+			}
 		}
 		effect = {
+			add_army_tradition_or_mil_power = { amount = 10 }
+			lithuania_area = {
+				add_province_modifier = {
+					name = UKR_defeated_lithuania
+					duration = 9125
+				}
+			}
+			samogitia_area = {
+				add_province_modifier = {
+					name = UKR_defeated_lithuania
+					duration = 9125
+				}
+			}
 		}
 	}
 	
@@ -788,6 +899,7 @@ UKR_Missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			310 = { country_or_non_sovereign_subject_holds = ROOT }
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				OR = {
 					area = pskov_area
@@ -834,10 +946,48 @@ UKR_Missions_2 = {
 		required_missions = { UKR_novgorod }
 		position = 8
 		provinces_to_highlight = {
+			province_id = 310
+			OR = {
+				NOT = {
+					trade_share = {
+						country = ROOT
+						share = 75
+					}
+				}
+				NOT = {
+					has_trade_building_trigger = yes
+				}
+				NOT = { 
+					AND = {
+						has_dlc = "Dharma"
+						NOT = { province_has_center_of_trade_of_level = 2 }
+					}
+				}
+			}
 		}
 		trigger = {
+			310 = {
+				trade_share = {
+					country = ROOT
+					share = 75
+				}
+				has_trade_building_trigger = yes
+				if = {
+					limit = {
+						has_dlc = "Dharma"
+					}
+					province_has_center_of_trade_of_level = 2
+				}
+			}
 		}
 		effect = {
+			310 = {
+				add_or_upgrade_trade_building = yes
+			}
+			add_country_modifier = {
+				name = UKR_legacy
+				duration = 14600
+			}
 		}
 	}
 	
@@ -846,46 +996,151 @@ UKR_Missions_2 = {
 		required_missions = { UKR_veliky UKR_grow_the_estuaries }
 		position = 9
 		provinces_to_highlight = {
+			province_id = 33
+			OR = {
+				AND = {
+					NOT = { has_building = trade_depot }
+					NOT = { has_building = stock_exchange }
+				}
+				NOT = { num_of_times_improved = 15 }
+			}
 		}
 		trigger = {
+			33 = {
+				OR = {
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				num_of_times_improved = 15
+			}	
 		}
 		effect = {
+			country_event = { id = ME_Ruthenia_Events.7 }
+			33 = {
+				add_or_upgrade_trade_building = yes
+			}
 		}
 	}
 	
 	UKR_kiev_node = {
-		icon = mission_rule_ruthenia
+		icon = mission_sovereign_principality
 		required_missions = { UKR_new_social_class }
 		position = 11
 		provinces_to_highlight = {
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				area = lithuania_area
+				area = podlasie_area
+				area = volhynia_area
+				area = pripyat_area
+				area = minsk_area
+				area = white_ruthenia_area
+				area = smolensk_area
+				area = chernigov_area
+				area = west_dniepr_area
+				area = east_dniepr_area
+				area = oka_area
+				area = sloboda_ukraine_area
+				area = podolia_volhynia_area
+			}
+			NOT = { has_trade_building_trigger = yes }
 		}
 		trigger = {
+			280 = {
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+			num_of_owned_provinces_with = {
+				province_has_center_of_trade_of_level = 1
+				has_trade_building_trigger = yes
+				custom_trigger_tooltip = {
+					tooltip = POL_is_in_kiev_node
+					OR = {
+						area = lithuania_area
+						area = podlasie_area
+						area = volhynia_area
+						area = pripyat_area
+						area = minsk_area
+						area = white_ruthenia_area
+						area = smolensk_area
+						area = chernigov_area
+						area = west_dniepr_area
+						area = east_dniepr_area
+						area = oka_area
+						area = sloboda_ukraine_area
+						area = podolia_volhynia_area
+					}
+				}		
+				value = 2
+			}
 		}
 		effect = {
+			add_mercantilism = 3
+			custom_tooltip = UKR_every_trade_center
+			tooltip = {
+				add_province_modifier = {
+					name = UKR_productivity
+					duration = 10950
+				}
+			}
 		}
 	}
 	
 	UKR_export_cities = {
-		icon = mission_rule_ruthenia
+		icon = dominant_economy
 		required_missions = { UKR_kiev_node UKR_develop_metropolitan_law UKR_breadbasket }
 		position = 14
 		provinces_to_highlight = {
+			owned_by = ROOT
+			has_port = yes
+			OR = {
+				NOT = { has_shipyard_building_trigger = yes }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { province_trade_power = 10 }
+			}
 		}
 		trigger = {
+			any_owned_province = {
+				has_port = yes
+				has_shipyard_building_trigger = yes
+				has_trade_building_trigger = yes
+				province_trade_power = 10
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = UKR_exporting_grain
+					duration = -1
+				}
+			}
 		}
 	}
 	
 	UKR_developing_vezhe = {
-		icon = mission_rule_ruthenia
+		icon = reissue_the_mining_code
 		required_missions = { }
 		position = 15
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+			has_mil_advisor_2 = yes
+			OR = {
+				has_adm_advisor_3 = yes
+				has_dip_advisor_3 = yes
+				has_mil_advisor_3 = yes
+			}
 		}
 		effect = {
+			country_event = { id = ME_Ruthenia_Events.8 } #Republic
+			add_stability_or_adm_power = yes
 		}
 	}
 	
@@ -896,8 +1151,24 @@ UKR_Missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			NOT = { average_autonomy_above_min = 15 }
+			OR = {
+				monthly_adm = 10
+				adm = 5
+			}
+			stability = 2
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_nobles
+					value = 5
+				}
+			}
 		}
 		effect = {
+			
 		}
 	}
 }
@@ -913,15 +1184,21 @@ UKR_Missions_3 = {
 	has_country_shield  = yes
 	
 	UKR_the_smolensk_gate = {
-		icon = mission_rule_ruthenia
+		icon = mission_conquer_tver
 		required_missions = { UKR_fate_of_ruthenia }
 		position = 6
 		provinces_to_highlight = {
+			province_id = 293
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			293 = { owned_by = ROOT }
 		}
 		effect = {
+			add_country_modifier = {
+				name = UKR_onwards_to_moscow
+				duration = 7300
+			}
 			tver_area = {
 				limit = {
 					NOT = { is_permanent_claim = ROOT }
@@ -993,6 +1270,26 @@ UKR_Missions_3 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Ruthenia_Events.5 } #The Looting of Moscow
+			if = {
+				limit = {
+					owns = 280
+				}
+				280 = {
+					add_province_modifier = {
+						name = UKR_eclipsed_moscow
+						duration = -1
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					add_province_modifier = {
+						name = UKR_eclipsed_moscow
+						duration = -1
+					}
+				}
+			}
 			yaroslavl_area = {
 				limit = {
 					NOT = { is_permanent_claim = ROOT }
@@ -1060,7 +1357,7 @@ UKR_Missions_3 = {
 	}
 	
 	UKR_restore_kiev = {
-		icon = mission_rule_ruthenia
+		icon = mission_restore_kiev
 		required_missions = { }
 		position = 10
 		provinces_to_highlight = {
@@ -1106,23 +1403,87 @@ UKR_Missions_3 = {
 			}
 		}
 		effect = {
-			
+			280 = {
+				remove_province_modifier = LIT_kiev_modifier
+				add_province_modifier = {
+					name = UKR_splendor_of_kiev
+					duration = -1
+				}
+			}
 		}
 	}
 	
 	UKR_breadbasket = {
-		icon = mission_rule_ruthenia
+		icon = prosperity_for_all
 		required_missions = { UKR_production }
 		position = 13
 		provinces_to_highlight = {
+			OR = {
+				trade_goods = grain
+				trade_goods = livestock
+			}
+			OR = {
+				region = ruthenia_region
+				area = zaporizhia_area
+				area = yedisan_area
+			}
 		}
 		trigger = {
-			development_in_provinces = {
-				value = 200
-				trade_goods = grain
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				development_in_provinces = {
+					value = 175
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 250
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
+				}
 			}
 		}
 		effect = {
+			add_years_of_owned_provinces_production_income = {
+				years = 8
+				trigger = {
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+					}
+					OR = {
+						region = ruthenia_region
+						area = zaporizhia_area
+						area = yedisan_area
+					}
+				}
+				custom_tooltip = MONOPOLY_INCOME_CLOTH_DESC
+			}
+			custom_tooltip = UKR_every_grain_livestock
+			tooltip = {
+				add_province_modifier = {
+					name = UKR_price
+					duration = 10950
+				}
+			}
 		}
 	}
 	
@@ -1139,13 +1500,15 @@ UKR_Missions_3 = {
 				}
 				canal_system = 10
 			}
+			else = {
+			}
 		}
 		effect = {
 		}
 	}
 	
 	UKR_bible_in_slavonic = {
-		icon = mission_rule_ruthenia
+		icon = reform_the_nomocanon
 		required_missions = { UKR_our_patriarch }
 		position = 15
 		provinces_to_highlight = {
@@ -1169,10 +1532,15 @@ UKR_Missions_3 = {
 	}
 	
 	UKR_mohyla_academy = {
-		icon = mission_rule_ruthenia
+		icon = mission_unite_the_princes
 		required_missions = { UKR_bible_in_slavonic }
 		position = 17
 		provinces_to_highlight = {
+			province_id = 280
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
 		}
 		trigger = {
 			280 = {
@@ -1181,6 +1549,13 @@ UKR_Missions_3 = {
 			}
 		}
 		effect = {
+			change_innovativeness = 5
+			280 = {
+				add_province_modifier = {
+					name = UKR_mohyla_academy
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -1394,7 +1769,7 @@ UKR_Missions_4 = {
 	}
 	
 	UKR_volga_bulgaria = {
-		icon = mission_rule_ruthenia
+		icon = mission_break_the_tatar_yoke
 		required_missions = { UKR_vladimir_suzdal UKR_onwards }
 		position = 9
 		provinces_to_highlight = {
@@ -1416,35 +1791,102 @@ UKR_Missions_4 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = UKR_campaigns
+				duration = 9125
+			}
 		}
 	}
 	
 	UKR_serfdom = {
-		icon = mission_rule_ruthenia
+		icon = mission_weather_the_troubles
 		required_missions = { }
 		position = 10
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				AND = {
+					num_of_estate_privileges = {
+						estate = estate_nobles
+						value = 3
+					}
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 70
+					}
+				}
+				AND = {
+					NOT = {
+						num_of_estate_privileges = {
+							estate = estate_nobles
+							value = 3
+						}
+					}
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 50
+					}
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = UKR_serfdom_reward_nobles
+			tooltip = {
+				add_country_modifier = {
+					name = UKR_manpower
+					duration = -1
+				}
+			}
+			custom_tooltip = UKR_serfdom_reward_not_nobles
+			tooltip = {
+				add_country_modifier = {
+					name = UKR_smerds
+					duration = -1
+				}
+			}
 		}
 	}
 	
 	UKR_kholops = {
-		icon = mission_rule_ruthenia
+		icon = austria_prospers
 		required_missions = { UKR_serfdom }
 		position = 11
 		provinces_to_highlight = {
+			OR = {
+				trade_goods = livestock
+				trade_goods = grain
+			}
+			NOT = { has_building = farm_estate }
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				OR = {
+					trade_goods = livestock
+					trade_goods = grain
+				}
+				has_building = farm_estate
+				value = 5
+			}
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 70
+			}
+			num_of_estate_agendas_completed = {
+				estate = estate_nobles
+				value = 3
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = UKR_serfdom
+				duration = 9125
+			}
 		}
 	}
 	
 	UKR_production = {
-		icon = mission_rule_ruthenia
+		icon = mission_state_manufactories 
 		required_missions = { }
 		position = 12
 		provinces_to_highlight = {
@@ -1458,12 +1900,23 @@ UKR_Missions_4 = {
 			}
 		}
 		effect = {
-			
+			add_years_of_income = 0.25
+			custom_tooltip = UKR_5_base_production
+			hidden_effect = {
+				for = {
+					amount = 5
+					effect = "
+						random_owned_province = {
+							add_base_production = 1
+						}
+					"
+				}
+			}
 		}
 	}
 	
 	UKR_weapon_production = {
-		icon = mission_rule_ruthenia
+		icon = mission_recruit_streltsy
 		required_missions = { UKR_production }
 		position = 13
 		provinces_to_highlight = {
@@ -1498,7 +1951,7 @@ UKR_Missions_4 = {
 	}
 	
 	UKR_our_patriarch = {
-		icon = mission_rule_ruthenia
+		icon = mission_autocephalous_archbishopric
 		required_missions = { }
 		position = 14
 		provinces_to_highlight = {
@@ -1557,15 +2010,54 @@ UKR_Missions_4 = {
 	}
 	
 	UKR_city_of_golden_domes = {
-		icon = mission_rule_ruthenia
+		icon = protectors_of_christendom
 		required_missions = { UKR_our_patriarch UKR_metropolitans }
 		position = 16
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 295
+						province_id = 280
+					}
+					NOT = {
+						280 = {
+							higher_development_than = 295
+						}
+					}
+				}
+				AND = {
+					OR = {
+						province_id = 261
+						province_id = 280
+					}
+					NOT = {
+						280 = {
+							higher_development_than = 261
+						}
+					}
+				}
+				AND = {
+					province_id = 280
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_building = cathedral }
+					}
+				}
+			}
 		}
 		trigger = {
-			
+			280 = {
+				owned_by = ROOT
+				has_building = cathedral
+				higher_development_than = 295 #Moscow
+				higher_development_than = 261 #Halycz
+			}
+			patriarch_authority = 1
+			religious_unity = 0.9
 		}
 		effect = {
+			country_event = { id = ME_Ruthenia_Events.3 }
 		}
 	}
 }
@@ -1609,6 +2101,10 @@ UKR_Missions_5 = {
 				type = mission_rewards_power_projection
 				amount = 25
 			}
+			
+			add_mil_power = 50
+			
+			
 			thrace_area = {
 				limit = {
 					NOT = { is_permanent_claim = ROOT }
@@ -1696,26 +2192,34 @@ UKR_Missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			stability = 3
+			stability = 2
 		}
 		effect = {
+			add_country_modifier = {
+				name = UKR_pravda
+				duration = 9125
+			}
 		}
 	}
 	
 	UKR_old_russian_law = {
-		icon = mission_rule_ruthenia
+		icon = mission_establish_the_prikazy
 		required_missions = { UKR_pravda }
 		position = 14
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_courthouse_building_trigger = yes }
 		}
 		trigger = {
 			has_adm_advisor_3 = yes
 			num_of_owned_provinces_with = {
 				has_courthouse_building_trigger = yes
-				value = 4
+				value = 5
 			}
 		}
 		effect = {
+			#add_country_modifier = {
+				#name 
 		}
 	}
 	
@@ -1724,26 +2228,41 @@ UKR_Missions_5 = {
 		required_missions = { UKR_our_patriarch }
 		position = 15
 		provinces_to_highlight = {
+			owned_by = ROOT
+			is_state = yes
+			NOT = { has_state_patriach = yes }
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
+			num_of_owned_states_with = {
 				has_state_patriach = yes
 				value = 5
 			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = UKR_council_of_powerful_patriarchs
+				duration = -1
+			}
 		}
 	}
 	
 	UKR_new_churches = {
 		icon = mission_cathedral_cities
-		required_missions = { UKR_metropolitans }
+		required_missions = { UKR_metropolitans UKR_city_of_golden_domes }
 		position = 17
 		provinces_to_highlight = {
+			owned_by = ROOT
+			is_state = yes
+			area_for_scope_province = {
+				NOT = {
+					religion = ROOT
+					has_building = cathedral
+					has_state_patriach = yes
+				}
+			}
 		}
 		trigger = {
-			num_of_states_with = {
+			num_of_owned_states_with = {
 				religion = ROOT
 				has_building = cathedral
 				has_state_patriach = yes
@@ -1752,10 +2271,11 @@ UKR_Missions_5 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = AAA
+				name = UKR_ruthenian_piety
+				duration = 10950
 			}
-			#Bless cathedral interaction for PA?
-			#TODO
+			custom_tooltip = UKR_enable_the_bless_cathedral
+			set_country_flag = UKR_unlock_bless_cathedrals
 		}
 	}
 }
