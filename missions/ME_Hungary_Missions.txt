@@ -21,9 +21,30 @@ ME_HUN_branch1 = {
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			custom_trigger_tooltip = {
+				tooltip = emp_hun_hungarian_succession_tooltip
+				has_regency = no
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			add_country_modifier = {
+				name = ME_HUN_regConsol_modifier
+				duration = 3650
+			}
+			if = {
+				limit = { 
+					dynasty = "Hunyadi"
+					southern_transylvania_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+				southern_transylvania_area = {
+					add_local_autonomy = -20
+				}
+			}
+			custom_tooltip = ME_HUN_regQuestion_tt
 		}
 	}
 	##Mission End
@@ -39,9 +60,57 @@ ME_HUN_branch1 = {
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			has_regency = no
+			has_heir = yes
+			OR = {
+				AND = {
+					dynasty = "von Habsburg"
+					OR = {
+						alliance_with = HAB
+						HAB = {
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+					}
+				}
+				if = {
+					limit = { has_dlc = "Leviathan" }
+					heir_claim = 80
+					crown_land_share = 30
+				}
+				else = {
+					legitimacy = 80
+					crown_land_share = 30
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			if = {
+				limit = {
+					dynasty = "von Habsburg"
+				}
+				add_country_modifier = {
+					name = ME_HUN_habDiplo_modifier
+					duration = 10950
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_solidHungarianDynasty_modifier
+					duration = 10950
+				}
+				austria_proper_area = {
+					type = all
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	##Mission End
