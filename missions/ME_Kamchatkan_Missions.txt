@@ -25,6 +25,10 @@ kamchatka_missions_1 = {
 		icon = mission_non-western_cavalry_raid
 		required_missions = { KCH_conquest_kamchatka }
 		position = 2
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { base_manpower = 5 }
+		}
 		trigger = {
 			army_tradition = 20
 			capital_scope = {
@@ -90,7 +94,10 @@ kamchatka_missions_2 = {
 		required_missions = {}
 		position = 1
 		trigger = {
-			vassal = 3
+			OR = {
+				vassal = 3
+				num_of_cities = 3
+			}
 		}
 		effect = {
 			capital_scope = {
@@ -107,13 +114,16 @@ kamchatka_missions_2 = {
 		required_missions = { KCH_conquest_kamchatka }
 		position = 2
 		provinces_to_highlight = {
-			owned_by = ROOT
-			is_capital = yes
+			is_capital_of = ROOT
+			OR = {
+				NOT = { fort_level = 3 }
+				NOT = { has_manpower_building_trigger = yes }
+			}
 		}
 		trigger = {
 			capital_scope = {
 				fort_level = 3
-				has_building = barracks
+				has_manpower_building_trigger = yes
 			}
 			advisor = fortification_expert 
 		}
@@ -152,6 +162,10 @@ kamchatka_missions_3 = {
 		icon = mission_manchu_warrior
 		required_missions = {}
 		position = 1
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { num_of_times_improved = 1 }
+		}
 		trigger = {
 			army_size_percentage = 1.0
 			capital_scope = {
@@ -169,6 +183,27 @@ kamchatka_missions_3 = {
 					add_permanent_claim = ROOT
 				}
 			}
+			if = {
+				limit = {
+					capital_scope = {
+						NOT = { area = kamchatka_area }
+					}
+				}
+				kamchatka_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = {  is_permanent_claim = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			random_province = {
+				limit = {
+					area = kamchatka_area
+					is_empty = yes
+				}
+				add_siberian_construction = 100
+			}
 		}
 	}
 	
@@ -177,7 +212,6 @@ kamchatka_missions_3 = {
 		required_missions = { KCH_rally_tribes }
 		position = 2
 		trigger = {
-			tag = KCH
 			stability = 1
 			OR = {
 				num_accepted_cultures = 1
@@ -288,7 +322,6 @@ kamchatka_missions_4 = {
 		required_missions = { KCH_faith_tribe }
 		position = 2
 		trigger = {
-			tag = KCH
 			cascadia_region = {
 				has_discovered = ROOT
 			}
@@ -342,10 +375,14 @@ kamchatka_missions_5 = {
 		icon = mission_buddhist_monk_praying
 		required_missions = { KCH_faith_tribe }
 		position = 2
+		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_tax_building_trigger = yes }
+		}
 		trigger = {
 			temple = 5
 			capital_scope = {
-				has_building = temple
+				has_tax_building_trigger = yes
 			}
 		}
 		effect = {
