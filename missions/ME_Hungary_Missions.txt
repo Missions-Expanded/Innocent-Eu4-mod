@@ -111,6 +111,7 @@ ME_HUN_branch1 = {
 					add_permanent_claim = ROOT
 				}
 			}
+			custom_tooltip = ME_HUN_newAdmin_tt
 		}
 	}
 	##Mission End
@@ -126,9 +127,63 @@ ME_HUN_branch1 = {
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			OR = {
+				HAB = {
+					exists = no
+				}
+				HAB = {
+					is_subject_of = ROOT
+				}
+				owns = 134
+				NOT = { HAB = { is_emperor = yes }}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			if = {
+				limit = { 
+					HAB = {
+						is_subject_of = ROOT
+					}
+				}
+				add_country_modifier = {
+					name = ME_HUN_brotherKingdoms_modifier
+					duration = 18250
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_warAgainstEmpire_modifier
+					duration = 18250
+				}
+				if = {
+					limit = {
+						exists = HAB
+						is_subject = no
+						HAB = {
+							is_subject = no
+						}
+					}
+					add_casus_belli = {
+						type = cb_restore_personal_union
+						months = 300
+						target = HAB
+					}
+				}
+				else = {
+					every_province = {
+						limit = {
+							owned_by = HAB
+							AND = {
+								NOT = { owned_by = ROOT }
+								NOT = { is_core = ROOT }
+							}
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			custom_tooltip = ME_HUN_austrianQuestion_tt
 		}
 	}
 	##Mission End
