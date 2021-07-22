@@ -191,7 +191,7 @@ ME_HUN_branch1 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_hreDom_mission = {
-		icon = gfx_placeholder
+		icon = claim_the_borderlands
 		required_missions = {
 			ME_HUN_austrianQuestion_mission 
 			ME_HUN_safeBohemia_mission
@@ -199,12 +199,50 @@ ME_HUN_branch1 = {
 		position = 4
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			region = south_german_region
+			NOT = {
+				owned_by = ROOT
+			}
+			NOT = {
+				is_core = ROOT
+			}
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			calc_true_if = {
+				amount = 15
+				all_owned_province = {
+					region = south_german_region
+				}
+			}
+			OR = {
+				NOT = { hre_size = 1 }
+				is_emperor = yes
+				HAB = {
+					is_subject_of = ROOT
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			if = {
+				limit = {
+					HAB = {
+						is_subject_of = ROOT
+					}
+				}
+				add_country_modifier = {
+					name = ME_HUN_habDominance_modifier
+					duration = 21900
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_hreDominance_modifier
+					duration = 14600
+				}
+			}
+			custom_tooltip = ME_HUN_hreDom_tt
 		}
 	}
 	##Mission End
@@ -512,7 +550,7 @@ ME_HUN_branch4 = {
 	##Mission Start
 	ME_HUN_polRelations_mission = {
         position = 1
-        icon = gfx_placeholder
+        icon = polish_diplomacy
         required_missions = {
 
         }
@@ -526,8 +564,8 @@ ME_HUN_branch4 = {
                     is_rival = HUN
                 }
                 is_rival = POL
-                NOT = { exists = POL }
                 alliance_with = POL
+				NOT = { exists = POL }
             }
         }
         effect = {
@@ -658,19 +696,42 @@ ME_HUN_branch4 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_warEurope_mission = {
-		icon = gfx_placeholder
+		icon = chivalry_is_not_dead
 		required_missions = {
 			ME_HUN_romaQuestion_mission
 		}
 		position = 3
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			owned_by = TUR
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			OR = {
+				TUR = {
+					exists = no
+				}
+				war_with = TUR
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			if = {
+				limit = {
+					war_with = TUR
+				}
+				add_country_modifier = {
+					name = ME_HUN_greatChristian_war_modifier
+					duration = 1825
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_alreadyLeft_modifier
+					duration = 1825
+				}
+			}
+			custom_tooltip = ME_HUN_warEurope_mission_tt
 		}
 	}
 	##Mission End
@@ -683,12 +744,47 @@ ME_HUN_branch4 = {
 		position = 5
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			OR = {
+				area = bulgaria_area
+				area = silistria_area
+			}
+			NOT = { is_core = ROOT }
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			silistria_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bulgaria_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			add_prestige = 20
+			add_papal_influence = 30
+			add_patriarch_authority = 10
+			balkan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					BUL = {
+						is_subject_of = ROOT
+					}
+				}
+				BUL = {
+					add_country_modifier = {
+						name = ME_HUN_bulgariaMarch_modifier
+						duration = 14600
+					}
+				}
+			}
 		}
 	}
 	##Mission End
@@ -745,43 +841,104 @@ ME_HUN_branch5 = {
 	
 	##Mission Start
 	ME_HUN_balkanSecurity_mission = {
-		icon = gfx_placeholder
+		icon = moravian_arms
 		required_missions = {
 			
 		}
 		position = 1
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			continent = europe
+			owned_by = SER
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			OR = {
+				war_with = SER
+				SER = {
+					exists = no
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			add_mil_power = 50
+			serbia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rascia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	##Mission End
 	##Mission Start
 	ME_HUN_revokeBuffer_mission = {
-		icon = gfx_placeholder
+		icon = fortress_of_belgrade
 		required_missions = {
 			ME_HUN_balkanSecurity_mission
 		}
 		position = 2
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			region = balkan_region
+			NOT = {
+				is_core = ROOT
+			}
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			calc_true_if = {
+				amount = 12
+				desc = ME_HUN_revokeBufferDesc_tt
+				all_owned_province = {
+					is_core = ROOT
+					region = balkan_region
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			balkan_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_province_modifier = {
+					name = ME_HUN_privRevoked_modifier
+					duration = 5475
+				}
+			}
+			hidden_effect = {
+				balkan_region = {
+					limit = {
+						owned_by = TUR
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			custom_tooltip = ME_HUN_privRevoked_tt
 		}
 	}
 	##Mission End
 	##Mission Start
 	ME_HUN_blackArmy_mission = {
-		icon = gfx_placeholder
+		icon = gory_to_the_black_army
 		required_missions = {
 			ME_HUN_revokeBuffer_mission
 		}
@@ -791,27 +948,75 @@ ME_HUN_branch5 = {
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			army_size_percentage = 0.9
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				army_tradition = 40
+				army_professionalism = 0.2
+			}
+			else = {
+				army_tradition = 40
+				has_mil_advisor_2 = yes
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			country_event = {
+				id = ME_Hungary_Events.1
+				days = 1
+			}
 		}
 	}
 	##Mission End
 	##Mission Start
 	ME_HUN_mountMount_mission = {
-		icon = gfx_placeholder
+		icon = fortress_switzerland
 		required_missions = {
 			ME_HUN_blackArmy_mission
 		}
 		position = 4
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			OR = {
+				area = rascia_area
+				area = bosnia_area
+				area = east_adriatic_coast_area
+				area = serbia_area
+			}
+			NOT = {
+				is_core = ROOT
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			rascia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bosnia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			serbia_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_adriatic_coast_area = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			balkan_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					has_fort = 1
+				}
+				add_province_modifier = {
+					name = ME_HUN_frontierTown_modifier
+					duration = 10950
+				}
+			}
 		}
 	}
 	##Mission End
