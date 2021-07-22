@@ -117,7 +117,7 @@ ME_HUN_branch1 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_austrianQuestion_mission = {
-		icon = gfx_placeholder
+		icon = imperial_ascendancy
 		required_missions = {
 			ME_HUN_newAdmin_mission
 		}
@@ -365,39 +365,77 @@ ME_HUN_branch3 = {
 	
 	##Mission Start
 	ME_HUN_transSchism_mission = {
-		icon = gfx_placeholder
-		required_missions = {
-			
-		}
-		position = 1
-		provinces_to_highlight = {
-			##PROVINCESHIGHLIGHTCODE
-		}
-		trigger = {
-			##MISSIONTRIGGER
-		}
-		effect = {
-			##MISSIONEFFECT
-		}
-	}
+        position = 1
+        icon = gfx_placeholder
+        required_missions = {
+
+        }
+        provinces_to_highlight = {
+            continent = europe
+            owned_by = ROOT
+            NOT = { has_owner_religion = yes }
+        }
+        trigger = {
+            custom_trigger_tooltip = {
+                tooltip = ME_transylvanianSchism_triggerTT
+                if = {
+                    limit = {
+                        religion = catholic   
+                    }
+                    religious_unity = 0.90
+                }
+                else = {
+                    religious_unity = 0.5
+                }
+            }
+        }
+        effect = {
+            if = {
+                limit = {
+                    religion = catholic
+                }
+                add_prestige = 20
+                add_stability = 1
+            }
+            else = {
+                add_country_modifier = {
+                    name = ME_Hungary_fierceConversion_modifier
+                    duration = 9125
+                }
+            }
+            custom_tooltip = ME_transylvanianSchism_mission_tt
+        }
+    }
 	##Mission End
 	##Mission Start
 	ME_HUN_ruthIssue_mission = {
-		icon = gfx_placeholder
-		required_missions = {
-			ME_HUN_transSchism_mission
-		}
-		position = 2
-		provinces_to_highlight = {
-			##PROVINCESHIGHLIGHTCODE
-		}
-		trigger = {
-			##MISSIONTRIGGER
-		}
-		effect = {
-			##MISSIONEFFECT
-		}
-	}
+        position = 2
+        icon = gfx_placeholder
+        required_missions = {
+            ME_HUN_transSchism_mission
+        }
+        provinces_to_highlight = {
+            province_id = 1952
+            NOT = { culture = hungarian }
+        }
+        trigger = {
+            1952 = {
+                owned_by = ROOT
+                OR = {
+                    culture = hungarian
+                    has_owner_accepted_culture = yes 
+                }
+            }
+        }
+        effect = {
+            1952 = {
+                add_province_modifier = {
+                    name = ME_HUN_carpathianSettlers_modifier
+                    duration = 18250
+                }
+            }
+        }
+    }
 	##Mission End
 	##Mission Start
 	ME_HUN_carpatUnity_mission = {
@@ -471,39 +509,150 @@ ME_HUN_branch4 = {
 	
 	##Mission Start
 	ME_HUN_polRelations_mission = {
-		icon = gfx_placeholder
-		required_missions = {
-			
-		}
-		position = 1
-		provinces_to_highlight = {
-			##PROVINCESHIGHLIGHTCODE
-		}
-		trigger = {
-			##MISSIONTRIGGER
-		}
-		effect = {
-			##MISSIONEFFECT
-		}
-	}
+        position = 1
+        icon = gfx_placeholder
+        required_missions = {
+
+        }
+        provinces_to_highlight = {
+            continent = europe
+            owned_by = POL
+        }
+        trigger = {
+            OR = {
+                POL = {
+                    is_rival = HUN
+                }
+                is_rival = POL
+                NOT = { exists = POL }
+                alliance_with = POL
+            }
+        }
+        effect = {
+            if = {
+                limit = {
+                    alliance_with  = POL
+                }
+                add_country_modifier = {
+                    name = ME_Hungary_northAlliance
+                    duration = 7300
+                }
+            }
+            else = {
+                add_country_modifier = {
+                    name = ME_Hungary_innerReconcil
+                    duration = 7300
+                }
+            }
+            wallachia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                    NOT = { is_core = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+            moldavia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                    NOT = { is_core = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+            custom_tooltip = ME_HUN_polishRelations_tt
+        }
+    }
 	##Mission End
 	##Mission Start
 	ME_HUN_romaQuestion_mission = {
-		icon = gfx_placeholder
-		required_missions = {
-			ME_HUN_polRelations_mission
-		}
-		position = 2
-		provinces_to_highlight = {
-			##PROVINCESHIGHLIGHTCODE
-		}
-		trigger = {
-			##MISSIONTRIGGER
-		}
-		effect = {
-			##MISSIONEFFECT
-		}
-	}
+        position = 2
+        icon = placeholder
+        required_missions = {
+            ME_HUN_polRelations_mission
+        }
+        provinces_to_highlight = {
+            if = {
+                limit = {
+                    alliance_with = POL
+                }
+                area = wallachia_area
+                NOT = { owned_by = ROOT }
+            }
+            else = {
+                OR = {
+                    area = moldavia_area
+                    area = wallachia_area
+                }
+                NOT = { owned_by = ROOT }
+            }
+        }
+        trigger = {
+            if = {
+                limit = {
+                    alliance_with = POL
+                }
+                wallachia_area = {
+					owned_by = ROOT
+				}
+            }
+            else = {
+                wallachia_area = {
+					owned_by = ROOT
+				}
+				moldavia_area = {
+					owned_by = ROOT
+				}
+            }
+        }
+        effect = {
+            if = {
+                limit = {
+                    alliance_with = POL
+                }
+                wallachia_area = {
+                    type = all
+                    add_province_modifier = {
+                        name = ME_HUN_danubianFrontier_modifier
+                        duration = 10950
+                    }
+                }
+            }
+            else = {
+                wallachia_area = {
+                    type = all
+                    add_province_modifier = {
+                        name = ME_HUN_danubianFrontier_modifier
+                        duration = 10950
+                    }
+                }
+                moldavia_area = {
+                    type = all
+                    add_province_modifier = {
+                        name = ME_HUN_danubianFrontier_modifier
+                        duration = 10950
+                    }
+                }
+            }
+            serbia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+            bosnia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+            rascia_area = {
+                limit = {
+                    NOT = { owned_by = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+			custom_tooltip = ME_HUN_romaQuestion_tt
+        }
+    }
 	##Mission End
 	##Mission Start
 	ME_HUN_warEurope_mission = {
