@@ -101,10 +101,10 @@ Japan_missions_1 = {
 				development = 30
 			}
 			num_of_owned_provinces_with = {
-				value = 2
+				value = 4
 				region = japan_region
-				province_has_center_of_trade_of_level = 2
-				development = 30
+				province_has_center_of_trade_of_level = 1
+				development = 20
 			}
 		}
 		effect = {
@@ -341,10 +341,15 @@ Japan_missions_1 = {
 		trigger = {
 			total_development = 1250
 			all_country = {
-				NOT = {
-					army_strength = {
-						who = ROOT
-						value = 0.75
+				OR = {
+					NOT = {
+						capital_scope = { continent = asia }
+					}
+					NOT = {
+						army_strength = {
+							who = ROOT
+							value = 0.75
+						}
 					}
 				}
 			}
@@ -649,10 +654,8 @@ Japan_missions_2 = {
 			total_development = 500
 			japan_region = {
 				type = all
-				owned_by = ROOT
-				OR = {
+				area_for_scope_province = {
 					has_manufactory_trigger = yes
-					trade_goods = gold
 				}
 			}
 		}
@@ -692,6 +695,13 @@ Japan_missions_2 = {
 				duration = 7300
 			}
 			korea_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			manchuria_region = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
@@ -922,7 +932,7 @@ Japan_missions_2 = {
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
-				local_autonomy = 50
+				local_autonomy_above_min = 15
 				unrest = 1
 			}
 		}
@@ -932,55 +942,55 @@ Japan_missions_2 = {
 				shanxi_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				north_henan_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				henan_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				anhui_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				hebei_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				south_hebei_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				shandong_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				jiangsu_area = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 				south_china_region = {
 					type = all
 					owned_by = ROOT
-					NOT = { local_autonomy = 50 }
+					NOT = { local_autonomy_above_min = 15 }
 					NOT = { unrest = 1 }
 				}
 			}
@@ -1155,7 +1165,11 @@ Japan_missions_3 = {
 		trigger = {
 			japan_region = {
 				type = all
-				owned_by = ROOT
+				OR = {
+					NOT = { owned_by = ROOT }
+					province_id = 1015
+					province_id = 1032
+				}
 			}
 		}
 		effect = {
@@ -1718,10 +1732,15 @@ Japan_missions_4 = {
 			OR = {
 				japan_region = {
 					type = all
-					owned_by = ROOT
+					OR = {
+						NOT = { owned_by = ROOT }
+						province_id = 1015
+						province_id = 1032
+					}
 				}
 				all_country = {
 					OR = {
+						tag = RYU
 						is_subject_of = ROOT
 						capital_scope = {
 							NOT = { region = japan_region }
@@ -1767,24 +1786,27 @@ Japan_missions_4 = {
 			}
 		}
 		trigger = {
-			japan_region = {
-				type = all
-				owned_by = ROOT
-				OR = {
-					has_building = fort_15th
-					has_building = fort_16th
-					has_building = fort_17th
-					has_building = fort_18th
-					has_building = coastal_defence
-					has_building = naval_battery
-					area_for_scope_province = {
-						OR = {
-							has_building = fort_15th
-							has_building = fort_16th
-							has_building = fort_17th
-							has_building = fort_18th
-							has_building = coastal_defence
-							has_building = naval_battery
+			custom_trigger_tooltip = {
+				tooltip = JAP_TOGEN_SHIRATAKI_TRIGGER_TT
+				japan_region = {
+					type = all
+					owned_by = ROOT
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+						area_for_scope_province = {
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+								has_building = coastal_defence
+								has_building = naval_battery
+							}
 						}
 					}
 				}
@@ -2113,7 +2135,7 @@ Japan_missions_5 = {
 				}
 			}
 			else = {
-				# ???
+				monthly_mil = 8
 			}
 			if = {
 				limit = {
@@ -2125,7 +2147,7 @@ Japan_missions_5 = {
 				}
 			}
 			else = {
-				# ???
+				monthly_dip = 8
 			}
 			if = {
 				limit = {
@@ -2137,7 +2159,7 @@ Japan_missions_5 = {
 				}
 			}
 			else = {
-				# ???
+				monthly_adm = 9
 			}
 		}
 		effect = {
