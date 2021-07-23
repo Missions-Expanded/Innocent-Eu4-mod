@@ -299,7 +299,7 @@ ME_HUN_branch2 = {
 	
 	##Mission Start
 	ME_HUN_quellHussite_mission = {
-		icon = gfx_placeholder
+		icon = hussite_regency
 		required_missions = {
 			ME_HUN_transSchism_mission 
 			ME_HUN_regQuestion_mission
@@ -307,12 +307,86 @@ ME_HUN_branch2 = {
 		position = 2
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			owned_by = BOH
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			BOH = {
+				OR = {
+					has_been_insulted_by_root = yes
+					is_subject = yes
+					exists = no
+					alliance_with = ROOT
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			if = {
+				limit = {
+					NOT = { alliance_with = BOH }
+					BOH = {
+						has_been_insulted_by_root = yes
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 24
+					target = BOH
+				}
+				BOH = {
+					country_event = {
+						id = ME_Hungary_Events.5
+						days = 1
+					}
+				}
+				custom_tooltip = ME_HUN_quellHussite_tt
+			}
+			else_if = {
+				limit = {
+					alliance_with = BOH
+				}
+				add_country_modifier = {
+					name = ME_HUN_pacifiedHussite_modifier
+					duration = 3650
+				}
+			}
+			moravia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bohemia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			erzgebirge_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			silesia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lusatia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = ME_HUN_quellHussite_ttt
 		}
 	}
 	##Mission End
@@ -583,19 +657,56 @@ ME_HUN_branch3 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_jagUnion_mission = {
-		icon = gfx_placeholder
+		icon = jageillonian_union
 		required_missions = {
 			ME_HUN_carpatUnity_mission
 		}
 		position = 4
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			if = {
+				limit = {
+					OR = {
+						POL = {
+							is_subject = no
+						}
+						PLC = {
+							is_subject = no
+						}
+					}
+				}
+				area = red_ruthenia_area
+				NOT = { owned_by = ROOT }
+			}
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			OR = {
+				senior_union_with = POL
+				senior_union_with = PLC
+				red_ruthenia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			poland_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hidden_effect = {
+				add_country_modifier = {
+					name = ME_HUN_hiddenModifier_v1
+					duration = 18250
+				}
+				set_country_flag = ME_HUN_heathenWar_flag
+			}
+			custom_tooltip = ME_HUN_jagUnion_tt
 		}
 	}
 	##Mission End
