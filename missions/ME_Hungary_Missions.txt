@@ -479,19 +479,105 @@ ME_HUN_branch3 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_carpatUnity_mission = {
-		icon = gfx_placeholder
+		icon = king_of_hungary
 		required_missions = {
 			ME_HUN_ruthIssue_mission
 		}
 		position = 3
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			region = carpathia_region
+			owned_by = ROOT
+			NOT = { religion = ROOT }
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			if = {
+				limit = {
+					OR = {
+						alliance_with = POL
+						alliance_with = PLC
+					}
+				}
+				carpathia_region = { 
+					type = all
+					OR = {
+						owned_by = ROOT
+						province_id = 268
+						province_id = 1756 
+						province_id = 2405 
+						province_id = 4529 
+						province_id = 4530
+					}
+				}
+			}
+			else = {
+				carpathia_region = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ME_HUN_carpatUnity_ttt
+				carpathia_region = {
+					type = all
+					OR = {
+						NOT = { owned_by = ROOT }
+						has_owner_religion = yes
+					}
+				}
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			add_country_modifier = {
+				name = ME_HUN_carpatUnity_mission
+				duration = -1
+			}
+			if = {
+				limit = {
+					exists = POL
+					is_subject = no
+					POL = {
+						is_subject = no
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 300
+					target = POL
+				}
+			}
+			if = {
+				limit = {
+					exists = PLC
+					is_subject = no
+					PLC = {
+						is_subject = no
+					}
+				}
+				add_casus_belli = {
+					type = cb_restore_personal_union
+					months = 300
+					target = PLC
+				}
+			}
+			if = {
+				limit = {
+					accepted_culture = romanian
+				}
+				add_dip_power = 100
+			}
+			else = {
+				add_accepted_culture = romanian
+			}
+			red_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	##Mission End
@@ -605,7 +691,7 @@ ME_HUN_branch4 = {
 	##Mission Start
 	ME_HUN_romaQuestion_mission = {
         position = 2
-        icon = placeholder
+        icon = ME_HUN_romaniaMoldavia_icon
         required_missions = {
             ME_HUN_polRelations_mission
         }
@@ -631,14 +717,17 @@ ME_HUN_branch4 = {
                     alliance_with = POL
                 }
                 wallachia_area = {
+					type = all
 					owned_by = ROOT
 				}
             }
             else = {
                 wallachia_area = {
+					type = all
 					owned_by = ROOT
 				}
 				moldavia_area = {
+					type = all
 					owned_by = ROOT
 				}
             }
@@ -737,9 +826,10 @@ ME_HUN_branch4 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_avengeVarna_mission = {
-		icon = gfx_placeholder
+		icon = mission_crusade_for_varna
 		required_missions = {
 			ME_HUN_warEurope_mission
+			ME_HUN_mountMount_mission
 		}
 		position = 5
 		provinces_to_highlight = {
@@ -754,9 +844,11 @@ ME_HUN_branch4 = {
 		trigger = {
 			##MISSIONTRIGGER
 			silistria_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			bulgaria_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -785,6 +877,13 @@ ME_HUN_branch4 = {
 					}
 				}
 			}
+			else = {
+				add_country_modifier = {
+					name = ME_HUN_reclaimBulgaria_modifier
+					duration = 5475
+				}
+			}
+			custom_tooltip = ME_HUN_avengeVarna_tt
 		}
 	}
 	##Mission End
@@ -993,28 +1092,35 @@ ME_HUN_branch5 = {
 		trigger = {
 			##MISSIONTRIGGER
 			rascia_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			bosnia_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			serbia_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 			east_adriatic_coast_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			##MISSIONEFFECT
-			balkan_region = {
-				limit = {
-					country_or_non_sovereign_subject_holds = ROOT
-					has_fort = 1
-				}
-				add_province_modifier = {
-					name = ME_HUN_frontierTown_modifier
-					duration = 10950
+			custom_tooltip = ME_mountmount_tt
+			hidden_effect = {
+				balkan_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						fort_level = 2
+					}
+					add_province_modifier = {
+						name = ME_HUN_frontierTown_modifier
+						duration = 10950
+					}
 				}
 			}
 		}
