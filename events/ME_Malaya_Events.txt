@@ -1,0 +1,1295 @@
+namespace = ME_Malaya_Events
+
+country_event = {
+	id = ME_Malaya_Events.1
+	title = ME_Malaya_Events.1.t
+	desc = ME_Malaya_Events.1.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.1.a
+		
+		add_years_of_income = -3
+		custom_tooltip = MSA_expedition
+		
+		country_event = { id = ME_Malaya_Events.2 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.1.b
+		
+		
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.2
+	title = ME_Malaya_Events.2.t
+	desc = ME_Malaya_Events.2.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	major = yes
+	
+	major_trigger = {
+		capital_scope = {
+			continent = asia
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.2.a
+		
+		hidden_effect = {
+			save_global_event_target_as = MSA_china_target
+		}
+		custom_tooltip = MSA_expedition
+		hidden_effect = {
+			#Below is a large queue of areas at which the fleet arrives
+			
+			random_list = { #random list to decide how 'aggressive' the fleet will be towards natives
+				20 = { } #no 'captures' guaranteed
+				50 = { set_global_flag = MSA_fleet_one }
+				25 = { set_global_flag = MSA_fleet_two }
+				5 = { set_global_flag = MSA_fleet_three }
+			}
+		
+			brunei_area = { #likely to be Brunei
+				MSA_start_expedition = { delay = 60 }
+			}
+			palawan_area = { #sulu 
+				MSA_start_expedition = { delay = 90 }
+			}
+			kalimantan_area = { #Sambas
+				MSA_start_expedition = { delay = 90 }
+			}
+			sabah_area = { #noone
+				MSA_start_expedition = { delay = 120 }
+			}
+			kutai_area = { #kutai and berau
+				MSA_start_expedition = { delay = 120 }
+			}
+			banjar_area = { #Banjar
+				MSA_start_expedition = { delay = 90 }
+			}
+			johor_area = { #noone
+				MSA_start_expedition = { delay = 135 }
+			}
+			malaya_area = { #Pahang, Kelantan
+				MSA_start_expedition = { delay = 150 }
+			}
+			malacca_area = { #Malacca
+				MSA_start_expedition = { delay = 150 }
+			}
+			central_sumatra_area = { #Siak Deli
+				MSA_start_expedition = { delay = 150 }
+			}
+			jambi_area = { #Jambi
+				MSA_start_expedition = { delay = 150 }
+			}
+			south_sumatra_area = { #Palembang
+				MSA_start_expedition = { delay = 180 }
+			}
+			banten_area = { #Sunda
+				MSA_start_expedition = { delay = 180 }
+			}
+			north_malaya_area = { #Kedah Pattani
+				MSA_start_expedition = { delay = 195 }
+			}
+			north_sumatra_area = { #Aceh, Pasai
+				MSA_start_expedition = { delay = 195 }
+			}
+			west_java_area = { #noone
+				MSA_start_expedition = { delay = 210 }
+			}
+			central_java_area = { #noone
+				MSA_start_expedition = { delay = 210 }
+			}
+			batak_area = { #Barus
+				MSA_start_expedition = { delay = 225 }
+			}
+			minangkabau_area = { #Pagarruyung, Indrapuri
+				MSA_start_expedition = { delay = 240 }
+			}
+			surabaya_area = { #Majapahit
+				MSA_start_expedition = { delay = 240 }
+			}
+			lesser_sunda_islands_area = { #Bali
+				MSA_start_expedition = { delay = 270 }
+			}
+			east_java_area = { #noone
+				MSA_start_expedition = { delay = 270 }
+			}
+			makassar_area = { #Bone and Makassar
+				MSA_start_expedition = { delay = 270 }
+			}
+			south_sulawesi_area = { #Buton and Luwu
+				MSA_start_expedition = { delay = 285 }
+			}
+			spice_islands_area = { #Ternate and Tidore #perhaps remove this idk
+				MSA_start_expedition = { delay = 330 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.3
+	title = ME_Malaya_Events.3.t
+	desc = ME_Malaya_Events.3.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	trigger = {
+		NOT = { has_country_flag = MSA_chinese_expedition_in_tag }
+	}
+	
+	immediate = {
+		set_country_flag = MSA_chinese_expedition_in_tag
+		hidden_effect = {
+			set_variable = {
+				which = MSA_china_var
+				value = 50
+			}
+			set_variable = {
+				which = MSA_events_left #When this event goes negative, you will get an event to dismiss the chinese or to urge them to stay for extra events
+				value = 5
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.3.a
+		
+		MSA_change_china_loyalty = { value = 20 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.3.b
+		
+		MSA_change_china_loyalty = { value = 0 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.3.c
+		
+		MSA_change_china_loyalty = { value = -20 }
+	}
+	
+	after = {
+		set_country_flag = MSA_need_to_start_event_chain #I directly triggered the event controller at first, but it broke randomness.
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.4
+	title = ME_Malaya_Events.4.t #Hidden Event Controller, fires the events for Chinese Expedition
+	desc = ME_Malaya_Events.4.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		has_country_flag = MSA_chinese_expedition_in_tag
+	}
+	
+	immediate = {
+		clr_country_flag = MSA_timer #this flag is used in event .5 for fallback in case the delayed event doesn't work.
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = MSA_events_left
+						value = 0
+					}
+				}
+			}
+			country_event = { id = ME_Malaya_Events.6 }
+		}
+		else_if = {
+			limit = {
+				has_reform = pirate_republic_reform
+				always = no
+			}
+			country_event = { id = ME_Malaya_Events.7 } #Chinese demand expulsion of pirates
+		}
+		else_if = {
+			limit = {
+				has_country_flag = MSA_neighbor_of_pirate
+				always = no
+			}
+			country_event = { id = ME_Malaya_Events.8 } #The Pirates in .7 have refused, request military intervention
+			clr_country_flag = MSA_neighbor_of_pirate
+		}
+		else = {
+			MSA_fire_event = yes #The Logic is defined in the scripted effect file for ease of use
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.3.a
+		
+	}
+	
+	after = {
+		set_country_flag = MSA_timer
+		change_variable = {
+			which = MSA_events_left
+			value = -1
+		}
+		country_event = { id = ME_Malaya_Events.4 days = 90 random = 60 } #Event Controller
+	}
+}
+	
+country_event = {
+	id = ME_Malaya_Events.5
+	title = ME_Malaya_Events.5.t #Hidden Fallback for event four
+	desc = ME_Malaya_Events.5.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	trigger = {
+		had_country_flag = {
+			flag = MSA_timer
+			days = 360
+		}
+	}
+	
+	immediate = {
+		country_event = { id = ME_Malaya_Events.4 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.3.a
+		
+	}
+}
+	
+country_event = {
+	id = ME_Malaya_Events.6
+	title = ME_Malaya_Events.6.t #The Chinese want to depart (but you may stop them once!)
+	desc = ME_Malaya_Events.6.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.6.a #farewell
+		
+		MSA_the_end = yes
+	}
+	
+	option = {
+		name = ME_Malaya_Events.6.b #noo, please stay!
+		
+		trigger = {
+			NOT = { has_country_flag = MSA_begged_to_stay }
+		}
+		
+		custom_tooltip = MSA_the_chinese_will_stay
+		hidden_effect = {
+			change_variable = {
+				which = MSA_events_left
+				value = 5
+			}
+			set_country_flag = MSA_timer
+			change_variable = {
+				which = MSA_events_left
+				value = -1
+			}
+			country_event = { id = ME_Malaya_Events.4 days = 90 random = 60 } #Event Controller
+		}
+		set_country_flag = MSA_begged_to_stay
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.7
+	title = ME_Malaya_Events.7.t #Cease and Desist
+	desc = ME_Malaya_Events.7.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		has_country_flag = MSA_interest
+	}
+	
+	option = {
+		name = ME_Malaya_Events.7.a #farewell
+		
+		MSA_insulting_bonus = yes
+		
+		custom_tooltip = MSA_our_neighboring_countries
+		
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = {
+						border_distance = {
+							who = ROOT
+							distance = 100
+						}
+					}
+				}
+				set_country_flag = MSA_neighbor_of_pirate
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.7.b #farewell
+		
+		change_government = monarchy
+		add_government_reform = feudalism_reform
+		#TODO: Special Subject Type?
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.8
+	title = ME_Malaya_Events.8.t #A Call to Arms
+	desc = ME_Malaya_Events.8.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		NOT = {
+			border_distance = {
+				who = ROOT
+				distance = 100
+			}
+		}
+		has_reform = pirate_republic_reform
+	}
+	
+	option = {
+		name = ME_Malaya_Events.8.a #farewell
+		
+		MSA_change_china_loyalty = { value = 10 }
+		
+	}
+	
+	option = {
+		name = ME_Malaya_Events.8.b #farewell
+		
+		MSA_change_china_loyalty = { value = 0 }
+		
+		custom_tooltip = MSA_gain_cb_to_install
+	}
+	
+	option = {
+		name = ME_Malaya_Events.8.c #farewell
+		
+		MSA_change_china_loyalty = { value = -10 }
+		
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.9
+	title = ME_Malaya_Events.9.t #Capture
+	desc = ME_Malaya_Events.9.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.9.a #farewell
+		
+		custom_tooltip = MSA_is_taken_into_custody
+		country_event = { id = ME_Malaya_Events.10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.9.b #farewell
+		
+		add_stability = -1
+		add_yearly_manpower = -1
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.10
+	title = ME_Malaya_Events.10.t #Capture
+	desc = ME_Malaya_Events.10.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		has_country_flag = MSA_interest
+	}
+	
+	option = {
+		name = ME_Malaya_Events.10.a #farewell
+		
+		#TODO Special Subject?
+		custom_tooltip = MSA_is_taken_into_custody
+		event_target:MSA_china_target = {
+			country_event = { id = ME_Malaya_Events.11 } #appointing a viceroy
+			hidden_effect = {
+				country_event = { id = ME_Malaya_Events.12 days = 730 }
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.11
+	title = ME_Malaya_Events.11.t #Appoint a Viceroy
+	desc = ME_Malaya_Events.11.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		tag = FROM
+	}
+	
+	option = {
+		name = ME_Malaya_Events.11.a #farewell
+		
+		
+	}
+	
+	option = {
+		name = ME_Malaya_Events.11.b #farewell
+		
+		FROM = {
+			define_ruler = {
+				culture = ROOT
+				religion = ROOT
+				hide_skills = yes
+				age = 30
+			} 
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.12
+	title = ME_Malaya_Events.12.t #Deciding the Fate
+	desc = ME_Malaya_Events.12.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		tag = FROM
+	}
+	
+	option = {
+		name = ME_Malaya_Events.12.a #farewell
+		
+		FROM = {
+			set_ruler = MSA_ruler_of_@FROM
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.12.b #farewell
+		
+		
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.13
+	title = ME_Malaya_Events.13.t #Fate of [From.GetName]
+	desc = ME_Malaya_Events.13.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	major = yes
+	major_trigger = {
+		tag = FROM
+	}
+	
+	option = {
+		name = ME_Malaya_Events.13.a #farewell
+		
+		FROM = {
+			set_ruler = MSA_ruler_of_@FROM
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.13.b #farewell
+		
+		
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.14
+	title = ME_Malaya_Events.15.t #hidden event to set a random flag (because randomness in eu4 is screwed up!)
+	desc = ME_Malaya_Events.13.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	hidden = yes
+	
+	immediate = {
+		#HERE WAS A RANDOM LIST UNTIL I DETERMINED THE SEED IS NOT RANDOM >:(
+	}
+	
+	option = {
+		name = ME_Malaya_Events.13.a #farewell
+		
+		ai_chance = { 
+			factor = 0.2
+		}
+		
+		set_country_flag = MSA_against_china
+	}
+	
+	option = {
+		name = ME_Malaya_Events.13.b #farewell
+		
+		ai_chance = { 
+			factor = 0.6
+		}
+		
+	}
+	
+	option = {
+		name = ME_Malaya_Events.13.c #farewell
+		
+		ai_chance = { 
+			factor = 0.2
+		}
+		
+		set_country_flag = MSA_with_china
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.15
+	title = ME_Malaya_Events.15.t #hidden event to begin the event chain (if I use the event fired by china, then randomness will break)
+	desc = ME_Malaya_Events.13.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	trigger = {
+		has_country_flag = MSA_need_to_start_event_chain
+	}
+	
+	mean_time_to_happen = {
+		months = 3
+	}
+	
+	hidden = yes
+	
+	option = {
+		name = ME_Malaya_Events.13.a #farewell
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		clr_country_flag = MSA_need_to_start_event_chain
+		set_country_flag = MSA_timer
+		change_variable = {
+			which = MSA_events_left
+			value = -1
+		}
+		country_event = { id = ME_Malaya_Events.4 days = 90 random = 60 } #Event Controller
+	}
+	
+}
+
+#25 Flavor Events
+
+country_event = {
+	id = ME_Malaya_Events.20
+	title = ME_Malaya_Events.20.t #Extradition
+	desc = ME_Malaya_Events.20.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			event_target:MSA_china_target = {
+				random_owned_province = {
+					save_event_target_as = MSA_origin_province
+				}
+			}
+			random_list = {
+				33 = { set_country_flag = MSA_treasurer }
+				33 = { set_country_flag = MSA_spymaster }
+				33 = { } #engineer 
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.20.a #who are they?
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		MSA_change_china_loyalty = { value = -5 }
+		add_prestige_or_monarch_power = { amount = 10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.20.b #Of course.
+		
+		ai_chance = { 
+			factor = 1 
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.20.c #skilled minister you say...?
+		
+		ai_chance = { 
+			factor = 1 
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = -20 }
+		if = {
+			limit = {
+				has_country_flag = MSA_treasurer
+			}
+			define_foreign_advisor = {
+				type = treasurer
+				skill = 2
+				culture = event_target:MSA_origin_province
+				religion = event_target:MSA_origin_province
+				cost_multiplier = 0.5
+			}
+		}
+		else_if = { 
+			limit = {
+				has_country_flag = MSA_spymaster
+			}
+			define_foreign_advisor = {
+				type = spymaster
+				skill = 2
+				culture = event_target:MSA_origin_province
+				religion = event_target:MSA_origin_province
+				cost_multiplier = 0.5
+			}
+		}
+		else = {
+			define_foreign_advisor = {
+				type = fortification_expert
+				skill = 2
+				culture = event_target:MSA_origin_province
+				religion = event_target:MSA_origin_province
+				cost_multiplier = 0.5
+			}
+		}
+	}
+	after = {
+		clr_country_flag = MSA_spymaster
+		clr_country_flag = MSA_treasurer
+	}
+}	
+
+country_event = {
+	id = ME_Malaya_Events.21
+	title = ME_Malaya_Events.21.t #Scandal at the Court
+	desc = ME_Malaya_Events.21.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.21.a #take the blame
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		reduce_stability_or_adm_power = yes
+	}
+	
+	option = {
+		name = ME_Malaya_Events.21.b #escape goat
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		add_prestige = -10
+		MSA_change_china_loyalty = { value = -15 }
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.22
+	title = ME_Malaya_Events.22.t #Desecration of a Holy Site
+	desc = ME_Malaya_Events.22.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.22.a #It's fine...
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 10 }
+		add_country_modifier = {
+			name = MSA_religion_not_respected
+			duration = 1825
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.22.b #It happens.
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		add_prestige = -5
+	}
+	
+	option = {
+		name = ME_Malaya_Events.22.c #THEY DID WHAT?
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = -5 }
+		add_country_modifier = {
+			name = MSA_religion_respected
+			duration = 3650
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.23
+	title = ME_Malaya_Events.23.t #Exotic Animals
+	desc = ME_Malaya_Events.23.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.23.a #Spare no expenses, send the animals to china!.
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 15 }
+		add_years_of_income = -1
+	}
+	
+	option = {
+		name = ME_Malaya_Events.23.b #Let them see!
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 5 }
+		add_prestige_or_monarch_power = { amount = 10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.23.c #Our animal are ours, not theirs
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.24
+	title = ME_Malaya_Events.24.t #Drunken Sailors
+	desc = ME_Malaya_Events.24.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.24.a #We will not tolerate this
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = -5 }
+		add_power_projection = {
+			type = mission_rewards_power_projection
+			amount = 5
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.24.b #Their supervisors know
+		
+		ai_chance = { 
+			factor = 1
+		}
+		add_dip_power = 10
+	}
+	
+	option = {
+		name = ME_Malaya_Events.24.c #Pretend as if nothing had happened
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		capital_scope = {
+			add_unrest = 3
+		}
+		MSA_change_china_loyalty = { value = 5 }
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.25
+	title = ME_Malaya_Events.25.t #Religious Idol
+	desc = ME_Malaya_Events.25.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.25.a #We will not tolerate this!
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 5
+		}
+		MSA_change_china_loyalty = { value = -5 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.25.b #The idol will bless them.
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -10
+		}
+		MSA_change_china_loyalty = { value = 5 }
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.26
+	title = ME_Malaya_Events.26.t #Exploitative Costs
+	desc = ME_Malaya_Events.26.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.26.a #Free Trade!
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}
+		add_country_modifier = {
+			name = MSA_free_trade
+			duration = 3650
+		}
+		MSA_change_china_loyalty = { value = -10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.26.b #Force the merchants
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -10
+		}
+		MSA_change_china_loyalty = { value = 10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.26.c #We can't do anything.
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		add_mercantilism = 2
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.27
+	title = ME_Malaya_Events.27.t #Nobles are worried
+	desc = ME_Malaya_Events.27.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.27.a #They might be right.
+		
+		ai_chance = { 
+			factor = 0
+		}
+		
+		if = {
+			limit = {
+				check_variable = {
+					which = MSA_china_var
+					value = 50
+				}
+			}
+			MSA_change_china_loyalty = { value = -10 }
+		}
+		else = {
+			MSA_change_china_loyalty = { value = 10 }
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.27.b #I rule, not the nobles.
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		add_estate_loyalty = {
+			estate = estate_nobles
+			loyalty = -10
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = MSA_china_var
+					value = 50
+				}
+			}
+			MSA_change_china_loyalty = { value = 10 }
+		}
+		else = {
+			MSA_change_china_loyalty = { value = -10 }
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.28
+	title = ME_Malaya_Events.28.t #Translator’s Dilemma
+	desc = ME_Malaya_Events.28.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.28.a #Universal Language
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 5 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.28.b #Wait
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		add_legitimacy = -10
+	}
+	
+	option = {
+		name = ME_Malaya_Events.28.c #Find a new translator
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		add_years_of_income = -0.25
+		MSA_change_china_loyalty = { value = 15 }
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.29
+	title = ME_Malaya_Events.29.t #Local Dislike
+	desc = ME_Malaya_Events.29.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.29.a #It is unwarranted
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 5 }
+		capital_scope = { add_unrest = 3 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.29.b #Find a new translator
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		capital_scope = {
+			if = {
+				limit = {
+					has_province_modifier = MSA_lowered_taxes
+				}
+				extend_province_modifier = { 
+					name = MSA_lowered_taxes
+					duration = 365
+				}
+			}
+			else = {
+				add_province_modifier = {
+					name = MSA_lowered_taxes
+					duration = 1825
+				}
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = -5 }
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.30
+	title = ME_Malaya_Events.30.t #Map Sharing
+	desc = ME_Malaya_Events.30.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.30.a #State secrets.
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		add_navy_tradition = 10
+	}
+	
+	option = {
+		name = ME_Malaya_Events.30.b #Share all maps
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+
+		MSA_change_china_loyalty = { value = 15 }
+		add_navy_tradition = -10
+	}
+	
+	option = {
+		name = ME_Malaya_Events.30.c #Share some of the maps
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = 5 }
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.31
+	title = ME_Malaya_Events.31.t #Impressment
+	desc = ME_Malaya_Events.31.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.31.a #How about no?
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		add_army_tradition = 5
+	}
+	
+	option = {
+		name = ME_Malaya_Events.31.b #Impressive.
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		add_navy_tradition = 10
+		add_yearly_sailors = -2
+		MSA_change_china_loyalty = { value = 10 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.31.c #Let them even use our ships!
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 3
+				has_country_flag = MSA_with_china
+			}
+		}
+		
+		add_yearly_sailors = -3
+		add_years_of_income = -0.5
+		add_country_modifier = {
+			name = MSA_treasure_fleet
+			duration = 9125
+		}
+		MSA_change_china_loyalty = { value = 20 }
+	}
+	
+	option = {
+		name = ME_Malaya_Events.31.e #Jail them.
+		
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 2
+				has_country_flag = MSA_against_china
+			}
+		}
+		
+		MSA_change_china_loyalty = { value = -15 }
+	}
+}

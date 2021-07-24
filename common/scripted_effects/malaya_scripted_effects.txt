@@ -1,0 +1,446 @@
+MSA_start_expedition = {
+	if = {
+		limit = {
+			is_capital = yes
+		}
+		owner = {
+			set_country_flag = MSA_interest
+			country_event = { id = ME_Malaya_Events.3 days = $delay$ }
+			country_event = { id = ME_Malaya_Events.14 days = 1 random = 14 }
+		}
+	}
+}
+
+# $value$
+MSA_change_china_loyalty = {
+	change_variable = {
+		which = MSA_china_var
+		value = $value$
+	}
+	
+	custom_tooltip = MSA_current_bonus
+	MSA_determine_current_bonus = yes
+	MSA_determine_future_bonus = { value = $value$ }
+	
+	hidden_effect = {
+		if = {
+			limit = {
+				check_variable = {
+					which = MSA_china_var
+					value = 100
+				}
+			}
+			set_variable = {
+				which = MSA_china_var
+				value = 100
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = MSA_china_var
+						value = 0
+					}
+				}
+			}
+			set_variable = {
+				which = MSA_china_var
+				value = 0
+			}
+		}
+	}
+}
+
+MSA_determine_current_bonus = {
+	if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 80
+			}
+		}
+		MSA_absolutely_loyal_bonus = { tooltip = yes }
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 60
+			}
+		}
+		MSA_swayed_bonus = { tooltip = yes }
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 40
+			}
+		}
+		MSA_neutral_bonus = { tooltip = yes }
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 20
+			}
+		}
+		MSA_in_defiance_bonus = { tooltip = yes }
+	}
+	else = {
+		MSA_insulting_bonus = { tooltip = yes }
+	}
+}
+
+MSA_determine_future_bonus = {
+	if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = MSA_temp
+					value = 0
+				}
+				change_variable = {
+					which = MSA_temp
+					which = MSA_china_var
+				}
+				change_variable = {
+					which = MSA_temp
+					value = $value$
+				}
+				check_variable = {
+					which = MSA_temp
+					value = 80
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = MSA_china_var
+						value = 80
+					}
+				}
+			}
+			custom_tooltip = MSA_bonus_will_change
+			MSA_absolutely_loyal_bonus = { tooltip = yes }
+		}
+		else = { custom_tooltip = MSA_bonus_no_change }
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = MSA_temp
+					value = 0
+				}
+				change_variable = {
+					which = MSA_temp
+					which = MSA_china_var
+				}
+				change_variable = {
+					which = MSA_temp
+					value = $value$
+				}
+				check_variable = {
+					which = MSA_temp
+					value = 60
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						check_variable = {
+							which = MSA_china_var
+							value = 60
+						}
+						NOT = {
+							check_variable = {
+								which = MSA_china_var
+								value = 80
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = MSA_bonus_will_change
+			MSA_swayed_bonus = { tooltip = yes }
+		}
+		else = { custom_tooltip = MSA_bonus_no_change }
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = MSA_temp
+					value = 0
+				}
+				change_variable = {
+					which = MSA_temp
+					which = MSA_china_var
+				}
+				change_variable = {
+					which = MSA_temp
+					value = $value$
+				}
+				check_variable = {
+					which = MSA_temp
+					value = 40
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						check_variable = {
+							which = MSA_china_var
+							value = 40
+						}
+						NOT = {
+							check_variable = {
+								which = MSA_china_var
+								value = 60
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = MSA_bonus_will_change
+			MSA_neutral_bonus = { tooltip = yes }
+		}
+		else = { custom_tooltip = MSA_bonus_no_change }
+	}
+	else_if = {
+		limit = {
+			variable_arithmetic_trigger = {
+				export_to_variable = {
+					which = MSA_temp
+					value = 0
+				}
+				change_variable = {
+					which = MSA_temp
+					which = MSA_china_var
+				}
+				change_variable = {
+					which = MSA_temp
+					value = $value$
+				}
+				check_variable = {
+					which = MSA_temp
+					value = 20
+				}
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					AND = {
+						check_variable = {
+							which = MSA_china_var
+							value = 20
+						}
+						NOT = {
+							check_variable = {
+								which = MSA_china_var
+								value = 40
+							}
+						}
+					}
+				}
+			}
+			custom_tooltip = MSA_bonus_will_change
+			MSA_in_defiance_bonus = { tooltip = yes }
+		}
+		else = { custom_tooltip = MSA_bonus_no_change }
+	}
+	else = {
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = MSA_china_var
+						value = 20
+					}
+				}
+			}
+			custom_tooltip = MSA_bonus_will_change
+			MSA_insulting_bonus = { tooltip = yes }
+		}
+		else = { custom_tooltip = MSA_bonus_no_change }
+	}
+}
+
+MSA_insulting_bonus = {
+	[[tooltip] tooltip = { ]
+		
+	add_country_modifier = {
+		name = MSA_insulting_modifier
+		duration = 14600
+	}
+	
+	[[tooltip] } ]
+}
+
+MSA_in_defiance_bonus = {
+	[[tooltip] tooltip = { ]
+		
+	add_country_modifier = {
+		name = MSA_in_defiance_modifier
+		duration = 10950
+	}
+	
+	[[tooltip] } ]
+}
+
+MSA_neutral_bonus = {
+	[[tooltip] tooltip = { ]
+		
+	add_country_modifier = {
+		name = MSA_neutral_modifier
+		duration = 9125
+	}
+	
+	[[tooltip] } ]
+}
+
+MSA_swayed_bonus = {
+	[[tooltip] tooltip = { ]
+		
+	add_country_modifier = {
+		name = MSA_swayed_modifier
+		duration = 9125
+	}
+	
+	[[tooltip] } ]
+}
+
+MSA_absolutely_loyal_bonus = {
+	[[tooltip] tooltip = { ]
+		
+	add_country_modifier = {
+		name = MSA_loyalty_modifier
+		duration = 10950
+	}
+	
+	[[tooltip] } ]
+}
+
+MSA_the_end = {
+	clr_country_flag = MSA_chinese_expedition_in_tag
+	if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 80
+			}
+		}
+		MSA_absolutely_loyal_bonus = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 60
+			}
+		}
+		MSA_swayed_bonus = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 40
+			}
+		}
+		MSA_neutral_bonus = yes
+	}
+	else_if = {
+		limit = {
+			check_variable = {
+				which = MSA_china_var
+				value = 20
+			}
+		}
+		MSA_in_defiance_bonus = yes
+	}
+	else = {
+		MSA_insulting_bonus = yes
+	}
+}
+
+#all the randomization and logic behind the events being fired is in the below trigger
+MSA_fire_event = {
+	random_list = {
+		100 = {
+			trigger = {
+				OR = {
+					has_global_flag = MSA_fleet_one
+					has_global_flag = MSA_fleet_two
+					has_global_flag = MSA_fleet_three
+				}
+				NOT = { 
+					check_variable = { 
+						which = MSA_china_var
+						value = 35
+					}
+				}
+				NOT = { num_of_cities = 5 }
+				always = no
+			}
+			country_event = { id = ME_Malaya_Events.9 } #warlike-relations with the expedition, capture.
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.20 } #Extradition
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.21 } #Scandal at the Court
+		}
+		1 = {
+			trigger = {
+				NOT = {
+					OR = {
+						has_country_modifier = MSA_religion_respected
+						has_country_modifier = MSA_religion_not_respected
+					}
+				}
+			}
+			country_event = { id = ME_Malaya_Events.22 } #Desecration of a Holy Site
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.23 } #Exotic Animals
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.24 } #Drunken Sailors
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.25 } #Religious Idol
+		}
+		1 = {
+			trigger = {
+				NOT = { has_country_modifier = MSA_free_trade }
+			}
+			country_event = { id = ME_Malaya_Events.26 } #Exploitative Costs
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.27 } #Nobles are worried
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.28 } #Translator's Dilemma
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.29 } #Locals dislike travellers
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.30 } #Map Sharing
+		}
+		1 = {
+			country_event = { id = ME_Malaya_Events.31 } #Sailor Impressment
+		}
+	}
+}
