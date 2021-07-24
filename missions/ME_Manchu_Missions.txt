@@ -26,9 +26,7 @@ manchu_missions_1 = {
 				area = heilongjiang_area
 				area = eastern_mongolia
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 6
 		trigger = {
@@ -40,41 +38,33 @@ manchu_missions_1 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			# custom_trigger_tooltip = {
-				# tooltip = manchu_conquer_korchin_trigger.tooltip
-				# NOT = { has_country_flag = ally_korchin }
-			# }
 		}
 		effect = {
-			#set_country_flag = manchu_conquer_korchin
-			# east_mongolia = {
-				# add_core = ROOT
-			# }
 			buryatia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}	
 			inner_mongolia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			outer_mongolia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			central_mongolia_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -84,7 +74,12 @@ manchu_missions_1 = {
 		icon = mission_chinese_general_riding
 		required_missions = { manchu_conquer_korchin }
 		provinces_to_highlight = {
-			owned_by = KHA
+			OR = {
+				area = inner_mongolia_area
+				area = outer_mongolia_area
+				area = central_mongolia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 7
 		trigger = {
@@ -105,21 +100,21 @@ manchu_missions_1 = {
 			uliastai_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			altai_sayan_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			ordos_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -135,9 +130,7 @@ manchu_missions_1 = {
 				area = ordos_area
 				area = altai_sayan_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			uliastai_area = {
@@ -214,27 +207,39 @@ manchu_missions_2 = {
 		required_missions = { }
 		position = 3
 		trigger =  {
-			MNG = {
-				OR = {
-					has_opinion_modifier = {
-						who = ROOT
-						modifier = insulted
+			if = {
+				limit = { exists = MNG }
+				MNG = {
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
+						war_with = ROOT
 					}
-					has_opinion_modifier = {
-						who = ROOT
-						modifier = scornfully_insulted
-					}
-					war_with = ROOT
 				}
+			}
+			else = {
+				legitimacy_equivalent = 75
+				prestige = 50
 			}
 		}
 		effect = {
 			add_prestige = 10
-			country_event = {
-				id = ME_Manchu_Events.3
+			if = {
+				limit = {
+					exists = MNG
+					726 = { owned_by = MNG }
+				}
+				country_event = { id = ME_Manchu_Events.3 }
 			}
 		}
 	}
+
 	manchu_capture_fushun = {
 		icon = mission_asian_city
 		required_missions = {
@@ -246,15 +251,14 @@ manchu_missions_2 = {
 		position = 4
 		provinces_to_highlight = {
 			region = manchuria_region
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			OR = {
 				AND = {
 					offensive_war_with = MNG
 					726 = {
+						owned_by = ROOT
 						controlled_by = ROOT
 					}
 				}
@@ -268,11 +272,14 @@ manchu_missions_2 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_Manchu_Events.4
+			if = {
+				limit = { exists = MNG }
+				country_event = { id = ME_Manchu_Events.4 }
 			}
+			else = { add_prestige = 10 }
 		}
-	}	
+	}
+
 	manchu_invade_joseon = {
 		icon = mission_asian_cannon
 		required_missions = { manchu_proclaim_great_jin }
@@ -284,9 +291,7 @@ manchu_missions_2 = {
 				province_id = 4231
 				province_id = 733
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger =  {
 			pyongan_area = {
@@ -307,6 +312,7 @@ manchu_missions_2 = {
 			}
 		}
 	}
+
 	manchu_gold_rush = {
 		icon = me_mission_manchu_gold
 		required_missions = {
@@ -316,9 +322,7 @@ manchu_missions_2 = {
 		}
 		provinces_to_highlight = {
 			area = buryatia_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 7
 		trigger = {
@@ -334,11 +338,10 @@ manchu_missions_2 = {
 				set_local_autonomy = 0
 				add_base_production = 1
 			}
-			buryatia_area = {
-				add_prosperity = 100
-			}
+			buryatia_area = { add_prosperity = 100 }
 		}
 	}
+
 	manchu_sichuan_campaign = {
 		icon = me_mission_manchu_sichuan
 		required_missions = { manchu_north_china_campaign }
@@ -347,9 +350,7 @@ manchu_missions_2 = {
 				area = sichuan_area
 				area = chuanbei_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 8
 		trigger = {
@@ -366,33 +367,30 @@ manchu_missions_2 = {
 			xinan_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	manchu_conquer_xinan = {
 		icon = me_mission_manchu_xinan
 		required_missions = { manchu_sichuan_campaign }
 		provinces_to_highlight = {
 			region = xinan_region
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		position = 9
 		trigger = {
 			xinan_region = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			#mission_completed = manchu_south_china_campaign
 		}
 		effect = {
-			country_event = {
-				id = ME_Manchu_Events.7
-			}
+			country_event = { id = ME_Manchu_Events.7 }
 		}
 	}
 }
@@ -434,7 +432,7 @@ manchu_missions_3 = {
 				num_of_banners = 20
 			}
 			else = {
-				army_size_percentage = 1.1
+				army_size_percentage = 1
 				manpower_percentage = 0.6
 			}
 			is_in_war = {
@@ -445,14 +443,14 @@ manchu_missions_3 = {
 			pyongan_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			hamgyeong_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -477,14 +475,14 @@ manchu_missions_3 = {
 			eastern_mongolia = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			heilongjiang_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -511,7 +509,7 @@ manchu_missions_3 = {
 			north_china_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -543,21 +541,21 @@ manchu_missions_3 = {
 			south_china_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			sichuan_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			chuanbei_area = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = {  is_permanent_claim = ROOT }
+					NOT = {  owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -605,12 +603,12 @@ manchu_missions_3 = {
 			}
 			north_china_region = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			south_china_region = {
 				type = all
 				OR = {
-					owned_by = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
 					is_empty = yes
 				}
 			}
@@ -623,28 +621,28 @@ manchu_missions_3 = {
 			korea_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			tibet_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			burma_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			indo_china_region = {
 				limit = {
 					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
+					NOT = { owned_by = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -684,7 +682,7 @@ manchu_missions_4 = {
 				}
 			}
 			capital_scope = {
-				has_building = barracks
+				has_manpower_building_trigger = yes
 				base_manpower = 10
 			}
 			has_idea = manchu_eight_banners
@@ -726,9 +724,15 @@ manchu_missions_4 = {
 		position = 7
 		required_missions = { manchu_han_eight_banners }
 		trigger = {
-			manpower_percentage = 1.0
 			manpower = 50
-			army_size_percentage = 1.25
+			OR = {
+				manpower_percentage = 1
+				army_size_percentage = 1
+				AND = {
+					army_size_percentage = 0.75
+					manpower_percentage = 0.50
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -744,13 +748,33 @@ manchu_missions_4 = {
 			manchu_north_china_campaign			
 		}
 		trigger = {
-			has_spy_network_in = {
-				who = MNG
-				value = 75
+			if = {
+				limit = { exists = MNG }
+				has_spy_network_in = {
+					who = MNG
+					value = 75
+				}
+			}
+			else = {
+				NOT = {
+					any_country = {
+						capital_scope = {
+							superregion = china_superregion
+						}
+						total_development = ROOT
+					}
+				}
 			}
 		}
 		effect = {
-			country_event = { id = ME_Manchu_Events.1 }
+			if = {
+				limit = { exists = MNG }
+				country_event = { id = ME_Manchu_Events.1 }
+			}
+			else = {
+				add_prestige = 15
+				add_mil_power = 50
+			}
 		}
 	}
 }
@@ -822,7 +846,7 @@ manchu_missions_5 = {
 				tooltip = {
 					capital_scope = {
 						add_province_modifier = {
-							name = manchu_mukun_modifier
+							name = manchu_mukun_ge_modifier
 							duration = -1
 						}
 					}
@@ -863,6 +887,7 @@ manchu_missions_5 = {
 			}
 		}
 	}
+	
 	manchu_seek_counsel = {
 		icon = mission_scholar_officials
 		required_missions = { manchu_organize_mukun }
@@ -880,6 +905,7 @@ manchu_missions_5 = {
 			}
 		}
 	}
+	
 	manchu_officializing_the_manchu_script = {
 		icon = me_mission_manchu_manchu
 		required_missions = { manchu_seek_counsel }
@@ -894,7 +920,10 @@ manchu_missions_5 = {
 				has_idea = qng_bogda_khan
 			}
 			capital_scope = {
-				has_building = courthouse
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+				}
 				development = 20
 			}
 		}
@@ -904,23 +933,21 @@ manchu_missions_5 = {
 			}
 		}
 	}
+
 	manchu_create_ministries = {
 		icon = me_mission_manchu_building
 		required_missions = { manchu_officializing_the_manchu_script }
 		position = 10
 		trigger = {
-			courthouse = 6
+			OR = {
+				courthouse = 6
+				town_hall = 6
+			}
 		}
 		effect = {
-			if = {
-				limit = { has_dlc = "Dharma"}
-				add_adm_power = 100
-				change_government_reform_progress = 15
-			}
-			else = {
-				add_adm_power = 200
-			}
-			add_stability = 1
+			add_adm_power = 100
+			change_government_reform_progress = 15
+			add_stability_or_adm_power = yes
 		}
 	}
 }
