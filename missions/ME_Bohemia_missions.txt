@@ -1,0 +1,517 @@
+bohemia_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = BOH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	boh_an_unlikely_messiah = {
+		icon = 
+		position = 2
+		required_missions = { boh_future_bohemia }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = hussites_have_resurfaced_tt
+				has_country_flag = first_hussite_king
+			}
+			BOH = {
+				OR = {
+					religion = catholic
+					religion = hussite
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_start_inquisition
+				duration = 7120
+			}
+		}
+	}
+
+	boh_purity_of_faith = {
+		icon = 
+		position = 3
+		required_missions = { boh_an_unlikely_messiah }
+		provinces_to_highlight = {
+			any_owned_province = {
+				NOT = { religion = ROOT }
+			}
+		}
+		trigger = {
+			all_owned_province = {
+				religion = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_united_faith
+				duration = 10680
+			}
+			if = {
+				limit = {
+					BOH = { religion = hussite }
+				}
+				add_faction = taborite
+				add_faction = ultraquist
+			}
+		}
+	}
+
+	boh_spread_news = {
+		icon = 
+		position = 4
+		required_missions = { boh_purity_of_faith }
+		trigger = {
+			custom_trigger_tooltip = { 
+				name = converted_nation_tt
+				has_country_flag = force_converted
+			}
+			OR = {
+				if = {
+					limit = { ROOT = catholic }
+					is_papal_controller = yes
+				}
+				if = {
+					limit = { 
+						OR = {
+							ROOT = hussite
+							ROOT = protestant
+						}
+					}
+					num_of_aspects = 3
+				}
+				if = {
+					limit = { ROOT = reformed }
+					has_active_fervor = yes
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					ROOT = { 
+						is_papal_controller = yes 
+					}
+				}
+				add_country_modifier = {
+					name = boh_back_papal_fold
+					duration = 10680
+				}
+			}
+			else_if = {
+				limit = {
+					AND = {
+						ROOT = hussite
+						faction_in_power = taborite
+						ROOT = { 
+							num_of_aspects = 3 
+						}
+					}
+				}
+				add_country_modifier = {
+					name = boh_czech_fervor
+					duration = 10680
+				}
+			}
+			else_if = {
+				limit = {
+					AND = {
+						ROOT = hussite
+						faction_in_power = ultraquist
+						ROOT = { 
+							num_of_aspects = 3 
+						}
+					}
+				}
+				add_country_modifier = {
+					name = boh_moderate_hussitism
+					duration = 10680
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						ROOT = { 
+							has_active_fervor = yes 
+						}
+						ROOT = { 
+							num_of_aspects = 3 
+						}
+					}
+				}
+				add_estate_loyalty_modifier = {
+    				estate = estate_church
+					desc = boh_evangelist_bohemia_estate_loyalty_modifier
+    				loyalty = 10
+    				duration = 10680
+				}
+				add_estate_influence_modifier = {
+    				estate = estate_church
+					desc = boh_evangelist_bohemia_estate_influence_modifier
+    				influence = 10
+    				duration = 10680
+				}
+			}
+		}
+	}
+
+	boh_apostles_of_faith = {
+		icon = 
+		position = 6
+		required_missions = { boh_spread_news }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Art of War"
+				}
+				OR = {
+					AND = {
+						hre_leagues_enabled = yes
+						OR = {
+							is_emperor = yes
+							emperor = {
+								is_in_league_war = yes
+							}
+						}
+					}
+					in_league = protestant
+					in_league = catholic
+					hre_religion_treaty = yes
+					hre_religion_locked = yes
+					AND = {
+						NOT = { hre_size = 1 }
+						religious_unity = 1
+					}
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						NOT = { hre_size = 1 }
+						religious_unity = 1
+					}
+					has_country_flag = catholic_league
+					has_country_flag = evangelical_union
+					AND = {
+						OR = {
+							current_age = age_of_absolutism
+							current_age = age_of_revolutions
+						}
+						OR = {
+							is_emperor = yes
+							has_won_war_against = {
+								who = emperor
+								max_years_since = 5
+							}
+							AND = {
+								alliance_with = emperor
+								OR = {
+									any_elector = {
+										is_subject_of = ROOT
+									}
+									any_elector = {
+										ROOT = {
+											has_won_war_against = {
+												who = PREV
+												max_years_since = 5
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Art of War"
+				}
+				custom_tooltip = boh_czech_zealotry_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							OR = {
+								AND = {
+									hre_leagues_enabled = yes
+									is_emperor = yes
+								}
+								in_league = protestant
+								in_league = catholic
+							}
+						}
+						set_country_flag = boh_enable_czech_zealotry
+					}
+					if = {
+						limit = {
+							hre_religion_treaty = yes
+						}
+						add_country_modifier = {
+							name = boh_eius_regio_cuius_religio
+							duration = -1
+						}
+					}
+					if = {
+						limit = {
+							OR = {
+								emperor = {
+									is_in_league_war = yes
+								}
+								hre_religion_locked = yes
+							}
+						}
+						add_country_modifier = {
+							name = boh_religious_neutrality
+							duration = 7300
+						}
+					}
+				}
+				if = {
+					limit = {
+						NOT = { hre_size = 1 }
+						religious_unity = 1
+					}
+					add_prestige = 10
+				}
+			}
+			else = {
+				custom_tooltip = boh_czech_zealotry_heretics_tt
+				hidden_effect = {
+					if = {
+						limit = {
+							OR = {
+								has_country_flag = catholic_league
+								has_country_flag = evangelical_union
+							}
+						}
+						set_country_flag = boh_czech_zealotry_heretics
+					}
+					if = {
+						limit = {
+							AND = {
+								OR = {
+									current_age = age_of_absolutism
+									current_age = age_of_revolutions
+								}
+								OR = {
+									is_emperor = yes
+									AND = {
+										alliance_with = emperor
+										OR = {
+											any_elector = {
+												is_subject_of = ROOT
+											}
+											any_elector = {
+												ROOT = {
+													has_won_war_against = {
+														who = PREV
+														max_years_since = 5
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						add_country_modifier = {
+							name = boh_imperial_europe
+							duration = -1
+						}
+					}
+					if = {
+						limit = {
+							AND = {
+								OR = {
+									current_age = age_of_absolutism
+									current_age = age_of_revolutions
+								}
+								has_won_war_against = {
+									who = emperor
+									max_years_since = 5
+								}
+							}
+						}
+						add_country_modifier = {
+							name = boh_defiant
+							duration = 14600
+						}
+					}
+					if = {
+						limit = {
+							NOT = { hre_size = 1 }
+							religious_unity = 1
+						}
+						add_prestige = 10
+					}
+				}
+			}
+		}
+	}
+}
+
+bohemia_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = BOH
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	
+	boh_dispute_ore_mountains = {
+		icon = 
+		position = 3
+		required_missions = { boh_late_arrival }
+		provinces_to_highlight = {
+			OR = {
+				owned_by = SAX
+				owned_by = THU
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = SAX
+				}
+				SAX = {
+					OR = {
+						has_opinion_modifier = {
+    						who = ROOT
+   							modifier = insulted
+						}
+						has_opinion_modifier = {
+    						who = ROOT
+    						modifier = scornfully_insulted
+						}
+					}
+				}
+				ROOT = { power_projection = 40 }
+				ROOT = { prestige = SAX }
+				ROOT = { 
+					army_strength = {
+						who = SAX
+						value = 2.25
+					}
+				}
+			}
+			else = {
+				prestige = 90
+				legitimacy = 100
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					61 = {
+						owned_by = SAX
+					}
+					4744 = {
+						owned_by = SAX
+					}
+					2965 = {
+						country_or_non_sovereign_subject_holds = SAX
+					}
+				}
+				custom_tooltip = ore_mountain_cb_tt
+				hidden_effect = {
+					add_casus_belli = {
+    					target = SAX
+    					type = cb_ore_dispute
+    					months = -1
+					}
+				}
+			}
+			else = {
+				south_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				thuringia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	boh_better_our_hands = {
+		icon = 
+		position = 5
+		required_missions = { boh_dispute_ore_mountains }
+		provinces_to_highlight = {
+			province_id = 2965
+			province_id = 4744
+			province_id = 61
+		}
+		trigger = {
+			2965 = { country_or_non_sovereign_subject_holds = ROOT }
+			4744 = { country_or_non_sovereign_subject_holds = ROOT }
+			61 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			country_event = {
+				id = ME_Bohemia_Events.1
+			}
+			add_country_modifier = {
+				name = boh_resolved_ore_mountains
+				duration = 3560
+			}
+			if = {
+				limit = {
+					has_country_flag = boh_podebrad
+				}
+				northern_saxony_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				braunschweig_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+}
+
+bohemia_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+    }
+
+	boh_future_bohemia = {
+		icon = 
+		position = 1
+		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = boh_hussite_faction_resurged_tt
+					has_country_flag = first_hussite_king
+				}
+				all_owned_province = { religion = ROOT }
+			}
+		}
+	}
+}
