@@ -137,11 +137,23 @@ italy_missions_1 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			italy_region = {
-				type = all
-				OR = {
-					NOT = { is_part_of_hre = yes }
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			if = {
+				limit = {
+					is_part_of_hre = yes
+				}
+				italy_region = {
+					type = all
+					is_part_of_hre = yes
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				italy_region = {
+					type = all
+					OR = {
+						NOT = { is_part_of_hre = yes }
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
 				}
 			}
 		}
@@ -201,12 +213,14 @@ italy_missions_1 = {
 		position = 23
 		provinces_to_highlight = {
 			region = italy_region
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { has_manpower_building_trigger = yes }
-				NOT = { has_forcelimit_building_trigger = yes }
-				NOT = { base_manpower = 10 }
-			}
+            OR = {
+                NOT = { country_or_non_sovereign_subject_holds = ROOT }
+                AND = {
+                    NOT = { has_manpower_building_trigger = yes }
+                    NOT = { has_forcelimit_building_trigger = yes }
+                    NOT = { base_manpower = 10 }
+                }
+            }
 		}
 		trigger = {
 			MIL = 6
@@ -386,11 +400,18 @@ italy_missions_1 = {
 					}
 				}
 				else = {
-					any_owned_province = {
-						region = italy_region
-						has_great_project = {
-							type = any
-							tier = 3
+					OR = {
+						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+							value = 3
+							region = italy_region
+							development = 50
+						}
+						any_owned_province = {
+							region = italy_region
+							has_great_project = {
+								type = any
+								tier = 3
+							}
 						}
 					}
 				}
@@ -544,11 +565,10 @@ italy_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 15
 				region = iberia_region
 				has_port = yes
-				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -635,7 +655,7 @@ italy_missions_2 = {
 			owned_by = ROOT
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 5
 				OR = {
 					area = lower_andalucia_area
@@ -1199,7 +1219,13 @@ italy_missions_3 = {
 		}
 		position = 16
 		trigger = {
-			mercantilism = 75
+			OR = {
+				mercantilism = 75
+				AND = {
+					monthly_dip = 12
+					trade = 3
+				}
+			}
 			trade_efficiency = 1.5
 			1298 = {
 				is_strongest_trade_power = ROOT
@@ -1548,11 +1574,7 @@ italy_missions_3 = {
 
 	ita_naval_hegemony = {
 		icon = mission_naval_dominance
-		required_missions = {
-			ita_ruling_americas
-			ita_capo_buona_speranza
-			ita_mare_nostrum
-		}
+		required_missions = { ita_mare_nostrum	}
 		position = 24
 		trigger = {
 			OR = {
@@ -1830,57 +1852,138 @@ italy_missions_3 = {
 			}
 		}
 		effect = {
-			101 = {
+			custom_tooltip = ITA_FERROVIE_TT
+			tooltip = {
 				add_permanent_province_modifier = {
 					name = ita_ferrovie_italiane
 					duration = -1
 				}
 			}
-			2981 = {
+			hidden_effect = {
+				101 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				2981 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				2979 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				4739 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				107 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				4729 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				108 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				103 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+				104 = {
+					add_permanent_province_modifier = {
+						name = ita_ferrovie_italiane
+						duration = -1
+					}
+				}
+			}
+			venetia_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			2979 = {
+			lombardy_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			4739 = {
+			piedmont_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			107 = {
+			tuscany_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			4729 = {
+			liguria_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			108 = {
+			emilia_romagna_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			103 = {
+			central_italy_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
-			104 = {
+			lazio_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
 				add_permanent_province_modifier = {
-					name = ita_ferrovie_italiane
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			po_valley_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
 					duration = -1
 				}
 			}
@@ -2352,7 +2455,7 @@ italy_missions_4 = {
 			italy_region = {
 				limit = { country_or_non_sovereign_subject_holds = ROOT }
 				add_permanent_province_modifier = {
-					name = ita_italian_prosperity
+					name = ita_italian_prosperity_1
 					duration = -1
 				}
 			}
@@ -2914,6 +3017,7 @@ italy_missions_5 = {
 	ita_develop_south = {
 		icon = mission_develop_cordoba
 		required_missions = {
+			ita_prosperity_all
 			ita_questione_meridionale
 		}
 		position = 27
@@ -3059,6 +3163,54 @@ italy_missions_5 = {
 			}
 			2983 = {
 				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			naples_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			calabria_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			apulia_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			western_sicily_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			sicily_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
+			}
+			corsica_sardinia_area = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				remove_province_modifier = ita_italian_prosperity_1
+				add_permanent_province_modifier = {
+					name = ita_italian_prosperity_final
+					duration = -1
+				}
 			}
 		}
 	}
