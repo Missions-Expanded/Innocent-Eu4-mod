@@ -361,7 +361,10 @@ LIT_missions_1 = {
 		required_missions = { LIT_fortify_ruthenia }
 		position = 14
 		provinces_to_highlight = {
-			owned_by = TUR
+			OR = {
+				owned_by = TUR
+				owns = 151
+			}
 		}
 		trigger = {
 			if = {
@@ -373,6 +376,9 @@ LIT_missions_1 = {
 					max_years_since = 20
 				}
 				army_size = TUR
+			}
+			else = {
+				owns = 151
 			}
 		}
 		effect = {
@@ -780,7 +786,7 @@ LIT_missions_3 = {
 				name = LIT_support_of_ruthenian_people
 				duration = 9125
 			}
-			#Events for ruthenian advisors?
+			#Events for ruthenian advisors? #TODO
 		}
 	}
 	
@@ -789,6 +795,9 @@ LIT_missions_3 = {
 		required_missions = { LIT_ruthenian_majority }
 		position = 4
 		provinces_to_highlight = {
+			culture_group = east_slavic
+			owned_by = ROOT
+			NOT = { has_courthouse_building_trigger = ROOT }
 		}
 		trigger = {
 			has_adm_advisor_3 = yes
@@ -1165,13 +1174,57 @@ LIT_missions_4 = {
 			custom_tooltip = LIT_mission_autonomy
 			tooltip = {
 				custom_tooltip = LIT_every_ruthenian_province
-				
+				add_province_modifier = {
+					name = LIT_integration
+					duration = 10950
+				}
 			}
 			custom_tooltip = LIT_mission_strength
 			tooltip = {
 				add_country_modifier = {
 					name = LIT_questioning_the_muscovite_growth
 					duration = 9125
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						reverse_has_opinion = {
+							who = OKA
+							value = 190
+						}
+					}
+					add_country_modifier = {
+						name = LIT_peaceful_resolutions
+						duration = 10950
+					}
+					add_dip_power = 50
+				}
+				if = {
+					limit = {
+						mission_completed = LIT_centralize
+					}
+					every_owned_province = {
+						limit = {
+							culture_group = east_slavic
+						}
+						add_province_modifier = {
+							name = LIT_integration
+							duration = 10950
+						}
+					}
+				}
+				if = {
+					limit = {
+						army_strength = {
+							who = MOS
+							value = 1.5
+						}
+					}
+					add_country_modifier = {
+						name = LIT_questioning_the_muscovite_growth
+						duration = 9125
+					}
 				}
 			}
 		}
@@ -1185,9 +1238,17 @@ LIT_missions_4 = {
 			owned_by = MOS
 		}
 		trigger = {
-			has_won_war_against = {
-				who = MOS
-				max_years_since = 20
+			if = {
+				limit = {
+					exists = MOS
+				}
+				has_won_war_against = {
+					who = MOS
+					max_years_since = 20
+				}
+			}
+			else = {
+				NOT = { exists = MOS }
 			}
 		}
 		effect = {
@@ -1231,11 +1292,16 @@ LIT_missions_4 = {
 		required_missions = { LIT_turmoil_in_poland }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				province_id = 257
+				owned_by = POL
+			}
 		}
 		trigger = {
 			OR = {
 				senior_union_with = POL
 				POL = { dynasty = "Jagiellon" }
+				owns = 257
 			}
 		}
 		effect = {
@@ -1539,7 +1605,6 @@ LIT_missions_4 = {
 		trigger = {
 			has_adm_advisor_2 = yes
 			NOT = { average_autonomy_above_min = 10 }
-			stability = 1
 			NOT = { average_unrest = 0 }
 		}
 		effect = {
@@ -1706,7 +1771,7 @@ LIT_missions_5 = {
 				}
 				army_strength = {
 					who = POL
-					value = 3
+					value = 2
 				}
 			}
 		}
@@ -1852,6 +1917,7 @@ LIT_missions_5 = {
 					estate = estate_nobles
 					loyalty = 70
 				}
+				NOT = { has_estate = estate_nobles }
 			}
 		}
 		effect = {
@@ -1887,13 +1953,25 @@ LIT_missions_5 = {
 		required_missions = { LIT_army_census }
 		position = 13
 		provinces_to_highlight = {
+			has_terrain = steppe
 		}
 		trigger = {
-			num_of_estate_agendas_completed = {
-				value = 3
-				estate = estate_cossacks
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				num_of_cossacks = 10
+				num_of_estate_agendas_completed = {
+					value = 3
+					estate = estate_cossacks
+				}
 			}
-			num_of_cossacks = 10
+			else = {
+				num_of_owned_provinces_with = {
+					has_terrain = steppe
+					value = 10
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
