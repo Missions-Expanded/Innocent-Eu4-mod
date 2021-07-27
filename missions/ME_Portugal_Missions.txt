@@ -23,7 +23,12 @@ POR_missions_1 = {
 			}
 		}
 		trigger = {
-			num_of_cardinals = 3
+			if = {
+				limit = {
+					religion = catholic
+				}
+				num_of_cardinals = 3
+			}
 			227 = {
 				owned_by = ROOT
 				has_tax_building_trigger = yes
@@ -39,7 +44,6 @@ POR_missions_1 = {
 			NOT = { is_at_war = yes }
 			NOT = { has_any_disaster = yes }
 			stability = 1
-			religion_group = christian
 		}
 		effect = {
 			add_estate_loyalty = {
@@ -80,29 +84,23 @@ POR_missions_1 = {
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { religion = catholic }
+				NOT = { religion = ROOT }
 			}
 		}
 		trigger = {
-			religion = catholic
 			334 = {
 				owned_by = ROOT
-				religion = catholic
+				religion = ROOT
 			}
 			1751 = {
 				owned_by = ROOT
-				religion = catholic
+				religion = ROOT
 			}
 		}
 		effect = {
 			add_papal_influence = 10
 			334 = {
-				if = {
-					limit = {
-						NOT = { has_building = cathedral }
-					}
-					add_building = cathedral
-				}
+				add_or_upgrade_tax_building = yes
 			}
 		}
 	}
@@ -153,11 +151,6 @@ POR_missions_1 = {
 			}
 		}
 		trigger = {
-			OR = {
-				religion = reformed
-				religion = protestant
-				religion = catholic
-			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 15
 				region = brazil_region
@@ -314,11 +307,20 @@ POR_missions_1b = {
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = { continent = europe }
+			custom_tooltip = POR_invested_cities_tt
+			tooltip = {
 				add_province_modifier = {
 					name = por_invested_cities
 					duration = 5475 #15 years
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = { continent = europe }
+					add_province_modifier = {
+						name = por_invested_cities
+						duration = 5475 #15 years
+					}
 				}
 			}
 		}
@@ -351,11 +353,20 @@ POR_missions_1b = {
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = { trade_goods = wine }
+			custom_tooltip = POR_vinho_portugues_tt
+			tooltip = {
 				add_province_modifier = {
 					name = por_wine_production
 					duration = 9125 #25 years
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = { trade_goods = wine }
+					add_province_modifier = {
+						name = por_wine_production
+						duration = 9125 #25 years
+					}
 				}
 			}
 		}
@@ -411,7 +422,7 @@ POR_missions_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	por_preparar_aramadas = {
-		icon = icon_wip
+		icon = mission_spanish_armada
 		position = 1
 		required_missions = { }
 		trigger = {
@@ -444,7 +455,7 @@ POR_missions_2 = {
 		}
 	}
 	por_para_estreito = {
-		icon = icon_wip
+		icon = mission_control_the_barbary_coast
 		position = 2
 		required_missions = { por_preparar_aramadas }
 		provinces_to_highlight = {
@@ -454,7 +465,7 @@ POR_missions_2 = {
 		trigger = {
 			NOT = { is_at_war = yes }
 			owns = 334
-			religion = catholic
+			#religion = catholic
 		}
 		effect = {
 			334 = {
@@ -470,7 +481,7 @@ POR_missions_2 = {
 		}
 	}
 	por_continent_atlantic = {
-		icon = icon_wip
+		icon = mission_colonize_the_caribbean
 		position = 3
 		required_missions = { por_encarar_mar }
 		trigger = {
@@ -478,9 +489,8 @@ POR_missions_2 = {
 				value = 5
 				region = brazil_region
 			}
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 1
-				region = brazil_region
+			brazil_region = {
+				country_or_non_sovereign_subject_holds = ROOT
 				province_has_center_of_trade_of_level = 1
 			}
 			1531 = { #Brazil
@@ -488,18 +498,14 @@ POR_missions_2 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = { region = brazil_region }
+			custom_tooltip = POR_continent_atlantic_tt
+			tooltip = {
 				add_province_modifier = {
 					name = por_crown_investments
 					duration = 3650 #10 years
 				}
 			}
-			every_subject_country = {
-				limit = {
-					NOT = { is_subject_of_type = tributary_state }
-					any_owned_province = { region = brazil_region }
-				}
+			hidden_effect = {
 				every_owned_province = {
 					limit = { region = brazil_region }
 					add_province_modifier = {
@@ -507,11 +513,24 @@ POR_missions_2 = {
 						duration = 3650 #10 years
 					}
 				}
+				every_subject_country = {
+					limit = {
+						NOT = { is_subject_of_type = tributary_state }
+						any_owned_province = { region = brazil_region }
+					}
+					every_owned_province = {
+						limit = { region = brazil_region }
+						add_province_modifier = {
+							name = por_crown_investments
+							duration = 3650 #10 years
+						}
+					}
+				}
 			}
 		}
 	}
 	por_rio_ouro = {
-		icon = icon_wip
+		icon = mission_african_gold
 		position = 4
 		required_missions = { por_continent_atlantic }
 		provinces_to_highlight = {
@@ -531,6 +550,7 @@ POR_missions_2 = {
 				AND = {
 					province_id = 765
 					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
 						NOT = { development = 15 }
 						NOT = { has_production_building_trigger = yes }
 					}
@@ -547,6 +567,7 @@ POR_missions_2 = {
 				}
 			}
 			765 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				development = 15
 				has_production_building_trigger = yes
 			}
@@ -557,7 +578,7 @@ POR_missions_2 = {
 					limit = {
 						NOT = { trade_goods = gold }
 					}
-					change_trade_goods = gold
+					change_trade_goods = gold #TODO tell  event
 				}
 				add_province_modifier = {
 					name = por_increase_funding
@@ -567,7 +588,7 @@ POR_missions_2 = {
 		}
 	}
 	por_city_slavers = {
-		icon = icon_wip
+		icon = mission_trade_in_gold_coast
 		position = 6
 		required_missions = { por_fim_mundo }
 		provinces_to_highlight = {
@@ -633,7 +654,7 @@ POR_missions_2 = {
 		}
 	}
 	por_fortuna_oriental = {
-		icon = icon_wip
+		icon = mission_portuguese_burma
 		position = 8
 		required_missions = { por_foothold_india }
 		provinces_to_highlight = {
@@ -696,7 +717,7 @@ POR_missions_2 = {
 		}
 	}
 	por_treacherous_nobility = {
-		icon = icon_wip
+		icon = mission_arts_and_letters
 		position = 9
 		required_missions = { }
 		trigger = {
@@ -712,7 +733,7 @@ POR_missions_2 = {
 		}
 	}
 	por_renovar_gestao = {
-		icon = icon_wip
+		icon = all_bases_covered
 		position = 10
 		required_missions = { por_treacherous_nobility }
 		trigger = {
@@ -747,12 +768,17 @@ POR_missions_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	por_encarar_mar = {
-		icon = icon_wip
+		icon = mission_plus_ultra
 		position = 2
 		required_missions = { }
 		trigger = {
-			has_idea_group = exploration_ideas
-			has_idea = quest_for_the_new_world
+			OR = {
+				AND = {
+					has_idea_group = exploration_ideas
+					has_idea = quest_for_the_new_world
+					num_of_colonies = 3
+				}
+			}
 			num_of_explorers = 1
 			sailors_percentage = 0.5
 		}
@@ -768,7 +794,7 @@ POR_missions_3 = {
 		}
 	}
 	por_naval_bases = {
-		icon = icon_wip
+		icon = mission_portuguese_malabar
 		position = 3
 		required_missions = { por_encarar_mar }
 		provinces_to_highlight = {
@@ -807,39 +833,46 @@ POR_missions_3 = {
 				add_permanent_claim = ROOT
 			}
 			1111 = {
-				if = {
-					limit = { has_building = shipyard }
-					add_building = grand_shipyard
-				}
+				add_or_upgrade_shipyard_building = yes
 			}
 			1096 = {
-				if = {
-					limit = { has_building = shipyard }
-					add_building = grand_shipyard
-				}
+				add_or_upgrade_shipyard_building = yes
 			}
 		}
 	}
 	por_faith_kongo = {
-		icon = icon_wip
+		icon = mission_establish_jesuit_missions
 		position = 4
 		required_missions = { por_golden_coast }
 		provinces_to_highlight = {
 			region = kongo_region
-			kongo_region = {
-				type = all
-				OR = {
-					NOT = { owned_by = ROOT }
-					NOT = { religion_group = christian }
+			ROOT = {
+				kongo_region = {
+					type = all
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { religion_group = christian }
+					}
 				}
 			}
 		}
 		trigger = {
-			kongo_region = {
-				owned_by = ROOT
-				religion_group = christian
+			if = {
+				limit = {
+					religion = catholic
+				}
+				kongo_region = {
+					owned_by = ROOT
+					religion_group = christian
+				}
+				papal_influence = 25
 			}
-			papal_influence = 25
+			else = {
+				kongo_region = {
+					owned_by = ROOT
+					religion = ROOT
+				}
+			}
 		}
 		effect = {
 			KON = {
@@ -863,7 +896,7 @@ POR_missions_3 = {
 		}
 	}
 	por_fim_mundo = {
-		icon = icon_wip
+		icon = mission_launch_a_flagship
 		position = 5
 		required_missions = { por_ponta_africa }
 		provinces_to_highlight = {
@@ -911,7 +944,7 @@ POR_missions_3 = {
 		}
 	}
 	por_skilled_sailing = {
-		icon = icon_wip
+		icon = mission_aragonese_navy
 		position = 6
 		required_missions = { por_fim_mundo }
 		trigger = {
@@ -941,7 +974,7 @@ POR_missions_3 = {
 		}
 	}
 	por_foothold_india = {
-		icon = icon_wip
+		icon = mission_indian_trade_company
 		position = 7
 		required_missions = { por_onwards_india }
 		provinces_to_highlight = {
@@ -986,7 +1019,7 @@ POR_missions_3 = {
 		}
 	}
 	por_gems_spices = {
-		icon = icon_wip
+		icon = defender_of_the_faith
 		position = 8
 		required_missions = { por_foothold_india }
 		provinces_to_highlight = {
@@ -1045,7 +1078,7 @@ POR_missions_3 = {
 		}
 	}
 	por_beautiful_island = {
-		icon = icon_wip
+		icon = mission_trade_with_cathay
 		position = 9
 		required_missions = { por_birthplace_silk }
 		provinces_to_highlight = {
@@ -1077,7 +1110,7 @@ POR_missions_3 = {
 		}
 	}
 	por_vontade_rei = { #moved from slot 1
-		icon = icon_wip
+		icon = mission_intervene_in_castile
 		position = 10
 		required_missions = { por_treacherous_nobility }
 		trigger = {
@@ -1103,7 +1136,7 @@ POR_missions_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	por_friends_pyrenees = {
-		icon = icon_wip
+		icon = mission_alliances
 		position = 1
 		required_missions = { }
 		trigger = {
@@ -1146,7 +1179,7 @@ POR_missions_4 = {
 		}
 	}
 	por_golden_coast = {
-		icon = icon_wip
+		icon = mission_native_reductions
 		position = 3
 		required_missions = { por_encarar_mar }
 		trigger = {
@@ -1232,7 +1265,7 @@ POR_missions_4 = {
 		}
 	}
 	por_ponta_africa = {
-		icon = icon_wip
+		icon = mission_look_west
 		position = 4
 		required_missions = { por_golden_coast }
 		provinces_to_highlight = {
@@ -1267,7 +1300,7 @@ POR_missions_4 = {
 		}
 	}
 	por_onwards_india = {
-		icon = icon_wip
+		icon = mission_rb_take_indian_coast
 		position = 6
 		required_missions = { por_ponta_africa }
 		trigger = {
@@ -1320,7 +1353,7 @@ POR_missions_4 = {
 		}
 	}
 	por_city_straits = {
-		icon = icon_wip
+		icon = mission_portuguese_malacca
 		position = 7
 		required_missions = { por_onwards_india }
 		provinces_to_highlight = {
@@ -1353,12 +1386,7 @@ POR_missions_4 = {
 					name = por_sound_toll
 					duration = 9125 #25 years
 				}
-				if = {
-					limit = {
-						NOT = { has_building = grand_shipyard }
-					}
-					add_building = grand_shipyard
-				}
+				add_or_upgrade_shipyard_building = yes
 				if = {
 					limit = { has_building = fort_17th }
 					add_building = fort_18th
@@ -1381,7 +1409,7 @@ POR_missions_4 = {
 		}
 	}
 	por_birthplace_silk = {
-		icon = icon_wip
+		icon = mission_portuguese_ceylon
 		position = 8
 		required_missions = { por_city_straits }
 		provinces_to_highlight = {
@@ -1463,7 +1491,7 @@ POR_missions_4 = {
 		}
 	}
 	por_rising_sun = {
-		icon = icon_wip
+		icon = mission_trade_with_japan
 		position = 9
 		required_missions = { por_birthplace_silk }
 		provinces_to_highlight = {
@@ -1516,7 +1544,7 @@ POR_missions_4 = {
 		}
 	}
 	por_tassalocracia_portuguesa = {
-		icon = icon_wip
+		icon = mission_lusitanian_empire
 		position = 10
 		required_missions = {
 			por_beautiful_island
@@ -1585,7 +1613,7 @@ POR_missions_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	por_chaos_await = {
-		icon = icon_wip
+		icon = mission_castillian_aggression
 		position = 1
 		required_missions = { }
 		provinces_to_highlight = {
@@ -1689,7 +1717,7 @@ POR_missions_5 = {
 		}
 	}
 	por_mundi_nostrum = {
-		icon = icon_wip
+		icon = mission_union_with_portugal
 		position = 2
 		required_missions = {
 			por_friends_pyrenees
@@ -1735,7 +1763,7 @@ POR_missions_5 = {
 		}
 	}
 	por_verdadeiro_imperio = {
-		icon = icon_wip
+		icon = mission_city_of_the_world's_desire #who thought to put ' in a mission icon name .-.
 		position = 3
 		required_missions = { por_mundi_nostrum }
 		provinces_to_highlight = {
@@ -1830,7 +1858,7 @@ POR_missions_5 = {
 		}
 	}
 	por_rival_republics = {
-		icon = icon_wip
+		icon = mission_control_venice
 		position = 4
 		required_missions = { por_verdadeiro_imperio }
 		trigger = {
@@ -1865,7 +1893,7 @@ POR_missions_5 = {
 		}
 	}
 	por_glittering_coast = {
-		icon = icon_wip
+		icon = mission_portuguese_interference
 		position = 5
 		required_missions = { por_ponta_africa }
 		provinces_to_highlight = {
@@ -1916,7 +1944,7 @@ POR_missions_5 = {
 		}
 	}
 	por_shipyards_east = {
-		icon = icon_wip
+		icon = mission_taula_de_canvi
 		position = 6
 		required_missions = { por_glittering_coast }
 		provinces_to_highlight = {
@@ -2181,7 +2209,7 @@ POR_missions_5 = {
 		}
 	}
 	por_island_shores = {
-		icon = icon_wip
+		icon = mission_portuguese_oman
 		position = 7
 		required_missions = { por_onwards_india }
 		provinces_to_highlight = {
@@ -2220,7 +2248,7 @@ POR_missions_5 = {
 		}
 	}
 	por_origin_spice = {
-		icon = icon_wip
+		icon = mission_rb_colonise_spice_islands
 		position = 9
 		required_missions = { por_birthplace_silk }
 		provinces_to_highlight = {
