@@ -340,6 +340,13 @@ ME_HUN_branch2 = {
 						days = 1
 					}
 				}
+				hidden_effect = {
+					add_country_modifier = {
+						name = ME_HUN_hiddenModifier_v2
+						duration = 24
+					}
+					set_country_flag = ME_HUN_quellHussite_flag
+				}
 				custom_tooltip = ME_HUN_quellHussite_tt
 			}
 			else_if = {
@@ -1000,37 +1007,69 @@ ME_HUN_branch4 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_bulEconomy_mission = {
-		icon = gfx_placeholder
+		icon = kingdom_of_lombardy
 		required_missions = {
 			
 		}
 		position = 6
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			province_id = 154
+			154 = {
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { base_production = 6}
+				}
+			}
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			154 = {
+				base_production = 6
+			}
+			NOT = { inflation = 1 }
+			OR = {
+				treasurer = 1
+				master_of_mint = 1
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			add_country_modifier = {
+				name = ME_HUN_hungarianMints_modifier
+				duration = 3650
+			}
 		}
 	}
 	##Mission End
 	##Mission Start
 	ME_HUN_danDev_mission = {
-		icon = gfx_placeholder
+		icon = mission_secure_khandesh
 		required_missions = {
 			ME_HUN_fiscalReform_mission
 		}
 		position = 8
 		provinces_to_highlight = {
 			##PROVINCESHIGHLIGHTCODE
+			area = transdanubia_area
+			NOT = {
+				development = 11
+			}
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			transdanubia_area = {
+				type = all
+				development = 11
+			}
 		}
 		effect = {
 			##MISSIONEFFECT
+			add_legitimacy = 10
+			add_country_modifier = {
+				name = ME_HUN_urbanisation_modifier
+				duration = 7300
+			}
 		}
 	}
 	##Mission End
@@ -1239,7 +1278,7 @@ ME_HUN_branch5 = {
 	##Mission End
 	##Mission Start
 	ME_HUN_fiscalReform_mission = {
-		icon = gfx_placeholder
+		icon = mission_african_gold
 		required_missions = {
 			ME_HUN_bulEconomy_mission
 		}
@@ -1249,9 +1288,58 @@ ME_HUN_branch5 = {
 		}
 		trigger = {
 			##MISSIONTRIGGER
+			NOT = {
+				estate_influence = {
+					estate = estate_nobles
+					influence = 60
+				}
+			}
+			NOT = {
+				estate_influence = {
+					estate = estate_burghers
+					influence = 50
+				}
+			}
+			NOT = {
+				estate_influence = {
+					estate = estate_church
+					influence = 50
+				}
+			}
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 50
+			}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 50
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 50
+			}
+			stability = 1
 		}
 		effect = {
 			##MISSIONEFFECT
+			if = {
+				limit = {
+					has_idea = national_bank
+				}
+				remove_country_modifier = ME_HUN_hungarianMints_modifier
+				add_country_modifier = {
+					name = ME_HUN_hungarianMintsImproved_modifier
+					duration = 27375
+				}
+			}
+			else = {
+				remove_country_modifier = ME_HUN_hungarianMints_modifier
+				add_country_modifier = {
+					name = ME_HUN_hungarianMints3_modifier
+					duration = 27375
+				}
+			}
+			custom_tooltip = ME_HUN_ficsalReform_tt
 		}
 	}
 	##Mission End
