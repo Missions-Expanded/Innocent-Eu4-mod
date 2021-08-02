@@ -251,6 +251,37 @@ ME_Delhi_Mission_slot_1 = {
 		icon = mission_expand_textile_industry
 		required_missions = { dlh_issue_land }
 		position = 6
+		provinces_to_highlight = {
+			AND = {
+				country_or_non_sovereign_subject_holds = ROOT
+				if = {
+					limit = { has_global_flag = trade_goods_expanded_mod_active }
+					OR = {
+						trade_goods = cloth
+						trade_goods = silk
+						trade_goods = carpet
+					}
+					NOT = {
+						OR = {
+							has_building = workshop 
+							has_building = counting_house
+						}
+					}	
+				}
+				else = {
+					OR = {
+						trade_goods = cloth
+						trade_goods = silk
+					}
+					NOT = {
+						OR = {
+							has_building = workshop 
+							has_building = counting_house
+						}
+					}	
+				}
+			}
+		}
 		trigger = {
 			if = {
 				limit = { has_global_flag = trade_goods_expanded_mod_active }
@@ -333,6 +364,13 @@ ME_Delhi_Mission_slot_1 = {
 		icon = mission_market_place_with_asian_traders
 		required_missions = { dlh_textile_innovations }
 		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 507
+				province_id = 1343
+				province_id = 504
+			}
+		}
 		trigger = {
 			OR = {
 				mercantilism = 40
@@ -428,15 +466,21 @@ ME_Delhi_Mission_slot_1 = {
 	}
 	dlh_tamil_spices = {
 		icon = mission_rb_colonise_spice_islands
-		required_missions = { }
+		required_missions = { dlh_own_tamils }
 		position = 13
+		provinces_to_highlight = {
+			AND = {
+				country_or_non_sovereign_subject_holds = ROOT
+				culture = tamil
+			}
+		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 10
 				culture = tamil
 				development = 15
 				OR = {
-					center_of_trade = 2
+					province_has_center_of_trade_of_level = 2
 					OR = {
 						has_building = marketplace
 						has_building = trade_depot
@@ -534,6 +578,319 @@ ME_Delhi_Mission_slot_2 = {
 			add_country_modifier = {
 				name = dlh_elite_infantry_modifier
 				duration = 9125
+			}
+		}
+	}
+	dlh_elephant_warfare = {
+		icon = army_reforms
+		required_missions = { dlh_balban_reforms }
+		position = 2
+		trigger = {
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.1
+			}
+			num_of_cavalry = 16
+			OR = {
+				regimental_camp = 4
+				conscription_center = 4
+			}
+		}
+		effect = {
+			add_mil_power = 50
+			add_country_modifier = {
+				name = bng_elephant_tactics_modifier
+				duration = 5475
+			}
+		}
+	}
+	dlh_qazis = {
+		icon = mission_indian_soldier_elephant
+		required_missions = { dlh_promote_mil_advisor }
+		position = 3
+		trigger = {
+			NOT = { num_of_powerful_estates = 1 }
+			NOT = { corruption = 1 }
+			NOT = { average_autonomy_above_min = 15 }
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_sectarian_qazis_modifier
+				duration = 10950
+			}
+			change_government_reform_progress = 50
+		}
+	}
+	dlh_city_of_taj = {
+		icon = mission_found_the_city_of_agra
+		required_missions = { dlh_seize_doab }
+		position = 4
+		provinces_to_highlight = {
+			province_id = 524
+		}
+		trigger = {
+			524 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+					province_has_center_of_trade_of_level = 3
+				}
+				development = 24
+				OR = {
+					has_building = temple
+					has_building = cathedral	
+				}
+			}
+		}
+		effect = {
+			524 = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+				change_province_name = "Agra"
+			}
+			add_country_modifier = {
+				name = dlh_new_baradaris_modifier
+				duration = 10950
+			}
+			country_event = {
+				id = ME_Delhi_Events.2
+			}
+		}
+	}
+	dlh_claiming_india = {
+		icon = mission_indian_trade_company
+		required_missions = { dlh_reintegrate_empire }
+		position = 6
+		trigger = {
+			army_size = 100
+			legitimacy_equivalent = 85
+			grown_by_development = 200
+		}
+		effect = {
+			hindusthan_region = {
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = dlh_secure_throne_modifier
+				duration = 7300
+			}
+		}
+	}
+	dlh_diamond_delhi = {
+		icon = mission_rb_take_indian_coast
+		required_missions = { dlh_textile_innovations }
+		position = 7
+		provinces_to_highlight = {
+			province = 522
+		}
+		trigger = {
+			522 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					province_trade_power = 50
+					province_has_center_of_trade_of_level = 3
+				}
+				development = 30
+				NOT = { had_recent_war = 10 }
+			}
+			524 = {
+				has_most_province_trade_power = ROOT
+			}
+		}
+		effect = {
+			522 = {
+				build_possible_manufactory_in_province = yes
+			}
+			add_years_of_income = 0.5
+			country_event = {
+				id = ME_Delhi_Events.3
+			}
+		}
+	}
+	dlh_bengali_jamdani = {
+		icon = mission_gujarati_textiles
+		required_missions = { dlh_diamond_delhi }
+		position = 8
+		provinces_to_highlight = { 
+			province_id = 564
+		}
+		trigger = {
+			564 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+					province_has_center_of_trade_of_level = 3
+				}
+				is_prosperous = yes
+			}
+		}
+		effect = {
+			522 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			country_event = {
+				id = bng_events.30
+			}
+			define_advisor = {
+				type = bng_jamdani_weaver_advisor
+				skill = 1
+				discount = yes
+			}
+		}
+	}
+	dlh_bengali_jamdani = {
+		icon = mission_grand_bengali_shipyards
+		required_missions = { dlh_bengali_jamdani }
+		position = 10
+		provinces_to_highlight = {
+			AND = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_port = yes
+				OR = {
+					province_id = 561
+					province_id = 2039
+					province_id = 4475
+					province_id = 564
+					province_id = 4474
+					province_id = 568
+				}
+				NOT = {
+					OR = {
+						has_building = dock
+						has_building = drydock
+					}
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+					}
+				}
+			}
+		}
+		trigger = {
+			561 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2039 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4475 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			564 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4474 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			568 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				dock = 3
+				drydock = 3
+			}
+			OR = {
+				shipyard = 3
+				grand_shipyard = 3
+			}
+			navy_size = 12
+		}
+		effect = {
+			522 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			country_event = {
+				id = bng_events.31
+			}
+			define_advisor = {
+				type = naval_reformer
+				skill = 2
+				discount = yes
+			}
+		}
+	}
+	dlh_bengali_jamdani = {
+		icon = mission_grand_bengali_shipyards
+		required_missions = { dlh_bengali_jamdani }
+		position = 9
+		provinces_to_highlight = {
+			AND = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_port = yes
+				OR = {
+					province_id = 561
+					province_id = 2039
+					province_id = 4475
+					province_id = 564
+					province_id = 4474
+					province_id = 568
+				}
+				NOT = {
+					OR = {
+						has_building = dock
+						has_building = drydock
+					}
+					OR = {
+						has_building = shipyard
+						has_building = grand_shipyard
+					}
+				}
+			}
+		}
+		trigger = {
+			561 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2039 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4475 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			564 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4474 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			568 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				dock = 3
+				drydock = 3
+			}
+			OR = {
+				shipyard = 3
+				grand_shipyard = 3
+			}
+			navy_size = 12
+		}
+		effect = {
+			country_event = {
+				id = bng_events.31
+			}
+			add_dip_power = 50
+			define_advisor = {
+				type = naval_reformer
+				skill = 2
+				discount = yes
 			}
 		}
 	}
