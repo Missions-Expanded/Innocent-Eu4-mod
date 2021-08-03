@@ -793,32 +793,121 @@ MSA_Missions_Trade_1 = {
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_production_building_trigger = yes }
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_production_building_trigger = yes
+				value = 20
+			}
+			num_of_trading_bonuses = 3
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_capitalization_of_goods
+				duration = -1
+			}
+			add_years_of_income = 1
 		}
 	}
 	
 	MSA_masters = {
-		icon = the_shape_of_trades_to_come
+		icon = mission_rb_colonise_spice_islands
 		required_missions = { MSA_capitalize }
 		position = 2
 		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				trade_goods = spices
+				trade_goods = nutmeg
+				trade_goods = cloves
+				trade_goods = vanilla
+			}
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				trade_goods = spices
-				has_production_building_trigger = yes
-				num_of_times_improved = 1
-				value = 10
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = spices
+						trade_goods = nutmeg
+						trade_goods = cloves
+						trade_goods = vanilla
+					}
+					has_production_building_trigger = yes
+					has_manufactory_trigger = yes
+					value = 10
+				}
+				development_in_provinces = {
+					OR = {
+						trade_goods = spices
+						trade_goods = nutmeg
+						trade_goods = cloves
+						trade_goods = vanilla
+					}
+					value = 300
+				}
 			}
-			development_in_provinces = {
-				trade_goods = spices
-				value = 200
+			else = {
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = spices
+						trade_goods = cloves
+					}
+					has_production_building_trigger = yes
+					has_manufactory_trigger = yes
+					value = 10
+				}
+				development_in_provinces = {
+					OR = {
+						trade_goods = spices
+						trade_goods = cloves
+					}
+					value = 200
+				}
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods  }
+				}
+				add_years_of_owned_provinces_production_income = {
+					years = 5
+					trigger = {
+						OR = {
+							trade_goods = spices
+							trade_goods = nutmeg
+							trade_goods = cloves
+							trade_goods = vanilla
+						}
+					}
+					custom_tooltip = MSA_from_spice_production_TGE
+				}
+				custom_tooltip = MSA_every_province_producing_spices_TGE
+			}
+			else = {
+				add_years_of_owned_provinces_production_income = {
+					years = 5
+					trigger = {
+						OR = {
+							trade_goods = spices
+							trade_goods = cloves
+						}
+					}
+					custom_tooltip = MSA_from_spice_production
+				}
+				custom_tooltip = MSA_every_province_producing_spices
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = MSA_masterful_spice
+					duration = 10950
+				}
+			}
 		}
 	}
 	
@@ -827,10 +916,133 @@ MSA_Missions_Trade_1 = {
 		required_missions = { MSA_masters }
 		position = 3
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					AND = {
+						trade_goods = spices
+						NOT = {
+							ROOT = {	
+								trading_part = {
+									trade_goods = spices
+									value = 0.33
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = nutmeg
+						NOT = {
+							ROOT = {	
+								trading_part = {
+									trade_goods = nutmeg
+									value = 0.75
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = vanilla
+						NOT = {
+							ROOT = {	
+								trading_part = {
+									trade_goods = vanilla
+									value = 0.75
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = cloves
+						NOT = {
+							ROOT = {	
+								trading_part = {
+									trade_goods = cloves
+									value = 0.75
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					AND = {
+						trade_goods = spices
+						NOT = {
+							ROOT = {	
+								trading_part = {
+									trade_goods = spices
+									value = 0.6
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = cloves
+						NOT = {
+							ROOT = {	
+								trading_part = {
+									trade_goods = cloves
+									value = 0.9
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = spices
+					value = 0.33
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.75
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.75
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.75
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.6
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.9
+				}
+			}
 		}
 		effect = {
+			define_advisor = {
+				type = trader
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.45
+			}
+			custom_tooltip = MSA_modify_capitalization_of_goods_by
+			hidden_effect = {
+				remove_country_modifier = MSA_capitalization_of_goods
+				add_country_modifier = {
+					name = MSA_capitalization_of_goods_2
+					duration = -1
+				}
+			}
 		}
 	}
 	
@@ -839,20 +1051,28 @@ MSA_Missions_Trade_1 = {
 		required_missions = { MSA_wealth_of_the_strait }
 		position = 5
 		provinces_to_highlight = {
+			province_id = 1361
+			NOT = {
+				highest_value_trade_node = yes
+			}
 		}
 		trigger = {
-			highest_value_trade_node = yes
+			1361 = { highest_value_trade_node = yes }
+			trade_efficiency = 0.5
 		}
 		effect = {
+			#every province in the strait
 			1348 = { change_province_name = "Straits of Malaya" }
 		}
 	}
 	
 	MSA_onset_of_modern_trade = {
-		icon = the_shape_of_trades_to_come
+		icon = indonesian_trade
 		required_missions = { MSA_straits_of_malaya MSA_masters_of_trade }
 		position = 7
 		provinces_to_highlight = {
+			is_capital_of = ROOT
+			NOT = { has_building = stock_exchange }
 		}
 		trigger = {
 			has_institution = global_trade
@@ -862,6 +1082,9 @@ MSA_Missions_Trade_1 = {
 			monthly_income = 300
 		}
 		effect = {
+			#Give Travelling merchant ability/advisor
+			#Give trade power perma in malacca or provinces downstream??
+			#Give foreign trade power strong for 25 years
 		}
 	}
 }
@@ -882,8 +1105,39 @@ MSA_Missions_Trade_2 = {
 		required_missions = { MSA_capitalize }
 		position = 2
 		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				trade_goods = tropical_wood
+				trade_goods = ebony
+				trade_goods = incense
+			}
+			NOT = { has_production_building_trigger = yes }
 		}
 		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = tropical_wood
+						trade_goods = ebony
+						trade_goods = incense
+					}
+					has_production_building_trigger = yes
+					value = 5
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = tropical_wood
+						trade_goods = incense
+					}
+					has_production_building_trigger = yes
+					value = 5
+				}
+			}
 		}
 		effect = {
 		}
@@ -894,8 +1148,24 @@ MSA_Missions_Trade_2 = {
 		required_missions = { MSA_controlling_the_strait MSA_wood MSA_spice_flows }
 		position = 4
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_manufactory_trigger = yes }
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_manufactory_trigger = yes
+				value = 50
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				num_of_trading_bonuses = 5
+			}
+			else = {
+				num_of_trading_bonuses = 3
+			}
+			monthly_income = 100
 		}
 		effect = {
 		}
@@ -908,6 +1178,25 @@ MSA_Missions_Trade_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				num_of_trading_bonuses = 15
+			}
+			else = {
+				num_of_trading_bonuses = 7
+			}
+			monthly_income = 200
+			calc_true_if = {
+				amount = 5
+				all_trade_node = {
+					trade_share = {
+						country = ROOT
+						share = 75
+					}
+				}
+			}
 		}
 		effect = {
 		}
@@ -932,8 +1221,17 @@ MSA_Missions_Trade_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				advisor = trader
+				has_dip_advisor_3 = yes
+			}
+			monthly_income = 50
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_cornerstone_of_our_nation
+				duration = -1
+			}
 		}
 	}
 	
@@ -942,8 +1240,20 @@ MSA_Missions_Trade_3 = {
 		required_missions = { MSA_cornerstone }
 		position = 2
 		provinces_to_highlight = {
+			owned_by = ROOT
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { development = 15 }
+			}
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				province_has_center_of_trade_of_level = 1
+				development = 15
+				has_trade_building_trigger = yes
+				value = 5
+			}
 		}
 		effect = {
 		}
@@ -954,10 +1264,40 @@ MSA_Missions_Trade_3 = {
 		required_missions = { MSA_great_trading_cities }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				province_id = 1361
+				province_id = 1357
+			}
+			NOT = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
 		}
 		trigger = {
+			1361 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
+			1357 = {
+				trade_share = {
+					country = ROOT
+					share = 90
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = MSA_modify_cornerstone_of_our_nation
+			hidden_effect = {
+				remove_country_modifier = MSA_cornerstone_of_our_nation
+				add_country_modifier = {
+					name = MSA_cornerstone_of_our_nation_2
+					duration = -1
+				}
+			}
 		}
 	}
 	
@@ -968,6 +1308,7 @@ MSA_Missions_Trade_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_centers_of_trade = 20
 		}
 		effect = {
 		}
@@ -978,8 +1319,21 @@ MSA_Missions_Trade_3 = {
 		required_missions = { MSA_protecting_existing_routes }
 		position = 6
 		provinces_to_highlight = {
+			owned_by = ROOT
+			has_port = yes
+			NOT = { has_shipyard_building_trigger = yes }
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_shipyard_building_trigger = yes
+				value = 10
+			}
+			
+			num_of_owned_provinces_with = {
+				has_shipyard_building_trigger = yes
+				province_has_center_of_trade_of_level = 1
+				value = 2
+			}
 		}
 		effect = {
 		}
@@ -1004,8 +1358,27 @@ MSA_Missions_Trade_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			num_of_light_ship = 60
 		}
 		effect = {
+			custom_tooltip = MSA_if_we_have_naval_commander
+			tooltip = {
+				add_country_modifier = {
+					name = MSA_innovations
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						advisor = naval_reformer 
+					}
+					add_country_modifier = {
+						name = MSA_innovations
+						duration = 9125
+					}
+				}
+			}
 		}
 	}
 	
@@ -1040,6 +1413,17 @@ MSA_Missions_Trade_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				has_flagship = yes
+			}
+			navy_size = 100
+			OR = {
+				num_of_heavy_ship = 20
+				num_of_galley = 50
+			}
 		}
 		effect = {
 		}
@@ -1074,10 +1458,36 @@ MSA_Missions_Trade_5 = {
 		required_missions = { MSA_foreign_powers }
 		position = 2
 		provinces_to_highlight = {
+			province_id = 667
 		}
 		trigger = {
+			OR = {
+				667 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 75
+						}
+					}
+				}
+				667 = {
+					trade_share = {
+						country = ROOT
+						share = 10
+					}
+					has_trader = ROOT
+				}
+			}
 		}
 		effect = {
+			define_advisor = {
+				type = travelling_merchant
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.33
+			}
+			country_event = { id = ME_Malaya_Events.49 }
 		}
 	}
 	
@@ -1090,16 +1500,33 @@ MSA_Missions_Trade_5 = {
 		trigger = {
 		}
 		effect = {
+			if = {
+				limit = {
+					always = yes #there'll be a trigger about chinese expedition here later
+				}
+				custom_tooltip = MSA_if_we_were_insulting
+				tooltip = {
+					add_power_projection = {
+						type = mission_rewards_power_projection
+						amount = 25
+					}
+				}
+				custom_tooltip = MSA_if_we_were_loyal
+				tooltip = {
+					add_years_of_income = 0.5
+				}
+			}
 		}
 	}
 	
 	MSA_tea_trade = {
-		icon = the_shape_of_trades_to_come
+		icon = mission_trade_with_cathay
 		required_missions = { MSA_expedition_into_canton }
 		position = 4
 		provinces_to_highlight = {
 		}
 		trigger = {
+			
 		}
 		effect = {
 		}
@@ -1112,6 +1539,11 @@ MSA_Missions_Trade_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				advisor = treasurer
+				advisor = master_of_mint
+				has_adm_advisor_3 = yes
+			}
 		}
 		effect = {
 		}
