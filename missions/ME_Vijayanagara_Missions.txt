@@ -15,25 +15,77 @@ vijayanagara_mission_1 = {
 	has_country_shield = yes
 	
 	vijayanagar_jaffna = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_integrate_jaffna
 		required_missions = { }
 		position = 1
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 2100
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				owns_core_province = 2100
+				navy_size_percentage = 0.75
+			}
 		}
 		effect = {
+			south_lanka_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lanka_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
 	vijayanagar_ilankai = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_lanka
 		required_missions = {
 			vijayanagar_jaffna
 			vijayanagar_maharaja
 		}
 		position = 2
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = south_lanka_area
+				area = lanka_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			south_lanka_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lanka_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			south_lanka_area = {
+				add_province_modifier = {
+					name = vij_improved_cinnamon_trade
+					duration = -1
+				}
+			}
+			lanka_area = {
+				add_province_modifier = {
+					name = vij_improved_cinnamon_trade
+					duration = -1
+				}
+			}
 		}
 	}
 
@@ -68,45 +120,104 @@ vijayanagara_mission_1 = {
 	}
 	
 	vijayanagar_south_indian_navy = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_grand_bengali_shipyards
 		required_missions = { }
 		position = 4
-		trigger = {	
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				has_port = yes
+				has_shipyard_building_trigger = yes
+				any_trade_node_member_province = { province_id = 1340 }
+			}
 		}
 		effect = {
+			add_yearly_sailors = 1
+			create_explorer = {
+				tradition = 75
+			}
+			add_country_modifier = {
+				name = vij_navigadaprabhu
+				duration = -1
+			}
 		}
 	}
 	
 	vijayanagar_exploration_indian_ocean = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_dominate_trade_in_aden
 		required_missions = { vijayanagar_south_indian_navy }
 		position = 5
-		trigger = {	
+		provinces_to_highlight = {
+			any_trade_node_member_province = { province_id = 1340 }
+			OR = {
+				is_island = yes
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			1340 = {
+				all_trade_node_member_province = {
+					has_discovered = ROOT
+				}
+				all_trade_node_member_province = {
+					OR = {
+						NOT = { is_island = yes }
+						owned_by = ROOT
+					}
+				}
+			}
 		}
 		effect = {
+			add_navy_tradition = 15
+			add_dip_power = 150
 		}
 	}
 	
 	vijayanagar_empire_eastern_trade = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_indian_trade_company
 		required_missions = {
 			vijayanagar_exploration_indian_ocean
 			vijayanagar_malaccan_spices
 		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 504
+				province_id = 1340
+				province_id = 1343
+				province_id = 1361
+			}
+		}
 		position = 6
-		trigger = {	
+		trigger = {
+			504 = { is_strongest_trade_power = ROOT }
+			1340 = { is_strongest_trade_power = ROOT }
+			1343 = { is_strongest_trade_power = ROOT }
+			1361 = { is_strongest_trade_power = ROOT }
 		}
 		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = vij_spice_empire
+				duration = 18250
+			}
 		}
 	}
 
 	vijayanagar_berari_gunnery = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_gunpowder_warfare
 		required_missions = { vijayanagar_raichur_doab }
 		position = 6
-		trigger = {	
+		trigger = {
+			maidan_area = {
+				has_forcelimit_building_trigger = yes
+				base_manpower = 10
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_modernizing_our_weapons
+				duration = 5475
+			}
 		}
 	}
 
@@ -202,42 +313,249 @@ vijayanagara_mission_1 = {
 	}
 
 	vijayanagar_horses_influx = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_maharashtra
 		required_missions = { vijayanagar_maharashtra }
 		position = 9
-		trigger = {	
+		trigger = {
+			telingana_area = {
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 10 }
+				NOT = { devastation = 1 }
+				num_of_times_improved = 3
+			}
+			konkan_area = {
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 10 }
+				NOT = { devastation = 1 }
+				num_of_times_improved = 3
+			}
+			desh_area = {
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 10 }
+				NOT = { devastation = 1 }
+				num_of_times_improved = 3
+			}
+			ahmednagar_area = {
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 10 }
+				NOT = { devastation = 1 }
+				num_of_times_improved = 3
+			}
+			berar_area = {
+				owned_by = ROOT
+				NOT = { local_autonomy_above_min = 10 }
+				NOT = { devastation = 1 }
+				num_of_times_improved = 3
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_turkish_knowledge
+				duration = 5475
+			}
 		}
 	}
 	
 	vijayanagar_defense_chaul = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_recover_konkan_ports
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 2089
+		}
+		trigger = {
+			2089 = {
+				owned_by = ROOT
+				OR = {
+					base_manpower = 10
+					base_production = 10
+				}
+				has_shipyard_building_trigger = yes
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+					has_building = coastal_defence
+					has_building = naval_battery
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					base_manpower = 10
+					base_production = 10
+				}
+				has_shipyard_building_trigger = yes
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+					has_building = coastal_defence
+					has_building = naval_battery
+				}
+			}
 		}
 		effect = {
+			add_yearly_sailors = 1
+			add_yearly_manpower = 1
+			random_owned_province = {
+				limit = {
+					OR = {
+						base_manpower = 10
+						base_production = 10
+					}
+					has_shipyard_building_trigger = yes
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+					}
+				}
+				add_base_manpower = 2
+				add_base_production = 2
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						base_manpower = 10
+						base_production = 10
+					}
+					has_shipyard_building_trigger = yes
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+					}
+				}
+				add_base_manpower = 2
+				add_base_production = 2
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						base_manpower = 10
+						base_production = 10
+					}
+					has_shipyard_building_trigger = yes
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+					}
+				}
+				add_base_manpower = 2
+				add_base_production = 2
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						base_manpower = 10
+						base_production = 10
+					}
+					has_shipyard_building_trigger = yes
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+						has_building = coastal_defence
+						has_building = naval_battery
+					}
+				}
+				add_base_manpower = 2
+				add_base_production = 2
+			}
 		}
 	}
 	
 	vijayanagar_administration_empire = {
-		icon = mission_protect_jain_communities
+		icon = mission_patronize_sufi_scholars
 		required_missions = { }
 		position = 11
-		trigger = {	
+		trigger = {
+			if = {
+				limit = {
+					has_estate = estate_brahmins
+				}
+				estate_loyalty = {
+					estate = estate_brahmins
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_adm = 10
+			}
+			if = {
+				limit = {
+					has_estate = estate_vaisyas
+				}
+				estate_loyalty = {
+					estate = estate_vaisyas
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_dip= 10
+			}
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+			}
+			else = {
+				monthly_mil = 10
+			}
 		}
 		effect = {
+			add_mana_scaled_on_monarch_skill = yes
+			add_country_modifier = {
+				name = vij_ministers
+				duration = 9125
+			}
 		}
 	}
 	
 	vijayanagar_provincial_administration = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_general_land_assessment
 		required_missions = { vijayanagar_administration_empire }
 		position = 12
-		trigger = {	
+		trigger = {
+			OR = {
+				ADM = 6
+				has_adm_advisor_3 = yes
+				monthly_adm = 12
+			}
+			is_ahead_of_time_in_specific_tech = { type = adm }
+			1340 = {
+				all_trade_node_member_province = {
+					owned_by = ROOT
+				}
+			}
 		}
 		effect = {
+			1340 = {
+				every_trade_node_member_province = {
+					add_province_modifier = {
+						name = vij_xis_provinces
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 	
@@ -245,24 +563,39 @@ vijayanagara_mission_1 = {
 		icon = mission_temple_patronage
 		required_missions = { vijayanagar_provincial_administration }
 		position = 13
-		trigger = {	
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				has_tax_building_trigger = yes
+				base_tax = 10
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_taxing_privilegs
+				duration = -1
+			}
 		}
 	}
 	
 	vijayanagar_water_purification = {
-		icon = mission_end_tamil_insurgency
+		icon = austria_prospers
 		required_missions = { vijayanagar_stable_country }
 		position = 14
-		trigger = {	
+		trigger = {
+			natural_scientist = 2
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = great_monuments }
+				}
+			}
 		}
 	}
 	
 	vijayanagar_prasanna_virupaksha = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_dharma_mission_religious_harmony
 		required_missions = { vijayanagar_water_purification }
 		position = 6
 		trigger = {	
@@ -289,7 +622,7 @@ vijayanagara_mission_2 = {
 	has_country_shield = yes
 	
 	vijayanagar_malabar_coast = {
-		icon = control_the_means_of_transaction
+		icon = mission_secure_the_malabar_coast
 		required_missions = { vijayanagar_maharaja }
 		position = 2
 		trigger = {
@@ -318,7 +651,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_spice_trader = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_dominate_persian_gulf
 		required_missions = {
 			vijayanagar_port_city_goa
 			vijayanagar_kozhikode
@@ -487,7 +820,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_northern_border = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_southern_frontier
 		required_missions = { vijayanagar_kalyana }
 		position = 8
 		trigger = {	
@@ -497,7 +830,7 @@ vijayanagara_mission_2 = {
 	}
 
 	vijayanagar_integrating_sarf_khas = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_abu_saids_dream
 		required_missions = { vijayanagar_northern_border }
 		position = 9
 		trigger = {	
@@ -507,7 +840,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_subjugating_gajapatis = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_burma
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
 		trigger = {	
@@ -517,7 +850,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_restoring_malwa_order = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_malwa_bng
 		required_missions = { vijayanagar_subjugating_gajapatis }
 		position = 11
 		trigger = {	
@@ -527,7 +860,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_amaranayaka_sainya = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_into_the_west
 		required_missions = { vijayanagar_administration_empire }
 		position = 12
 		trigger = {	
@@ -537,7 +870,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_land_revenue = {
-		icon = mission_protect_jain_communities
+		icon = mission_a_million_rice_fields
 		required_missions = { vijayanagar_provincial_administration }
 		position = 13
 		trigger = {	
@@ -547,7 +880,7 @@ vijayanagara_mission_2 = {
 	}
 	
 	vijayanagar_brahmins_loyalty = {
-		icon = mission_protect_jain_communities
+		icon = mission_convert_bengal
 		required_missions = { vijayanagar_stable_country }
 		position = 14
 		trigger = {	
@@ -667,7 +1000,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_south_indian_trade = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_south_indian_trade
 		required_missions = {
 			vijayanagar_ilankai
 			vijayanagar_malabar_coast
@@ -682,7 +1015,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_coromandel_flow = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_entrepot_of_india
 		required_missions = {
 			vijayanagar_south_indian_navy
 			vijayanagar_south_indian_trade
@@ -695,7 +1028,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_gange_mouth = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_andhra_bah
 		required_missions = { vijayanagar_coromandel_flow }
 		position = 6
 		trigger = {	
@@ -705,7 +1038,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_overlooking_sea = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_coromandel_expansion
 		required_missions = {
 			vijayanagar_gange_mouth
 			vijayanagar_gujarat_riches
@@ -718,7 +1051,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_mines_golconda = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_growth_of_golcond
 		required_missions = { vijayanagar_kalyana }
 		position = 8
 		trigger = {	
@@ -728,7 +1061,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_end_adil_shahi = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_deccanis
 		required_missions = {
 			vijayanagar_northern_border
 			vijayanagar_samu_garidi
@@ -741,7 +1074,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_following_indus = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_follow_the_brahmaputra
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 11
 		trigger = {	
@@ -751,7 +1084,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_bharat = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_indian_empire
 		required_missions = {
 			vijayanagar_restoring_malwa_order
 			vijayanagar_following_indus
@@ -765,7 +1098,7 @@ vijayanagara_mission_3 = {
 	}
 	
 	vijayanagar_stable_country = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_establish_mint_towns
 		required_missions = { }
 		position = 13
 		trigger = {	
@@ -775,7 +1108,7 @@ vijayanagara_mission_3 = {
 	}
 
 	vijayanagar_machilipatnam_minerals = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_modernize_production
 		required_missions = { vijayanagar_stable_country }
 		position = 14
 		trigger = {	
@@ -785,7 +1118,7 @@ vijayanagara_mission_3 = {
 	}
 
 	vijayanagar_gem_cutting_industries = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_industrialize_bengal
 		required_missions = { vijayanagar_machilipatnam_minerals }
 		position = 15
 		trigger = {	
@@ -812,7 +1145,7 @@ vijayanagara_mission_4 = {
 	has_country_shield = yes
 
 	vijayanagar_hindu_princedoms = {
-		icon = mission_restore_rule_over_mysore
+		icon = mission_conquer_andhra_vij
 		required_missions = { vijayanagar_maharaja }
 		position = 2
 		provinces_to_highlight = {
@@ -853,7 +1186,7 @@ vijayanagara_mission_4 = {
 	}
 
 	vijayanagar_desolate_land = {
-		icon = mission_restore_rule_over_mysore
+		icon = mission_clear_the_delta
 		required_missions = { vijayanagar_hindu_princedoms }
 		position = 3
 		provinces_to_highlight = {
@@ -894,7 +1227,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_city_victory = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_city_of_victory_vij
 		required_missions = {
 			vijayanagar_south_indian_trade
 			vijayanagar_wonderous_palace
@@ -907,7 +1240,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_kannada_literature = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_vedic_education
 		required_missions = {
 			vijayanagar_city_victory
 		}
@@ -919,7 +1252,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_gujarat_riches = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_invade_gujarat
 		required_missions = { vijayanagar_coromandel_flow }
 		position = 6
 		trigger = {	
@@ -929,7 +1262,7 @@ vijayanagara_mission_4 = {
 	}
 
 	vijayanagar_malik_maidan = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_fortify_mandu
 		required_missions = {  }
 		position = 7
 		trigger = {	
@@ -939,7 +1272,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_samu_garidi = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_rajputana
 		required_missions = {
 			vijayanagar_malik_maidan
 			vijayanagar_military_recruitment
@@ -952,7 +1285,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_elephant_warfare = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_siam
 		required_missions = { vijayanagar_samu_garidi }
 		position = 9
 		trigger = {	
@@ -962,7 +1295,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_eastern_jungle = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_demand_garjat_fealty
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
 		trigger = {	
@@ -972,7 +1305,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_bengal_supremacy = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_divert_trade_from_bengal
 		required_missions = {
 			vijayanagar_eastern_jungle
 			vijayanagar_reverse_course
@@ -985,7 +1318,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_fairs = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_market_place_with_asian_traders
 		required_missions = {
 			vijayanagar_stable_country
 			vijayanagar_internal_trade
@@ -998,7 +1331,7 @@ vijayanagara_mission_4 = {
 	}
 	
 	vijayanagar_balances_trade = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_the_chola_campaigns
 		required_missions = {
 			vijayanagar_fairs
 			vijayanagar_trade_landing
@@ -1167,7 +1500,7 @@ vijayanagara_mission_5 = {
 	}
 	
 	vijayanagar_tamil_trade = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_gharbianss
 		required_missions = {
 			vijayanagar_end_tamil_insurgency
 			vijayanagar_coromandel_flow
@@ -1180,7 +1513,7 @@ vijayanagara_mission_5 = {
 	}
 
 	vijayanagar_military_recruitment = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_conquer_malwa_mer
 		required_missions = {  }
 		position = 7
 		trigger = {	
@@ -1190,7 +1523,7 @@ vijayanagara_mission_5 = {
 	}
 
 	vijayanagar_wootz_steel = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_bankers_of_cambay
 		required_missions = { vijayanagar_military_recruitment }
 		position = 8
 		trigger = {	
@@ -1200,7 +1533,7 @@ vijayanagara_mission_5 = {
 	}
 
 	vijayanagar_introduction_matchlock = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_integrate_the_purbias
 		required_missions = { vijayanagar_wootz_steel }
 		position = 9
 		trigger = {	
@@ -1210,7 +1543,7 @@ vijayanagara_mission_5 = {
 	}
 
 	vijayanagar_reverse_course = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_bengal_campaign
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
 		trigger = {	
@@ -1220,7 +1553,7 @@ vijayanagara_mission_5 = {
 	}
 	
 	vijayanagar_internal_trade = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_brahmin_administrators
 		required_missions = {  }
 		position = 13
 		trigger = {	
@@ -1230,7 +1563,7 @@ vijayanagara_mission_5 = {
 	}
 	
 	vijayanagar_trade_landing = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_konkani_pirates
 		required_missions = { vijayanagar_internal_trade }
 		position = 14
 		trigger = {	
@@ -1240,7 +1573,7 @@ vijayanagara_mission_5 = {
 	}
 	
 	vijayanagar_trade_supremacy = {
-		icon = mission_end_tamil_insurgency
+		icon = mission_dharma_mission_the_riches_of_india
 		required_missions = {
 			vijayanagar_fairs
 			vijayanagar_trade_landing
