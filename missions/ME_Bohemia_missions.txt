@@ -53,6 +53,9 @@ bohemia_missions_1 = {
 				limit = {
 					BOH = { religion = hussite }
 				}
+			}
+			custom_tooltip = boh_enable_factions_tt
+			hidden_effect = {
 				add_faction = boh_hussite_taborite
 				add_faction = boh_hussite_ultraquist
 			}
@@ -936,6 +939,330 @@ bohemia_missions_3 = {
 					set_country_flag = boh_enable_crusade_justice
 				}
 			}	
+		}
+	}
+}
+
+bohemia_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+    }
+	has_country_shield = yes
+
+	boh_change_warfare = {
+		icon = mission_alliances
+		required_missions = { boh_future_bohemia }
+		position = 2
+		trigger = {
+			mil_tech = 5
+			has_mil_advisor = yes
+		}
+		effect = {
+			add_unit_construction = {
+    			type = artillery
+    			amount = 2
+    			speed = 0.75
+    			cost = 0
+			}
+			add_country_modifier = {
+				name = boh_origin_gunpowder
+				duration = -1
+			}
+		}
+	}
+
+	boh_mokrsko_mine = {
+		icon = mission_alliances
+		required_missions = {
+			boh_change_warfare
+			boh_late_arrival
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 2967
+		}
+		trigger = {
+			2967 = {
+				base_production = 6
+			}
+			years_of_income = 0.5
+		}
+		effect = {
+			add_years_of_income = -0.5
+			2967 = {
+				add_province_modifier = {
+					name = boh_mokrsko_mine
+					duration = -1
+				}
+			}
+			2956 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	boh_heritage_iron_gold = {
+		icon = mission_alliances
+		required_missions = { boh_rising_dynasty }
+		position = 5
+		provinces_to_highlight = {
+			if = {
+				limit = { has_country_flag = czech_habsburg }
+				area = austria_proper_area
+				area = inner_austria_area
+				province_id = 129
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			else = {
+				area = austria_proper_area
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			if = {
+				limit = { has_country_flag = czech_habsburg }
+				austria_proper_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				inner_austria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				austria_proper_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					HAB = { is_subject_of = ROOT }
+				}
+				add_liberty_desire = -10
+			}
+			else_if = {
+				limit = {
+					has_country_flag = czech_habsburg
+					NOT = {
+						HAB = { is_subject_of = ROOT }
+					}
+				}
+				add_country_modifier = {
+					name = boh_austrian_overlord
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = boh_vengance_ottakar
+					duration = 5475
+				}
+			}
+		}
+	}
+}
+
+bohemia_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+    }
+	has_country_shield = yes
+
+	boh_silesian_fealty = {
+		icon = mission_alliances
+		required_missions = { boh_future_bohemia }
+		position = 2
+		trigger = {
+			OPL = {
+				has_opinion = {
+					who = ROOT
+					value = 200
+				}
+				liberty_desire = 0
+			}
+			GLG = {
+				has_opinion = {
+					who = ROOT
+					value = 200
+				}
+				liberty_desire = 0
+			}
+		}
+		effect = {
+			custom_tooltip = boh_silesian_integration_tt
+			hidden_effect = {
+				OPL = {
+					country_event = { id = ME_Bohemia_Event.4 }
+				}
+				GLG = {
+					country_event = { id = ME_Bohemia_Event.5 }
+				}
+			}
+		}
+	}
+
+	boh_silesian_minerals = {
+		icon = mission_alliances
+		required_missions = { boh_silesian_fealty }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 263
+				province_id = 2966
+				province_id = 4723
+			}
+			NOT = { base_production = 6 }
+			NOT = { has_production_building = yes }
+		}
+		trigger = {
+			263 = {
+				owned_by = ROOT
+				base_production = 6
+				has_production_building = yes
+			}
+			2966 = {
+				owned_by = ROOT
+				base_production = 6
+				has_production_building = yes
+			}
+			4723 = {
+				owned_by = ROOT
+				base_production = 6
+				has_production_building = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = boh_silesia_prosperous_tt
+				silesia_area = { is_prosperous = yes }
+			}
+		}
+		effect = {
+			country_event = { id = ME_Bohemia_Event.6 }
+		}
+	}
+
+	boh_crystal_glass = {
+		icon = mission_alliances
+		required_missions = { 
+			boh_silesian_minerals
+			boh_mokrsko_mine
+		}
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1771
+				province_id = 4238
+				province_id = 2956
+			}
+			NOT = { base_production = 6 }
+			NOT = { has_production_building = yes }
+		}
+		trigger = {
+			production_leader = {
+				trade_goods = glass
+			}
+			1771 = {
+				owned_by = ROOT
+				trade_goods = glass
+				base_production = 6
+				has_production_building = yes
+			}
+			4238 = {
+				owned_by = ROOT
+				trade_goods = glass
+				base_production = 6
+				has_production_building = yes
+			}
+			2956 = {
+				owned_by = ROOT
+				trade_goods = glass
+				base_production = 6
+				has_production_building = yes
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					1771 = {
+						NOT = { has_building = counting_house }
+					}
+				}
+				1771 = { add_building = counting_house }
+			}
+			else_if = {
+				limit = {
+					4238 = {
+						NOT = { has_building = counting_house }
+					}
+				}
+				4238 = { add_building = counting_house }
+			}
+			else_if = {
+				limit = {
+					2956 = {
+						NOT = { has_building = counting_house }
+					}
+				}
+				2956 = { add_building = counting_house }
+			}
+			if = {
+				limit = {
+					NOT = { has_global_flag = bohemian_glass_flag }
+				}
+				country_event = { id = prices.43 }
+			}
+			1771 = {
+				add_province_modifier = {
+					name = boh_city_glass
+					duration = -1
+				}
+			}
+			4238 = {
+				add_province_modifier = {
+					name = boh_city_glass
+					duration = -1
+				}
+			}
+			2956 = {
+				add_province_modifier = {
+					name = boh_city_glass
+					duration = -1
+				}
+			}
+		}
+	}
+
+	boh_czech_administration = {
+		icon = mission_alliances
+		required_missions = { boh_crystal_glass }
+		position = 6
+		trigger = {
+			prestige = 50
+			corruption = 1
+			legitimacy_equivalent = 100
+			average_unrest = -1
+			stability = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_model_administation
+				duration = -1
+			}
 		}
 	}
 }
