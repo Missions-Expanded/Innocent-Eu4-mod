@@ -28,8 +28,9 @@ vijayanagara_mission_1 = {
 		trigger = {
 			OR = {
 				owns_core_province = 2100
-				navy_size_percentage = 0.75
+				navy_size_percentage = 1
 			}
+			monthly_dip = 9
 		}
 		effect = {
 			south_lanka_area = {
@@ -124,11 +125,16 @@ vijayanagara_mission_1 = {
 		required_missions = { }
 		position = 4
 		trigger = {
-			num_of_owned_provinces_with = {
-				value = 10
-				has_port = yes
-				has_shipyard_building_trigger = yes
-				any_trade_node_member_province = { province_id = 1340 }
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 10
+					has_port = yes
+					has_shipyard_building_trigger = yes
+				}
+				AND = {
+					navy_size_percentage = 1
+					navy_size = 25
+				}
 			}
 		}
 		effect = {
@@ -155,14 +161,17 @@ vijayanagara_mission_1 = {
 			}
 		}
 		trigger = {
-			1340 = {
-				all_trade_node_member_province = {
-					has_discovered = ROOT
-				}
-				all_trade_node_member_province = {
-					OR = {
-						NOT = { is_island = yes }
-						owned_by = ROOT
+			custom_trigger_tooltip = {
+				tooltip = VJI_EXPLORATION_INDIAN_OCEAN_TT
+				1340 = {
+					all_trade_node_member_province = {
+						has_discovered = ROOT
+					}
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { is_island = yes }
+							owned_by = ROOT
+						}
 					}
 				}
 			}
@@ -541,9 +550,12 @@ vijayanagara_mission_1 = {
 				monthly_adm = 12
 			}
 			is_ahead_of_time_in_specific_tech = { type = adm }
-			1340 = {
-				all_trade_node_member_province = {
-					owned_by = ROOT
+			custom_trigger_tooltip = {
+				tooltip = VIJ_LAND_REVENUE_TT
+				1340 = {
+					all_trade_node_member_province = {
+						owned_by = ROOT
+					}
 				}
 			}
 		}
@@ -551,7 +563,7 @@ vijayanagara_mission_1 = {
 			1340 = {
 				every_trade_node_member_province = {
 					add_province_modifier = {
-						name = vij_xis_provinces
+						name = vij_six_provinces
 						duration = -1
 					}
 				}
@@ -575,6 +587,7 @@ vijayanagara_mission_1 = {
 				name = vij_taxing_privilegs
 				duration = -1
 			}
+			add_inflation = -3
 		}
 	}
 	
@@ -584,11 +597,39 @@ vijayanagara_mission_1 = {
 		position = 14
 		trigger = {
 			natural_scientist = 2
+			india_superregion = {
+				type = all
+				OR = {
+					province_id = 541
+					NOT = { higher_development_than = 541 }
+				}
+			}
 		}
 		effect = {
+			541 = {
+				add_development_scaled_on_monarch_skill = yes
+			}
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = great_monuments }
+				}
+				rayalaseema_area = {
+					limit = {
+						NOT = { province_id = 541 }
+					}
+					random_list = {
+						33 = { add_base_tax = 1  }
+						33 = { add_base_production = 1  }
+						33 = { add_base_manpower = 1  }
+					}
+				}
+			}
+			else = {
+				rayalaseema_area = {
+					add_permanent_province_modifier = {
+						name = vij_dasavanda
+						duration = -1
+					}
 				}
 			}
 		}
@@ -598,9 +639,31 @@ vijayanagara_mission_1 = {
 		icon = mission_dharma_mission_religious_harmony
 		required_missions = { vijayanagar_water_purification }
 		position = 6
-		trigger = {	
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+					is_expanded_mod_active = { mod = great_monuments }
+				}
+				541 = {
+					OR = {
+						has_great_project = {
+							type = any
+							tier = 2
+						}
+						development = 50
+					}
+				}
+			}
+			else = {
+				541 = {
+					development = 50
+				}
+			}
 		}
 		effect = {
+			add_splendor = 200
+			add_mana_scaled_on_monarch_skill = yes
 		}
 	}
 }
@@ -625,9 +688,23 @@ vijayanagara_mission_2 = {
 		icon = mission_secure_the_malabar_coast
 		required_missions = { vijayanagar_maharaja }
 		position = 2
+		provinces_to_highlight = {
+			area = malabar_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
+			malabar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			malabar_area = {
+				add_province_modifier = {
+					name = vij_malabar_spice_trade
+					duration = 7300
+				}
+			}
 		}
 	}
 	
@@ -635,18 +712,124 @@ vijayanagara_mission_2 = {
 		icon = control_the_means_of_transaction
 		required_missions = { vijayanagar_malabar_coast }
 		position = 3
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Art of War"
-				}
-				num_of_war_reparations = 3
+		provinces_to_highlight = {
+			province_id = 534
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 10 }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { has_production_building_trigger = yes }
+				local_autonomy = 15
 			}
-			else = {
-				share_of_starting_income = 1.25
+		}
+		trigger = {
+			534 = {
+				owned_by = ROOT
+				development = 10
+				has_trade_building_trigger = yes
+				has_production_building_trigger = yes
+				NOT = { local_autonomy = 15 }
 			}
 		}
 		effect = {
+			534 = {
+				add_province_modifier = {
+					name = vij_city_spices
+					duration = -1
+				}
+				if = {
+					limit = {
+						has_no_manufactory_trigger = yes
+					}
+					if = {
+						limit = {
+							OR = {
+								trade_goods = naval_supplies
+								trade_goods = fish
+								trade_goods = salt
+							}
+						}
+						add_building = wharf
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = copper
+								trade_goods = iron
+							}
+						}
+						add_building = weapons
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = wool
+								trade_goods = cloth
+								trade_goods = silk
+								trade_goods = dyes
+							}
+						}
+						add_building = textile
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = coffee
+								trade_goods = cotton
+								trade_goods = sugar
+								trade_goods = tobacco
+								trade_goods = tea
+								trade_goods = cocoa
+							}
+						}
+						add_building = plantations
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = ivory
+								trade_goods = slaves
+								trade_goods = spices
+								trade_goods = fur
+								trade_goods = incense
+							}
+						}
+						add_building = tradecompany
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = grain
+								trade_goods = livestock
+								trade_goods = wine
+							}
+						}
+						add_building = farm_estate
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = paper
+								trade_goods = gems
+								trade_goods = tropical_wood
+								trade_goods = glass
+								trade_goods = chinaware
+							}
+						}
+						add_building = mills
+					}
+					else = {
+						add_base_tax = 1
+						add_base_production = 1
+						add_base_manpower = 1
+					}
+				}
+				else = {
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
 		}
 	}
 	
@@ -658,32 +841,72 @@ vijayanagara_mission_2 = {
 			vijayanagar_south_indian_trade
 		}
 		position = 4
-		trigger = {	
+		provinces_to_highlight = {
+			any_trade_node_member_province = { province_id = 1340 }
+			trade_goods = spices
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VIJ_SPICE_TRADER_TT
+				1340 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { trade_goods = spices }
+							AND = {
+								owned_by = ROOT
+								OR = {
+									has_manufactory_trigger = yes
+									AND = {
+										has_production_building_trigger = yes
+										base_production = 10
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			1340 = {
+				every_trade_node_member_province = {
+					limit = {
+						owned_by = ROOT
+						trade_goods = spices
+					}
+					add_province_modifier = {
+						name = vij_indian_spice_market
+						duration = -1
+					}
+				}
+			}
+			1361 = {
+				every_trade_node_member_province = {
+					limit = {
+						trade_goods = spices
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 
 	vijayanagar_malaccan_spices = {
 		icon = mission_rajendras_ambition
-		required_missions = {
-			vijayanagar_south_indian_navy
-			vijayanagar_spice_trader
-		}
+		required_missions = { vijayanagar_south_indian_navy }
 		position = 5
 		provinces_to_highlight = {
 			region = malaya_region
 			trade_goods = spices
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 		}
 		trigger = {
-			malaya_region = {
-				type = all
-				OR = {
-					NOT = { trade_goods = spices }
-					country_or_non_sovereign_subject_holds = ROOT
+			num_of_owned_provinces_with = {
+				value = 10
+				trade_goods = spices
+				any_trade_node_member_province = {
+					province_id = 1361
 				}
 			}
 		}
@@ -692,25 +915,28 @@ vijayanagara_mission_2 = {
 			add_navy_tradition = 25
 			1361 = {
 				add_trade_modifier = {
-					who = root
+					who = ROOT
 					duration = 7300
 					power = 50
 					key = rajendra_modifier
 				}
 			}
-			lower_burma_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+			1361 = {
+				every_trade_node_member_province = {
+					limit = {
+						trade_goods = spices
+						owned_by = ROOT
+					}
+					if = {
+						limit = { 
+							owner = { DIP = 6 }
+						}
+						add_base_production = 2
+					}
+					else = {
+						add_base_production = 1
+					}
 				}
-				add_claim = ROOT
-			}
-			arakan_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_claim = ROOT
 			}
 		}
 	}
@@ -721,9 +947,7 @@ vijayanagara_mission_2 = {
 		position = 6
 		provinces_to_highlight = {
 			area = raichur_doab_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			raichur_doab_area = {
@@ -735,14 +959,14 @@ vijayanagara_mission_2 = {
 			add_mil_power = 50
 			maidan_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			golconda_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
@@ -783,35 +1007,35 @@ vijayanagara_mission_2 = {
 			country_event = { id = flavor_vij.20 }
 			telingana_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			konkan_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			desh_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			ahmednagar_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			berar_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
@@ -823,9 +1047,54 @@ vijayanagara_mission_2 = {
 		icon = mission_southern_frontier
 		required_missions = { vijayanagar_kalyana }
 		position = 8
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = raichur_doab_area
+				area = golconda_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			raichur_doab_area = {
+				type = all
+				owned_by = ROOT
+			}
+			golconda_area = {
+				type = all
+				owned_by = ROOT
+			}
+			raichur_doab_area = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				base_manpower = 10
+			}
+			golconda_area = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				base_manpower = 10
+			}
 		}
 		effect = {
+			raichur_doab_area = {
+				add_province_modifier = {
+					name = vij_damboli
+					duration = -1
+				}
+			}
+			golconda_area = {
+				add_province_modifier = {
+					name = vij_damboli
+					duration = -1
+				}
+			}
 		}
 	}
 
@@ -833,9 +1102,72 @@ vijayanagara_mission_2 = {
 		icon = mission_abu_saids_dream
 		required_missions = { vijayanagar_northern_border }
 		position = 9
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = raichur_doab_area
+				area = desh_area
+				area = maidan_area
+				area = ahmednagar_area
+				area = berar_area
+				area = telingana_area
+				area = golconda_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 40
+				NOT = { controlled_by = ROOT }
+			}
+		}
+		trigger = {
+			raichur_doab_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
+			desh_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
+			maidan_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
+			ahmednagar_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
+			berar_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
+			telingana_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
+			golconda_area = {
+				type = all
+				owned_by = ROOT
+				controlled_by = ROOT
+				NOT = { local_autonomy = 40 }
+			}
 		}
 		effect = {
+			add_yearly_manpower = 1
+			add_country_modifier = {
+				name = vij_recruiting_sarf_khas
+				duration = -1
+			}
 		}
 	}
 	
@@ -843,9 +1175,33 @@ vijayanagara_mission_2 = {
 		icon = mission_conquer_burma
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = orissa_area
+				area = jharkhand_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			orissa_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			jharkhand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_oriya_literature
+				duration = 9125
+			}
+			orissa_area = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
 		}
 	}
 	
@@ -853,9 +1209,39 @@ vijayanagara_mission_2 = {
 		icon = mission_conquer_malwa_bng
 		required_missions = { vijayanagar_subjugating_gajapatis }
 		position = 11
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = malwa_area
+				area = gondwana_area
+				area = jharkhand_area
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy_above_min = 50
+			}
+		}
+		trigger = {
+			malwa_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy_above_min = 50 }
+			}
+			gondwana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy_above_min = 50 }
+			}
+			jharkhand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy_above_min = 50 }
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_marwari_cavalry
+				duration = 10950
+			}
 		}
 	}
 	
@@ -863,9 +1249,26 @@ vijayanagara_mission_2 = {
 		icon = mission_into_the_west
 		required_missions = { vijayanagar_administration_empire }
 		position = 12
-		trigger = {	
+		trigger = {
+			grown_by_development = 200
+			army_size = 50
+			num_of_cavalry = 4
+			india_superregion = {
+				type = all
+				OR = {
+					is_capital = yes
+					owner = {
+						NOT = { total_development = ROOT }
+					}
+				}
+			}
 		}
 		effect = {
+			add_adm_power = 150
+			add_country_modifier = {
+				name = vij_nayankara
+				duration = -1
+			}
 		}
 	}
 	
@@ -873,9 +1276,135 @@ vijayanagara_mission_2 = {
 		icon = mission_a_million_rice_fields
 		required_missions = { vijayanagar_provincial_administration }
 		position = 13
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					any_trade_node_member_province = {
+						province_id = 1340
+					}
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VIJ_LAND_REVENUE_TT
+				1340 = {
+					all_trade_node_member_province = {
+						owned_by = ROOT
+					}
+				}
+			}
+			development_in_provinces = {
+				value = 100
+				has_terrain = jungle
+				any_trade_node_member_province = {
+					province_id = 1340
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					has_terrain = hills
+					has_terrain = drylands
+				}
+				any_trade_node_member_province = {
+					province_id = 1340
+				}
+				base_manpower = 10
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					trading_bonus = {
+						trade_goods = cinnamon
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = naval_supplies
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = tropical_wood
+						value = yes
+					}
+					any_owned_province = {
+						trade_goods = cinnamon
+						development = 25
+					}
+					any_owned_province = {
+						trade_goods = naval_supplies
+						development = 25
+					}
+					any_owned_province = {
+						trade_goods = tropical_wood
+						development = 25
+					}
+				}
+			}
+			else = {
+				OR = {
+					trading_bonus = {
+						trade_goods = naval_supplies
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = tropical_wood
+						value = yes
+					}
+					any_owned_province = {
+						trade_goods = naval_supplies
+						development = 25
+					}
+					any_owned_province = {
+						trade_goods = tropical_wood
+						development = 25
+					}
+				}
+			}
 		}
 		effect = {
+			1340 = {
+				every_trade_node_member_province = {
+					if = {
+						limit = { has_terrain = jungle }
+						add_permanent_province_modifier = {
+							name = vij_wet_land
+							duration = -1
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								has_terrain = hills
+								has_terrain = drylands
+							}
+							NOT = { has_province_modifier = vij_wet_land }
+						}
+						add_permanent_province_modifier = {
+							name = vij_dry_land
+							duration = -1
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								trade_goods = cinnamon
+								trade_goods = naval_supplies
+								trade_goods = tropical_wood
+							}
+							NOT = { has_province_modifier = vij_wet_land }
+							NOT = { has_province_modifier = vij_dry_land }
+						}
+						add_permanent_province_modifier = {
+							name = vij_wood
+							duration = -1
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -883,9 +1412,17 @@ vijayanagara_mission_2 = {
 		icon = mission_convert_bengal
 		required_missions = { vijayanagar_stable_country }
 		position = 14
-		trigger = {	
+		trigger = {
+			OR = {
+				temple = 5
+				cathedral = 5
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_temples_deities
+				duration = 5475
+			}
 		}
 	}
 	
@@ -896,9 +1433,25 @@ vijayanagara_mission_2 = {
 			vijayanagar_brahmins_loyalty
 		}
 		position = 16
-		trigger = {	
+		trigger = {
+			OR = {
+				temple = 10
+				cathedral = 10
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = ages_and_splendor }
+				}
+				add_country_modifier = {
+					name = vij_dharmic_syncretism
+					duration = 18250
+				}
+			}
+			else = {
+				change_adm = 2
+			}
 		}
 	}
 }
@@ -925,32 +1478,51 @@ vijayanagara_mission_3 = {
 		position = 1
 		trigger = {
 			army_size_percentage = 1
+			monthly_mil = 10
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_preparation_war
+				duration = 5475
+			}
 			malabar_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			mysore_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			kanara_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
 			}
 			madura_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			andhra_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+			north_carnatic_area = {
+				limit = {
+					NOT = { owned_by = ROOT	}
 					NOT = { is_core = ROOT	}
 				}
 				add_permanent_claim = ROOT
@@ -975,27 +1547,8 @@ vijayanagara_mission_3 = {
 			}
 		}
 		effect = {
-			kanara_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			malabar_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			madura_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
+			add_mil_power = 50
+			add_prestige = 10
 		}	
 	}
 	
@@ -1008,9 +1561,42 @@ vijayanagara_mission_3 = {
 			vijayanagar_hindu_princedoms
 		}
 		position = 3
-		trigger = {	
+		trigger = {
+			mercantilism = 25
+			1340 = { is_strongest_trade_power = ROOT }
+			num_of_owned_provinces_with = {
+				value = 5
+				any_trade_node_member_province = { province_id = 1340 }
+				province_has_center_of_trade_of_level = 1
+			}
 		}
 		effect = {
+			set_country_flag = vij_trade_flag
+			country_event = { id = flavor_vij.17 }
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = vij_trade_dominion_ge
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = vij_trade_dominion
+					duration = -1
+				}
+			}
+			1340 = {
+				every_trade_node_member_province = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	
@@ -1021,9 +1607,23 @@ vijayanagara_mission_3 = {
 			vijayanagar_south_indian_trade
 		}
 		position = 5
-		trigger = {	
+		provinces_to_highlight = {
+			any_trade_node_member_province = { province_id = 1340 }
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VIJ_LAND_REVENUE_TT
+				1340 = {
+					all_trade_node_member_province = {
+						owned_by = ROOT
+					}
+				}
+			}
 		}
 		effect = {
+			add_mercantilism = 5
+			add_mana_scaled_on_monarch_skill = yes
 		}
 	}
 	
@@ -1031,9 +1631,28 @@ vijayanagara_mission_3 = {
 		icon = mission_conquer_andhra_bah
 		required_missions = { vijayanagar_coromandel_flow }
 		position = 6
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 1343
+		}
+		trigger = {
+			1343 = {
+				trade_share = {
+					country = ROOT
+					share = 20
+				}
+			}
 		}
 		effect = {
+			1343 = {
+				every_trade_node_member_province = {
+					limit = {
+						has_port = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 	
@@ -1044,9 +1663,25 @@ vijayanagara_mission_3 = {
 			vijayanagar_gujarat_riches
 		}
 		position = 7
-		trigger = {	
+		provinces_to_highlight = {
+			superregion = india_superregion
+			has_port = yes
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			india_superregion = {
+				type = all
+				OR = {
+					owned_by = ROOT
+					NOT = { has_port = yes }
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_dominion_indian_ocean
+				duration = -1
+			}
 		}
 	}
 	
@@ -1054,9 +1689,31 @@ vijayanagara_mission_3 = {
 		icon = mission_growth_of_golcond
 		required_missions = { vijayanagar_kalyana }
 		position = 8
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 542
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+				local_autonomy = 10
+				NOT = { num_of_times_improved_by_owner = 2 }
+			}
+		}
+		trigger = {
+			542 = {
+				owned_by = ROOT
+				is_core = ROOT
+				NOT = { local_autonomy = 10 }
+				num_of_times_improved_by_owner = 2
+			}
 		}
 		effect = {
+			542 = {
+				add_or_upgrade_production_building = yes
+				add_permanent_province_modifier = {
+					name = vij_improved_mineral_mines
+					duration = -1
+				}
+			}
 		}
 	}
 	
@@ -1067,9 +1724,29 @@ vijayanagara_mission_3 = {
 			vijayanagar_samu_garidi
 		}
 		position = 9
-		trigger = {	
+		trigger = {
+			deccan_region = {
+				type = all
+				OR = {
+					is_capital = yes
+					owner = {
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+						NOT = { total_development = ROOT }
+					}
+				}
+			}
 		}
 		effect = {
+			add_mana_scaled_on_monarch_skill = yes
+			add_country_modifier = {
+				name = vij_dream_unification
+				duration = -1
+			}
 		}
 	}
 	
@@ -1077,9 +1754,29 @@ vijayanagara_mission_3 = {
 		icon = mission_follow_the_brahmaputra
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 11
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = northern_sindh_area
+				area = sindh_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			northern_sindh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sindh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			504 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
 		}
 	}
 	
@@ -1091,9 +1788,162 @@ vijayanagara_mission_3 = {
 			vijayanagar_bengal_supremacy
 		}
 		position = 12
-		trigger = {	
+		trigger = {
+			army_size = 200
+			num_of_cavalry = 24
+			india_superregion = {
+				type = all
+				OR = {
+					is_capital = yes
+					owner = {
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+						NOT = { total_development = ROOT }
+					}
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = { has_country_modifier = vij_dream_unification }
+				remove_country_modifier = vij_dream_unification
+			}
+			add_country_modifier = {
+				name = vij_hindu_india
+				duration = -1
+			}
+			506 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			517 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			524 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			536 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			539 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			541 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			545 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			552 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			558 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			1948 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			2052 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			2099 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			4410 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			4421 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			4461 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
+			4503 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+					}
+					add_core = ROOT
+				}
+			}
 		}
 	}
 	
@@ -1101,9 +1951,15 @@ vijayanagara_mission_3 = {
 		icon = mission_establish_mint_towns
 		required_missions = { }
 		position = 13
-		trigger = {	
+		trigger = {
+			share_of_starting_income = 1.15
+			NOT = { inflation = 1 }
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_careful_investment
+				duration = 5475
+			}
 		}
 	}
 
@@ -1111,9 +1967,62 @@ vijayanagara_mission_3 = {
 		icon = mission_modernize_production
 		required_missions = { vijayanagar_stable_country }
 		position = 14
-		trigger = {	
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1340
+			}
+			OR = {
+				trade_goods = gems
+				trade_goods = pearls
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				development_in_provinces = {
+					value = 50
+					OR = {
+						trade_goods = gems
+						trade_goods = pearls
+					}
+				}
+				production_leader = {
+					trade_goods = gems
+				}
+				production_leader = {
+					trade_goods = pearls
+				}
+			}
 		}
 		effect = {
+			543 = {
+				add_base_production = 4
+				add_permanent_province_modifier = {
+					name = vij_center_production
+					duration = -1
+				}
+			}
+			custom_tooltip = VIJ_FASCINATING_TT
+			tooltip = {
+				add_permanent_province_modifier = {
+					name = vij_fascinating
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = gems
+							trade_goods = pearls
+						}
+					}
+					add_permanent_province_modifier = {
+						name = vij_fascinating
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 
@@ -1121,9 +2030,73 @@ vijayanagara_mission_3 = {
 		icon = mission_industrialize_bengal
 		required_missions = { vijayanagar_machilipatnam_minerals }
 		position = 15
-		trigger = {	
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1340
+			}
+			trade_goods = gems
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			development_in_provinces = {
+				value = 100
+				OR = {
+					trade_goods = gems
+					trade_goods = pearls
+				}
+			}
+			production_leader = {
+				trade_goods = gems
+			}
+			production_leader = {
+				trade_goods = pearls
+			}
+			custom_trigger_tooltip = {
+				tooltip = VIJ_GEM_CUTTING_INDUSTRIES_TT
+				1340 = {
+					all_trade_node_member_province = {
+						owned_by = ROOT
+						OR = {
+							has_manufactory_trigger = yes
+							NOT = { trade_goods = gems }
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			add_years_of_owned_provinces_production_income = {
+				years = 1
+				trigger = { trade_goods = gems }
+			}
+			543 = {
+				remove_province_modifier = vij_center_production
+				add_permanent_province_modifier = {
+					name = vij_industrial_center
+					duration = -1
+				}
+			}
+			custom_tooltip = VIJ_FASCINATING_TT
+			tooltip = {
+				remove_province_modifier = vij_fascinating
+				add_permanent_province_modifier = {
+					name = vij_fascinating_industry
+					duration = -1
+				}
+			}
+			every_owned_province = {
+				limit = {
+					has_province_modifier = vij_fascinating
+				}
+				remove_province_modifier = vij_fascinating
+				add_permanent_province_modifier = {
+					name = vij_fascinating_industry
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -1149,38 +2122,28 @@ vijayanagara_mission_4 = {
 		required_missions = { vijayanagar_maharaja }
 		position = 2
 		provinces_to_highlight = {
-			area = mysore_area
+			OR = {
+				area = andhra_area
+				area = north_carnatic_area
+			}
 			NOT = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		trigger = {
-			mysore_area = {
+			andhra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			north_carnatic_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT	
 			}
 		}
 		effect = {
-			kanara_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			malabar_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			madura_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = vij_reign_telugu
+				duration = 9125
 			}
 		}	
 	}
@@ -1190,40 +2153,40 @@ vijayanagara_mission_4 = {
 		required_missions = { vijayanagar_hindu_princedoms }
 		position = 3
 		provinces_to_highlight = {
-			area = mysore_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			area = andhra_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { prosperity = 10 }
+				}
+				NOT = { num_of_times_improved = 3 }
 			}
 		}
 		trigger = {
-			mysore_area = {
+			andhra_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				owned_by = ROOT
+				if = {
+					limit = { has_dlc = "Mandate of Heaven" }
+					prosperity = 10
+				}
+				num_of_times_improved = 3
 			}
 		}
 		effect = {
-			kanara_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+			543 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
 			}
-			malabar_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+			andhra_area = {
+				add_province_modifier = {
+					name = vij_remediation
+					duration = 5475
 				}
-				add_permanent_claim = ROOT
 			}
-			madura_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}	
+		}
 	}
 	
 	vijayanagar_city_victory = {
@@ -1233,9 +2196,25 @@ vijayanagara_mission_4 = {
 			vijayanagar_wonderous_palace
 		}
 		position = 4
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 541
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				devastation = 1
+				NOT = { development = 24 }
+			}
+		}
+		trigger = {
+			prestige = 50
+			legitimacy_equivalent = 90
+			541 = {
+				is_capital_of = ROOT
+				NOT = { devastation = 1 }
+				development = 24
+			}
 		}
 		effect = {
+			country_event = { id = flavor_vij.21 }
 		}
 	}
 	
@@ -1245,9 +2224,25 @@ vijayanagara_mission_4 = {
 			vijayanagar_city_victory
 		}
 		position = 5
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 541
+			OR = {
+				NOT = { has_building = university }
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			university = 5
+			541 = {
+				owned_by = ROOT
+				has_building = university
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_patronising_kannada_literature
+				duration = -1
+			}
 		}
 	}
 	
@@ -1255,9 +2250,33 @@ vijayanagara_mission_4 = {
 		icon = mission_invade_gujarat
 		required_missions = { vijayanagar_coromandel_flow }
 		position = 6
-		trigger = {	
+		provinces_to_highlight = {
+			province_id = 504
+		}
+		trigger = {
+			NOT = {
+				any_country = {
+					504 = {
+						trade_share = {
+							share = 5
+							country = PREV
+						}
+					}
+					navy_size = ROOT
+				}
+			}
 		}
 		effect = {
+			504 = {
+				every_trade_node_member_province = {
+					limit = {
+						has_port = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
 		}
 	}
 
@@ -1265,9 +2284,18 @@ vijayanagara_mission_4 = {
 		icon = mission_fortify_mandu
 		required_missions = {  }
 		position = 7
-		trigger = {	
+		trigger = {
+			monthly_mil = 10
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_guns
+				duration = 5475
+			}
+			capital_scope = {
+				artillery = ROOT
+				artillery = ROOT
+			}
 		}
 	}
 	
@@ -1278,9 +2306,18 @@ vijayanagara_mission_4 = {
 			vijayanagar_military_recruitment
 		}
 		position = 8
-		trigger = {	
+		trigger = {
+			monthly_mil = 11
+			OR = {
+				army_tradition = 50
+				army_professionalism = 0.50
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_samu_garidi
+				duration = -1
+			}
 		}
 	}
 	
@@ -1288,9 +2325,67 @@ vijayanagara_mission_4 = {
 		icon = mission_conquer_siam
 		required_missions = { vijayanagar_samu_garidi }
 		position = 9
-		trigger = {	
+		trigger = {
+			owns_core_province = 541
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+					is_expanded_mod_active = { mod = great_monuments }
+				}
+				541 = {
+					has_great_project = {
+						type = vijayanagara_elephant_stables
+						tier = 2
+					}
+				}
+			}
+			else = {
+				541 = {
+					base_manpower = 10
+					has_manpower_building_trigger = yes
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = VIJ_ELEPHANTS_TT
+				hidden_effect = {
+					every_owned_province = {
+						limit = { trade_goods = elephants }
+						if = {
+							limit = { 
+								owner = { MIL = 6 }
+							}
+							add_base_manpower = 2
+						}
+						else = {
+							add_base_manpower = 1
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = great_monuments }
+				}
+				541 = {
+					add_province_modifier = {
+						name = vij_improved_warfare
+						duration = 3650
+					}
+				}
+			}
+			else = {
+				541 = {
+					add_province_modifier = {
+						name = vij_elephant_stables
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 	
@@ -1298,9 +2393,35 @@ vijayanagara_mission_4 = {
 		icon = mission_demand_garjat_fealty
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = garjat_area
+				area = upper_mahanadi_area
+				area = orissa_area
+				area = jharkhand_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			garjat_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_mahanadi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			orissa_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			jharkhand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_mil_power = 100
 		}
 	}
 	
@@ -1311,9 +2432,53 @@ vijayanagara_mission_4 = {
 			vijayanagar_reverse_course
 		}
 		position = 11
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = garjat_area
+				area = upper_mahanadi_area
+				area = orissa_area
+				area = jharkhand_area
+				area = west_bengal_area
+				area = gaur_area
+				area = east_bengal_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			garjat_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_mahanadi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			orissa_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			jharkhand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			gaur_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_bengal_supremacy
+				duration = -1
+			}
 		}
 	}
 	
@@ -1324,9 +2489,16 @@ vijayanagara_mission_4 = {
 			vijayanagar_internal_trade
 		}
 		position = 14
-		trigger = {	
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				has_trade_building_trigger = yes
+				base_production = 5
+			}
 		}
 		effect = {
+			add_mercantilism = 5
+			custom_tooltip = VIJ_FAIRS_EVENTS_CHAIN_START
 		}
 	}
 	
@@ -1337,9 +2509,47 @@ vijayanagara_mission_4 = {
 			vijayanagar_trade_landing
 		}
 		position = 15
-		trigger = {	
+		trigger = {
+			num_of_trading_bonuses = 2
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 16
+					province_has_center_of_trade_of_level = 1
+				}
+				num_of_owned_provinces_with = {
+					value = 12
+					province_has_center_of_trade_of_level = 2
+				}
+			}
+			1343 = {
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+			}
+			504 = {
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+			}
 		}
 		effect = {
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = vij_favourable_balance
+				duration = 10950
+			}
+			custom_tooltip = BNG_FRUITS_OF_TRADE_DESC
+			hidden_effect = {
+				every_owned_province = {
+					limit = { province_has_center_of_trade_of_level = 2 }
+					add_province_modifier = {
+						name = bng_fruitful_trade_modifier
+						duration = 9125
+					}
+				}
+			}
 		}
 	}
 }
@@ -1436,9 +2646,7 @@ vijayanagara_mission_5 = {
 			}
 			hidden_effect = {
 				every_owned_province = {
-					limit = {
-						culture = tamil
-					}
+					limit = { culture = tamil }
 					add_province_modifier = {
 						name = vij_tamil_trade_guilds
 						duration = 18250
@@ -1484,9 +2692,7 @@ vijayanagara_mission_5 = {
 			custom_tooltip = VIJ_TAMIL_PROVINCES_TT
 			hidden_effect = {
 				every_owned_province = {
-					limit = {
-						culture = tamil
-					}
+					limit = { culture = tamil }
 					add_devastation = -15
 					add_prosperity = 10
 					random_list = {
@@ -1506,9 +2712,28 @@ vijayanagara_mission_5 = {
 			vijayanagar_coromandel_flow
 		}
 		position = 6
-		trigger = {	
+		trigger = {
+			development_in_provinces = {
+				value = 100
+				culture = tamil
+			}
+			all_owned_province = {
+				OR = {
+					NOT = { culture = tamil }
+					has_manufactory_trigger = yes
+					AND = {
+						base_production = 10
+						has_production_building_trigger = yes
+					}
+				}
+			}
 		}
 		effect = {
+			add_mercantilism = 5
+			add_country_modifier = {
+				name = vij_tamil_trading_secrets
+				duration = -1
+			}
 		}
 	}
 
@@ -1516,9 +2741,39 @@ vijayanagara_mission_5 = {
 		icon = mission_conquer_malwa_mer
 		required_missions = {  }
 		position = 7
-		trigger = {	
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_manpower_building_trigger = yes
+					has_forcelimit_building_trigger = yes
+					base_manpower = 10
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = VIJ_MILITARY_RECRUITMENT_TT
+			tooltip = {
+				add_province_modifier = {
+					name = vij_training_gyms
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							has_manpower_building_trigger = yes
+							has_forcelimit_building_trigger = yes
+							base_manpower = 10
+						}
+					}
+					add_province_modifier = {
+						name = vij_training_gyms
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 
@@ -1526,9 +2781,79 @@ vijayanagara_mission_5 = {
 		icon = mission_bankers_of_cambay
 		required_missions = { vijayanagar_military_recruitment }
 		position = 8
-		trigger = {	
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				development_in_provinces = {
+					value = 50
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+						trade_goods = brass
+						trade_goods = bronze
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 50
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+					}
+				}
+			}
+			any_owned_province = {
+				OR = {
+					trade_goods = iron
+					trade_goods = copper
+					trade_goods = brass
+					trade_goods = bronze
+				}
+				development = 20
+				OR = {
+					has_manufactory_trigger = yes
+					has_production_building_trigger = yes
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_monopoly_steel
+				duration = -1
+			}
+			random_owned_province = {
+				limit = {
+					trade_goods = iron
+					NOT = { has_manufactory_trigger = yes }
+				}
+				add_building = weapons
+			}
+			custom_tooltip = VIJ_WOOTZ_STEEL_TT
+			tooltip = {
+				add_province_modifier = {
+					name = vij_development_wootz_steel
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = iron
+							trade_goods = copper
+							trade_goods = brass
+							trade_goods = bronze
+						}
+					}
+					add_province_modifier = {
+						name = vij_development_wootz_steel
+						duration = 9125
+					}
+				}
+			}
 		}
 	}
 
@@ -1536,9 +2861,30 @@ vijayanagara_mission_5 = {
 		icon = mission_integrate_the_purbias
 		required_missions = { vijayanagar_wootz_steel }
 		position = 9
-		trigger = {	
+		trigger = {
+			trading_bonus = {
+				trade_goods = iron
+				value = yes
+			}
+			development_in_provinces = {
+				value = 100
+				trade_goods = iron
+			}
+			monthly_mil = 12
 		}
 		effect = {
+			add_country_modifier = {
+				name = vij_reformed_gunnery
+				duration = -1
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				country_event = {
+					id = ME_Vijayanagara_Events.5
+				}
+			}
 		}
 	}
 
@@ -1546,7 +2892,27 @@ vijayanagara_mission_5 = {
 		icon = mission_bengal_campaign
 		required_missions = { vijayanagar_end_adil_shahi }
 		position = 10
-		trigger = {	
+		provinces_to_highlight = {
+			OR = {
+				area = gaur_area
+				area = west_bengal_area
+				area = east_bengal_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			gaur_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 		}
@@ -1556,9 +2922,19 @@ vijayanagara_mission_5 = {
 		icon = mission_brahmin_administrators
 		required_missions = {  }
 		position = 13
-		trigger = {	
+		trigger = {
+			OR = {
+				marketplace = 5
+				stock_exchange = 5
+				trade_depot = 5
+			}
 		}
 		effect = {
+			add_years_of_income = 1
+			add_estate_loyalty = {
+				estate = estate_vaisyas
+				loyalty = 10
+			}
 		}
 	}
 	
@@ -1566,9 +2942,47 @@ vijayanagara_mission_5 = {
 		icon = mission_konkani_pirates
 		required_missions = { vijayanagar_internal_trade }
 		position = 14
-		trigger = {	
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				has_port = yes
+				has_trade_building_trigger = yes
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = VIJ_TRADE_LANDING_TT
+			tooltip = {
+				add_province_modifier = {
+					name = vij_defying_external_trade
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_port = yes
+						has_trade_building_trigger = yes
+						OR = {
+							has_shipyard_building_trigger = yes
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+					add_province_modifier = {
+						name = vij_defying_external_trade
+						duration = 9125
+					}
+				}
+			}
 		}
 	}
 	
@@ -1579,9 +2993,47 @@ vijayanagara_mission_5 = {
 			vijayanagar_trade_landing
 		}
 		position = 15
-		trigger = {	
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 20
+				has_trade_building_trigger = yes
+				base_production = 10
+			}
+			calc_true_if = {
+				amount = 4
+				all_trade_node = {
+					is_strongest_trade_power = ROOT
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = VIJ_TRADE_SUPREMACY_TT
+			tooltip = {
+				if = {
+					limit = { has_province_modifier = vij_defying_external_trade }
+					remove_province_modifier = vij_defying_external_trade
+				}
+				add_province_modifier = {
+					name = vij_indian_trade
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_trade_building_trigger = yes
+						base_production = 10
+					}
+					if = {
+						limit = { has_province_modifier = vij_defying_external_trade }
+						remove_province_modifier = vij_defying_external_trade
+					}
+					add_province_modifier = {
+						name = vij_indian_trade
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 }
