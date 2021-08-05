@@ -466,7 +466,7 @@ ME_Delhi_Mission_slot_1 = {
 	}
 	dlh_tamil_spices = {
 		icon = mission_rb_colonise_spice_islands
-		required_missions = { dlh_own_tamils }
+		required_missions = { dlh_tamil_rule }
 		position = 13
 		provinces_to_highlight = {
 			AND = {
@@ -523,7 +523,7 @@ ME_Delhi_Mission_slot_1 = {
 						culture = tamil
 						development = 15
 						OR = {
-							center_of_trade = 2
+							province_has_center_of_trade_of_level = 2
 							OR = {
 								has_building = marketplace
 								has_building = trade_depot
@@ -569,7 +569,7 @@ ME_Delhi_Mission_slot_2 = {
 		trigger = {
 			OR = {
 				army_tradition = 30
-				army_professionalism = 0.075
+				army_professionalism = 0.05
 			}
 			mil_tech = 5
 		}
@@ -582,7 +582,7 @@ ME_Delhi_Mission_slot_2 = {
 		}
 	}
 	dlh_elephant_warfare = {
-		icon = army_reforms
+		icon = mission_a_million_elephants
 		required_missions = { dlh_balban_reforms }
 		position = 2
 		trigger = {
@@ -597,7 +597,7 @@ ME_Delhi_Mission_slot_2 = {
 			}
 		}
 		effect = {
-			add_mil_power = 50
+			add_army_tradition = 10
 			add_country_modifier = {
 				name = bng_elephant_tactics_modifier
 				duration = 5475
@@ -687,7 +687,10 @@ ME_Delhi_Mission_slot_2 = {
 		required_missions = { dlh_textile_innovations }
 		position = 7
 		provinces_to_highlight = {
-			province = 522
+			OR = {
+				province_id = 522
+				province_id = 524
+			}
 		}
 		trigger = {
 			522 = {
@@ -715,7 +718,7 @@ ME_Delhi_Mission_slot_2 = {
 	}
 	dlh_bengali_jamdani = {
 		icon = mission_gujarati_textiles
-		required_missions = { dlh_diamond_delhi }
+		required_missions = { dlh_diamond_delhi dlh_quell_tiger }
 		position = 8
 		provinces_to_highlight = { 
 			province_id = 564
@@ -752,15 +755,17 @@ ME_Delhi_Mission_slot_2 = {
 			}
 		}
 	}
-	dlh_bengali_jamdani = {
+	dlh_utilise_shipbuilding = {
 		icon = mission_grand_bengali_shipyards
 		required_missions = { dlh_bengali_jamdani }
-		position = 10
+		position = 9
 		provinces_to_highlight = {
 			AND = {
-				country_or_non_sovereign_subject_holds = ROOT
-				has_port = yes
 				OR = {
+					AND = {
+						country_or_non_sovereign_subject_holds = ROOT
+						has_port = yes
+					}
 					province_id = 561
 					province_id = 2039
 					province_id = 4475
@@ -825,72 +830,243 @@ ME_Delhi_Mission_slot_2 = {
 			}
 		}
 	}
-	dlh_bengali_jamdani = {
-		icon = mission_grand_bengali_shipyards
-		required_missions = { dlh_bengali_jamdani }
-		position = 9
+	dlh_malabar_coast = {
+		icon = mission_secure_the_malabar_coast
+		required_missions = { dlh_artillery dlh_conquer_malwa }
+		position = 10
 		provinces_to_highlight = {
-			AND = {
-				country_or_non_sovereign_subject_holds = ROOT
-				has_port = yes
-				OR = {
-					province_id = 561
-					province_id = 2039
-					province_id = 4475
-					province_id = 564
-					province_id = 4474
-					province_id = 568
+			OR = {
+				AND = {
+					area = konkan_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
-				NOT = {
-					OR = {
-						has_building = dock
-						has_building = drydock
-					}
-					OR = {
-						has_building = shipyard
-						has_building = grand_shipyard
+				AND = {
+					area = konkan_area
+					country_or_non_sovereign_subject_holds = ROOT
+					NOT = {
+						OR = {
+							has_building = marketplace
+							has_building = trade_depot
+							has_building = stock_exchange
+						}
+						development = 12
 					}
 				}
 			}
 		}
 		trigger = {
-			561 = {
+			konkan_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				development = 12
 			}
-			2039 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4475 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			564 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			4474 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			568 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			OR = {
-				dock = 3
-				drydock = 3
-			}
-			OR = {
-				shipyard = 3
-				grand_shipyard = 3
-			}
-			navy_size = 12
 		}
 		effect = {
-			country_event = {
-				id = bng_events.31
+			konkan_area = {
+				add_province_modifier = {
+					name = dlh_konkan_ports_modifier
+					duration = -1
+				}
 			}
-			add_dip_power = 50
-			define_advisor = {
-				type = naval_reformer
-				skill = 2
-				discount = yes
+			raichur_doab_area = {
+				add_permanent_claim = ROOT
+			}
+			kanara_area = {
+				add_permanent_claim = ROOT
+			}
+			mysore_area = {
+				add_permanent_claim = ROOT
+			}
+			rayalaseema_area = {
+				add_permanent_claim = ROOT
+			}
+			malabar_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_furthest_reach = {
+		icon = expand_to_the_south
+		required_missions = { dlh_malabar_coast }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = raichur_doab_area
+				area = kanara_area
+				area = mysore_area
+				area = rayalaseema_area
+				area = malabar_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			raichur_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kanara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			mysore_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rayalaseema_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			malabar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_provinces_reclaimed_modifier
+				duration = 18250
+			}
+			madura_area = {
+				add_permanent_claim = ROOT
+			}
+			kongu_area = {
+				add_permanent_claim = ROOT
+			}
+			south_carnatic_area = {
+				add_permanent_claim = ROOT
+			}
+			north_carnatic_area = {
+				add_permanent_claim = ROOT
+			}
+			tanjore_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_tamil_rule = {
+		icon = mission_end_tamil_insurgency
+		required_missions = { dlh_furthest_reach }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				area = madura_area
+				area = kongu_area
+				area = south_carnatic_area
+				area = north_carnatic_area
+				area = tanjore_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			madura_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kongu_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			south_carnatic_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_carnatic_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tanjore_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_tamil_trade_modifier
+				duration = 18250
+			}
+			lanka_area = {
+				add_permanent_claim = ROOT
+			}
+			south_lanka_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_dominate_gulf = {
+		icon = mission_arabian_sea_trade
+		required_missions = { dlh_tamil_rule }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1334
+				province_id = 1335
+				province_id = 4346
+			}
+		}
+		trigger = {
+			mercantilism = 80
+			num_of_owned_provinces_with = {
+				value = 10
+				province_has_center_of_trade_of_level = 2
+			}
+			OR = {
+				1334 = { #Strait of Hormuz
+					trade_share = {
+						country = ROOT
+						share = 20
+					}
+				}
+				1335 = { #Persian Gulf
+					trade_share = {
+						country = ROOT
+						share = 20
+					}
+				}
+				4346 = { #Qamr Bay
+					trade_share = {
+						country = ROOT
+						share = 20
+					}
+				}
+				num_of_owned_provinces_with = {
+					value = 4
+					province_has_center_of_trade_of_level = 1
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_goods_of_gulf_modifier
+				duration = 14600
+			}
+			random_owned_province = {
+				limit = { province_has_center_of_trade_of_level = 1 }
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			random_owned_province = {
+				limit = { province_has_center_of_trade_of_level = 1 }
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			random_owned_province = {
+				limit = { province_has_center_of_trade_of_level = 1 }
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			random_owned_province = {
+				limit = { province_has_center_of_trade_of_level = 1 }
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
 			}
 		}
 	}
@@ -906,6 +1082,896 @@ ME_Delhi_Mission_slot_3 = {
 		tag = DLH
 		NOT = { has_country_flag = formed_delhi }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+	}
+
+	dlh_let_fires_burn = {
+		icon = mission_steppe_warriors
+		required_missions = { dlh_balban_reforms }
+		position = 2
+		trigger = {
+			if = {
+				limit = { has_dlc = "Leviathan" }
+				OR = {
+					num_of_times_used_transfer_development = 6
+					any_country = {
+						ROOT = {
+							has_pillaged_capital_against = PREV
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = { ai = yes }
+				num_of_war_reparations = 2
+			}
+			else = {
+				num_of_war_reparations = 3
+			}
+			is_at_war = yes
+		}
+		effect = {
+			add_years_of_income = 1
+			custom_tooltip = DLH_DEVESTATION_AND_TAX_TT
+			hidden_effect = {
+				every_country = {
+					limit = { war_with = FROM }
+					every_owned_province = {
+						limit = { controlled_by = FROM }
+						add_devastation = 50
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 10
+							num_of_war_reparations = 10
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 9
+							num_of_war_reparations = 9
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 8
+							num_of_war_reparations = 8
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 7
+							num_of_war_reparations = 7
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 6
+							num_of_war_reparations = 6
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 5
+							num_of_war_reparations = 5
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 4
+							num_of_war_reparations = 4
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 3
+							num_of_war_reparations = 3
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 2
+							num_of_war_reparations = 2
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+				if = {
+					limit = { 
+						OR = {
+							num_of_times_used_transfer_development = 1
+							num_of_war_reparations = 1
+						}
+					} 
+					random_owned_province = {
+						random_list = {
+							33 = {
+								add_base_tax = 1
+							}
+							33 = {
+								add_base_production = 1
+							}
+							34 = {
+								add_base_manpower = 1
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	dlh_seize_doab = {
+		icon = mission_conquer_the_doab
+		required_missions = { dlh_deal_with_splinters }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = lower_doab_area
+				area = upper_doab_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lower_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_push_to_bihar_modifier
+				duration = 7300
+			}
+			lower_doab_area = {
+				add_province_modifier = {
+					name = dlh_asserting_control_modifier
+					duration = 9125
+				}
+			}
+			524 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 25
+					key = STRONG_MERCHANTS
+				}
+			}
+		}
+	}
+	dlh_traitors_no_more = {
+		icon = mission_defeat_jaunpur
+		required_missions = { dlh_seize_doab }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = katehar_area
+				area = oudh_area
+				area = purvanchal_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			katehar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			oudh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			purvanchal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				army_size = JNP
+				NOT = { exists = JNP }
+			}
+		}
+		effect = {
+			JNP = {
+				every_core_province = {
+					limit = { 
+						NOT = { is_core = FROM }
+					}
+					add_core = FROM
+				}
+			}
+			custom_tooltip = DLH_HINDAVI_AVADHI_MODIFIER_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = { 
+						OR = {
+							culture = avadhi
+							culture = hindavi
+						}
+					}
+					add_province_modifier = {
+						name = dlh_sharqi_subadars_modifier
+						duration = 9125
+					}
+				}
+				random_owned_province = {
+					limit = { 
+						OR = {
+							culture = avadhi
+							culture = hindavi
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { 
+						OR = {
+							culture = avadhi
+							culture = hindavi
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { 
+						OR = {
+							culture = avadhi
+							culture = hindavi
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { 
+						OR = {
+							culture = avadhi
+							culture = hindavi
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = { 
+						OR = {
+							culture = avadhi
+							culture = hindavi
+						}
+					}
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+
+	dlh_reintegrate_empire = {
+		icon = mission_delhi_resurgent
+		required_missions = { dlh_traitors_no_more dlh_descend_into_rajputana }
+		position = 5
+		provinces_to_highlight = {
+			AND = {
+				is_core = ROOT
+				NOT = { owned_by = ROOT }
+			}
+		}
+		trigger = {
+			all_core_province = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}	
+			prestige = 20
+			OR = {
+				NOT = { average_effective_unrest = 3 }
+				NOT = { overextension_percentage = 0.01 }
+			}
+		}
+		effect = {
+			change_adm = 1
+			change_dip = 1
+			change_mil = 1
+			gaur_area = {
+				add_permanent_claim = ROOT
+			}
+			west_bengal_area = {
+				add_permanent_claim = ROOT
+			}
+			north_bengal_area = {
+				add_permanent_claim = ROOT
+			}
+			east_bengal_area = {
+				add_permanent_claim = ROOT
+			}
+			568 = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_quell_tiger = {
+		icon = mission_conquer_bengal_dlh
+		required_missions = { dlh_reintegrate_empire }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = gaur_area
+				area = west_bengal_area
+				area = north_bengal_area
+				area = east_bengal_area
+				province_id = 568
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			gaur_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			} 
+			568 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_sleeping_tiger_modifier
+				duration = 5475
+			}
+			orissa_area = {
+				add_permanent_claim = ROOT
+			}
+			jharkhand_area = {
+				add_permanent_claim = ROOT
+			}
+			upper_mahanadi_area = {
+				add_permanent_claim = ROOT
+			}
+			garjat_area = {
+				add_permanent_claim = ROOT
+			}
+			2080 = {
+				add_permanent_claim = ROOT
+			}
+			549 = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_subjugate_gajapats = {
+		icon = mission_conquer_orissa_dlh
+		required_missions = { dlh_quell_tiger }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = orissa_area
+				area = jharkhand_area
+				area = upper_mahanadi_area
+				area = garjat_area
+				province_id = 549
+				province_id = 2080
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			orissa_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			jharkhand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_mahanadi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			garjat_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			} 
+			549 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2080 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				if = {
+					limit = { has_dlc = "Rule Britannia" }
+					innovativeness = 10
+				}
+				else = {
+					adm_tech = 10
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						KJH = {
+							vassal_of = FROM
+						}
+						GRJ = {
+							vassal_of = FROM
+						}
+						PRD = {
+							vassal_of = FROM
+						}
+						JPR = {
+							vassal_of = FROM
+						}
+					}
+				}
+				if = {
+					limit = { 
+						KJH = {
+							vassal_of = FROM
+						}
+					} 
+					KJH = {
+						add_liberty_desire = -20
+					}
+				}
+				if = {
+					limit = { 
+						GRJ = {
+							vassal_of = FROM
+						}
+					} 
+					GRJ = {
+						add_liberty_desire = -20
+					}
+				}
+				if = {
+					limit = { 
+						PRD = {
+							vassal_of = FROM
+						}
+					} 
+					PRD = {
+						add_liberty_desire = -20
+					}
+				}
+				if = {
+					limit = { 
+						JPR = {
+							vassal_of = FROM
+						}
+					} 
+					JPR = {
+						add_liberty_desire = -20
+					}
+				}
+			}
+			add_country_modifier = {
+				name = dlh_oriya_literature_modifier
+				duration = 9125
+			}
+			malwa_area = {
+				add_permanent_claim = ROOT
+			}
+			gondwana_area = {
+				add_permanent_claim = ROOT
+			}
+			552 = {
+				add_or_upgrade_university_building = yes
+			}
+			if = {
+				limit = { has_estate = estate_brahmins }
+				add_estate_loyalty = {
+					estate = estate_brahmins 
+					loyalty = 10
+				}
+			}
+			else_if = {
+				limit = { has_estate = estate_dhimmi }
+				add_estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 10
+				}
+			}
+		}
+	} 
+	dlh_conquer_malwa = {
+		icon = mission_conquer_malwa_bng
+		required_missions = { dlh_subjugate_gajapats }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = malwa_area
+						area = gondwana_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					OR = {
+						area = malwa_area
+						area = gondwana_area
+					}
+					country_or_non_sovereign_subject_holds = ROOT 
+					local_autonomy_above_min = 50
+				}
+			}
+		}
+		trigger = {
+			malwa_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy_above_min = 50 }
+			}
+			gondwana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy_above_min = 50 }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_marwari_cavalry_modifier
+				duration = 10950
+			}
+			andhra_area = {
+				add_permanent_claim = ROOT
+			}
+			golconda_area = {
+				add_permanent_claim = ROOT
+			}
+			telingana_area = {
+				add_permanent_claim = ROOT
+			}
+			berar_area = {
+				add_permanent_claim = ROOT
+			}
+			ahmednagar_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_revenge_bahmanis = {
+		icon = mission_conquer_central_deccan
+		required_missions = { dlh_conquer_malwa }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = andhra_area
+				area = golconda_area
+				area = telingana_area
+				area = berar_area
+				area = ahmednagar_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			andhra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			golconda_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			telingana_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			berar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ahmednagar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_expell_bahmanids_modifier
+				duration = 9125
+			}
+			desh_area = {
+				add_permanent_claim = ROOT
+			}
+			maidan_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_daulatabad = {
+		icon = mission_viceroyalty_of_the_deccan
+		required_missions = { dlh_revenge_bahmanis }
+		position = 12
+		provinces_to_highlight = {
+			province_id = 545
+		}
+		trigger = {
+			545 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th	
+				}
+				development = 24
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+				NOT = { local_autonomy_above_min = 20 }
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			545 = {
+				add_province_modifier = {
+					name = dlh_daulatabad_modifier
+					duration = -1
+				}
+				add_or_upgrade_manpower_building = yes
+				add_base_tax = 2
+				add_base_production = 2
+			}
+		}
+	}
+	dlh_wootz_steel = {
+		icon = mission_viceroyalty_of_the_deccan
+		required_missions = { dlh_tamil_rule dlh_mines_of_golconda }
+		position = 13
+		provinces_to_highlight = {
+			AND = {
+				trade_goods = iron
+				region = deccan_region
+				NOT = {
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+				}
+				NOT = { base_production = 10 }
+			}
+		}
+		trigger = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+						trade_goods = coal
+						trade_goods = tin
+						trade_goods = lead
+						trade_goods = gunpowder
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+						trade_goods = coal
+					}
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 3
+				AND = {
+					trade_goods = iron
+					region = deccan_region
+					OR = {
+						has_building = workshop
+						has_building = counting_house
+					}
+					base_production = 10
+				}
+			}
+			OR = {
+				has_global_modifier_value = {
+					which = production_efficiency
+					value = 0.25
+				}
+				trading_bonus = {
+					trade_goods = iron
+					value = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = DLH_STEEL_OWNED_TT
+			custom_tooltip = DLH_WOOTZ_ENLIGHTENMENT_TT
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						AND = {
+							trade_goods = iron
+							region = deccan_region
+							OR = {
+								has_building = workshop
+								has_building = counting_house
+							}
+							base_production = 10
+						}
+					}
+					add_province_modifier = {
+						name = dlh_wootz_steel_modifier
+						duration = 9125
+					}
+				}
+				set_country_flag = dlh_monopoly_on_steel_flag
+			}
+		}
+	}
+	dlh_hindustan = {
+		icon = mission_indian_empire
+		required_missions = { dlh_dominate_gulf dlh_prevent_collapse }
+		position = 13
+		provinces_to_highlight = {
+			superregion = india_superregion
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			india_superregion = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			government_rank = 3
+			development = 1000
+			has_unified_culture_group = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_united_hindustan_modifier
+				duration = -1
+			}
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
 	}
 }
 
