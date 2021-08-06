@@ -1902,7 +1902,9 @@ ME_Delhi_Mission_slot_3 = {
 				value = 3
 				AND = {
 					trade_goods = iron
-					region = deccan_region
+					OR = {
+						region = deccan_region
+						region = coromandel_region 
 					OR = {
 						has_building = workshop
 						has_building = counting_house
@@ -1985,6 +1987,74 @@ ME_Delhi_Mission_slot_4 = {
 		tag = DLH
 		NOT = { has_country_flag = formed_delhi }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+	}
+
+	dlh_weather_future = {
+		icon = mission_crush_delhi
+		required_missions = { }
+		position = 1
+		trigger = {
+			OR = {
+				army_size_percentage = 0.8
+				ROOT = {
+					all_subject_country = { 
+						NOT = {
+							army_size = FROM
+						}
+					}
+				}
+			}
+			NOT = { is_in_deficit = yes }
+		}
+		effect = {
+			every_province = {
+				limit = { is_core = JAN }
+				add_core = FROM
+			}
+			add_country_modifier = {
+				name = dlh_hold_line_modifier
+				duration = 7300
+			}
+		}
+	}
+	dlh_deal_with_splinters = {
+		icon = mission_have_two_subjects
+		required_missions = { dlh_weather_future  }
+		position = 2
+		trigger = {
+			OR = {
+				SRH = {
+					vassal_of = FROM
+					NOT = { liberty_desire = 50 }
+				}
+				507 = {
+					owned_by = FROM
+				}
+			}
+			if = {
+				limit = { exists = JNP }
+				OR = {
+					has_opinion_modifier = {
+						who = JNP
+						modifier = embraced_absolutism
+					}
+					has_opinion_modifier = {
+						who = JNP
+						modifier = embraced_absolutism
+					}
+				}
+			}
+		}
+		effect = {
+			every_province = {
+				limit = { is_core = JAN }
+				add_core = FROM
+			}
+			add_country_modifier = {
+				name = dlh_hold_line_modifier
+				duration = 7300
+			}
+		}
 	}
 }
 
