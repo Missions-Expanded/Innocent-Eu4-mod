@@ -1907,6 +1907,7 @@ ME_Delhi_Mission_slot_3 = {
 					OR = {
 						region = deccan_region
 						region = coromandel_region 
+					}
 					OR = {
 						has_building = workshop
 						has_building = counting_house
@@ -1933,7 +1934,10 @@ ME_Delhi_Mission_slot_3 = {
 					limit = {
 						AND = {
 							trade_goods = iron
-							region = deccan_region
+							OR = {
+								region = deccan_region
+								region = coromandel_region 
+							}
 							OR = {
 								has_building = workshop
 								has_building = counting_house
@@ -1996,7 +2000,7 @@ ME_Delhi_Mission_slot_4 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			OR = {
+			AND = {
 				army_size_percentage = 0.8
 				ROOT = {
 					all_subject_country = { 
@@ -2048,14 +2052,39 @@ ME_Delhi_Mission_slot_4 = {
 			}
 		}
 		effect = {
-			every_province = {
-				limit = { is_core = JAN }
-				add_core = FROM
+			custom_tooltip = DLH_SIRHIND_SEIZE_TT
+			hidden_effect = {
+				if = {
+					limit = {
+						SRH = {
+							vassal_of = FROM
+							NOT = { liberty_desire = 50 }
+							sirhind_area = {
+								type = all
+								owned_by = THIS
+							}
+						}
+					}
+					sirhind_area = {
+						cede_province = FROM
+					}
+				}
 			}
-			add_country_modifier = {
-				name = dlh_hold_line_modifier
-				duration = 7300
+			if = {
+				limit = {
+					sirhind_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+				sirhind_area = {
+					add_permanent_province_modifier = { 
+						name = dlh_delhis_again_modifier
+						duration = 9125  
+					}
+				}
 			}
+			create_general = { tradition = 60 }
 		}
 	}
 }
