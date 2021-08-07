@@ -2131,6 +2131,7 @@ country_event = {
 	title = ME_France_Events.58.T
 	desc = ME_France_Events.58.D
 	picture = LIBERUM_VETO_eventPicture
+	fire_only_once = yes
 	is_triggered_only = yes
 	immediate = {
 		clr_country_flag = french_hre_subject_enabled
@@ -2157,8 +2158,11 @@ country_event = {
 			}
 		}
 		name = ME_France_Events.58.OPT2
-		every_owned_province = {
-			add_permanent_claim = FROM
+		custom_tooltip = fra_gains_permanent_claims
+		hidden_effect = {
+			every_owned_province = {
+				add_permanent_claim = FROM
+			}
 		}
 	}
 }
@@ -2172,7 +2176,6 @@ country_event = {
 	is_triggered_only = yes
 	option = {
 		name = ME_France_Events.59
-		custom_tooltip = fra_lose_one_authority_tt
 		subtract_variable = {            
     		which = french_authority
     		value = 1
@@ -2181,39 +2184,153 @@ country_event = {
 	}
 }
 
-[From.GetName] requests the Emperor's aid;
-country_event = {
-	id = ME_France_Events.59
-	title = ME_France_Events.59.T
-	desc = ME_France_Events.59.D
-	picture = DEBATE_REPUBLICAN_eventPicture
-	mean_time_to_happen = {
-		months = 6
-	}
-	immediate = {
-		set_country_flag = french_authority_event
-	}
-	trigger = {
-		has_country_flag = french_hre_subject_enabled
-	}
-
-
 #Francorum Renovatio Imperii#
 country_event = {
 	id = ME_France_Events.60
 	title = ME_France_Events.60.T
 	desc = ME_France_Events.60.D
 	picture = HRE_eventPicture
+	fire_only_once = yes
 	is_triggered_only = yes
 	major = yes
 	option = {
 		name = ME_France_Events.60.OPT1
 		custom_tooltip = fra_french_princes_vassalization
 		override_country_name = fra_francia
-		hidden_effect = {
-			country_event = {
-				id = ME_France_Events.58
+		every_subject_country = {
+			limit = {
+				is_subject_of_type = french_hre_subject
 			}
+			hidden_effect = {
+				country_event = {
+					id = ME_France_Events.58
+				}
+			}
+		}
+		clr_country_flag = french_hre_subject_enabled
+	}
+}
+
+#Hidden event for imperial request#
+country_event = {
+	id = ME_France_Events.61
+	title = ME_France_Events.61.T
+	desc = ME_France_Events.61.D
+	picture = DEBATE_REPUBLICAN_eventPicture
+	hidden = yes
+	mean_time_to_happen = {
+		months = 2
+	}
+	immediate = {
+		clr_country_flag = french_authority_event
+		set_country_flag = french_authority_event
+	}
+	trigger = {
+		had_country_flag = {
+			flag = french_authority_event
+			days = 180
+		}
+	}
+	option = {
+		name = ME_France_Events.61.OPT1
+		country_event = {
+			id = ME_France_Events.62
+		}
+	}
+	option = {
+		name = ME_France_Events.61.OPT2
+		country_event = {
+			id = ME_France_Events.63
+		}
+	}
+	option = {
+		name = ME_France_Events.61.OPT3
+		country_event = {
+			id = ME_France_Events.64
+		}
+	}
+
+#An Imperial Request (manpower version)#
+country_event = {
+	id = ME_France_Events.62
+	title = ME_France_Events.62.T
+	desc = ME_France_Events.62.D
+	picture = TRADE_GOODS_PLANTATION_GOODS_IN_WAREHOUSE_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.62.OPT1
+		change_variable = {
+			which = french_authority
+			value = 1
+		}
+		add_yearly_manpower = -0.5
+	}
+	option = {
+		name = ME_France_Events.62.OPT2
+		change_variable = {
+			which = french_authority
+			value = 1
+		}
+		add_country_modifier = {
+			name = fra_funding_mercs
+			duration = 10950
+		}
+	}
+	option = {
+		name = ME_France_Events.62.OPT2
+		subtract_variable = {
+			which = french_authority
+			value = 1
+		}
+	}
+}
+
+#An Imperial Request (gold version)#
+country_event = {
+	id = ME_France_Events.63
+	title = ME_France_Events.63.T
+	desc = ME_France_Events.63.D
+	picture = OVEREXTENSION_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.63.OPT1
+		change_variable = {
+			which = french_authority
+			value = 1
+		}
+		add_years_of_income = -0.5
+	}
+	option = {
+		name = ME_France_Events.63.OPT2
+		subtract_variable = {
+			which = french_authority
+			value = 1
+		}
+	}
+}
+
+#An Imperial Request (mana version)#
+country_event = {
+	id = ME_France_Events.64
+	title = ME_France_Events.64.T
+	desc = ME_France_Events.64.D
+	picture = MERCHANTS_TALKING_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.64.OPT1
+		change_variable = {
+			which = french_authority
+			value = 1
+		}
+		add_adm_power = -100
+		add_dip_power = -100
+		add_mil_power = -100
+	}
+	option = {
+		name = ME_France_Events.64.OPT2
+		subtract_variable = {
+			which = french_authority
+			value = 1
 		}
 	}
 }
