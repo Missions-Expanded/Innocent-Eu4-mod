@@ -11,10 +11,15 @@ MSA_Missions_Expansion_1 = {
 	MSA_army_reforms = {
 		icon = mission_integrate_the_purbias
 		required_missions = { MSA_land }
-		position = 2
+		position = 9
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.1
+			}
+			army_tradition = 60
 		}
 		effect = {
 		}
@@ -23,7 +28,7 @@ MSA_Missions_Expansion_1 = {
 	MSA_great_power = {
 		icon = mission_found_udaipur
 		required_missions = { MSA_army_reforms }
-		position = 4
+		position = 11
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -46,8 +51,12 @@ MSA_Missions_Expansion_2 = {
 	MSA_land = {
 		icon = mission_defeat_mewar
 		required_missions = { MLC_malaya }
-		position = 1
+		position = 8
 		provinces_to_highlight = {
+			OR = {
+				area = tenasserim_area
+				area = north_tenasserim_area
+			}
 		}
 		trigger = {
 			OR = {
@@ -101,13 +110,72 @@ MSA_Missions_Expansion_2 = {
                 }
                 add_permanent_claim = ROOT
             }
+			custom_tooltip = MSA_completed_by_forcelimit
+			tooltip = {
+				add_country_modifier = {
+					name = MSA_offensive_focus
+					duration = 5475
+				}
+			}
+			custom_tooltip = MSA_completed_by_fortification
+			tooltip = {
+				add_country_modifier = {
+					name = MSA_defensive_focus
+					duration = 10950
+				}
+			}
+			custom_tooltip = MSA_completed_by_both
+			tooltip = {
+				add_country_modifier = {
+					name = MSA_balanced_focus
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							tenasserim_area = {
+								owned_by = ROOT
+								fort_level = 2
+							}
+							north_tenasserim_area = {
+								owned_by = ROOT
+								fort_level = 2
+							}
+						}
+						army_size = 40
+						army_size_percentage = 0.75
+					}
+					add_country_modifier = {
+						name = MSA_balanced_focus
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = {
+						army_size = 40
+						army_size_percentage = 0.75
+					}
+					add_country_modifier = {
+						name = MSA_offensive_focus
+						duration = 5475
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = MSA_balanced_focus
+						duration = 9125
+					}
+				}
+			}
 		}
 	}
 	
 	MSA_elephant = {
 		icon = mission_a_million_elephants
 		required_missions = { MSA_land }
-		position = 2
+		position = 9
 		provinces_to_highlight = {
 			OR = {
 				area = khorat_area
@@ -131,6 +199,10 @@ MSA_Missions_Expansion_2 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_against_a_million_elephants
+				duration = 10950
+			}
 			north_laos_area = {
 				limit = {
                     NOT = { is_core = ROOT }
@@ -186,7 +258,7 @@ MSA_Missions_Expansion_2 = {
 	MSA_indochina = {
 		icon = mission_restore_pagodas
 		required_missions = { MSA_end_the_angkor MSA_elephant }
-		position = 4
+		position = 11
 		provinces_to_highlight = {
 			OR = {
 				area = champasak_area
@@ -201,6 +273,8 @@ MSA_Missions_Expansion_2 = {
 				area = north_tenasserim_area
 				area = tay_nguyen_area
 				area = champa_area
+				area = sukhothai_area
+				area = north_laos_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -208,6 +282,7 @@ MSA_Missions_Expansion_2 = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				OR = {
 					area = champasak_area
+					area = sukhothai_area
 					area = vientiane_area
 					area = northern_thai_area
 					area = cambodia_area
@@ -219,24 +294,45 @@ MSA_Missions_Expansion_2 = {
 					area = north_tenasserim_area
 					area = tay_nguyen_area
 					area = champa_area
+					area = north_laos_area
 				}
 				value = 40
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_land_of_gold
+				duration = 9125
+			}
 		}
 	}
 	
 	MSA_china = {
 		icon = mission_seize_the_dragon_throne
 		required_missions = { MSA_indochina }
-		position = 5
+		position = 12
 		provinces_to_highlight = {
 		}
 		trigger = {
-			
+			custom_trigger_tooltip = {
+				tooltip = MSA_defeated_emperor_of_china
+				any_country = {
+					is_emperor_of_china = yes
+					ROOT = {
+						has_won_war_against = { who = PREV }
+					}
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_china_defeated
+				duration = 10950
+			}
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 40
+			}
 		}
 	}
 }
@@ -252,9 +348,9 @@ MSA_Missions_Expansion_3 = {
 	}
 	
 	MSA_champa = {
-		icon = mission_reliable_allies
+		icon = mission_mnd_khm_protect_the_cham
 		required_missions = { MSA_navy }
-		position = 2
+		position = 9
 		provinces_to_highlight = {
 			OR = {
 				owned_by = CHA
@@ -265,7 +361,12 @@ MSA_Missions_Expansion_3 = {
 		}
 		trigger = {
 			OR = {
-				alliance_with = CHA
+				AND = {
+					alliance_with = CHA
+					CHA = {
+						NOT = { num_of_cities = 11 }
+					}
+				}
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 					OR = {
 						area = champa_area
@@ -276,30 +377,117 @@ MSA_Missions_Expansion_3 = {
 			}
 		}
 		effect = {
+			mekong_area = {
+				limit = {
+                    NOT = { is_core = ROOT }
+                    NOT = { is_permanent_claim = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+			angkor_area = {
+				limit = {
+                    NOT = { is_core = ROOT }
+                    NOT = { is_permanent_claim = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+			cambodia_area = {
+				limit = {
+                    NOT = { is_core = ROOT }
+                    NOT = { is_permanent_claim = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+			custom_tooltip = MSA_completed_by_alliance
+			tooltip = {
+				CHA = {
+					country_event = { id = ME_Malaya_Events.54 }
+				}
+				add_country_modifier = {
+					name = MSA_fellow_cham
+					duration = 7300
+				}
+			}
+			custom_tooltip = MSA_completed_by_conquest
+			tooltip = {
+				add_accepted_culture_or_dip_power = { culture = cham }
+			}
 		}
 	}
 	
 	MSA_end_the_angkor = {
 		icon = mission_rule_indochina
 		required_missions = { MSA_champa MSA_elephant }
-		position = 3
+		position = 10
 		provinces_to_highlight = {
+			OR = {
+				area = mekong_area
+				area = angkor_area
+				area = cambodia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = mekong_area
+					area = angkor_area
+					area = cambodia_area
+				}
+				value = 7
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_conqueror_of_the_khmer_empire
+				duration = 10950
+			}
+			custom_tooltip = MSA_if_we_are_hindu
+			tooltip = {
+				add_country_modifier = {
+					name = MSA_legacy_of_the_hindu_empire
+					duration = 7300
+				}
+			}
 		}
 	}
 	
 	MSA_import_spice_crops = {
 		icon = mission_coromandel_expansion
 		required_missions = { MSA_colonize_australia }
-		position = 5 
+		position = 12
 		provinces_to_highlight = {
+			colonial_region = colonial_australia
+			OR = {
+				has_terrain = farmlands 
+				has_terrain = woods
+				has_terrain = hills
+				has_terrain = drylands
+				has_terrain = grasslands
+				has_terrain = jungle
+				has_terrain = coastline
+				has_terrain = savannah
+			}
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				colonial_region = colonial_australia
+				OR = {
+					has_terrain = farmlands 
+					has_terrain = woods
+					has_terrain = hills
+					has_terrain = drylands
+					has_terrain = grasslands
+					has_terrain = jungle
+					has_terrain = coastline
+					has_terrain = savannah
+				}
+				has_production_building_trigger = yes
+				value = 7
+			}
 		}
 		effect = {
+			country_event = { id = ME_Malaya_Events.51 }
 		}
 	}
 }
@@ -317,48 +505,128 @@ MSA_Missions_Expansion_4 = {
 	MSA_navy = {
 		icon = mission_follow_the_brahmaputra
 		required_missions = { MLC_malaya }
-		position = 1
+		position = 8
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				navy_size = 60
+				navy_size_percentage = 0.9
+			}
 		}
 		effect = {
+			moluccas_region = {
+				limit = {
+                    NOT = { is_core = ROOT }
+                    NOT = { is_permanent_claim = ROOT }
+                }
+                add_permanent_claim = ROOT
+            }
+			add_country_modifier = {
+				name = MSA_nation_of_seafarers
+				duration = 5475
+			}
 		}
 	}
 	
 	MSA_spice_islands = {
 		icon = mission_mnd_maj_cloves
 		required_missions = { MSA_navy }
-		position = 3 
+		position = 10 
 		provinces_to_highlight = {
+			OR = {
+				province_id = 649
+				province_id = 650
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			OR = {
+				AND = {
+					649 = { country_or_non_sovereign_subject_holds = ROOT }
+					650 = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					OR = {
+						area = south_sulawesi_area
+						area = sulawesi_area
+						area = makassar_area
+						area = spice_islands_area
+					}
+					value = 7
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_spice_trade
+				duration = 5475
+			}
 		}
 	}
 	
 	MSA_colonize_australia = {
-		icon = mission_mnd_khm_restored_empire
+		icon = colonize_australia
 		required_missions = { MSA_spice_islands }
-		position = 4 
+		position = 11
 		provinces_to_highlight = {
+			colonial_region = colonial_australia
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				colonial_region = colonial_australia
+				is_city = yes
+				value = 10
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_new_frontiers
+				duration = 10950
+			}
+			
+			add_dip_power = 50
 		}
 	}
 	
 	MSA_wealth = {
 		icon = mission_african_gold
 		required_missions = { MSA_colonize_australia }
-		position = 5 
+		position = 12
 		provinces_to_highlight = {
+			region = australia_region
+			OR = {
+				is_empty = yes
+				AND = {
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
 		}
 		trigger = {
+			OR = {
+				australia_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					region = australia_region
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+					value = 3
+				}
+			}
 		}
 		effect = {
+			add_years_of_income = 1
+			custom_tooltip = MSA_bypass_requirements #TODO
+			add_inflation = -2
 		}
 	}
 }
@@ -376,36 +644,168 @@ MSA_Missions_Expansion_5 = {
 	MSA_philippines = {
 		icon = mission_mnd_maj_prepare_eastern_campaigns
 		required_missions = { MSA_navy }
-		position = 2 
+		position = 9
 		provinces_to_highlight = {
+			OR = {
+				area = luzon_area
+				area = visayas_area
+				area = west_mindanao_area
+				area = mindanao_area
+				area = southern_luzon_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				OR = {
+					area = luzon_area
+					area = visayas_area
+					area = west_mindanao_area
+					area = mindanao_area
+					area = southern_luzon_area
+				}
+				value = 9
+			}
 		}
 		effect = {
+			custom_tooltip = MSA_events_will_gradually_fire_to_colonize_the_rest_of_phillipines #TODO
 		}
 	}
 	
 	MSA_taiwan = {
 		icon = mission_portuguese_malacca
 		required_missions = { MSA_philippines }
-		position = 3 
+		position = 10 
 		provinces_to_highlight = {
+			area = taiwan_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			taiwan_area = {
+				owned_by = ROOT
+				is_city = yes
+				has_shipyard_building_trigger = yes
+			}
 		}
 		effect = {
+			custom_tooltip = MSA_random_province_fulfilling_the_requirements
+			tooltip = {
+				add_province_modifier = {
+					name = MSA_entrepot_of_malaya
+					duration = -1
+				}
+			}
+			add_mercantilism = 2
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						area = taiwan_area
+						is_city = yes
+						has_shipyard_building_trigger = yes
+					}
+					add_province_modifier = {
+						name = MSA_entrepot_of_malaya
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 	
 	MSA_settle_the_islands = {
 		icon = mission_rajputana_frontier
 		required_missions = { MSA_spice_islands }
-		position = 4 
+		position = 11 
 		provinces_to_highlight = {
+			OR = {
+				area = south_sulawesi_area
+				area = sulawesi_area
+				area = makassar_area
+				area = spice_islands_area
+				area = timor_area
+				area = lesser_sunda_islands_area
+				area = molluca_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			south_sulawesi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sulawesi_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			makassar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			spice_islands_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			timor_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lesser_sunda_islands_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			molluca_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			custom_tooltip = MSA_distribute_5_base_tax_and_5_base_production
+			
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = MSA_spice_islands_modifier_GE
+					duration = 9125
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = MSA_spice_islands_modifier
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				for = {
+					amount = 5
+					effect = "
+						random_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = spices
+									trade_goods = cloves
+								}
+							}
+							add_base_tax = 1
+						}
+					"
+				}
+				for = {
+					amount = 5
+					effect = "
+						random_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = spices
+									trade_goods = cloves
+								}
+							}
+							add_base_production = 1
+						}
+					"
+				}
+			}
 		}
 	}
 }
@@ -1194,7 +1594,7 @@ MSA_Missions_Trade_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = no#TRADE
+		always = yes#TRADE
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -1203,7 +1603,7 @@ MSA_Missions_Trade_1 = {
 	MSA_capitalize = {
 		icon = the_shape_of_trades_to_come
 		required_missions = { }
-		position = 1
+		position = 13
 		provinces_to_highlight = {
 			owned_by = ROOT
 			NOT = { has_production_building_trigger = yes }
@@ -1274,7 +1674,7 @@ MSA_Missions_Trade_1 = {
 	MSA_masters = {
 		icon = mission_rb_colonise_spice_islands
 		required_missions = { MSA_capitalize }
-		position = 2
+		position = 14
 		provinces_to_highlight = {
 			owned_by = ROOT
 			OR = {
@@ -1373,7 +1773,7 @@ MSA_Missions_Trade_1 = {
 	MSA_spice_flows = {
 		icon = mission_dominate_persian_gulf
 		required_missions = { MSA_masters }
-		position = 3
+		position = 15
 		provinces_to_highlight = {
 			if = {
 				limit = {
@@ -1502,7 +1902,7 @@ MSA_Missions_Trade_1 = {
 	MSA_straits_of_malaya = {
 		icon = mission_malayan_viceroyalty
 		required_missions = { MSA_wealth_of_the_strait }
-		position = 5
+		position = 17
 		provinces_to_highlight = {
 			province_id = 1361
 			NOT = {
@@ -1561,7 +1961,7 @@ MSA_Missions_Trade_1 = {
 	MSA_onset_of_modern_trade = {
 		icon = indonesian_trade
 		required_missions = { MSA_straits_of_malaya MSA_masters_of_trade }
-		position = 7
+		position = 19
 		provinces_to_highlight = {
 			is_capital_of = ROOT
 			NOT = { has_building = stock_exchange }
@@ -1615,7 +2015,7 @@ MSA_Missions_Trade_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = no#TRADE
+		always = yes#TRADE
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -1624,7 +2024,7 @@ MSA_Missions_Trade_2 = {
 	MSA_wood = {
 		icon = mission_clear_the_delta
 		required_missions = { MSA_capitalize }
-		position = 2
+		position = 14
 		provinces_to_highlight = {
 			owned_by = ROOT
 			OR = {
@@ -1696,7 +2096,7 @@ MSA_Missions_Trade_2 = {
 	MSA_wealth_of_the_strait = {
 		icon = mission_entrepot_of_india
 		required_missions = { MSA_controlling_the_strait MSA_wood MSA_spice_flows }
-		position = 4
+		position = 16
 		provinces_to_highlight = {
 			owned_by = ROOT
 			NOT = { has_manufactory_trigger = yes }
@@ -1736,7 +2136,7 @@ MSA_Missions_Trade_2 = {
 	MSA_masters_of_trade = {
 		icon = mission_steer_trade_to_bengal
 		required_missions = { MSA_straits_of_malaya MSA_wealth_of_the_strait MSA_trade_giant }
-		position = 6
+		position = 18
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -1780,7 +2180,7 @@ MSA_Missions_Trade_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = no#TRADE
+		always = yes#TRADE
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -1789,7 +2189,7 @@ MSA_Missions_Trade_3 = {
 	MSA_cornerstone = {
 		icon = mission_bengal_entrepot
 		required_missions = { }
-		position = 1
+		position = 13
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -1818,7 +2218,7 @@ MSA_Missions_Trade_3 = {
 	MSA_great_trading_cities = {
 		icon = mission_dominate_trade_in_aden
 		required_missions = { MSA_cornerstone }
-		position = 2
+		position = 14
 		provinces_to_highlight = {
 			owned_by = ROOT
 			province_has_center_of_trade_of_level = 1
@@ -1867,7 +2267,7 @@ MSA_Missions_Trade_3 = {
 	MSA_controlling_the_strait = {
 		icon = mission_look_west
 		required_missions = { MSA_great_trading_cities }
-		position = 3
+		position = 15
 		provinces_to_highlight = {
 			OR = {
 				province_id = 1361
@@ -1917,7 +2317,7 @@ MSA_Missions_Trade_3 = {
 	MSA_trade_giant = {
 		icon = mission_sail_to_the_east_indies
 		required_missions = { MSA_controlling_the_strait }
-		position = 5
+		position = 17
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -1931,7 +2331,7 @@ MSA_Missions_Trade_3 = {
 	MSA_ports = {
 		icon = expand_the_arsenal
 		required_missions = { MSA_protecting_existing_routes }
-		position = 6
+		position = 18
 		provinces_to_highlight = {
 			owned_by = ROOT
 			has_port = yes
@@ -1984,7 +2384,7 @@ MSA_Missions_Trade_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = no#TRADE
+		always = yes#TRADE
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -1993,7 +2393,7 @@ MSA_Missions_Trade_4 = {
 	MSA_great_merchant_fleet = {
 		icon = mission_south_indian_trade
 		required_missions = { MSA_foreign_powers MSA_cornerstone }
-		position = 2
+		position = 14
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2025,7 +2425,7 @@ MSA_Missions_Trade_4 = {
 	MSA_at_the_shores_of_india = {
 		icon = mission_coromandel_trade
 		required_missions = { MSA_great_merchant_fleet }
-		position = 4
+		position = 16
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2077,7 +2477,7 @@ MSA_Missions_Trade_4 = {
 	MSA_protecting_existing_routes = {
 		icon = mission_grand_bengali_shipyards
 		required_missions = { }
-		position = 5
+		position = 17
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2089,7 +2489,7 @@ MSA_Missions_Trade_4 = {
 	MSA_fleet_to_topple_empires = {
 		icon = mission_naval_dominance
 		required_missions = { MSA_protecting_existing_routes }
-		position = 7
+		position = 19
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2123,7 +2523,7 @@ MSA_Missions_Trade_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = no#TRADE
+		always = yes#TRADE
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -2132,7 +2532,7 @@ MSA_Missions_Trade_5 = {
 	MSA_foreign_powers = {
 		icon = mission_to_the_south_china_sea
 		required_missions = { }
-		position = 1
+		position = 13
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2192,7 +2592,7 @@ MSA_Missions_Trade_5 = {
 	MSA_expedition_into_canton = {
 		icon = mission_dominate_gujarati_trade
 		required_missions = { MSA_malay_community MSA_great_merchant_fleet }
-		position = 3
+		position = 15
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2224,7 +2624,7 @@ MSA_Missions_Trade_5 = {
 	MSA_tea_trade = {
 		icon = mission_trade_with_cathay
 		required_missions = { MSA_expedition_into_canton }
-		position = 4
+		position = 16
 		provinces_to_highlight = {	
 			OR = {
 				trade_goods = tea
@@ -2249,7 +2649,7 @@ MSA_Missions_Trade_5 = {
 	MSA_minting = {
 		icon = mission_establish_mint_towns
 		required_missions = { }
-		position = 5
+		position = 17
 		provinces_to_highlight = {
 		}
 		trigger = {
@@ -2270,7 +2670,7 @@ MSA_Missions_Trade_5 = {
 	MSA_spread_the_mint = {
 		icon = dominant_economy
 		required_missions = { MSA_minting }
-		position = 7
+		position = 19
 		provinces_to_highlight = {
 		}
 		trigger = {
