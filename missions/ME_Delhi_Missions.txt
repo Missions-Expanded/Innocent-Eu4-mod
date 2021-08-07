@@ -2044,13 +2044,9 @@ ME_Delhi_Mission_slot_4 = {
 			if = {
 				limit = { exists = JNP }
 				OR = {
-					has_opinion_modifier = {
+					army_strength = {
 						who = JNP
-						modifier = insulted
-					}
-					has_opinion_modifier = {
-						who = JNP
-						modifier = scornfully_insulted
+						value = 0.50
 					}
 				}	
 			}
@@ -2089,6 +2085,182 @@ ME_Delhi_Mission_slot_4 = {
 				}
 			}
 			create_general = { tradition = 60 }
+		}
+	}
+	dlh_loyal_rajputs = {
+		icon = mission_rajputana_frontier
+		required_missions = { dlh_deal_with_splinters }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4507
+				province_id = 512
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				JAN = {
+					vassal_of = FROM
+					NOT = { liberty_desire = 40 }
+					4507 = {
+						owned_by = THIS
+					}
+					512 = {
+						owned_by = THIS
+					}
+				}
+				AND = {
+					4507 = {
+						owned_by = FROM
+					}
+					512 = {
+						owned_by = FROM
+					}
+				}
+			}
+			if = {
+				limit = { has_estate =  estate_rajput }
+				OR = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_rajput
+						influence = 60
+					}
+				}	
+			}
+			else = {
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					estate_influence = {
+						estate = estate_nobles
+						influence = 60
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = DLH_JANGLADESH_ANNEX_TT
+			hidden_effect = {
+				if = {
+					limit = {
+						JAN = {
+							vassal_of = FROM
+						}
+					}
+					inherit = JAN					
+				}
+			}
+			4507 = {
+				add_province_modifier = {
+					name = dlh_loyal_rajputs_modifier
+					duration = -1
+				}
+				set_local_autonomy = 0
+				add_base_manpower = 1
+			}
+			512 = {
+				add_province_modifier = {
+					name = dlh_loyal_rajputs_modifier
+					duration = -1
+				}
+				set_local_autonomy = 0
+				add_base_manpower = 1
+			}
+			every_province = {
+				limit = { culture = rajput }
+				add_permanent_claim = FROM
+			}
+		}
+	}
+	dlh_descend_into_rajputana = {
+		icon = mission_subjugate_rajputana
+		required_missions = { dlh_loyal_rajputs }
+		position = 4
+		provinces_to_highlight = {
+			AND = {
+				culture = rajput
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 4
+					culture = rajput
+				}
+			}
+			army_size_percentage = 1
+			OR = {
+				num_of_generals = 2
+				num_of_mercenaries = 2
+			}
+		}
+		effect = {
+			custom_tooltip = DLH_NEW_CB_TT
+			set_country_flag = dlh_delhiite_conquests
+			add_country_modifier = {
+				name = dlh_gunpowder_warfare_modifier
+				duration = 7300
+			}
+		}
+	}
+	dlh_follow_indus = {
+		icon = se_along_the_river
+		required_missions = { dlh_descend_into_rajputana }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = sindh_area
+						area = northern_sindh_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				province_id = 506				
+			}
+		}
+		trigger = {
+			northern_sindh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sindh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			506 = {
+				OR = {
+					province_has_center_of_trade_of_level = 2
+					development = 15
+				}
+			}
+		}
+		effect = {
+			patan_area = {
+				add_permanent_claim = ROOT
+			}
+			ahmedabad_area = {
+				add_permanent_claim = ROOT
+			}
+			saurashtra_area = {
+				add_permanent_claim = ROOT
+			}
+			506 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			country_event = {
+				id = ME_Delhi_Events.4
+			}
 		}
 	}
 }
