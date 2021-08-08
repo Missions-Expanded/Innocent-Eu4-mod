@@ -2212,7 +2212,7 @@ ME_Delhi_Mission_slot_4 = {
 		}
 	}
 	dlh_follow_indus = {
-		icon = se_along_the_river
+		icon = develop_the_po_valley
 		required_missions = { dlh_descend_into_rajputana }
 		position = 5
 		provinces_to_highlight = {
@@ -2261,6 +2261,363 @@ ME_Delhi_Mission_slot_4 = {
 			country_event = {
 				id = ME_Delhi_Events.4
 			}
+		}
+	}
+	dlh_returning_gujarat = {
+		icon = mission_conquer_gujarat_bah
+		required_missions = { dlh_follow_indus }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = patan_area
+						area = ahmedabad_area
+						area = saurashtra_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				province_id = 4457				
+			}
+		}
+		trigger = {
+			patan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ahmedabad_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			saurashtra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4457 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				development = 20
+			}
+		}
+		effect = {
+			khandesh_area = {
+				add_permanent_claim = ROOT
+			}
+			tapti_area = {
+				add_permanent_claim = ROOT
+			}
+			country_event = {
+				id = ME_Delhi_Events.5
+			}
+		}
+	}
+	dlh_reinvigorate_ties = {
+		icon = mission_arabian_sea_trade
+		required_missions = { dlh_returning_gujarat }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 504
+				OR = {
+					AND = {
+						any_trade_node_member_province = { province_id = 504 }
+						province_has_center_of_trade_of_level = 1
+						NOT = {
+							province_has_center_of_trade_of_level = 2
+						}
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}			
+			}
+		}
+		trigger = {
+			504 = { #Thatta
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+			trade_efficiency = 0.25
+			num_of_owned_provinces_with = {
+				value = 4
+				AND = {
+					any_trade_node_member_province = { province_id = 504 }
+					province_has_center_of_trade_of_level = 2
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			mogadishu_area = {
+				add_permanent_claim = ROOT
+			}
+			1334 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 25
+					key = DLH_ARABIAN_TIES
+				}
+			}
+			1335 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 25
+					key = DLH_ARABIAN_TIES
+				}
+			}
+			4346 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 25
+					key = DLH_ARABIAN_TIES
+				}
+			}
+			add_country_modifier = {
+				name = dlh_influx_cavalry_modifier
+				duration = 9125
+			}
+		}
+	}
+	dlh_balance_of_trade = {
+		icon = mission_steer_trade_to_bengal
+		required_missions = { dlh_subjugate_gajapats }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 504
+				province_id = 1343
+				OR = {
+					AND = {
+						province_has_center_of_trade_of_level = 1
+						NOT = {
+							province_has_center_of_trade_of_level = 2
+						}
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}			
+			}
+		}
+		trigger = {
+			504 = { #Thatta
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1343 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			OR = {
+				num_of_merchants = 6
+				num_of_owned_provinces_with = {
+					value = 12
+					province_has_center_of_trade_of_level = 2
+				}
+			}
+			
+		}
+		effect = {
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = flh_favourable_balance_modifier
+				duration = 10950
+			}
+			custom_tooltip = BNG_FRUITS_OF_TRADE_DESC
+			hidden_effect = {
+				every_owned_province = {
+					limit = { province_has_center_of_trade_of_level = 2 }
+					add_province_modifier = {
+						name = bng_fruitful_trade_modifier
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+	dlh_malvi_architecture = {
+		icon = mission_malwi_architecture
+		required_missions = { dlh_conquer_malwa }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 526
+				AND = {
+					culture = malvi
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}	
+				AND = {
+					is_core = MLW
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}	
+			}
+		}
+		trigger = {
+			526 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_building = cathedral
+				development = 20
+			}
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 5
+					culture = malvi
+				}
+				MLW = {
+					all_core_province = {
+						owned_by = FROM
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Delhi_Events.7
+			}
+			if = {
+				limit = { has_dlc = "Leviathan" }
+				add_country_modifier = {
+					name = dlh_monument_preservation_lev_modifier
+					duration = 7300
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = dlh_monument_preservation_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	dlh_suzerain_deccan = {
+		icon = mission_viceroyalty_of_the_deccan
+		required_missions = { dlh_revenge_bahmanis }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = maidan_area
+						area = desh_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				} 
+				AND = {
+					region = deccan_region
+					NOT = { development = 16 }
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			maidan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			desh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				region = deccan_region
+				development = 16
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = dlh_deccan_plateau_modifier
+				duration = 10950 
+			}
+			change_crown_land = { add = 5 }
+			deccan_region = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_diamond_city = {
+		icon = mission_rb_inland_india
+		required_missions = { dlh_suzerain_deccan }
+		position = 12
+		provinces_to_highlight = {
+			province_id = 542
+		}
+		trigger = {
+			542 = {
+				OR = {
+					has_building = state_house
+					has_building = courthouse
+					has_building = town_hall
+				}
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+			NOT = { num_of_loans = 1 }
+			1948 = { #Bidar
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+		}
+		effect = {
+			542 = {
+				add_province_modifier = {
+					name = dlh_diamond_city_modifier
+					duration = -1
+				}
+				build_possible_manufactory_in_province = yes
+				change_province_name = "Hyderabad"
+				create_or_add_center_of_trade_level = 1
+			}
+			add_inflation = -1
+		}
+	}
+	dlh_prevent_collapse = {
+		icon = mission_metropolis_of_the_deccan
+		required_missions = { dlh_diamond_city }
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					region = deccan_region
+					local_autonomy_above_min = 10
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				AND = {
+					region = deccan_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
+		}
+		trigger = {
+			deccan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { local_autonomy_above_min = 10 }
+			}
+			has_adm_advisor_3 = yes
+			state_house = 3
+			NOT = { overextension_percentage = 0.01 }
+		}
+		effect = {
+			deccan_region = {
+				add_province_modifier = {
+					name = dlh_deccan_subadars_modifier
+					duration = -1
+				}
+			}
+			change_government_reform_progress = 50
 		}
 	}
 }
