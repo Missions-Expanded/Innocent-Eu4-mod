@@ -1701,6 +1701,7 @@ ME_Delhi_Mission_slot_3 = {
 			}
 			552 = {
 				add_or_upgrade_university_building = yes
+				add_next_institution_embracement = 50
 			}
 			if = {
 				limit = { has_estate = estate_brahmins }
@@ -2029,7 +2030,7 @@ ME_Delhi_Mission_slot_4 = {
 	}
 	dlh_deal_with_splinters = {
 		icon = mission_have_two_subjects
-		required_missions = { dlh_weather_future  }
+		required_missions = { dlh_weather_future dlh_repell_lodis }
 		position = 2
 		trigger = {
 			OR = {
@@ -2213,7 +2214,7 @@ ME_Delhi_Mission_slot_4 = {
 	}
 	dlh_follow_indus = {
 		icon = develop_the_po_valley
-		required_missions = { dlh_descend_into_rajputana }
+		required_missions = { dlh_descend_into_rajputana dlh_encroach_kabul }
 		position = 5
 		provinces_to_highlight = {
 			OR = {
@@ -2631,5 +2632,288 @@ ME_Delhi_Mission_slot_5 = {
 		tag = DLH
 		NOT = { has_country_flag = formed_delhi }
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+	}
+
+	dlh_repell_lodis = {
+		icon = fortify_the_passes
+		required_missions = {  }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				owned_by = SRH
+				area = sirhind_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				SRH = {
+					vassal_of = FROM
+					NOT = { liberty_desire = 60 }
+				}
+				army_size = SRH
+				sirhind_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			OR = {
+				spymaster = 1
+				monthly_dip = 8
+			}
+		}
+		effect = {
+			custom_tooltip = DLH_PREVENT_WAR_TT
+			if = {
+				limit = { NOT = { has_global_flag = dlh_bahlul_lodi_flag } }
+				set_global_flag = dlh_bahlul_lodi_flag
+				country_event = {
+					id = ME_Delhi_Events.12
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = dlh_prepare_war_modifier
+					duration = 1825
+				}
+			}
+		}
+	}
+	dlh_assert_control = {
+		icon = mission_the_sultanate_restored
+		required_missions = { dlh_deal_with_splinters }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = lahore_area
+				area = sirhind_area
+				province_id = 4511
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			sirhind_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = {	nationalism = 10 }
+			}
+			sirhind_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = {	nationalism = 10 }
+			}
+			4511 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = {	nationalism = 10 }
+			}
+		}
+		effect = {
+			change_mil = 1
+			kashmir_area = {
+				add_permanent_claim = ROOT
+			}
+			sind_sagar_area = {
+				add_permanent_claim = ROOT
+			}
+			multan_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_encroach_kabul = {
+		icon = mission_afghan_frontier
+		required_missions = { dlh_assert_control }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				area = kashmir_area
+				area = sind_sagar_area
+				area = multan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			kashmir_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			sind_sagar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			multan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+		}
+		effect = {
+			sindh_area = {
+				add_permanent_claim = ROOT
+			}
+			northern_sindh_area = {
+				add_permanent_claim = ROOT
+			}
+			kabulistan_area = {
+				add_permanent_claim = ROOT
+			}
+			ghor_area = {
+				add_permanent_claim = ROOT
+			}
+			balkh_area = {
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = { exists = AFG }
+				add_casus_belli = {
+					target = AFG
+					type = cb_vassalize_mission
+					months = 120
+				}
+			}
+		}
+	}
+	dlh_afghan_buffer = {
+		icon = mission_subdue_the_afghans
+		required_missions = { dlh_encroach_kabul dlh_follow_indus }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = kabulistan_area
+						area = ghor_area
+						area = balkh_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					culture = afghan
+					unrest = 3
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		trigger = {
+			kabulistan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			ghor_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			balkh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT 
+			}
+			OR = {
+				AFG = {
+					OR = {
+						vassal_of = FROM
+						march_of = FROM
+					}
+				}
+				num_of_owned_provinces_with = {
+					value = 10
+					culture = afghan
+					NOT = { unrest = 3 }
+				}
+			}
+		}
+		effect = {
+			termez_area = {
+				add_permanent_claim = ROOT
+			}
+			merv_area = {
+				add_permanent_claim = ROOT
+			}
+			transoxiana_area = {
+				add_permanent_claim = ROOT
+			}
+			sistan_area = {
+				add_permanent_claim = ROOT
+			}
+			herat_area = {
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = { 
+					AFG = {
+						OR = {
+							vassal_of = FROM
+							march_of = FROM
+						}
+					}
+				}
+				create_general = { tradition = 50 }
+			}
+			add_country_modifier = {
+				name = dlh_afghan_nobles_modifier
+				duration = 9125
+			}
+			custom_tooltip = DLH_AFGHAN_MANPOWER_TT
+			hidden_effect = {
+				every_province = {
+					limit = { 
+						country_or_non_sovereign_subject_holds = ROOT 
+						culture = afghan 
+					}
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	dlh_tamerlane_commeupance = {
+		icon = mission_crush_delhi
+		required_missions = { dlh_afghan_buffer }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 454
+				province_id = 446
+			}
+		}
+		trigger = {
+			OR = {
+				454 = { country_or_non_sovereign_subject_holds = ROOT }
+				454 = { controlled_by = ROOT }
+				any_country = { 
+					454 = { owned_by = THIS }
+					FROM = {
+						war_score_against = {
+							who = PREVPREV
+							value = 75
+						}
+					}
+				}
+			}
+			OR = {
+				any_country = {
+					dynasty = "Timurid" 
+					FROM = {
+						has_won_war_against = {
+							who = PREVPREV
+							max_years_since = 25
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			454 = {
+				add_devastation = 75
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_manpower = -2
+			}
+			capital_scope = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
+			}
+			add_years_of_income = 1
+			add_yearly_manpower = 1
+			add_power_projection = 20
+		}
 	}
 }
