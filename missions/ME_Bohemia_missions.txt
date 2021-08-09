@@ -1266,3 +1266,283 @@ bohemia_missions_5 = {
 		}
 	}
 }
+
+bohemia_missions_mutual = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			has_country_flag = czech_podebrad
+			has_country_flag = czech_habsburg
+			has_country_flag = czech_jagiellon
+		}
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+    }
+	has_country_shield = yes
+	
+	boh_trojan_chronicles = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 8
+		provinces_to_highlight = { 
+			OR = {
+				province_id = 267
+			}
+		}
+		trigger = {
+			is_institution_enabled = printing_press
+			267 = {
+				base_tax = 8
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			267 = {
+				add_institution_embracement = {
+					which = printing_press
+					value = 25
+				}
+				add_province_modifier = {
+					name = boh_trojan_chronicles
+					duration = 1825
+				}
+			}
+		}
+	}
+
+	boh_groschen_minting = {
+		icon = mission_alliances
+		required_missions = { boh_trojan_chronicles }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				province_id = 2970
+			}
+		}
+		trigger = {
+			has_institution = global_trade
+			2970 = {
+				base_production = 8
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			2970 = {
+				add_province_modifier = {
+					name = boh_minting_groschen
+					duration = -1
+				}
+			}
+			custom_tooltip = boh_tge_silver_tt
+			hidden_effect = {
+				2970 = {
+					if = {
+						limit = {
+							is_expanded_mode_active = trade_goods
+						}
+						change_trade_goods = silver
+					}
+				}
+			}
+		}
+	}
+
+	boh_kickstart_industry = {
+		icon = mission_alliances
+		required_missions = { boh_groschen_minting }
+		position = 12
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				has_production_building_trigger = yes
+				has_manufactory_trigger = yes
+			}
+			adm_tech = 16
+			has_institution = manufactories
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_productive_economy
+				duration = 10950
+			}
+			add_adm_power = 75
+			add_dip_power = 75
+			add_mil_power = 75
+			custom_tooltip = boh_full_eco_new_reward_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						full_idea_group = economic
+					}
+					add_country_modifier = {
+						name = boh_early_industrialization
+						duration = 36500
+					}
+				}
+			}
+		}
+	}	
+
+	boh_the_bergeral = {
+		icon = mission_alliances
+		required_missions = { boh_kickstart_industry }
+		position = 14
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4723
+				province_id = 263
+				province_id = 4237
+			}
+			NOT = { base_production = 10 }
+			has_manufactory_trigger = no
+		}
+		trigger = {
+			has_institution = enlightenment
+			4723 = {
+				owned_by = ROOT
+				base_production = 10
+				has_manufactory_trigger = yes
+			}
+			263 = {
+				owned_by = ROOT
+				base_production = 10
+				has_manufactory_trigger = yes
+			}
+			4237 = {
+				owned_by = ROOT
+				base_production = 10
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_power_of_steam
+				duration = 7300
+			}
+		}
+	}
+}
+
+bohemia_missions_podebrad_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+    }
+	has_country_shield = yes
+
+	boh_bavarian_ground = {
+		icon = mission_alliances
+		required_missions = { boh_hus_footsteps }
+		position = 8
+		provinces_to_highlight = {
+			area = lower_bavaria_area
+			area = upper_bavaria_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lower_bavaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			upper_bavaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					faction_in_power = boh_hussite_taborite
+				}
+				lower_bavaria_area = {
+					add_devastation = 10
+				}
+				upper_bavaria_area = {
+					add_devastation = 10
+				}
+			}
+			else_if = {
+				limit = {
+					faction_in_power = boh_hussite_ultraquist
+				}
+				lower_bavaria_area = {
+					add_devastation = 5
+				}
+				upper_bavaria_area = {
+					add_devastation = 5
+				}
+			}
+			add_country_modifier = {
+				name = boh_vengance_is
+				duration = -1
+			}
+		}
+	}
+
+	boh_swabian_ground = {
+        icon = mission_alliances
+        required_missions = { boh_bavarian_ground }
+        position = 9
+        provinces_to_highlight = {
+            area = upper_swabia_area
+            NOT = { country_or_non_sovereign_subject_holds = ROOT }
+        }
+        trigger = {
+            upper_swabia_area = {
+                type = all
+                country_or_non_sovereign_subject_holds = ROOT
+            }
+        }
+        effect = {
+            if = {
+                limit = {
+                    faction_in_power = boh_hussite_taborite
+                }
+                upper_swabia_area = {
+                    add_devastation = 10
+                }
+            }
+            else_if = {
+                limit = {
+                    faction_in_power = boh_hussite_ultraquist
+                }
+                upper_swabia_area = {
+                    add_devastation = 5
+                }
+            }
+            add_country_modifier = {
+                name = boh_vengance_better_served
+                duration = -1
+            }
+			remove_country_modifier = boh_vengance_is
+        }
+    }
+
+	boh_city_of_tears = {
+		icon = mission_alliances
+		required_missions = { boh_swabian_ground }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4712
+			}
+		}
+		trigger = {
+			4712 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			country_event = { id = ME_Bohemia_Event.7 }
+			remove_country_modifier = boh_vengance_better_served
+			add_country_modifier = {
+				name = boh_vengance_served_cold
+				duration = -1
+			}
+		}
+	}	
+}
+	
