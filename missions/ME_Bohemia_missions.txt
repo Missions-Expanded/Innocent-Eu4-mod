@@ -390,42 +390,50 @@ bohemia_missions_2 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					61 = {
-						owned_by = SAX
-					}
-					4744 = {
-						owned_by = SAX
-					}
-					2965 = {
-						country_or_non_sovereign_subject_holds = SAX
-					}
-				}
-				custom_tooltip = ore_mountain_cb_tt
-				hidden_effect = {
-					add_casus_belli = {
-    					target = SAX
-    					type = cb_ore_dispute
-    					months = -1
-					}
-				}
+			61 = {
+    			owner = {
+        			if = {
+            			limit = {
+                			NOT = { tag = ROOT }
+            			}
+            			reverse_add_casus_belli = {
+                			target = ROOT
+                			type = cb_ore_dispute
+                			months = -1
+            			}
+        			}
+    			}
 			}
-			else = {
-				south_saxony_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				thuringia_area = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+			4744 = {	
+    			owner = {
+        			if = {
+         				limit = {
+                			NOT = { tag = ROOT }
+                			NOT = { owns = 61 }
+            			}
+            			reverse_add_casus_belli = {
+                			target = ROOT
+                			type = cb_ore_dispute
+                			months = -1
+            			}
+        			}
+    			}
+			}
+			2965 = {
+    			owner = {
+        			if = {
+            			limit = {
+                			NOT = { tag = ROOT }
+                			NOT = { owns = 61 }
+                			NOT = { owns = 4744 }
+            			}
+            			reverse_add_casus_belli = {
+                			target = ROOT
+                			type = cb_ore_dispute
+                			months = -1
+            			}
+        			}
+    			}
 			}
 		}
 	}
@@ -449,7 +457,7 @@ bohemia_missions_2 = {
 		}
 		effect = {
 			country_event = {
-				id = ME_Bohemia_Events.1
+				id = ME_Bohemia_Event.1
 			}
 			add_country_modifier = {
 				name = boh_resolved_ore_mountains
@@ -919,7 +927,7 @@ bohemia_missions_3 = {
 				else = {
 					add_casus_belli = {
     					target = LIT
-    					type = cb_border_dispute
+    					type = cb_border_war
     					months = -1
 					}
 				}
@@ -1272,11 +1280,6 @@ bohemia_missions_mutual = {
 	generic = no
 	ai = yes
 	potential = {
-		OR = {
-			has_country_flag = czech_podebrad
-			has_country_flag = czech_habsburg
-			has_country_flag = czech_jagiellon
-		}
         tag = BOH
         has_country_flag = use_missions_expanded_missions_instead_of_paradox
     }
@@ -1519,11 +1522,12 @@ bohemia_missions_podebrad_2 = {
                 name = boh_vengance_better_served
                 duration = -1
             }
-			remove_country_modifier = boh_vengance_is
+			custom_tooltip = boh_remove_previous_modifier_tt
+			hidden_effect = { remove_country_modifier = boh_vengance_is }
         }
     }
 
-	boh_city_of_tears = {
+	boh_city_of_woes = {
 		icon = mission_alliances
 		required_missions = { boh_swabian_ground }
 		position = 11
@@ -1537,12 +1541,355 @@ bohemia_missions_podebrad_2 = {
 		}
 		effect = {
 			country_event = { id = ME_Bohemia_Event.7 }
-			remove_country_modifier = boh_vengance_better_served
+			custom_tooltip = boh_remove_previous_modifier_tt
+			hidden_effect = { remove_country_modifier = boh_vengance_better_served }
 			add_country_modifier = {
 				name = boh_vengance_served_cold
 				duration = -1
 			}
 		}
-	}	
+	}
+
+	boh_hussite_empire = {
+		icon = mission_alliances
+		required_missions = { boh_city_of_woes }
+		position = 13
+		provinces_to_highlight = {	
+			owned_by = ROOT
+			NOT = { religion = hussite }
+		}
+		trigger = {
+			all_owned_province = {
+				religion = hussite
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					faction_in_power = boh_hussite_taborite
+				}
+				add_country_modifier = {
+					name = boh_tab_devout_church
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = boh_ultra_devout_church
+					duration = -1
+				}
+			}
+			add_casus_belli = {
+				target = PAP
+    			type = cb_papacy_burn
+				months = 35600
+			}
+		}
+	}
+
+	boh_globalni_husite = {
+		icon = mission_alliances
+		required_missions = { 
+			boh_hussite_empire
+			boh_true_evil
+		}
+		position = 15
+		provinces_to_highlight = {
+			OR = {
+				superregion = europe_superregion
+			}
+			NOT = { religion = hussite }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = boh_hussite_provinces_eu_tt
+				calc_true_if = {
+					europe_superregion = {
+						type = all
+						religion = hussite
+					}
+					amount = 300
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_to_end_world
+				duration = -1
+			}
+		}
+	}
+}	
+
+bohemia_missions_podebrad_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+    }
+	has_country_shield = yes
+
+	boh_hus_footsteps = {
+		icon = mission_alliances
+		position = 7
+		required_missions = { boh_rise_lion }
+		trigger = {
+			religion = hussite
+			is_defender_of_faith = yes
+			army_size = 50
+		}
+		effect = {
+			lower_bavaria_area = {
+        		if = {
+            		limit = {
+                		NOT = { owned_by = ROOT }
+            		}
+					owner = {
+            			reverse_add_casus_belli = {
+                			target = ROOT
+                			type = cb_pilgrimage_konstanz
+                			months = 35600
+						}
+            		}
+				}
+			}
+			upper_bavaria_area = {
+    			if = {
+            		limit = {
+                		NOT = { owned_by = ROOT }
+            		}
+					owner = {
+            			reverse_add_casus_belli = {
+                			target = ROOT
+                			type = cb_pilgrimage_konstanz
+                			months = 35600
+						}
+            		}
+				}
+			}
+			upper_swabia_area = {
+    			if = {
+        			limit = {
+           				NOT = { owned_by = ROOT }
+            		}
+					owner = {
+            			reverse_add_casus_belli = {
+                			target = ROOT
+                			type = cb_pilgrimage_konstanz
+                			months = 35600
+						}
+            		}
+				}
+			}
+			hidden_effect = {
+				upper_swabia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}		
+					add_permanent_claim = ROOT
+				}
+				upper_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}		
+					add_permanent_claim = ROOT
+				}
+				lower_bavaria_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}		
+					add_permanent_claim = ROOT
+				}
+			}
+			neumark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}		
+				add_permanent_claim = ROOT
+			}
+			mittelmark_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}		
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = boh_warriors_faith
+				duration = -1
+			}
+			custom_tooltip = boh_avenging_hus_tt
+			hidden_effect = {
+				add_country_modifier = {
+					name = boh_avenging_hus
+					duration = -1
+				}
+			}
+		}
+	}
+
+	boh_plight_brandenburg = {
+		icon = mission_alliances
+		required_missions = { boh_hus_footsteps }
+		position = 9
+		provinces_to_highlight = {
+			area = mittelmark_area
+			area = neumark_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			mittelmark_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			neumark_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mil_power = 75
+			south_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}		
+				add_permanent_claim = ROOT
+			}
+			northern_saxony_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}		
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	boh_cleansing_saxony = {
+		icon = mission_alliances
+		required_missions = { boh_plight_brandenburg }
+		position = 10
+		provinces_to_highlight = {
+			area = south_saxony_area
+			area = northern_saxony_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			south_saxony_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			northern_saxony_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_lord_saxony
+				duration = -1
+			}
+			braunschweig_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}		
+				add_permanent_claim = ROOT
+			}
+			thuringia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}		
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	boh_exporting_religion = {
+		icon = mission_alliances
+		required_missions = { boh_cleansing_saxony }
+		position = 12
+		provinces_to_highlight = {
+			area = braunschweig_area
+			area = thuringia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			braunschweig_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			thuringia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			mercantilism = 25
+			61 = {
+				is_strongest_trade_power = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_higher_matter
+				duration = 18250
+			}
+		}
+	}
+
+	boh_true_evil = {
+		icon = mission_alliances
+		required_missions = {
+			boh_exporting_religion
+			boh_hussite_empire
+		}
+		position = 14
+		provinces_to_highlight = {
+			province_id = 118
+		}
+		trigger = {
+			if = {
+				limit = {
+					118 = { owned_by = PAP }
+				}
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = PAP
+					casus_belli = cb_papacy_burn
+					warscore = 0.8
+				}
+				118 = { controlled_by = ROOT }
+			}
+			else = {
+				118 = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		effect = {
+			country_event = { id = ME_Bohemia_Event.8 }
+			remove_caus_belli = {
+				target = PAP
+				type = cb_papacy_burn
+			}
+			custom_tooltip = boh_apostles_cb_tt
+			hidden_effect = {
+				every_country = {
+					limit = {
+						NOT = { religion = hussite }
+					}
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_new_apostoles
+						months = 35600
+					}
+				}
+			}
+		}
+	}
 }
-	
