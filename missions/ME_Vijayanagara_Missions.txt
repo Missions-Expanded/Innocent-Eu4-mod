@@ -1938,19 +1938,29 @@ vijayanagara_mission_3 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			OR = {
-				development_in_provinces = {
-					value = 50
-					OR = {
-						trade_goods = gems
-						trade_goods = pearls
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					development_in_provinces = {
+						value = 50
+						OR = {
+							trade_goods = gems
+							trade_goods = pearls
+						}
 					}
+					production_leader = { trade_goods = gems }
+					production_leader = { trade_goods = pearls }
 				}
-				production_leader = {
-					trade_goods = gems
-				}
-				production_leader = {
-					trade_goods = pearls
+			}
+			else = {
+				OR = {
+					development_in_provinces = {
+						value = 50
+						trade_goods = gems
+					}
+					production_leader = { trade_goods = gems }
 				}
 			}
 		}
@@ -1964,9 +1974,17 @@ vijayanagara_mission_3 = {
 			}
 			custom_tooltip = VIJ_FASCINATING_TT
 			tooltip = {
-				add_permanent_province_modifier = {
-					name = vij_fascinating
-					duration = -1
+				random_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = gems
+							trade_goods = pearls
+						}
+					}
+					add_permanent_province_modifier = {
+						name = vij_fascinating
+						duration = -1
+					}
 				}
 			}
 			hidden_effect = {
@@ -1999,15 +2017,31 @@ vijayanagara_mission_3 = {
 			}
 		}
 		trigger = {
-			development_in_provinces = {
-				value = 100
-				OR = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				development_in_provinces = {
+					value = 100
+					OR = {
+						trade_goods = gems
+						trade_goods = pearls
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 100
 					trade_goods = gems
-					trade_goods = pearls
 				}
 			}
 			production_leader = { trade_goods = gems }
-			production_leader = { trade_goods = pearls }
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				production_leader = { trade_goods = pearls }
+			}
 			custom_trigger_tooltip = {
 				tooltip = VIJ_GEM_CUTTING_INDUSTRIES_TT
 				1340 = {
@@ -2035,16 +2069,17 @@ vijayanagara_mission_3 = {
 			}
 			custom_tooltip = VIJ_FASCINATING_TT
 			tooltip = {
-				remove_province_modifier = vij_fascinating
-				add_permanent_province_modifier = {
-					name = vij_fascinating_industry
-					duration = -1
+				random_owned_province = {
+					limit = { has_province_modifier = vij_fascinating }
+					remove_province_modifier = vij_fascinating
+					add_permanent_province_modifier = {
+						name = vij_fascinating_industry
+						duration = -1
+					}
 				}
 			}
 			every_owned_province = {
-				limit = {
-					has_province_modifier = vij_fascinating
-				}
+				limit = { has_province_modifier = vij_fascinating }
 				remove_province_modifier = vij_fascinating
 				add_permanent_province_modifier = {
 					name = vij_fascinating_industry
@@ -2608,9 +2643,12 @@ vijayanagara_mission_5 = {
 			add_mercantilism = 5
 			custom_tooltip = VIJ_TAMIL_PROVINCE_TT
 			tooltip = {
-				add_province_modifier = {
-					name = vij_tamil_trade_guilds
-					duration = 18250
+				random_owned_province = {
+					limit = { culture = tamil }
+					add_province_modifier = {
+						name = vij_tamil_trade_guilds
+						duration = 18250
+					}
 				}
 			}
 			hidden_effect = {
@@ -2723,9 +2761,18 @@ vijayanagara_mission_5 = {
 		effect = {
 			custom_tooltip = VIJ_MILITARY_RECRUITMENT_TT
 			tooltip = {
-				add_province_modifier = {
-					name = vij_training_gyms
-					duration = -1
+				random_owned_province = {
+					limit = {
+						OR = {
+							has_manpower_building_trigger = yes
+							has_forcelimit_building_trigger = yes
+							base_manpower = 10
+						}
+					}
+					add_province_modifier = {
+						name = vij_training_gyms
+						duration = -1
+					}
 				}
 			}
 			hidden_effect = {
@@ -2802,9 +2849,19 @@ vijayanagara_mission_5 = {
 			}
 			custom_tooltip = VIJ_WOOTZ_STEEL_TT
 			tooltip = {
-				add_province_modifier = {
-					name = vij_development_wootz_steel
-					duration = 9125
+				random_owned_province = {
+					limit = {
+						OR = {
+							trade_goods = iron
+							trade_goods = copper
+							trade_goods = brass
+							trade_goods = bronze
+						}
+					}
+					add_province_modifier = {
+						name = vij_development_wootz_steel
+						duration = 9125
+					}
 				}
 			}
 			hidden_effect = {
@@ -2929,9 +2986,22 @@ vijayanagara_mission_5 = {
 		effect = {
 			custom_tooltip = VIJ_TRADE_LANDING_TT
 			tooltip = {
-				add_province_modifier = {
-					name = vij_defying_external_trade
-					duration = 9125
+				random_owned_province = {
+					limit = {
+						has_port = yes
+						has_trade_building_trigger = yes
+						OR = {
+							has_shipyard_building_trigger = yes
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+							has_building = fort_18th
+						}
+					}
+					add_province_modifier = {
+						name = vij_defying_external_trade
+						duration = 9125
+					}
 				}
 			}
 			hidden_effect = {
@@ -2979,13 +3049,19 @@ vijayanagara_mission_5 = {
 		effect = {
 			custom_tooltip = VIJ_TRADE_SUPREMACY_TT
 			tooltip = {
-				if = {
-					limit = { has_province_modifier = vij_defying_external_trade }
-					remove_province_modifier = vij_defying_external_trade
-				}
-				add_province_modifier = {
-					name = vij_indian_trade
-					duration = -1
+				random_owned_province = {
+					limit = {
+						has_trade_building_trigger = yes
+						base_production = 10
+					}
+					if = {
+						limit = { has_province_modifier = vij_defying_external_trade }
+						remove_province_modifier = vij_defying_external_trade
+					}
+					add_province_modifier = {
+						name = vij_indian_trade
+						duration = -1
+					}
 				}
 			}
 			hidden_effect = {
