@@ -158,10 +158,49 @@
 		}
 	}
 
+	fra_republic_connacht = {
+		required_missions = { fra_puppeteers_play }
+		icon = mission_rb_cod_wars
+		position = 10
+		provinces_to_highlight = {
+			region = british_isles_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				british_isles_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				british_isles_region = {
+					type = all
+					owned_by = ROOT
+				}
+				NOT = { exists = IRE }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				add_prestige = 5
+			}
+			country_event = {
+				id = ME_France_Events.69
+			}
+		}
+	}
+
 	fra_renaissance = {
 		required_missions = { }
 		icon = florentine_renaissance
-		position = 9
+		position = 11
 		trigger = {
 			has_institution = renaissance
 			num_of_owned_provinces_with = {
@@ -172,27 +211,6 @@
 		effect = {
 			country_event = {
 				id = ME_France_Events.5
-			}
-		}
-	}
-
-	fra_batavania_republic = {
-		required_missions = { fra_puppeteers_play }
-		icon = mission_the_austrian_succession
-		position = 11
-		provinces_to_highlight = {
-			region = low_countries_region
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			low_countries_region = {
-				type = all
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			country_event = {
-				id = ME_France_Events.6
 			}
 		}
 	}
@@ -556,10 +574,49 @@ france_missions_2 = {
 		}
 	}
 
+	fra_kingdom_spain = {
+		required_missions = { fra_puppeteers_play }
+		icon = mission_the_austrian_succession
+		position = 10
+		provinces_to_highlight = {
+			region = iberia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				iberia_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				iberia_region = {
+					type = all
+					owned_by = ROOT
+				}
+				NOT = { exists = SPA }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				add_prestige = 5
+			}
+			country_event = {
+				id = ME_France_Events.26
+			}
+		}
+	}
+
 	fra_modernization = {
 		required_missions = { fra_renaissance }
 		icon = centralize_france
-		position = 10
+		position = 12
 		trigger = {
 			government_reform_progress = 10
 			adm_tech = 20
@@ -584,26 +641,6 @@ france_missions_2 = {
 		}
 	}
 
-	fra_italian_republic = {
-		required_missions = { fra_puppeteers_play }
-		icon = establish_client_states
-		position = 11
-		provinces_to_highlight = {
-			region = italy_region
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			italy_region = {
-				type = all
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			country_event = {
-				id = ME_France_Events.10
-			}
-		}
-	}
 
 	fra_dive_into_unknown = {
 		required_missions = {
@@ -918,6 +955,10 @@ france_missions_3 = {
 				name = fra_golden_age_france
 				duration = 3650
 			}
+			add_country_modifier = {
+				name = fra_successful_bureaucracy
+				duration = -1
+			}
 			if = {
 				limit = {
 					has_dlc = "Rule Britannia"
@@ -963,104 +1004,29 @@ france_missions_3 = {
 		}
 	}
 
-	fra_tame_season = {
-		required_missions = {
-			fra_avenging_nicopolis
+	fra_puppeteers_play = {
+		required_missions = { 
 			fra_french_superiority
+			fra_avenging_nicopolis
 			fra_into_poland
 		}
-		icon = the_russian_campaign
-		position = 9
-		provinces_to_highlight = {
-			OR = {
-				area = oka_area
-				area = moscow_area
-				area = ryazan_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			oka_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			moscow_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			ryazan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = fra_tamed_russian_winter
-				duration = -1
-			}
-		}
-	}
-
-	fra_puppeteers_play = {
-		required_missions = { fra_tame_season }
 		icon = establish_client_states
-		position = 10
+		position = 9
 		trigger = {
-			if = {
-				limit = {
-					OR = {
-						has_dlc = "Emperor"
-						has_dlc = "Rights Of Man"
-					}
-				}
-				OR = {
-					AND = {
-						NOT = { great_power_rank = 1 }
-						hegemon_strength = 10
-					}
-					is_hegemon = yes
-					AND = {
-						current_age = age_of_revolutions
-						OR = {
-							has_reform = revolutionary_empire
-							has_reform = revolutionary_republic
-							NOT = {
-								any_province = { has_revolution_in_province = yes }
-							}
-							any_known_country = {
-								is_revolution_target = yes
-								war_with = ROOT
-								capital_scope = { controlled_by = ROOT }
-							}
-						}
-					}
-				}
-			}
-			else = {
-				OR = {
-					total_development = 1000
-					AND = {
-						current_age = age_of_revolutions
-						OR = {
-							has_reform = revolutionary_empire
-							has_reform = revolutionary_republic
-							NOT = {
-								any_province = { has_revolution_in_province = yes }
-							}
-							any_known_country = {
-								is_revolution_target = yes
-								war_with = ROOT
-								capital_scope = { controlled_by = ROOT }
-							}
-						}
-					}
-				}
-			}
+			adm_tech = 20
+			dip_tech = 23
+			mil_tech = 20
+			army_size = 250
+			navy_size_percentage = 1
+			total_development = 1500
 		}
 		effect = {
 			add_country_modifier = {
 				name = fra_managing_client_states
 				duration = -1
+			}
+			country_event = {
+				id = ME_France_Events.70
 			}
 		}
 	}
@@ -1068,7 +1034,7 @@ france_missions_3 = {
 	fra_confederation_rhine = {
 		required_missions = { fra_puppeteers_play }
 		icon = control_swabia
-		position = 11
+		position = 10
 		provinces_to_highlight = {
 			OR = {
 				area = north_rhine_area
@@ -1081,32 +1047,70 @@ france_missions_3 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			north_rhine_area = {
-				type = all
-				owned_by = ROOT
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				north_rhine_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				lower_rhineland_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				palatinate_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				hesse_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				upper_rhineland_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				lower_swabia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
 			}
-			lower_rhineland_area = {
-				type = all
-				owned_by = ROOT
-			}
-			palatinate_area = {
-				type = all
-				owned_by = ROOT
-			}
-			hesse_area = {
-				type = all
-				owned_by = ROOT
-			}
-			upper_rhineland_area = {
-				type = all
-				owned_by = ROOT
-			}
-			lower_swabia_area = {
-				type = all
-				owned_by = ROOT
+			else = {
+				north_rhine_area = {
+					type = all
+					owned_by = ROOT
+				}
+				lower_rhineland_area = {
+					type = all
+					owned_by = ROOT
+				}
+				palatinate_area = {
+					type = all
+					owned_by = ROOT
+				}
+				hesse_area = {
+					type = all
+					owned_by = ROOT
+				}
+				upper_rhineland_area = {
+					type = all
+					owned_by = ROOT
+				}
+				lower_swabia_area = {
+					type = all
+					owned_by = ROOT
+				}
+				NOT = { exists = GER }
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				add_prestige = 5
+			}
 			country_event = {
 				id = ME_France_Events.14
 			}
@@ -1115,14 +1119,14 @@ france_missions_3 = {
 
 	fra_one_nation_to_rule_them_all = {
 		required_missions = {
-			fra_batavania_republic
-			fra_italian_republic
+			fra_tame_season
+			fra_republic_connacht
 			fra_confederation_rhine
-			fra_polish_subjects
 			fra_kingdom_spain
+			fra_polish_subjects
 		}
 		icon = french_empire
-		position = 12
+		position = 11
 		trigger = {
 			if = {
 				limit = {
@@ -1812,12 +1816,53 @@ france_missions_4 = {
 		}
 	}
 
+	fra_polish_subjects = {
+		required_missions = { fra_puppeteers_play }
+		icon = polish_subjects
+		position = 10
+		provinces_to_highlight = {
+			region = poland_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				poland_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				poland_region = {
+					type = all
+					owned_by = ROOT
+				}
+				NOT = { exists = POL }
+			}	
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				add_prestige = 5
+			}
+			else = {
+				country_event = {
+					id = ME_France_Events.18
+				}
+			}
+		}
+	}
+
 	fra_power_steam = {
 		required_missions = {
 			fra_cogito_ergo_sum
 		}
 		icon = industrialized_rhineland
-		position = 10
+		position = 12
 		provinces_to_highlight = {
 			if = {
 				limit = {
@@ -1890,27 +1935,6 @@ france_missions_4 = {
 			}
 			country_event = {
 				id = ME_France_Events.17
-			}
-		}
-	}
-
-	fra_polish_subjects = {
-		required_missions = { fra_puppeteers_play }
-		icon = polish_subjects
-		position = 11
-		provinces_to_highlight = {
-			region = poland_region
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			poland_region = {
-				type = all
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			country_event = {
-				id = ME_France_Events.18
 			}
 		}
 	}
@@ -2416,10 +2440,51 @@ france_missions_5 = {
 		}
 	}
 
+	fra_tame_season = {
+		required_missions = { fra_puppeteers_play }
+		icon = the_russian_campaign
+		position = 10
+		provinces_to_highlight = {
+			region = russia_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = { fra_francia_formed }
+				}
+				russia_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				russia_region = {
+					type = all
+					owned_by = ROOT
+				}
+				NOT = { exists = NOV }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = fra_francia_formed
+				}
+				add_prestige = 5
+			}
+			else = {
+				country_event = {
+					id = ME_France_Events.68
+				}
+			}
+		}
+	}
+
 	fra_cogito_ergo_sum = {
 		required_missions = { }
 		icon = reform_bergordnung
-		position = 9
+		position = 11
 		trigger = {
 			has_institution = enlightenment
 			is_ahead_of_time_in_specific_tech = { type = adm }
@@ -2445,27 +2510,6 @@ france_missions_5 = {
 					name = fra_scientific_revolution
 					duration = 18250
 				}
-			}
-		}
-	}
-
-	fra_kingdom_spain = {
-		required_missions = { fra_puppeteers_play }
-		icon = mission_the_austrian_succession
-		position = 11
-		provinces_to_highlight = {
-			region = iberia_region
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			iberia_region = {
-				type = all
-				owned_by = ROOT
-			}
-		}
-		effect = {
-			country_event = {
-				id = ME_France_Events.26
 			}
 		}
 	}
