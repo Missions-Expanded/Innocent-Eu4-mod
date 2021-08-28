@@ -16,6 +16,7 @@ country_event = {	#establish black army
 			name = ME_HUN_blackArmy_modifier
 			duration = -1
 		}
+		set_country_flag = ME_HUN_blackArmy_flag
 	}
 }
 
@@ -32,6 +33,8 @@ country_event = {	#remove bonuses form black army
 	fire_only_once = yes
 
 	trigger = {
+		tag = HUN
+		has_country_flag = ME_HUN_blackArmy_flag
 		NOT = { current_age = age_of_discovery }
 	}
 
@@ -117,29 +120,64 @@ country_event = {
 	desc = ME_Hungary_Events.5_d
 	picture = BATTLE_eventPicture
 
+	is_triggered_only = yes
+
+	fire_only_once = yes
+
+	option = {	#give a fight!
+		name = ME_Hungary_Events.5_o1
+		ai_chance = {
+			factor = 5
+		}
+		add_country_modifier = {
+			name = ME_HUN_hereticStruggle_modifier
+			duration = 730
+		}
+		emperor = {
+			add_opinion = {
+				who = FROM
+				modifier = ME_HUN_hungarianLament_opinion
+			}
+		}
+	}
+	option = {	#By god, let's back down ffs!
+		name = ME_Hungary_Events.5_o2
+		HUN = {
+			create_union = ROOT
+		}
+		HUN = {
+			add_opinion = {
+				who = BOH
+				modifier = ME_HUN_hussiteRebellion_opinion
+			}
+		}
+		prestige = -25
+		add_legitimacy = -25
+	}
+}
+
+country_event = {
+	id = ME_Hungary_Events.6
+	title = ME_Hungary_Events.6_t
+	desc = ME_Hungary_Events.6_d
+	picture = BATTLE_eventPicture
+
 	mean_time_to_happen = {
-		days = 1
+		months = 1
+	}
+
+	trigger = {
+		has_country_flag = ME_HUN_quellHussite_flag
+		NOT = {
+			has_country_modifier = ME_HUN_hiddenModifier_v2
+		}
 	}
 
 	fire_only_once = yes
 
-	hidden = yes
-
-	trigger = {
-		NOT = {
-			has_country_modifier = ME_HUN_hiddenModifier_v2
-		}
-		has_country_flag = ME_HUN_quellHussite_flag
-	}
-
-	immediate = {
-		country_event = {
-			id = ME_Hungary_Events.6
-		}
-	}
-
-	option = {
-		name = ME_Hungary_Events.4_o1
-		add_prestige = 1
+	option = {	#sad
+		name = ME_Hungary_Events.6_o1
+		add_legitimacy = -15
+		add_prestige = -30
 	}
 }
