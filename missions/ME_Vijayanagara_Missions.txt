@@ -155,10 +155,8 @@ vijayanagara_mission_1 = {
 		position = 5
 		provinces_to_highlight = {
 			any_trade_node_member_province = { province_id = 1340 }
-			OR = {
-				is_island = yes
-				NOT = { owned_by = ROOT }
-			}
+			NOT = { is_island = yes }
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -169,7 +167,7 @@ vijayanagara_mission_1 = {
 					}
 					all_trade_node_member_province = {
 						OR = {
-							NOT = { is_island = yes }
+							is_island = yes
 							owned_by = ROOT
 						}
 					}
@@ -531,6 +529,11 @@ vijayanagara_mission_1 = {
 		icon = mission_general_land_assessment
 		required_missions = { vijayanagar_administration_empire }
 		position = 12
+		provinces_to_highlight = {
+			any_trade_node_member_province = { province_id = 1340 }
+			NOT = { is_island = yes }
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			OR = {
 				ADM = 6
@@ -541,7 +544,12 @@ vijayanagara_mission_1 = {
 			custom_trigger_tooltip = {
 				tooltip = VIJ_LAND_REVENUE_TT
 				1340 = {
-					all_trade_node_member_province = { owned_by = ROOT }
+					all_trade_node_member_province = {
+						OR = {
+							is_island = yes
+							owned_by = ROOT
+						}
+					}
 				}
 			}
 		}
@@ -895,17 +903,38 @@ vijayanagara_mission_2 = {
 
 	vijayanagar_malaccan_spices = {
 		icon = mission_rajendras_ambition
-		required_missions = { vijayanagar_south_indian_navy }
+		required_missions = {
+			vijayanagar_south_indian_navy
+			vijayanagar_malaccan_spices
+		}
 		position = 5
 		provinces_to_highlight = {
-			region = malaya_region
+			any_trade_node_member_province = { province_id = 1361 }
 			trade_goods = spices
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				value = 10
-				trade_goods = spices
-				any_trade_node_member_province = { province_id = 1361 }
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_trigger_tooltip = {
+					tooltip = VIJ_MALACCAN_SPICE_TGE
+					num_of_owned_provinces_with = {
+						value = 7
+						trade_goods = spices
+						any_trade_node_member_province = { province_id = 1361 }
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = VIJ_MALACCAN_SPICE_TGE
+					num_of_owned_provinces_with = {
+						value = 10
+						trade_goods = spices
+						any_trade_node_member_province = { province_id = 1361 }
+					}
+				}
 			}
 		}
 		effect = {
@@ -1252,7 +1281,8 @@ vijayanagara_mission_2 = {
 			india_superregion = {
 				type = all
 				OR = {
-					is_capital = yes
+					owned_by = ROOT
+					is_capital = no
 					owner = {
 						NOT = { total_development = ROOT }
 					}
@@ -1272,11 +1302,21 @@ vijayanagara_mission_2 = {
 		icon = mission_a_million_rice_fields
 		required_missions = { vijayanagar_provincial_administration }
 		position = 13
+		provinces_to_highlight = {
+			any_trade_node_member_province = { province_id = 1340 }
+			NOT = { is_island = yes }
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = VIJ_LAND_REVENUE_TT
 				1340 = {
-					all_trade_node_member_province = { owned_by = ROOT }
+					all_trade_node_member_province = {
+						OR = {
+							is_island = yes
+							owned_by = ROOT
+						}
+					}
 				}
 			}
 			development_in_provinces = {
@@ -1542,8 +1582,16 @@ vijayanagara_mission_3 = {
 			vijayanagar_hindu_princedoms
 		}
 		position = 3
+		provinces_to_highlight = {
+			any_trade_node_member_province = { province_id = 1340 }
+			province_has_center_of_trade_of_level = 1
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			mercantilism = 25
+			OR = {
+				mercantilism = 25
+				trader = 1
+			}
 			1340 = { is_strongest_trade_power = ROOT }
 			num_of_owned_provinces_with = {
 				value = 5
@@ -1590,13 +1638,19 @@ vijayanagara_mission_3 = {
 		position = 5
 		provinces_to_highlight = {
 			any_trade_node_member_province = { province_id = 1340 }
+			NOT = { is_island = yes }
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = VIJ_LAND_REVENUE_TT
 				1340 = {
-					all_trade_node_member_province = { owned_by = ROOT }
+					all_trade_node_member_province = {
+						OR = {
+							is_island = yes
+							owned_by = ROOT
+						}
+					}
 				}
 			}
 		}
@@ -1622,14 +1676,17 @@ vijayanagara_mission_3 = {
 			}
 		}
 		effect = {
-			1343 = {
-				every_trade_node_member_province = {
-					limit = {
-						has_port = yes
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+			custom_tooltip = VIJ_BENGAL_CONQUEST
+			hidden_effect = {
+				1343 = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
 					}
-					add_permanent_claim = ROOT
 				}
 			}
 		}
@@ -1723,6 +1780,83 @@ vijayanagara_mission_3 = {
 				name = vij_dream_unification
 				duration = -1
 			}
+			orissa_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jharkhand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_sindh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sindh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			garjat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			upper_mahanadi_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			orissa_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jharkhand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			gaur_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			west_bengal_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_bengal_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -1770,7 +1904,8 @@ vijayanagara_mission_3 = {
 			india_superregion = {
 				type = all
 				OR = {
-					is_capital = yes
+					owned_by = ROOT
+					is_capital = no
 					owner = {
 						NOT = {
 							army_strength = {
@@ -2272,14 +2407,17 @@ vijayanagara_mission_4 = {
 			}
 		}
 		effect = {
-			504 = {
-				every_trade_node_member_province = {
-					limit = {
-						has_port = yes
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
+			custom_tooltip = VIJ_GUJARAT_CONQUEST
+			hidden_effect = {
+				504 = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
 					}
-					add_permanent_claim = ROOT
 				}
 			}
 		}
