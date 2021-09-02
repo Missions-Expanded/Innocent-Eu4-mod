@@ -1282,7 +1282,7 @@ bohemia_missions_mutual = {
 	potential = {
         tag = BOH
 		OR = {
-			has_country_flag - czech_podebrad
+			has_country_flag = czech_podebrad
 			has_country_flag = czech_jagiellon
 			has_country_flag = czech_habsburg
 		}
@@ -1360,7 +1360,7 @@ bohemia_missions_mutual = {
 	boh_kickstart_industry = {
 		icon = mission_have_manufactories
 		required_missions = { boh_groschen_minting }
-		position = 12
+		position = 11
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 5
@@ -1396,7 +1396,7 @@ bohemia_missions_mutual = {
 	boh_the_bergeral = {
 		icon = me_mission_manufactory_furnace
 		required_missions = { boh_kickstart_industry }
-		position = 14
+		position = 13
 		provinces_to_highlight = {
 			OR = {
 				province_id = 4723
@@ -1559,7 +1559,7 @@ bohemia_missions_podebrad_2 = {
 	boh_hussite_empire = {
 		icon = join_the_reformation
 		required_missions = { boh_city_of_woes }
-		position = 13
+		position = 12
 		provinces_to_highlight = {	
 			owned_by = ROOT
 			NOT = { religion = hussite }
@@ -1599,7 +1599,7 @@ bohemia_missions_podebrad_2 = {
 			boh_hussite_empire
 			boh_true_evil
 		}
-		position = 15
+		position = 14
 		provinces_to_highlight = {
 			OR = {
 				superregion = europe_superregion
@@ -1857,7 +1857,7 @@ bohemia_missions_podebrad_3 = {
 			boh_exporting_religion
 			boh_hussite_empire
 		}
-		position = 14
+		position = 13
 		provinces_to_highlight = {
 			province_id = 118
 		}
@@ -1909,7 +1909,7 @@ bohemia_missions_podebrad_4 = {
         tag = BOH
 		has_country_flag = czech_podebrad
         has_country_flag = use_missions_expanded_missions_instead_of_paradox
-    	}
+    }
 	has_country_shield = yes
 
 	boh_battlecry_old = {
@@ -1992,7 +1992,7 @@ bohemia_missions_podebrad_4 = {
 	boh_council_war = {
 		icon = return_visby_to_the_league
 		required_missions = { boh_war_wagon }
-		position = 13
+		position = 12
 		trigger = {
 			has_mil_advisor_3 = yes
 			if = {
@@ -2040,7 +2040,7 @@ bohemia_missions_podebrad_4 = {
         tag = BOH
 		has_country_flag = czech_podebrad
         has_country_flag = use_missions_expanded_missions_instead_of_paradox
-    	}
+    }
 	has_country_shield = yes
 
 	boh_podebrady_court = {
@@ -2151,7 +2151,7 @@ bohemia_missions_podebrad_4 = {
 	boh_centralization_efforts = {
 		icon = balance_the_estates
 		required_missions = { boh_haunted_disaster }
-		position = 12
+		position = 11
 		provinces_to_highlight = {
 			owned_by = ROOT
 			local_autonomy = 11
@@ -2172,7 +2172,7 @@ bohemia_missions_podebrad_4 = {
 	boh_czech_above_all = {
 		icon = me_mission_bohemia_flag
 		required_missions = { boh_centralization_efforts }
-		position = 14
+		position = 13
 		trigger = {
 			if = {
 				limit = {
@@ -2209,14 +2209,17 @@ bohemia_missions_jagiellon_1 = {
     }
 	has_country_shield = yes
 
-	boh_western_slavic_connections
+	boh_western_slavic_connections = {
 		icon = me_mission_bohemia_flag
 		required_missions = { boh_moravian_dream }
 		position = 9
 		provinces_to_highlight = {
-			area = east_adriatic_coast_area
-			area = slavonia_area
-			area = croatia_area
+			OR = {
+				area = east_adriatic_coast_area
+				area = slavonia_area
+				area = croatia_area
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			croatia_area = {
@@ -2239,21 +2242,487 @@ bohemia_missions_jagiellon_1 = {
 						NOT = { province_has_center_of_trade_of_level = 3 }
 					}
 				}
-				add_center_of_trade_level = 1
+				custom_tooltip = boh_ragusa_province_cot_up_tt
+				hidden_effect = {
+					add_center_of_trade_level = 1
+				}
 			}
 			else = {
 				add_base_production = 3
 			}
-			add_accepted_culture = slovene
-			add_country_modifier = {
-				name = boh_accept_slovene
-				hidden = yes
-				duration = -1
+			custom_tooltip = boh_slovene_croatian_without_slot_tt
+			hidden_effect = {
+				add_accepted_culture = slovene
+				add_country_modifier = {
+					name = boh_accept_slovene
+					hidden = yes
+					duration = -1
+				}
+				add_accepted_culture = croatian
+				add_country_modifier = {
+					name = boh_accept_croatian
+					hidden = yes
+					duration = -1
+				}
 			}
-			add_accepted_culture = croatian
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	boh_greater_slavia = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_western_slavic_connections }
+		position = 11
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = serbia_area
+				area = rascia_area
+				area = bosnia_area
+			}
+		}
+		trigger = {
+			serbia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			rascia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bosnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			serbia_area = { add_nationalism = -10 }
+			rascia_area = { add_nationalism = -10 }
+			bosnia_area = { add_nationalism = -10 }
+			custom_tooltip = boh_new_lands_get_modifier_tt
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						area = serbia_area
+						area = rascia_area
+						area = albania_area
+						area = bosnia_area
+					}
+					add_province_modfier = {
+						name = boh_submission_new_states
+						duration = 7300
+					}
+				}
+			}
+			albania_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_greece_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	boh_pan_slavic_unity = {
+		icon = me_mission_bohemia_flag
+		required_missions = { 
+			boh_greater_slavia
+			boh_ruins_empire
+		}
+		position = 13
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_owner_religion = yes }
+			NOT = { nationalism = 0 }
+		}
+		trigger = {
+			all_owned_province = {
+				has_owner_religion = yes
+				nationalism = 0
+			}
+			global_unrest = -1
+		}
+		effect = {
 			add_country_modifier = {
-				name = boh_accept_croatian
-				hidden = yes
+				name = boh_pan_slavic_glory
 				duration = -1
 			}
 		}
+	}
+}
+
+bohemia_missions_jagiellon_2 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	boh_new_commonwealth = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_rise_lion }
+		position = 7
+		trigger = {
+			if = {
+				limit = {
+					exists = LIT
+					LIT = { is_subject = no }
+				}
+				LIT = { junior_union_with = ROOT }
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 10
+					is_core = LIT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { exists = HUN }
+				add_casus_belli = {
+    					target = HUN
+    					type = cb_restore_personal_union
+    					months = -1
+				}
+			}
+			else = {
+				slovakia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				transylvania_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				southern_transylvania_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				alfold_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				transdanubia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 10
+			}
+			add_mil_power = 75
+		}
+	}
+
+	boh_moravian_dream = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_new_commonwealth }
+		position = 8
+		trigger = {
+			if = {
+				limit = {
+					exists = HUN
+					HUN = { is_subject = no }
+				}
+				HUN = { junior_union_with = ROOT }
+			}
+			else = {
+				slovakia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				transylvania_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				southern_transylvania_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				alfold_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				transdanubia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					HUN = { is_subject_of = ROOT }
+				}
+				HUN = {
+					add_country_modifier = {
+						name = boh_moravian_heritage
+						duration = 18250
+					}
+				}
+				add_dip_power = 75
+				add_adm_power = 75
+			}
+			else = {
+				slovakia_area = {
+					add_province_modifier = {
+						name = boh_moravian_heritage2
+						duration = 3650
+					}
+				}
+				transylvania_area = {
+					add_province_modifier = {
+						name = boh_moravian_heritage2
+						duration = 3650
+					}
+				}
+				southern_transylvania_area = {
+					add_province_modifier = {
+						name = boh_moravian_heritage2
+						duration = 3650
+					}
+				}
+				alfold_area = {
+					add_province_modifier = {
+						name = boh_moravian_heritage2
+						duration = 3650
+					}
+				}
+				transdanubia_area = {
+					add_province_modifier = {
+						name = boh_moravian_heritage2
+						duration = 3650
+					}
+				}
+			}
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bulgaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}	
+			silistria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			wallachia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = { 
+				id = ME_Bohemia_Event.9
+			}
+		}
+	}
+
+	boh_defenders_europe = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_moravian_dream }
+		position = 9
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = bulgaria_area
+				area = silistria_area
+				area = wallachia_area
+			}
+		}
+		trigger = {
+			bulgaria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}	
+			silistria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}	
+			wallachia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bulgaria_area = {
+				add_province_modifier = {
+					name = boh_aegis_europe
+					duration = -1
+				}
+			}
+			silistria_area = {
+				add_province_modifier = {
+					name = boh_aegis_europe
+					duration = -1
+				}
+			}
+			add_prestige = 20
+			thrace_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			macedonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	boh_defenstrate_heathens = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_defenders_europe }
+		position = 10
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = thrace_area
+				area = macedonia_area
+			}
+		}
+		trigger = {
+			thrace_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}	
+			macedonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			151 = {
+				add_province_modifier = {
+					name = boh_bosporus_toll
+					duration = -1
+				}
+			}
+			thrace_area = {
+				add_province_modifier = {
+					name = boh_gateway_europe
+					duration = -1
+				}
+			}
+		}
+	}
+	
+	boh_ruins_empire = {
+		icon = me_mission_bohemia_flag
+		required_missions = { 
+			boh_defenstrate_heathens
+			boh_greater_slavia
+		}
+		position = 12
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = northern_greece_area
+				area = albania_area
+				area = morea_area
+			}
+		}
+		trigger = {
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			albania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Bohemia_Event.14 }
+		}
+	}
