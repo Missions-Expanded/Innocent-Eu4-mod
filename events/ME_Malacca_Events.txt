@@ -60,7 +60,7 @@ country_event = {
 		
 		define_advisor = {
 			name = "Tun Perak"
-			type = statesman
+			type = bendahara
 			skill = 3
 			religion = ROOT
 			culture = ROOT
@@ -231,5 +231,75 @@ country_event = {
 		}
 		
 		override_country_name = MSA_SNG
+	}
+}
+
+country_event = {
+	id = ME_Malacca_Events.5 #Fall of Malacca
+	title = ME_Malacca_Events.5.t
+	desc = ME_Malacca_Events.5.d
+	picture = ADVISOR_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malacca_Events.5.a
+		
+		ai_chance = {
+			factor = 1
+		}
+		
+		595 = {
+			cede_province = PRK
+		}
+		PRK = {	set_capital = 595 }
+		
+		597 = {
+			cede_province = JOH
+		}
+		JOH = {	set_capital = 597 }
+		
+		every_owned_province = {
+			ROOT = { set_capital = PREV }
+			if = {
+				limit = {
+					ROOT = {
+						variable_arithmetic_trigger = {
+							export_to_variable = {
+								variable_name = JOH_Distance
+								value = capital_distance 
+								who = JOH
+							}
+							export_to_variable = {
+								variable_name = PRK_Distance
+								value = capital_distance 
+								who = PRK
+							}
+							
+							check_variable = {
+								which = PRK_Distance
+								which = JOH_Distance
+							}
+						}
+					}
+				}
+				cede_province = JOH
+				if = {
+					limit = {
+						is_core = ROOT 
+					}
+					add_core = JOH
+				}
+			}
+			else = {
+				cede_province = PRK
+				if = {
+					limit = {
+						is_core = ROOT 
+					}
+					add_core = PRK
+				}
+			}
+		}
 	}
 }

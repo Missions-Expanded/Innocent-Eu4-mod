@@ -2278,6 +2278,35 @@ country_event = {
 		add_stability = -1
 	}
 }
+
+country_event = {
+	id = ME_Malaya_Events.52
+	title = ME_Malaya_Events.52.t #Trade Deal
+	desc = ME_Malaya_Events.52.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.52.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		
+	}
+	
+	option = {
+		name = ME_Malaya_Events.52.b
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+	}
+}
+
 country_event = {
 	id = ME_Malaya_Events.53
 	title = ME_Malaya_Events.53.t #Tropical Wood - Purpose
@@ -2419,6 +2448,10 @@ country_event = {
 		tag = FROM 
 	}
 	
+	immediate = {
+		set_country_flag = MSA_incident
+	}
+	
 	option = {
 		name = ME_Malaya_Events.56.a
 		
@@ -2426,6 +2459,7 @@ country_event = {
 			factor = 1
 		}
 		
+		set_country_flag = MSA_europe_no
 		custom_tooltip = MSA_europe_no
 		
 		FROM = {
@@ -2440,6 +2474,7 @@ country_event = {
 			factor = 0
 		}
 		
+		set_country_flag = MSA_europe_yes
 		custom_tooltip = MSA_europe_yes
 	}
 }
@@ -2492,7 +2527,7 @@ country_event = {
 
 country_event = {
 	id = ME_Malaya_Events.59
-	title = ME_Malaya_Events.59.t #Religious Zeal - Muslim
+	title = ME_Malaya_Events.59.t #Religious \ - Muslim
 	desc = ME_Malaya_Events.59.d
 	picture = RELIGIOUS_WARS_eventPicture
 	
@@ -2546,4 +2581,473 @@ country_event = {
 		set_country_flag = MSA_chose_religious_tree
 		swap_non_generic_missions = yes
 	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.61
+	title = ME_Malaya_Events.61.t #Religious Zeal - Other
+	desc = ME_Malaya_Events.61.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	mean_time_to_happen = {
+		months = 12
+	}
+	
+	trigger = {
+		tag = MSA
+		NOT = { has_country_flag = MSA_chose_religious_tree }
+		religion_group = dharmic
+	}
+	
+	option = {
+		name = ME_Malaya_Events.61.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		set_country_flag = MSA_religion_hindu
+		set_country_flag = MSA_chose_religious_tree
+		swap_non_generic_missions = yes
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.62
+	title = ME_Malaya_Events.62.t #Christianity Spread - Initial Event
+	desc = ME_Malaya_Events.62.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	trigger = {
+		OR = {
+			had_country_flag = {
+				flag = MSA_europe_yes
+				days = 3650
+			}
+			had_country_flag = {
+				flag = MSA_europe_no
+				days = 9125
+			}
+		}
+	}
+	
+	immediate = {
+		set_country_flag = MSA_spread_of_christianity
+	}
+	
+	option = {
+		name = ME_Malaya_Events.62.a #No!
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		custom_tooltip = MSA_spread_of_christianity_slow
+	}
+	
+	option = {
+		name = ME_Malaya_Events.62.b #Sure
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		custom_tooltip = MSA_spread_of_christianity_will_continue
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.63
+	title = ME_Malaya_Events.63.t #Christianity Spread - Pick a Province
+	desc = ME_Malaya_Events.63.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	trigger = {
+		any_owned_province = {
+			NOT = { religion_group = christian_group }
+		}
+	}
+	hidden = yes
+	
+	immediate = {
+		random_owned_province = {
+			limit = {
+				NOT = { religion_group = christian_group }
+			}
+			save_event_target_as = MSA_province
+		}
+		
+		random_owned_province = {
+			limit = {
+				NOT = { religion_group = christian_group }
+				culture_group = malay
+			}
+			save_event_target_as = MSA_province
+		}
+		
+		random_owned_province = {
+			limit = {
+				NOT = { religion_group = christian_group }
+				province_has_center_of_trade_of_level = 1
+				culture_group = malay
+			}
+			save_event_target_as = MSA_province
+		}
+		
+		event_target:MSA_province = {
+			province_event = { id = ME_Malaya_Events.64 }
+		}
+	}
+		
+	option = {
+		name = ME_Malaya_Events.62.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		
+	}
+}
+
+province_event = {
+	id = ME_Malaya_Events.64
+	title = ME_Malaya_Events.64.t #Christianity Spread
+	desc = ME_Malaya_Events.64.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	goto = ROOT
+		
+	option = {
+		name = ME_Malaya_Events.64.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		change_religion = event_target:MSA_province
+		add_province_modifier = {
+			name = MSA_christian_community
+			duration = -1
+		}
+	}
+}
+
+province_event = {
+	id = ME_Malaya_Events.65
+	title = ME_Malaya_Events.65.t #The Fall of the Muslim Sultanates in India
+	desc = ME_Malaya_Events.65.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	trigger = {
+		province_id = 522
+		NOT = {
+			calc_true_if = {
+				india_superregion = {
+					owner = {
+						religion_group = muslim_group
+					}
+				}
+				value = 25
+			}
+		}
+	}
+	
+	major = yes
+	major_trigger = {
+		religion_group = muslim_group
+		religion_group = dharmic
+	}
+		
+	option = {
+		name = ME_Malaya_Events.65.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		change_religion = event_target:MSA_province
+		add_province_modifier = {
+			name = MSA_christian_community
+			duration = -1
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.66
+	title = ME_Malaya_Events.66.t #Concessions
+	desc = ME_Malaya_Events.66.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.66.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		trigger = {
+			NOT = { has_country_modifier = MSA_concession_guard }
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 5
+		}
+		add_country_modifier = {
+			name = MSA_concession_guard
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.66.b
+		
+		trigger = {
+			NOT = { has_country_modifier = MSA_concession_trade_efficiency }
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 5
+		}
+		add_country_modifier = {
+			name = MSA_concession_trade_efficiency
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.66.c
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 5
+		}
+		set_country_flag = MSA_trade_concession_timer
+		custom_tooltip = MSA_random_partner
+		tooltip = {
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 50
+					key = MSA_benefits
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.66.e
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 25
+		}
+		set_country_flag = MSA_province_give_up
+		country_event = { id = ME_Malaya_Events.68 } #Province Choice
+	}
+	
+	option = {
+		name = ME_Malaya_Events.66.g
+		
+		ai_chance = { 
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.67
+	title = ME_Malaya_Events.67.t #Concessions
+	desc = ME_Malaya_Events.67.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Malaya_Events.67.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		trigger = {
+			NOT = { has_country_modifier = MSA_concession_guard }
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 5
+		}
+		add_country_modifier = {
+			name = MSA_concession_guard
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.67.b
+		
+		trigger = {
+			NOT = { has_country_modifier = MSA_concession_trade_efficiency }
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 5
+		}
+		add_country_modifier = {
+			name = MSA_concession_trade_efficiency
+			duration = 5475
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.67.c
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 5
+		}
+		set_country_flag = MSA_trade_concession_timer
+		custom_tooltip = MSA_random_partner
+		tooltip = {
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 5475
+					power = 50
+					key = MSA_benefits
+				}
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.67.e
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		change_variable = {
+			which = MSA_foreign_investment_amount
+			value = 25
+		}
+		set_country_flag = MSA_province_give_up
+		country_event = { id = ME_Malaya_Events.68 } #Province Choice
+	}
+	
+	option = {
+		name = ME_Malaya_Events.67.g
+		
+		ai_chance = { 
+			factor = 1
+		}
+	}
+}
+
+country_event = {
+	id = ME_Malaya_Events.68
+	title = ME_Malaya_Events.68.t #Concession - Provicne
+	desc = ME_Malaya_Events.68.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+	
+	immediate = {
+		MSA_set_up_province_targets = yes
+	}
+	
+	option = {
+		name = ME_Malaya_Events.68.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		event_target:Malaya_target_1 = {
+			MSA_execute_province_effect = yes
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.68.b
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		event_target:Malaya_target_2 = {
+			MSA_execute_province_effect = yes
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.68.c
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		event_target:Malaya_target_3 = {
+			MSA_execute_province_effect = yes
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.68.e
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		trigger = {
+			has_country_flag = MSA_four_targets
+		}
+		event_target:Malaya_target_4 = {
+			MSA_execute_province_effect = yes
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.68.f
+		
+		ai_chance = { 
+			factor = 1
+		}
+		trigger = {
+			has_country_flag = MSA_four_targets
+		}
+		
+		event_target:Malaya_target_5 = {
+			MSA_execute_province_effect = yes
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.68.g
+		
+		ai_chance = { 
+			factor = 1
+		}
+	}
+	
 }
