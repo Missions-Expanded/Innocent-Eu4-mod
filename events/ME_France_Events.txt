@@ -788,18 +788,36 @@ country_event = {
 				alliance_with = emperor
 			}
 		}
-		kill_heir = yes
-		define_heir = {
-			name = "marie"
-			dynasty = "de Bourgogne"
-			age = 16
-			claim = 95
-			adm = 4
-			dip = 5
-			mil = 3
-			female = yes
+		if = {
+			limit = {
+				has_ruler = "Charles"
+				dynasty = "de Bourgogne"
+			}
+			kill_heir = yes
+			define_heir = {
+				name = "marie"
+				dynasty = "de Bourgogne"
+				age = 16
+				claim = 95
+				adm = 4
+				dip = 5
+				mil = 3
+				female = yes
+			}
+			add_ruler_flag = fra_charles_no_dying_flag
+			set_heir_flag = mary_is_heir
 		}
-		set_heir_flag = mary_is_heir
+		else = {
+			kill_ruler = yes
+			custom_tooltip = fra_marie_ascending_tt
+			hidden_effect = {
+				country_event = { 
+					id = ME_France_Events.77
+					hidden = yes
+					days = 1
+				}
+			}
+		}
 		if = {
 			limit = {
 				is_rival = FROM
@@ -834,15 +852,7 @@ country_event = {
 				days = 15
 			}
 		}
-		if = {
-			limit = {
-				NOT = { has_country_flag = burgundian_succession_start }
-				NOT = { has_country_flag = bur_crisis_has_happened }
-			}
-			country_event = { id = incidents_bur_inheritance.1 }
-		}
 	}
-
 	option = {
 		name = ME_France_Events.22.OPT2
 		ai_chance = { factor = 50 }
@@ -2456,3 +2466,45 @@ country_event = {
 		}
 	}
 }
+
+#Hidden event for marie#
+country_event = {
+	id = ME_France_Events.77
+	title = ME_France_Events.77.T
+	desc = ME_France_Events.77.D
+	picture = DIPLOMACY_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_France_Events.77.OPT1
+		kill_heir = yes
+		define_heir = {
+			name = "marie"
+			dynasty = "de Bourgogne"
+			age = 16
+			claim = 95
+			adm = 4
+			dip = 5
+			mil = 3
+			female = yes
+		}
+		set_heir_flag = mary_is_heir
+	}
+}
+
+#Hidden event for charles#
+country_event = {
+	id = ME_France_Events.78
+	title = ME_France_Events.78.T
+	desc = ME_France_Events.78.D
+	picture = DIPLOMACY_eventPicture
+	hidden = yes
+	trigger = {
+		OR = {
+			is_year = 1495
+			BUR = { has_heir_flag = mary_is_heir }
+		}
+	}
+	option = {
+		name = ME_France_Events.78.OPT1
+		clr_ruler_flag = fra_charles_no_dying_flag
+	}
