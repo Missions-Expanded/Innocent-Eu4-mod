@@ -1347,9 +1347,7 @@ bohemia_missions_mutual = {
 			hidden_effect = {
 				2970 = {
 					if = {
-						limit = {
-							is_expanded_mode_active = trade_goods
-						}
+						limit = { is_expanded_mod_active = trade_goods }
 						change_trade_goods = silver
 					}
 				}
@@ -2765,6 +2763,264 @@ bohemia_missions_jagiellon_2 = {
 				duration = -1
 			}
 			override_country_name = boh_slavia
+		}
+	}
+}
+
+bohemia_missions_jagiellon_3 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+		has_country_flag = czech_jagiellon
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	boh_karlovy_vary = {
+		icon = imperial_ascendancy
+		position = 9
+		required_missions = { }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				province_id = 1771
+			}
+		}
+		trigger = {
+			1771 = {
+				owned_by = ROOT
+				base_tax = 8
+				devastation = 0
+			}
+		}
+		effect = {
+			1771 = {
+				change_province_name = "Karlovy Vary"
+			}
+		}
+	}
+
+	boh_charles_bridge = {
+		icon = mission_early_game_buildings
+		position = 11
+		required_missions = { boh_karlovy_vary }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				province_id = 266
+			}
+		}
+		trigger = {
+			266 = {
+				development = 30
+				devastation = 0
+			}
+			has_adm_advisor_3 = yes
+			custom_trigger_tooltip = {
+				tooltip = boh_charles_bridge_prosperous_tt
+				bohemia_area = { 
+					type = all
+					is_prosperous = yes 
+				}
+			}
+		}
+		effect = {
+			bohemia_area = {
+				add_province_modifier = {
+					name = boh_charles_bridge_modifier
+					duration = -1
+				}
+			}
+			add_country_modifier = {
+				name = boh_bridge_splendor
+				duration = 36500
+			}
+		}
+	}
+
+	boh_schwarzenberg_canal = {
+		icon = mission_invade_island
+		position = 13
+		required_missions = { boh_charles_bridge }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				province_id = 2968
+			}
+		}
+		trigger = {
+			2968 = {
+				base_production = 6
+				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			2968 = {
+				add_province_modifier = {
+					name = boh_schwarzenberg_canal_modifier
+					duration = -1
+				}
+			}
+			country_event = { id = ME_Bohemia_Event.15 }
+		}
+	}
+}
+
+bohemia_missions_jagiellon_4 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+		has_country_flag = czech_jagiellon
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	boh_slavic_court = {
+		icon = mission_alliances
+		required_missions = { }
+		position = 8
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = boh_employed_advisor_czech_tt
+				employed_advisor = {
+					category = adm
+					culture = czech
+				}
+				employed_advisor = {
+					category = dip
+					culture = czech
+				}
+				employed_advisor = {
+					category = mil
+					culture = czech
+				}
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 50
+			}
+			estate_loyalty = {
+				estate = estate_burghers
+				loyalty = 50
+			}
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_great_slavic_minds
+				duration = 18250
+			}
+		}
+	}
+
+	boh_haunted_disaster = {
+		icon = peace_in_europe
+		required_missions = { boh_slavic_court }
+		position = 10
+		provinces_to_highlight = {
+			owned_by = ROOT
+			devastation = 1
+		}
+		trigger = {
+			stability = 3
+			all_owned_province = {
+				devastation = 0
+			}
+			custom_trigger_tooltip = {
+				tooltip = boh_areas_negative_unrest
+				erzgebirge_area = {
+					type = all
+					unrest = -1
+					is_prosperous = yes
+				}
+				bohemia_area = {
+					type = all
+					unrest = -1
+					is_prosperous = yes
+				}
+				moravia_area = {
+					type = all
+					unrest = -1
+					is_prosperous = yes
+				}
+				silesia_area = {
+					type = all
+					unrest = -1
+					is_prosperous = yes
+				}
+				lusatia_area = {
+					type = all
+					unrest = -1
+					is_prosperous = yes
+				}
+			}
+			
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_prosperity_stability
+				duration = 18250
+			}
+			add_adm_power = 50
+			add_prestige = 10
+		}
+	}
+
+	boh_centralization_efforts = {
+		icon = balance_the_estates
+		required_missions = { boh_haunted_disaster }
+		position = 12
+		provinces_to_highlight = {
+			owned_by = ROOT
+			local_autonomy = 11
+		}
+		trigger = {
+			crown_land_share = 40
+			num_of_provinces_in_territories = 10
+			average_autonomy = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_centralized_state
+				duration = -1
+			}
+		}
+	}
+
+	boh_czech_above_all = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_centralization_efforts }
+		position = 14
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				NOT = { great_power_rank = 2 }
+			}
+			else = {
+				all_country = {
+					NOT = {
+						total_development = ROOT
+					}
+				}
+			}
+			power_projection = 80
+			has_completed_all_reforms_trigger = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_czech_supremacy_europe
+				duration = -1
+			}
 		}
 	}
 }
