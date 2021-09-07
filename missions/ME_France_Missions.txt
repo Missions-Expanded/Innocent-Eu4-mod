@@ -74,6 +74,18 @@
 				}
 				add_permanent_claim = ROOT
 			}
+			piedmont_area = {
+				add_province_modifier = {
+					name = fra_frenchify_italians
+					duration 3650
+				}
+			}
+			liguria_area = {
+				add_province_modifier = {
+					name = fra_frenchify_italians
+					duration 3650
+				}
+			}
 		}
 	}
 
@@ -102,12 +114,33 @@
 			}
 		}
 		effect = {
-			custom_tooltip = FRA_march_southwards_TT
-				hidden_effect = {
-					country_event = {
-						id = ME_France_Events.2
-					}
+			if = {
+				limit = {
+					religion = catholic
 				}
+				add_country_modifier = {
+					name = fra_custodian_roma
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					religion = protestant
+				}
+				add_country_modifier = {
+					name = fra_conquest_roma_pro
+					duration = -1
+				}
+			}
+			else_if = {
+				limit = {
+					religion = reformed
+				}
+				add_country_modifier = {
+					name = fra_conquest_roma_ref
+					duration = -1
+				}
+			}
 		}		
 	}
 
@@ -500,6 +533,9 @@ france_missions_2 = {
 				name = fra_french_canal
 				duration = 7300
 			}
+			1272 = {
+				change_province_name = "Le French Canal"
+			}
 		}
 	}
 
@@ -531,6 +567,10 @@ france_missions_2 = {
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = fra_iron_crown
+				duration = 3650
 			}
 		}
 	}
@@ -633,13 +673,16 @@ france_missions_2 = {
 			country_event = {
 				id = ME_France_Events.9
 			}
-			every_owned_province = {
-				limit = {
-					region = france_region
-				}
-				add_province_modifier = {
-					name = fra_account_keeping
-					duration = -1
+			custom_tooltip = fra_account_keeping_tt
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						region = france_region
+					}
+					add_province_modifier = {
+						name = fra_account_keeping
+						duration = -1
+					}
 				}
 			}
 		}
@@ -1022,7 +1065,7 @@ france_missions_3 = {
 		required_missions = { 
 			fra_french_superiority
 			fra_avenging_nicopolis
-			fra_into_poland
+			fra_hornets_nest
 		}
 		icon = establish_client_states
 		position = 9
@@ -1665,63 +1708,52 @@ france_missions_4 = {
 		}
 	}
 
-	fra_higher_education = {
-		required_missions = { fra_royaulme_france }
-		icon = academy_of_the_bran
-		position = 3
+	fra_iberian_invasion = {
+		required_missions = {
+			fra_royaulme_france
+		}
+		icon = the_spanish_succession
+		position = 4
 		provinces_to_highlight = {
 			OR = {
-				province_id = 172
-				province_id = 201
+				area = catalonia_area
+				area = valencia_area
+				area = toledo_area
+				area = castille_area
 			}
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { development = 20 }
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			172 = {
+			catalonia_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
-				development = 30
 			}
-			201 = {
+			valencia_area = {
+				type = all
 				country_or_non_sovereign_subject_holds = ROOT
-				development = 30
+			}
+			toledo_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			castille_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					has_dlc = "Rule Britannia"
-				}
-				change_innovativeness = 3
+			add_mil_power = 100
+			catalonia_area = {
+				add_nationalism = -10
 			}
-			else = {
-				add_prestige = 10
+			valencia_area = {
+				add_nationalism = -10
 			}
-			172 = {
-				if = {
-					limit = {
-						NOT = { has_building = university }
-					}
-					add_building = university
-				}
-				add_province_modifier = {
-					name = fra_local_university
-					duration = -1
-				}
+			toledo_area = {
+				add_nationalism = -10
 			}
-			201 = {
-				if = {
-					limit = {
-						NOT = { has_building = university }
-					}
-					add_building = university
-				}
-				add_province_modifier = {
-					name = fra_local_university
-					duration = -1
-				}
+			castille_area = {
+				add_nationalism = -10
 			}
 		}
 	}
@@ -1770,62 +1802,43 @@ france_missions_4 = {
 		}
 	}
 
-	fra_iberian_invasion = {
+	fra_german_invasion = {
 		required_missions = {
 			fra_break_neutrality
 			fra_rhennish_conquests
 		}
-		icon = the_spanish_succession
+		icon = the_balance_of_power
 		position = 7
 		provinces_to_highlight = {
 			OR = {
-				area = catalonia_area
-				area = valencia_area
-				area = toledo_area
-				area = castille_area
+				province_id = 50
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			catalonia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			valencia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			toledo_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			castille_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			50 = {
+				controlled_by = ROOT
+				devastation = 50
+				owner = {
+					is_in_war = {
+						attacker_leader = ROOT
+						war_score = -50
+					}
+				}
 			}
 		}
 		effect = {
-			add_mil_power = 100
-			mazovia_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			50 = {
+				add_base_tax = -2
+				add_base_production = -2
+				add_base_manpower = -2
 			}
-			sandomierz_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			malopolska_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			capital_scope = {
+				add_base_tax = 2
+				add_base_production = 2
+				add_base_manpower = 2
 			}
 		}
 	}
@@ -2402,54 +2415,71 @@ france_missions_5 = {
 		}
 	}
 
-	fra_into_poland = {
-		required_missions = { fra_iberian_invasion }
-		icon = polish_subjects
+	fra_hornets_nest = {
+		required_missions = { fra_german_invasion }
+		icon = boh_humiliate_austria
 		position = 8
 		provinces_to_highlight = {
 			OR = {
-				area = mazovia_area
-				area = sandomierz_area
-				area = malopolska_area
+				province_id = 134
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			mazovia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			sandomierz_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			malopolska_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			134 = {
+				controlled_by = ROOT
+				devastation = 50
+				owner = {
+					is_in_war = {
+						attacker_leader = ROOT
+						war_score = -50
+					}
+				}
 			}
 		}
 		effect = {
-			add_mil_power = 100
-			oka_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = fra_triumph_emperor
+				duration = 3650
 			}
-			moscow_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			134 = {
+				add_base_tax = -2
+				add_base_manpower = -2
+				add_base_production = -2
 			}
-			ryazan_area = {
+			if = {
 				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
+					HAB = { is_emperor = yes}
+					imperial_influence = 30
 				}
-				add_permanent_claim = ROOT
+				HAB = { add_imperial_influence = -30 }
+			}
+			else_if = {
+				limit = { hre_reform_level = 1 }
+				revoke_reform = reichsreform
+			}
+			else_if = {
+				limit = { hre_reform_level = 2 }
+				revoke_reform = reichsregiment
+			}
+			else_if = {
+				limit = { hre_reform_level = 3 }
+				revoke_reform = hofgericht
+			}
+			else_if = {
+				limit = { hre_reform_level = 4 }
+				revoke_reform = gemeinerpfennig
+			}
+			else_if = {
+				limit = { hre_reform_level = 4 }
+				revoke_reform = landfriede
+			}
+			else_if = {
+				limit = { hre_reform_level = 5 }
+				revoke_reform = erbkaisertum
+			}
+			else_if = {
+				limit = { hre_reform_level = 6 }
+				revoke_reform = privilegia_de_non_appelando
 			}
 		}
 	}
