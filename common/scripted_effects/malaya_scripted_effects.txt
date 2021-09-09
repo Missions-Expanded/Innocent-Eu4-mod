@@ -510,6 +510,7 @@ MSA_malay_missions = {
 		complete_mission = PLB_srivijaya
 		complete_mission = SUM_generic_alam_melayu
 		complete_mission = MKS_alam_melayu
+		complete_mission = TID_TER_alam_melayu
 	}
 }
 
@@ -745,4 +746,213 @@ MSA_discover_tiwi = {
 	2728 = { discover_province = ROOT }
 	2725 = { discover_province = ROOT }
 	635 = { discover_province = ROOT }
+}
+
+MSA_load_province_flags = {
+	if = {
+		limit = {
+			has_country_flag = TID_TER_can_load_all_provinces
+		}
+		MSA_load_ternate_claims = { tag = $tag$ }
+		MSA_load_tidore_claims = { tag = $tag$ }
+	}
+	else_if = {
+		limit = {
+			tag = TID
+		}
+		MSA_load_tidore_claims = { tag = $tag$ }
+	}
+	else = {
+		MSA_load_ternate_claims = { tag = $tag$ }
+	}
+}
+
+MSA_load_ternate_claims = {
+	648 = { set_province_flag = MSA_$tag$_claim } #shared
+	647 = { set_province_flag = MSA_$tag$_claim } #shared
+	2696 = { set_province_flag = MSA_$tag$_claim } #shared
+	2717 = { set_province_flag = MSA_$tag$_claim } #shared
+	645 = { set_province_flag = MSA_$tag$_claim } #shared
+	646 = { set_province_flag = MSA_$tag$_claim } #shared
+	633 = { set_province_flag = MSA_$tag$_claim }
+	4796 = { set_province_flag = MSA_$tag$_claim }
+	643 = { set_province_flag = MSA_$tag$_claim }
+	2714 = { set_province_flag = MSA_$tag$_claim }
+	2713 = { set_province_flag = MSA_$tag$_claim }
+	644 = { set_province_flag = MSA_$tag$_claim }
+	642 = { set_province_flag = MSA_$tag$_claim }
+}
+
+MSA_load_tidore_claims = {
+	648 = { set_province_flag = MSA_$tag$_claim } #shared
+	647 = { set_province_flag = MSA_$tag$_claim } #shared
+	2696 = { set_province_flag = MSA_$tag$_claim } #shared
+	2717 = { set_province_flag = MSA_$tag$_claim } #shared
+	645 = { set_province_flag = MSA_$tag$_claim } #shared
+	646 = { set_province_flag = MSA_$tag$_claim } #shared
+	2724 = { set_province_flag = MSA_$tag$_claim }
+	2725 = { set_province_flag = MSA_$tag$_claim }
+	1245 = { set_province_flag = MSA_$tag$_claim }
+	2718 = { set_province_flag = MSA_$tag$_claim }
+}
+
+MSA_clear_flags = {
+	648 = { clr_province_flag = MSA_$tag$_claim } #shared
+	647 = { clr_province_flag = MSA_$tag$_claim } #shared
+	2696 = { clr_province_flag = MSA_$tag$_claim } #shared
+	2717 = { clr_province_flag = MSA_$tag$_claim } #shared
+	645 = { clr_province_flag = MSA_$tag$_claim } #shared
+	646 = { clr_province_flag = MSA_$tag$_claim } #shared
+	2724 = { clr_province_flag = MSA_$tag$_claim }
+	2725 = { clr_province_flag = MSA_$tag$_claim }
+	1245 = { clr_province_flag = MSA_$tag$_claim }
+	2718 = { clr_province_flag = MSA_$tag$_claim }
+	633 = { clr_province_flag = MSA_$tag$_claim }
+	4796 = { clr_province_flag = MSA_$tag$_claim }
+	643 = { clr_province_flag = MSA_$tag$_claim }
+	2714 = { clr_province_flag = MSA_$tag$_claim }
+	2713 = { clr_province_flag = MSA_$tag$_claim }
+	644 = { clr_province_flag = MSA_$tag$_claim }
+	642 = { clr_province_flag = MSA_$tag$_claim }
+}
+
+MSA_find_provinces_tag = {
+	MSA_find_provinces = { target = 1 tag = $tag$ }
+	if = {
+		limit = { has_country_flag = TID_TER_1_province }
+		MSA_find_provinces = { target = 2 tag = $tag$ }
+		if = {
+			limit = { has_country_flag = TID_TER_2_province }
+			MSA_find_provinces = { target = 3 tag = $tag$ }
+			if = {
+				limit = { has_country_flag = TID_TER_3_province }
+				MSA_find_provinces = { target = 4 tag = $tag$ }
+				if = {
+					limit = { has_country_flag = TID_TER_4_province }
+					MSA_find_provinces = { target = 5 tag = $tag$ }
+				}
+			}
+		}
+	}
+}
+
+MSA_find_provinces = {
+	random_province = {
+		limit = {
+			has_province_flag = MSA_$tag$_claim
+			is_empty = yes
+		}
+		save_event_target_as = MSA_target_$target$
+		clr_province_flag = MSA_$tag$_claim
+		ROOT = { set_country_flag = TID_TER_$target$_province }
+	}
+}
+
+MSA_TID_TER_cost = {
+	if = {
+		limit = {
+			check_variable = { which = MSA_num_of_colonies value = 1 }
+		}
+		if = {
+			limit = {
+				check_variable = { which = MSA_num_of_colonies value = 2 }
+			}
+			if = {
+				limit = {
+					check_variable = { which = MSA_num_of_colonies value = 3 }
+				}
+				if = {
+					limit = {
+						check_variable = { which = MSA_num_of_colonies value = 4 }
+					}
+					add_treasury = -150
+				}
+				else = { add_treasury = -125 }
+			}
+			else = { add_treasury = -100 }
+		}
+		else = { add_treasury = -75 }
+	}
+	else = { add_treasury = -50 }
+	
+	hidden_effect = {
+		change_variable = {
+			which = MSA_num_of_colonies
+			value = 1
+		}
+	}
+}
+
+MSA_sumatra_reward = {
+	add_mercantilism = 2
+	add_country_modifier = {
+		name = MSA_legacy_of_srivijaya
+		duration = 7300
+	}
+}
+
+MSA_borneo_reward = {
+	add_navy_tradition = 10
+	add_country_modifier = {
+		name = MSA_bruneian_thalassocracy_distrubed
+		duration = 7300
+	}
+}
+
+MSA_sulawesi_reward = {
+	add_prestige_or_monarch_power = { amount = 10 }
+	add_country_modifier = {
+		name = MSA_island_of_iron
+		duration = 9125
+	}
+}
+
+MSA_java_reward = {
+	add_army_tradition_or_mil_power = { amount = 10 }
+	add_country_modifier = {
+		name = MSA_majapahit_defeated
+		duration = 10950
+	}
+}
+
+MSA_malaya_reward = {
+	add_stability_or_adm_power = yes
+	1361 = {
+		add_trade_modifier = {
+			who = ROOT
+			duration = 9125
+			power = 25
+			key = MSA_strait_secured
+		}
+	}
+}
+
+BEI_modifier_extension = {
+	custom_tooltip = BEI_extend_or_add_humble_rise
+	hidden_effect = {
+		if = {
+			limit = {
+				any_owned_province = {
+					has_province_modifier = BEI_humble_rise_to_greatness
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_province_modifier = BEI_humble_rise_to_greatness
+				}
+				extend_province_modifier = {
+					name = BEI_humble_rise_to_greatness
+					duration = 3650
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				add_province_modifier = {
+					name = BEI_humble_rise_to_greatness
+					duration = 3650
+				}
+			}
+		}
+	}
 }
