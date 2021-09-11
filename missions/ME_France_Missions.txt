@@ -389,6 +389,140 @@
 			}
 		}
 	}
+
+	fra_urbanization = {
+		required_missions = { }
+		icon = mission_early_game_buildings
+		position = 19
+		provinces_to_highlight = {
+			OR = {
+				province_id = 183
+				province_id = 174
+				province_id = 203
+				province_id = 200
+				province_id = 177
+			}
+			NOT = { num_of_times_improved_by_owner = 5 }
+		}
+		trigger = {
+			has_institution = renaissance
+			174 = {
+				owned_by = ROOT
+				num_of_times_improved_by_owner = 5
+			}
+			177 = {
+				owned_by = ROOT
+				num_of_times_improved_by_owner = 5
+			}
+			183 = {
+				owned_by = ROOT
+				num_of_times_improved_by_owner = 5
+			}
+			200 = {
+				owned_by = ROOT
+				num_of_times_improved_by_owner = 5
+			}
+			203 = {
+				owned_by = ROOT
+				num_of_times_improved_by_owner = 5
+			}
+		}
+		effect = {
+			174 = {
+				add_province_modifier = {
+					name = fra_urban_projects
+					duration = 18250
+				}
+			}
+			177 = {
+				add_province_modifier = {
+					name = fra_urban_projects
+					duration = 18250
+				}
+			}
+			183 = {
+				add_province_modifier = {
+					name = fra_urban_projects
+					duration = 18250
+				}
+			}
+			200 = {
+				add_province_modifier = {
+					name = fra_urban_projects
+					duration = 18250
+				}
+			}
+			203 = {
+				add_province_modifier = {
+					name = fra_urban_projects
+					duration = 18250
+				}
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = {
+						mod = governments
+					}
+				}
+				add_country_modifier = {
+					name = fra_ge_urban_growth
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	fra_treasurer = {
+		required_missions = { fra_urbanization }
+		icon = Control_Junkers
+		position = 20
+		trigger = {
+			treasurer = 3
+			monthly_adm = 12
+			corruption = 0
+			inflation = 0
+		}
+		effect = {
+			custom_tooltip = fra_cheaper_treasurer_tt
+			set_country_flag = fra_treasurer_flag
+		}
+	}
+
+	fra_cogito_ergo_sum = {
+		required_missions = { fra_treasurer }
+		icon = reform_bergordnung
+		position = 22
+		trigger = {
+			has_institution = enlightenment
+			is_ahead_of_time_in_specific_tech = { type = adm }
+			is_ahead_of_time_in_specific_tech = { type = dip }
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 40
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_enligthened_rulers
+				duration = 43800
+			}
+			custom_tooltip = fra_inno_full_extra_reward_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						full_idea_group = innovativeness_ideas
+					}
+					add_country_modifier = {
+						name = fra_scientific_revolution
+						duration = 18250
+					}
+				}
+			}
+		}
+	}
 }
 
 france_missions_2 = {
@@ -814,6 +948,126 @@ france_missions_2 = {
 					create_or_add_center_of_trade_level = { level = 1 }
 					add_province_modifier = {
 						name = fra_exotic_goods_exporter
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	fra_fontainebleau = {
+		required_missions = {
+			fra_urbanization
+			fra_renaissance
+		}
+		icon = mission_religious
+		position = 20
+		provinces_to_highlight = {
+			OR = { province_id = 186 }
+		}
+		trigger = {
+			186 = { has_tas_building_trigger = yes }
+			any_country = {
+				culture_group = latin
+				has_opinion = {
+					who = ROOT
+					value = 100
+				}
+			}
+			adm_tech = 7
+		}
+		effect = {
+			186 = {
+				add_province_modifier = {
+					name = fra_school
+					duration = 18250
+				}
+				add_base_tax = 2
+			}
+		}
+	}
+
+	fra_higher_education = {
+		required_missions = { fra_fontainebleau }
+		icon = academy_of_the_bran
+		position = 21
+		provinces_to_highlight = {
+			OR = {
+				province_id = 172
+				province_id = 201
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { development = 20 }
+			}
+		}
+		trigger = {
+			172 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 30
+			}
+			201 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				development = 30
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 3
+			}
+			else = {
+				add_prestige = 10
+			}
+			172 = {
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				add_province_modifier = {
+					name = fra_local_university
+					duration = -1
+				}
+			}
+			201 = {
+				if = {
+					limit = {
+						NOT = { has_building = university }
+					}
+					add_building = university
+				}
+				add_province_modifier = {
+					name = fra_local_university
+					duration = -1
+				}
+			}
+		}
+	}
+
+	fra_modernization = {
+		required_missions = { fra_higher_education }
+		icon = centralize_france
+		position = 22
+		trigger = {
+			government_reform_progress = 10
+			adm_tech = 20
+		}
+		effect = {
+			country_event = {
+				id = ME_France_Events.9
+			}
+			custom_tooltip = fra_account_keeping_tt
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						region = france_region
+					}
+					add_province_modifier = {
+						name = fra_account_keeping
 						duration = -1
 					}
 				}
@@ -1536,6 +1790,81 @@ france_missions_3 = {
 				add_country_modifier = {
 					name = fra_colonial_empire
 					duration = -1
+				}
+			}
+		}
+	}
+
+	fra_renaissance = {
+		required_missions = { }
+		icon = florentine_renaissance
+		position = 19
+		trigger = {
+			has_institution = renaissance
+			num_of_owned_provinces_with = {
+				value = 5
+				num_of_times_improved = 2
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_France_Events.5
+			}
+		}
+	}
+
+	fra_maritime_capital = {
+		required_missions = { fra_renaissance }
+		icon = mission_colonial
+		position = 21
+		provinces_to_highlight = {
+			OR = { province_id = 201 }
+		}
+		trigger = {
+			201 = {
+				owned_by = ROOT
+				base_manpower = 10
+				base_production = 10
+				base_tax = 10
+				has_dock_building_trigger = yes
+				has_shipyard_building_trigger = yes
+			}
+		}
+		effect = {
+			201 = {
+				add_province_modifier = {
+					name = fra_marseille
+					duration = -1
+				}
+				change_province_name = "Marseille"
+			}
+			if = {
+				limit = {
+					201 = { 
+						NOT = { province_has_center_of_trade_of_level = 3 }	
+					}
+				}
+				201 = { add_center_of_trade_level = 1 }
+			}
+			else = {
+				201 = { add_base_production = 3 }
+			}
+			if = {
+				limit = {
+					201 = { has_building = dock }
+				}
+				201 {
+					remove_building = dock
+					add_building = drydock
+				}
+			}
+			if = {
+				limit = {
+					201 = { has_building = shipyard }
+				}
+				201 = {
+					remove_building = shipyard
+					add_building = grand_shipyard
 				}
 			}
 		}
@@ -2307,11 +2636,6 @@ france_missions_5 = {
 			add_country_modifier = {
 				name = fra_triumph_emperor
 				duration = 3650
-			}
-			134 = {
-				add_base_tax = -2
-				add_base_manpower = -2
-				add_base_production = -2
 			}
 			if = {
 				limit = {
