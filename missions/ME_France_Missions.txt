@@ -1869,6 +1869,30 @@ france_missions_3 = {
 			}
 		}
 	}
+
+	fra_mercure_france = {
+		required_missions = { fra_maritime_capital }
+		icon = geneva_conventions
+		position = 22
+		provinces_to_highlight = {
+			area = ile_de_france_area
+		}
+		trigger = {
+			183 = {
+				base_tax = 15
+				printing_press = 100
+				has_courthouse_building_trigger = yes
+				devastation = 0
+			}
+			custom_trigger_tooltip = {
+				tooltip = fra_france_area_prosperous_tt
+				ile_de_france_area = { is_prosperous = yes }
+			}
+		}
+		effect = {
+			custom_tooltip = fra_mercure_galant_tt
+		}
+	}
 }
 
 france_missions_4 = {
@@ -2371,6 +2395,193 @@ france_missions_4 = {
 				country_event = {
 					id = ME_France_Events.20
 				}
+			}
+		}
+	}
+
+	fra_fuel_fire = {
+		required_missions = {
+			fra_renaissance
+			fra_agrarian_societies
+		}
+		icon = confront_the_lombards
+		position = 20
+		provinces_to_highlight = {
+			OR = {
+				province_id = 199
+				province_id = 190
+				province_id = 4390
+			}
+		}
+		trigger = {
+			199 = {
+				owned_by = ROOT
+				base_production = 8
+				has_production_building_trigger = yes
+			}
+			190 = {
+				owned_by = ROOT
+				base_production = 8
+				has_production_building_trigger = yes
+			}
+			4390 = {
+				owned_by = ROOT
+				base_production = 8
+				has_production_building_trigger = yes
+			}
+		}
+		effect = {
+			199 = {
+				add_province_modifier = {
+					name = fra_french_steel
+					duration = -1
+				}
+			}
+			190 = {
+				add_province_modifier = {
+					name = fra_french_steel
+					duration = -1
+				}
+			}
+			4390 = {
+				add_province_modifier = {
+					name = fra_french_steel
+					duration = -1
+				}
+			}
+		}
+	}
+
+	fra_second_paris = {
+		required_missions = { fra_fuel_fire }
+		icon = italian_riches
+		position = 21
+		provinces_to_highlight = {
+			OR = { province_id = 203 }
+		}
+		trigger = {
+			203 = {
+				owned_by = ROOT
+				base_production = 10
+				base_tax = 10
+				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			country_event = { id = ME_France_Events.36 }
+			custom_tooltip = fra_lyon_improvements_tt
+			hidden_effect = {
+				203 = {
+					if = {
+						limit = {
+							has_building = workshop
+							NOT = { has_building = counting_house }
+						}
+						remove_building = workshop
+						add_building = counting_house
+					}
+					else = { add_building = workshop }
+					if = {
+						limit = {
+							has_building = trade_depot
+							NOT = { has_building = stock_exchange }
+						}
+						remove_building = trade_depot
+						add_building = stock_exchange
+					}
+					else_if = {
+						limit = {
+							has_building = marketplace
+							NOT = { has_building = trade_depot }
+						}
+						remove_building = marketplace
+						add_building = trade_depot
+					}
+					else = { add_building = marketplace }
+					add_center_of_trade_level = 1
+				}
+			}
+			custom_tooltip = fra_manufactory_lyon_tt
+		}
+	}
+
+	fra_power_steam = {
+		required_missions = { fra_second_paris }
+		icon = industrialized_rhineland
+		position = 22
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				trade_goods = coal
+				owned_by = ROOT
+				OR = {
+					NOT = { base_production = 10 }
+					NOT = { has_production_building_trigger = yes }
+					NOT = { has_building = furnace }
+				}
+				ROOT = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 4
+							trade_goods = coal
+							base_production = 10
+							has_production_building_trigger = yes
+							has_building = furnace
+						}
+					}
+				}
+			}
+			else = {
+				owned_by = ROOT
+				OR = {
+					NOT = { base_production = 15 }
+					NOT = { has_production_building_trigger = yes }
+					NOT = { has_manufactory_trigger = yes }
+				}
+				ROOT = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 4
+							base_production = 15
+							has_production_building_trigger = yes
+							has_manufactory_trigger = yes
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				num_of_owned_provinces_with = {
+					value = 4
+					trade_goods = coal
+					base_production = 10
+					has_production_building_trigger = yes
+					has_building = furnace
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 4
+					base_production = 15
+					has_production_building_trigger = yes
+					has_manufactory_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fra_mass_production_weapons
+				duration = -1
+			}
+			country_event = {
+				id = ME_France_Events.17
 			}
 		}
 	}
@@ -2923,4 +3134,9 @@ france_missions_5 = {
 			}
 		}
 	}
+
+	fra_agrarian_societies = {
+		required_missions = { }
+		icon = mission_rb_a_mighty_fleet
+		position = 17
 }
