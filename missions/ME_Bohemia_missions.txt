@@ -811,12 +811,12 @@ bohemia_missions_3 = {
 				area = central_poland_area
 				area = malopolska_area
 				area = sandomierz_area
-				NOT = { country_or_non_sovereign_subject = ROOT }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			}
 			else {
 				area = wielkopolska_area
 				area = central_poland_area
-				NOT = { country_or_non_sovereign_subject = ROOT }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			}
 		}		
 		trigger = {
@@ -2999,6 +2999,218 @@ bohemia_missions_jagiellon_4 = {
 		icon = me_mission_bohemia_flag
 		required_missions = { boh_centralization_efforts }
 		position = 14
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				NOT = { great_power_rank = 2 }
+			}
+			else = {
+				all_country = {
+					NOT = {
+						total_development = ROOT
+					}
+				}
+			}
+			power_projection = 80
+			has_completed_all_reforms_trigger = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = boh_czech_supremacy_europe
+				duration = -1
+			}
+		}
+	}
+}
+
+bohemia_missions_habsburg_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+        tag = BOH
+        has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	boh_secure_vote = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_nejvetsi_kurfirt }
+		position = 8
+		trigger = {
+			if = {
+				limit = {  
+					SAX = { is_subject = no }
+				}
+				SAX = { is_subject_of = ROOT }
+			}
+			else = {
+				south_saxony_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					SAX = { is_subject_of = ROOT }
+					THU = { is_subject_of = ROOT }
+				}
+				custom_tooltip = boh_sax_thur_unite_tt
+				tooltip = {
+					THU = { 
+						country_event = { id = ME_Bohemia_Event.16 }
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					SAX = { is_subject_of = ROOT }
+				}
+				SAX = {
+					add_country_modifier = {
+						name = boh_legitimate_subject_elector
+						hidden = yes
+						duration = -1
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = boh_saxon_overlords
+					duration = 3650
+				}
+			}
+		}
+	}
+
+	boh_four_kind = {
+		icon = me_mission_bohemia_flag
+		position = 10
+		required_missions = { 
+			boh_secure_vote
+			boh_two_kind	
+		}
+		position = 10
+		provinces_to_highlight = {
+			capital_scope = {
+				owner = { is_elector = yes }
+				NOT = {
+					preferred_emperor = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				any_elector = {
+					preferred_emperor = ROOT
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				amount = 4
+			}
+		}
+		effect = {
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 10
+			}
+			add_prestige = 10
+			add_dip_power = 75
+		}
+	}
+
+	boh_barbarians_gates = {
+		icon = me_mission_bohemia_flag
+		position = 11
+		required_missions = { 
+			boh_four_kind
+			boh_confirm_imperial_bohemia	
+		}
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					owner = { is_emperor = yes }
+					root = { is_emperor = no }
+				}
+				AND = {
+					is_part_of_hre = yes
+					owner = {
+						OR = {
+							is_part_of_hre = no
+							AND = {
+								is_subject = yes
+								overlord = { is_part_of_hre = no }
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			is_emperor = yes
+			custom_trigger_tooltip = {
+				tooltip = no_hre_province_owned_by_non_hre_member_or_overlord_trigger
+				europe = {
+					type = all
+					OR = {
+						is_part_of_hre = no
+						AND = {
+							is_part_of_hre = yes
+							owner = {
+								is_part_of_hre = yes
+								OR = {
+									is_subject = no
+									AND = {
+										is_subject = yes
+										overlord = { is_part_of_hre = yes }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_imperial_influence = 15
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				add_dip_power = 100
+				custom_tooltip = boh_imperial_border_tt
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+							NOT = { is_rival = root }
+							NOT = { root = { is_rival = prev } }
+						}
+						add_trust = {
+							who = root
+							value = 10
+						}
+					}
+				}
+			}
+			else = { add_dip_power = 200 }
+		}
+	}
+
+	boh_czech_above_all = {
+		icon = me_mission_bohemia_flag
+		required_missions = { boh_barbarians_gates }
+		position = 12
 		trigger = {
 			if = {
 				limit = {
