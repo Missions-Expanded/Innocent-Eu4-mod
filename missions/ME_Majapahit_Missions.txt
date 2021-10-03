@@ -23,7 +23,12 @@ MAJ_missions_1 = {
 		position = 2
 		provinces_to_highlight = {
 		}
-		trigger = {	
+		trigger = {
+			OR = {
+				reverse_has_opinion = {
+					who = SUN
+				}
+			}
 		}
 		effect = {
 		}
@@ -57,7 +62,30 @@ MAJ_missions_1 = {
 		position = 4
 		provinces_to_highlight = {
 		}
-		trigger = {	
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.25
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.25
+				}
+			}
 		}
 		effect = {
 		}
@@ -157,12 +185,10 @@ MAJ_missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			OR = {
-				army_size_percentage = 0.8
-				army_size = 16
-			}
+			army_size = 14
 		}
 		effect = {
+			
 		}
 	}
 	
@@ -194,10 +220,14 @@ MAJ_missions_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			num_of_artillery = 5
+			num_of_artillery = 6
+			army_tradition = 60
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = MAJ_cetbangs_modifier
+				duration = 9125
+			}
 		}
 	}
 	
@@ -219,10 +249,24 @@ MAJ_missions_2 = {
 		required_missions = { }
 		position = 5
 		provinces_to_highlight = {
+			province_has_center_of_trade_of_level = 1
+			owned_by = ROOT
+			NOT = { has_trade_building_trigger = yes }
 		}
 		trigger = {	
+			OR = {
+				power_projection = 15
+				any_owned_province = {
+					province_has_center_of_trade_of_level = 1
+					has_trade_building_trigger = yes
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MAJ_back_in_business
+				duration = 10950
+			}
 		}
 	}
 	
@@ -249,6 +293,21 @@ MAJ_missions_2 = {
 		}
 		effect = {
 			custom_tooltip = MAJ_distribute_15_manpower
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				custom_tooltip = MAJ_rice_provs
+			}
+			else = {
+				custom_tooltip = MAJ_provinces_fulfilling_triggers
+			}
+			tooltip = {
+				add_province_modifier = {
+					name = MAJ_rice_fields
+					duration = 9125
+				}
+			}
 			hidden_effect = {
 				for = {
 					amount = 15
@@ -261,15 +320,103 @@ MAJ_missions_2 = {
 						}
 					"
 				}
-			}
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = trade_goods }
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					east_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					central_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					west_java_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					surabaya_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					banten_area = {
+						limit = { trade_goods = rice }
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
 				}
-				custom_tooltip = MAJ_rice_provs
-			}
-			else = {
-				custom_tooltip = MAJ_provinces_fulfilling_triggers
+				else = { #inefficient use of space but eh
+					east_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					central_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					west_java_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					surabaya_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+					banten_area = {
+						limit = {
+							has_production_building_trigger = yes
+							development = 10
+							has_terrain = grasslands
+						}
+						add_province_modifier = {
+							name = MAJ_rice_fields
+							duration = 9125
+						}
+					}
+				}
 			}
 		}
 	}
@@ -279,15 +426,27 @@ MAJ_missions_2 = {
 		required_missions = { MAJ_blessed_fields }
 		position = 7
 		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { development = 40 }
+				NOT = { num_of_buildings_in_province = 5 }
+			}
 		}
 		trigger = {
 			capital_scope = {
 				development = 40
 				num_of_buildings_in_province = 5
 			}
-			
 		}
 		effect = {
+			capital_scope = {	
+				add_province_modifier = {
+					name = MAJ_trowulan_rebuilt
+					duration = -1
+				}
+			}
+			add_adm_power = 100
+			change_government_reform_progress = 25
 		}
 	}
 }
@@ -461,6 +620,16 @@ MAJ_missions_3 = {
 			MSA_malaya_trigger = yes
 		}
 		effect = {
+			custom_tooltip = MAJ_merge_modifiers
+			hidden_effect = {
+				remove_country_modifier = MAJ_temasik_defeated
+				remove_country_modifier = MAJ_unruly_subject_defeated
+				remove_country_modifier = MAJ_suvarnadvipa
+				add_country_modifier = {
+					name = MAJ_empire
+					duration = -1
+				}
+			}
 			MSA_malaya_effect = yes
 		}
 	}
@@ -496,8 +665,15 @@ MAJ_missions_4 = {
 				has_tax_building_trigger = yes
 				value = 5
 			}
+			capital_scope = {
+				has_tax_building_trigger = yes
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MAJ_majapahit_architecture
+				duration = 9125
+			}
 		}
 	}
 	
@@ -508,7 +684,24 @@ MAJ_missions_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
-			
+			OR = {
+				land_forcelimit = 20
+				custom_trigger_tooltip = {
+					tooltip = MAJ_is_no_longer_in_disaster
+					OR = {
+						has_country_flag = MAJ_resolved_disaster
+						calc_true_if = {
+							AND = {
+								has_country_flag = MAJ_resolved_monetary_issues
+								has_country_flag = MAJ_resolved_adipati
+								has_country_flag = MAJ_resolved_trade
+								has_country_flag = MAJ_resolved_faith_in_throne
+							}
+							amount = 2
+						}
+					}
+				}
+			}
 		}
 		effect = {
 			set_country_flag = MAJ_palapa_campaigns_cb
@@ -518,6 +711,7 @@ MAJ_missions_4 = {
 				duration = -1
 				desc = MAJ_until_end_of_discovery
 			}
+			MSA_claims_sulawesi = yes
 		}
 	}
 	
@@ -526,10 +720,23 @@ MAJ_missions_4 = {
 		required_missions = { MAJ_gajah_madas_oath }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 622
+			NOT = { country_or_subject_holds = ROOT }
 		}
-		trigger = {	
+		trigger = {
+			622 = { country_or_subject_holds = ROOT }
+			OR = {
+				num_of_subjects = 5
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					MSA_is_in_sumatra = yes
+					value = 5
+				}
+			}
 		}
 		effect = {
+			MSA_claims_sumatra = yes
+			MSA_claims_malaya = yes
+			
 		}
 	}
 	
@@ -659,6 +866,12 @@ MAJ_missions_5 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MAJ_a_call_of_shiva
+				duration = 9125
+			}
+			
+			add_army_tradition_or_mil_power = { amount = 10 }
 		}
 	}
 	
@@ -691,6 +904,7 @@ MAJ_missions_5 = {
 				name = MAJ_securing_important_territories
 				duration = 10950
 			}
+			MSA_claims_spice_islands = yes
 		}
 	}
 	
