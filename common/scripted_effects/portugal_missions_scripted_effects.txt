@@ -1,0 +1,66 @@
+POR_create_feitoria = {
+	add_province_modifier = {
+		name = por_feitoria_1
+		duration = -1
+	}
+}
+
+POR_upgrade_feitoria = {
+	if = {
+		limit = {
+			has_province_modifier = por_feitoria_1
+		}
+		remove_province_modifier = por_feitoria_1
+		add_province_modifier = {
+			name = por_feitoria_2
+			duration = -1
+		}
+		ROOT = { add_treasury = -250 }
+	}
+	else_if = {
+		limit = {
+			has_province_modifier = por_feitoria_2
+		}
+		remove_province_modifier = por_feitoria_2
+		add_province_modifier = {
+			name = por_feitoria_3
+			duration = -1
+		}
+		ROOT = { add_treasury = -750 } 
+	}
+}
+
+POR_initialize_event_targets = {
+	POR_find_provinces = { target = 1 }
+	if = {
+		limit = { has_country_flag = POR_1_province }
+		POR_find_provinces = { target = 2 }
+		if = {
+			limit = { has_country_flag = POR_2_province }
+			POR_find_provinces = { target = 3 }
+			if = {
+				limit = { has_country_flag = POR_3_province }
+				POR_find_provinces = { target = 4 }
+				if = {
+					limit = { has_country_flag = POR_4_province }
+					POR_find_provinces = { target = 5 }
+				}
+			}
+		}
+	}
+}
+
+POR_find_provinces = {
+	random_owned_province = {
+		limit = {
+			NOT = { has_province_flag = POR_scoped }
+			OR = {
+				has_province_modifier = por_feitoria_1
+				has_province_modifier = por_feitoria_2
+			}
+		}
+		set_province_flag = POR_scoped
+		save_event_target_as = por_target_$target$
+		ROOT = { set_country_flag = POR_$target$_province }
+	}
+}
