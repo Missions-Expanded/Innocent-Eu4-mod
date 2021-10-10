@@ -25,10 +25,46 @@ SUM_generic_missions_1 = {
 	}
 	has_country_shield = yes
 	
+	SUM_generic_army = {
+		icon = mission_conquer_malwa_guj
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			army_size_percentage = 0.9
+			num_of_generals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = SUM_army_modifier
+				duration = 7300
+			}
+			custom_tooltip = SUM_when_both_are_completed
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = SUM_generic_navy
+					}
+					capital_scope = {
+						area = {
+							every_neighbor_province = {
+								area = {
+									add_permanent_claim = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	SUM_defeat_the_fakes = {
-		icon = mission_look_west
+		icon = mission_conquer_sindh_dlh
 		required_missions = { SUM_generic_srivijaya }
-		position = 2
+		position = 3
 		provinces_to_highlight = {
 			owned_by = PLB
 		}
@@ -42,11 +78,16 @@ SUM_generic_missions_1 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = SUM_capital_of_srivijaya_conquered
+				duration = 10950
+			}
+			add_adm_power = 100
 		}
 	}
 	
 	SUM_generic_unite_the_island = {
-		icon = mission_look_west
+		icon = mission_conquer_malwa_mug
 		required_missions = { SUM_defeat_the_fakes }
 		position = 5
 		provinces_to_highlight = {
@@ -61,12 +102,13 @@ SUM_generic_missions_1 = {
 		}
 		effect = {
 			MSA_claims_java = yes
+			add_stability_or_adm_power = yes
 			add_army_tradition_or_mil_power = { amount = 10 }
 		}
 	}
 	
 	SUM_generic_celebes = {
-		icon = mission_look_west
+		icon = mission_rb_colonise_spice_islands
 		required_missions = { SUM_generic_java }
 		position = 7
 		provinces_to_highlight = {
@@ -80,6 +122,8 @@ SUM_generic_missions_1 = {
 			}
 		}
 		effect = {
+			MSA_sulawesi_reward = yes
+			MSA_claims_spice_islands = yes
 		}
 	}
 }
@@ -112,40 +156,39 @@ SUM_generic_missions_2 = {
 	has_country_shield = yes
 	
 	SUM_generic_srivijaya = {
-		icon = mission_look_west
-		required_missions = { }
-		position = 1
+		icon = me_mission_malay_ruler
+		required_missions = { SUM_generic_navy SUM_generic_army }
+		position = 2
 		provinces_to_highlight = {
+			is_claim = ROOT
 		}
 		trigger = {
+			grown_by_development = 50 
 		}
 		effect = {
+			MSA_sumatra_reward = yes
 			MSA_claims_sumatra = yes
 			MSA_claims_malaya = yes
 		}
 	}
 	
 	SUM_generic_might = {
-		icon = mission_look_west
+		icon = mission_conquer_lower_burma_tau
 		required_missions = { SUM_generic_srivijaya }
-		position = 3
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
-		}
-	}
-	
-	SUM_generic_hegemon = {
-		icon = mission_look_west
-		required_missions = { SUM_generic_might }
 		position = 4
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				power_projection = 33
+				army_size = 20
+			}
 		}
 		effect = {
+			create_general = {
+				tradition = 80
+			}
+			add_prestige_or_monarch_power = { amount = 15 }
 		}
 	}
 	
@@ -154,10 +197,17 @@ SUM_generic_missions_2 = {
 		required_missions = { SUM_generic_unite_the_island SUM_generic_borneo }
 		position = 6
 		provinces_to_highlight = {
+			MSA_is_in_java = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_java = yes
+				value = 15
+			}
 		}
 		effect = {
+			MSA_java_reward = yes
 			MSA_claims_sulawesi = yes
 		}
 	}
@@ -190,10 +240,45 @@ SUM_generic_missions_3 = {
 	}
 	has_country_shield = yes
 	
+	SUM_generic_navy = {
+		icon = mission_divert_trade_from_bengal
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+		}
+		trigger = {
+			navy_size_percentage = 0.9
+			num_of_admirals = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = SUM_navy_modifier
+				duration = 7300
+			}
+			custom_tooltip = SUM_when_both_are_completed
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = SUM_generic_army
+					}
+					capital_scope = {
+						area = {
+							every_neighbor_province = {
+								area = {
+									add_permanent_claim = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	SUM_defeat_malaka = {
-		icon = mission_look_west
+		icon = me_mission_sack_malacca
 		required_missions = { SUM_generic_srivijaya }
-		position = 2
+		position = 3
 		provinces_to_highlight = {
 			MSA_is_in_malaya = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -220,7 +305,7 @@ SUM_generic_missions_3 = {
 	}
 	
 	SUM_generic_borneo = {
-		icon = mission_look_west
+		icon = mission_mnd_maj_rein_in_brunei
 		required_missions = { SUM_defeat_malaka }
 		position = 5
 		provinces_to_highlight = {
@@ -235,12 +320,13 @@ SUM_generic_missions_3 = {
 		}
 		effect = {
 			add_accepted_culture_or_dip_power = { culture = bornean }
+			MSA_borneo_reward = yes
 			MSA_claims_java = yes
 		}
 	}
 	
 	SUM_generic_alam_melayu = {
-		icon = mission_look_west
+		icon = mission_sail_to_the_east_indies
 		required_missions = { SUM_generic_java SUM_generic_borneo }
 		position = 7
 		provinces_to_highlight = {
@@ -292,11 +378,17 @@ SUM_generic_missions_4 = {
 			capital_scope = {
 				num_of_buildings_in_province = 2
 				development = 10
+				has_tax_building_trigger = yes
 			}	
 		}
 		effect = {
 			add_country_modifier = {
-				name = AAA
+				name = SUM_sumatran_architecture
+				duration = 10950
+			}
+			
+			capital_scope = {
+				add_or_upgrade_tax_building = yes
 			}
 		}
 	}
@@ -306,22 +398,45 @@ SUM_generic_missions_4 = {
 		required_missions = { SUM_generic_architecture_sumatra }
 		position = 3
 		provinces_to_highlight = {
+			MSA_is_in_sumatra = yes
 		}
 		trigger = {
+			development_in_provinces = {
+				MSA_is_in_sumatra = yes
+				value = 300
+			}
+			monthly_income = 25
 		}
 		effect = {
+			
 		}
 	}
 	
 	SUM_generic_lampung_peppers = {
-		icon = mission_look_west
+		icon = mission_dominate_persian_gulf
 		required_missions = { }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 623
+			OR = {
+				NOT = { has_production_building_trigger = yes }
+				NOT = { owned_by = ROOT }
+			}
 		}
 		trigger = {
+			623 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
 		}
 		effect = {
+			623 = {
+				add_province_modifier = {
+					name = lampung_pepper
+					duration = -1
+				}
+				add_or_upgrade_production_building = yes
+			}
 		}
 	}
 	
@@ -366,26 +481,41 @@ SUM_generic_missions_5 = {
 	has_country_shield = yes
 	
 	SUM_generic_secure_trade = {
-		icon = mission_look_west
+		icon = mission_arabian_trade
 		required_missions = { SUM_generic_architecture_sumatra }
 		position = 2
 		provinces_to_highlight = {
 		}
 		trigger = {
+			home_trade_node = {
+				trade_share = {
+					share = 33
+					country = ROOT
+				}
+			}
 		}
 		effect = {
+			home_trade_node_effect_scope = {
+				add_trade_node_income = 12
+			}
+			add_country_modifier = {
+				name = SUM_trade
+				duration = 9125
+			}
 		}
 	}
 	
 	SUM_generic_orang_laut = {
-		icon = mission_look_west
+		icon = mission_arabian_ports
 		required_missions = { SUM_generic_secure_trade }
 		position = 4
 		provinces_to_highlight = {
 		}
 		trigger = {
+			MSA_orang_laut_trigger = yes
 		}
 		effect = {
+			MSA_orang_laut_effect = yes
 		}
 	}
 	
@@ -396,6 +526,7 @@ SUM_generic_missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			
 		}
 		effect = {
 		}

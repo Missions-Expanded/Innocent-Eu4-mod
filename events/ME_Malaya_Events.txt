@@ -3132,7 +3132,7 @@ country_event = {
 			flag = MSA_muslim_center_flag_being_rivalled
 			days = 1825
 		}
-		event_target:MSA_muslim_center_flag_being_rivalled = {
+		event_target:ME_MSA_muslim_center_target_rival = {
 			owned_by = ROOT
 		}
 	}
@@ -3368,5 +3368,103 @@ province_event = {
 			save_global_event_target_as = ME_MSA_muslim_center_target
 			custom_tooltip = MSA_tooltip
 		}
+	}
+}
+
+############################
+#
+#	Spread of Islam in Nusantara
+#	
+#	Below there is a set of events that brings forth a natural,
+#	independent spread of islam through Malaya. 
+#	Dependant on several factors that impact its speed,
+# 	Its main purposes is spreading Islam slowly and gradually, without 
+#	the interference of personal events, such as the ones that
+# 	Champa or Majapahit have. 
+#	Factors that impact its speed will be written down in the event MTTH.
+#	Islam will try to spread especially among trade routes (trade centers)
+#	
+#
+############################
+
+province_event = {
+	id = ME_Malaya_Events.75
+	title = ME_Malaya_Events.75.t #Events relating to Spread of Islam
+	desc = ME_Malaya_Events.75.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	trigger = {
+		province_id = 596 #Melaka, basically trying to have the logic here done only once.
+		#had_global_flag = {
+		#}
+	}
+	
+	hidden = yes
+	
+	mean_time_to_happen = {
+		months = 60
+		modifier = {
+			factor = 1.00
+			current_age = age_of_exploration
+		}
+		modifier = {
+			factor = 0.75
+			current_age = age_of_reformation
+		}
+		modifier = {
+			factor = 1.25
+			current_age = age_of_absolutism
+		}
+		modifier = {
+			factor = 1.50
+			current_age = age_of_revolutions
+		}
+	}
+
+	#Todo: make this pain not inflict physical pain upon the reader
+	immediate = {
+		hidden_effect = {
+			random_list = {
+				60 = { #this roll is for the "route" spread. likely to fail and just execute the code below
+					MSA_spread_of_islam_route_spread = yes
+				}
+				40 = { #regular roll, random spread to any border province
+					MSA_spread_of_islam_normal_spread = yes
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Malaya_Events.74.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+
+		event_target:MSA_target_province_religion = {
+			change_religion = event_target:MSA_origin_province_religion
+			province_event = { id = ME_Malaya_Events.76 }
+		}
+	}
+}
+
+province_event = {
+	id = ME_Malaya_Events.76
+	title = ME_Malaya_Events.76.t #Event to inform the nation about spread of islam
+	desc = ME_Malaya_Events.76.d
+	picture = RELIGIOUS_WARS_eventPicture
+	
+	is_triggered_only = yes
+
+	goto = ROOT
+	
+	option = {
+		name = ME_Malaya_Events.76.a
+		
+		ai_chance = { 
+			factor = 1
+		}
+		
+		custom_tooltip = MSA_converted
 	}
 }

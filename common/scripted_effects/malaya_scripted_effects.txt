@@ -337,6 +337,7 @@ MSA_absolutely_loyal_bonus = {
 
 MSA_the_end = {
 	clr_country_flag = MSA_chinese_expedition_in_tag
+	set_country_flag = MSA_chinese_expedition_concluded
 	if = {
 		limit = {
 			check_variable = {
@@ -520,7 +521,7 @@ MSA_malay_missions = {
 		complete_mission = PSA_ATJ_alam_melayu
 		#Borneo missing
 		complete_mission = MAJ_majapahit
-		#Java missing
+		complete_mission = JAV_alam_melayu
 	}
 }
 
@@ -805,6 +806,7 @@ MSA_orang_laut_effect = {
 			key = MLC_orang_laut
 		}
 	}
+	custom_tooltip = Orang_Laut_events
 }
 
 MSA_discover_tiwi = {
@@ -1075,6 +1077,86 @@ PSA_ATJ_modifier_extension = {
 					duration = 3650
 				}
 			}
+		}
+	}
+}
+
+MSA_spread_of_islam_route_spread = {
+	set_global_flag = MSA_am_I_executed #we will use this flag to check if the algorithm produced a result for a province. If it will return negative, then the province will be marked as unavailable to save performance
+	random_province = {
+		limit = {
+			province_has_center_of_trade_of_level = 1
+			has_port = yes
+			religion_group = muslim
+			MSA_affected_by_spread_of_islam = yes
+			OR = {
+				NOT = { has_province_flag = MSA_spread_failed }
+				had_province_flag = {
+					flag = MSA_spread_failed
+					days = 18250
+				}
+			}
+		}
+		
+		save_event_target_as = MSA_origin_province_religion
+		
+		every_province = {
+			limit = {
+				province_has_center_of_trade_of_level = 1
+				has_port = yes
+				NOT = { religion_group = muslim }
+				NOT = {
+					province_distance = {
+						who = PREV
+						distance = 150 #number about right.
+					}
+				}
+				MSA_affected_by_spread_of_islam = yes
+			}
+			set_province_flag = MSA_in_reach
+			clr_global_flag = MSA_am_I_executed
+		}
+		
+		if = {
+			limit = {
+				has_global_flag = MSA_am_I_executed #we failed.
+			}
+			clr_global_flag = MSA_am_I_executed
+			set_province_flag = MSA_spread_failed
+			MSA_spread_of_islam_normal_spread = yes
+		}
+		else = {
+			random_province = {
+				limit = {
+					has_province_flag = MSA_in_reach
+				}
+				save_event_target_as = MSA_target_province_religion
+			}
+			every_province = {
+				limit = {
+					has_province_flag = MSA_in_reach
+				}
+				clr_province_flag = MSA_in_reach
+			}
+		}
+	}
+}
+
+MSA_spread_of_islam_normal_spread = { #land spread
+	random_province = {
+		limit = {
+			religion_group = muslim
+			MSA_affected_by_spread_of_islam = yes #areas and regions affected by malayan spread of islam
+			any_neighbor_province = {
+				NOT = { religion_group = muslim }
+			}
+		}
+		save_event_target_as = MSA_origin_province_religion
+		random_neighbor_province = {
+			limit = {
+				NOT = { religion_group = muslim }
+			}
+			save_event_target_as = MSA_target_province_religion
 		}
 	}
 }
