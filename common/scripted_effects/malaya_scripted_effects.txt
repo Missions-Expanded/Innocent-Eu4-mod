@@ -1160,3 +1160,75 @@ MSA_spread_of_islam_normal_spread = { #land spread
 		}
 	}
 }
+
+MSA_christian_spread_animist_dharmic = { #common spread, in the provinces not converted by islam yet
+	set_global_flag = MSA_am_I_executed
+	random_owned_province = {
+		limit = {
+			NOT = { religion_group = christian }
+			OR = {
+				religion_group = pagan
+				religion_group = dharmic
+			}
+			culture_group = malay
+		}
+		save_event_target_as = MSA_province
+		clr_global_flag = MSA_am_I_executed
+	}
+	
+	random_owned_province = {
+		limit = {
+			NOT = { religion_group = christian }
+			OR = {
+				religion_group = pagan
+				religion_group = dharmic
+			}
+			province_has_center_of_trade_of_level = 1
+			culture_group = malay
+		}
+		save_event_target_as = MSA_province
+		clr_global_flag = MSA_am_I_executed
+	}
+	
+	if = {
+		limit = { 
+			has_global_flag = MSA_am_I_executed
+		}
+		clr_global_flag = MSA_am_I_executed
+		MSA_christian_spread_center = yes
+	}
+	else = {
+	
+	
+	}
+}
+
+MSA_christian_spread_center = { #the other spread.
+	random_owned_province = {
+		limit = {
+			NOT = { religion_group = christian }
+			culture_group = malay
+			province_has_center_of_trade_of_level = 1
+		}
+		save_event_target_as = MSA_province
+	}
+	if = {
+		limit = {
+			if = {
+				limit = { has_global_flag = MSA_spread_of_christianity_slow }
+				num_of_owned_provinces_with = {
+					religion_group = christian
+					value = 6
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					religion_group = christian
+					value = 12
+				}
+			}
+		}
+		clr_global_flag = MSA_spread_of_christianity
+		country_event = { id = ME_Malaya_Events.77 }
+	}
+}

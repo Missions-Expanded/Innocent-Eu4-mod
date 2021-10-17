@@ -2184,6 +2184,12 @@ province_event = {
 		set_global_flag = MSA_muslim_center_flag
 		save_global_event_target_as = ME_MSA_muslim_center_target
 		custom_tooltip = MSA_tooltip
+		
+		hidden_effect = {
+			617 = { set_country_flag = MSA_spread_failed } #starting centers too far away
+			594 = { set_country_flag = MSA_spread_failed }
+			2673 = { set_country_flag = MSA_spread_failed }
+		}
 	}
 }
 
@@ -2604,7 +2610,14 @@ country_event = {
 	trigger = {
 		tag = MSA
 		NOT = { has_country_flag = MSA_chose_religious_tree }
-		religion_group = dharmic
+		NOT = {
+			OR = {
+				religion_group = dharmic
+				religion_group = christian
+				religion_group = buddhist
+				religion_group = muslim
+			}
+		}
 	}
 	
 	option = {
@@ -2651,6 +2664,7 @@ country_event = {
 		}
 		
 		custom_tooltip = MSA_spread_of_christianity_slow
+		set_country_flag = MSA_spread_of_christianity_slow
 	}
 	
 	option = {
@@ -2673,37 +2687,27 @@ country_event = {
 	trigger = {
 		has_country_flag = MSA_spread_of_christianity
 		any_owned_province = {
-			NOT = { religion_group = christian_group }
+			NOT = { religion_group = christian }
 		}
 	}
 	hidden = yes
 	
 	mean_time_to_happen = {
 		months = 60
+		
+		modifier = {
+			factor = 2
+			has_country_flag = MSA_spread_of_christianity_slow
+		}
 	}
 	immediate = {
-		random_owned_province = {
-			limit = {
-				NOT = { religion_group = christian_group }
+		random_list = {
+			75 = {
+				MSA_christian_spread_animist_dharmic = yes
 			}
-			save_event_target_as = MSA_province
-		}
-		
-		random_owned_province = {
-			limit = {
-				NOT = { religion_group = christian_group }
-				culture_group = malay
+			25 = {
+				MSA_christian_spread_center = yes
 			}
-			save_event_target_as = MSA_province
-		}
-		
-		random_owned_province = {
-			limit = {
-				NOT = { religion_group = christian_group }
-				province_has_center_of_trade_of_level = 1
-				culture_group = malay
-			}
-			save_event_target_as = MSA_province
 		}
 		
 		event_target:MSA_province = {
@@ -2732,6 +2736,17 @@ province_event = {
 	
 	goto = ROOT
 		
+	immediate = {
+		hidden_effect = {
+			random_province = {
+				limit = {
+					religion_group = christian
+				}
+				save_event_target_as = MSA_province
+			}
+		}
+	}
+	
 	option = {
 		name = ME_Malaya_Events.64.a
 		
@@ -2759,7 +2774,7 @@ province_event = {
 			calc_true_if = {
 				india_superregion = {
 					owner = {
-						religion_group = muslim_group
+						religion_group = muslim
 					}
 				}
 				value = 25
@@ -2769,7 +2784,7 @@ province_event = {
 	
 	major = yes
 	major_trigger = {
-		religion_group = muslim_group
+		religion_group = muslim
 		religion_group = dharmic
 	}
 		
@@ -2780,11 +2795,7 @@ province_event = {
 			factor = 1
 		}
 		
-		change_religion = event_target:MSA_province
-		add_province_modifier = {
-			name = MSA_christian_community
-			duration = -1
-		}
+		
 	}
 }
 

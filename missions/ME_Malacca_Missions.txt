@@ -188,6 +188,51 @@ MLC_missions_1 = {
             }
 		}
 	}
+	
+	MLC_import_firearms = {
+		icon = mission_gunpowder_warfare
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+		}
+		trigger = {
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			mil_tech = 6 #Arquebus
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_firearms_imported
+				duration = 9125
+			}
+		}
+	}
+	
+	MLC_malay_lela = {
+		icon = mission_new_army
+		required_missions = { MLC_import_firearms }
+		position = 8
+		provinces_to_highlight = {
+		}
+		trigger = {
+			num_of_artillery = 10
+			is_ahead_of_time_in_specific_tech = { type = mil }
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				innovativeness = 10
+			}
+			army_tradition = 45
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_pioneering_new_cannon_technologies
+				duration = 10950
+			}
+			
+			add_mil_power = 50
+		}
+	}
 }
 
 MLC_missions_2 = {
@@ -459,17 +504,32 @@ MLC_missions_3 = {
 			594 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
-			if = {
-				limit = {
-					4812 = {
-						country_or_non_sovereign_subject_holds = ROOT
-						NOT = { has_building = fort_15th }
+			tooltip = {
+				if = {
+					limit = {
+						4812 = {
+							NOT = { fort_level = 2 }
+						}
 					}
+					4812 = { add_or_upgrade_fort_building = yes }
 				}
-				4812 = { add_building = fort_15th }
+				else = {
+					594 = { add_or_upgrade_fort_building = yes }
+				}
 			}
-			else = {
-				594 = { add_building = fort_15th }
+			hidden_effect = {
+				if = {
+					limit = {
+						4812 = {
+							country_or_non_sovereign_subject_holds = ROOT
+							NOT = { fort_level = 2 }
+						}
+					}
+					4812 = { add_or_upgrade_fort_building = yes }
+				}
+				else = {
+					594 = { add_or_upgrade_fort_building = yes }
+				}
 			}
 			tenasserim_area = {
 				limit = {
@@ -586,7 +646,16 @@ MLC_missions_4 = {
 			}
 		}
 		effect = {
-			
+			tenasserim_area = {
+				add_province_modifier = {
+					name = MLC_integrating_the_panhandle
+					duration = 9125
+				}
+			}
+			add_country_modifier = {
+				name = MLC_siam_defeated
+				duration = -1
+			}
 		}
 	}
 	
@@ -604,10 +673,38 @@ MLC_missions_4 = {
 		}
 	}
 	
-	MLC_chinese_expedition = {
-		icon = mission_open_up_china
+	MLC_welcoming_traders = {
+		icon = mission_rajput_trade_guilds
 		required_missions = { }
 		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = {
+			home_trade_node = {
+				trade_share = {
+					share = 25
+					country = ROOT
+				}
+			}
+			OR = {
+				has_dip_advisor_2 = yes
+				trader = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_foreign_merchants_in_our_lands
+				duration = 10950
+			}
+			
+			add_mercantilism = 2
+		}
+	}
+	
+	MLC_chinese_expedition = {
+		icon = mission_open_up_china
+		required_missions = { MLC_welcoming_traders }
+		position = 7
 		provinces_to_highlight = {
 			owned_by = event_target:EmperorOfChina
 		}
@@ -642,21 +739,71 @@ MLC_missions_4 = {
 				}
 			}
 			else = {
+				capital_scope = {
+					province_trade_power = 50
 				}
+			}
 		}
 		effect = {
-		}
-	}
-	
-	MLC_mission_to_china = {
-		icon = mission_the_chola_campaigns
-		required_missions = { MLC_chinese_expedition }
-		position = 7
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
+			custom_tooltip = MLC_if_we_were_swayed
+			tooltip = {	
+				add_country_modifier = {
+					name = MLC_diplomats
+					duration = 9125
+				}
+				add_dip_power = 50
+			}
+			custom_tooltip = MLC_if_we_were_insulting
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_harm_to_injury
+					duration = 7300
+				}
+				add_mil_power = 50
+			}
+			custom_tooltip = MLC_if_we_were_neutral
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_careful_distancing
+					duration = 9125
+				}
+				add_adm_power = 50
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							has_country_flag = MSA_swayed_flag
+							has_country_flag = MSA_absolutely_loyal_flag
+						}
+					}
+					add_country_modifier = {
+						name = MLC_diplomats
+						duration = 9125
+					}
+					add_dip_power = 50
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_country_flag = MSA_insulting_flag
+							has_country_flag = MSA_in_defiance_flag
+						}
+					}
+					add_country_modifier = {
+						name = MLC_harm_to_injury
+						duration = 7300
+					}
+					add_mil_power = 50
+				}
+				else = {
+					add_country_modifier = {
+						name = MLC_careful_distancing
+						duration = 9125
+					}
+					add_adm_power = 50
+				}
+			}
 		}
 	}
 }
@@ -680,12 +827,11 @@ MLC_missions_5 = {
 		trigger = {
 			legitimacy = 75
 			OR = {
-				statesman = 1
-				diplomat = 1
 				estate_loyalty = {
 					estate = estate_nobles
 					loyalty = 60
 				}
+				NOT = { has_estate = estate_nobles }
 			}
 		}
 		effect = {
@@ -736,43 +882,7 @@ MLC_missions_5 = {
 				}
 			}
 			else = {
-				if = {
-					limit = {
-						government = monarchy
-					}
-					if = {
-						limit = {
-							is_expanded_mod_active = { mod = governments }
-						}
-						has_reform_on_level = 9
-					}
-					else = { has_reform_on_level = 7 }
-				}
-				else_if = {
-					limit = {
-						government = republic
-					}
-					if = {
-						limit = {
-							is_expanded_mod_active = { mod = governments }
-						}
-						has_reform_on_level = 11
-					}
-					else = { has_reform_on_level = 10 }
-				}
-				else_if = {
-					limit = {
-						government = theocracy
-					}
-					if = {
-						limit = {
-							is_expanded_mod_active = { mod = governments }
-						}
-						has_reform_on_level = 12
-					}
-					else = { has_reform_on_level = 8 }
-				}
-				else = { has_reform_on_level = 5 }
+				ME_has_completed_all_reforms = yes
 			}
 		}
 		effect = {
@@ -861,7 +971,7 @@ MLC_missions_5 = {
 				owned_by = ROOT
 				if = {
 					limit = {
-						ai = yes
+						owner = { ai = yes }
 					}
 					development = 10
 				}
@@ -953,6 +1063,54 @@ MLC_missions_5 = {
 						name = MLC_golden_peninsula_modifier
 						duration = -1
 					}
+				}
+			}
+		}
+	}
+	
+	MLC_tin = {
+		icon = dominant_economy
+		required_missions = { MLC_welcoming_traders }
+		position = 7
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trade_goods = tin
+			}
+			else = {
+				trade_goods = copper
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				any_owned_province = {
+					trade_goods = tin
+					has_production_building_trigger = yes
+				}
+			}
+			else = {
+				any_owned_province = {
+					trade_goods = copper
+					has_production_building_trigger = yes
+				}
+			}
+			master_of_mint = 1
+		}
+		effect = {
+			add_country_modifier = {
+				name = MLC_tin_ingots
+				duration = 9125
+			}
+			custom_tooltip = MLC_if_we_have_level_2_mom
+			hidden_effect = {
+				if = {
+					limit = { master_of_mint = 2 }
+					add_inflation = -2
 				}
 			}
 		}
