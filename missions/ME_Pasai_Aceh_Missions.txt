@@ -55,11 +55,19 @@ PSA_ATJ_missions_1 = {
 		required_missions = { PSA_ATJ_sumatra }
 		position = 4
 		provinces_to_highlight = {
+			MSA_is_in_borneo = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_borneo = yes
+				value = 4
+			}
 		}
 		effect = {
-			
+			MSA_claims_borneo = yes
+			add_mil_power = 100
+			add_army_tradition_or_mil_power = { amount = 20 }
 		}
 	}
 	
@@ -68,11 +76,19 @@ PSA_ATJ_missions_1 = {
 		required_missions = { PSA_ATJ_borneo }
 		position = 5
 		provinces_to_highlight = {
+			province_id = 636
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			636 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
-			
+			MSA_borneo_reward = yes
+			MSA_claims_philippines = yes
+			add_country_modifier = {
+				name = PSA_ATJ_brunei_modifier
+				duration = 7300
+			}
 		}
 	}
 	
@@ -231,16 +247,21 @@ PSA_ATJ_missions_2 = {
 		position = 6
 		provinces_to_highlight = {
 			MSA_is_in_sulawesi = yes
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = ROOT }
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				MSA_is_in_sulawesi = yes
+				religion = ROOT
 				value = 5
 			}
 		}
 		effect = {
 			MSA_sulawesi_reward = yes
+			MSA_claims_spice_islands = yes
 			PSA_ATJ_modifier_extension = yes
 		}
 	}
@@ -250,10 +271,24 @@ PSA_ATJ_missions_2 = {
 		required_missions = { PSA_ATJ_sulawesi }
 		position = 8
 		provinces_to_highlight = {
+			MSA_is_in_spice_islands = yes
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { religion = ROOT }
+			}
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				religion = ROOT
+				MSA_is_in_spice_islands = yes
+				value = 3
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PSA_ATJ_the_grand_quest
+				duration = -1
+			}
 			PSA_ATJ_modifier_extension = yes
 		}
 	}
@@ -506,8 +541,20 @@ PSA_ATJ_missions_4 = {
 					loyalty = 60
 				}
 			}
+			navy_size = 10
+			OR = {
+				navy_size = 15
+				navy_size = MLC
+			}
 		}
 		effect = {
+			capital_scope = {
+				add_or_upgrade_shipyard_building = yes
+			}
+			add_country_modifier = {
+				name = PSA_ATJ_port_management
+				duration = 10950
+			}
 		}
 	}
 	
@@ -530,8 +577,23 @@ PSA_ATJ_missions_4 = {
 		required_missions = { PSA_ATJ_orang_laut_alliances }
 		position = 5
 		provinces_to_highlight = {
+			owned_by = ROOT
+			trade_goods = spices
+			NOT = { has_production_building_trigger = yes }
 		}
 		trigger = {
+			home_trade_node = {
+				trade_share = {
+					share = 25
+					country = ROOT
+				}
+				has_most_province_trade_power = yes
+			}
+			num_of_owned_provinces_with = {
+				trade_goods = spices
+				has_production_building_trigger = yes
+				value = 5
+			}
 		}
 		effect = {
 		}
@@ -600,7 +662,6 @@ PSA_ATJ_missions_5 = {
 			}
 		}
 		effect = {
-			
 			define_foreign_advisor = {
 				type = natural_scientist
 				name = "Shaykh Nur ad-Din"
@@ -609,6 +670,8 @@ PSA_ATJ_missions_5 = {
 				culture = 385
 				religion = 385
 			}
+			
+			change_innovativeness = 2
 		}
 	}
 	
@@ -617,13 +680,78 @@ PSA_ATJ_missions_5 = {
 		required_missions = { PSA_ATJ_reach_out }
 		position = 4
 		provinces_to_highlight = {
+			area = north_sumatra_area
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+				NOT = { development = 30 }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { has_trade_building_trigger = yes }
+				AND = {
+					NOT = { has_province_modifier = MSA_muslim_center }
+					has_global_flag = MSA_muslim_center_flag
+				}
+			}
 		}
 		trigger = {
+			num_of_estate_agendas_completed = {
+				estate = estate_burghers
+				value = 2
+			}
+			north_sumatra_area = {
+				owned_by = ROOT
+				province_has_center_of_trade_of_level = 1
+				development = 30
+				has_tax_building_trigger = yes
+				has_trade_building_trigger = yes
+				fort_level = 2
+				OR = {
+					has_province_modifier = MSA_muslim_center
+					custom_trigger_tooltip = {
+						tooltip = BEI_no_muslim_center_exists
+						NOT = { has_global_flag = MSA_muslim_center_flag }
+					}
+				}
+			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = PSA_ATJ_porch_of_mecca_modifier
-				duration = -1
+			custom_tooltip = MSA_random_province_fulfilling_the_requirements
+			tooltip = {
+				add_prosperity = 100
+				add_or_upgrade_tax_building = yes
+				add_or_upgrade_trade_building = yes
+				add_province_modifier = {
+					name = PSA_ATJ_porch_of_mecca_modifier
+					duration = -1
+				}
+			}
+			
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						area = north_sumatra_area
+					}
+					province_has_center_of_trade_of_level = 1
+					development = 30
+					has_tax_building_trigger = yes
+					has_trade_building_trigger = yes
+					fort_level = 2
+					OR = {
+						has_province_modifier = MSA_muslim_center
+						custom_trigger_tooltip = {
+							tooltip = BEI_no_muslim_center_exists
+							NOT = { has_global_flag = MSA_muslim_center_flag }
+						}
+					}
+				}
+				add_prosperity = 100
+				add_or_upgrade_tax_building = yes
+				add_or_upgrade_trade_building = yes
+				add_province_modifier = {
+					name = PSA_ATJ_porch_of_mecca_modifier
+					duration = -1
+				}
 			}
 		}
 	}
@@ -635,6 +763,25 @@ PSA_ATJ_missions_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 80
+				}
+				NOT = {
+					estate_influence = {
+						estate = estate_nobles
+						influence = 40
+					}
+				}
+				NOT = {
+					num_of_estate_privileges = {
+						estate = estate_nobles
+						value = 1
+					}
+				}
+				absolutism = 20
+			}
 		}
 		effect = {
 			custom_tooltip = POL_the_noble_privileges
@@ -683,6 +830,10 @@ PSA_ATJ_missions_5 = {
 					}
 					else = { add_mil_power = 25 }
 				}	
+			}
+			add_country_modifier = {
+				name = PSA_ATJ_orang_kaya_curbed
+				duration = 9125
 			}
 		}
 	}
