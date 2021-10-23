@@ -118,7 +118,7 @@ naples_missions_1 = {
 			tooltip = {
 				add_country_modifier = {
 					name = nap_dominus_vobiscum
-					duration = 9100
+					duration = 9125
 				}
 			}
 			custom_tooltip = NAP_PAPAL_RELATIONS_BAD_TT
@@ -156,7 +156,7 @@ naples_missions_1 = {
 					}
 					add_country_modifier = {
 						name = nap_dominus_vobiscum
-						duration = 9100
+						duration = 9125
 					}
 				}
 				else = {
@@ -187,9 +187,10 @@ naples_missions_1 = {
 		position = 2
 		trigger = {
 			if = {
-				limit = { 
+				limit = {
 					exists = HUN
-					HUN = { is_subject = no }
+					HUN = { valid_for_personal_unions_trigger = yes }
+					valid_for_personal_unions_trigger = yes
 				}
 				reverse_has_opinion = {
 					who = HUN
@@ -218,6 +219,8 @@ naples_missions_1 = {
 			if = {
 				limit = {
 					exists = HUN
+					HUN = { valid_for_personal_unions_trigger = yes }
+					valid_for_personal_unions_trigger = yes
 				}
 				HUN = {
 					country_event = {
@@ -253,7 +256,7 @@ naples_missions_1 = {
 		effect = {
 			add_country_modifier = {
 				name = nap_hunyady_legacy
-				duration = 9100
+				duration = 9125
 			}
 		}
 	}
@@ -620,7 +623,7 @@ naples_missions_2 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			legitimacy = 90
+			legitimacy_equivalent = 90
 			diplomatic_reputation = 3
 		}
 		effect = {
@@ -680,7 +683,8 @@ naples_missions_2 = {
 			if = {
 				limit = {
 					exists = PRO
-					PRO = { is_subject = no }
+					PRO = { valid_for_personal_unions_trigger = yes }
+					valid_for_personal_unions_trigger = yes
 				}
 				reverse_has_opinion = {
 					who = PRO
@@ -709,6 +713,8 @@ naples_missions_2 = {
 			if = {
 				limit = {
 					exists = PRO
+					PRO = { valid_for_personal_unions_trigger = yes }
+					valid_for_personal_unions_trigger = yes
 				}
 				PRO = {
 					country_event = {
@@ -746,7 +752,7 @@ naples_missions_2 = {
 		effect = {
 			add_country_modifier = {
 				name = nap_house_anjou_modifier
-				duration = 9100
+				duration = 9125
 			}
 		}
 	}
@@ -1009,26 +1015,57 @@ naples_missions_3 = {
 		position = 1
 		trigger = {
 			if = {
-				limit = {
-					is_expanded_mod_active = { mod = flavour_and_events }
+				limit = { has_estate = estate_nobles }
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = flavour_and_events }
+					}
+					is_year = 1465
+					custom_trigger_tooltip = {
+						tooltip = naples_baronian_revolt_TT
+						OR = {
+							NOT = { has_country_flag = nap_barony_first_risen }
+							AND = {
+								has_country_flag = nap_barony_first_risen
+								NOT = { num_of_rebel_controlled_provinces = 1 }
+								NOT = { num_of_rebel_armies = 1 }
+							}
+						}
+					}
 				}
-				is_year = 1465
-				NOT = { has_country_flag = nap_barony_first_risen }
-			}
-			else_if = {
-				limit = {
-					has_estate = estate_nobles
-				}
-				is_year = 1464
-				estate_loyalty = {
-					estate = estate_nobles
-					loyalty = 65
-				}
-				NOT = {
+				else = {
+					is_year = 1464
 					estate_loyalty = {
 						estate = estate_nobles
-						loyalty = 90
+						loyalty = 65
 					}
+					NOT = {
+						estate_influence = {
+							estate = estate_nobles
+							influence = 85
+						}
+					}
+				}
+			}
+			else = {
+				is_year = 1464
+				naples_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { devastation = 1 }
+					NOT = { unrest = 1 }
+				}
+				apulia_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { devastation = 1 }
+					NOT = { unrest = 1 }
+				}
+				calabria_area = {
+					type = all
+					owned_by = ROOT
+					NOT = { devastation = 1 }
+					NOT = { unrest = 1 }
 				}
 			}
 		}
@@ -1037,14 +1074,31 @@ naples_missions_3 = {
 				limit = {
 					is_expanded_mod_active = { mod = flavour_and_events }
 				}
-				capital_scope = {
-					add_development_scaled_on_monarch_skill = yes
-				}
+				capital_scope = { add_development_scaled_on_monarch_skill = yes }
+				add_mana_scaled_on_monarch_skill = yes
 			}
 			else = {
 				add_country_modifier = {
 					name = nap_twenty_years_prosperity
 					duration = 7300
+				}
+			}
+			custom_tooltip = NAPLES_TWENTY_YEARS_PROSPERITY
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						devastation = 25
+					}
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						add_devastation = -50
+						add_prosperity = 15
+					}
+					else = {
+						add_devastation = -50
+					}
 				}
 			}
 		}
@@ -1709,7 +1763,7 @@ naples_missions_4 = {
 		effect = {
 			add_country_modifier = {
 				name = nap_sicilian_school
-				duration = 9100
+				duration = 9125
 			}
 			country_event = { id = ME_Naples_Events.1 }
 			set_country_flag = naples_renaissance_flag
@@ -1887,7 +1941,7 @@ naples_missions_5 = {
 			}
 			add_country_modifier = {
 				name = nap_military_campaign
-				duration = 9100
+				duration = 9125
 			}
 		}
 	}
