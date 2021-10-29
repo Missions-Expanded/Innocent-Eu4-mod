@@ -4088,7 +4088,6 @@ MSA_Missions_Europe_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#EUROPE
 		has_country_flag = MSA_europe_yes
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4096,7 +4095,7 @@ MSA_Missions_Europe_1 = {
 	has_country_shield = yes
 	
 	MSA_finding_partners = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_caribbean_cn
 		required_missions = { }
 		position = 27
 		provinces_to_highlight = {
@@ -4111,10 +4110,8 @@ MSA_Missions_Europe_1 = {
 		}
 		effect = {
 			custom_tooltip = MSA_the_european_nations
-			add_country_modifier = {
-				name = MSA_great_power_diplomacy
-				duration = 5475
-			}
+			add_dip_power = 50
+			
 			custom_tooltip = MSA_every_country_we_allied_with
 			tooltip = {
 				add_country_modifier = {
@@ -4139,7 +4136,7 @@ MSA_Missions_Europe_1 = {
 	}
 	
 	MSA_foreign_traders = {
-		icon = mission_to_the_south_china_sea
+		icon = support_the_bulk_trades
 		required_missions = { MSA_finding_partners }
 		position = 29
 		provinces_to_highlight = {
@@ -4159,22 +4156,43 @@ MSA_Missions_Europe_1 = {
 				}
 			}
 		}
-		effect = {
+		effect = { #this is just a mission to enable investments, no extra rewards but some money
 			custom_tooltip = MSA_foreign_investment
 			set_country_flag = MSA_foreign_investment
+			add_years_of_income = 0.25
 		}
 	}
 	
 	MSA_mastery_of_the_coin = {
-		icon = mission_to_the_south_china_sea
+		icon = invest_in_the_rich_trades
 		required_missions = { MSA_foreign_traders }
 		position = 31
 		provinces_to_highlight = {
 		}
 		trigger = {
-			monthly_income = 500
+			monthly_income = 600
+			trade_efficiency = 1.2
+			home_trade_node = {
+				highest_value_trade_node = yes
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = MSA_mastery_of_the_coin_modifier_GE
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = MSA_mastery_of_the_coin_modifier
+					duration = -1
+				}
+			}
+			add_years_of_income = 1
 		}
 	}
 }
@@ -4184,7 +4202,6 @@ MSA_Missions_Europe_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#EUROPE
 		has_country_flag = MSA_europe_yes
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4192,27 +4209,36 @@ MSA_Missions_Europe_2 = {
 	has_country_shield = yes
 	
 	MSA_negotations = {
-		icon = mission_to_the_south_china_sea
+		icon = control_coromandel
 		required_missions = { MSA_finding_partners MSA_foreign_powers_placate }
 		position = 28
 		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
-		}
-	}
-	
-	MSA_foreign_companies = {
-		icon = mission_to_the_south_china_sea
-		required_missions = { MSA_foreign_traders }
-		position = 30
-		provinces_to_highlight = {
-			owner = {
-				capital_scope = { 
-					continent = europe
+			OR = {
+				owner = {
+					capital_scope = { 
+						continent = europe
+					}
+					alliance_with = ROOT
+					NOT = { has_signed_a_trade_deal_with_root_trigger = yes }
 				}
-				alliance_with = ROOT
+				AND = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						if = {
+							limit = {
+								has_dlc = "Dharma"
+							}
+							province_has_center_of_trade_of_level = 1
+						}
+						else = {
+							province_has_center_of_trade_of_level = 2
+						}
+					}
+					OR = {
+						NOT = { has_trade_building_trigger = yes }
+						NOT = { development = 25 }
+					}
+				}
 			}
 		}
 		trigger = {
@@ -4221,8 +4247,40 @@ MSA_Missions_Europe_2 = {
 				alliance_with = ROOT
 				has_signed_a_trade_deal_with_root_trigger = yes
 			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				province_has_center_of_trade_of_level = 2
+				has_trade_building_trigger = yes
+				development = 25
+				value = 3
+			}
 		}
 		effect = {
+			
+		}
+	}
+	
+	MSA_foreign_companies = {
+		icon = charter_the_voc
+		required_missions = { MSA_foreign_traders }
+		position = 30
+		provinces_to_highlight = {
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MSA_has_done_at_least_10_request
+				check_variable = {
+					which = ME_Num_of_Foreign_Investments
+					value = 10
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = MSA_foreign_investment_modifier
+				duration = 5475
+			}
+			custom_tooltip = MSA_invest_in_production
+			set_country_flag = MSA_invest_in_production
 		}
 	}
 }
@@ -4232,7 +4290,6 @@ MSA_Missions_Europe_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#EUROPE
 		has_country_flag = MSA_europe_yes
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4240,19 +4297,101 @@ MSA_Missions_Europe_3 = {
 	has_country_shield = yes
 	
 	MSA_foreign_powers_placate = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_rule_the_garjats
 		required_missions = { }
 		position = 27
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				owner = {
+					is_great_power = yes
+					NOT = {
+						OR = {
+							marriage_with = ROOT
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+				}
+			}
+			else = {
+				owner = {
+					total_development = 400
+					NOT = {
+						OR = {
+							marriage_with = ROOT
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
+				}
+				calc_true_if = {
+					is_great_power = yes
+					OR = {
+						marriage_with = ROOT
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					value = 2
+				}
+			}
+			else = {
+				calc_true_if = {
+					total_development = 400
+					OR = {
+						marriage_with = ROOT
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+					value = 2
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_great_power_diplomacy
+				duration = 5475
+			}
+			
+			define_advisor = {
+				type = diplomat
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.4
+			}
 		}
 	}
 	
 	MSA_shipbuilding = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_naval_dominance
 		required_missions = { MSA_technology_sharing MSA_foreign_powers_placate }
 		position = 29
 		provinces_to_highlight = {
@@ -4281,7 +4420,6 @@ MSA_Missions_Europe_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#EUROPE
 		has_country_flag = MSA_europe_yes
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4294,13 +4432,16 @@ MSA_Missions_Europe_4 = {
 		position = 28
 		provinces_to_highlight = {
 			owner = {
-				tech_difference = 3
+				tech_difference = 1
 			}
 		}
 		trigger = {
 			NOT = {
 				any_country = {
-					tech_difference = 3
+					capital_scope = {
+						continent = europe
+					}
+					tech_difference = 1
 				}
 			}
 		}
@@ -4327,7 +4468,6 @@ MSA_Missions_Europe_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#EUROPE
 		has_country_flag = MSA_europe_yes
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4523,7 +4663,6 @@ MSA_Missions_Independence_1 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#INDEPENDENCE
 		has_country_flag = MSA_europe_no
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4572,7 +4711,6 @@ MSA_Missions_Independence_2 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#INDEPENDENCE
 		has_country_flag = MSA_europe_no
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4621,7 +4759,6 @@ MSA_Missions_Independence_3 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#INDEPENDENCE
 		has_country_flag = MSA_europe_no
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4658,7 +4795,6 @@ MSA_Missions_Independence_4 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#INDEPENDENCE
 		has_country_flag = MSA_europe_no
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -4707,7 +4843,6 @@ MSA_Missions_Independence_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = yes#INDEPENDENCE
 		has_country_flag = MSA_europe_no
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
