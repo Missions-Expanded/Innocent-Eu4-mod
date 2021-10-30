@@ -2856,6 +2856,14 @@ country_event = {
 			factor = 1
 		}
 		
+		trigger = {
+			any_ally = {
+				capital_scope = {
+					continent = europe
+				}
+			}
+		}
+		
 		change_variable = {
 			which = MSA_foreign_investment_amount
 			value = 5
@@ -2872,22 +2880,46 @@ country_event = {
 				}
 			}
 		}
+		hidden_effect = {
+			random_ally = {
+				limit = {
+					capital_scope = {
+						continent = europe
+					}
+				}
+				1361 = {
+					add_trade_modifier = {
+						who = PREV
+						duration = 5475
+						power = 50
+						key = MSA_benefits
+					}
+				}
+			}
+		}
 	}
 	
-	option = {
-		name = ME_Malaya_Events.66.e
+	#option = {
+	#	name = ME_Malaya_Events.66.e
+	#	
+		# ai_chance = { 
+			# factor = 1
+		# }
+		# trigger = {
+			# any_ally = {
+				# capital_scope = {
+					# continent = europe
+				# }
+			# }
+		# }
 		
-		ai_chance = { 
-			factor = 1
-		}
-		
-		change_variable = {
-			which = MSA_foreign_investment_amount
-			value = 25
-		}
-		set_country_flag = MSA_province_give_up
-		country_event = { id = ME_Malaya_Events.68 } #Province Choice
-	}
+		# change_variable = {
+			# which = MSA_foreign_investment_amount
+			# value = 25
+		# }
+		# set_country_flag = MSA_province_give_up
+		# country_event = { id = ME_Malaya_Events.68 } #Province Choice
+	# }
 	
 	option = {
 		name = ME_Malaya_Events.66.g
@@ -2900,7 +2932,7 @@ country_event = {
 
 country_event = {
 	id = ME_Malaya_Events.67
-	title = ME_Malaya_Events.67.t #Concessions
+	title = ME_Malaya_Events.67.t #Requests
 	desc = ME_Malaya_Events.67.d
 	picture = RELIGIOUS_WARS_eventPicture
 	
@@ -2913,16 +2945,29 @@ country_event = {
 			factor = 1
 		}
 		trigger = {
-			NOT = { has_country_modifier = MSA_concession_guard }
+			check_variable = {
+				which = MSA_foreign_investment_amount
+				value = 10
+			}
+			OR = {
+				NOT = { has_country_flag = MSA_investment_a_cooldown }
+				had_country_flag = {
+					flag = MSA_investment_a_cooldown
+					days = 3650
+				}
+			}
 		}
+		custom_tooltip = MSA_cooldown_10
+		MSA_this_will_cost = { amount = 10 execute = yes }
 		
-		change_variable = {
-			which = MSA_foreign_investment_amount
-			value = 5
-		}
-		add_country_modifier = {
-			name = MSA_concession_guard
-			duration = 5475
+		set_country_flag = MSA_investment_a_cooldown
+		custom_tooltip = MSA_100_power_split
+		hidden_effect = { #this is where the fun begins
+			MSA_find_lowest_tech_effect = yes
+			change_variable = {
+				which = ME_Num_of_Foreign_Investments
+				value = 1
+			}
 		}
 	}
 	
@@ -2930,16 +2975,27 @@ country_event = {
 		name = ME_Malaya_Events.67.b
 		
 		trigger = {
-			NOT = { has_country_modifier = MSA_concession_trade_efficiency }
+			check_variable = {
+				which = MSA_foreign_investment_amount
+				value = 10
+			}
+			NOT = { has_country_modifier = MSA_mercenary_investment_modifier }
 		}
 		
-		change_variable = {
-			which = MSA_foreign_investment_amount
-			value = 5
-		}
+		custom_tooltip = MSA_cooldown_10
+		MSA_this_will_cost = { amount = 10 execute = yes }
+		
+		custom_tooltip = MSA_space_lol
+		add_yearly_manpower = 0.5
 		add_country_modifier = {
-			name = MSA_concession_trade_efficiency
-			duration = 5475
+			name = MSA_mercenary_investment_modifier
+			duration = 3650
+		}
+		hidden_effect = {
+			change_variable = {
+				which = ME_Num_of_Foreign_Investments
+				value = 1
+			}
 		}
 	}
 	
@@ -2949,22 +3005,42 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
-		
-		change_variable = {
-			which = MSA_foreign_investment_amount
-			value = 5
-		}
-		set_country_flag = MSA_trade_concession_timer
-		custom_tooltip = MSA_random_partner
-		tooltip = {
-			1361 = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = 5475
-					power = 50
-					key = MSA_benefits
+		trigger = {
+			check_variable = {
+				which = MSA_foreign_investment_amount
+				value = 15
+			}
+			OR = {
+				NOT = { has_country_flag = MSA_investment_c_cooldown }
+				had_country_flag = {
+					flag = MSA_investment_c_cooldown
+					days = 5475
 				}
 			}
+			any_owned_province = {
+				NOT = { trade_goods = coffee } #wtf?
+			}
+		}
+		
+		custom_tooltip = MSA_cooldown_15
+		MSA_this_will_cost = { amount = 15 }
+		
+		custom_tooltip = MSA_space_lol
+		set_country_flag = MSA_coffee_choice
+		custom_tooltip = MSA_coffee_choice
+		tooltip = {
+			add_province_modifier = {
+				name = MSA_coffee
+				duration = -1
+			}
+		}
+		country_event = { id = ME_Malaya_Events.68 } #Coffee - province choice
+		
+		hidden_effect = {
+			#change_variable = {
+			#	which = ME_Num_of_Foreign_Investments
+			#	value = 1
+			#}
 		}
 	}
 	
@@ -2974,17 +3050,157 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
-		
-		change_variable = {
-			which = MSA_foreign_investment_amount
-			value = 25
+		trigger = {
+			check_variable = {
+				which = MSA_foreign_investment_amount
+				value = 5
+			}
+			OR = {
+				NOT = { has_country_flag = MSA_investment_e_cooldown }
+				had_country_flag = {
+					flag = MSA_investment_e_cooldown
+					days = 1825
+				}
+			}
 		}
-		set_country_flag = MSA_province_give_up
-		country_event = { id = ME_Malaya_Events.68 } #Province Choice
+		
+		custom_tooltip = MSA_cooldown_5
+		MSA_this_will_cost = { amount = 5 execute = yes }
+		
+		custom_tooltip = MSA_space_lol
+		add_army_tradition_or_mil_power = { amount = 10 }
+		set_country_flag = MSA_investment_e_cooldown
+		hidden_effect = {
+			change_variable = {
+				which = ME_Num_of_Foreign_Investments
+				value = 1
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.67.f
+		
+		ai_chance = { 
+			factor = 1
+		}
+		trigger = {
+			check_variable = {
+				which = MSA_foreign_investment_amount
+				value = 10
+			}
+			any_ally = {
+				capital_scope = {
+					continent = europe
+				}
+			}
+			OR = {
+				NOT = { has_country_flag = MSA_investment_f_cooldown }
+				had_country_flag = {
+					flag = MSA_investment_f_cooldown
+					days = 3650
+				}
+			}
+		}
+		
+		custom_tooltip = MSA_cooldown_10
+		MSA_this_will_cost = { amount = 10 execute = yes }
+		
+		custom_tooltip = MSA_space_lol
+		custom_tooltip = MSA_get_a_trader
+		set_country_flag = MSA_investment_f_cooldown
+		hidden_effect = {
+			change_variable = {
+				which = ME_Num_of_Foreign_Investments
+				value = 1
+			}
+			
+			random_ally = {
+				limit = {
+					capital_scope = {
+						continent = europe
+					}
+				}
+				ROOT = {
+					define_advisor = {
+						type = trader
+						skill = 3
+						culture = PREV
+						religion = PREV
+						cost_multiplier = 0.25
+					}
+				}
+			}
+		}
 	}
 	
 	option = {
 		name = ME_Malaya_Events.67.g
+		
+		ai_chance = { 
+			factor = 1
+		}
+		trigger = {
+			has_country_flag = MSA_invest_in_production
+			check_variable = {
+				which = MSA_foreign_investment_amount
+				value = 20
+			}
+			OR = {
+				NOT = { has_country_flag = MSA_investment_g_cooldown }
+				had_country_flag = {
+					flag = MSA_investment_g_cooldown
+					days = 5475
+				}
+			}
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				any_owned_province = {
+					OR = {
+						trade_goods = spices
+						trade_goods = cloves
+						trade_goods = nutmeg
+						trade_goods = vanilla
+					}
+					NOT = { has_province_modifier = MSA_enhanced_spice_production }
+				}
+			}
+			else = {
+				any_owned_province = {
+					OR = {
+						trade_goods = spices
+						trade_goods = cloves
+					}
+					NOT = { has_province_modifier = MSA_enhanced_spice_production }
+				}
+			}
+		}
+		
+		custom_tooltip = MSA_cooldown_15
+		MSA_this_will_cost = { amount = 20 }
+		
+		custom_tooltip = MSA_space_lol
+		set_country_flag = MSA_plantation_choice
+		custom_tooltip = MSA_plantation_choice
+		tooltip = {
+			add_province_modifier = {
+				name = MSA_enhanced_spice_production
+				duration = -1
+			}
+		}
+		country_event = { id = ME_Malaya_Events.68 }
+		hidden_effect = {
+			#change_variable = {
+			#	which = ME_Num_of_Foreign_Investments
+			#	value = 1
+			#}
+		}
+	}
+	
+	option = {
+		name = ME_Malaya_Events.67.h
 		
 		ai_chance = { 
 			factor = 1
@@ -3010,6 +3226,11 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
+		trigger = {
+			has_country_flag = MSA_1_province
+		}
+		
+		goto = Malaya_target_1
 		
 		event_target:Malaya_target_1 = {
 			MSA_execute_province_effect = yes
@@ -3022,6 +3243,11 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
+		trigger = {
+			has_country_flag = MSA_2_province
+		}
+		
+		goto = Malaya_target_2
 		
 		event_target:Malaya_target_2 = {
 			MSA_execute_province_effect = yes
@@ -3034,6 +3260,11 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
+		trigger = {
+			has_country_flag = MSA_3_province
+		}
+		
+		goto = Malaya_target_3
 		
 		event_target:Malaya_target_3 = {
 			MSA_execute_province_effect = yes
@@ -3046,15 +3277,17 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
-		
 		trigger = {
-			has_country_flag = MSA_four_targets
+			has_country_flag = MSA_4_province
 		}
+		
+		goto = Malaya_target_4
+		
 		event_target:Malaya_target_4 = {
 			MSA_execute_province_effect = yes
 		}
 	}
-	#make an effect taht gives ROOT a foreign trader for cheep
+
 	option = {
 		name = ME_Malaya_Events.68.f
 		
@@ -3062,8 +3295,10 @@ country_event = {
 			factor = 1
 		}
 		trigger = {
-			has_country_flag = MSA_four_targets
+			has_country_flag = MSA_5_province
 		}
+		
+		goto = Malaya_target_5
 		
 		event_target:Malaya_target_5 = {
 			MSA_execute_province_effect = yes
@@ -3076,6 +3311,8 @@ country_event = {
 		ai_chance = { 
 			factor = 1
 		}
+		
+		MSA_clear_flags_province_choice = yes
 	}
 	
 }
@@ -3563,90 +3800,92 @@ country_event = {
 	}
 	
 	immediate = {
-		random_list = {
-			1 = {
-				trigger = {
-					2684 = { is_empty = yes }
+		hidden_effect = {
+			random_list = {
+				1 = {
+					trigger = {
+						2684 = { is_empty = yes }
+					}
+					2684 = { save_event_target_as = MSA_province }
 				}
-				2684 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					621 = { is_empty = yes }
+				1 = {
+					trigger = {
+						621 = { is_empty = yes }
+					}
+					621 = { save_event_target_as = MSA_province }
 				}
-				621 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2683 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2683 = { is_empty = yes }
+					}
+					2683 = { save_event_target_as = MSA_province }
 				}
-				2683 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2679 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2679 = { is_empty = yes }
+					}
+					2679 = { save_event_target_as = MSA_province }
 				}
-				2679 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2693 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2693 = { is_empty = yes }
+					}
+					2693 = { save_event_target_as = MSA_province }
 				}
-				2693 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					632 = { is_empty = yes }
+				1 = {
+					trigger = {
+						632 = { is_empty = yes }
+					}
+					632 = { save_event_target_as = MSA_province }
 				}
-				632 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2706 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2706 = { is_empty = yes }
+					}
+					2706 = { save_event_target_as = MSA_province }
 				}
-				2706 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2708 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2708 = { is_empty = yes }
+					}
+					2708 = { save_event_target_as = MSA_province }
 				}
-				2708 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					4845 = { is_empty = yes }
+				1 = {
+					trigger = {
+						4845 = { is_empty = yes }
+					}
+					4845 = { save_event_target_as = MSA_province }
 				}
-				4845 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					643 = { is_empty = yes }
+				1 = {
+					trigger = {
+						643 = { is_empty = yes }
+					}
+					643 = { save_event_target_as = MSA_province }
 				}
-				643 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					4796 = { is_empty = yes }
+				1 = {
+					trigger = {
+						4796 = { is_empty = yes }
+					}
+					4796 = { save_event_target_as = MSA_province }
 				}
-				4796 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2714 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2714 = { is_empty = yes }
+					}
+					2714 = { save_event_target_as = MSA_province }
 				}
-				2714 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					2713 = { is_empty = yes }
+				1 = {
+					trigger = {
+						2713 = { is_empty = yes }
+					}
+					2713 = { save_event_target_as = MSA_province }
 				}
-				2713 = { save_event_target_as = MSA_province }
-			}
-			1 = {
-				trigger = {
-					644 = { is_empty = yes }
+				1 = {
+					trigger = {
+						644 = { is_empty = yes }
+					}
+					644 = { save_event_target_as = MSA_province }
 				}
-				644 = { save_event_target_as = MSA_province }
 			}
 		}
 	}
@@ -3694,19 +3933,21 @@ country_event = {
 	}
 	
 	immediate = {
-		random_province = {
-			limit = {
-				is_empty = yes
-				OR = {
-					area = southern_luzon_area
-					area = luzon_area
-					area = visayas_area
-					area = mindanao_area
-					area = west_mindanao_area
-					area = palawan_area
+		hidden_effect = {
+			random_province = {
+				limit = {
+					is_empty = yes
+					OR = {
+						area = southern_luzon_area
+						area = luzon_area
+						area = visayas_area
+						area = mindanao_area
+						area = west_mindanao_area
+						area = palawan_area
+					}
 				}
+				save_event_target_as = MSA_province
 			}
-			save_event_target_as = MSA_province
 		}
 	}
 	

@@ -939,6 +939,143 @@ MSA_find_provinces = {
 	}
 }
 
+MSA_set_up_province_targets = {
+	MSA_find_provinces_concession_request = { target = 1 }
+	if = {
+		limit = { has_country_flag = MSA_1_province }
+		MSA_find_provinces_concession_request = { target = 2 }
+		if = {
+			limit = { has_country_flag = MSA_2_province }
+			MSA_find_provinces_concession_request = { target = 3 }
+			if = {
+				limit = { has_country_flag = MSA_3_province }
+				MSA_find_provinces_concession_request = { target = 4 }
+				if = {
+					limit = { has_country_flag = MSA_4_province }
+					MSA_find_provinces_concession_request = { target = 5 }
+				}
+			}
+		}
+	}
+}
+
+#flags
+# MSA_coffee_choice
+# MSA_plantation_choice
+# 
+
+MSA_execute_province_effect = {
+	if = {
+		limit = {
+			owner = { has_country_flag = MSA_coffee_choice }
+		}
+		change_trade_goods = coffee
+		add_province_modifier = {
+			name = MSA_coffee
+			duration = -1
+		}
+		owner = {
+			MSA_this_will_cost = { amount = 15 execute = yes }
+			set_country_flag = MSA_investment_c_cooldown
+		}
+	}
+	else_if = {
+		limit = {
+			owner = { has_country_flag = MSA_plantation_choice }
+		}
+		add_province_modifier = {
+			name = MSA_enhanced_spice_production
+			duration = -1
+		}
+		owner = {
+			MSA_this_will_cost = { amount = 20 execute = yes }
+			set_country_flag = MSA_investment_g_cooldown
+		}
+	}
+	
+	owner = {
+		MSA_clear_flags_province_choice = yes
+		hidden_effect = {
+			change_variable = {
+				which = ME_Num_of_Foreign_Investments
+				value = 1
+			}
+		}
+	}
+}
+
+MSA_clear_flags_province_choice = {
+	clr_country_flag = MSA_coffee_choice
+	clr_country_flag = MSA_plantation_choice
+	hidden_effect = {
+		every_owned_province = {
+			clr_province_flag = MSA_flag_already_set
+		}
+	}
+}
+
+MSA_find_provinces_concession_request = {
+	if = {
+		limit = {
+			has_country_flag = MSA_coffee_choice
+		}
+		random_owned_province = {
+			limit = {
+				NOT = { has_province_flag = MSA_flag_already_set }
+				NOT = { trade_goods = coffee }
+				OR = {
+					region = malaya_region
+					region = indonesia_region
+					region = moluccas_region 
+				}
+			}
+			save_event_target_as = Malaya_target_$target$
+			set_province_flag = MSA_flag_already_set
+			ROOT = { set_country_flag = MSA_$target$_province }
+		}
+	}
+	else_if = {
+		limit = {
+			has_country_flag = MSA_plantation_choice
+		}
+		if = {
+			limit = {
+				is_expanded_mod_active = { mod = trade_goods }
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_flag = MSA_flag_already_set }
+					OR = {
+						trade_goods = cloves
+						trade_goods = spices
+						trade_goods = vanilla
+						trade_goods = nutmeg
+					}
+					NOT = { has_province_modifier = MSA_enhanced_spice_production }
+				}
+				save_event_target_as = Malaya_target_$target$
+				set_province_flag = MSA_flag_already_set
+				ROOT = { set_country_flag = MSA_$target$_province }
+			}
+		}
+		else = {
+			random_owned_province = {
+				limit = {
+					NOT = { has_province_flag = MSA_flag_already_set }
+					OR = {
+						trade_goods = cloves
+						trade_goods = spices
+					}
+					NOT = { has_province_modifier = MSA_enhanced_spice_production }
+				}
+				save_event_target_as = Malaya_target_$target$
+				set_province_flag = MSA_flag_already_set
+				ROOT = { set_country_flag = MSA_$target$_province }
+			}
+		}
+	}
+}
+
 MSA_TID_TER_cost = { #funny. I use this for more than TID TER!
 	if = {
 		limit = {
@@ -1230,5 +1367,168 @@ MSA_christian_spread_center = { #the other spread.
 		}
 		clr_global_flag = MSA_spread_of_christianity
 		country_event = { id = ME_Malaya_Events.77 }
+	}
+}
+
+MSA_this_will_cost = {
+	custom_tooltip = MSA_this_will_cost_$amount$
+	[[execute]
+		hidden_effect = {
+			subtract_variable = {
+				which = MSA_foreign_investment_amount
+				value = $amount$
+			}
+		}
+	]
+}
+
+MSA_find_lowest_tech_effect = {
+	export_to_variable = {
+		which = MSA_our_adm_tech
+		value = trigger_value:adm_tech
+	}
+	export_to_variable = {
+		which = MSA_our_dip_tech
+		value = trigger_value:dip_tech
+	}
+	export_to_variable = {
+		which = MSA_our_mil_tech
+		value = trigger_value:mil_tech
+	}
+	set_variable = {
+		which = MSA_our_lowest_tech
+		which = MSA_our_adm_tech
+	}
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = MSA_our_dip_tech
+					which = MSA_our_lowest_tech
+				}
+			}
+		}
+		set_variable = {
+			which = MSA_our_lowest_tech
+			which = MSA_our_dip_tech
+		}
+	}
+	if = {
+		limit = {
+			NOT = {
+				check_variable = {
+					which = MSA_our_mil_tech
+					which = MSA_our_lowest_tech
+				}
+			}
+		}
+		set_variable = {
+			which = MSA_our_lowest_tech
+			which = MSA_our_mil_tech
+		}
+	}
+	
+	subtract_variable = {
+		which = MSA_our_adm_tech
+		which = MSA_our_lowest_tech
+	}
+	subtract_variable = {
+		which = MSA_our_dip_tech
+		which = MSA_our_lowest_tech
+	}
+	subtract_variable = {
+		which = MSA_our_mil_tech
+		which = MSA_our_lowest_tech
+	}
+	
+	if = {
+		limit = {
+			is_variable_equal = {
+				which = MSA_our_adm_tech
+				value = 0
+			}
+		}
+		if = {
+			limit = {
+				is_variable_equal = {
+					which = MSA_our_dip_tech
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = MSA_our_mil_tech
+						value = 0
+					}
+				}
+				add_adm_power = 40
+				add_dip_power = 40
+				add_mil_power = 40
+			}
+			else = {
+				add_adm_power = 60
+				add_dip_power = 60
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = MSA_our_mil_tech
+						value = 0
+					}
+				}
+				add_adm_power = 60
+				add_mil_power = 60
+			}
+			else = {
+				add_adm_power = 120
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = {
+				is_variable_equal = {
+					which = MSA_our_dip_tech
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = MSA_our_mil_tech
+						value = 0
+					}
+				}
+				add_dip_power = 60
+				add_mil_power = 60
+			}
+			else = {
+				add_dip_power = 120
+			}
+		}
+		else = {
+			add_mil_power = 120
+		}
+	}
+	
+	#flush the vars
+	set_variable = {
+		which = MSA_our_adm_tech
+		value = 0
+	}
+	set_variable = {
+		which = MSA_our_dip_tech
+		value = 0
+	}
+	set_variable = {
+		which = MSA_our_mil_tech
+		value = 0
+	}
+	set_variable = {
+		which = MSA_our_lowest_tech
+		value = 0
 	}
 }
