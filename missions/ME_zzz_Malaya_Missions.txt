@@ -4227,7 +4227,7 @@ MSA_Missions_Europe_2 = {
 						continent = europe
 					}
 					alliance_with = ROOT
-					NOT = { has_signed_a_trade_deal_with_root_trigger = yes }
+					NOT = { has_trade_deal_with_root_trigger  = yes }
 				}
 				AND = {
 					country_or_non_sovereign_subject_holds = ROOT
@@ -4253,7 +4253,7 @@ MSA_Missions_Europe_2 = {
 			any_country = {
 				capital_scope = { continent = europe }
 				alliance_with = ROOT
-				has_signed_a_trade_deal_with_root_trigger = yes
+				has_trade_deal_with_root_trigger  = yes
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				province_has_center_of_trade_of_level = 2
@@ -4263,7 +4263,11 @@ MSA_Missions_Europe_2 = {
 			}
 		}
 		effect = {
-			
+			add_country_modifier = {
+				name = MSA_trade_negotiatons_modifier
+				duration = 9125
+			}
+			add_dip_power = 50
 		}
 	}
 	
@@ -4411,12 +4415,33 @@ MSA_Missions_Europe_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			is_ahead_of_time_in_tech = { type = dip }
+			OR = {
+				has_global_modifier_value = {
+					which = ship_durability
+					value = 0.1
+				}
+				has_global_modifier_value = {
+					which = naval_morale
+					value = 0.2
+				}
+			}
+			navy_tradition = 20
+			num_of_admirals = 2
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_high_seas
+				duration = 7300
+			}
+			
+			create_admiral = {
+				tradition = 75
+			}
 		}
 	}
 	
-	MSA_european_administration = {
+	MSA_european_administration = { #better mission concept needed here
 		icon = mission_to_the_south_china_sea
 		required_missions = { MSA_foreign_companies MSA_influence }
 		position = 31
@@ -4441,7 +4466,7 @@ MSA_Missions_Europe_4 = {
 	has_country_shield = yes
 	
 	MSA_technology_sharing = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_konkani_pirates
 		required_missions = { MSA_foreign_powers_placate MSA_embrace_colonial_thought }
 		position = 28
 		provinces_to_highlight = {
@@ -4460,17 +4485,23 @@ MSA_Missions_Europe_4 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_perma_institution
+				duration = -1
+			}
 			
+			change_innovativeness = 5
 		}
 	}
 	
 	MSA_influence = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_metropolis_of_the_deccan
 		required_missions = { MSA_technology_sharing }
 		position = 30
 		provinces_to_highlight = {
 		}
 		trigger = {
+			#idk yet
 		}
 		effect = {
 		}
@@ -4684,24 +4715,77 @@ MSA_Missions_Independence_1 = {
 	has_country_shield = yes
 	
 	MSA_securing_resources = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_jawal_silver_mine
 		required_missions = { MSA_rising_power }
 		position = 28
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					trade_goods = iron
+					trade_goods = zinc
+					trade_goods = copper
+					trade_goods = tin
+				}
+			}
+			else = {
+				OR = {
+					trade_goods = iron
+					trade_goods = copper
+				}
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+				NOT = { has_production_building_trigger = yes }
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = iron
+						trade_goods = zinc
+						trade_goods = copper
+						trade_goods = tin
+					}
+					has_production_building_trigger = yes
+					has_manufactory_trigger = yes
+					value = 5
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+					}
+					has_production_building_trigger = yes
+					has_manufactory_trigger = yes
+					value = 3
+				}
+			}
 		}
 		effect = {
 		}
 	}
 	
 	MSA_rallying_the_mob = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_order_in_the_domain
 		required_missions = { }
 		position = 29
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				manpower_percentage = 0.6
+				manpower = 100
+			}
 		}
 		effect = {
 		}
@@ -4709,7 +4793,7 @@ MSA_Missions_Independence_1 = {
 	
 	MSA_win_several_wars = {
 		icon = mission_to_the_south_china_sea
-		required_missions = { }
+		required_missions = { MSA_rallying_the_mob }
 		position = 31
 		provinces_to_highlight = {
 		}
@@ -4748,8 +4832,34 @@ MSA_Missions_Independence_2 = {
 		required_missions = { MSA_rising_power }
 		position = 29
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				owner = {
+					great_power_rank = ROOT
+				}
+			}
+			else = {
+				owner = {
+					total_development = ROOT
+				}
+			}
 		}
 		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				great_power_rank = 1
+			}
+			else = {
+				NOT = {
+					any_country = {
+						total_development = ROOT
+					}
+				}
+			}
 		}
 		effect = {
 		}
@@ -4757,11 +4867,19 @@ MSA_Missions_Independence_2 = {
 	
 	MSA_seeking_allies = {
 		icon = mission_to_the_south_china_sea
-		required_missions = { }
+		required_missions = { MSA_rallying_the_mob }
 		position = 30
 		provinces_to_highlight = {
 		}
 		trigger = {
+			calc_true_if = {
+				all_ally = {
+					capital_scope = {
+						continent = asia
+					}
+				}
+				amount = 3
+			}
 		}
 		effect = {
 		}
@@ -4780,12 +4898,26 @@ MSA_Missions_Independence_3 = {
 	has_country_shield = yes
 	
 	MSA_naval_europe = {
-		icon = mission_to_the_south_china_sea
+		icon = indonesian_trade
 		required_missions = { }
 		position = 28
 		provinces_to_highlight = {
+			owner = {
+				naval_strength = {
+					who = ROOT
+					value = 0.75
+				}
+			}
 		}
 		trigger = {
+			NOT = {
+				any_country = {
+					naval_strength = {
+						who = ROOT
+						value = 0.75
+					}
+				}
+			}
 		}
 		effect = {
 		}
@@ -4822,6 +4954,10 @@ MSA_Missions_Independence_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			any_country = {
+				capital_scope = { continent = europe }
+				war_with = ROOT
+			}
 		}
 		effect = {
 		}
@@ -4834,6 +4970,16 @@ MSA_Missions_Independence_4 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			calc_true_if = {
+				amount = 4
+				1998 = { country_or_non_sovereign_subject_holds = ROOT }
+				1999 = { country_or_non_sovereign_subject_holds = ROOT }
+				1248 = { country_or_non_sovereign_subject_holds = ROOT }
+				1101 = { country_or_non_sovereign_subject_holds = ROOT }
+				1100 = { country_or_non_sovereign_subject_holds = ROOT }
+				1102 = { country_or_non_sovereign_subject_holds = ROOT }
+				1103 = { country_or_non_sovereign_subject_holds = ROOT }
+			}
 		}
 		effect = {
 		}
@@ -4868,8 +5014,25 @@ MSA_Missions_Independence_5 = {
 		required_missions = { MSA_first_encounters }
 		position = 28
 		provinces_to_highlight = {
+			OR = {
+				region = indonesia_region
+				region = malaya_region 
+				region = moluccas_region
+			}
 		}
 		trigger = {
+			indonesia_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			malaya_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			moluccas_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 		}
