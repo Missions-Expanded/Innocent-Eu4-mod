@@ -4440,18 +4440,6 @@ MSA_Missions_Europe_3 = {
 			}
 		}
 	}
-	
-	MSA_european_administration = { #better mission concept needed here
-		icon = mission_to_the_south_china_sea
-		required_missions = { MSA_foreign_companies MSA_influence }
-		position = 31
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
-		}
-	}
 }
 
 MSA_Missions_Europe_4 = {
@@ -4772,6 +4760,22 @@ MSA_Missions_Independence_1 = {
 			}
 		}
 		effect = {
+			add_mercantilism = 5
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = governments }
+				}
+				add_country_modifier = {
+					name = MSA_securing_resources_GE
+					duration = 7300
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = MSA_securing_resources
+					duration = 7300
+				}
+			}
 		}
 	}
 	
@@ -4788,18 +4792,49 @@ MSA_Missions_Independence_1 = {
 			}
 		}
 		effect = {
+			set_country_flag = MSA_10_morale_against_colonizers
+			custom_tooltip = MSA_10_morale_against_colonizers
 		}
 	}
 	
 	MSA_win_several_wars = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_end_tamil_insurgency
 		required_missions = { MSA_rallying_the_mob }
 		position = 31
 		provinces_to_highlight = {
+			owner = {
+				capital_scope = {
+					continent = europe
+				}
+				NOT = {
+					ROOT = {
+						has_won_war_against = { country = PREV }
+					}
+				}
+			}
 		}
 		trigger = {
+			calc_true_if = {
+				all_country = {
+					capital_scope = {
+						continent = europe
+					}
+				}
+				ROOT = {
+					has_won_war_against = { country = PREV }
+				}
+				amount = 5
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_rallied_against_colonizers
+				duration = 7300
+			}
+			
+			create_general = {
+				tradition = 90
+			}
 		}
 	}
 }
@@ -4816,21 +4851,9 @@ MSA_Missions_Independence_2 = {
 	has_country_shield = yes
 	
 	MSA_rising_power = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_new_army
 		required_missions = { }
 		position = 27
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
-		}
-	}
-	
-	MSA_greatest_power = {
-		icon = mission_to_the_south_china_sea
-		required_missions = { MSA_rising_power }
-		position = 29
 		provinces_to_highlight = {
 			if = {
 				limit = {
@@ -4862,14 +4885,41 @@ MSA_Missions_Independence_2 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_power_on_the_rise
+				duration = 10950
+			}
+			
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 40
+			}
+		}
+	}
+	
+	MSA_greatest_power = {
+		icon = mission_persianate_empire
+		required_missions = { MSA_rising_power }
+		position = 29
+		provinces_to_highlight = {
+		}
+		trigger = {
+			grown_by_development = 2000
+		}
+		effect = {
 		}
 	}
 	
 	MSA_seeking_allies = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_prosperity_in_bengal
 		required_missions = { MSA_rallying_the_mob }
 		position = 30
 		provinces_to_highlight = {
+			owner = {
+				capital_scope = {
+					continent = asia
+				}
+			}
 		}
 		trigger = {
 			calc_true_if = {
@@ -4882,6 +4932,10 @@ MSA_Missions_Independence_2 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_anti_colonizer_alliance
+				duration = -1
+			}
 		}
 	}
 }
@@ -4948,7 +5002,7 @@ MSA_Missions_Independence_4 = {
 	has_country_shield = yes
 	
 	MSA_first_encounters = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_emperor_of_hindusthan
 		required_missions = { }
 		position = 27
 		provinces_to_highlight = {
@@ -4960,14 +5014,54 @@ MSA_Missions_Independence_4 = {
 			}
 		}
 		effect = {
+			add_war_exhaustion = -2
+			raise_war_taxes = yes
+			malaya_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			indonesia_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			moluccas_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mascarenes_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
 	MSA_seize_the_islands = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_invade_gujarat
 		required_missions = { MSA_first_encounters MSA_naval_europe }
 		position = 29
 		provinces_to_highlight = {
+			OR = {
+				province_id = 1998
+				province_id = 1999
+				province_id = 1248
+				province_id = 1101
+				province_id = 1100
+				province_id = 1102
+				province_id = 1103
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			calc_true_if = {
@@ -4982,18 +5076,24 @@ MSA_Missions_Independence_4 = {
 			}
 		}
 		effect = {
-		}
-	}
-	
-	MSA_reroute_muslim_traders = {
-		icon = mission_to_the_south_china_sea
-		required_missions = { MSA_no_more }
-		position = 31
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
+			add_country_modifier = {
+				name = MSA_indian_ocean
+				duration = -1
+			}
+			east_africa_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			south_africa_region = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 }
@@ -5010,7 +5110,7 @@ MSA_Missions_Independence_5 = {
 	has_country_shield = yes
 	
 	MSA_heathens = {
-		icon = mission_to_the_south_china_sea
+		icon = mission_integrate_the_gonds
 		required_missions = { MSA_first_encounters }
 		position = 28
 		provinces_to_highlight = {
@@ -5019,11 +5119,16 @@ MSA_Missions_Independence_5 = {
 				region = malaya_region 
 				region = moluccas_region
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { area = indian_ocean_islands_area }
 		}
 		trigger = {
 			indonesia_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					country_or_non_sovereign_subject_holds = ROOT
+					NOT = { area = indian_ocean_islands_area }
+				}
 			}
 			malaya_region = {
 				type = all
@@ -5035,11 +5140,15 @@ MSA_Missions_Independence_5 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_keeping_colonizers_off
+				duration = -1
+			}
 		}
 	}
 	
-	MSA_no_more = {
-		icon = mission_to_the_south_china_sea
+	MSA_reroute_muslim_traders = {
+		icon = mission_rein_in_the_velamas
 		required_missions = { MSA_heathens MSA_seize_the_islands }
 		position = 30
 		provinces_to_highlight = {
@@ -5047,6 +5156,15 @@ MSA_Missions_Independence_5 = {
 		trigger = {
 		}
 		effect = {
+			hidden_effect = {
+				remove_country_modifier = MSA_keeping_colonizers_off
+				remove_country_modifier = MSA_indian_ocean
+				add_country_modifier = {
+					name = MSA_malayan_empire
+					duration = -1
+				}
+			}
+			custom_tooltip = MSA_merge_two_conquest_modifiers
 		}
 	}
 }
