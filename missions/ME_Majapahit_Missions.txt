@@ -25,16 +25,54 @@ MAJ_missions_1 = {
 			owned_by = SUN
 		}
 		trigger = {
-			OR = {
-				reverse_has_opinion = {
-					who = SUN
-					value = 100
+			if = {
+				limit = {
+					is_enemy = SUN
 				}
-				has_won_war_against = { who = SUN }
-				2687 = { owned_by = ROOT }
+				OR = {
+					reverse_has_opinion = {
+						who = SUN
+						value = 0
+					}
+					SUN = { 
+						is_subject_of = ROOT
+						is_subject_of_type = vassal
+					}
+					2687 = { owned_by = ROOT }
+				}
+			}
+			else = {
+				OR = {
+					reverse_has_opinion = {
+						who = SUN
+						value = 100
+					}
+					SUN = { 
+						is_subject_of = ROOT
+						is_subject_of_type = vassal
+					}
+					2687 = { owned_by = ROOT }
+				}
 			}
 		}
 		effect = {
+			custom_tooltip = MAJ_reward_if_opinion
+			tooltip = {
+				country_event = { id = ME_Majapahit_Events.103 } #Ask peacefully
+			}
+			custom_tooltip = MAJ_reward_if_subject
+			tooltip = {
+				country_event = { id = ME_Majapahit_Events.100 } #force the sunda into the relation
+			}
+			custom_tooltip = MAJ_reward_if_conquest 
+			tooltip = { #conquest done, just give a reward for boring conquest.
+				add_prestige_or_monarch_power = { amount = 20 }
+				
+				add_country_modifier = {
+					name = MAJ_sunda_conquered
+					duration = 7300
+				}
+			}
 		}
 	}
 	
@@ -243,7 +281,22 @@ MAJ_missions_2 = {
 			army_size = 14
 		}
 		effect = {
-			
+			add_adm_power = 50
+			add_army_tradition_or_mil_power = { amount = 10 }
+			west_java_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			banten_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { is_permanent_claim = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 	
@@ -805,6 +858,7 @@ MAJ_missions_4 = {
 			}
 		}
 		effect = {
+			#make this an event?
 			set_country_flag = MAJ_palapa_campaigns_cb
 			custom_tooltip = MAJ_palapa_campaigns_cb
 			add_country_modifier = {
@@ -944,7 +998,32 @@ MAJ_missions_4 = {
 			}
 		}
 		effect = {
+			1361 = {
+				add_trade_node_income = 60
+			}
+			add_mercantilism = 3
+			#if we own malacca, upgrade the trade center?
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+			}
 			
+			custom_tooltip = MAJ_if_we_own_malaka
+			tooltip = {
+				596 = {
+					create_or_add_center_of_trade_level = { level = 1 }
+				}
+			}
+			
+			hidden_effect = {
+				596 = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						create_or_add_center_of_trade_level = { level = 1 }
+					}
+				}
+			}
 		}
 	}
 }
@@ -1172,7 +1251,6 @@ MAJ_missions_5 = {
 				name = MAJ_verge_of_the_empire
 				duration = 9125
 			}
-			country_event = { id = ME_Majapahit_Events.100 } 
 		}
 	}
 }

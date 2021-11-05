@@ -3912,8 +3912,21 @@ MSA_Missions_Christian_1 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			OR = {
+				has_global_modifier_value = {
+					which = global_missionary_strength
+					value = 0.08
+				}
+				num_of_missionaries = 2
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MSA_evangelization
+				duration = 9125
+			}
+			
+			change_religious_influence_equivalent = { add = 10 }
 		}
 	}
 	
@@ -3922,10 +3935,33 @@ MSA_Missions_Christian_1 = {
 		required_missions = { MSA_invite_missionaries MSA_proselytize }
 		position = 23
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { num_of_times_improved_by_owner = 10 }
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				num_of_times_improved_by_owner = 10
+				value = 10
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					religion = catholic 
+				}
+				add_country_modifier = {
+					name = MSA_jesuit
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = MSA_religious_orders
+					duration = -1
+				}
+			}
+			
+			add_stability_or_adm_power = yes
 		}
 	}
 	
@@ -3934,6 +3970,7 @@ MSA_Missions_Christian_1 = {
 		required_missions = { MSA_enroot }
 		position = 25
 		provinces_to_highlight = {
+			
 		}
 		trigger = {
 		}
@@ -3946,8 +3983,17 @@ MSA_Missions_Christian_1 = {
 		required_missions = { MSA_growing_community }
 		position = 26
 		provinces_to_highlight = {
+			superregion = china_superregion
+			NOT = { religion_group = christian }
 		}
 		trigger = {
+			calc_true_if = {
+				china_superregion = {
+					type = all
+					religion_group = christian
+				}
+				amount = 10
+			}
 		}
 		effect = {
 		}
@@ -3990,6 +4036,8 @@ MSA_Missions_Christian_2 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			religious_unity = 0.75
+			
 		}
 		effect = {
 		}
@@ -4024,8 +4072,14 @@ MSA_Missions_Christian_3 = {
 		required_missions = { MSA_relations_with_the_faithful MSA_proselytize }
 		position = 23
 		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { has_tax_building_trigger = yes }
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				has_tax_building_trigger = yes
+				value = 20
+			}
 		}
 		effect = {
 		}
@@ -4036,10 +4090,26 @@ MSA_Missions_Christian_3 = {
 		required_missions = { MSA_convert_temples }
 		position = 24
 		provinces_to_highlight = {
+			province_id = 630
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { development = 25 }
+				NOT = { num_of_buildings_in_province = 3 }
+			}
 		}
 		trigger = {
+			630 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+				development = 25
+				num_of_buildings_in_province = 3
+			}
 		}
 		effect = {
+			630 = {
+				add_or_upgrade_tax_building = yes
+			}
 		}
 	}
 	
@@ -4050,6 +4120,8 @@ MSA_Missions_Christian_3 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			has_institution = printing_press
+			university = 5
 		}
 		effect = {
 		}
@@ -4110,6 +4182,39 @@ MSA_Missions_Christian_5 = {
 		provinces_to_highlight = {
 		}
 		trigger = {
+			monthly_adm = 10
+			OR = {
+				theologian = 2
+				has_adm_advisor_3 = yes
+			}
+			has_reform_on_level = 5
+			
+			if = {
+				limit = {
+					religion = catholic
+				}
+				papal_influence = 25
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Common Sense"
+					religion = protestant
+				}
+				church_power = 50
+			}
+			else_if = {
+				limit = {
+					has_dlc = "Wealth of Nations"
+					religion = reformed
+				}
+				fervor = 50
+			}
+			else_if = {
+				limit = {
+					religion = anglican
+				}
+				church_power = 50
+			}
 		}
 		effect = {
 		}
@@ -4118,26 +4223,35 @@ MSA_Missions_Christian_5 = {
 	MSA_eliminate_heresy = {
 		icon = spread_piety
 		required_missions = { MSA_bible_study }
-		position = 24
+		position = 25
 		provinces_to_highlight = {
+			owned_by = ROOT
+			religion_group = ROOT
+			NOT = { religion = ROOT }
 		}
 		trigger = {
+			NOT = {
+				any_owned_province = {
+					religion_group = ROOT
+					NOT = { religion = ROOT }
+				}
+			}
 		}
 		effect = {
 		}
 	}
 	
-	MSA_eliminate_heresy_2 = {
-		icon = fund_the_monasteries
-		required_missions = { MSA_eliminate_heresy }
-		position = 25
-		provinces_to_highlight = {
-		}
-		trigger = {
-		}
-		effect = {
-		}
-	}
+	#MSA_eliminate_heresy_2 = {
+	#	icon = fund_the_monasteries
+	#	required_missions = { MSA_bible_study }
+	#	position = 25
+	#	provinces_to_highlight = {
+	#	}
+	#	trigger = {
+	#	}
+	#	effect = {
+	#	}
+	#}
 }
 
 MSA_Missions_Europe_1 = {
