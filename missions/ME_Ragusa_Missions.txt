@@ -10,7 +10,7 @@ ragusa_missions_slot_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	ragusa_balkan_latin_republic = {
 		icon = fortify_malta
 		required_missions = { }
@@ -54,7 +54,6 @@ ragusa_missions_slot_1 = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
-				add_permanent_claim = ROOT
 				add_core = ROOT
 			}
 			bosnia_area = {
@@ -80,7 +79,7 @@ ragusa_missions_slot_1 = {
 			}
 		}
 	}
-	
+
 	ragusa_shores_dalmatia = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { ragusa_balkan_latin_republic }
@@ -111,7 +110,7 @@ ragusa_missions_slot_1 = {
 			}
 		}
 	}
-	
+
 	ragusa_safe_adriatic_balkans = {
 		icon = adriatic_access
 		required_missions = { ragusa_shores_dalmatia }
@@ -122,6 +121,17 @@ ragusa_missions_slot_1 = {
 			}
 			has_port = yes
 			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						has_port = yes
+						any_trade_node_member_province = {
+							province_id = 137
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -143,7 +153,7 @@ ragusa_missions_slot_1 = {
 			add_republican_tradition = 5
 		}
 	}
-	
+
 	ragusa_northern_adriatic_coast = {
 		icon = mission_early_game_buildings
 		required_missions = { ragusa_new_republic }
@@ -156,6 +166,19 @@ ragusa_missions_slot_1 = {
 			}
 			has_port = yes
 			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						OR = {
+							area = east_adriatic_coast_area
+							area = croatia_area
+							area = carinthia_area
+						}
+						has_port = yes
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -185,18 +208,33 @@ ragusa_missions_slot_1 = {
 			}
 		}
 	}
-	
+
 	ragusa_defying_doge = {
 		icon = mission_combat_barbary_piracy
 		required_missions = { ragusa_northern_adriatic_coast }
 		position = 7
-		trigger = {
+		provinces_to_highlight = {
+			province_id = 112
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			112 = {
 				owner = {
-					NOT = {
-						naval_strength = {
-							who = ROOT
-							value = 1
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				owns_or_non_sovereign_subject_of = 112
+				112 = {
+					owner = {
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 1
+							}
 						}
 					}
 				}
@@ -247,7 +285,7 @@ ragusa_missions_slot_1 = {
 			}
 		}
 	}
-	
+
 	ragusa_maritime_republics = {
 		icon = me_mission_venice_navy
 		required_missions = { ragusa_fleet_expansion }
@@ -319,7 +357,7 @@ ragusa_missions_slot_1 = {
 			}
 		}
 	}
-	
+
 	ragusa_ragusan_commerce = {
 		icon = mission_trade_company_region_abroad
 		required_missions = {
@@ -365,7 +403,7 @@ ragusa_missions_slot_1 = {
 			}
 		}
 	}
-	
+
 	ragusa_masters_of_commerce = {
 		icon = me_mission_venice_people_talking
 		required_missions = { ragusa_ragusan_commerce }
@@ -404,7 +442,7 @@ ragusa_missions_slot_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	ragusa_balkan_hinterland = {
 		icon = mission_cannons_firing
 		required_missions = { ragusa_balkan_latin_republic }
@@ -416,6 +454,18 @@ ragusa_missions_slot_2 = {
 				area = serbia_area
 			}
 			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						OR = {
+							area = bosnia_area
+							area = rascia_area
+							area = serbia_area
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -432,7 +482,7 @@ ragusa_missions_slot_2 = {
 			add_yearly_manpower = 1.5
 		}
 	}
-	
+
 	ragusa_secured_income = {
 		icon = dominant_economy
 		required_missions = { ragusa_balkan_hinterland }
@@ -458,11 +508,24 @@ ragusa_missions_slot_2 = {
 					duration = -1
 				}
 				add_devastation = -25
-				add_prosperity = 25
+				if = {
+					limit = {
+						is_state = yes
+					}
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+						}
+						add_prosperity = 25
+					}
+					else = {
+						add_base_production = 1
+					}
+				}
 			}
 		}
 	}
-	
+
 	ragusa_new_republic = {
 		icon = me_mission_venice_small_ship_in_port
 		required_missions = {
@@ -484,7 +547,7 @@ ragusa_missions_slot_2 = {
 			}
 		}
 	}
-	
+
 	ragusa_apulian_shores = {
 		icon = me_mission_aragon_lighthouse_of_alexandria
 		required_missions = {
@@ -505,7 +568,10 @@ ragusa_missions_slot_2 = {
 			apulia_area = {
 				add_base_production = 1
 				if = {
-					limit = { has_dlc = "Mandate of Heaven" }
+					limit = {
+						has_dlc = "Mandate of Heaven"
+						is_state = yes
+					}
 					add_prosperity = 50
 				}
 			}
@@ -523,9 +589,9 @@ ragusa_missions_slot_2 = {
 				}
 				add_permanent_claim = ROOT
 			}
-		}	
+		}
 	}
-	
+
 	ragusa_city_ancona = {
 		icon = reclaim_the_aegean
 		required_missions = { ragusa_northern_adriatic_coast }
@@ -546,18 +612,33 @@ ragusa_missions_slot_2 = {
 			}
 		}
 	}
-	
+
 	ragusa_superba = {
 		icon = mission_sea_battles
 		required_missions = { ragusa_republic_salerno }
 		position = 8
-		trigger = {
+		provinces_to_highlight = {
+			province_id = 101
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			101 = {
 				owner = {
-					NOT = {
-						naval_strength = {
-							who = ROOT
-							value = 1
+					naval_strength = {
+						who = ROOT
+						value = 1
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				owns_or_non_sovereign_subject_of = 101
+				101 = {
+					owner = {
+						NOT = {
+							naval_strength = {
+								who = ROOT
+								value = 1
+							}
 						}
 					}
 				}
@@ -570,7 +651,7 @@ ragusa_missions_slot_2 = {
 			}
 		}
 	}
-	
+
 	ragusa_rule_italian_trade = {
 		icon = mission_sea_battles
 		required_missions = {
@@ -591,11 +672,11 @@ ragusa_missions_slot_2 = {
 			}
 		}
 		trigger = {
+			mercantilism = 33
 			owns_core_province = 2983
 			owns_core_province = 101
 			owns_core_province = 115
 			owns_core_province = 112
-			mercantilism = 33
 		}
 		effect = {
 			add_country_modifier = {
@@ -619,32 +700,39 @@ ragusa_missions_slot_2 = {
 				province_id = 137
 			}
 			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				NOT = { has_trade_building_trigger = yes }
 				NOT = { num_of_times_improved = 10 }
 			}
 		}
 		trigger = {
 			112 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				num_of_times_improved = 10
 				has_trade_building_trigger = yes
 			}
 			101 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				num_of_times_improved = 10
 				has_trade_building_trigger = yes
 			}
 			2983 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				num_of_times_improved = 10
 				has_trade_building_trigger = yes
 			}
 			115 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				num_of_times_improved = 10
 				has_trade_building_trigger = yes
 			}
 			2977 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				num_of_times_improved = 10
 				has_trade_building_trigger = yes
 			}
 			137 = {
+				country_or_non_sovereign_subject_holds = ROOT
 				num_of_times_improved = 10
 				has_trade_building_trigger = yes
 			}
@@ -657,22 +745,52 @@ ragusa_missions_slot_2 = {
 					has_dlc = "Mandate of Heaven"
 				}
 				112 = {
-					add_prosperity = 15
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
 				}
 				101 = {
-					add_prosperity = 15
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
 				}
 				2983 = {
-					add_prosperity = 15
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
 				}
 				115 = {
-					add_prosperity = 15
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
 				}
 				2977 = {
-					add_prosperity = 15
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
 				}
 				137 = {
-					add_prosperity = 15
+					if = {
+						limit = {
+							is_state = yes
+						}
+						add_prosperity = 15
+					}
 				}
 			}
 		}
@@ -691,8 +809,8 @@ ragusa_missions_slot_3 = {
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
-	has_country_shield = yes		
-	
+	has_country_shield = yes
+
 	ragusa_saint_blaise = {
 		icon = connect_further_austria
 		required_missions = { ragusa_distant_renaissance }
@@ -701,7 +819,7 @@ ragusa_missions_slot_3 = {
 			province_id = 137
 			OR = {
 				NOT = { owned_by = ROOT }
-				renaissance = 100
+				NOT = { renaissance = 100 }
 				NOT = { has_tax_building_trigger = yes }
 				NOT = { num_of_times_improved = 5 }
 			}
@@ -718,7 +836,8 @@ ragusa_missions_slot_3 = {
 			137 = {
 				if = {
 					limit = {
-						ROOT = { religion = catholic }
+						religion = catholic
+						has_owner_religion = yes
 					}
 					add_cardinal = yes
 				}
@@ -810,7 +929,7 @@ ragusa_missions_slot_3 = {
 			}
 		}
 	}
-	
+
 	ragusa_republic_salerno = {
 		icon = develop_naples
 		required_missions = { ragusa_apulian_shores }
@@ -830,7 +949,9 @@ ragusa_missions_slot_3 = {
 					duration = -1
 				}
 				if = {
-					limit = { has_building = shipyard }
+					limit = {
+						has_building = shipyard
+					}
 					remove_building = shipyard
 					add_building_construction = {
 						building = grand_shipyard
@@ -838,7 +959,10 @@ ragusa_missions_slot_3 = {
 						cost = 0
 					}
 				}
-				else = {
+				else_if = {
+					limit = {
+						NOT = { has_building = grand_shipyard }
+					}
 					add_building_construction = {
 						building = shipyard
 						speed = 0.5
@@ -967,7 +1091,7 @@ ragusa_missions_slot_4 = {
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
-			is_capital = yes
+			is_capital_of = ROOT
 			NOT = { num_of_times_improved = 2 }
 		}
 		trigger = {
@@ -997,20 +1121,22 @@ ragusa_missions_slot_4 = {
 		provinces_to_highlight = {
 			province_id = 137
 			OR = {
-				NOT = { development = 20 }
-				NOT = { base_manpower = 7 }
-			}
-			OR = {
 				NOT = { owned_by = ROOT }
-				NOT = { has_building = fort_15th }
-				NOT = { has_building = fort_16th }
-				NOT = { has_building = fort_17th }
-				NOT = { has_building = fort_18th }
+				AND = {
+					NOT = { development = 20 }
+					NOT = { base_manpower = 7 }
+				}
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
 			}
 		}
 		trigger = {
+			owns = 137
 			137 = {
-				owned_by = ROOT
 				OR = {
 					development = 20
 					base_manpower = 7
@@ -1038,9 +1164,18 @@ ragusa_missions_slot_4 = {
 		required_missions = { ragusa_safer_entrepot }
 		position = 3
 		provinces_to_highlight = {
-			has_port = yes
 			owned_by = ROOT
+			has_port = yes
 			NOT = { num_of_times_improved = 2 }
+			ROOT = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_port = yes
+						num_of_times_improved = 2
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -1052,33 +1187,38 @@ ragusa_missions_slot_4 = {
 		effect = {
 			add_yearly_sailors = 1
 			custom_tooltip = RAGUSA_SHIP_TT
-			every_owned_province = {
-				limit = {
-					has_port = yes
-					num_of_times_improved = 2
-				}
-				if = {
+			hidden_effect = {
+				every_owned_province = {
 					limit = {
-						has_building = grand_shipyard
+						has_port = yes
+						num_of_times_improved = 2
 					}
-					add_base_production = 4
-				}
-				else_if = {
-					limit = {
-						has_building = shipyard
+					if = {
+						limit = {
+							has_building = grand_shipyard
+						}
+						add_base_production = 4
 					}
-					remove_building = shipyard
-					add_building_construction = {
-						building = grand_shipyard
-						speed = 1
-						cost = 0
+					else_if = {
+						limit = {
+							has_building = shipyard
+						}
+						remove_building = shipyard
+						add_building_construction = {
+							building = grand_shipyard
+							speed = 1
+							cost = 0
+						}
 					}
-				}
-				else = {
-					add_building_construction = {
-						building = shipyard
-						speed = 1
-						cost = 0
+					else_if = {
+						limit = {
+							NOT = { has_building = grand_shipyard }
+						}
+						add_building_construction = {
+							building = shipyard
+							speed = 1
+							cost = 0
+						}
 					}
 				}
 			}
@@ -1113,64 +1253,64 @@ ragusa_missions_slot_4 = {
 			142 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			163 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			3003 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			164 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			320 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			2348 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 			4700 = {
 				if = {
 					limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
 				}
 			}
 		}
@@ -1214,10 +1354,10 @@ ragusa_missions_slot_4 = {
 			}
 		}
 		trigger = {
+			mercantilism = 33
 			owns_core_province = 151
 			owns_core_province = 4239
 			owns_core_province = 358
-			mercantilism = 33
 		}
 		effect = {
 			add_country_modifier = {
@@ -1460,6 +1600,12 @@ ragusa_missions_slot_5 = {
 		provinces_to_highlight = {
 			area = malabar_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
+			NOT = {
+				malabar_area = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
 		}
 		trigger = {
 			malabar_area = {
