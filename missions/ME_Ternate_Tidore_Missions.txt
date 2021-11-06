@@ -89,7 +89,7 @@ TID_TER_missions_2 = {
 	has_country_shield = yes
 	
 	TID_TER_unrivalled = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_defeat_jaunpur
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -120,7 +120,7 @@ TID_TER_missions_2 = {
 	}
 	
 	TID_TER_sulawesi = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_demand_garjat_fealty
 		required_missions = { TID_TER_unrivalled }
 		position = 2
 		provinces_to_highlight = {
@@ -167,7 +167,7 @@ TID_TER_missions_2 = {
 	}
 	
 	TID_TER_malay_peninsula = {
-		icon = mission_rb_take_gibraltar
+		icon = me_mission_malay_ruler
 		required_missions = { TID_TER_conquer_island TID_TER_sumatra }
 		position = 6
 		provinces_to_highlight = {
@@ -282,7 +282,6 @@ TID_TER_missions_3 = {
 		}
 		effect = {
 			set_country_flag = TID_TER_can_load_all_provinces
-			add_dip_power = 25
 			custom_tooltip = TID_TER_colonize_decision_upgrade
 			capital_scope = {
 				create_or_add_center_of_trade_level = { level = 1 }
@@ -291,19 +290,32 @@ TID_TER_missions_3 = {
 	}
 	
 	TID_TER_philippines = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_las_islas_filipinas
 		required_missions = { TID_TER_sulawesi }
 		position = 3
 		provinces_to_highlight = {
+			MSA_is_in_philippines = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		trigger = {	
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				MSA_is_in_philippines = yes
+				value = 15
+			}
 		}
 		effect = {
+			#Raid on Bohol event?
+			add_country_modifier = {
+				name = TID_TER_raids_into_mindanao
+				duration = 9125
+			}
+			
+			add_mil_power = 50
 		}
 	}
 	
 	TID_TER_sumatra = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_entrepot_of_india
 		required_missions = { TID_TER_java }
 		position = 5
 		provinces_to_highlight = {
@@ -386,18 +398,40 @@ TID_TER_missions_4 = {
 		effect = {
 			custom_tooltip = TID_TER_colonize_decision
 			set_country_flag = TID_TER_colonize_decision
+			
+			add_dip_power = 50
 		}
 	}
 	
 	TID_TER_maritime_empire = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_dominate_trade_in_aden
 		required_missions = { TID_TER_naval_traditions TID_TER_domain }
 		position = 3
 		provinces_to_highlight = {
+			island = yes
+			NOT = { owned_by = ROOT }
 		}
-		trigger = {	
+		trigger = {
+			naval_forcelimit = 40
+			num_of_owned_provinces_with = {
+				island = yes
+				value = 15
+			}
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				num_of_admirals_with_traits = 2
+			}
+			else = {
+				num_of_admirals = 2
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = TID_TER_thalassocracy
+				duration = -1
+			}
 		}
 	}
 	
@@ -406,10 +440,88 @@ TID_TER_missions_4 = {
 		required_missions = { TID_TER_maritime_empire TID_TER_cloves }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				province_id = 649
+				province_id = 650
+				province_id = 648
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 25 }
+			}
 		}
-		trigger = {	
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.2
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.2
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.2
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.2
+				}
+			}
+			649 = {
+				owned_by = ROOT
+				development = 25
+			}
+			650 = {
+				owned_by = ROOT
+				development = 25
+			}
+			648 = {
+				owned_by = ROOT
+				development = 25
+			}
 		}
 		effect = {
+			649 = {
+				add_permanent_province_modifier = {
+					name = clove_boom
+					duration = -1
+				}
+			}
+			650 = {
+				add_permanent_province_modifier = {
+					name = clove_boom
+					duration = -1
+				}
+			}
+			648 = {
+				add_permanent_province_modifier = {
+					name = clove_boom
+					duration = -1
+				}
+			}
+			
+			add_adm_power = 50
+			
+			add_years_of_owned_provinces_production_income = {
+				years = 5
+				trigger = {
+					OR = {
+						trade_goods = spices
+						trade_goods = nutmeg
+						trade_goods = cloves
+						trade_goods = vanilla
+					}
+				}
+				custom_tooltip = MSA_from_spice_production_TGE
+			}
+			custom_tooltip = MSA_every_province_producing_spices_TGE
 		}
 	}
 }
@@ -435,7 +547,7 @@ TID_TER_missions_5 = {
 	has_country_shield = yes
 	
 	TID_TER_naval_expansion = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_grand_bengali_shipyards
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -447,18 +559,59 @@ TID_TER_missions_5 = {
 			}
 		}
 		effect = {
+			create_admiral = {
+				tradition = 60
+				add_manuever = 1
+			}
+			custom_tooltip = MSA_admiral_1_manueverpip
+			
+			add_country_modifier = {
+				name = TID_TER_naval_tradition_from_battles
+				duration = -1
+			}
 		}
 	}
 	
 	TID_TER_naval_traditions = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_growth_of_surat
 		required_missions = { TID_TER_naval_expansion }
 		position = 2
 		provinces_to_highlight = {
 		}
-		trigger = {	
+		trigger = {
+			OR = {
+				navy_tradition = 30
+				navy_size = 25
+			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				random_owned_province = {
+					limit = { has_port = yes }
+					create_flagship = {    
+						type = light_ship
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+				}
+				add_unit_construction = {
+					type = light_ship
+					amount = 5
+					speed = 0.1
+					cost = 0
+				}
+			}
+			
+			
+			add_yearly_sailors = 1
+			
+			add_dip_power = 50
 		}
 	}
 	
@@ -490,6 +643,90 @@ TID_TER_missions_5 = {
 			649 = { add_or_upgrade_production_building = yes }
 			650 = { add_or_upgrade_production_building = yes }
 			add_mercantilism = 2
+		}
+	}
+	
+	TID_TER_allying_other_religion = {
+		icon = mission_gharbianss
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+		}
+		trigger = {
+			OR = {
+				any_ally = {
+					OR = {
+						religion = hinduism
+						religion = sunni
+					}
+				}
+				AND = {
+					religion = animist
+					custom_trigger_tooltip = {
+						tooltip = MAJ_has_converted_5_provinces
+						check_variable = { which = num_converted_religion value = 5 }
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = TID_TER_reward_if_ally
+			tooltip = {
+				country_event = { id = ME_Ternate_Tidore_Events.2 }
+			}
+			custom_tooltip = TID_TER_reward_if_conversion
+			tooltip = {
+				add_country_modifier = {
+					name = TID_TER_kept_traditions
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						any_ally = {
+							OR = {
+								religion = hinduism
+								religion = sunni
+							}
+						}
+					}
+					country_event = { id = ME_Ternate_Tidore_Events.2 }
+				}
+				else = {
+					add_country_modifier = {
+						name = TID_TER_kept_traditions
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	
+	TID_TER_orthodoxy = {
+		icon = mission_interfaith_relations
+		required_missions = { TID_TER_allying_other_religion }
+		position = 8
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { religion = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_convert_10_provinces_tooltip
+				check_variable = { which = num_converted_religion value = 10 }
+			}
+			religious_unity = 0.9
+		}
+		effect = {
+			add_stability_or_adm_power = yes
+			define_advisor = {
+				type = inquisitor
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.4
+			}
 		}
 	}
 }
