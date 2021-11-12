@@ -13,11 +13,7 @@ nagpur_column_1 = {
 		icon = mission_growth_of_ahmedabad
 		required_missions = {  }
 		provinces_to_highlight = {
-			area_for_scope_province = {
-				is_capital_of = ROOT
-			}
-			NOT = { owned_by = ROOT }
-			development = 25
+			is_capital_of = ROOT
 		}
 		trigger = {
 			treasury = 500
@@ -34,13 +30,34 @@ nagpur_column_1 = {
 			}
 		}
 		effect = {
-			add_estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 10
+			
+			if = {
+				limit = {
+					has_estate = estate_rajput
+				}
+
+				add_estate_loyalty = {
+					estate = estate_rajput
+					loyalty = 10
+				}
 			}
-			546 = {
+			else_if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+
+				add_estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 10
+				}
+			}
+			else = {
+				add_mil_power = 50
+			}
+			
+			capital_scope = {
 				add_province_modifier = {
-					name = "nagardhan_fortress"
+					name = "nagpur_nagardhan_fortress"
 					duration = -1
 				}
 			}
@@ -59,10 +76,30 @@ nagpur_column_1 = {
 			}
 		}
 		effect = {
-			add_estate_loyalty = {
-				estate = estate_vaisyas
-				loyalty = 10
+			if = {
+				limit = {
+					has_estate = estate_vaisyas
+				}
+
+				add_estate_loyalty = {
+					estate = estate_vaisyas
+					loyalty = 10
+				}
 			}
+			else_if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+
+				add_estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 10
+				}
+			}
+			else = {
+				add_dip_power = 50
+			}
+			
 			random_owned_province = {
 				limit = { is_core = ROOT }
 				add_base_production = 2
@@ -91,16 +128,42 @@ nagpur_column_1 = {
 			}
 		}
 		effect = {
-			add_estate_loyalty = {
-				estate = estate_vaisyas
-				loyalty = 20
+			if = {
+				limit = {
+					has_estate = estate_vaisyas
+				}
+
+				add_estate_loyalty = {
+					estate = estate_vaisyas
+					loyalty = 10
+				}
+				add_estate_influence_modifier = {
+					estate = estate_vaisyas
+					desc = EST_VAL_FURTHERED_SPOUSES_FAMILY_NOBLES
+					influence = 10
+					duration = 7300
+				}
 			}
-			add_estate_influence_modifier = {
-				estate = estate_nobles
-				desc = EST_VAL_FURTHERED_SPOUSES_FAMILY_NOBLES
-				influence = 10
-				duration = 7300
+			else_if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+
+				add_estate_loyalty = {
+					estate = estate_burghers
+					loyalty = 10
+				}
+				add_estate_influence_modifier = {
+					estate = estate_burghers
+					desc = EST_VAL_FURTHERED_SPOUSES_FAMILY_NOBLES
+					influence = 10
+					duration = 7300
+				}
 			}
+			else = {
+				add_dip_power = 65
+			}
+
 			add_country_modifier = {
 				name = "nagpur_land_cultivation"
 				duration = -1
@@ -155,10 +218,36 @@ nagpur_column_2 = {
 			num_accepted_cultures = 2
 		}
 		effect = {
-			add_estate_loyalty = {
-				estate = estate_brahmins
-				loyalty = 10
+			if = {
+				limit = {
+					has_estate = estate_brahmins
+				}
+				add_estate_loyalty = {
+					estate = estate_brahmins
+					loyalty = 10
+				}
 			}
+			else_if = {
+				limit = {
+					has_estate = estate_church
+				}
+				add_estate_loyalty = {
+					estate = estate_church
+					loyalty = 10
+				}
+			}
+			else = {
+				add_adm_power = 50
+			}
+
+			hidden_effect = {
+				add_country_modifier = {
+					name = nagpur_social_cohesion
+					duration = -1
+					hidden = yes
+				}
+			}
+
 			if = {
 				limit = { NOT = { accepted_culture = gondi } }
 				add_accepted_culture = gondi
@@ -269,6 +358,16 @@ nagpur_column_2 = {
 		icon = mission_conquer_maharashtra
 		required_missions = {  }
 		position = 4
+		provinces_to_highlight = {
+			AND = {
+				area = baghelkhand_area
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			AND = {
+				area = bihar_area
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
 		trigger = {
 			baghelkhand_area = {
 				type = all
@@ -322,6 +421,26 @@ nagpur_column_2 = {
 		icon = mission_reclaim_dehli
 		required_missions = { nagpur_trunk_road_entrance }
 		position = 5
+		provinces_to_highlight = {
+			owned_by = DLH
+			owned_by = JNP
+			AND = {
+				province_id = 556
+				NOT = { owned_by = ROOT}
+			}
+			AND = {
+				province_id = 4497
+				NOT = { owned_by = ROOT}
+			}
+			AND = {
+				province_id = 524
+				NOT = { owned_by = ROOT}
+			}
+			AND = {
+				province_id = 522
+				NOT = { owned_by = ROOT}
+			}
+		}
 		trigger = {
 			NOT = { exists = DLH }
 			NOT = { exists = JNP }
@@ -352,6 +471,21 @@ nagpur_column_2 = {
 		icon = mission_conquer_malwa_bah
 		required_missions = { nagpur_toward_delhi }
 		position = 6
+		provinces_to_highlight = {
+			owned_by = PUN
+			AND = {
+				province_id = 507
+				NOT = { owned_by = ROOT}
+			}
+			AND = {
+				province_id = 506
+				NOT = { owned_by = ROOT}
+			}
+			AND = {
+				province_id = 578
+				NOT = { owned_by = ROOT}
+			}
+		}
 		trigger = {
 			NOT = { exists = PUN }
 			owns_core_province = 507 #Lahore
@@ -384,6 +518,18 @@ nagpur_column_3 = {
 		icon = mission_subdue_rajputana
 		required_missions = {  }
 		position = 1
+		provinces_to_highlight = {
+			owned_by = ORI
+			owned_by = YOR
+			AND = {
+				area = andhra_area
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			AND = {
+				area = orissa_area
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		trigger = {
 			NOT = { exists = ORI }
 			NOT = { exists = YOR }
@@ -411,6 +557,14 @@ nagpur_column_3 = {
 		icon = mission_afghan_frontier
 		required_missions = { nagpur_take_andhra }
 		position = 3
+		provinces_to_highlight = {
+			owned_by = TLG
+			owned_by = YOR
+			AND = {
+				area = golconda_area
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		trigger = {
 			NOT = { exists = TLG }
 			NOT = { exists = YOR }
@@ -462,6 +616,17 @@ nagpur_column_3 = {
 		icon = mission_city_of_victory_bah
 		required_missions = { nagpur_telugu_takeover }
 		position = 4
+		provinces_to_highlight = {
+			owned_by = VIJ
+			AND = {
+				area = rayalaseema_area
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			AND = {
+				area = north_carnatic_area
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
 		trigger = {
 			NOT = { exists = VIJ }
 			rayalaseema_area = {
@@ -506,6 +671,33 @@ nagpur_column_3 = {
 		icon = mission_cromandel_coast
 		required_missions = { nagpur_vijayanagar_invasion }
 		position = 5
+		provinces_to_highlight = {
+			owned_by = VIJ
+			AND = {
+				province_id = 539
+				NOT = { is_core = ROOT }
+			}
+			AND = {
+				province_id = 540
+				NOT = { is_core = ROOT }
+			}
+			AND = {
+				province_id = 2026
+				NOT = { is_core = ROOT }
+			}
+			AND = {
+				province_id = 536
+				NOT = { is_core = ROOT }
+			}
+			AND = {
+				province_id = 534
+				NOT = { is_core = ROOT }
+			}
+			AND = {
+				province_id = 4413
+				NOT = { is_core = ROOT }
+			}
+		}
 		trigger = {
 			NOT = { exists = VIJ }
 			owns_core_province = 539 #Pulicat
@@ -544,6 +736,40 @@ nagpur_column_3 = {
 		icon = mission_subjugate_saurashtra
 		required_missions = { nagpur_konkan_ports }
 		position = 6
+		provinces_to_highlight = {
+			owned_by = GUJ
+			owned_by = SND
+			AND = {
+				area = ahmedabad_area
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			AND = {
+				area = saurashtra_area
+				country_or_non_sovereign_subject_holds = ROOT	
+			}
+			AND = {
+				area = patan_area
+				country_or_non_sovereign_subject_holds = ROOT
+				local_autonomy = 40
+			}
+			AND = {
+				area = sindh_area
+				country_or_non_sovereign_subject_holds = ROOT
+				local_autonomy = 40
+			}
+			AND = {
+				province_id	= 517
+				NOT = { province_has_center_of_trade_of_level = 2 }
+			}
+			AND = {
+				province_id	= 4457
+				NOT = { province_has_center_of_trade_of_level = 2 }
+			}
+			AND = {
+				province_id	= 4503
+				NOT = { province_has_center_of_trade_of_level = 2 }
+			}
+		}
 		trigger = {
 			NOT = { exists = GUJ }
 			NOT = { exists = SND }
@@ -659,9 +885,24 @@ nagpur_column_3 = {
 		icon = mission_indian_empire
 		required_missions = { nagpur_coastal_gujarat nagpur_seize_punjab nagpur_rajput_lands }
 		position = 7
+		provinces_to_highlight = {			
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { religion = hinduism }
+			}
+			OR = {
+				province_id = 4495
+				province_id = 524
+				province_id = 511
+				province_id = 4417
+				province_id = 558
+				province_id = 2052
+				province_id = 4461
+			}
+		}
 		trigger = {
 			stability = 3
-			legitimacy = 100
+			legitimacy_equivalent = 100
 			prestige = 50
 			NOT = { corruption = 0.02 }
 			religious_unity = 1
@@ -719,6 +960,16 @@ nagpur_column_4 = {
 	nagpur_the_bengal_delta = {
 		icon = mission_follow_the_brahmaputra
 		required_missions = {  }
+		provinces_to_highlight = {
+			owned_by = BNG
+			AND = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				OR = {
+					area = west_bengal_area
+					area = east_bengal_area
+				}
+			}
+		}
 		trigger = {
 			NOT = { exists = BNG }
 			west_bengal_area = {
@@ -751,6 +1002,23 @@ nagpur_column_4 = {
 	nagpur_dominate_bengali_trade = {
 		icon = mission_arabian_sea_trade
 		required_missions = { nagpur_the_bengal_delta }
+		provinces_to_highlight = {
+			AND = {
+				province_id = 1343
+				NOT = { is_strongest_trade_power = ROOT }
+			}
+			AND = {
+				OR = {
+					area = west_bengal_area
+					area = east_bengal_area	
+				}
+				OR = {
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					local_autonomy = 40
+				}
+				
+			}
+		}
 		trigger = {
 			NOT = { exists = BNG }
 			num_of_owned_provinces_with = {
@@ -839,6 +1107,11 @@ nagpur_column_4 = {
 	nagpur_fleet_ambitions = {
 		icon = mission_grand_bengali_shipyards
 		required_missions = { nagpur_dominate_bengali_trade }
+		provinces_to_highlight = {
+			province_id = 1343
+			area = west_bengal_area
+			area = east_bengal_area
+		}
 		trigger = {
 			NOT = { exists = BNG }
 			grand_shipyard = 3
@@ -870,6 +1143,10 @@ nagpur_column_4 = {
 		icon = mission_advance_to_kalyana
 		required_missions = { nagpur_telugu_takeover }
 		position = 4
+		provinces_to_highlight = {
+			area = ahmednagar_area
+			area = maidan_area
+		}
 		trigger = {
 			NOT = { exists = BAH }
 			ahmednagar_area = {
@@ -907,6 +1184,7 @@ nagpur_column_4 = {
 		icon = mission_recover_konkan_ports
 		required_missions = { nagpur_bahmanid_invasion }
 		position = 5
+		
 		trigger = {
 			NOT = { exists = BAH }
 			desh_area = {
