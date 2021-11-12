@@ -13,9 +13,7 @@ ahmed_column_1 = {
 
 	ahmed_not_done_fighting = {
 		icon = mission_conquer_sindh_mer
-		required_missions = {  }
-		provinces_to_highlight = {
-		}
+		required_missions = { }
 		trigger = {
 			manpower_percentage = 0.80
 			num_of_generals = 2
@@ -38,17 +36,14 @@ ahmed_column_1 = {
 			}
 		}
 	}
+
 	ahmed_warriors_do_read_books = {
 		icon = mission_vedic_education
 		required_missions = { ahmed_not_done_fighting }
 		position = 3
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_institution = renaissance
-			employed_advisor = {
-				category = MIL
-			}
+			employed_advisor = { category = MIL }
 			num_of_generals = 2
 		}
 		effect = {
@@ -58,16 +53,30 @@ ahmed_column_1 = {
 			}
 		}
 	}
+
 	ahmed_coastal_access = {
 		icon = mission_secure_hajj_ports
 		required_missions = { ahmed_warriors_do_read_books }
 		position = 4
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = konkan_area
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					area = malabar_area
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						local_autonomy = 25
+					}
+				}
+			}
 		}
 		trigger = {
 			konkan_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			malabar_area = {
 				type = all
@@ -82,12 +91,11 @@ ahmed_column_1 = {
 			}
 		}
 	}
+
 	ahmed_habshi_integration = {
 		icon = mission_african_trade_post
 		required_missions = { ahmed_coastal_access }
 		position = 6
-		provinces_to_highlight = {
-		}
 		trigger = {
 			stability = 3
 			has_mil_advisor_3 = yes
@@ -128,17 +136,12 @@ ahmed_column_2 = {
 			manpower_percentage = 0.80
 			num_of_owned_provinces_with = {
 				value = 3
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
+				has_manpower_building_trigger = yes
 			}
 		}
 		effect = {
 			random_owned_province = {
-					limit = {
-						is_core = AHM
-					}
+				limit = { is_core = ROOT }
 				add_base_manpower = 2
 			}
 			define_advisor = {
@@ -150,6 +153,7 @@ ahmed_column_2 = {
 			}
 		}
 	}
+
 	ahmed_ample_forces_ready = {
 		icon = mission_afghan_frontier
 		required_missions = { ahmed_army_compounds }
@@ -158,25 +162,24 @@ ahmed_column_2 = {
 			army_size = 40
 			num_of_owned_provinces_with = {
 				value = 3
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
+				has_manpower_building_trigger = yes
 			}
 		}
 		effect = {
 			random_owned_province = {
-					limit = {
-						is_core = AHM
-					}
+				limit = { is_core = ROOT }
 				add_base_manpower = 2
 			}
 			add_army_tradition = 20
 		}
 	}
+
 	ahmed_exuding_power = {
 		icon = mission_integrate_the_purbias
-		required_missions = { ahmed_ample_forces_ready ahmed_warriors_do_read_books }
+		required_missions = {
+			ahmed_ample_forces_ready
+			ahmed_warriors_do_read_books
+		}
 		position = 4
 		trigger = {
 			army_size = 60
@@ -192,9 +195,14 @@ ahmed_column_2 = {
 			}
 		}
 	}
+
 	ahmed_trade_leaning_west = {
 		icon = mission_conquer_gujarat_dlh
-		required_missions = { ahmed_the_battle_of_talikota ahmed_exuding_power ahmed_coastal_access }
+		required_missions = {
+			ahmed_the_battle_of_talikota
+			ahmed_exuding_power
+			ahmed_coastal_access
+		}
 		position = 5
 		trigger = {
 			504 = {
@@ -213,15 +221,11 @@ ahmed_column_2 = {
 		}
 		effect = {
 			random_owned_province = {
-					limit = {
-						is_core = AHM
-					}
+				limit = { is_core = ROOT }
 				add_base_production = 1
 			}
 			random_owned_province = {
-					limit = {
-						is_core = AHM
-					}
+				limit = { is_core = ROOT }
 				add_base_production = 1
 			}
 			capital_scope = {
@@ -232,12 +236,14 @@ ahmed_column_2 = {
 			add_mercantilism = 3
 		}
 	}
+
 	ahmed_locked_and_loaded_westward = {
 		icon = mission_grand_bengali_shipyards
-		required_missions = { ahmed_trade_leaning_west ahmed_habshi_integration }
-		position = 7
-		provinces_to_highlight = {
+		required_missions = {
+			ahmed_trade_leaning_west
+			ahmed_habshi_integration
 		}
+		position = 7
 		trigger = {
 			stability = 3
 			num_accepted_cultures = 3
@@ -260,15 +266,15 @@ ahmed_column_2 = {
 			add_years_of_income = 0.75
 			majarteen_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			somaliland_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -297,8 +303,9 @@ ahmed_column_3 = {
 				province_id = 548
 				province_id = 1948
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
 			}
 		}
 		trigger = {
@@ -312,63 +319,62 @@ ahmed_column_3 = {
 			country_event = { id = ME_Deccani_Events.1 }
 			konkan_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			raichur_doab_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			andhra_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			tapti_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			khandesh_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	ahmed_the_battle_of_talikota = {
 		icon = mission_control_the_ganges_delta
 		required_missions = { ahmed_five_cities_five_successors }
 		position = 4
 		provinces_to_highlight = {
 			area = raichur_doab_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			raichur_doab_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			country_event = { id = ME_Deccani_Events.2 }
 			rayalaseema_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
@@ -389,32 +395,59 @@ ahmed_column_3 = {
 			}
 		}
 		trigger = {
-			NOT = { exists = VIJ }
-			NOT = { exists = KHD }
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = KHD }
+				KHD = {
+					NOT = { total_development = ROOT }
+				}
+				KHD = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = KHD
+					}
+				}
+			}
 			rayalaseema_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			khandesh_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			berar_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			country_event = { id = ME_Deccani_Events.3 }
 			deccan_region = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	ahmed_unite_the_region = {
 		icon = mission_emperor_of_hindusthan
 		required_missions = { ahmed_khandesh_and_vijayangara }
@@ -426,33 +459,61 @@ ahmed_column_3 = {
 			}
 		}
 		trigger = {
-			NOT = { exists = VIJ }
-			NOT = { exists = BAH }
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = BAH }
+				BAH = {
+					NOT = { total_development = ROOT }
+				}
+				BAH = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = BAH
+					}
+				}
+			}
 			NOT = { average_unrest = 2 }
 			religious_unity = 1
 			deccan_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			country_event = { id = ME_Deccani_Events.4 }
 			coromandel_region = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	ahmed_chowmahalla_palace = {
 		icon = mission_metropolis_of_the_deccan
 		required_missions = { ahmed_unite_the_region }
 		position = 7
 		provinces_to_highlight = {
 			province_id = 542
-			NOT = {
+			OR = {
+				NOT = { owned_by = ROOT }
 				has_building = cathedral
 			}
 		}
@@ -463,6 +524,7 @@ ahmed_column_3 = {
 			prestige = 75
 			stability = 3
 			542 = {
+				owned_by = ROOT
 				has_building = cathedral
 			}
 		}
@@ -475,6 +537,7 @@ ahmed_column_3 = {
 		}
 	}
 }
+
 ahmed_column_4 = {
 	slot = 4
 	generic = no
@@ -487,17 +550,12 @@ ahmed_column_4 = {
 	ahmed_survey_the_land = {
 		icon = mission_a_million_rice_fields
 		required_missions = { }
-		provinces_to_highlight = {
-		}
 		trigger = {	
 			grown_by_development = 20
 			NOT = { average_unrest = 2 }
 			num_of_owned_provinces_with = {
 				value = 2
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
+				has_tax_building_trigger = yes
 			}
 		}
 		effect = {
@@ -520,10 +578,7 @@ ahmed_column_4 = {
 			prestige = 50
 			num_of_owned_provinces_with = {
 				value = 5
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
+				has_tax_building_trigger = yes
 			}
 		}
 		effect = {
@@ -541,20 +596,28 @@ ahmed_column_4 = {
 	}
 	ahmed_tombs_of_the_giants = {
 		icon = mission_sindh_campaign
-		required_missions = { ahmed_school_of_art ahmed_school_of_architecture }
+		required_missions = {
+			ahmed_school_of_art
+			ahmed_school_of_architecture
+		}
 		position = 4
 		provinces_to_highlight = {
+			province_id = 544
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_capital_of = ROOT }
+				NOT = { development = 20 }
+				NOT = { has_tax_building_trigger = yes }
+			}
 		}
 		trigger = {
 			artist = 3
 			legitimacy = 100
-			capital = 544
 			544 = {
+				owned_by = ROOT
+				is_capital = yes
 				development = 20
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
+				has_tax_building_trigger = yes
 			}
 		}
 		effect = {
@@ -567,9 +630,14 @@ ahmed_column_4 = {
 			}
 		}
 	}
+
 	ahmed_revenue_refinement = {
 		icon = mission_gharbianss
-		required_missions = { ahmed_the_battle_of_talikota ahmed_tombs_of_the_giants ahmed_school_of_engineering }
+		required_missions = {
+			ahmed_the_battle_of_talikota
+			ahmed_tombs_of_the_giants
+			ahmed_school_of_engineering
+		}
 		position = 5
 		provinces_to_highlight = {
 		}
@@ -601,6 +669,14 @@ ahmed_column_4 = {
 				if = {
 					limit = {
 						NOT = { has_building = plantations }
+						OR = {
+							trade_goods = coffee
+							trade_goods = cotton
+							trade_goods = sugar
+							trade_goods = tobacco
+							trade_goods = tea
+							trade_goods = cocoa
+						}
 					}
 					add_building_construction = {
 						building = plantations
@@ -616,6 +692,13 @@ ahmed_column_4 = {
 				if = {
 					limit = {
 						NOT = { has_building = mills }
+						OR = {
+							trade_goods = paper
+							trade_goods = gems
+							trade_goods = tropical_wood
+							trade_goods = glass
+							trade_goods = chinaware
+						}
 					}
 					add_building_construction = {
 						building = mills
@@ -628,21 +711,21 @@ ahmed_column_4 = {
 				}
 			}
 			random_owned_province = {
-					limit = {
-						is_core = AHM
-					}
+				limit = { is_core = ROOT }
 				add_base_tax = 2
 				add_base_production = 1
 				add_base_manpower = 1
 			}
 		}
 	}
+
 	ahmed_military_investments = {
 		icon = mission_prepare_an_invasion_force
-		required_missions = { ahmed_revenue_refinement ahmed_gem_of_a_capital_city }
-		position = 7
-		provinces_to_highlight = {
+		required_missions = {
+			ahmed_revenue_refinement
+			ahmed_gem_of_a_capital_city
 		}
+		position = 7
 		trigger = {
 			army_tradition = 50
 			army_size_percentage = 0.9
@@ -651,10 +734,7 @@ ahmed_column_4 = {
 			weapons = 1
 			num_of_owned_provinces_with = {
 				value = 10
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
+				has_forcelimit_building_trigger = yes
 			}
 		}
 		effect = {
@@ -680,8 +760,6 @@ ahmed_column_5 = {
 	ahmed_stop_court_intrigue = {
 		icon = mission_restore_faith_in_the_throne
 		required_missions = {  }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			legitimacy = 100
 			NOT = { average_unrest = 2 }
@@ -703,10 +781,7 @@ ahmed_column_5 = {
 			capital = 544
 			544 = {
 				development = 18
-				OR = {
-					has_building = workshop
-					has_building = counting_house
-				}
+				has_production_building_trigger = yes
 			}
 		}
 		effect = {
@@ -717,11 +792,21 @@ ahmed_column_5 = {
 			add_years_of_income = 1.0
 		}
 	}
+
 	ahmed_school_of_engineering = {
 		icon = mission_fortify_rajputana
 		required_missions = { ahmed_school_of_art }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 544
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				AND = {
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
 		}
 		trigger = {
 			fortification_expert = 3
@@ -742,22 +827,39 @@ ahmed_column_5 = {
 			}
 		}
 	}
+
 	ahmed_gem_of_a_capital_city = {
 		icon = mission_conquer_central_deccan
 		required_missions = { ahmed_school_of_engineering }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 544
+					OR = {
+						NOT = { is_capital_of = ROOT }
+						NOT = { development = 30 }
+					}
+				}
+				AND = {
+					province_id = 545
+					OR = {
+						NOT = { development = 20 }
+						NOT = { owned_by = ROOT }
+						NOT = { province_has_center_of_trade_of_level = 3 }
+					}
+				}
+			}
 		}
 		trigger = {
 			stability = 3
-			capital = 544
 			544 = {
+				is_capital_of = ROOT
 				development = 30
 			}
 			545 = {
+				owned_by = ROOT
 				development = 20
-			}
-			545 = { #Daulatabad
 				province_has_center_of_trade_of_level = 3
 			}
 		}

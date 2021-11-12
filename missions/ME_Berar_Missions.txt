@@ -45,17 +45,23 @@ berar_column_1 = {
 			}
 		}
 	}
+
 	berar_digging_deeper = {
 		icon = mission_bankers_of_cambay
 		position = 4
 		required_missions = { berar_begin_the_mines }
 		provinces_to_highlight = {
+			province_id = 548
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { base_production = 7 }
+			}
 		}
 		trigger = {
 			grown_by_development = 30
 			NOT = { inflation = 0.1 }
-			capital = 548
 			548 = {
+				is_capital_of = ROOT
 				base_production = 7
 			}
 		}
@@ -69,16 +75,26 @@ berar_column_1 = {
 			}
 		}
 	}
+
 	berar_academy_of_gunpowder = {
 		icon = mission_integrate_the_purbias
 		position = 6
-		required_missions = { berar_digging_deeper berar_field_guns }
+		required_missions = {
+			berar_digging_deeper
+			berar_field_guns
+		}
 		provinces_to_highlight = {
+			province_id = 548
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { base_tax = 12 }
+				NOT = { has_building = university }
+			}
 		}
 		trigger = {
 			num_of_artillery = 30
-			capital = 548
 			548 = {
+				is_capital_of = ROOT
 				has_building = university
 				base_tax = 12
 			}
@@ -134,15 +150,26 @@ berar_column_2 = {
 			}
 		}
 	}
+
 	berar_cannon_foundries = {
 		icon = mission_industrialize_bengal
 		position = 3
-		required_missions = { berar_begin_the_mines berar_in_the_fray }
+		required_missions = {
+			berar_begin_the_mines
+			berar_in_the_fray
+		}
+		provinces_to_highlight = {
+			province_id = 548
+			OR = {
+				NOT = { is_capital_of = ROOT }
+				NOT = { base_production = 10 }
+			}
+		}
 		trigger = {
 			num_of_artillery = 15
 			army_size = 40
-			capital = 548
 			548 = {
+				is_capital_of = ROOT
 				base_production = 10
 			}
 		}
@@ -159,6 +186,7 @@ berar_column_2 = {
 			}
 		}
 	}
+
 	berar_mortar_refinement = {
 		icon = mission_fortify_mandu
 		position = 4
@@ -175,6 +203,7 @@ berar_column_2 = {
 			}
 		}
 	}
+
 	berar_field_guns = {
 		icon = mission_cannons_firing
 		position = 5
@@ -218,9 +247,7 @@ berar_column_3 = {
 				province_id = 548
 				province_id = 1948
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			owns_core_province = 569
@@ -233,50 +260,49 @@ berar_column_3 = {
 			country_event = { id = ME_Deccani_Events.1 }
 			konkan_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			raichur_doab_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			andhra_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			tapti_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			khandesh_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	berar_the_battle_of_talikota = {
 		icon = mission_control_the_ganges_delta
 		required_missions = { berar_five_cities_five_successors }
 		position = 3
 		provinces_to_highlight = {
 			area = raichur_doab_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			raichur_doab_area = {
@@ -288,13 +314,14 @@ berar_column_3 = {
 			country_event = { id = ME_Deccani_Events.2 }
 			rayalaseema_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	berar_khandesh_and_vijayangara = {
 		icon = mission_bengal_campaign
 		required_missions = { berar_the_battle_of_talikota }
@@ -305,13 +332,37 @@ berar_column_3 = {
 				area = khandesh_area
 				area = berar_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			NOT = { exists = VIJ }
-			NOT = { exists = KHD }
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = KHD }
+				KHD = {
+					NOT = { total_development = ROOT }
+				}
+				KHD = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = KHD
+					}
+				}
+			}
 			rayalaseema_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT	
@@ -329,26 +380,51 @@ berar_column_3 = {
 			country_event = { id = ME_Deccani_Events.3 }
 			deccan_region = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	berar_unite_the_region = {
 		icon = mission_emperor_of_hindusthan
 		required_missions = { berar_khandesh_and_vijayangara }
 		position = 5
 		provinces_to_highlight = {
 			region = deccan_region
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			NOT = { exists = VIJ }
-			NOT = { exists = BAH }
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = BAH }
+				BAH = {
+					NOT = { total_development = ROOT }
+				}
+				BAH = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = BAH
+					}
+				}
+			}
 			NOT = { average_unrest = 2 }
 			religious_unity = 1
 			deccan_region = {
@@ -360,21 +436,23 @@ berar_column_3 = {
 			country_event = { id = ME_Deccani_Events.4 }
 			coromandel_region = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	berar_chowmahalla_palace = {
 		icon = mission_metropolis_of_the_deccan
 		required_missions = { berar_unite_the_region }
 		position = 6
 		provinces_to_highlight = {
 			province_id = 542
-			NOT = {
-				has_building = cathedral
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = cathedral }
 			}
 		}
 		trigger = {
@@ -384,6 +462,7 @@ berar_column_3 = {
 			prestige = 75
 			stability = 3
 			542 = {
+				owned_by = ROOT
 				has_building = cathedral
 			}
 		}
@@ -422,6 +501,9 @@ berar_column_4 = {
 					loyalty = 60
 				}
 			}
+			else = {
+				monthly_adm = 9
+			}
 			if = {
 				limit = {
 					has_estate = estate_brahmins
@@ -440,11 +522,13 @@ berar_column_4 = {
 			}
 		}
 	}
+
 	berar_large_and_in_charge = {
 		icon = mission_friends_or_enemies
 		position = 3
-		required_missions = { berar_learned_family berar_the_loyalty_at_home }
-		provinces_to_highlight = {
+		required_missions = {
+			berar_learned_family
+			berar_the_loyalty_at_home
 		}
 		trigger = {	
 			num_of_cities = 30
@@ -454,9 +538,7 @@ berar_column_4 = {
 		}
 		effect = {
 			random_owned_province = {
-					limit = {
-						is_core = BRR
-					}
+				limit = { is_core = ROOT }
 				add_base_tax = 2
 			}
 			define_advisor = {
@@ -469,6 +551,7 @@ berar_column_4 = {
 			}
 		}
 	}
+
 	berar_the_growing_estates = {
 		icon = mission_dominate_trade_in_bengal
 		position = 4
@@ -485,6 +568,7 @@ berar_column_4 = {
 					loyalty = 60
 				}
 			}
+			else = { monthly_adm = 10 }
 			if = {
 				limit = {
 					has_estate = estate_brahmins
@@ -503,6 +587,7 @@ berar_column_4 = {
 					loyalty = 60
 				}
 			}
+			else = { monthly_dip= 10 }
 			if = {
 				limit = {
 					has_estate = estate_jains
@@ -521,6 +606,7 @@ berar_column_4 = {
 					loyalty = 60
 				}
 			}
+			else = { monthly_mil = 10 }
 			if = {
 				limit = {
 					has_estate = estate_maratha
@@ -539,6 +625,7 @@ berar_column_4 = {
 			}
 		}
 	}
+
 	berar_secure_to_the_center = {
 		icon = mission_conquer_central_deccan
 		position = 5
@@ -547,8 +634,8 @@ berar_column_4 = {
 		}
 		trigger = {	
 			total_development = 500
-			capital = 548
 			548 = {
+				is_capital_of = ROOT
 				OR = {
 					has_building = fort_15th
 					has_building = fort_16th
@@ -590,8 +677,6 @@ berar_column_5 = {
 		icon = mission_court_education
 		position = 2
 		required_missions = { berar_the_loyalty_at_home }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_institution = renaissance
 			has_adm_advisor_2 = yes
@@ -611,6 +696,7 @@ berar_column_5 = {
 			}
 		}
 	}
+
 	berar_variety_of_production = {
 		icon = mission_expand_textile_industry
 		position = 4
@@ -621,10 +707,7 @@ berar_column_5 = {
 			has_institution = new_world_i
 			num_of_owned_provinces_with = {
 				value = 5
-				OR = {
-					has_building = workshop
-					has_building = counting_house
-				}
+				has_production_building_trigger = yes
 			}
 		}
 		effect = {
