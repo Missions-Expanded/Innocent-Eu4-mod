@@ -11,24 +11,32 @@ mysore_column_1 = {
 
 	mysore_renovate_srirangapatna_fort = {
 		icon = mission_restore_rule_over_mysore
-		required_missions = {  }
+		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			province_id = 4421
+			OR = {
+				NOT = { development = 18 }
+				AND = {
+					NOT = { has_building = fort_15th }
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+				NOT = { has_manpower_building_trigger = yes }
+			}
 		}
 		trigger = {
 			4421 = {
-                development = 18
+				development = 18
 				OR = {
 					has_building = fort_15th
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
-            }
+				has_manpower_building_trigger = yes
+			}
 		}
 		effect = {
 			add_yearly_manpower = 1
@@ -40,36 +48,40 @@ mysore_column_1 = {
 			}
 		}
 	}
+
 	mysore_firearms_for_mysoreans = {
 		icon = mission_gunpowder_warfare
 		required_missions = { mysore_renovate_srirangapatna_fort }
 		position = 3
 		provinces_to_highlight = {
+			is_capital_of = ROOT
+			OR = {
+				NOT = { development = 20 }
+				NOT = { has_manpower_building_trigger = yes }
+			}
 		}
 		trigger = {
 			has_institution = renaissance
 			army_tradition = 20
 			army_size = 30
 			capital_scope = {
-                development = 20
+				development = 20
+				has_manpower_building_trigger = yes
+			}
+			num_of_owned_provinces_with = {
+				value = 5
 				OR = {
 					has_building = barracks
 					has_building = training_fields
 				}
-            }
-			num_of_owned_provinces_with = {
-                value = 5
-                OR = {
-                    has_building = barracks
-                    has_building = training_fields
-                }
-            }
+			}
 		}
 		effect = {
 			add_mil_power = 25
 			country_event = { id = ME_Mysore_Events.2 }
 		}
 	}
+
 	mysore_fortified_from_invasion = {
 		icon = mission_gwalior_and_rathambore
 		required_missions = { mysore_firearms_for_mysoreans }
@@ -82,21 +94,21 @@ mysore_column_1 = {
 			army_size = 45
 			manpower_percentage = 0.9
 			num_of_owned_provinces_with = {
-                value = 7
-                OR = {
-                    has_building = barracks
-                    has_building = training_fields
-                }
-            }
+				value = 7
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+			}
 			num_of_owned_provinces_with = {
-                value = 5
-                OR = {
-                    has_building = fort_15th
-                    has_building = fort_16th
+				value = 5
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
-                }
-            }
+				}
+			}
 			custom_trigger_tooltip = {
 				tooltip = new_world_remove_euro_toolip
 				capital_scope = {
@@ -119,12 +131,11 @@ mysore_column_1 = {
 			}
 		}
 	}
+
 	mysore_iron_cased_rockets = {
 		icon = mission_new_army
 		required_missions = { mysore_fortified_from_invasion }
 		position = 7
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_institution = printing_press
 			iron = 3
@@ -132,12 +143,12 @@ mysore_column_1 = {
 			army_tradition = 40
 			army_size = 60
 			num_of_owned_provinces_with = {
-                value = 10
-                OR = {
-                    has_building = barracks
-                    has_building = training_fields
-                }
-            }
+				value = 10
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+			}
 			has_global_modifier_value = {
 				which = discipline
 				value = 0.15
@@ -202,16 +213,19 @@ mysore_column_2 = {
 			}
 		}
 	}
+
 	mysore_our_home_area = {
 		icon = mission_conquer_the_doab
 		required_missions = { mysore_first_alliances }
 		position = 2
 		provinces_to_highlight = {
+			area = mysore_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			mysore_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -222,18 +236,24 @@ mysore_column_2 = {
 			}
 			rayalaseema_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	mysore_end_vijayangars_heart = {
 		icon = mission_reduce_champaner
 		required_missions = { mysore_our_home_area }
 		position = 4
 		provinces_to_highlight = {
+			province_id = 541
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
 		}
 		trigger = {
 			owns_core_province = 541
@@ -249,49 +269,66 @@ mysore_column_2 = {
 			}
 			maidan_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			kanara_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			north_carnatic_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			south_carnatic_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	mysore_inroads_to_the_deccan = {
 		icon = mission_gawans_madrasar
 		required_missions = { mysore_end_vijayangars_heart }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = raichur_doab_area
+						area = kanara_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					province_id = 1948
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+			}
 		}
 		trigger = {
 			owns_core_province = 1948
 			kanara_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			raichur_doab_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			is_at_war = no
 			NOT = { average_unrest = 2 }
@@ -301,83 +338,97 @@ mysore_column_2 = {
 			set_government_rank = 3
 			deccan_region = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	mysore_fortify_the_krishna = {
 		icon = mission_control_the_desh
-		required_missions = { mysore_fortified_from_invasion mysore_inroads_to_the_deccan }
+		required_missions = {
+			mysore_fortified_from_invasion
+			mysore_inroads_to_the_deccan
+		}
 		position = 6
 		provinces_to_highlight = {
-			province_id = 2030
-			province_id = 2033
-			province_id = 4428
-			province_id = 532
-			province_id = 2090
-			province_id = 4425
-			province_id = 543
+			OR = {
+				province_id = 2030
+				province_id = 2033
+				province_id = 4428
+				province_id = 532
+				province_id = 2090
+				province_id = 4425
+				province_id = 543
+			}
+			OR = {
+				NOT = { development = 12 }
+				AND = {
+					NOT = { has_building = fort_16th }
+					NOT = { has_building = fort_17th }
+					NOT = { has_building = fort_18th }
+				}
+			}
 		}
 		trigger = {
 			2030 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 			2033 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 			4428 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 			532 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 			2090 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 			4425 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 			543 = {
-                development = 12
+				development = 12
 				OR = {
 					has_building = fort_16th
 					has_building = fort_17th
 					has_building = fort_18th
 				}
-            }
+			}
 		}
 		effect = {
 			custom_tooltip = WALL_OF_KRISHNA
@@ -443,9 +494,7 @@ mysore_column_3 = {
 		required_missions = { mysore_first_alliances }
 		position = 2
 		provinces_to_highlight = {
-			OR = {
-				area = kongu_area
-			}
+			area = kongu_area
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
@@ -454,30 +503,34 @@ mysore_column_3 = {
 		trigger = {
 			kongu_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			add_prestige = 10
 			tanjore_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			madura_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	mysore_south_indian_domination = {
 		icon = mission_conquer_andhra_bah
-		required_missions = { mysore_kongu_memories mysore_access_to_the_coast }
+		required_missions = {
+			mysore_kongu_memories
+			mysore_access_to_the_coast
+		}
 		position = 3
 		provinces_to_highlight = {
 			OR = {
@@ -493,15 +546,15 @@ mysore_column_3 = {
 		trigger = {
 			tanjore_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			madura_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			malabar_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			tanjore_area = {
 				type = all
@@ -528,39 +581,50 @@ mysore_column_3 = {
 			}
 			lanka_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			south_lanka_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 			1248 = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	mysore_fight_off_european_influence = {
 		icon = mission_cromandel_coast
 		required_missions = { mysore_south_indian_domination }
 		position = 4
 		provinces_to_highlight = {
 			OR = {
-				area = lanka_area
-				area = south_lanka_area
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				AND = {
+					OR = {
+						area = lanka_area
+						area = south_lanka_area
+					}
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						local_autonomy = 50
+					}
+				}
+				AND = {
+					province_id = 1248
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
 			}
 		}
 		trigger = {
@@ -571,16 +635,7 @@ mysore_column_3 = {
 				}
 			}
 			1248 = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			lanka_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			south_lanka_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			lanka_area = {
 				type = all
@@ -615,6 +670,7 @@ mysore_column_3 = {
 			}
 		}
 	}
+
 	mysore_subjugate_marathi_people = {
 		icon = mission_bengal_campaign
 		required_missions = { mysore_inroads_to_the_deccan }
@@ -626,23 +682,11 @@ mysore_column_3 = {
 				area = ahmednagar_area
 			}
 			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				local_autonomy = 30
 			}
-        }
+		}
 		trigger = {
-			desh_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			konkan_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			ahmednagar_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
 			desh_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -667,9 +711,14 @@ mysore_column_3 = {
 			}
 		}
 	}
+
 	mysore_deccan_domination = {
 		icon = mission_viceroyalty_of_the_deccan
-		required_missions = { mysore_subjugate_marathi_people mysore_iron_cased_rockets mysore_monopolize_trade }
+		required_missions = {
+			mysore_subjugate_marathi_people
+			mysore_iron_cased_rockets
+			mysore_monopolize_trade
+		}
 		position = 8
 		provinces_to_highlight = {
 			OR = {
@@ -680,7 +729,7 @@ mysore_column_3 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-        }
+		}
 		trigger = {
 			government_rank = 3
 			stability = 3
@@ -728,7 +777,7 @@ mysore_column_4 = {
 		required_missions = { mysore_first_alliances }
 		position = 2
 		provinces_to_highlight = {
-        }
+		}
 		trigger = {
 			OR = {
 				4413 = {
@@ -743,28 +792,32 @@ mysore_column_4 = {
 			add_prestige = 10
 			malabar_area = {
 				limit = {
-					NOT = { is_permanent_claim = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
+
 	mysore_start_manufacturing = {
 		icon = mission_consume_the_baghels
-		required_missions = { mysore_access_to_the_coast mysore_start_of_kannada_patronage }
+		required_missions = {
+			mysore_access_to_the_coast
+			mysore_start_of_kannada_patronage
+		}
 		position = 3
 		provinces_to_highlight = {
-        }
+		}
 		trigger = {
 			share_of_starting_income = 2.0
 			num_of_owned_provinces_with = {
-                value = 4
-                OR = {
-                    has_building = workshop
-                    has_building = counting_house
-                }
-            }
+				value = 4
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
 			malabar_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -779,23 +832,25 @@ mysore_column_4 = {
 			}
 		}
 	}
+
 	mysore_reformed_silk_production = {
 		icon = mission_modernize_production
-		required_missions = { mysore_start_manufacturing mysore_fight_off_european_influence }
+		required_missions = {
+			mysore_start_manufacturing
+			mysore_fight_off_european_influence
+		}
 		position = 5
-		provinces_to_highlight = {
-        }
 		trigger = {
 			weapons = 1
 			plantations = 3
 			textile = 3
 			num_of_owned_provinces_with = {
-                value = 10
-                OR = {
-                    has_building = workshop
-                    has_building = counting_house
-                }
-            }
+				value = 10
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
 		}
 		effect = {
 			capital_scope = {
@@ -805,50 +860,45 @@ mysore_column_4 = {
 				}
 			}
 			random_owned_province = {
-					limit = {
-						is_core = MYS
-					}
+				limit = { is_core = ROOT }
 				add_base_production = 2
 			}
 			random_owned_province = {
-					limit = {
-						is_core = MYS
-					}
+				limit = { is_core = ROOT }
 				add_base_production = 2
 			}
 			4416 = {
-                change_trade_goods = silk
-            }
+				change_trade_goods = silk
+			}
 			4415 = {
-                change_trade_goods = silk
-            }
+				change_trade_goods = silk
+			}
 			2026 = {
-                change_trade_goods = silk
-            }
+				change_trade_goods = silk
+			}
 			add_country_modifier = {
 				name = "mysore_silk_industry_rising"
 				duration = 7300 #20 years
 			}
 		}
 	}
+
 	mysore_monopolize_trade = {
 		icon = mission_industrialize_bengal
 		required_missions = { mysore_reformed_silk_production }
 		position = 7
-		provinces_to_highlight = {
-        }
 		trigger = {
 			weapons = 2
 			plantations = 5
 			textile = 5
 			has_institution = manufactories
 			num_of_owned_provinces_with = {
-                value = 12
-                OR = {
-                    has_building = workshop
-                    has_building = counting_house
-                }
-            }
+				value = 12
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
 			1340 = {
 				is_strongest_trade_power = ROOT
 			}
@@ -879,41 +929,32 @@ mysore_column_5 = {
 	mysore_instability_of_the_ummatur = {
 		icon = mission_spoils_of_war
 		required_missions = {  }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			dynasty = "Ummatur"
-			NOT = {
-				stability = 0
-			}
-			NOT = {
-				prestige = 10
-			}
-			NOT = {
-				legitimacy = 70
-			}
+			NOT = { stability = 0 }
+			NOT = { prestige = 10 }
+			NOT = { legitimacy = 70 }
 		}
 		effect = {
 			country_event = { id = ME_Mysore_Events.1 }
 		}
 	}
+
 	mysore_start_of_kannada_patronage = {
 		icon = mission_brahmin_administrators
 		required_missions = { }
 		position = 2
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_institution = renaissance
 			stability = 1
 			prestige = 25
 			num_of_owned_provinces_with = {
-                value = 4
-                OR = {
-                    has_building = temple
-                    has_building = cathedral
-                }
-            }
+				value = 4
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
 			if = {
 				limit = {
 					has_estate = estate_brahmins
@@ -926,15 +967,11 @@ mysore_column_5 = {
 		}
 		effect = {
 			random_owned_province = {
-					limit = {
-						is_core = MYS
-					}
+				limit = { is_core = ROOT }
 				add_base_tax = 1
 			}
 			random_owned_province = {
-					limit = {
-						is_core = MYS
-					}
+				limit = { is_core = ROOT }
 				add_base_tax = 1
 			}
 			capital_scope = {
@@ -943,10 +980,11 @@ mysore_column_5 = {
 						name = "mysore_patronage_foundations"
 						duration = 7300 #20 Years
 					}
-                }
-            }
+				}
+			}
 		}
 	}
+
 	mysore_filled_and_loyal_court = {
 		icon = mission_interfaith_relations
 		required_missions = { mysore_start_of_kannada_patronage }
@@ -967,12 +1005,12 @@ mysore_column_5 = {
 				category = MIL
 			}
 			num_of_owned_provinces_with = {
-                value = 8
-                OR = {
-                    has_building = temple
-                    has_building = cathedral
-                }
-            }
+				value = 8
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
 			if = {
 				limit = {
 					has_estate = estate_brahmins
@@ -995,9 +1033,7 @@ mysore_column_5 = {
 		effect = {
 			add_prestige = 10
 			random_owned_province = {
-					limit = {
-						is_core = MYS
-					}
+				limit = { is_core = ROOT }
 				add_base_tax = 2
 			}
 			add_country_modifier = {
@@ -1006,6 +1042,7 @@ mysore_column_5 = {
 			}
 		}
 	}
+
 	mysore_education_and_theatrics = {
 		icon = mission_court_education
 		required_missions = { mysore_filled_and_loyal_court }
@@ -1017,9 +1054,9 @@ mysore_column_5 = {
 			stability = 3
 			prestige = 75
 			num_of_owned_provinces_with = {
-                value = 5
-                has_building = university
-            }
+				value = 5
+				has_building = university
+			}
 			if = {
 				limit = {
 					has_estate = estate_brahmins
