@@ -389,8 +389,34 @@ bijapure_column_3 = {
 			}
 		}
 		trigger = {
-			NOT = { exists = VIJ }
-			NOT = { exists = KHD }
+			OR = {
+				NOT = { exists = VIJ }
+				VIJ = {
+					NOT = { total_development = ROOT }
+				}
+				VIJ = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = VIJ
+					}
+				}
+			}
+			OR = {
+				NOT = { exists = KHD }
+				KHD = {
+					NOT = { total_development = ROOT }
+				}
+				KHD = {
+					is_subject_of = ROOT
+				}
+				NOT = {
+					india_superregion = {
+						owned_by = KHD
+					}
+				}
+			}
 			rayalaseema_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT	
@@ -415,6 +441,7 @@ bijapure_column_3 = {
 			}
 		}
 	}
+
 	bijapur_unite_the_region = {
 		icon = mission_emperor_of_hindusthan
 		required_missions = { bijapur_khandesh_and_vijayangara }
@@ -472,14 +499,16 @@ bijapure_column_3 = {
 			}
 		}
 	}
+
 	bijapur_chowmahalla_palace = {
 		icon = mission_metropolis_of_the_deccan
 		required_missions = { bijapur_unite_the_region }
 		position = 7
 		provinces_to_highlight = {
 			province_id = 542
-			NOT = {
-				has_building = cathedral
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = cathedral }
 			}
 		}
 		trigger = {
@@ -489,6 +518,7 @@ bijapure_column_3 = {
 			prestige = 75
 			stability = 3
 			542 = {
+				owned_by = ROOT
 				has_building = cathedral
 			}
 		}
@@ -517,16 +547,12 @@ bijapur_column_4 = {
 		position = 2
 		provinces_to_highlight = {
 			owned_by = ROOT
-			NOT = { has_building = temple }
-			NOT = { has_building = cathedral }
+			NOT = { has_tax_building_trigger = yes }
 			ROOT = {
 				NOT = {
 					num_of_owned_provinces_with = {
 						value = 3
-						OR = {
-						has_building = temple
-						has_building = cathedral
-						}
+						has_tax_building_trigger = yes
 					}
 				}
 			}
@@ -534,10 +560,7 @@ bijapur_column_4 = {
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 3
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
+				has_tax_building_trigger = yes
 			}
 			religious_unity = 1.0
 			piety = -0.25
@@ -557,12 +580,11 @@ bijapur_column_4 = {
 			}
 		}
 	}
+
 	bijapur_malik_i_maidan_cannon = {
 		icon = mission_fortify_mandu
 		required_missions = { bijapur_five_cities_five_successors }
 		position = 3
-		provinces_to_highlight = {
-		}
 		trigger = {
 			num_of_artillery = 6
 			army_size = 20
@@ -584,9 +606,13 @@ bijapur_column_4 = {
 			}
 		}
 	}
+
 	bijapur_military_unison = {
 		icon = mission_integrate_the_purbias
-		required_missions = { bijapur_malik_i_maidan_cannon bijapur_worthy_subjects }
+		required_missions = {
+			bijapur_malik_i_maidan_cannon
+			bijapur_worthy_subjects
+		}
 		position = 4
 		provinces_to_highlight = {
 		}
@@ -610,6 +636,7 @@ bijapur_column_4 = {
 			}
 		}
 	}
+
 	bijapur_utilize_the_raichur_doab = {
 		icon = mission_gujarati_diaspora
 		required_missions = { bijapur_the_battle_of_talikota }
@@ -619,34 +646,16 @@ bijapur_column_4 = {
 		trigger = {
 			is_at_war = no
 			532 = {
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
+				has_tax_building_trigger = yes
+				has_manpower_building_trigger = yes
 			}
 			2033 = {
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
+				has_tax_building_trigger = yes
+				has_manpower_building_trigger = yes
 			}
 			4428 = {
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
+				has_tax_building_trigger = yes
+				has_manpower_building_trigger = yes
 			}
 		}
 		effect = {
@@ -674,20 +683,17 @@ bijapur_column_5 = {
 	bijapur_seperate_but_allies = {
 		icon = mission_interfaith_relations
 		required_missions = {  }
-		provinces_to_highlight = {
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = building_alliances.tooltip
-				num_of_allies = 2
 				calc_true_if = {
+					amount = 2
 					all_ally = {
 						has_opinion = {
 							who = ROOT
 							value = 150
 						}
 					}
-					amount = 2
 				}
 			}
 		}
@@ -698,12 +704,14 @@ bijapur_column_5 = {
 			}
 		}
 	}
+
 	bijapur_worthy_subjects = {
 		icon = mission_the_tamil_trade_guilds
-		required_missions = { bijapur_seperate_but_allies bijapur_five_cities_five_successors }
-		position = 3
-		provinces_to_highlight = {
+		required_missions = {
+			bijapur_seperate_but_allies
+			bijapur_five_cities_five_successors
 		}
+		position = 3
 		trigger = {
 			num_of_royal_marriages = 4
 			num_of_non_tributary_subjects = 2
@@ -715,12 +723,11 @@ bijapur_column_5 = {
 			}
 		}
 	}
+
 	bijapur_quell_the_marathas = {
 		icon = mission_unite_the_deccan
 		required_missions = { bijapur_worthy_subjects }
 		position = 5
-		provinces_to_highlight = {
-		}
 		trigger = {
 			stability = 3
 			custom_trigger_tooltip = {
