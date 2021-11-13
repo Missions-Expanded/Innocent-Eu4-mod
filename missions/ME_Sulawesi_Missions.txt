@@ -161,6 +161,18 @@ MKS_missions_1 = {
 					duration = 9125
 				}
 			}
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { has_global_flag = MKS_trade_with_tiwi }
+					}
+					set_global_flag = MKS_trade_with_tiwi
+					add_country_modifier = {
+						name = MKS_trade_with_australia
+						duration = 9125
+					}
+				}
+			}
 		}
 	}
 }
@@ -224,10 +236,11 @@ MKS_missions_2 = {
 			}
 		}
 		effect = {
-			MSA_claims_java = yes
-			MSA_claims_spice_islands = yes
 			set_country_flag = MKS_colonize_decision
 			custom_tooltip = MKS_colonization
+			custom_tooltip = MSA_space_lol
+			MSA_claims_java = yes
+			MSA_claims_spice_islands = yes
 			kutai_area = {
 				limit = {
 					NOT = { is_core = ROOT }
@@ -418,9 +431,11 @@ MKS_missions_4 = {
 					is_expanded_mod_active = { mod = trade_goods }
 				}
 				OR = {
-					trade_share = {
-						country = ROOT
-						share = 15
+					home_trade_node = {
+						trade_share = {
+							country = ROOT
+							share = 15
+						}
 					}
 					trading_part = {
 						trade_goods = nutmeg
@@ -430,9 +445,11 @@ MKS_missions_4 = {
 			}
 			else = {
 				OR = {
-					trade_share = {
-						country = ROOT
-						share = 15
+					home_trade_node = {
+						trade_share = {
+							country = ROOT
+							share = 15
+						}
 					}
 					trading_part = {
 						trade_goods = cloves
@@ -480,14 +497,27 @@ MKS_missions_4 = {
 	}
 	
 	MKS_seas = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_malayan_viceroyalty
 		required_missions = { MKS_maritime_empire }
 		position = 7
 		provinces_to_highlight = {
 		}
-		trigger = {	
+		trigger = {
+			navy_tradition = 30
+			OR = {
+				naval_reformer = 1
+				has_dip_advisor_2 = yes
+			}
 		}
 		effect = {
+			capital_scope = {
+				add_or_upgrade_shipyard_building = yes
+			}
+			
+			add_country_modifier = {
+				name = MKS_mastery_of_the_seas
+				duration = 9125
+			}
 		}
 	}
 }
@@ -529,6 +559,7 @@ MKS_missions_5 = {
 				name = MKS_pillar_island_modifier
 				duration = 9125
 			}
+			add_yearly_sailors = 1
 		}
 	}
 	
@@ -539,7 +570,7 @@ MKS_missions_5 = {
 		provinces_to_highlight = {
 			OR = {
 				AND = {
-					province_id = 612
+					province_id = 642
 					OR = {
 						NOT = { has_production_building_trigger = yes }
 						NOT = { owned_by = ROOT }
@@ -596,31 +627,78 @@ MKS_missions_5 = {
 			} #Makassar
 		}
 		effect = {
-			country_event = { id = ME_Sulawesi_Events.2 } #Cannon trade good
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				#country_event = { id = ME_Sulawesi_Events.2 } #Cannon trade good
+			}
+			641 = {
+				add_province_modifier = {
+					name = MKS_artillery_foundry
+					duration = -1
+				}
+			}
 		}
 	}
 	
 	MKS_maritime_empire = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_defeat_mewar
 		required_missions = { }
 		position = 6
 		provinces_to_highlight = {
 		}
-		trigger = {	
+		trigger = {
+			has_mil_advisor = 2
+			army_tradition = 40
 		}
 		effect = {
+			country_event = { id = ME_Sulawesi_Events.4 }
+			add_yearly_manpower = 1
 		}
 	}
 	
 	MKS_overseas_subjects = {
-		icon = mission_rb_take_gibraltar
+		icon = mission_dominate_trade_in_aden
 		required_missions = { MKS_maritime_empire }
 		position = 8
 		provinces_to_highlight = {
+			island = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {	
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				island = yes
+				value = 15
+			}
+			navy_size = 20
+			if = {
+				limit = {
+					has_dlc = "Rights of Man"
+				}
+				num_of_admirals_with_traits = 2
+			}
+			else = {
+				num_of_admirals = 2
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = MKS_naval_empire
+				duration = -1
+			}
+			
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+				}
+				random_owned_province = {
+					limit = { has_port = yes }
+					create_flagship = {    
+						type = light_ship
+					}
+				}
+			}
 		}
 	}
 }
