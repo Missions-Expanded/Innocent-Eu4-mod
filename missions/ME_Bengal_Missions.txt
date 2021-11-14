@@ -1,0 +1,4131 @@
+ME_Bengali_Missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		tag = BNG
+		OR = {
+			NOT = { has_dlc = "Dharma" }
+			AND = {
+				has_dlc = "Dharma"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+	bng_root_out_ganesha = {
+		icon = mission_ahmadabad_paper
+		required_missions = { }
+		position = 1
+		trigger = {
+			num_of_estate_privileges = {
+				estate = estate_nobles
+				value = 2
+			}
+			if = {
+				limit = { has_global_flag = advisors_expanded_mod_active }
+				OR = {
+					reformist = 1 
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+				}
+			}
+			else = {
+				estate_loyalty = {
+					estate = estate_nobles
+					loyalty = 60
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_purge_ganesha_modifier
+				duration = 18250
+			}
+		}
+	}
+	
+	bng_clean_government = {
+		icon = mission_court_education
+		required_missions = { bng_root_out_ganesha }
+		position = 2
+		trigger = {
+			has_adm_advisor = yes
+			has_dip_advisor = yes
+			has_mil_advisor = yes
+			NOT = { average_effective_unrest = 2 }
+			NOT = { overextension_percentage = 0.01 }
+			OR = {
+				has_reform = centralize_reform
+				has_reform = decentralize_reform
+			}
+		}
+		effect = {
+			change_government_reform_progress = 50
+			add_ruler_modifier = {
+				name = bng_new_admin_modifier
+				duration = -1
+			}
+		}
+	}
+	
+	bng_navigate_asian_politics = {
+		icon = personal_diplomacy 
+		required_missions = { bng_clean_government bng_sharqi_diplomacy }
+		position = 4 
+		trigger = {
+			OR = {
+				MNG = {
+					OR = {
+						has_opinion = {
+							who = ROOT 
+							value = 100
+						}
+						alliance_with = ROOT 
+					}
+				}
+				TIM = {
+					OR = {
+						has_opinion = {
+							who = ROOT 
+							value = 100
+						}
+						alliance_with = ROOT 
+					}
+				}
+				is_great_power = yes 
+				total_development = 300
+			}
+			num_of_allies = 2
+		}
+		effect = {
+			if = {
+				limit = {
+					num_of_allies = 2 
+				}
+				every_ally = {
+					add_trust = { 
+						who = ROOT 
+						value = 25 
+						mutual = yes 
+					}
+				}
+			}
+			add_country_modifier = {
+				name = bng_navigated_asian_politics_modifier
+				duration = 9125
+			}
+		}
+	}
+	
+	bng_satiate_dragon = {
+		icon = mission_valencian_silk
+		required_missions = { bng_navigate_asian_politics }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 568 
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				trading_bonus = {
+					trade_goods = silk
+					value = yes
+				}
+				trading_bonus = {
+					trade_goods = cloth
+					value = yes
+				}
+			}
+			568 = {
+				num_of_times_improved = 6
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			MNG = {
+				country_event = {
+					id = bng_events.1
+				}
+			}
+			add_years_of_owned_provinces_production_income = {
+				years = 8
+				trigger = {
+					OR = {
+						trade_goods = cloth
+						trade_goods = silk
+					}
+				}
+				custom_tooltip = BNG_FROM_CLOTH_AND_SILK
+			}
+			custom_tooltip = BNG_MONOPOLY_INCOME_CLOTH_DESC
+			hidden_effect = {
+				if = {
+					limit = {
+						AND = {
+							trading_bonus = {
+								trade_goods = silk
+								value = yes
+							}
+							trading_bonus = {
+								trade_goods = cloth
+								value = yes
+							}
+						}
+					}
+					every_owned_province = {
+						limit = { 
+							OR = {
+								trade_goods = silk
+								trade_goods = cloth 
+							}
+						}
+						add_base_production = 1 
+						add_province_modifier = {
+							name = bng_worldly_sericulture_modifier
+							duration = 9125
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						trading_bonus = {
+							trade_goods = silk
+							value = yes 
+						}
+					}
+					every_owned_province = {
+						limit = { trade_goods = silk } 
+						add_base_production = 1 
+					}
+				}
+				else_if = {
+					limit = {
+						trading_bonus = {
+							trade_goods = cloth
+							value = yes
+						}
+					}
+					every_owned_province = {
+						limit = { trade_goods = cloth }
+						add_base_production = 1
+					}
+				}
+			}
+		}
+	}
+	bng_himalayan_helmet = {
+		icon = mission_fortify_rajputana
+		required_missions = { bng_topple_sharqi }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				area = nepal_area
+				area = baisi_rajya_area
+				area = bhutan_area
+				area = himalayan_hills_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = BNG_NEPAL_FORTS_TT
+				num_of_owned_provinces_with = {
+					value = 5
+					OR = {
+						area = nepal_area
+						area = bhutan_area
+					}
+					base_manpower = 4
+					OR = {
+						has_building = fort_15th
+						has_building = fort_16th
+						has_building = fort_17th
+						has_building = fort_18th
+					}
+				}
+			}
+			nepal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			bhutan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			baisi_rajya_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			himalayan_hills_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				full_idea_group = defensive_ideas
+				has_mil_advisor_3 = yes
+			}
+		}
+		effect = {
+			nepal_area = {
+				add_province_modifier = {
+					name = bng_himalayan_forts_modifier
+					duration = -1
+				}
+			}
+			bhutan_area = {
+				add_province_modifier = {
+					name = bng_himalayan_forts_modifier
+					duration = -1
+				}
+			}
+			add_yearly_manpower = 1.5
+			add_country_modifier = {
+				name = bng_gurkha_support_modifier
+				duration = 9125
+			}
+		}
+	}
+	bng_agrarian_reform = {
+		icon = mission_rule_the_garjats
+		required_missions = { bng_destroy_sirhind }
+		position = 9
+
+		trigger = {
+			if = {
+				limit = {
+					has_global_flag = trade_goods_expanded_mod_active
+				}
+				development_in_provinces = {
+					value = 200
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+						trade_goods = citrus
+						trade_goods = rice
+						trade_goods = cotton
+					} 
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 200
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+						trade_goods = cotton
+					} 
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = trade_goods_expanded_mod_active
+				}
+				custom_tooltip = BNG_AGRARIAN_REFORM_TGE_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = { 
+							OR = {
+								trade_goods = grain
+								trade_goods = livestock
+								trade_goods = citrus
+								trade_goods = rice
+								trade_goods = cotton
+							} 
+						}
+						add_province_modifier = {
+							name = bng_agrarian_restructure_modifier
+							duration = 18250
+						}	
+					}
+				}
+			}
+			else = {
+				custom_tooltip = BNG_AGRARIAN_REFORM_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = { 
+							OR = {
+								trade_goods = grain
+								trade_goods = livestock
+								trade_goods = cotton
+							} 
+						}
+						add_province_modifier = {
+							name = bng_agrarian_restructure_modifier
+							duration = 18250
+						}	
+					}
+				} 
+			}
+			add_country_modifier = {
+				name = bng_agricultural_upheaval_modifier
+				duration = -1
+			}
+			add_stability = 1
+		}
+	}
+	bng_patronise_scholars = {
+		icon = mission_patronize_sufi_scholars
+		required_missions = { bng_syncretic_missionaries }
+		position = 11
+
+		trigger = {
+			OR = {
+				innovativeness = 30
+				full_idea_group = innovativeness_ideas
+				full_idea_group = administrative_ideas
+				university = 2
+			}
+			if = {
+				limit = {}
+				has_idea = bng_sericulture
+			}
+			else = {
+				has_idea = bng_bengali_industrialization
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.19
+			}
+		}
+	}
+	bng_sunderbans_general = {
+		icon = mission_rajendras_ambition
+		required_missions = { }
+		position = 12
+
+		trigger = {
+			2039 = {
+				OR = {
+					has_building = temple						
+					has_building = cathedral
+				}
+			}
+			OR = {
+				monthly_adm = 10
+				army_tradition = 40
+			}
+			2039 = {
+				OR = {
+					num_of_times_improved = 5
+					AND = {
+						local_autonomy = 0
+						is_prosperous = yes
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.20
+			}
+			custom_tooltip = BNG_KHAN_JAHAN_DESC
+			hidden_effect = {
+				if = {
+					limit = { monthly_adm = 10 }
+					define_advisor = {
+						type = bng_saint_general_advisor
+						name = "Khan Jahan Ali"
+						skill = 2
+						culture = uzbek
+						religion = sunni
+						cost_multiplier = 0.25
+					}
+				}
+				if = {
+					limit = { army_tradition = 40 }
+					define_general = {
+						shock = 4
+						fire = 0
+						manuever = 2
+						siege = 1
+						trait = inspirational_leader_general_personality
+						name = "Khan Jahan Ali"
+					}
+				}
+			}
+		}
+	}
+	bng_bengali_style = {
+		icon = mission_mosque
+		required_missions = { bng_sunderbans_general }
+		position = 14
+
+		trigger = {
+			OR = {
+				temple = 16
+				cathedral = 16
+			}
+			OR = {
+				full_idea_group = humanist_ideas
+				full_idea_group = islamic_ideas
+				dominant_religion = sunni
+				dominant_religion = shiite
+				dominant_religion = ibadi
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 80
+				}
+			}
+			OR = {
+				prestige = 50
+				NOT = { piety = -0.2 }
+				piety = 0.2
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.21
+			}
+		}
+	}
+	bng_distinct_language = {
+		icon = mission_vedic_education
+		required_missions = { bng_bengali_style }
+		position = 15
+
+		trigger = {
+			is_institution_enabled = printing_press
+			OR = {
+				courthouse = 2
+				development_in_provinces = {
+					value = 50
+					trade_goods = paper
+				}
+			}
+			OR = {
+				innovativeness = 12
+				has_institution = printing_press
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_rikhta_tradition_modifier
+				duration = 18250
+			}
+		}
+	}
+	bng_hindu_poets = {
+		icon = mission_patronize_local_gods
+		required_missions = { bng_distinct_language }
+		position = 17
+
+		trigger = {
+			calc_true_if = {
+				employed_advisor = {
+					religion = hinduism
+				}
+				amount = 1
+			}
+			OR = {
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = BNG_TOLERANCE_HINDU_TT
+						hinduism = 3
+					}
+					artist = 3
+				}
+				full_idea_group = humanist_ideas
+				ruler_has_personality = scholar_personality
+				ruler_has_personality = free_thinker_personality
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.22
+			}
+		}
+	}
+	bng_metal_crafts = {
+		icon = industrialized_rhineland
+		required_missions = { bng_precursor_revolution }
+		position = 18
+
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				AND = {
+					trade_goods = iron
+					base_production = 8
+					has_building = weapons
+				}
+			}
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				OR = {
+					development_in_provinces = {
+						value = 50
+						OR = {
+							trade_goods = lead
+							trade_goods = copper
+						}
+					}
+					num_of_owned_provinces_with = {
+						value = 2
+						trade_goods = metalworking
+					}
+				}
+			}
+			else = {
+				OR = {
+					development_in_provinces = {
+						value = 50
+						trade_goods = copper
+					}
+					num_of_owned_provinces_with = {
+						value = 2
+						trade_goods = metalworking
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_tooltip = BNG_IRON_CRAFTS_TGE_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							OR = {
+								trade_goods = iron
+								trade_goods = lead
+								trade_goods = copper
+							}
+						}
+						add_province_modifier = {
+							name = bng_metal_arts_and_crafts_modifier
+							duration = 9125
+						}
+					}
+				}
+				custom_tooltip = BNG_METALWORKING_DEVELOPMENT_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							trade_goods = metalworking
+						}
+						add_base_production = 2
+						add_base_tax = 2
+					}
+				}
+			}
+			else = {
+				custom_tooltip = BNG_IRON_CRAFTS_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							OR = {
+								trade_goods = iron
+								trade_goods = copper
+							}
+						}
+						add_province_modifier = {
+							name = bng_metal_arts_and_crafts_modifier
+							duration = 9125
+						}
+					}
+				}
+			}
+			add_mil_power = 100
+		}
+	}
+	bng_1000_cloth = {
+		icon = mission_expand_textile_industry
+		required_missions = { bng_metal_crafts }
+		position = 20
+
+		trigger = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = indigo
+						trade_goods = cotton
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = dyes
+						trade_goods = cotton
+					}
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 8
+				AND = {
+					OR = {
+						trade_goods = silk
+						trade_goods = cloth
+					}
+					has_building = textile
+				}
+			}
+			production_efficiency = 0.40
+			prestige = 50
+		}
+		effect = {
+			custom_tooltip = BNG_CLOTH_MANUFACTURE_DESC
+			hidden_effect = {
+				if = {
+					limit = { has_global_flag = trade_goods_expanded_mod_active }
+					if = {
+						limit = { 
+							trading_bonus = {
+								trade_goods = indigo
+								value = yes
+							}
+						}
+						every_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = silk
+									trade_goods = cloth
+								}
+							}
+							add_province_modifier = {
+								name = bng_cloth_innovations_boost_modifier
+								duration = 9125
+							}
+						}
+					}
+					else = {
+						every_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = silk
+									trade_goods = cloth
+								}
+							}
+							add_province_modifier = {
+								name = bng_cloth_innovations_modifier
+								duration = 9125
+							}
+						}
+					}
+				}
+				else = {
+					if = {
+						limit = { 
+							trading_bonus = {
+								trade_goods = dyes
+								value = yes
+							}
+						}
+						every_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = silk
+									trade_goods = cloth
+								}
+							}
+							add_province_modifier = {
+								name = bng_cloth_innovations_boost_modifier
+								duration = 9125
+							}
+						}
+					}
+					else = {
+						every_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = silk
+									trade_goods = cloth
+								}
+							}
+							add_province_modifier = {
+								name = bng_cloth_innovations_modifier
+								duration = 9125
+							}
+						}
+					}
+				}
+				every_owned_province = {
+					limit = { trade_goods = cotton }
+					add_base_production = 2
+				}
+			}
+		}
+	}
+}
+
+ME_Bengali_Missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		tag = BNG
+		OR = {
+			NOT = { has_dlc = "Dharma" }
+			AND = {
+				has_dlc = "Dharma"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+
+	bng_sharqi_diplomacy = {
+		icon = mission_the_ganges_campaign
+		required_missions = { bng_shamsuddin_triumph }
+		position = 3	
+		provinces_to_highlight = {
+			province_id = 555
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				555 = {
+					owner = { 
+						has_opinion = {	
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+				is_rival = JNP
+			}
+			if = {
+				limit = { has_country_flag = advisors_expanded_mod_active }
+				OR = {
+					monthly_dip = 10 
+					statesman = 1 
+					diplomat = 1 
+					negotiator = 1 
+				}
+			}
+			else = {
+				OR = {
+					monthly_dip = 10
+					statesman = 1
+					diplomat = 1 
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					555 = {
+						owner = {
+							has_opinion = {
+								who = FROM
+								value = 100
+							}
+						}
+					}
+				}
+				country_event = {
+					id = bng_events.2
+				}
+				set_country_flag = bng_jnp_alliance
+			}
+			else_if = {
+				limit = {
+					555 = {
+						owner = {
+							is_rival = FROM
+						}
+					}
+				}
+				555 = {
+					owner = { remove_fow = 12 }
+				}
+				add_country_modifier = {
+					name = bng_push_to_bihar_modifier
+					duration = 9125
+				}
+			}
+			else_if = {
+				limit = {
+					555 = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				add_power_projection = {
+					type = mission_rewards_power_projection
+					amount = 25
+				}
+				add_mil_power = 50 
+			}
+		}
+	}
+	bng_extend_up_ganges = {
+		icon = mission_conquer_the_doab
+		required_missions = { bng_sharqi_diplomacy }
+		position = 4	
+		provinces_to_highlight = {
+			area = bihar_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			if = {
+				limit = { has_country_flag = bng_jnp_alliance }
+				alliance_with = JNP
+				marriage_with = JNP
+				diplomatic_reputation = 3
+			}
+			else = {
+				bihar_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				army_size = 30
+			}
+		}
+		effect = {
+			if = {
+				limit = { has_country_flag = bng_jnp_alliance }
+				if = {
+					limit = {
+						555 = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					524 = {
+						owner = {
+							reverse_add_casus_belli = {
+								target = ROOT
+								type = cb_restore_personal_union
+								months = 120
+							}
+						}
+					}
+				}
+				else = {
+					555 = {
+						owner = {
+							reverse_add_casus_belli = {
+								target = ROOT
+								type = cb_restore_personal_union
+								months = 120
+							}
+						}
+					}
+				}
+				add_country_modifier = {
+					name = bng_growing_reach_modifier
+					duration = 9125
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						555 = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+					524 = {
+						owner = {
+							reverse_add_casus_belli = {
+								target = ROOT
+								type = cb_vassalize_mission
+								months = 120
+							}
+						}
+					}
+				}
+				else = {
+					555 = {
+						owner = {
+							reverse_add_casus_belli = {
+								target = ROOT
+								type = cb_vassalize_mission
+								months = 120
+							}
+						}
+					}
+				}
+				purvanchal_area = {
+					add_permanent_claim = ROOT
+				}
+				mithila_area = {
+					add_permanent_claim = ROOT
+				}
+				country_event = {
+					id = bng_events.10
+				}
+				add_accepted_culture = bihari
+			}
+		}
+	}
+	bng_jaunpur_jewel = {
+		icon = mission_riches_of_golconda
+		required_missions = { bng_extend_up_ganges bng_romantic_general }
+		position = 5	
+		provinces_to_highlight = {
+			OR = {
+				area = purvanchal_area
+				area = mithila_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			purvanchal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			mithila_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			555 = {
+				OR = {
+					has_building = fort_15th
+					has_building = fort_16th
+					has_building = fort_17th
+					has_building = fort_18th
+				}
+				devastation = 0
+			}
+		}
+		effect = {
+			country_event = {
+				id = flavor_jnp.4
+			}
+			add_country_modifier = {
+				name = bng_center_of_ganges_modifier
+				duration = 9125
+			}
+			purvanchal_area = {
+				add_nationalism = -10
+			}
+			lower_doab_area = {
+				add_permanent_claim = ROOT
+			}
+			oudh_area = {
+				add_permanent_claim = ROOT
+			}
+			katehar_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bng_topple_sharqi = {
+		icon = mission_defeat_jaunpur
+		required_missions = { bng_jaunpur_jewel }
+		position = 6	
+		provinces_to_highlight = {
+			OR = {
+				area = oudh_area
+				area = lower_doab_area
+				area = katehar_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			lower_doab_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			oudh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			katehar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			555 = {
+				OR = {
+					has_building = courthouse
+					has_building = town_hall
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_gangara_niyantrana_modifier
+				duration = -1
+			}
+			upper_doab_area = {
+				add_permanent_claim = ROOT
+			}
+			sirhind_area = {
+				add_permanent_claim = ROOT
+			}
+			lahore_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	bng_destroy_sirhind = {
+		icon = mission_the_tiger_triumphant 
+		required_missions = { bng_himalayan_helmet bng_slay_peacock }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = sirhind_area
+				area = lahore_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			sirhind_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			lahore_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = SRH }
+				SRH = {
+					vassal_of = ROOT
+				}
+			}
+			army_size = 80
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_descend_in_india_modifier 
+				duration = -1
+			}
+			add_mil_power = 100
+			add_army_tradition = 20
+			change_mil = 1
+		}
+	}
+	
+	bng_funnel_grand_trunk_road = {
+		icon = mission_the_grand_trunk_road_bng
+		required_missions = { bng_destroy_sirhind }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4474
+				province_id = 522
+				area = east_bengal_area
+				area = west_bengal_area
+				area = bihar_area
+				area = upper_doab_area
+				area = lower_doab_area
+				area = gaur_area
+				area = purvanchal_area
+				area = sirhind_area
+				area = lahore_area
+			}
+			NOT = {
+				AND = {
+					is_prosperous  = yes
+					num_of_times_improved = 2
+				}
+			}
+		}
+		trigger = {
+			524 = {
+				is_strongest_trade_power = ROOT
+			}
+			purvanchal_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			lower_doab_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			upper_doab_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			west_bengal_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			east_bengal_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			bihar_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			gaur_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			sirhind_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+			lahore_area = {
+				type = all 
+				country_or_non_sovereign_subject_holds = ROOT 
+				is_prosperous = yes
+				num_of_times_improved = 2
+			}
+		}
+		effect = {
+			522 = {
+				add_center_of_trade_level = 1
+			}
+			555 = {
+				center_of_trade = 1
+			}
+			507 = {
+				add_province_modifier = {
+					name = bng_mouth_of_trunk_modifier
+					duration = -1
+				}
+				add_center_of_trade_level = 1
+			}
+			4474 = {
+				add_province_modifier = {
+					name = bng_mouth_of_trunk_modifier
+					duration = -1
+				}
+				center_of_trade = 1
+			}
+			custom_tooltip = BNG_GRAND_TRUNK_ROAD_DESC
+			hidden_effect = {
+				east_bengal_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				upper_doab_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				lower_doab_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				bihar_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				purvanchal_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				west_bengal_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				gaur_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				sirhind_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+				lahore_area = {
+					add_province_modifier = {
+						name = bng_grand_trunk_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	bng_syncretic_missionaries = {
+		icon = mission_sufi_shrines
+		required_missions = { bng_jagirdar_system }
+		position = 10
+		provinces_to_highlight = {
+			province_id = 2039
+		}
+
+		trigger = {
+			if = {
+				limit = { has_estate = estate_dhimmi }
+				has_estate_privilege = estate_dhimmi_guaranteed_autonomy
+			}
+			else_if = {
+				limit = { has_estate = estate_brahmins }
+				has_estate_privilege = estate_brahmins_guaranteed_autonomy
+			}
+			estate_loyalty = {
+				estate = estate_church
+				loyalty = 60
+			}
+			OR = {
+				temple = 3
+				cathedral = 3
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.25
+			}
+		}
+	}
+	bng_bagerhat_mosques = {
+		icon = mission_conquer_malwa_bng
+		required_missions = { bng_syncretic_missionaries }
+		position = 12
+		provinces_to_highlight = {
+			province_id = 2039
+		}
+
+		trigger = {
+			2039 = {
+				OR = {
+					base_tax = 8
+					base_production = 8
+				}
+				has_owner_religion = yes
+			}
+			num_of_religion = {
+				religion = sunni
+				value = 0.2
+			}
+		}
+		effect = {
+			2039 = {
+				add_permanent_province_modifier = {
+					name = bng_mosque_city_of_bagerhat_modifier
+					duration = -1
+				}
+			}
+			country_event = {
+				id = bng_events.27
+			}
+		}
+	}
+	bng_dighis = {
+		icon = austria_prospers
+		required_missions = { bng_bagerhat_mosques bng_sunderbans_general bng_expand_mint_towns }
+		position = 13
+
+		trigger = {
+			NOT = { average_autonomy = 5 }
+			OR = {
+				monthly_adm = 13
+				adm_tech = 13
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				development = 20
+			}
+		}
+		effect = {
+			custom_tooltip = BNG_DIGHI_BUILD_DESC
+			hidden_effect = {
+				every_owned_province = {
+					limit = { development = 20 }
+					add_base_tax = 1
+					add_base_manpower = 1
+					add_province_modifier = {
+						name = bng_dighi_construction_modifier
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+	bng_administer_qazi = {
+		icon = encroach_on_the_germans
+		required_missions = { bng_dighis }
+		position = 14
+
+		trigger = {
+			adm = 4
+			custom_trigger_tooltip = {
+				tooltip = BNG_ALL_REFORMS_TT
+				OR = {
+					has_reform = political_absolutism_reform
+					has_reform = legislative_houses_reform
+				}
+			}
+			NOT = { corruption = 0 }
+		}	
+		effect = {
+			add_country_modifier = {
+				name = bng_qazis_modifier
+				duration = -1
+			}
+		}
+	}
+	bng_somapura_mahavihara = {
+		icon = mission_conquer_lower_burma_tau
+		required_missions = { bng_bengali_style }
+		position = 14
+
+		trigger = {
+			4479 = {
+				has_building = university
+				development = 35
+			}
+			OR = {
+				innovativeness = 25
+				has_institution = enlightenment
+			}
+			years_of_income = 1.0
+		}
+		effect = {
+			country_event = {
+				id = bng_events.28
+			}
+		}
+	}
+	bng_sponsor_mosques = {
+		icon = mission_early_modern_university
+		required_missions = { bng_distinct_language }
+		position = 15
+		provinces_to_highlight = {
+			province_id = 385
+		}
+		
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = BNG_RELATIONS_WITH_ARABIA_TT
+				OR = {
+					AND = {
+						385 = {
+							owner = { 
+								has_opinion = {	
+									who = ROOT
+									value = 150
+								}
+							}
+						}	
+						384 = {
+							owner = { 
+								has_opinion = {	
+									who = ROOT
+									value = 150
+								}
+							}
+						}
+					}	
+					AND = {
+						385 = { country_or_non_sovereign_subject_holds = ROOT }
+						384 = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+			}
+			OR = {
+				university = 2
+				innovativeness = 25
+			}
+			has_adm_advisor_3 = yes
+		}
+		effect = {
+			if = {
+				limit = {
+					AND = {
+						385 = {
+							owner = { 
+								has_opinion = {	
+									who = ROOT
+									value = 150
+								}
+							}
+						}	
+						384 = {
+							owner = { 
+								has_opinion = {	
+									who = ROOT
+									value = 150
+								}
+							}
+						}
+					}	
+				}
+				384 = {
+					owner = {
+						country_event = {
+							id = bng_events.23
+						}
+					}
+				}
+				385 = {
+					owner = {
+						country_event = {
+							id = bng_events.23
+						}
+					}
+				}
+			}
+			else = {
+				country_event = {
+					id = bng_events.24
+				}
+			}
+		}
+	}
+	bng_precursor_revolution = {
+		icon = mission_industria_sedera
+		required_missions = { bng_proto_industrialisation }
+		position = 16
+		trigger = {
+			grown_by_development = 600
+			num_of_owned_provinces_with = {
+				value = 6
+				AND = {
+					development = 30
+					has_building = counting_house
+				}
+			}
+			is_institution_enabled = enlightenment
+			adm_tech = 16
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_metallurgy_modifier
+				duration = 9125
+			}
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_tooltip = BNG_METALS_AND_GUNPOWDER_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							trade_goods = gunpowder
+							trade_goods = metalworking
+						}
+						add_base_production = 2
+					}
+				}
+			}
+			else = {
+				add_army_tradition = 20
+			}
+		}
+	}
+	bng_coalfield = {
+		icon = mission_rb_central_belt_coal_mining
+		required_missions = { bng_precursor_revolution }
+		position = 19
+		provinces_to_highlight = {
+			province_id = 2081
+		}
+
+		trigger = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_trigger_tooltip = {
+					tooltip = BNG_MANUFACTORIES_TGE_TT
+					OR = {
+						num_of_owned_provinces_with = {
+							value = 20
+							OR = {
+								has_building = wharf
+								has_building = weapons
+								has_building = textile
+								has_building = plantations
+								has_building = tradecompany
+								has_building = farm_estate
+								has_building = mills
+							}
+						}
+						num_of_owned_provinces_with = {
+							value = 5
+							OR = {
+								trade_good = metalworking
+								trade_good = munitions
+								trade_good = woodworking
+								trade_good = leather
+								trade_good = jewellery
+								trade_good = steam_engine
+								trade_good = optics
+								trade_good = cannon
+							}
+						}
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = BNG_MANUFACTORIES_TT
+					num_of_owned_provinces_with = {
+						value = 20
+						OR = {
+							has_building = wharf
+							has_building = weapons
+							has_building = textile
+							has_building = plantations
+							has_building = tradecompany
+							has_building = farm_estate
+							has_building = mills
+						}
+					}
+				}
+			}
+			2081 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_building = counting_house
+				has_latent_trade_goods = coal
+			}
+		}
+		effect = {
+			2081 = {
+				if = {
+					limit = { has_building = furnace }
+					add_base_production = 4
+				}
+				else = {
+					add_building = furnace
+				}
+				add_base_production = 4
+				add_base_tax = 4
+				add_province_modifier = {
+					name = bng_coalfield_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+ME_Bengali_Missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		tag = BNG
+		OR = {
+			NOT = { has_dlc = "Dharma" }
+			AND = {
+				has_dlc = "Dharma"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+
+	bng_tend_to_wounds = {
+		icon = mission_gharbianss
+		required_missions = { }
+		position = 1
+		
+		trigger = {
+			num_of_loans = 0
+			stability = 1
+			NOT = { yearly_corruption_increase = 0.001 }
+		}
+		effect = {
+			capital_scope = {
+				add_prosperity = 100
+				random_list = {
+					33 = { add_base_tax = 1 }
+					33 = { add_base_production = 1 }
+					34 = { add_base_manpower = 1 }
+				}
+			}
+			add_ruler_modifier = {
+				name = bng_mahmud_shah_reform_modifier 
+				duration = -1
+			}
+		}
+	}
+
+	bng_shamsuddin_triumph = {
+		icon = mission_new_army
+		required_missions = { bng_tend_to_wounds }
+		position = 2
+
+		trigger = {
+			OR = {
+				manpower_percentage = 0.75
+				army_size_percentage = 0.75
+			}
+			num_of_generals = 1
+		}
+		effect = {
+			bihar_area = {
+				add_permanent_claim = ROOT
+			}
+			jharkhand_area = {
+				add_permanent_claim = ROOT
+			}
+			nepal_area = {
+				add_permanent_claim = ROOT
+			}
+			bhutan_area = {
+				add_permanent_claim = ROOT
+			}
+			country_event = {
+				id = bng_events.12
+			}
+		}
+	}
+
+	bng_romantic_general = {
+		icon = mission_end_the_shan_domination
+		required_missions = { bng_shamsuddin_triumph }
+		position = 4
+
+		trigger = {
+			OR = {
+				army_tradition = 30
+				army_professionalism = 0.10
+			}
+			OR = {
+				mil = 5
+				mil_tech = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_diplomatic_warfare_modifier
+				duration = 9125
+			}
+			country_event = {
+				id = bng_events.13
+			}
+			562 = {
+				add_permanent_claim = ROOT
+			}
+			arakan_area = {
+				add_permanent_claim = ROOT
+			}
+			tripura_area = {
+				add_permanent_claim = ROOT
+			}
+			naga_hills_area = {
+				add_permanent_claim = ROOT
+			}
+			assam_area = {
+				add_permanent_claim = ROOT
+			}
+			orissa_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	bng_rajput_nobles = {
+		icon = mission_accomodate_the_rajputs
+		required_missions = { bng_romantic_general }
+		position = 5
+
+		trigger = {
+			has_estate = estate_rajput
+			AND = {
+				has_reform = governmental_purbias_register_reform
+				has_estate_privilege = estate_rajput_look_up_purbias
+			}
+			num_of_rajput = 15
+			OR = {
+				army_professionalism = 0.25
+				army_tradition = 60
+			}
+			estate_loyalty = {
+				estate = estate_rajput
+				loyalty = 60
+			}
+		}	
+		effect = {
+			add_country_modifier = {
+				name = bng_purbiyas_modifier
+				duration = -1
+			}
+			add_country_modifier = {
+				name = bng_expand_rajput_modifier
+				duration = -1
+			}
+			custom_tooltip = BNG_RAJPUT_GENERAL_DESC
+			hidden_effect = {
+				capital_scope = {
+					rajput_infantry = ROOT
+				}
+				capital_scope = {
+					rajput_infantry = ROOT
+				}
+				capital_scope = {
+					rajput_infantry = ROOT
+				}
+				capital_scope = {
+					rajput_infantry = ROOT
+				}
+				capital_scope = {
+					rajput_infantry = ROOT
+				}
+				if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 80
+						}
+					}
+					create_general = { tradition = 100 }
+				}
+				else_if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 70
+						}
+					}
+					create_general = { tradition = 90 }
+				}
+				else_if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 60
+						}
+					}
+					create_general = { tradition = 80 }
+				}
+				else_if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 50
+						}
+					}
+					create_general = { tradition = 70 }
+				}
+				else_if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 40
+						}
+					}
+					create_general = { tradition = 60 }
+				}
+				else_if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 30
+						}
+					}
+					create_general = { tradition = 50 }
+				}
+				else_if = {
+					limit = {
+						estate_influence = {
+							estate = estate_rajput
+							influence = 20
+						}
+					}
+					create_general = { tradition = 40 }
+				}
+				else = {
+					create_general = { tradition = 20 }
+				}
+			}
+		}
+	}
+	bng_slay_peacock = {
+		icon = mission_crush_delhi
+		required_missions = { bng_topple_sharqi }
+		position = 7
+		provinces_to_highlight = {
+			area = upper_doab_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+
+		trigger = {
+			OR = {
+				DLH = {
+					vassal_of = ROOT
+				}
+				upper_doab_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			legitimacy_equivalent = 80
+		}
+		effect = {
+			if = {
+				limit = { 
+					DLH = {
+						vassal_of = ROOT
+					}
+				}
+				DLH = {
+					add_liberty_desire = -50
+				}
+			}
+			add_country_modifier = {
+				name = bng_usurp_delhi_modifier
+				duration = 9125
+			}
+			country_event = {
+				id = bng_events.14
+			}
+		}
+	}
+	bng_jagirdar_system = {
+		icon = mission_general_land_assessment
+		required_missions = { }
+		position = 9
+
+		trigger = {
+			if = {
+				limit = { has_government_mechanic = iqta_mechanic }
+				custom_trigger_tooltip = {
+					tooltip = BNG_JAGIRDAR_CHECK_TT
+					OR = {
+						has_country_modifier = efficient_tax_farming_modifier
+						has_country_modifier = land_acquisition_modifier
+						has_country_modifier = lenient_taxation_modifier
+					}
+				}
+			}
+			else = {
+				treasury = 100
+			}
+			if = {
+				limit = { has_estate = estate_nobles }
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					estate_loyalty = {
+						estate = estate_church
+						loyalty = 60
+					}
+				}
+			}
+			else = {
+				NOT = { average_autonomy = 10 }
+			}
+		}
+		effect = {
+			if = {
+				limit = { has_government_mechanic = iqta_mechanic }
+				custom_tooltip = BNG_ENFORCED_JAGIRDAR_DESC
+				if = {
+					limit = { has_country_modifier = efficient_tax_farming_modifier }
+					add_country_modifier = {
+						name = bng_jagirdar_patronage
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = { has_country_modifier = land_acquisition_modifier }
+					add_country_modifier = {
+						name = bng_jagirdar_absolutism
+						duration = 9125
+					}
+					change_crown_land = { add = 5 }
+				}
+				else_if = {
+					limit = { has_country_modifier = lenient_taxation_modifier }
+					add_country_modifier = {
+						name = bng_jagirdar_strengthened
+						duration = 9125
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = bng_jagirdar_patronage
+					duration = 9125
+				}
+			}
+		}
+	}
+	bng_delta_reclamation = {
+		icon = mission_clear_the_delta
+		required_missions = { bng_jagirdar_system }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = west_bengal_area
+				area = east_bengal_area
+			}
+		}
+
+		trigger = {
+			west_bengal_area = {
+				type = all
+				num_of_times_improved = 1
+			}
+			east_bengal_area = {
+				type = all
+				num_of_times_improved = 1
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_abundent_wood_modifier
+				duration = 9125
+			}
+			custom_tooltip = BNG_UNLOCK_DELTA_TT
+			set_country_flag = bng_clear_delta
+		}
+	}
+	bng_goods_of_pandua = {
+		icon = mission_dominate_trade_in_bengal
+		required_missions = { bng_delta_reclamation }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 4479
+		}
+
+		trigger = { 
+			4479 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				development = 18
+			}
+		}
+		effect = {
+			4479 = {
+				center_of_trade = 1
+				change_province_name = "Pandua"
+			}
+			country_event = {
+				id = bng_events.29
+			}
+		}
+	}
+	bng_expand_mint_towns = {
+		icon = mission_establish_mint_towns
+		required_missions = { bng_goods_of_pandua }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4477
+				province_id = 4476
+				province_id = 4475
+				province_id = 2039
+			}
+		}
+
+		trigger = {
+			4477 = {
+				OR = {
+					has_building = workshop	
+					has_building = counting_house
+				}
+				base_tax = 6
+			}
+			2039 = {
+				OR = {
+					has_building = workshop	
+					has_building = counting_house
+				}
+				base_tax = 6
+			}
+			4475 = {
+				OR = {
+					has_building = workshop	
+					has_building = counting_house
+				}
+				base_tax = 6
+			}
+			4476 = {
+				OR = {
+					has_building = workshop	
+					has_building = counting_house
+				}
+				base_tax = 6
+			}
+			OR = {
+				master_of_mint = 1
+				full_idea_group = economic_ideas
+			}
+		}
+		effect = {
+			4476 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
+				change_province_name = "Mahmudabad"
+			}
+			4477 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
+			}
+			2039 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
+				change_province_name = "Khalifatabad"
+			}
+			4475 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
+			}
+			custom_tooltip = BNG_MIDAS_MINTS_DESC
+			hidden_effect = {
+				if = {
+					limit = { ruler_has_personality = midas_touched_personality }
+					add_country_modifier = {
+						name = bng_flourishing_currency_modifier
+						duration = 9125
+					}
+					add_years_of_income = 0.5
+				}
+				if = {
+					limit = { mission_completed = bng_cowry_shells }
+					add_country_modifier = {
+						name = bng_dual_standard_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	bng_source_for_minting = {
+		icon = mission_zambezi_gold
+		required_missions = { bng_expand_mint_towns }
+		position = 14
+		provinces_to_highlight = {
+			province_id = 586
+		}
+
+		trigger = {
+			586 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				base_production = 8
+			}
+			NOT = { devastation = 1 }
+		}
+		effect = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				586 = {
+					change_trade_goods = silver
+					add_province_modifier = {
+						name = bng_mint_source_modifier
+						duration = -1
+					}
+				}
+			}
+			else = {
+				586 = {
+					change_trade_goods = gems
+					add_province_modifier = {
+						name = bng_mint_source_modifier
+						duration = -1
+					}
+				}
+			}
+			add_inflation = -1
+		}
+	}
+	bng_proto_industrialisation = {
+		icon = mission_industrialize_bengal
+		required_missions = { }
+		position = 16
+		
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					has_building = wharf
+					has_building = weapons
+					has_building = textile
+					has_building = plantations
+					has_building = tradecompany
+					has_building = farm_estate
+					has_building = mills
+				}
+			}
+			has_institution = manufactories
+			num_of_trading_bonuses = 2
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_beating_heart_of_india_modifier
+				duration = -1
+			}
+			custom_tooltip = BNG_PROVINCE_WITH_MANUFACTORIES_DESC
+			hidden_effect = {
+				every_owned_province = {
+					limit = { has_province_modifier = birthplace_of_manufactories }
+					remove_province_modifier = birthplace_of_manufactories
+					add_permanent_province_modifier = {
+						name = bng_birthplace_of_manufactories
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	bng_capital_affluence = {
+		icon = mission_prosperity_in_bengal
+		required_missions = { bng_proto_industrialisation }
+		position = 17
+		
+		trigger = {
+			563 = {
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				OR = {
+					has_building = temple
+					has_building = cathedral
+				}
+			}
+			prestige = 50
+			development_in_provinces = {
+				value = 250
+				culture = bengali
+			}
+		}
+		effect = {
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+				add_or_upgrade_tax_building = yes
+				add_or_upgrade_production_building = yes
+				add_development_scaled_on_monarch_skill = yes
+			}
+		}
+	}
+	bng_flushed_deck = {
+		icon = mission_junk_boat
+		required_missions = { bng_precursor_revolution }
+		position = 18
+
+		trigger = {
+			num_of_heavy_ship = 25
+			grand_shipyard = 3
+			dip_tech = 19
+		}
+		effect = {
+			custom_tooltip = BNG_NAVIGATOR_RULER_DESC
+			if = {
+				limit = { ruler_has_personality = navigator_personality }
+				add_country_modifier = {
+					name = bng_flushed_deck_modifier
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = bng_flushed_deck_modifier
+					duration = 9125
+				}
+			}
+			change_innovativeness = 3
+		}
+	}
+	bng_flagships = {
+		icon = mission_grand_bengali_shipyards
+		required_missions = { bng_flushed_deck }
+		position = 19
+
+		trigger = {
+			has_flagship = yes 
+			num_of_allies = 2
+			navy_size = 100
+		}
+		effect = {
+			custom_tooltip = BNG_BUILD_SHIPS_PER_ALLIANCE_DESC
+			hidden_effect = {
+				if = {
+					limit = { num_of_allies = 6 }
+					568 = {
+						add_unit_construction = {
+							type = heavy_ship
+							amount = 12
+							speed = 0
+							cost = 0
+						}
+					}
+				}
+				if = {
+					limit = { num_of_allies = 5 }
+					568 = {
+						add_unit_construction = {
+							type = heavy_ship
+							amount = 10
+							speed = 0
+							cost = 0
+						}
+					}
+				}
+				if = {
+					limit = { num_of_allies = 4 }
+					568 = {
+						add_unit_construction = {
+							type = heavy_ship
+							amount = 8
+							speed = 0
+							cost = 0
+						}
+					}
+				}
+				if = {
+					limit = { num_of_allies = 3 }
+					568 = {
+						add_unit_construction = {
+							type = heavy_ship
+							amount = 6
+							speed = 0
+							cost = 0
+						}
+					}
+				}
+				else = {
+					568 = {
+						add_unit_construction = {
+							type = heavy_ship
+							amount = 4
+							speed = 0
+							cost = 0
+						}
+					}
+				}
+			}
+			add_country_modifier = {
+				name = bng_tigers_reach_modifier
+				duration = -1
+			}
+			add_dip_power = 100
+		}
+	}
+	bng_create_steam_engines = {
+		icon = mission_rb_prospect_for_coal
+		required_missions = { bng_coalfield bng_flagships bng_ironclads }
+		position = 20
+
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				development = 30
+			}
+			furnace = 3
+		}
+		effect = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_tooltip = BNG_STEAM_ENGINES_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = {
+							OR = {
+								AND = {
+									development = 30
+									OR = {
+										trade_good = metalworking
+										trade_good = munitions
+										trade_good = woodworking
+										trade_good = leather
+										trade_good = jewellery
+										trade_good = steam_engine
+										trade_good = optics
+										trade_good = cannon
+									}
+								}
+								AND = {
+									development = 25
+									OR = {
+										trade_good = naval_supplies
+									}
+									OR = {
+										has_building = grand_shipyard
+										has_building = wharf
+									}
+								}
+							}
+						}
+						if = {
+							limit = { has_building = workshop }
+							remove_building = workshop
+							add_building = steam_factory
+						}
+						else_if = {
+							limit = { has_building = counting_house }
+							remove_building = counting_house
+							add_building = steam_factory
+						}
+						else = {
+							add_building = steam_factory
+						}
+					}
+				}
+			}
+			custom_tooltip = BNG_STEAM_EXPERIMENTS_DESC
+			hidden_effect = {
+				every_owned_province = {
+					limit = { development = 30 }
+					add_province_modifier = {
+						name = bng_industrial_city_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+ME_Bengali_Missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		tag = BNG
+		OR = {
+			NOT = { has_dlc = "Dharma" }
+			AND = {
+				has_dlc = "Dharma"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+
+	bng_cuttack_port = {
+		icon = mission_conquer_cuttack 
+		required_missions = { bng_facilitate_trade }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 552
+		}
+
+		trigger = {
+			552 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+			}
+		}
+		effect = {
+			552 = {
+				add_center_of_trade_level = 1
+				add_base_production = 1
+			}
+			custom_tooltip = BNG_GAJAPAT_WEALTH_DESC
+			hidden_effect = {
+				552 = {
+					if = {
+						limit = {
+							1343 = {
+								trade_share = {
+									country = ROOT
+									share = 75
+								}
+							}
+						}
+						add_province_modifier = {
+							name = bng_gajapati_wealth_modifier
+							duration = -1
+						}
+					}
+				}
+			}
+		}
+	}
+	bng_mallabansa = {
+		icon = mission_spoils_of_war
+		required_missions = { bng_shamsuddin_triumph }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				province_id = 557
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+
+		trigger = {
+			557 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				infantry_in_province = 4
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				culture = nepali
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.17
+			}
+		}
+	}
+	bng_annihilate_arakan = {
+		icon = mission_end_arakan_piracy
+		required_missions = { bng_mallabansa bng_romantic_general }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				area = arakan_area
+				province_id = 1343
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+
+		trigger = {
+			num_of_light_ship = 16
+			arakan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			navy_size_percentage = 1
+		}
+		effect = {
+			custom_tooltip = BNG_ARAKAN_PIRATES_DESC
+			hidden_effect = {
+				if = {
+					limit = { num_of_captured_ships_with_boarding_doctrine = 10 }
+					add_country_modifier = {
+						name = bng_integrate_arakanese_pirates_modifier
+						duration = -1
+					}
+				}
+				else = {
+					arakan_area = {
+						add_province_modifier = {
+							name = bng_root_out_pirates_modifier
+							duration = 9125
+						}
+					}
+				}
+			}
+			add_yearly_sailors = 1
+		}
+	}
+	bng_woo_burma = {
+		icon = mission_lower_burma_campaign
+		required_missions = { bng_annihilate_arakan }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = naga_hills_area
+				area = tripura_area
+				area = assam_area
+				region = burma_region
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+
+		trigger = {
+			OR = {
+				has_dip_advisor_3 = yes
+				ruler_has_personality = charismatic_negotiator_personality
+				ruler_has_personality = silver_tongue_personality
+			}
+			AND = {
+				naga_hills_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT 
+				}
+				tripura_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT 
+				}
+				assam_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_rule_burma_modifier
+				duration = -1
+			}
+			burma_region = {
+				add_permanent_claim = ROOT
+			}
+			custom_tooltip = BNG_BURMA_VASSALS_DESC
+			hidden_effect = {
+				ROOT = {
+					every_subject_country = {
+						add_country_modifier = {
+							name = bng_militant_missionary_modifier
+							duration = -1
+						}
+						change_religion = sunni
+					}
+				}
+			}
+		}
+	}
+	bng_eastern_frontier = {
+		icon = mission_southern_frontier
+		required_missions = { bng_woo_burma }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				region = burma_region
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+
+		trigger = {
+			army_size = 60
+			OR = {
+				full_idea_group = naval_ideas
+				num_of_heavy_ship = 20
+			}
+			custom_trigger_tooltip = {
+				tooltip = BNG_MILITARY_IDEA_TT
+				if = {
+					limit = { has_global_flag = idea_groups_expanded_mod_active }
+					OR = {
+						army_tradition = 70
+						full_idea_group = aristocracy_ideas
+						full_idea_group = plutocracy_ideas
+						full_idea_group = offensive_ideas
+						full_idea_group = defensive_ideas
+						full_idea_group = quality_ideas
+						full_idea_group = quantity_ideas
+						full_idea_group = naval_ideas
+						full_idea_group = military_academy_idea_groups_expanded
+						full_idea_group = standing_army_idea_groups_expanded
+						full_idea_group = mercenary_army_idea_groups_expanded
+						full_idea_group = cossacks_idea_groups_expanded
+						full_idea_group = theocratic_idea_groups_expanded
+						full_idea_group = horde_idea_groups_expanded
+						full_idea_group = piracy_idea_groups_expanded
+						full_idea_group = engineer_idea_groups_expanded
+					}
+				}
+				else = {
+					OR = {
+						army_tradition = 70
+						full_idea_group = aristocracy_ideas
+						full_idea_group = plutocracy_ideas
+						full_idea_group = offensive_ideas
+						full_idea_group = defensive_ideas
+						full_idea_group = quality_ideas
+						full_idea_group = quantity_ideas
+						full_idea_group = naval_ideas
+						full_idea_group = horde_gov_ideas
+						full_idea_group = theocracy_gov_ideas
+						full_idea_group = indigenous_ideas
+					}
+				}
+			}
+			burma_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			is_defender_of_faith = yes
+		}
+		effect = {
+			burma_region = {
+				limit = { country_or_non_sovereign_subject_holds = ROOT }
+				add_province_modifier = {
+					name = bng_integrate_burma_modifier
+					duration = 9125
+				}
+			}
+			add_country_modifier = {
+				name = bng_sword_of_east_modifier
+				duration = -1
+			}
+			custom_tooltip = BNG_ISLAMIC_CLAIMS_TT
+			hidden_effect = {
+				every_province = {
+					limit = {
+						superregion = east_indies_superregion
+						OR = {
+							religion_group = muslim 
+							religion = ROOT 
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT 
+				}
+			}		
+		}
+	}
+	bng_monopoly_on_spice = {
+		icon = mission_open_up_china
+		required_missions = { bng_eastern_frontier }
+		position = 9
+		provinces_to_highlight = {
+			province_id = 596
+		}
+
+		trigger = {
+			596 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				base_production = 8
+				base_tax = 6
+			}
+			1361 = {
+				has_merchant = PREV
+				is_strongest_trade_power = ROOT
+			}
+			if = {
+				limit = {
+					has_global_flag = trade_goods_expanded_mod_active
+				}
+				development_in_provinces = {
+					value = 200
+					OR = {
+						trade_goods = spices
+						trade_goods = cloves
+						trade_goods = cinnamon
+					} 
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 200
+					trade_goods = spices
+				}
+			}
+			trade_efficiency = 0.40
+		}
+		effect = {
+			add_mercantilism = 5
+			596 = {
+				add_center_of_trade_level = 1
+			}
+			if = {
+				limit = { has_country_flag = trade_goods_expanded_mod_active }
+				add_years_of_owned_provinces_production_income = {
+					years = 5
+					trigger = {
+						OR = {
+							trade_goods = spices
+							trade_goods = cloves
+							trade_goods = cinnamon
+							trade_goods = saffron
+						}
+					}
+					custom_tooltip = BNG_VARIOUS_SPICES
+				}
+			}
+			else = {
+				add_years_of_owned_provinces_production_income = {
+					years = 5
+					trigger = {
+						trade_goods = spices
+					}
+					custom_tooltip = BNG_VARIOUS_SPICES
+				}
+			}
+			custom_tooltip = BNG_SPICES_DESC
+			hidden_effect = {
+				if = {
+					limit = { has_country_flag = trade_goods_expanded_mod_active }
+					if = {
+						limit = {
+							AND = {
+								trading_bonus = {
+									trade_goods = spices
+									value = yes
+								}
+								trading_bonus = {
+									trade_goods = cloves
+									value = yes
+								}
+								trading_bonus = {
+									trade_goods = cinnamon
+									value = yes
+								}
+							}
+						}
+						every_owned_province = {
+							limit = { 
+								OR = {
+									trade_goods = spices
+									trade_goods = cloves
+									trade_goods = cinnamon
+								}
+							}
+							add_base_production = 1 
+							add_province_modifier = {
+								name = bng_monopolised_spices_modifier
+								duration = 9125
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							trading_bonus = {
+								trade_goods = cloves
+								value = yes 
+							}
+						}
+						every_owned_province = {
+							limit = { trade_goods = cloves } 
+							add_base_production = 1 
+						}
+					}
+					else_if = {
+						limit = {
+							trading_bonus = {
+								trade_goods = spices
+								value = yes
+							}
+						}
+						every_owned_province = {
+							limit = { trade_goods = spices }
+							add_base_production = 1
+						}
+					}
+					else_if = {
+						limit = {
+							trading_bonus = {
+								trade_goods = cinnamon
+								value = yes
+							}
+						}
+						every_owned_province = {
+							limit = { trade_goods = cinnamon }
+							add_base_production = 1
+						}
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							trading_bonus = {
+								trade_goods = spices
+								value = yes
+							}
+						}
+						every_owned_province = {
+							limit = { trade_goods = spices }
+							add_base_production = 1
+						}
+					}
+				}
+			}
+		}
+	}
+	bng_worlds_dockyards = {
+		icon = mission_shipyards_of_gujarat
+		required_missions = { bng_the_sultans_navy }
+		position = 11
+		provinces_to_highlight = {
+			province_id = 568
+		}
+
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+			}
+			568 = {
+				base_production = 10
+				OR = {
+					has_building = shipyard
+					has_building = grand_shipyard
+				}
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+		}
+		effect = {
+			568 = {
+				add_province_modifier = {
+					name = bng_grand_bengali_shipyards_modifier
+					duration = -1
+				}
+				add_or_upgrade_shipyard_building = yes
+			}
+			random_owned_province = {
+				limit = {
+					AND = {
+						OR = {
+							has_building = shipyard
+							has_building = grand_shipyard
+						}
+						NOT = { province_id = 568 }
+					}
+				}
+				add_province_modifier = {
+					name = bng_grand_bengali_shipyards_modifier
+					duration = -1
+				}
+				add_or_upgrade_shipyard_building = yes
+			}
+		}
+	}
+	bng_economic_vibrancy = {
+		icon = mission_dominate_persian_gulf
+		required_missions = { bng_expand_mint_towns bng_tradition_of_shipbuilding }
+		position = 13
+		provinces_to_highlight = {
+			province_id = 1343
+		}
+
+		trigger = {
+			west_bengal_area = {
+				type = all
+				development = 12
+			}
+			east_bengal_area = {
+				type = all
+				development = 12
+			}
+			OR = {
+				1343 = {
+					trade_share = {
+						country = ROOT
+						share = 75
+					}
+				}
+				production_income_percentage = 0.33
+			}
+			if = {
+				limit = { has_global_flag = advisors_expanded_mod_active }
+				OR = {
+					adm = 5
+					civil_engineer = 1
+					natural_scientist = 1
+				}
+			}
+			else = {
+				OR = {
+					adm = 5
+					natural_scientist = 1
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.30
+			}
+			custom_tooltip = BNG_DIVERSIFY_DELTA_DESC
+			hidden_effect = {
+				if = {
+					limit = { has_global_flag = trade_goods_expanded_mod_active }
+					561 = {
+						change_trade_goods = citrus
+					}
+					568 = {
+						change_trade_goods = cinnamon
+					}
+					2044 = {
+						change_trade_goods = tin
+					}
+					2046 = {
+						change_trade_goods = lead
+					}
+					4475 = {
+						change_trade_goods = tar
+					}
+				}
+				else = {
+					561 = {
+						change_trade_goods = wine
+					}
+					568 = {
+						change_trade_goods = spices
+					}
+					2044 = {
+						change_trade_goods = iron
+					}
+					2046 = {
+						change_trade_goods = copper
+					}
+					4475 = {
+						change_trade_goods = naval_supplies
+					}
+				}
+			}
+			if = {
+				limit = { has_global_flag = advisors_expanded_mod_active }
+				custom_tooltip = BNG_CIVIL_ENGINEER_DESC
+				hidden_effect = {
+					if = {
+						civil_engineer = 5
+						random_owned_province = {
+							limit = { 
+								area = west_bengal_area 
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+						random_owned_province = {
+							limit = { 
+								area = east_bengal_area
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+					}
+					if = {
+						civil_engineer = 4
+						random_owned_province = {
+							limit = { 
+								area = west_bengal_area 
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+						random_owned_province = {
+							limit = { 
+								area = east_bengal_area
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+					}
+					if = {
+						civil_engineer = 3
+						random_owned_province = {
+							limit = { 
+								area = west_bengal_area 
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+						random_owned_province = {
+							limit = { 
+								area = east_bengal_area
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+					}
+					if = {
+						civil_engineer = 2
+						random_owned_province = {
+							limit = { 
+								area = west_bengal_area 
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+						random_owned_province = {
+							limit = { 
+								area = east_bengal_area
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+					}
+					if = {
+						civil_engineer = 1
+						random_owned_province = {
+							limit = { 
+								area = west_bengal_area 
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+						random_owned_province = {
+							limit = { 
+								area = east_bengal_area
+								NOT = { has_province_flag = bng_civil_engineer_improved }
+							}
+							random_list = {
+								33 = { add_base_tax = 2 }
+								33 = { add_base_production = 2 }
+								34 = { add_base_manpower = 2 }
+							}
+							set_province_flag = bng_civil_engineer_improved
+						}
+					}
+				}
+			}
+		}
+	}
+	bng_diverse_government = {
+		icon = a_strong_government
+		required_missions = { bng_source_for_minting bng_economic_vibrancy bng_economy_of_sonargaon }
+		position = 15
+
+		trigger = {
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+			has_mil_advisor_2 = yes
+			custom_trigger_tooltip = {
+				tooltip = BNG_ALL_REFORMS_TT
+				OR = {
+					has_reform = political_absolutism_reform
+					has_reform = legislative_houses_reform
+				}
+			}
+			monthly_adm = 12
+			estate_loyalty = {
+				estate = all
+				loyalty = 60
+			}
+		}
+		effect = {
+			custom_tooltip = BNG_UNLOCK_NEW_ADVISORS
+			set_country_flag = bng_new_advisors
+			add_absolutism = 10
+			add_country_modifier = {
+				name = bng_absolute_government_modifier
+				duration = 18250
+			}
+		   	define_advisor = {
+				type = bng_sufi_scholar_advisor
+				skill = 1
+				discount = yes
+			}
+			define_advisor = {
+				type = bng_jamdani_weaver_advisor
+				skill = 1
+				discount = yes
+			}
+		}
+	}
+	bng_global_immigration = {
+		icon = mission_unite_bengal
+		required_missions = { bng_diverse_government }
+		position = 16
+
+		trigger = {
+			num_accepted_cultures = 4
+			government_rank = 3
+			development = 1000
+			has_unified_culture_group = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_melting_pot_of_india_modifier
+				duration = -1
+			}
+			change_adm = 1
+			change_dip = 1
+		}
+	}
+	bng_artillery_innovations = {
+		icon = mission_gunpowder_warfare
+		required_missions = { bng_empower_paiks }
+		position = 18
+
+		trigger = {
+			mil_tech = 13
+			num_of_artillery = 20
+			custom_trigger_tooltip = {
+				tooltip = BNG_MILITARY_IDEA_TT
+				if = {
+					limit = { has_global_flag = idea_groups_expanded_mod_active }
+					OR = {
+						army_tradition = 70
+						full_idea_group = aristocracy_ideas
+						full_idea_group = plutocracy_ideas
+						full_idea_group = offensive_ideas
+						full_idea_group = defensive_ideas
+						full_idea_group = quality_ideas
+						full_idea_group = quantity_ideas
+						full_idea_group = naval_ideas
+						full_idea_group = military_academy_idea_groups_expanded
+						full_idea_group = standing_army_idea_groups_expanded
+						full_idea_group = mercenary_army_idea_groups_expanded
+						full_idea_group = cossacks_idea_groups_expanded
+						full_idea_group = theocratic_idea_groups_expanded
+						full_idea_group = horde_idea_groups_expanded
+						full_idea_group = piracy_idea_groups_expanded
+						full_idea_group = engineer_idea_groups_expanded
+					}
+				}
+				else = {
+					OR = {
+						army_tradition = 70
+						full_idea_group = aristocracy_ideas
+						full_idea_group = plutocracy_ideas
+						full_idea_group = offensive_ideas
+						full_idea_group = defensive_ideas
+						full_idea_group = quality_ideas
+						full_idea_group = quantity_ideas
+						full_idea_group = naval_ideas
+						full_idea_group = horde_gov_ideas
+						full_idea_group = theocracy_gov_ideas
+						full_idea_group = indigenous_ideas
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = BNG_ARTILLERY_IDEAS_DESC
+			if = {
+				limit = { has_global_flag = idea_groups_expanded_mod_active }
+				if = {
+					limit = { full_idea_group = innovativeness_ideas }
+					if = {
+						limit = {
+							calc_true_if = {
+								amount = 2
+								full_idea_group = aristocracy_ideas
+								full_idea_group = plutocracy_ideas
+								full_idea_group = offensive_ideas
+								full_idea_group = defensive_ideas
+								full_idea_group = quality_ideas
+								full_idea_group = quantity_ideas
+								full_idea_group = naval_ideas
+								full_idea_group = military_academy_idea_groups_expanded
+								full_idea_group = standing_army_idea_groups_expanded
+								full_idea_group = mercenary_army_idea_groups_expanded
+								full_idea_group = cossacks_idea_groups_expanded
+								full_idea_group = theocratic_idea_groups_expanded
+								full_idea_group = horde_idea_groups_expanded
+								full_idea_group = piracy_idea_groups_expanded
+								full_idea_group = engineer_idea_groups_expanded
+							}
+						}
+						add_country_modifier = {
+							name = bng_professional_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = offensive_ideas
+								full_idea_group = quality_ideas
+								full_idea_group = standing_army_idea_groups_expanded
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = defensive_ideas
+								full_idea_group = aristocracy_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_defensive_inno_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = engineer_idea_groups_expanded
+								full_idea_group = quantity_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = bng_standard_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							calc_true_if = {
+								amount = 2
+								full_idea_group = aristocracy_ideas
+								full_idea_group = plutocracy_ideas
+								full_idea_group = offensive_ideas
+								full_idea_group = defensive_ideas
+								full_idea_group = quality_ideas
+								full_idea_group = quantity_ideas
+								full_idea_group = naval_ideas
+								full_idea_group = military_academy_idea_groups_expanded
+								full_idea_group = standing_army_idea_groups_expanded
+								full_idea_group = mercenary_army_idea_groups_expanded
+								full_idea_group = cossacks_idea_groups_expanded
+								full_idea_group = theocratic_idea_groups_expanded
+								full_idea_group = horde_idea_groups_expanded
+								full_idea_group = piracy_idea_groups_expanded
+								full_idea_group = engineer_idea_groups_expanded
+							}
+						}
+						add_country_modifier = {
+							name = bng_professional_artillery_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = offensive_ideas
+								full_idea_group = quality_ideas
+								full_idea_group = standing_army_idea_groups_expanded
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_artillery_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = defensive_ideas
+								full_idea_group = aristocracy_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_defensive_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = engineer_idea_groups_expanded
+								full_idea_group = quantity_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_artillery_modifier
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = bng_standard_artillery_modifier
+							duration = 9125
+						}
+					}
+				}
+			}
+			else = {
+				if = {
+					limit = { full_idea_group = innovativeness_ideas }
+					if = {
+						limit = {
+							calc_true_if = {
+								amount = 2
+								full_idea_group = aristocracy_ideas
+								full_idea_group = plutocracy_ideas
+								full_idea_group = offensive_ideas
+								full_idea_group = defensive_ideas
+								full_idea_group = quality_ideas
+								full_idea_group = quantity_ideas
+								full_idea_group = naval_ideas
+								full_idea_group = horde_gov_ideas
+								full_idea_group = theocracy_gov_ideas
+								full_idea_group = indigenous_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_professional_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = offensive_ideas
+								full_idea_group = quality_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = defensive_ideas
+								full_idea_group = aristocracy_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_defensive_inno_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = { full_idea_group = quantity_ideas }
+						add_country_modifier = {
+							name = bng_offensive_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = bng_standard_artillery_inno_modifier
+							duration = 9125
+						}
+					}
+				}
+				else = {
+					if = {
+						limit = {
+							calc_true_if = {
+								amount = 2
+								full_idea_group = aristocracy_ideas
+								full_idea_group = plutocracy_ideas
+								full_idea_group = offensive_ideas
+								full_idea_group = defensive_ideas
+								full_idea_group = quality_ideas
+								full_idea_group = quantity_ideas
+								full_idea_group = naval_ideas
+								full_idea_group = horde_gov_ideas
+								full_idea_group = theocracy_gov_ideas
+								full_idea_group = indigenous_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_professional_artillery_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = offensive_ideas
+								full_idea_group = quality_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_artillery_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = {
+							OR = {
+								full_idea_group = defensive_ideas
+								full_idea_group = aristocracy_ideas
+							}
+						}
+						add_country_modifier = {
+							name = bng_offensive_defensive_modifier
+							duration = 9125
+						}
+					}
+					else_if = {
+						limit = { full_idea_group = quantity_ideas }
+						add_country_modifier = {
+							name = bng_offensive_artillery_modifier
+							duration = 9125
+						}
+					}
+					else = {
+						add_country_modifier = {
+							name = bng_standard_artillery_modifier
+							duration = 9125
+						}
+					}
+				}
+			}
+		}
+	}
+	bng_ironclads = {
+		icon = mission_rb_build_furnaces
+		required_missions = { bng_artillery_innovations bng_flushed_deck }
+		position = 19
+		
+		trigger = {
+			navy_size_percentage = 1
+			naval_forcelimit = 150
+			has_dip_advisor_3 = yes
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				OR = {
+					trading_bonus = {
+						trade_goods = iron
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = copper
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = lead
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = metalworking
+						value = yes
+					}
+				}
+			}
+			else = {
+				OR = {
+					trading_bonus = {
+						trade_goods = iron
+						value = yes
+					}
+					trading_bonus = {
+						trade_goods = copper
+						value = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_ironclad_experiments_modifier
+				duration = 9125
+			}
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_tooltip = BNG_RANDOM_OWNED_NAVAL_SUPPLIES_DESC
+				random_owned_province = {
+					limit = {
+						AND = {
+							OR = {
+								trade_goods = naval_supplies
+								trade_goods = tar
+							}
+							has_building = grand_shipyard
+						}
+					}
+					add_province_modifier = {
+						name = bng_shipbuilding_innovations_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+ME_Bengali_Missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	has_country_shield = yes
+	potential = {
+		tag = BNG
+		OR = {
+			NOT = { has_dlc = "Dharma" }
+			AND = {
+				has_dlc = "Dharma"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+
+	bng_facilitate_trade = {
+		icon = mission_steer_trade_to_bengal
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			province_id = 1343
+		}
+
+		trigger = {
+			1343 = {
+				trade_share = {
+					country = ROOT
+					share = 45
+				}
+			}
+			561 = {
+				OR = {
+					num_of_times_improved = 3
+					province_has_center_of_trade_of_level = 2
+				}
+			}
+		}
+		effect = {
+			1343 = {
+				add_trade_node_income = 12
+			}
+			add_country_modifier = {
+				name = bng_influential_merchants_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	bng_cowry_shells = {
+		icon = mission_entrepot_of_india
+		required_missions = { bng_facilitate_trade }
+		position = 2
+		provinces_to_highlight = {
+			province_id = 1248
+		}
+
+		trigger = {
+			1248 = {
+				OR = {	
+					owned_by = ROOT
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
+					}
+				}
+			}
+			monthly_income = 25
+			num_of_light_ship = 15
+			1340 = {
+				trade_share = {
+					country = ROOT
+					share = 5
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.15
+			}
+			add_country_modifier = {
+				name = bng_efficient_exchange_modifier
+				duration = 9125
+			}
+			1248 = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	bng_safeguard_trade = {
+		icon = mission_arabian_sea_trade
+		required_missions = { bng_cowry_shells }
+		position = 4
+
+		trigger = {
+			num_of_merchants = 4
+			num_of_trading_bonuses = 1
+			mercantilism = 20
+		}
+		effect = {
+			custom_tooltip = BNG_ABUNDENT_GOODS_DESC
+			hidden_effect = {
+				if = {
+					limit = { num_of_trading_bonuses = 5 }
+					add_country_modifier = {
+						name = bng_abundent_goods_5_modifier
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = { num_of_trading_bonuses = 4 }
+					add_country_modifier = {
+						name = bng_abundent_goods_4_modifier
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = { num_of_trading_bonuses = 3 }
+					add_country_modifier = {
+						name = bng_abundent_goods_3_modifier
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = { num_of_trading_bonuses = 2 }
+					add_country_modifier = {
+						name = bng_abundent_goods_2_modifier
+						duration = 9125
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = bng_abundent_goods_1_modifier
+						duration = 9125
+					}
+				}
+			}
+			add_mercantilism = 5
+			1371 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 50
+					key = BNG_ABUNDENT_GOODS_TRADE
+				}
+			}
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 50
+					key = BNG_ABUNDENT_GOODS_TRADE
+				}
+			}
+		}
+	}
+	
+	bng_rich_trade = {
+		icon = mission_indian_trade_company
+		required_missions = { bng_safeguard_trade }
+		position = 6
+
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1361
+				province_id = 4477
+			}
+		}
+		
+		trigger = {
+			1343 = {
+				highest_value_trade_node = yes
+			}
+			OR = {
+				trade_income_percentage = 0.40
+				full_idea_group = trade_ideas
+			}
+			1361 = {
+				has_most_province_trade_power = ROOT
+			}
+
+			OR = {
+				trader = 3
+				dip = 6
+			}
+			has_institution = global_trade
+		}
+
+		effect = {
+			if = {
+				limit = { has_global_flag = advisors_expanded_mod_active }
+				define_advisor = {
+					type = marketeer
+					skill = 3
+					cost_multiplier = 0.25
+				}
+			}
+			else = {
+				define_advisor = {
+					type = trader
+					skill = 3
+					cost_multiplier = 0.5
+				}
+			}
+			4477 = {
+				add_or_upgrade_trade_building = yes
+			}
+			4474 = {
+				add_or_upgrade_trade_building = yes
+			}
+			561 = {
+				add_or_upgrade_trade_building = yes
+			}
+			custom_tooltip = BNG_FRUITS_OF_TRADE_DESC
+			hidden_effect = {
+				every_owned_province = {
+					limit = { province_has_center_of_trade_of_level = 2 }
+					add_province_modifier = {
+						name = bng_fruitful_trade_modifier
+						duration = 9125
+					}
+				}
+			}
+			country_event = {
+				id = bng_events.16
+			}
+		}
+	}
+	bng_tripura_gold = {
+		icon = mission_african_gold 
+		required_missions = { bng_woo_burma }
+		position = 7
+
+		provinces_to_highlight = {
+			province_id = 2091
+		}
+		
+		trigger = {
+			2091 = {
+				base_production = 8
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.18
+			}
+		}
+	}
+	bng_takas_for_shah = {
+		icon = mission_invade_burma
+		required_missions = { bng_tripura_gold }
+		position = 9
+		
+		trigger = {
+			OR = {
+				if = {
+					limit = { has_global_flag = trade_goods_expanded_mod_active }
+					OR = {
+						num_of_owned_provinces_with = {
+							value = 2
+							OR = {
+								trade_goods = gold
+								trade_goods = silver
+							}
+							full_idea_group = economic_ideas
+						}
+					}
+				}
+				else = {
+					OR = {
+						num_of_owned_provinces_with = {
+							value = 2
+							trade_goods = gold
+						}
+						full_idea_group = economic_ideas
+					}					
+				}
+			}
+			monthly_income = 60
+		}
+		effect = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_tooltip = BNG_BURMAN_SILVER_DESC
+				hidden_effect = {
+					random_owned_province = {
+						limit = {
+							AND = {
+								NOT = { trade_goods = silver }
+								NOT = { province_id = 568 }
+								region = burma_region
+							}
+						}
+						change_trade_goods = silver
+						add_base_production = 2
+					}
+					random_owned_province = {
+						limit = {
+							AND = {
+								NOT = { trade_goods = silver }
+								NOT = { province_id = 568 }
+								region = burma_region
+							}
+						}
+						change_trade_goods = silver
+						add_base_production = 2
+					}
+					every_owned_province = {
+						limit = { trade_goods = silver }
+						add_province_modifier = {
+							name = bng_military_coinage_modifier
+							duration = 9125
+						}
+					}
+				}
+			}
+			else = {
+				586 = {
+					add_province_modifier = {
+						name = bng_military_coinage_modifier
+						duration = 9125
+					}
+					add_base_production = 2
+				}
+			}
+			add_ruler_modifier = {
+				name = bng_conqueror_modifier
+				duration = -1
+			}
+			add_prestige = 20
+			add_mil_power = 50
+		}
+	}
+	bng_the_sultans_navy = {
+		icon = toulon_dockyards
+		required_missions = { }
+		position = 10
+		
+		trigger = {
+			navy_size = 20
+			if = {
+				limit = { has_global_flag = advisors_expanded_mod_active }
+				OR = {
+					naval_reformer = 1
+					navarch = 1
+					navy_tradition = 15
+				}
+			}
+			else = {
+				naval_reformer = 1
+			}
+		}
+		effect = {
+			create_admiral = { tradition = 50 }
+			add_country_modifier = {
+				name = bng_protect_shore_modifier
+				duration = -1
+			}
+		}
+	}
+	bng_tradition_of_shipbuilding = {
+		icon = toulon_dockyards
+		required_missions = { bng_the_sultans_navy }
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				province_id = 561
+				province_id = 4474
+				province_id = 4477
+			}
+		}
+		trigger = {
+			561 = {
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+			4474 = {
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+			4477 = {
+				OR = {
+					has_building = dock
+					has_building = drydock
+				}
+			}
+			OR = {
+				dip_tech = 9
+				development_in_provinces = {
+					value = 50
+					trade_goods = naval_supplies
+				}
+				full_idea_group = maritime_ideas
+				full_idea_group = naval
+			}
+		}
+		effect = {
+			country_event = {
+				id = bng_events.31
+			}
+			add_navy_tradition = 20
+		}
+	}
+	bng_economy_of_sonargaon = {
+		icon = mission_defeat_mewar
+		required_missions = { bng_tradition_of_shipbuilding }
+		position = 14
+		provinces_to_highlight = {
+			province_id = 4474
+		}
+
+		trigger = {
+			4474 = {
+				num_of_times_improved = 10
+				OR = {
+					has_building = state_house
+					has_building = courthouse
+					has_building = town_hall
+				}
+			}
+		}
+		effect = {
+			4474 = {
+				add_province_modifier = {
+					name = bng_center_of_minting_modifier
+				}
+				add_base_tax = 2
+			}
+			add_inflation = -2
+		}
+	}
+	bng_empower_paiks = {
+		icon = mission_raid_on_genoa
+		required_missions = { }
+		position = 17
+		
+		trigger = {
+			estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 60
+			}
+			OR = {
+				estate_influence = {
+					estate = estate_nobles
+					influence = 50
+				}
+				has_estate_privilege = estate_nobles_officer_corp
+				has_estate_privilege = estate_nobles_command_of_the_military
+			}
+			capital_scope = {
+				OR = {
+					has_building = barracks
+					has_building = training_fields
+				}
+			}
+		}
+		effect = {
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
+			add_army_tradition = 10
+			capital_scope = {
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = bng_royal_guards_modifier
+					duration = 18250
+				}
+			}
+		}
+	}
+	bng_elephant_warfare = {
+		icon = mission_conquer_siam
+		required_missions = { bng_empower_paiks }
+		position = 18
+		
+		trigger = {
+			cavalry_fraction = 0.25
+			OR = {
+				barracks = 5
+				training_fields = 5
+			}
+			mil_tech = 10
+		}
+		effect = {
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				custom_tooltip = BNG_ELEPHANT_DEVELOPMENT_DESC
+				hidden_effect = {
+					every_owned_province = {
+						limit = { trade_goods = elephants }
+						add_base_manpower = 2
+						add_base_production = 2
+					}
+				}
+			}
+			add_country_modifier = {
+				name = bng_elephant_tactics_modifier
+				duration = 9125
+			}
+		}
+	}
+	bng_excellent_firearms = {
+		icon = mission_integrate_the_purbias
+		required_missions = { bng_elephant_warfare }
+		position = 20
+		
+		trigger = {
+			num_of_rajput = 25
+			army_size = 100
+			if = {
+				limit = { has_global_flag = trade_goods_expanded_mod_active }
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+						trade_goods = coal
+						trade_goods = tin
+						trade_goods = lead
+						trade_goods = gunpowder
+					}
+				}
+			}
+			else = {
+				development_in_provinces = {
+					value = 150
+					OR = {
+						trade_goods = iron
+						trade_goods = copper
+						trade_goods = coal
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_gunpower_empire_modifier
+				duration = -1
+			}
+			country_event = {
+				id = bng_events.32
+			}
+		}
+	}
+}
