@@ -13,61 +13,183 @@ ME_Bengali_Missions_1 = {
 			}
 		}
 	}
-	bng_root_out_ganesha = {
-		icon = mission_ahmadabad_paper
-		required_missions = { }
-		position = 1
+	bng_taluqdar_zamindar_conflict = {
+		icon = mission_noble_council
+		required_missions = { dlh_issue_land }
+		position = 2
 		trigger = {
-			num_of_estate_privileges = {
-				estate = estate_nobles
-				value = 2
-			}
-			if = {
-				limit = { has_global_flag = advisors_expanded_mod_active }
-				OR = {
-					reformist = 1 
+			OR = {
+				if = {
+					limit = { has_estate = estate_nobles }
 					estate_loyalty = {
 						estate = estate_nobles
 						loyalty = 60
 					}
 				}
-			}
-			else = {
-				estate_loyalty = {
-					estate = estate_nobles
-					loyalty = 60
+				if = {
+					limit = { has_estate = estate_nobles }	
+					NOT = {
+						estate_territory = {
+					 		estate = estate_nobles
+					    	territory = 15
+						}
+					}
 				}
+			}
+			OR = {
+				if = {
+					limit = { has_dlc = "Dharma" }
+					if = {
+						limit = { has_estate = estate_brahmins }
+						estate_loyalty = {
+							estate = estate_brahmins
+							loyalty = 60
+						}
+					}
+				}
+				if = {
+					limit = { has_dlc = "Dharma" }
+					if = {
+						limit = { has_estate = estate_brahmins }	
+						NOT = {
+							estate_territory = {
+						 		estate = estate_brahmins
+						    	territory = 15
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = BNG_TOLERANCE_HINDU_TT
+					hinduism = 3
+				}
+				piety = 50
+			}
+			OR = {
+				absolutism = 40
+				NOT = { average_autonomy_above_min = 15 }
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = bng_purge_ganesha_modifier
-				duration = 18250
+			if = {
+				limit = { has_estate = estate_nobles }
+				change_estate_land_share = {
+				    estate = estate_nobles
+				    share = -5
+				}
+			}
+			if = {
+				limit = { has_dlc = "Dharma" }
+				if = {
+					limit = { has_estate = estate_brahmins }
+					change_estate_land_share = {
+				    	estate = estate_brahmins
+				   		share = -5
+					}
+				}
+			}
+			else = {
+				add_adm_power = 50
+			}
+			custom_tooltip = BNG_VARIABLE_REWARD_NOBLES
+			if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+				}
+				add_country_modifier = {
+					name = bng_noble_loyalty_modifier
+					duration = 18250
+				}
+			}
+			if = {
+				limit = {
+					estate_loyalty = {
+						estate = estate_brahmins
+						loyalty = 60
+					}
+				}
+				add_country_modifier = {
+					name = bng_brahmins_loyalty_modifier
+					duration = 18250
+				}
+			}
+			if = {
+				NOT = {
+					estate_territory = {
+				 		estate = estate_brahmins
+				    	territory = 15
+					}
+				}
+				add_country_modifier = {
+					name = bng_brahmins_crownland_modifier
+					duration = 18250
+				}
+			}
+			if = {
+				NOT = {
+					estate_territory = {
+				 		estate = estate_nobles
+				    	territory = 15
+					}
+				}
+				add_country_modifier = {
+					name = bng_brahmins_crownland_modifier
+					duration = 18250
+				}
+			}
+			if = {
+				limit = {
+					AND = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_brahmins
+							loyalty = 60
+						}
+					}
+				}
+				add_country_modifier = {
+					name = bng_noble_brahmins_loyalty_modifier
+					duration = -1
+				}
+			}
+			if = {
+				limit = {
+					AND = {
+						NOT = {
+							estate_territory = {
+						 		estate = estate_nobles
+						    	territory = 15
+							}
+						}
+						NOT = {
+							estate_territory = {
+						 		estate = estate_brahmins
+						    	territory = 15
+							}
+						}
+					}
+				}
+				add_country_modifier = {
+					name = bng_noble_brahmins_crownland_modifier
+					duration = -1
+				}
 			}
 		}
 	}
 	
-	bng_clean_government = {
-		icon = mission_court_education
-		required_missions = { bng_root_out_ganesha }
-		position = 2
+	bng_afghan_nobility = {
+		icon = mission_subdue_the_afghans
+		required_missions = { bng_taluqdar_zamindar_conflict }
+		position = 3
 		trigger = {
-			has_adm_advisor = yes
-			has_dip_advisor = yes
-			has_mil_advisor = yes
-			NOT = { average_effective_unrest = 2 }
-			NOT = { overextension_percentage = 0.01 }
-			OR = {
-				has_reform = centralize_reform
-				has_reform = decentralize_reform
-			}
 		}
 		effect = {
-			change_government_reform_progress = 50
-			add_ruler_modifier = {
-				name = bng_new_admin_modifier
-				duration = -1
-			}
 		}
 	}
 	
