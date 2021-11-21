@@ -369,7 +369,7 @@ SUM_generic_missions_4 = {
 	has_country_shield = yes
 	
 	SUM_generic_architecture_sumatra = {
-		icon = mission_look_west
+		icon = me_mission_sea_throne_room
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -401,6 +401,9 @@ SUM_generic_missions_4 = {
 			MSA_is_in_sumatra = yes
 		}
 		trigger = {
+			owns_all_provinces = {
+				MSA_is_in_sumatra = yes
+			}
 			development_in_provinces = {
 				MSA_is_in_sumatra = yes
 				value = 300
@@ -408,7 +411,52 @@ SUM_generic_missions_4 = {
 			monthly_income = 25
 		}
 		effect = {
-			
+			add_stability_or_adm_power = yes
+			custom_tooltip = MLC_highlighted_area
+			tooltip = {
+				add_province_modifier = {
+					name = SUM_generic_suvarnadvipa_modifier
+					duration = -1
+				}
+			}
+			hidden_effect = {
+				central_sumatra_area = {
+					add_province_modifier = {
+						name = SUM_generic_suvarnadvipa_modifier
+						duration = -1
+					}
+				}
+				jambi_area = {
+					add_province_modifier = {
+						name = SUM_generic_suvarnadvipa_modifier
+						duration = -1
+					}
+				}
+				minangkabau_area = {
+					add_province_modifier = {
+						name = SUM_generic_suvarnadvipa_modifier
+						duration = -1
+					}
+				}
+				north_sumatra_area = {
+					add_province_modifier = {
+						name = SUM_generic_suvarnadvipa_modifier
+						duration = -1
+					}
+				}
+				south_sumatra_area = {
+					add_province_modifier = {
+						name = SUM_generic_suvarnadvipa_modifier
+						duration = -1
+					}
+				}
+				batak_area = {
+					add_province_modifier = {
+						name = SUM_generic_suvarnadvipa_modifier
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 	
@@ -441,14 +489,96 @@ SUM_generic_missions_4 = {
 	}
 	
 	SUM_generic_spice_kings = {
-		icon = mission_look_west
+		icon = mission_gharbianss
 		required_missions = { SUM_generic_lampung_peppers SUM_generic_orang_laut }
 		position = 5
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					AND = {
+						trade_goods = nutmeg
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = nutmeg
+									value = 0.25
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = cloves
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = cloves
+									value = 0.25
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = vanilla
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = vanilla
+									value = 0.25
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				trade_goods = spices
+				NOT = {
+					ROOT = {
+						trading_part = {
+							trade_goods = spices
+							value = 0.25
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			share_of_starting_income = 3
+			monthly_income = 10
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.25
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.25
+				}
+			}
 		}
 		effect = {
+			add_years_of_trade_income = { years = 1 }
+			custom_tooltip = JAV_trade_income
+			add_country_modifier = {
+				name = SUM_generic_spice_flows
+				duration = -1
+			}
 		}
 	}
 }
@@ -481,7 +611,7 @@ SUM_generic_missions_5 = {
 	has_country_shield = yes
 	
 	SUM_generic_secure_trade = {
-		icon = mission_arabian_trade
+		icon = mission_dharma_mission_arabian_trade
 		required_missions = { SUM_generic_architecture_sumatra }
 		position = 2
 		provinces_to_highlight = {
@@ -520,27 +650,56 @@ SUM_generic_missions_5 = {
 	}
 	
 	SUM_generic_religious_conflicts = {
-		icon = mission_look_west
+		icon = mission_mnd_maj_candi_shrines
 		required_missions = { }
-		position = 4
+		position = 5
 		provinces_to_highlight = {
+			is_capital = yes
+			owner = { NOT = { religion = ROOT } }
 		}
 		trigger = {
-			
+			any_country = {
+				NOT = { religion = ROOT }
+				war_with = ROOT
+			}
 		}
 		effect = {
+			add_mil_power = 50
+			raise_war_taxes = yes
 		}
 	}
 	
 	SUM_generic_battlefield = {
-		icon = mission_look_west
+		icon = mission_prosperity_in_bengal
 		required_missions = { SUM_generic_religious_conflicts }
-		position = 6
+		position = 7
 		provinces_to_highlight = {
+			NOT = { religion = ROOT }
+			OR = {
+				owned_by = ROOT
+				is_capital = yes
+			}
 		}
 		trigger = {
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = obj_force_converted_tooltip
+					has_country_flag = force_converted
+				}
+				
+				custom_trigger_tooltip = {
+					tooltip = MSA_converted_3_provinces
+					check_variable = { which = num_converted_religion value = 3 }
+				}
+			}	
 		}
 		effect = {
+			add_country_modifier = {
+				name = SUM_hegemony
+				duration = -1
+			}
+			
+			add_army_tradition_or_mil_power = { amount = 15 }
 		}
 	}
 }
