@@ -933,13 +933,130 @@ MSA_find_provinces_tag = {
 	}
 }
 
+MSA_event_87_potential = {
+	if = {
+		limit = {
+			NOT = { has_dlc = "Mandate of Heaven" }
+		}
+		MSA_87_find_provinces = { target = 1 goods = $goods$ }
+		if = {
+			limit = { has_country_flag = MSA_1_province }
+			MSA_87_find_provinces = { target = 2 goods = $goods$ }
+			if = {
+				limit = { has_country_flag = MSA_2_province }
+				MSA_87_find_provinces = { target = 3 goods = $goods$ }
+				if = {
+					limit = { has_country_flag = MSA_3_province }
+					MSA_87_find_provinces = { target = 4 goods = $goods$ }
+					if = {
+						limit = { has_country_flag = MSA_1_province }
+						MSA_87_find_provinces = { target = 5 goods = $goods$ }
+					}
+				}
+			}
+		}
+	}
+	else = {
+		MSA_87_find_provinces = { target = 1 goods = $goods$ }
+		if = {
+			limit = { has_country_flag = MSA_1_province }
+			MSA_87_find_provinces = { target = 2 goods = $goods$ }
+			if = {
+				limit = { has_country_flag = MSA_2_province }
+				MSA_87_find_provinces = { target = 3 goods = $goods$ }
+			}
+		}
+		if = {
+			limit = { has_country_flag = MSA_3_province }
+			MSA_87_find_provinces_state_edict = { target = 4 goods = $goods$ }
+			if = {
+				limit = { has_country_flag = MSA_1_province }
+				MSA_87_find_provinces_state_edict = { target = 5 goods = $goods$ }
+			}
+		}
+	}
+}
+
+MSA_87_find_provinces = {
+	random_owned_province = {
+		limit = {
+			NOT = { has_province_flag = MSA_flag_already_set }
+			NOT = { trade_goods = $goods$ }
+			NOT = { has_state_edict = edict_advancement_effort }
+		}
+		save_event_target_as = Malaya_target_$target$
+		set_province_flag = MSA_flag_already_set
+		ROOT = { set_country_flag =  MSA_$target$_province }
+	}
+}
+
+MSA_87_find_provinces_state_edict = {
+	random_owned_province = {
+		limit = {
+			NOT = { has_province_flag = MSA_flag_already_set }
+			NOT = { trade_goods = $goods$ }
+			has_state_edict = edict_advancement_effort
+		}
+		save_event_target_as = Malaya_target_$target$
+		set_province_flag = MSA_flag_already_set
+		ROOT = { set_country_flag =  MSA_$target$_province }
+	}
+}
+
+MSA_87_clr_flags = {
+	every_owned_province = {
+		clr_province_flag = MSA_flag_already_set
+	}
+	clr_country_flag = MSA_1_province
+	clr_country_flag = MSA_2_province
+	clr_country_flag = MSA_3_province
+	clr_country_flag = MSA_4_province
+	clr_country_flag = MSA_5_province
+	clr_country_flag = MSA_cocoa_flag
+	clr_country_flag = MSA_coffee_flag
+}
+
+MSA_87_execute_effect = {
+	if = {
+		limit = { has_country_flag = MSA_$id$_province }
+		if = { 
+			limit = {
+				has_country_flag = MSA_cocoa_flag
+			}
+			event_target:Malaya_target_$id$ = {
+				change_trade_goods = cocoa
+			}
+			hidden_effect = {
+				subtract_variable = {
+					which = MSA_cocoa_provinces
+					value = 1
+				}
+			}
+		}
+		else_if = { 
+			limit = {
+				has_country_flag = MSA_coffee_flag
+			}
+			event_target:Malaya_target_$id$ = {
+				change_trade_goods = coffee
+			}
+			hidden_effect = {
+				subtract_variable = {
+					which = MSA_coffee_provinces
+					value = 1
+				}
+			}
+		}
+	}
+}
+
 MSA_find_provinces = {
 	random_province = {
 		limit = {
 			has_province_flag = MSA_$tag$_claim
 			is_empty = yes
 		}
-		save_event_target_as = MSA_target_$target$
+		save_event_target_as = Malaya_target_$target$
 		clr_province_flag = MSA_$tag$_claim
 		ROOT = { set_country_flag = TID_TER_$target$_province }
 	}
@@ -1973,5 +2090,22 @@ MSA_shrink_canton_effect = {
 				value = 1
 			}
 		}
+	}
+}
+
+MSA_colonies_in_borneo = {
+	2706 = {
+		if = {
+			limit = { is_empty = yes }
+			add_siberian_construction = 100
+		}
+		else = { add_core = ROOT }
+	}
+	2708 = {
+		if = {
+			limit = { is_empty = yes }
+			add_siberian_construction = 100
+		}
+		else = { add_core = ROOT }
 	}
 }
