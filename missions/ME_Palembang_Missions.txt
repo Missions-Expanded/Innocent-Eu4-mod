@@ -10,7 +10,7 @@ PLB_missions_1 = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -18,7 +18,7 @@ PLB_missions_1 = {
 	has_country_shield = yes
 	
 	PLB_tarumanagara = {
-		icon = mission_riches_of_golconda
+		icon = mnd_maj_sunda_relations
 		required_missions = { PLB_legacy_of_srivijaya }
 		position = 3
 		provinces_to_highlight = {
@@ -62,7 +62,7 @@ PLB_missions_1 = {
 	}
 	
 	PLB_majapahit_kneels = {
-		icon = mission_riches_of_golconda
+		icon = mission_mnd_maj_end_disaster
 		required_missions = { PLB_tarumanagara }
 		position = 5
 		provinces_to_highlight = {
@@ -106,7 +106,7 @@ PLB_missions_1 = {
 	}
 	
 	PLB_sri_tri_buana = {
-		icon = mission_riches_of_golconda
+		icon = me_mission_malay_leader
 		required_missions = { PLB_majapahit_kneels PLB_langkasuka }
 		position = 7
 		provinces_to_highlight = {
@@ -216,7 +216,7 @@ PLB_missions_1 = {
 	}
 	
 	PLB_eastern_peripheries = {
-		icon = mission_riches_of_golconda
+		icon = mission_mnd_maj_cloves
 		required_missions = { PLB_sri_tri_buana }
 		position = 8
 		provinces_to_highlight = {
@@ -258,7 +258,7 @@ PLB_missions_2 = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -266,7 +266,7 @@ PLB_missions_2 = {
 	has_country_shield = yes
 	
 	PLB_legacy_of_srivijaya = {
-		icon = mission_riches_of_golconda
+		icon = mission_mnd_khm_resurgence
 		required_missions = { PLB_privateer_problem }
 		position = 2
 		provinces_to_highlight = {
@@ -347,7 +347,7 @@ PLB_missions_2 = {
 	}
 	
 	PLB_malayu = {
-		icon = mission_riches_of_golconda
+		icon = me_mission_malay_ruler
 		required_missions = { PLB_legacy_of_srivijaya }
 		position = 4
 		provinces_to_highlight = {
@@ -373,7 +373,7 @@ PLB_missions_2 = {
 	}
 	
 	PLB_langkasuka = {
-		icon = mission_riches_of_golconda
+		icon = me_mission_sack_malacca
 		required_missions = { PLB_malayu }
 		position = 6
 		provinces_to_highlight = {
@@ -406,11 +406,10 @@ PLB_missions_3_1 = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
-		MSA_is_tag = { tag = PLB }
 	}
 	has_country_shield = yes
 	
@@ -427,11 +426,14 @@ PLB_missions_3_1 = {
 				}
 				OR = {
 					has_reform = pirate_republic_reform
-					is_year = 1446
+					AND = {
+						is_year = 1446
+						stability = 1
+					}
 				}
 			}
 			else = {
-				#TODO: DLC ALTERNATIVE
+				stability = 1
 			}
 		}
 		effect = {
@@ -478,6 +480,13 @@ PLB_missions_3_1 = {
 					}
 				}
 			}
+			else = {
+				add_mercantilism = 2
+				add_country_modifier = {
+					name = PLB_chinese_viceroyalty
+					duration = 7300
+				}
+			}
 		}
 	}
 }
@@ -494,7 +503,7 @@ PLB_missions_3_non_pirate = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -503,38 +512,131 @@ PLB_missions_3_non_pirate = {
 	has_country_shield = yes
 	
 	PLB_ming = {
-		icon = mission_riches_of_golconda
+		icon = mission_open_up_china
 		required_missions = { PLB_privateer_problem }
 		position = 2
 		provinces_to_highlight = {
+			owned_by = event_target:EmperorOfChina
 		}
 		trigger = {
-			if = {
-				limit = {
-					exists = MNG
-					MNG = {
-						is_emperor_of_china = yes
-					}
-				}
+			event_target:EmperorOfChina = {
 				has_opinion = {
 					who = ROOT
-					value = 100
+					value = 75
 				}
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PLB_imperial_diplomacy
+				duration = 7300
+			}
 		}
 	}
 	
 	PLB_expedition = {
-		icon = mission_riches_of_golconda
+		icon = mission_trade_with_cathay
 		required_missions = { PLB_ming }
 		position = 3
 		provinces_to_highlight = {
+			owned_by = event_target:EmperorOfChina
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = MLC_chinese_expedition_has_concluded
+				has_country_flag = MSA_chinese_expedition_concluded
+			}
+			if = {
+				limit = {
+					OR = {
+						has_country_flag = MSA_insulting_flag
+						has_country_flag = MSA_in_defiance_flag
+					}
+				}
+				event_target:EmperorOfChina = {
+					has_been_insulted_by_root = yes
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						has_country_flag = MSA_swayed_flag
+						has_country_flag = MSA_absolutely_loyal_flag
+					}
+				}
+				event_target:EmperorOfChina = {
+					has_opinion = {
+						who = ROOT
+						value = 150
+					}
+				}
+			}
+			else = {
+				capital_scope = {
+					province_trade_power = 50
+				}
+			}
 		}
 		effect = {
+			custom_tooltip = MLC_if_we_were_swayed
+			tooltip = {	
+				add_country_modifier = {
+					name = MLC_diplomats
+					duration = 9125
+				}
+				add_dip_power = 50
+			}
+			custom_tooltip = MLC_if_we_were_insulting
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_harm_to_injury
+					duration = 7300
+				}
+				add_mil_power = 50
+			}
+			custom_tooltip = MLC_if_we_were_neutral
+			tooltip = {
+				add_country_modifier = {
+					name = MLC_careful_distancing
+					duration = 9125
+				}
+				add_adm_power = 50
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							has_country_flag = MSA_swayed_flag
+							has_country_flag = MSA_absolutely_loyal_flag
+						}
+					}
+					add_country_modifier = {
+						name = MLC_diplomats
+						duration = 9125
+					}
+					add_dip_power = 50
+				}
+				else_if = {
+					limit = {
+						OR = {
+							has_country_flag = MSA_insulting_flag
+							has_country_flag = MSA_in_defiance_flag
+						}
+					}
+					add_country_modifier = {
+						name = MLC_harm_to_injury
+						duration = 7300
+					}
+					add_mil_power = 50
+				}
+				else = {
+					add_country_modifier = {
+						name = MLC_careful_distancing
+						duration = 9125
+					}
+					add_adm_power = 50
+				}
+			}
 		}
 	}
 }
@@ -592,7 +694,7 @@ PLB_missions_3_2 = {
 	has_country_shield = yes
 	
 	PLB_seas_never_conquered = {
-		icon = mission_riches_of_golconda
+		icon = mission_mnd_maj_rein_in_brunei
 		required_missions = { PLB_malayu }
 		position = 5
 		provinces_to_highlight = {
@@ -609,11 +711,12 @@ PLB_missions_3_2 = {
 			create_general = {
 				tradition = 80
 			}
+			MSA_borneo_reward = yes
 		}
 	}
 	
 	PLB_srivijaya = {
-		icon = mission_riches_of_golconda
+		icon = mission_sail_to_the_east_indies
 		required_missions = { PLB_seas_never_conquered PLB_langkasuka }
 		position = 7
 		provinces_to_highlight = {
@@ -640,7 +743,7 @@ PLB_missions_4_non_pirate = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -661,7 +764,7 @@ PLB_missions_4_non_pirate = {
 	}
 	
 	PLB_peppers_of_lampung = {
-		icon = mission_riches_of_golconda
+		icon = mission_rb_colonise_spice_islands
 		required_missions = { PLB_restore_palembang }
 		position = 4
 		provinces_to_highlight = {
@@ -669,20 +772,22 @@ PLB_missions_4_non_pirate = {
 			OR = {
 				NOT = { has_production_building_trigger = yes }
 				NOT = { development = 12 }
+				NOT = { owned_by = ROOT }
 			}
 		}
 		trigger = {
 			623 = {
+				owned_by = ROOT
 				has_production_building_trigger = yes
 				development = 12
 			}
 		}
 		effect = {
-			add_permanent_province_modifier = {
-				name = lampung_pepper
-				duration = -1
-			}
 			623 = {
+				add_permanent_province_modifier = {
+					name = lampung_pepper
+					duration = -1
+				}
 				add_or_upgrade_production_building = yes
 			}
 		}
@@ -703,26 +808,137 @@ PLB_missions_4_non_pirate = {
 	}
 	
 	PLB_control_the_seas = {
-		icon = mission_look_west
+		icon = mission_dharma_mission_arabian_trade
 		required_missions = { PLB_allying_the_natives }
 		position = 6
 		provinces_to_highlight = {
 		}
 		trigger = {
+			home_trade_node = {
+				trade_share = {
+					share = 33
+					country = ROOT
+				}
+			}
 		}
 		effect = {
+			home_trade_node_effect_scope = {
+				add_trade_node_income = 12
+			}
+			add_country_modifier = {
+				name = SUM_trade
+				duration = 9125
+			}
 		}
 	}
 	
 	PLB_trade_superiority = {
-		icon = mission_look_west
+		icon = mission_subjugate_saurashtra
 		required_missions = { PLB_control_the_seas PLB_malacca }
 		position = 7
 		provinces_to_highlight = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					AND = {
+						trade_goods = nutmeg
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = nutmeg
+									value = 0.25
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = cloves
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = cloves
+									value = 0.25
+								}
+							}
+						}
+					}
+					AND = {
+						trade_goods = vanilla
+						NOT = {
+							ROOT = {
+								trading_part = {
+									trade_goods = vanilla
+									value = 0.25
+								}
+							}
+						}
+					}
+				}
+			}
+			else = {
+				trade_goods = spices
+				NOT = {
+					ROOT = {
+						trading_part = {
+							trade_goods = spices
+							value = 0.25
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			monthly_income = 15
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				trading_part = {
+					trade_goods = nutmeg
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = cloves
+					value = 0.25
+				}
+				trading_part = {
+					trade_goods = vanilla
+					value = 0.25
+				}
+			}
+			else = {
+				trading_part = {
+					trade_goods = spices
+					value = 0.25
+				}
+			}
 		}
 		effect = {
+			add_years_of_trade_income = { years = 1 }
+			custom_tooltip = JAV_trade_income
+			capital_scope = {
+				add_or_upgrade_trade_building = yes
+			}
+			
+			1361 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 10
+					key = MAJ_spice_trade
+				}
+			}
+			
+			1357 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = -1
+					power = 10
+					key = MAJ_spice_trade
+				}
+			}
 		}
 	}
 }
@@ -739,7 +955,7 @@ PLB_missions_4_pirate = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -808,7 +1024,7 @@ PLB_missions_5_1 = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -820,17 +1036,33 @@ PLB_missions_5_1 = {
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
+			OR = {
+				province_id = 1015
+				owned_by = RYU
+			}
 		}
 		trigger = {
 			if = {
 				limit = { exists = RYU }
-				has_opinion = {
+				reverse_has_opinion = {
 					who = RYU
 					value = 75
 				}
 			}
+			else = {
+				1015 = {
+					has_merchant = ROOT
+				}
+			}
 		}
 		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = PLB_ryukyu_palembang_spice_agreement
+					duration = -1
+				}
+			}
+			add_dip_power = 50
 		}
 	}
 }
@@ -847,7 +1079,7 @@ PLB_missions_5_non_pirate = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}
@@ -856,7 +1088,7 @@ PLB_missions_5_non_pirate = {
 	has_country_shield = yes
 	
 	PLB_restore_palembang = {
-		icon = mission_riches_of_golconda
+		icon = mission_defeat_jaunpur
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
@@ -885,7 +1117,7 @@ PLB_missions_5_non_pirate = {
 				limit = {
 					has_dlc = "Dharma"
 				}
-				622 = { add_or_upgrade_trade_building = yes }
+				622 = { add_or_upgrade_shipyard_building = yes }
 			}
 			else = {
 				622 = { add_center_of_trade_level = 1 }
@@ -911,10 +1143,19 @@ PLB_missions_5_non_pirate = {
 		required_missions = { PLB_allying_the_natives }
 		position = 6
 		provinces_to_highlight = {
+			owned_by = MLC
 		}
 		trigger = {
+			OR = {
+				navy_size = MLC
+				NOT = { exists = MLC }
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PLB_naval_dominance
+				duration = 9125
+			}
 		}
 	}
 }
@@ -931,7 +1172,7 @@ PLB_missions_5_pirate = {
 		OR = {
 			tag = PLB
 			AND = {
-				tag = PLB
+				tag = MSA
 				was_tag = PLB
 			}
 		}

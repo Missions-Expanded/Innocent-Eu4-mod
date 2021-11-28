@@ -3749,12 +3749,28 @@ MSA_Missions_Hindu_3 = {
 		required_missions = { MSA_secure_hindu_holy_sites MSA_bring_back }
 		position = 26
 		provinces_to_highlight = {
+			NOT = { religion = ROOT }
 		}
 		trigger = {
+			calc_true_if = {
+				all_province = {
+					religion = ROOT
+				}
+				amount = 500
+			}
 		}
 		effect = {
 			set_country_flag = MSA_hindu_decision_flag
 			custom_tooltip = MSA_switch_diety
+			
+			custom_tooltip = MSA_strengthen_holy_sites_of_hindu
+			hidden_effect = {
+				remove_country_modifier = MSA_holy_sites_of_hindu
+				add_country_modifier = { 
+					name = MSA_holy_sites_of_hindu_2
+					duration = -1
+				}
+			}
 		}
 	}
 }
@@ -3794,14 +3810,39 @@ MSA_Missions_Hindu_4 = {
 		required_missions = { MSA_secure_hindu_holy_sites MSA_prambanan }
 		position = 25
 		provinces_to_highlight = {
+			OR = {
+				religion_group = eastern
+				owner = { religion_group = eastern }
+				province_id = 558
+			}
 		}
 		trigger = {
-			
+			OR = {
+				any_ally = { 
+					religion_group = eastern
+					has_opinion = {
+						who = ROOT
+						value = 200
+					}
+				}
+				num_of_owned_provinces_with = {
+					religion_group = eastern
+					NOT = { unrest = 0 }
+					NOT = { nationalism = 1 }
+					value = 5
+				}
+				558 = { owned_by = ROOT }
+			}
 		}
 		effect = {
 			custom_tooltip = buddha_deity_tt
 			hidden_effect = {
 				complete_mission = sun_candi_temples 
+			}
+			add_stability_or_adm_power = yes
+			add_country_modifier = {
+				name = MSA_buddhist_syncretism
+				duration = -1
 			}
 		}
 	}
