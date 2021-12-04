@@ -60,10 +60,10 @@ ME_Bengali_Missions_1 = {
 					}
 				}
 				custom_trigger_tooltip = {
-					tooltip = BNG_TOLERANCE_HINDU_TT
+					tooltip = TOLERANCE_HEATHEN_TT
 					hinduism = 3
 				}
-				piety = 50
+				piety = 0.5
 			}
 			OR = {
 				absolutism = 40
@@ -91,7 +91,7 @@ ME_Bengali_Missions_1 = {
 			else = {
 				add_adm_power = 50
 			}
-			custom_tooltip = BNG_VARIABLE_REWARD_NOBLES
+			custom_tooltip = BNG_VARIABLE_REWARD_NOBLES_TT
 			if = {
 				limit = {
 					estate_loyalty = {
@@ -136,7 +136,7 @@ ME_Bengali_Missions_1 = {
 					}
 				}
 				add_country_modifier = {
-					name = bng_brahmins_crownland_modifier
+					name = bng_noble_crownland_modifier
 					duration = 18250
 				}
 			}
@@ -188,57 +188,97 @@ ME_Bengali_Missions_1 = {
 		required_missions = { bng_taluqdar_zamindar_conflict }
 		position = 3
 		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 8
+					culture = afghani
+				}
+				AFG = {
+					alliance_with = ROOT
+				}
+				if = {
+					limit = { has_estate = estate_nobles }
+					estate_influence = {
+						estate = estate_nobles
+						influence = 60
+					}
+				}
+			}
+			OR = {
+				army_tradition = 40
+				bihar_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
 		}
 		effect = {
+			add_yearly_manpower = 1
+			tooltip = {
+				add_country_modifier = {
+					name = bng_ties_to_kabul_modifier
+					duration = 10950
+				}
+				custom_tooltip = BNG_OWN_KABUL_MAKE_PERMANENT_TT
+			}
+			hidden_effect = {
+				if = {
+					limit = { 
+						451 = {
+							owned_by = ROOT
+						}
+					}
+					add_country_modifier = {
+						name = bng_ties_to_kabul_modifier
+						duration = -1
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = bng_ties_to_kabul_modifier
+						duration = 10950
+					}
+				}
+			}
 		}
 	}
 	
-	bng_navigate_asian_politics = {
-		icon = personal_diplomacy 
-		required_missions = { bng_clean_government bng_sharqi_diplomacy }
-		position = 4 
+	bng_procure_bombards = {
+		icon = mission_cannons_firing 
+		required_missions = { bng_integrate_peasant_bands }
+		position = 5
 		trigger = {
+			num_of_artillery = 10
 			OR = {
-				MNG = {
+				army_professionalism = 0.10
+				custom_trigger_tooltip = {
+					tooltip = ANY_MILITARY_IDEA_TT
 					OR = {
-						has_opinion = {
-							who = ROOT 
-							value = 100
-						}
-						alliance_with = ROOT 
+						full_idea_group = aristocracy_ideas
+						full_idea_group = plutocracy_ideas
+						full_idea_group = offensive_ideas
+						full_idea_group = defensive_ideas
+						full_idea_group = quality_ideas
+						full_idea_group = quantity_ideas
+						full_idea_group = naval_ideas
+						full_idea_group = horde_gov_ideas
+						full_idea_group = theocracy_gov_ideas
+						full_idea_group = indigenous_ideas
 					}
 				}
-				TIM = {
-					OR = {
-						has_opinion = {
-							who = ROOT 
-							value = 100
-						}
-						alliance_with = ROOT 
-					}
-				}
-				is_great_power = yes 
-				total_development = 300
 			}
-			num_of_allies = 2
+			num_of_owned_provinces_with = {
+				value = 4
+				has_forcelimit_building_trigger = yes
+			}
+			mil_tech = 10
 		}
 		effect = {
-			if = {
-				limit = {
-					num_of_allies = 2 
-				}
-				every_ally = {
-					add_trust = { 
-						who = ROOT 
-						value = 25 
-						mutual = yes 
-					}
-				}
-			}
 			add_country_modifier = {
-				name = bng_navigated_asian_politics_modifier
+				name = bng_rockets_modifier
 				duration = 9125
 			}
+			add_mil_power = 50
 		}
 	}
 	
@@ -653,7 +693,7 @@ ME_Bengali_Missions_1 = {
 			OR = {
 				AND = {
 					custom_trigger_tooltip = {
-						tooltip = BNG_TOLERANCE_HINDU_TT
+						tooltip = TOLERANCE_HEATHEN_TT
 						hinduism = 3
 					}
 					artist = 3
@@ -900,182 +940,322 @@ ME_Bengali_Missions_2 = {
 			}
 		}
 	}
-
-	bng_sharqi_diplomacy = {
-		icon = mission_the_ganges_campaign
-		required_missions = { bng_shamsuddin_triumph }
-		position = 3	
-		provinces_to_highlight = {
-			province_id = 555
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+	dlh_issue_land = {
+		icon = mission_general_land_assessment
+		required_missions = { }
+		position = 1
 		trigger = {
-			OR = {
-				555 = {
-					owner = { 
-						has_opinion = {	
-							who = ROOT
-							value = 100
+			custom_trigger_tooltip = {	
+				tooltip = DLH_ESTATE_LOYALTY_2
+				calc_true_if = {
+					amount = 2
+					if = {
+						limit = { has_estate = estate_nobles }
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_burghers }
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_church }
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_cossacks }
+						estate_loyalty = {
+							estate = estate_cossacks
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_dhimmi }
+						estate_loyalty = {
+							estate = estate_dhimmi
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_nomadic_tribes }
+						estate_loyalty = {
+							estate = estate_nomadic_tribes
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_brahmins }
+						estate_loyalty = {
+							estate = estate_brahmins
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_jains }
+						estate_loyalty = {
+							estate = estate_jains
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_maratha }
+						estate_loyalty = {
+							estate = estate_maratha
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_rajput }
+						estate_loyalty = {
+							estate = estate_rajput
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_vaisyas }
+						estate_loyalty = {
+							estate = estate_vaisyas
+							loyalty = 60
 						}
 					}
 				}
-				is_rival = JNP
 			}
 			if = {
-				limit = { has_country_flag = advisors_expanded_mod_active }
-				OR = {
-					monthly_dip = 10 
-					statesman = 1 
-					diplomat = 1 
-					negotiator = 1 
+				limit = { 
+					AND = {
+						has_government_mechanic = iqta_mechanic 
+						has_dlc = "Dharma"
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = JAGIRDAR_CHECK_TT
+					OR = {
+						has_country_modifier = efficient_tax_farming_modifier
+						has_country_modifier = land_acquisition_modifier
+						has_country_modifier = lenient_taxation_modifier
+					}
 				}
 			}
 			else = {
-				OR = {
-					monthly_dip = 10
-					statesman = 1
-					diplomat = 1 
-				}
+				crown_land_share = 45
 			}
 		}
 		effect = {
+			custom_tooltip = DLH_ESTATE_LAND_TT
 			if = {
 				limit = {
-					555 = {
-						owner = {
-							has_opinion = {
-								who = FROM
-								value = 100
-							}
+					OR = {
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_brahmins
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_dhimmi
+							loyalty = 60
 						}
 					}
-				}
-				country_event = {
-					id = bng_events.2
-				}
-				set_country_flag = bng_jnp_alliance
-			}
-			else_if = {
-				limit = {
-					555 = {
-						owner = {
-							is_rival = FROM
-						}
-					}
-				}
-				555 = {
-					owner = { remove_fow = 12 }
 				}
 				add_country_modifier = {
-					name = bng_push_to_bihar_modifier
-					duration = 9125
+					name = dlh_inam_land_modifier
+					duration = 7300
 				}
 			}
-			else_if = {
+			if = {
 				limit = {
-					555 = { country_or_non_sovereign_subject_holds = ROOT }
+					OR = {
+						estate_loyalty = {
+							estate = estate_jains
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_vaisyas
+							loyalty = 60
+						}
+					}
 				}
-				add_power_projection = {
-					type = mission_rewards_power_projection
-					amount = 25
+				add_country_modifier = {
+					name = dlh_khalisa_land_modifier
+					duration = 7300
 				}
-				add_mil_power = 50 
+			}
+			if = {
+				limit = {
+					OR = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_rajput
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_maratha
+							loyalty = 60
+						}
+					}
+				}
+				add_country_modifier = {
+					name = dlh_iqta_land_modifier
+					duration = 7300
+				}
 			}
 		}
 	}
-	bng_extend_up_ganges = {
-		icon = mission_conquer_the_doab
-		required_missions = { bng_sharqi_diplomacy }
-		position = 4	
-		provinces_to_highlight = {
-			area = bihar_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+	bng_empower_paiks = {
+		icon = mission_raid_on_genoa
+		required_missions = { dlh_issue_land }
+		position = 2
 		trigger = {
-			if = {
-				limit = { has_country_flag = bng_jnp_alliance }
-				alliance_with = JNP
-				marriage_with = JNP
-				diplomatic_reputation = 3
+			has_mil_advisor_3 = yes
+			OR = {
+				capital_scope = { has_manpower_building_trigger = yes }
+				#ADD HABSHI SHIT#
 			}
-			else = {
-				bihar_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
+		}
+		effect = {
+			add_army_tradition = 10
+			capital_scope = {
+				add_province_modifier = {
+					name = bng_royal_paiks_modifier
+					duration = -1
 				}
-				army_size = 30
+			}
+		}
+	}
+	bng_integrate_peasant_bands = {
+		icon = mission_new_army
+		required_missions = { bng_empower_paiks }
+		position = 4
+		trigger = {
+			army_size = 40
+			num_of_owned_provinces_with = {
+				value = 6
+				has_manpower_building_trigger = yes
+			}
+			OR = {
+				if = {
+					limit = { has_estate = estate_rajput }
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 50
+					}
+				}
+				if = {
+					limit = { has_estate = estate_nobles }
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 50
+					}
+				}
+				else = {
+					manpower_percentage = 0.75
+				}
 			}
 		}
 		effect = {
 			if = {
-				limit = { has_country_flag = bng_jnp_alliance }
-				if = {
-					limit = {
-						555 = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					524 = {
-						owner = {
-							reverse_add_casus_belli = {
-								target = ROOT
-								type = cb_restore_personal_union
-								months = 120
-							}
-						}
-					}
+				limit = {
+					is_expanded_mod_active = { mod = governments }
 				}
-				else = {
-					555 = {
-						owner = {
-							reverse_add_casus_belli = {
-								target = ROOT
-								type = cb_restore_personal_union
-								months = 120
-							}
-						}
-					}
-				}
-				add_country_modifier = {
-					name = bng_growing_reach_modifier
-					duration = 9125
-				}
+				custom_tooltip = ENABLE_BAKSARIYAS_TT
+				set_country_flag = baksariyas_enable
 			}
 			else = {
-				if = {
-					limit = {
-						555 = { country_or_non_sovereign_subject_holds = ROOT }
-					}
-					524 = {
-						owner = {
-							reverse_add_casus_belli = {
-								target = ROOT
-								type = cb_vassalize_mission
-								months = 120
-							}
-						}
-					}
-				}
-				else = {
-					555 = {
-						owner = {
-							reverse_add_casus_belli = {
-								target = ROOT
-								type = cb_vassalize_mission
-								months = 120
-							}
-						}
-					}
-				}
-				purvanchal_area = {
-					add_permanent_claim = ROOT
-				}
-				mithila_area = {
-					add_permanent_claim = ROOT
-				}
-				country_event = {
-					id = bng_events.10
-				}
-				add_accepted_culture = bihari
+				add_yearly_manpower = 0.5
 			}
+			add_country_modifier = {
+				name = bng_mahajant_modifier
+				duration = 14600
+			}
+			custom_tooltip = JNP_GIVE_OUT_MANPOWER_DEV_TT
+			hidden_effect = { 
+				random_owned_province = { #1
+					limit = {
+						OR = {
+							culture = avadhi
+							culture = kanauji
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							culture = avadhi
+							culture = kanauji
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = { #3
+					limit = {
+						OR = {
+							culture = avadhi
+							culture = kanauji
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = {
+					limit = {
+						OR = {
+							culture = avadhi
+							culture = kanauji
+						}
+					}
+					add_base_manpower = 1
+				}
+				random_owned_province = { #5
+					limit = {
+						OR = {
+							culture = avadhi
+							culture = kanauji
+						}
+					}
+					add_base_manpower = 1
+				}
+			}
+		}
+	}
+	bng_legacy_of_pala = {
+		icon = mission_brahmin_administrators
+		required_missions = { bng_procure_bombards jnp_rajput_relations }
+		position = 6
+		trigger = {
+			has_unified_culture_group = yes
+			religious_unity = 1
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = TOLERANCE_HEATHEN_TT
+					hinduism = 3
+				}
+				full_idea_group = humanist_ideas
+			}
+			government_rank = 3
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_muslim_maharaja_modifier
+				duration = -1
+			}
+			add_mana_scaled_on_monarch_skill = yes
 		}
 	}
 	bng_jaunpur_jewel = {
@@ -1749,212 +1929,437 @@ ME_Bengali_Missions_3 = {
 		}
 	}
 
-	bng_tend_to_wounds = {
-		icon = mission_gharbianss
-		required_missions = { }
-		position = 1
-		
-		trigger = {
-			num_of_loans = 0
-			stability = 1
-			NOT = { yearly_corruption_increase = 0.001 }
-		}
-		effect = {
-			capital_scope = {
-				add_prosperity = 100
-				random_list = {
-					33 = { add_base_tax = 1 }
-					33 = { add_base_production = 1 }
-					34 = { add_base_manpower = 1 }
-				}
-			}
-			add_ruler_modifier = {
-				name = bng_mahmud_shah_reform_modifier 
-				duration = -1
-			}
-		}
-	}
-
-	bng_shamsuddin_triumph = {
-		icon = mission_new_army
-		required_missions = { bng_tend_to_wounds }
+	bng_expand_mint_towns = {
+		icon = mission_establish_mint_towns
+		required_missions = { dlh_issue_land }
 		position = 2
-
-		trigger = {
-			OR = {
-				manpower_percentage = 0.75
-				army_size_percentage = 0.75
-			}
-			num_of_generals = 1
-		}
-		effect = {
-			bihar_area = {
-				add_permanent_claim = ROOT
-			}
-			jharkhand_area = {
-				add_permanent_claim = ROOT
-			}
-			nepal_area = {
-				add_permanent_claim = ROOT
-			}
-			bhutan_area = {
-				add_permanent_claim = ROOT
-			}
-			country_event = {
-				id = bng_events.12
-			}
-		}
-	}
-
-	bng_romantic_general = {
-		icon = mission_end_the_shan_domination
-		required_missions = { bng_shamsuddin_triumph }
-		position = 4
-
-		trigger = {
-			OR = {
-				army_tradition = 30
-				army_professionalism = 0.10
-			}
-			OR = {
-				mil = 5
-				mil_tech = 5
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = bng_diplomatic_warfare_modifier
-				duration = 9125
-			}
-			country_event = {
-				id = bng_events.13
-			}
-			562 = {
-				add_permanent_claim = ROOT
-			}
-			arakan_area = {
-				add_permanent_claim = ROOT
-			}
-			tripura_area = {
-				add_permanent_claim = ROOT
-			}
-			naga_hills_area = {
-				add_permanent_claim = ROOT
-			}
-			assam_area = {
-				add_permanent_claim = ROOT
-			}
-			orissa_area = {
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	bng_rajput_nobles = {
-		icon = mission_accomodate_the_rajputs
-		required_missions = { bng_romantic_general }
-		position = 5
-
-		trigger = {
-			has_estate = estate_rajput
+		provinces_to_highlight = {
 			AND = {
-				has_reform = governmental_purbias_register_reform
-				has_estate_privilege = estate_rajput_look_up_purbias
+				OR = {
+					province_id = 2039
+					province_id = 4475
+					province_id = 4476
+					province_id = 4477 
+				}
+				NOT = {
+					OR = {
+						base_tax = 6 
+						has_production_building_trigger = yes
+						owned_by = ROOT
+					}
+				}
 			}
-			num_of_rajput = 15
+		}
+
+		trigger = {
+			4477 = {
+				owned_by = ROOT
+				OR = {
+					base_tax = 6 
+					has_production_building_trigger = yes
+				}
+			}
+			2039 = {
+				owned_by = ROOT
+				OR = {
+					base_tax = 6 
+					has_production_building_trigger = yes
+				}
+			}
+			4475 = {
+				owned_by = ROOT
+				OR = {
+					base_tax = 6 
+					has_production_building_trigger = yes
+				}
+			}
+			4476 = {
+				owned_by = ROOT
+				OR = {
+					base_tax = 6 
+					has_production_building_trigger = yes
+				}
+			}
 			OR = {
-				army_professionalism = 0.25
-				army_tradition = 60
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = governments }
+					}
+					has_reform = mint_towns_reform
+				}
+				master_of_mint = 1
+				share_of_stating_income = 1.5
 			}
-			estate_loyalty = {
-				estate = estate_rajput
-				loyalty = 60
-			}
-		}	
+			NOT = { num_of_loans = 1 }
+		}
 		effect = {
-			add_country_modifier = {
-				name = bng_purbiyas_modifier
-				duration = -1
+			4476 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
 			}
-			add_country_modifier = {
-				name = bng_expand_rajput_modifier
-				duration = -1
+			4477 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
 			}
-			custom_tooltip = BNG_RAJPUT_GENERAL_DESC
+			2039 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
+			}
+			4475 = {
+				add_province_modifier = {
+					name = bng_prosperous_mints_modifier
+					duration = 9125
+				}
+			}
+			custom_tooltip = BNG_COMPLETE_COWRY_SHELL_MISSION_TT
+			tooltip = {
+				add_country_modifier = {
+					name = bng_dual_standard_modifier
+					duration = -1
+				}
+			}
 			hidden_effect = {
-				capital_scope = {
-					rajput_infantry = ROOT
+				if = {
+					limit = { mission_completed = bng_cowry_shells }
+					add_country_modifier = {
+						name = bng_dual_standard_modifier
+						duration = -1
+					}
 				}
-				capital_scope = {
-					rajput_infantry = ROOT
+			}
+		}
+	}
+
+	bng_search_for_silver = {
+		icon = mission_jawal_silver_mine
+		required_missions = { bng_tend_to_wounds }
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 586
+					NOT = {
+						OR = {
+							province_has_center_of_trade_of_level = 2
+							has_building = trade_depot
+							has_building = stock_exchange
+							country_or_non_sovereign_subject_holds = ROOT 
+						}
+					}
 				}
-				capital_scope = {
-					rajput_infantry = ROOT
+				province_id  = 584
+			}
+		}
+		trigger = {
+			586 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				OR = {
+					province_has_center_of_trade_of_level = 2
+					has_building = trade_depot
+					has_building = stock_exchange
 				}
-				capital_scope = {
-					rajput_infantry = ROOT
+			}
+			584 = { 
+				trade_share = {
+					country = ROOT
+					share = 60
 				}
-				capital_scope = {
-					rajput_infantry = ROOT
+			}
+			monthly_dip = 11
+		}
+		effect = {
+			586 = {
+				add_province_modifier = {
+					name = bng_pegu_silver_entrepot_modifier
+					duration = -1
 				}
 				if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 80
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					change_trade_goods = silver
+				}
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			custom_tooltip = BNG_ADD_DIP_POWER_PER_ALLIANCE_TT
+			hidden_effect = {
+				if = {
+					limit = { num_of_allies = 1 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 2 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 3 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 4 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 5 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 6 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 7 }
+					add_dip_power = 25
+				}
+				if = {
+					limit = { num_of_allies = 8 }
+					add_dip_power = 25
+				}
+			}
+		}
+	}
+
+	bng_persian_immigrants = {
+		icon = mission_market_place_with_asian_traders
+		required_missions = { bng_search_for_silver }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 564
+					NOT = {
+						OR = {
+							province_trade_power = 80
+							has_building = stock_exchange
+							owned_by = ROOT
+						}
+					}
+				}
+				province_id  = 1343
+			}
+		}
+		trigger = {
+			564 = {
+				owned_by = ROOT
+				OR = {
+					province_trade_power = 80
+					has_building = stock_exchange
+				}
+			}
+			1343 = {
+				has_most_province_trade_power = ROOT
+			}
+			trade_efficiency = 0.30
+		}
+		effect = {
+			564 = {
+				add_base_production = 2
+				add_unit_construction = {
+					type = light_ship
+					amount = 10
+					speed = 0.25
+					cost = 0
+				}
+				if = {
+					limit = { 
+						NOT = { has_flagship = yes } 
+					}
+					ROOT = {
+						create_flagship = {    
+							name = "Sedgewick"
+							type = light_ship
+						}
+					}
+				}
+			}
+			define_advisor = {
+				type = trader
+				name = "Khoja Wajid"
+				skill = 3
+				culture = armenian
+				religion = orthodox
+			}
+			country_event = {
+				id = ME_Bengal_Events.1
+			}
+		}
+	}
+	jnp_rajput_relations = {
+		icon = mission_integrate_the_purbias
+		required_missions = { bng_integrate_peasant_bands }
+		position = 5
+		trigger = {
+			if = {
+				limit = { has_estate = estate_rajput }
+				OR = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 60
+					}
+					num_of_estate_privileges = {
+						estate = estate_rajput
+						value = 2
+					}
+				}
+			}
+			elif = {
+				limit = { has_estate = estate_nobles }
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					num_of_estate_privileges = {
+						estate = estate_nobles
+						value = 2
+					}
+				}
+			}
+			OR = {
+				NOT = {
+					any_country = {
+						army_size = PREV
+						primary_culture = rajput
+					}
+				}
+				calc_true_if = {
+					amount = 2
+					any_country = {
+						culture = rajput
+						has_opinion = {
+							who = PREV
+							value = 120
+						}
+					}
+				}
+			}	
+			num_of_owned_provinces_with = {
+				amount = 8
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jnp_integrate_rajput_modifier
+				duration = -1
+			}
+			custom_tooltip = BNG_RAJPUT_GENERAL_TT
+			if = {
+				limit = { has_country_flag = integrate_delhi }
+				add_army_tradition_or_mil_power = { amount = 10 }
+			}
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
+				add_army_professionalism = 0.0025
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 80
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 80
+							}
 						}
 					}
 					create_general = { tradition = 100 }
 				}
 				else_if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 70
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 70
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 70
+							}
 						}
 					}
 					create_general = { tradition = 90 }
 				}
 				else_if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 60
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 60
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 60
+							}
 						}
 					}
 					create_general = { tradition = 80 }
 				}
 				else_if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 50
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 50
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 50
+							}
 						}
 					}
 					create_general = { tradition = 70 }
 				}
 				else_if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 40
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 40
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 40
+							}
 						}
 					}
 					create_general = { tradition = 60 }
 				}
 				else_if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 30
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 30
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 30
+							}
 						}
 					}
 					create_general = { tradition = 50 }
 				}
 				else_if = {
 					limit = {
-						estate_influence = {
-							estate = estate_rajput
-							influence = 20
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 20
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 20
+							}
 						}
 					}
 					create_general = { tradition = 40 }
@@ -2133,100 +2538,6 @@ ME_Bengali_Missions_3 = {
 			}
 			country_event = {
 				id = bng_events.29
-			}
-		}
-	}
-	bng_expand_mint_towns = {
-		icon = mission_establish_mint_towns
-		required_missions = { bng_goods_of_pandua }
-		position = 12
-		provinces_to_highlight = {
-			OR = {
-				province_id = 4477
-				province_id = 4476
-				province_id = 4475
-				province_id = 2039
-			}
-		}
-
-		trigger = {
-			4477 = {
-				OR = {
-					has_building = workshop	
-					has_building = counting_house
-				}
-				base_tax = 6
-			}
-			2039 = {
-				OR = {
-					has_building = workshop	
-					has_building = counting_house
-				}
-				base_tax = 6
-			}
-			4475 = {
-				OR = {
-					has_building = workshop	
-					has_building = counting_house
-				}
-				base_tax = 6
-			}
-			4476 = {
-				OR = {
-					has_building = workshop	
-					has_building = counting_house
-				}
-				base_tax = 6
-			}
-			OR = {
-				master_of_mint = 1
-				full_idea_group = economic_ideas
-			}
-		}
-		effect = {
-			4476 = {
-				add_province_modifier = {
-					name = bng_prosperous_mints_modifier
-					duration = 9125
-				}
-				change_province_name = "Mahmudabad"
-			}
-			4477 = {
-				add_province_modifier = {
-					name = bng_prosperous_mints_modifier
-					duration = 9125
-				}
-			}
-			2039 = {
-				add_province_modifier = {
-					name = bng_prosperous_mints_modifier
-					duration = 9125
-				}
-				change_province_name = "Khalifatabad"
-			}
-			4475 = {
-				add_province_modifier = {
-					name = bng_prosperous_mints_modifier
-					duration = 9125
-				}
-			}
-			custom_tooltip = BNG_MIDAS_MINTS_DESC
-			hidden_effect = {
-				if = {
-					limit = { ruler_has_personality = midas_touched_personality }
-					add_country_modifier = {
-						name = bng_flourishing_currency_modifier
-						duration = 9125
-					}
-					add_years_of_income = 0.5
-				}
-				if = {
-					limit = { mission_completed = bng_cowry_shells }
-					add_country_modifier = {
-						name = bng_dual_standard_modifier
-						duration = -1
-					}
-				}
 			}
 		}
 	}
@@ -4134,46 +4445,6 @@ ME_Bengali_Missions_5 = {
 				add_base_tax = 2
 			}
 			add_inflation = -2
-		}
-	}
-	bng_empower_paiks = {
-		icon = mission_raid_on_genoa
-		required_missions = { }
-		position = 17
-		
-		trigger = {
-			estate_loyalty = {
-				estate = estate_nobles
-				loyalty = 60
-			}
-			OR = {
-				estate_influence = {
-					estate = estate_nobles
-					influence = 50
-				}
-				has_estate_privilege = estate_nobles_officer_corp
-				has_estate_privilege = estate_nobles_command_of_the_military
-			}
-			capital_scope = {
-				OR = {
-					has_building = barracks
-					has_building = training_fields
-				}
-			}
-		}
-		effect = {
-			add_estate_loyalty = {
-				estate = estate_nobles
-				loyalty = 10
-			}
-			add_army_tradition = 10
-			capital_scope = {
-				add_base_manpower = 1
-				add_province_modifier = {
-					name = bng_royal_guards_modifier
-					duration = 18250
-				}
-			}
 		}
 	}
 	bng_elephant_warfare = {
