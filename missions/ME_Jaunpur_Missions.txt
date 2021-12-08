@@ -19,9 +19,9 @@ ME_Jaunpuri_Missions_1 = {
 		position = 1
 		trigger = {
 			army_size = 35
-			OR = {
-				barracks = 6
-				training_fields = 6
+			num_of_owned_provinces_with = {
+				value = 6
+				has_manpower_building_trigger = yes
 			}
 			OR = {
 				if = {
@@ -184,51 +184,6 @@ ME_Jaunpuri_Missions_1 = {
 						}
 						add_base_manpower = 1
 					}
-				}
-				random_owned_province = { #1
-					limit = {
-						OR = {
-							culture = avadhi
-							culture = kanauji
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							culture = avadhi
-							culture = kanauji
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = { #3
-					limit = {
-						OR = {
-							culture = avadhi
-							culture = kanauji
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = {
-					limit = {
-						OR = {
-							culture = avadhi
-							culture = kanauji
-						}
-					}
-					add_base_manpower = 1
-				}
-				random_owned_province = { #5
-					limit = {
-						OR = {
-							culture = avadhi
-							culture = kanauji
-						}
-					}
-					add_base_manpower = 1
 				}
 				random_owned_province = { #1
 					limit = {
@@ -538,7 +493,8 @@ ME_Jaunpuri_Missions_1 = {
 					duration = 7300
 				}
 			}
-			else = {
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
 				add_country_modifier = {
 					name = jnp_diplo_ties_modifier
 					duration = 7300
@@ -558,7 +514,7 @@ ME_Jaunpuri_Missions_1 = {
 	}
 	jnp_bahri_and_tatari = {
 		icon = mission_marwari_horses
-		required_missions = { jnp_ties_to_east_west jnp_conquer_delhi }
+		required_missions = { jnp_ties_to_east_west jnp_where_it_all_began }
 		position = 8
 		provinces_to_highlight = {
 			OR = {
@@ -580,10 +536,8 @@ ME_Jaunpuri_Missions_1 = {
 			}
 			504 = {
 				trade_share = {
-					trade_share = {
-						country = ROOT
-						share = 50
-					}
+					country = ROOT
+					share = 50
 				}
 			}
 		}
@@ -765,7 +719,8 @@ ME_Jaunpuri_Missions_1 = {
 					duration = 18250
 				}
 			}
-			else = {
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
 				add_country_modifier = {
 					name = jnp_rajput_decentralising_modifier
 					duration = 18250
@@ -935,6 +890,398 @@ ME_Jaunpuri_Missions_2 = {
 			}
 			else = {
 				bihar_area = { add_base_tax = 1 }
+			}
+		}
+	}
+	jnp_march_on_delhi = {
+		icon = mission_indian_soldier_elephant
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 522
+		}
+		trigger = {
+			OR = {
+				NOT = {
+					reverse_has_opinion = {
+						who = DLH
+						value = -50
+					}
+				}
+				monthly_dip = 9
+			}
+			OR = {
+				522 = { 
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				DLH = {
+					is_at_war = yes
+				}
+				army_strength = {
+					who = DLH
+					value = 1.5
+				}
+			}
+		}
+		effect = {
+			upper_doab_area = {
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					DLH = {
+						is_at_war = yes
+					}
+				}
+				add_country_modifier = {
+					name = jnp_rush_for_throne_modifier
+					duration = 1825
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = jnp_march_modifier
+					duration = 2650
+				}
+			}
+		}
+	}
+	jnp_where_it_all_began = {
+		icon = mission_crush_delhi
+		required_missions = { jnp_march_on_delhi }
+		position = 7
+		provinces_to_highlight = {
+			area = upper_doab_area
+		}
+		trigger = {
+			is_state_core = 522
+			upper_doab_area = {
+				type = all
+				NOT = { local_autonomy_above_min = 10 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = RESOLVE_DELHI_ADMINISTRATION_TT
+				OR = {
+					has_country_flag = integrate_delhi
+					has_country_flag = destroyed_delhi 
+				}
+			}
+		}
+		effect = {
+			sirhind_area = {
+				add_permanent_claim = ROOT
+			}
+			lahore_area = {
+				add_permanent_claim = ROOT
+			}
+			4511 = {
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = { has_country_flag = integrate_delhi }
+				add_adm_power = 100
+			}
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
+				add_army_tradition_or_mil_power = { amount = 15 }
+			}
+		}
+	}
+	jnp_kick_out_pashtuns = {
+		icon = mission_conquer_punjab
+		required_missions = { jnp_where_it_all_began }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = lahore_area
+				area = sirhind_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			507 = {
+				NOT = { devastation = 1 }
+			}
+			if = {
+				limit = { 
+					SRH = { vassal_of = PREV }
+				}
+				SRH = {
+					NOT = { liberty_desire = 40 }
+					lahore_area = {
+						type = all
+						owned_by = PREV
+					}
+				}
+				army_strength = {
+					who = SRH
+					value = 1.5
+				}
+			}
+			else = {
+				sirhind_area = {
+					type = all
+					owned_by = ROOT
+				}
+				lahore_area = {
+					type = all
+					owned_by = ROOT
+				}
+				4511 = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { has_country_flag = integrate_delhi }
+				507 = {
+					add_province_modifier = {
+						name = jnp_lahore_scholastic_traditions_modifier
+						duration = -1
+					}
+				}
+			}
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
+				507 = {
+					add_province_modifier = {
+						name = jnp_lahore_ghaznavid_revival_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	jnp_rajput_relations = {
+		icon = mission_integrate_the_purbias
+		required_missions = { jnp_kick_out_pashtuns }
+		position = 9
+		trigger = {
+			if = {
+				limit = { has_estate = estate_rajput }
+				OR = {
+					estate_loyalty = {
+						estate = estate_rajput
+						loyalty = 60
+					}
+					num_of_estate_privileges = {
+						estate = estate_rajput
+						value = 2
+					}
+				}
+			}
+			elif = {
+				limit = { has_estate = estate_nobles }
+				OR = {
+					estate_loyalty = {
+						estate = estate_nobles
+						loyalty = 60
+					}
+					num_of_estate_privileges = {
+						estate = estate_nobles
+						value = 2
+					}
+				}
+			}
+			OR = {
+				NOT = {
+					any_country = {
+						army_size = PREV
+						primary_culture = rajput
+					}
+				}
+				calc_true_if = {
+					amount = 2
+					any_country = {
+						culture = rajput
+						has_opinion = {
+							who = PREV
+							value = 120
+						}
+					}
+				}
+			}	
+			num_of_owned_provinces_with = {
+				amount = 8
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jnp_integrate_rajput_modifier
+				duration = -1
+			}
+			custom_tooltip = BNG_RAJPUT_GENERAL_TT
+			if = {
+				limit = { has_country_flag = integrate_delhi }
+				add_army_tradition_or_mil_power = { amount = 10 }
+			}
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
+				add_army_professionalism = 0.0025
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 80
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 80
+							}
+						}
+					}
+					create_general = { tradition = 100 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 70
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 70
+							}
+						}
+					}
+					create_general = { tradition = 90 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 60
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 60
+							}
+						}
+					}
+					create_general = { tradition = 80 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 50
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 50
+							}
+						}
+					}
+					create_general = { tradition = 70 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 40
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 40
+							}
+						}
+					}
+					create_general = { tradition = 60 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 30
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 30
+							}
+						}
+					}
+					create_general = { tradition = 50 }
+				}
+				else_if = {
+					limit = {
+						OR = {
+							estate_influence = {
+								estate = estate_rajput
+								influence = 20
+							}
+							estate_influence = {
+								estate = estate_nobles
+								influence = 20
+							}
+						}
+					}
+					create_general = { tradition = 40 }
+				}
+				else = {
+					create_general = { tradition = 20 }
+				}
+			}
+		}
+	}	
+	dlh_returning_gujarat = {
+		icon = mission_conquer_gujarat_bah
+		required_missions = { dlh_follow_indus }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = patan_area
+						area = ahmedabad_area
+						area = saurashtra_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				province_id = 4457				
+			}
+		}
+		trigger = {
+			patan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ahmedabad_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			saurashtra_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			4457 = {
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+				}
+				development = 20
+			}
+		}
+		effect = {
+			khandesh_area = {
+				add_permanent_claim = ROOT
+			}
+			tapti_area = {
+				add_permanent_claim = ROOT
+			}
+			country_event = {
+				id = ME_Delhi_Events.5
 			}
 		}
 	}
@@ -1145,10 +1492,7 @@ ME_Jaunpuri_Missions_3 = {
 		trigger = {
 			555 = {
 				owned_by = ROOT 
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
+				has_tax_building_trigger = yes
 				higher_development_than = 522
 			}
 			NOT = { had_recent_war = 10 }
@@ -1226,10 +1570,8 @@ ME_Jaunpuri_Missions_3 = {
 			} 
 			524 = { 
 				trade_share = {
-					trade_share = {
-						country = ROOT
-						share = 80
-					}
+					country = ROOT
+					share = 80
 				}
 			}
 			is_production_leader_of_any_trade_good = yes
@@ -1319,6 +1661,405 @@ ME_Jaunpuri_Missions_3 = {
 							}
 						}
 						add_base_production = 1
+					}
+				}
+			}
+		}
+	}
+	jnp_control_trunk = {
+		icon = mission_the_tamil_trade_guilds
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 522
+			}	
+		}
+		trigger = {
+			522 = { 
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+			OR = {
+				num_of_merchants = 4
+				trade_efficiency = 0.20
+			}
+		}
+		effect = {
+			sindh_area = {
+				add_permanent_claim = ROOT
+			}
+			northern_sindh_area = {
+				add_permanent_claim = ROOT
+			}
+			504 = {
+				every_trade_node_member_province = {
+					limit = { province_has_center_of_trade_of_level = 1 }
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	dlh_follow_indus = {
+		icon = develop_the_po_valley
+		required_missions = { jnp_control_trunk jnp_where_it_all_began }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						area = sindh_area
+						area = northern_sindh_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				province_id = 506				
+			}
+		}
+		trigger = {
+			northern_sindh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			sindh_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			506 = {
+				OR = {
+					province_has_center_of_trade_of_level = 2
+					development = 15
+				}
+			}
+		}
+		effect = {
+			patan_area = {
+				add_permanent_claim = ROOT
+			}
+			ahmedabad_area = {
+				add_permanent_claim = ROOT
+			}
+			saurashtra_area = {
+				add_permanent_claim = ROOT
+			}
+			506 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			country_event = {
+				id = ME_Delhi_Events.4
+			}
+			if = {
+				limit = { has_country_flag = integrate_delhi }
+				every_owned_province = {
+					limit = { province_has_center_of_trade_of_level = 1 }
+					add_local_autonomy = -20
+				}
+				add_mercantilism = 2
+			}
+			elif = {
+				limit = { has_country_flag = destroyed_delhi }
+				add_country_modifier = {
+					name = jnp_secured_border_modifier
+					duration = 9125
+				}
+				add_yearly_manpower = 0.5
+			}
+		}
+	}
+	jnp_grand_trunk_road = {
+		icon = develop_the_po_valley
+		required_missions = { dlh_follow_indus }
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				area = purvanchal_area	
+				area = lower_doab_area	
+				area = oudh_area	
+				area = katehar_area	
+				area = upper_doab_area	
+				area = sirhind_area	
+				area = lahore_area
+				area = gaur_area
+				province_id = 4476
+				province_id = 4477	
+				province_id = 561	
+				province_id = 568
+				province_id = 4474	
+				province_id = 564	
+				province_id = 4472	
+				province_id = 4489	
+				province_id = 558	
+				province_id = 506	
+				province_id = 2039	
+				province_id = 4475	
+				province_id = 2047	
+				province_id = 4488	
+			}
+			NOT = { num_of_times_improved_by_owner = 2 }
+		}
+		trigger = {
+			purvanchal_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			lower_doab_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			oudh_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			katehar_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			upper_doab_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			sirhind_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			lahore_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			gaur_area = {
+				type = all
+				num_of_times_improved_by_owner = 2
+			}
+			4476 = {
+				num_of_times_improved_by_owner = 2
+			}
+			4477 = {
+				num_of_times_improved_by_owner = 2
+			}
+			561 = {
+				num_of_times_improved_by_owner = 2
+			}
+			568 = {
+				num_of_times_improved_by_owner = 2
+			}
+			4474 = {
+				num_of_times_improved_by_owner = 2
+			}
+			564 = {
+				num_of_times_improved_by_owner = 2
+			}
+			4472 = {
+				num_of_times_improved_by_owner = 2
+			}
+			4489 = {
+				num_of_times_improved_by_owner = 2
+			}
+			558 = {
+				num_of_times_improved_by_owner = 2
+			}
+			506 = {
+				num_of_times_improved_by_owner = 2
+			}
+			2039 = {
+				num_of_times_improved_by_owner = 2
+			}
+			4475 = {
+				num_of_times_improved_by_owner = 2
+			}
+			2047 = {
+				num_of_times_improved_by_owner = 2
+			}
+			4488 = {
+				num_of_times_improved_by_owner = 2
+			}
+		}
+		effect = {
+			custom_tooltip = JNP_GRAND_TRUNK_PROVINCES
+			tooltip = {
+				add_province_modifier = {
+					name = jnp_grand_trunk_road_modifier
+					duration = -1
+				}
+			}
+			if = {
+				limit = { tag = BNG }
+				564 = {
+					add_province_modifier = {
+						name = jnp_mouth_of_trunk_modifier
+						duration = -1
+					}
+				}
+				561 = {
+					add_province_modifier = {
+						name = jnp_mouth_of_trunk_modifier
+						duration = -1
+					}
+				}
+			}
+			elif = {
+				limit = { tag = DLH }
+				522 = {
+					add_province_modifier = {
+						name = jnp_mouth_of_trunk_modifier
+						duration = -1
+					}
+				}
+				506 = {
+					add_province_modifier = {
+						name = jnp_mouth_of_trunk_modifier
+						duration = -1
+					}
+				}
+			}
+			else = {
+				555 = {
+					add_province_modifier = {
+						name = jnp_mouth_of_trunk_modifier
+						duration = -1
+					}
+				}
+				524 = {
+					add_province_modifier = {
+						name = jnp_mouth_of_trunk_modifier
+						duration = -1
+					}
+				}
+			}
+			hidden_effect = {
+				purvanchal_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				lower_doab_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				oudh_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				katehar_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				upper_doab_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				sirhind_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				lahore_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				gaur_area = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4476 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4477 = {
+				    add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				561 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				568 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4474 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				564 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4472 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4489 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				558 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				506 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				2039 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4475 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				2047 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
+					}
+				}
+				4488 = {
+					add_province_modifier = {
+						name = jnp_grand_trunk_road_modifier
+						duration = -1
 					}
 				}
 			}
