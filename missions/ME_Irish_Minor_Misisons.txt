@@ -122,20 +122,31 @@ irish_minor_missions_2 = {
 		}
 		trigger = {
 			373 = {
-				owner = {
-					has_spy_network_from = {
-						who = ROOT
-						value = 50
+				OR = {
+					owner = {
+						has_spy_network_from = {
+							who = ROOT
+							value = 50
+						}
 					}
+					owned_by = ROOT
 				}
 			}
 		}
 		effect = {
-			custom_tooltip = irish_minor_pale_TT
-			hidden_effect = {
-				country_event = {
-					id = ME_Irish_Minor_Events.4
+			if = {
+				limit = {
+					NOT = { owns = 373 }
 				}
+				custom_tooltip = irish_minor_pale_TT
+				hidden_effect = {
+					country_event = {
+						id = ME_Irish_Minor_Events.4
+					}
+				}
+			}
+			else = {
+				add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
 			}
 		}
 	}
@@ -232,8 +243,8 @@ irish_minor_missions_2 = {
 					type = all
 					owned_by = ROOT
 					OR = {
-						base_manpower = 10has_manpower_building_trigger
-						 = yes
+						base_manpower = 10
+						has_manpower_building_trigger = yes
 						has_forcelimit_building_trigger = yes
 					}
 				}
@@ -432,17 +443,44 @@ irish_minor_missions_3 = {
 		}
 		position = 5
 		trigger = {
-			war_with = ENG
+			if = {
+				limit = {
+					OR = {
+						exists = ENG
+						exists = GBR
+					}
+				}
+				OR = {
+					war_with = ENG
+					war_with = GBR
+				}
+			}
+			else = {
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = british_isles_region
+						}
+						total_development = ROOT
+					}
+				}
+			}
 		}
 		effect = {
-			every_owned_province = {
+			if = {
 				limit = {
-					has_port = yes
+					OR = {
+						war_with = ENG
+						war_with = GBR
+					}
 				}
-				add_province_modifier = {
+				add_country_modifier = {
 					name = irish_minor_strengthened_harbor
-					duration = -1
+					duration = 5475
 				}
+			}
+			else = {
+				add_prestige = 15
 			}
 		}
 	}	
@@ -488,13 +526,35 @@ irish_minor_missions_3 = {
 			}
 		}
 		effect = {
+			add_splendor = 100
+			add_prestige = 10
+			add_mana_scaled_on_monarch_skill = yes
 			add_country_modifier = {
 				name = irish_minor_new_horizons
 				duration = 18250
 			}
-			every_owned_province = {
+			ulster_area = {
 				add_devastation = -10
 				add_prosperity = 10
+			}
+			munster_area = {
+				add_devastation = -10
+				add_prosperity = 10
+			}
+			connacht_area = {
+				add_devastation = -10
+				add_prosperity = 10
+			}
+			leinster_area = {
+				add_devastation = -10
+				add_prosperity = 10
+			}
+			british_isles_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
