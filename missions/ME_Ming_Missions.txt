@@ -292,10 +292,37 @@ ming_missions_1 = {
 		required_missions = { mng_sino_korean_relations }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = chahar_area
+				area = jilin_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			chahar_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			jilin_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			ningguta_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			furdan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -304,10 +331,31 @@ ming_missions_1 = {
 		required_missions = { mng_secure_liaoning }
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				area = ningguta_area
+				area = furdan_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			ningguta_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			furdan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			manchuria_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			province_event = { id = ME_Ming_Events.15 }
 		}
 	}
 
@@ -316,10 +364,53 @@ ming_missions_1 = {
 		required_missions = { mng_sino_korean_border }
 		position = 8
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					region = manchuria_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = {
+						ROOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 35
+								region = manchuria_region
+							}
+						}
+					}
+				}
+				AND = {
+					region = manchuria_region
+					NOT = { owned_by = ROOT }
+					culture = jurchen
+				}
+			}
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 35
+				region = manchuria_region
+			}
+			manchuria_region = {
+				type = all
+				culture = jurchen
+				owned_by = ROOT
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 3
+			}
 		}
 		effect = {
+			every_province = {
+				if = {
+					limit = { culture = jurchen }
+					change_culture = manchu
+				}
+			}
+			add_country_modifier = {
+				name = mng_incorporation_manchuria
+				duration = 9125
+			}
 		}
 	}
 
@@ -328,10 +419,19 @@ ming_missions_1 = {
 		required_missions = {  }
 		position = 9
 		provinces_to_highlight = {
+			province_id = 1816
+			NOT = {
+				1816 = { development = 40 }
+			}
 		}
 		trigger = {
+			1816 = { development = 40 }
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_splendid_capital
+				duration = 9125
+			}
 		}
 	}
 
@@ -339,11 +439,16 @@ ming_missions_1 = {
 		icon = mission_asian_trader
 		required_missions = { mng_develop_beijing }
 		position = 10
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			marketplace = 5
 		}
 		effect = {
+			add_mercantilism = 2
+			add_country_modifier = {
+				name = mng_new_trade_opportunities
+				duration = 9125
+			}
 		}
 	}
 
@@ -351,11 +456,26 @@ ming_missions_1 = {
 		icon = mission_market_place_with_asian_traders
 		required_missions = { mng_construct_new_marketplaces }
 		position = 11
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			calc_true_if = {
+				amount = 10
+				all_trade_nodes = {
+					has_most_province_trade_power = ROOT
+				}
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 2
+			}
 		}
 		effect = {
+			add_mercantilism = 2
+			add_country_modifier = {
+				name = mng_strengthened_bamboo_network
+				duration = 9125
+			}
 		}
 	}
 
@@ -364,10 +484,34 @@ ming_missions_1 = {
 		required_missions = { mng_chinese_traders }
 		position = 12
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 2151
+					2151 = {
+						has_manufactory_trigger = no
+					}
+				}
+				all_owned_provinces = {
+					trade_goods = chinaware
+					has_manufactory_trigger = no
+				}
+			}
 		}
 		trigger = {
+			calc_true_if = {
+				amount = 5
+				all_owned_provinces = {
+					trade_goods = chinaware
+					has_manufactory_trigger = yes
+				}
+			}
+			2151 = { has_manufactory_trigger = yes }
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_jingdezhen_chinaware
+				duration = 9125
+			}
 		}
 	}
 }
@@ -388,9 +532,7 @@ ming_missions_2 = {
 		position = 1
 		provinces_to_highlight = {
 			province_id = 703
-			NOT = {
-				owned_by = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			owns = 703
@@ -430,10 +572,21 @@ ming_missions_2 = {
 		required_missions = { mng_avert_tumu }
 		position = 2
 		provinces_to_highlight = {
+			OR ={
+				area = ordos_area
+				area = inner_mongolia_area
+			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			owns = ordos_area
+			owns = inner_mongolia_area
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_stop_barbarian_raids
+				duration = 3650
+			}
 		}
 	}
 
@@ -442,10 +595,88 @@ ming_missions_2 = {
 		required_missions = { mng_push_back_four_oirats }
 		position = 3
 		provinces_to_highlight = {
+			region = mongolia_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				ROOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 45
+						region = mongolia_region
+					}
+				}
+			}
 		}
 		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 45
+				region = mongolia_region
+			}
+			KHA = {
+				OR = {
+					AND = {
+						is_subject_of = ROOT
+						NOT = { liberty_desire = 20 }
+					}
+					exists = no
+				}
+			}
+			OIR = {
+				OR = {
+					AND = {
+						is_subject_of = ROOT
+						NOT = { liberty_desire = 20 }
+					}
+					exists = no
+				}
+			}
+			KRC = {
+				OR = {
+					AND = {
+						is_subject_of = ROOT
+						NOT = { liberty_desire = 20 }
+					}
+					exists = no
+				}
+			}
 		}
 		effect = {
+			add_stability_or_adm_power = yes
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_mandate = 5
+			}
+			add_country_modifier = {
+				name = mng_pacified_north
+				duration = 18250
+			}
+			remove_country_modifier = mng_relieved_officials
+			add_country_modifier = {
+				name = mng_yuan_bureaucrats
+				duration = -1
+			}
+			west_siberia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_siberia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ural_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -457,22 +688,253 @@ ming_missions_2 = {
 		}
 		position = 4
 		provinces_to_highlight = {
+			OR = {
+				area = tarim_basin_area
+				area = kashgaria_area
+				area = kashmir_area
+				area = shanshan_area
+				area = turpan_kumul_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = tarim_basin_area
+			owns_or_non_sovereign_subject_of = kashgaria_area
+			owns_or_non_sovereign_subject_of = kashmir_area
+			owns_or_non_sovereign_subject_of = shanshan_area
+			owns_or_non_sovereign_subject_of = turpan_kumul_area
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_silk_road_secured
+				duration = 9125
+			}
+			arys_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			balkh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ferghana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ghor_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			herat_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jetysuu_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kabulistan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			khiva_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			termez_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kyzylkum_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			merv_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sistan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			syr_darya_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			transoxiana_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
 	mng_sino_korean_relations = {
 		icon = mission_noble_council
-		required_missions = { }
+		required_missions = {  }
 		position = 5
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			OR = {
+				AND = {
+					OR = {
+						KOR = { is_subject_of = ROOT }
+						KOR = { alliance_with = ROOT }
+					}
+					KOR = { marriage_with = ROOT }
+					KOR = {
+						has_opinion = {
+							value = 150
+							who = ROOT
+						}
+					}
+				}
+				AND = {
+					NOT = {
+						OR = {
+							KOR = { is_subject_of = ROOT }
+							KOR = { alliance_with = ROOT }
+						}
+					}
+					OR = {
+						KOR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+						}
+						KOR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+						}
+					}
+					NOT = {
+						KOR = {
+							has_opinion = {
+								value = 0
+								who = ROOT
+							}
+						}
+					}
+				}
+				NOT = { exists = KOR }
+			}
 		}
 		effect = {
+			chahar_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			jilin_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hamgyeong_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			pyongan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			4231 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			733 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1012 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			1818 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			4182 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			4651 = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = { id = ME_Ming_Events.14 }
 		}
 	}
 
@@ -481,10 +943,39 @@ ming_missions_2 = {
 		required_missions = { mng_sino_korean_relations }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = hamgyeong_area
+				area = pyongan_area
+				province_id = 4213
+				province_id = 733
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = hamgyeong_area
+			owns_or_non_sovereign_subject_of = pyongan_area
+			owns_or_non_sovereign_subject_of = 4213
+			owns_or_non_sovereign_subject_of = 733
 		}
 		effect = {
+			korea_region = {
+				limit = { owned_by = ROOT }
+				add_province_modifier = {
+					name = mng_han_four_commanderies
+					duration = 9125
+				}
+			}
+			add_country_modifier = {
+				name = mng_korean_officials
+				duration = -1
+			}
+			south_korea_area = {
+				limit= {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -493,10 +984,26 @@ ming_missions_2 = {
 		required_missions = { mng_four_han_commanderies }
 		position = 7
 		provinces_to_highlight = {
+			area = south_korea_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = south_korea_area
 		}
 		effect = {
+			remove_country_modifier = mng_korean_officials
+			add_country_modifier = {
+				name = mng_korean_aristocrats
+				duration = -1
+			}
+			country_event = { id = ME_Ming_Events.16 }
+			korea_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -505,10 +1012,53 @@ ming_missions_2 = {
 		required_missions = { mng_ungjin_commandery }
 		position = 8
 		provinces_to_highlight = {
+			region = korea_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = korea_region
+			OR = {
+				IF = {
+					limit = {
+						NOT = { accepted_culture = korean }
+					}
+					dip_power = 150
+				}
+				accepted_culture = korean
+				korea_region = {
+					type = all
+					NOT = { culture = korean }
+				}
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 3
+			}
 		}
 		effect = {
+			add_meritocracy = 5
+			IF = {
+				limit = {
+					NOT = { accepted_culture = korean }
+				}
+				add_dip_power = -150
+			}
+			every_province = {
+				if = {
+					limit = { culture = korean }
+					change_culture = chaoxian
+				}
+			}
+			add_country_modifier = {
+				name = mng_korea_assimilated
+				duration = 9125
+			}
+			remove_country_modifier = mng_korean_aristocrats
+			add_country_modifier = {
+				name = mng_sino_korean_elite
+				duration = -1
+			}
 		}
 	}
 
@@ -516,11 +1066,25 @@ ming_missions_2 = {
 		icon = mission_mnd_dai_temples
 		required_missions = {  }
 		position = 9
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			army_tradition = 40
+			calc_true_if = {
+				amount = 2
+				all_country = {
+					has_spy_network_from = {
+						value = 40
+						who = ROOT
+					}
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_feared_agents
+				duration = -1
+			}
+			country_event = { id = ME_Ming_Events.24 }
 		}
 	}
 
@@ -531,11 +1095,17 @@ ming_missions_2 = {
 			mng_shake_changwei
 		}
 		position = 10
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			has_mil_advisor_3 = yes
+			has_adm_advisor_3 = yes
+			has_dip_advisor_3 = yes
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_reformed_cabinet
+				duration = 1925
+			}
 		}
 	}
 
@@ -543,11 +1113,24 @@ ming_missions_2 = {
 		icon = mission_mnd_dai_universities
 		required_missions = { mng_construct_new_marketplaces }
 		position = 11
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			IF = {
+				limit = { has_global_flag = governments_expanded_mod_active }
+				OR = {
+					farm_estate = 5
+					has_reform = wei_suo_reform
+				}
+			}
+			ELSE = {
+				farm_estate = 5
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_tuntian_system
+				duration = 9125
+			}
 		}
 	}
 
@@ -559,11 +1142,27 @@ ming_missions_2 = {
 			mng_five_peoples_china
 		}
 		position = 12
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			total_development = 2000
+			religious_unity = 0.9
+			ME_has_reform_on_level = { level = 9 }
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 5
+				imperial_mandate = 70
+				meritocracy = 80
+			}
+			adm_tech = 26
+			dip_tech = 26
+			mil_tech = 26
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_virtuous_government
+				duration = -1
+			}
 		}
 	}
 
@@ -571,11 +1170,44 @@ ming_missions_2 = {
 		icon = mission_scholar_officials
 		required_missions = { mng_governance_virtue }
 		position = 13
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = {  }
 		trigger = {
+			all_country = {
+				variable_arithmetic_trigger = {
+					custom_tooltip = MNG_HAS_2_TIMES_TOTAL_DEVELOPMENT_THAN_EVERY
+					export_to_variable = {
+						which = our_total_development
+						value = trigger_value:total_development
+						who = ROOT
+					}
+					export_to_variable = {
+						which = their_total_development
+						value = trigger_value:total_development
+						who = THIS
+					}
+					multiply_variable = {
+						which = their_total_development
+						value = 2
+					}
+					check_variable = {
+						which = our_total_development
+						which = their_total_development
+					}
+				}
+			}
+			calc_true_if = {
+				amount = 10
+				all_country = {
+					is_subject_of = ROOT
+					total_development = 100
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_true_middle_kingdom
+				duration = -1
+			}
 		}
 	}
 }
@@ -596,9 +1228,7 @@ ming_missions_3 = {
 		position = 1
 		provinces_to_highlight = {
 			province_id = 2134
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			owns = 2134
@@ -627,10 +1257,34 @@ ming_missions_3 = {
 		required_missions = { mng_west_sea }
 		position = 2
 		provinces_to_highlight = {
+			OR = {
+				area = amdo_area
+				area = kham_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			KAM = {
+				OR = {
+					exists = no
+					is_subject_of = ROOT
+				}
+			}
+			owns_or_non_sovereign_subject_of = amdo_area
+			owns_or_non_sovereign_subject_of = kham_area
 		}
 		effect = {
+			tibet_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = mng_tibet_monks
+				duration = -1
+			}
 		}
 	}
 
@@ -639,10 +1293,119 @@ ming_missions_3 = {
 		required_missions = { mng_amdo_kham_commision }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				area = tsang_area
+				area = utsang_area
+				area = ngari_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 3
+			}
+			owns_or_non_sovereign_subject_of = tsang_area
+			owns_or_non_sovereign_subject_of = utsang_area
+			owns_or_non_sovereign_subject_of = ngari_area
 		}
 		effect = {
+			tibet_region = {
+				add_province_modifier = {
+					name = mng_roof_world
+					duration = 9125
+				}
+			}
+			remove_country_modifier = mng_tibet_monks
+			add_country_modifier = {
+				name = mng_tibet_lama_advisors
+				duration = -1
+			}
+			baisi_rajya_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			bihar_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			lower_doab_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			mithila_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			nepal_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			oudh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			purvanchal_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tarim_basin_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kashgaria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kashmir_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			shanshan_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			turpan_kumul_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -651,10 +1414,53 @@ ming_missions_3 = {
 		required_missions = { mng_secure_tibet }
 		position = 4
 		provinces_to_highlight = {
+			OR = {
+				area = baisi_rajya_area
+				area = bihar_area
+				area = lower_doab_area
+				area = mithila_area
+				area = nepal_area
+				area = oudh_area
+				area = purvanchal_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			IF = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 4
+			}
+			owns_or_non_sovereign_subject_of = baisi_rajya_area
+			owns_or_non_sovereign_subject_of = bihar_area
+			owns_or_non_sovereign_subject_of = lower_doab_area
+			owns_or_non_sovereign_subject_of = mithila_area
+			owns_or_non_sovereign_subject_of = nepal_area
+			owns_or_non_sovereign_subject_of = oudh_area
+			owns_or_non_sovereign_subject_of = purvanchal_area
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_patron_buddha
+				duration = 9125
+			}
+			add_country_modifier = {
+				name = mng_buddhist_holy_sites
+				duration = 9125
+			}
+			remove_country_modifier = mng_tibet_lama_advisors
+			add_country_modifier = {
+				name = mng_guided_buddha
+				duration = -1
+			}
+			country_event = { id = ME_Ming_Events.21 }
+			india_superregion = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -663,10 +1469,50 @@ ming_missions_3 = {
 		required_missions = { mng_patron_buddhism }
 		position = 5
 		provinces_to_highlight = {
+			superregion = india_superregion
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				ROOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 150
+						superregion = india_superregion
+					}
+				}
+			}
 		}
 		trigger = {
+			IF = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				religion = confucianism
+				has_harmonized_with = dharmic
+			}
+			ELSE = {
+				india_superregion = {
+					limit = { owned_by = ROOT }
+					NOT = {
+						OR = {
+							religion = hinduism
+							religion = sikhism
+						}
+					}
+				}
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 150
+				superregion = india_superregion
+			}
 		}
 		effect = {
+			add_stability_or_adm_power = yes
+			IF = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				add_meritocracy = 10
+			}
+			add_country_modifier = {
+				name = mng_emperor_india
+				duration = 18250
+			}
 		}
 	}
 
@@ -675,10 +1521,68 @@ ming_missions_3 = {
 		required_missions = { mng_sino_korean_relations }
 		position = 6
 		provinces_to_highlight = {
+			OR = {
+				area = northern_kyushu
+				area = kyushu_area
+			}
+			NOT = { province_id = 1015 }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = northern_kyushu
+			kyushu_area = {
+				limit = {
+					NOT = { province_id = 1015 }
+				}
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			IF = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 2
+			}
 		}
 		effect = {
+			define_general = {
+				name = "Qi Jiguang"
+				fire = 6
+				shock = 4
+				manuever = 3
+				siege = 4
+			}
+			add_country_modifier = {
+				name = mng_samurai_retainers
+				duration = -1
+			}
+			# Add 10% trade power to Nippon and Girin trade nodes. key/name = mng_enforced_kan_he_mao_yi
+			shikoku_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			sanindo_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			saigoku_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kinai_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -786,7 +1690,7 @@ ming_missions_4 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = mng_pacified_naman_tribes
+				name = mng_pacified_nanman_tribes
 				duration = 1825
 			}
 			burma_region = {
@@ -977,7 +1881,7 @@ ming_missions_5 = {
 
 	mng_sino_viet_relations = {
 		icon = mission_mnd_maj_subjugate_makassar
-		required_missions = { }
+		required_missions = {  }
 		position = 1
 		trigger = {
 			if = {
@@ -986,8 +1890,8 @@ ming_missions_5 = {
 					DAI = {
 						is_subject_of = ROOT
 						has_opinion = {
-							who = ROOT
 							value = 150
+							who = ROOT
 						}
 						marriage_with = ROOT
 					}
@@ -1006,8 +1910,8 @@ ming_missions_5 = {
 							is_enemy = ROOT
 							NOT = {
 								has_opinion = {
-									who = ROOT
 									value = -50
+									who = ROOT
 								}
 							}
 						}
