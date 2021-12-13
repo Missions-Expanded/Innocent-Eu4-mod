@@ -64,9 +64,7 @@
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.1
-			}
+			country_event = { id = ME_France_Events.1 }
 			lombardy_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -90,7 +88,7 @@
 	}
 
 	fra_march_southwards = {
-		required_missions = { 
+		required_missions = {
 			fra_doorway_italy
 			fra_secure_lombardy
 		}
@@ -144,7 +142,7 @@
 			if = {
 				limit = {
 					NOT = {
-						NAP = { is_subject_of = FRA }
+						NAP = { is_subject_of = ROOT }
 					}
 				}
 				central_italy_area = {
@@ -176,11 +174,11 @@
 					add_permanent_claim = ROOT
 				}
 			}
-		}		
+		}
 	}
 
 	fra_avenging_nicopolis = {
-		required_missions = { 
+		required_missions = {
 			fra_march_southwards
 			fra_complex_claim
 		}
@@ -188,11 +186,27 @@
 		position = 8
 		provinces_to_highlight = {
 			OR = {
-				area = albania_area
-				area = macedonia_area
-				area = bulgaria_area
+				AND = {
+					OR = {
+						area = albania_area
+						area = macedonia_area
+					}
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					area = bulgaria_area
+					OR = {
+						AND = {
+							exists = BUL
+							NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						}
+						AND = {
+							NOT = { exists = BUL }
+							NOT = { owned_by = ROOT }
+						}
+					}
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			albania_area = {
@@ -203,9 +217,20 @@
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			bulgaria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = {
+					exists = BUL
+				}
+				bulgaria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			else = {
+				bulgaria_area = {
+					type = all
+					owned_by = ROOT
+				}
 			}
 		}
 		effect = {
@@ -214,14 +239,12 @@
 					exists = BUL
 				}
 				add_casus_belli = {
-					type = cb_crusade
+					type = cb_fra_crusade_against_tur
 					target = TUR
 				}
 			}
 			else = {
-				country_event = {
-					id = ME_France_Events.4
-				}
+				country_event = { id = ME_France_Events.4 }
 			}
 		}
 	}
@@ -232,7 +255,16 @@
 		position = 10
 		provinces_to_highlight = {
 			region = british_isles_region
-			NOT = { owned_by = ROOT }
+			OR = {
+				AND = {
+					ROOT = { has_country_flag = fra_francia_formed }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					ROOT = { NOT = { has_country_flag = fra_francia_formed } }
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -245,11 +277,11 @@
 				}
 			}
 			else = {
+				NOT = { exists = HSC }
 				british_isles_region = {
 					type = all
 					owned_by = ROOT
 				}
-				NOT = { exists = HSC }
 			}
 		}
 		effect = {
@@ -259,8 +291,8 @@
 				}
 				add_prestige = 5
 			}
-			country_event = {
-				id = ME_France_Events.69
+			else = {
+				country_event = { id = ME_France_Events.69 }
 			}
 		}
 	}
@@ -279,11 +311,23 @@
 				}
 				if = {
 					limit = {
-						exists = POR
 						OR = {
-							exists = CAS
-							exists = SPA
-							exists = ARA
+							AND = {
+								exists = CAS
+								CAS = { is_subject = no }
+							}
+							AND = {
+								exists = SPA
+								SPA = { is_subject = no }
+							}
+							AND = {
+								exists = ARA
+								ARA = { is_subject = no }
+							}
+							AND = {
+								exists = POR
+								POR = { is_subject = no }
+							}
 						}
 					}
 					OR = {
@@ -307,11 +351,11 @@
 				}
 				else = {
 					any_great_power = {
-						great_power_rank = 2
-					}
-					has_spy_network_from = {
-						who = ROOT
-						value = 50
+						NOT = { great_power_rank = 3 }
+						has_spy_network_from = {
+							who = ROOT
+							value = 50
+						}
 					}
 				}
 			}
@@ -405,7 +449,7 @@
 						is_strongest_trade_power = ROOT
 					}
 				}
-			}	
+			}
 			if = {
 				limit = {
 					has_dlc = Dharma
@@ -769,9 +813,7 @@ france_missions_2 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.8
-			}
+			country_event = { id = ME_France_Events.8 }
 		}
 	}
 
@@ -781,7 +823,16 @@ france_missions_2 = {
 		position = 10
 		provinces_to_highlight = {
 			region = iberia_region
-			NOT = { owned_by = ROOT }
+			OR = {
+				AND = {
+					ROOT = { has_country_flag = fra_francia_formed }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					ROOT = { NOT = { has_country_flag = fra_francia_formed } }
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -809,8 +860,8 @@ france_missions_2 = {
 				}
 				add_prestige = 5
 			}
-			country_event = {
-				id = ME_France_Events.26
+			else = {
+				country_event = { id = ME_France_Events.26 }
 			}
 		}
 	}
@@ -916,9 +967,7 @@ france_missions_2 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.11
-			}
+			country_event = { id = ME_France_Events.11 }
 			add_country_modifier = {
 				name = fra_monopolizing_angle
 				duration = 7300
@@ -1001,9 +1050,15 @@ france_missions_2 = {
 		icon = mission_religious
 		position = 20
 		provinces_to_highlight = {
-			OR = { province_id = 186 }
+			province_id = 186
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+			}
 		}
 		trigger = {
+			adm_tech = 7
+			owns = 186
 			186 = { has_tax_building_trigger = yes }
 			any_country = {
 				culture_group = latin
@@ -1012,7 +1067,6 @@ france_missions_2 = {
 					value = 100
 				}
 			}
-			adm_tech = 7
 		}
 		effect = {
 			186 = {
@@ -1095,9 +1149,7 @@ france_missions_2 = {
 			adm_tech = 20
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.9
-			}
+			country_event = { id = ME_France_Events.9 }
 			custom_tooltip = fra_account_keeping_tt
 			hidden_effect = {
 				every_owned_province = {
@@ -1125,9 +1177,9 @@ france_missions_3 = {
 	has_country_shield = yes
 
 	fra_herding_lost_sheep = {
-		required_missions = { 
+		required_missions = {
 			fra_dynastic_struggle
-			fra_compagnies_ordonnance 
+			fra_compagnies_ordonnance
 		}
 		icon = mission_conquer_50_development
 		position = 2
@@ -1168,9 +1220,7 @@ france_missions_3 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			country_event = {
-				id = ME_France_Events.7
-			}
+			country_event = { id = ME_France_Events.7 }
 		}
 	}
 
@@ -1199,9 +1249,7 @@ france_missions_3 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.12
-			}
+			country_event = { id = ME_France_Events.12 }
 			add_country_modifier = {
 				name = fra_ancien_regime
 				duration = 18250
@@ -1248,8 +1296,16 @@ france_missions_3 = {
 		position = 6
 		trigger = {
 			prestige = 60
-			OR = {
-				in_golden_age = yes
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					in_golden_age = yes
+					grown_by_development = 400
+				}
+			}
+			else = {
 				grown_by_development = 400
 			}
 		}
@@ -1281,25 +1337,27 @@ france_missions_3 = {
 		icon = reform_bergordnung
 		position = 8
 		trigger = {
-			NOT = {
-				any_country = {
+			army_size = 150
+			all_country = {
+				OR = {
 					capital_scope = {
-						continent = europe
+						NOT = { continent = europe }
 					}
-					army_strength = {
-						who = ROOT
-						value = 1
+					AND = {
+						NOT = {
+							army_strength = {
+								who = ROOT
+								value = 1
+							}
+						}
+						NOT = { total_development = ROOT }
+						NOT = { monthly_income = ROOT }
 					}
-					total_development = ROOT
-					monthly_income = ROOT
 				}
 			}
-			army_size = 150
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.13
-			}
+			country_event = { id = ME_France_Events.13 }
 			add_country_modifier = {
 				name = fra_french_supremacy
 				duration = -1
@@ -1308,7 +1366,7 @@ france_missions_3 = {
 	}
 
 	fra_puppeteers_play = {
-		required_missions = { 
+		required_missions = {
 			fra_french_superiority
 			fra_avenging_nicopolis
 			fra_hornets_nest
@@ -1328,9 +1386,7 @@ france_missions_3 = {
 				name = fra_managing_client_states
 				duration = -1
 			}
-			country_event = {
-				id = ME_France_Events.70
-			}
+			country_event = { id = ME_France_Events.70 }
 		}
 	}
 
@@ -1347,7 +1403,16 @@ france_missions_3 = {
 				area = upper_rhineland_area
 				area = lower_swabia_area
 			}
-			NOT = { owned_by = ROOT }
+			OR = {
+				AND = {
+					ROOT = { has_country_flag = fra_francia_formed }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					ROOT = { NOT = { has_country_flag = fra_francia_formed } }
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -1415,8 +1480,8 @@ france_missions_3 = {
 				}
 				add_prestige = 5
 			}
-			country_event = {
-				id = ME_France_Events.14
+			else = {
+				country_event = { id = ME_France_Events.14 }
 			}
 		}
 	}
@@ -1443,7 +1508,7 @@ france_missions_3 = {
 				custom_trigger_tooltip = {
 					tooltip = FRANCE_HAS_TWICE_THE_DEVELOPMENT_ARMY_NAVY_2ND_GREAT_POWER
 					NOT = {
-						any_great_power = {
+						any_other_great_power = {
 							great_power_rank = 2
 							army_strength = {
 								who = ROOT
@@ -1519,9 +1584,7 @@ france_missions_3 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.15
-			}
+			country_event = { id = ME_France_Events.15 }
 		}
 	}
 
@@ -1529,13 +1592,6 @@ france_missions_3 = {
 		required_missions = { fra_journey_eastwards }
 		icon = toulon_dockyards
 		position = 14
-		provinces_to_highlight = {
-			OR = {
-				region = coromandel_region
-				region = bengal_region
-			}
-			NOT = { has_discovered = ROOT }
-		}
 		trigger = {
 			coromandel_region = {
 				has_discovered = ROOT
@@ -1616,9 +1672,7 @@ france_missions_3 = {
 		icon = toulon_dockyards
 		position = 16
 		provinces_to_highlight = {
-			OR = {
-				colonial_region = colonial_louisiana
-			}
+			colonial_region = colonial_louisiana
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
@@ -1849,9 +1903,7 @@ france_missions_3 = {
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.5
-			}
+			country_event = { id = ME_France_Events.5 }
 		}
 	}
 
@@ -1860,7 +1912,15 @@ france_missions_3 = {
 		icon = mission_colonial
 		position = 21
 		provinces_to_highlight = {
-			OR = { province_id = 201 }
+			province_id = 201
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 10 }
+				NOT = { base_production = 10 }
+				NOT = { base_tax = 10 }
+				NOT = { has_dock_building_trigger = yes }
+				NOT = { has_shipyard_building_trigger = yes }
+			}
 		}
 		trigger = {
 			201 = {
@@ -1882,8 +1942,8 @@ france_missions_3 = {
 			}
 			if = {
 				limit = {
-					201 = { 
-						NOT = { province_has_center_of_trade_of_level = 3 }	
+					201 = {
+						NOT = { province_has_center_of_trade_of_level = 3 }
 					}
 				}
 				201 = { add_center_of_trade_level = 1 }
@@ -1986,9 +2046,7 @@ france_missions_4 = {
 		}
 		effect = {
 			add_army_tradition = 5
-			country_event = {
-				id = ME_France_Events.16
-			}
+			country_event = { id = ME_France_Events.16 }
 			if = {
 				limit = {
 					is_expanded_mod_active = {
@@ -2169,18 +2227,32 @@ france_missions_4 = {
 		icon = the_balance_of_power
 		position = 7
 		provinces_to_highlight = {
+			province_id = 50
+			NOT = { owned_by = ROOT }
 			OR = {
-				province_id = 50
+				NOT = { controlled_by = ROOT }
+				NOT = { devastation = 15 }
+				owner = {
+					NOT = {
+						is_in_war = {
+							attacker_leader = ROOT
+							war_score = 50
+						}
+					}
+				}
 			}
 		}
 		trigger = {
-			50 = {
-				controlled_by = ROOT
-				devastation = 15
-				owner = {
-					is_in_war = {
-						attacker_leader = ROOT
-						war_score = 50
+			OR = {
+				owns = 50
+				50 = {
+					controlled_by = ROOT
+					devastation = 15
+					owner = {
+						is_in_war = {
+							attacker_leader = ROOT
+							war_score = 50
+						}
 					}
 				}
 			}
@@ -2203,7 +2275,16 @@ france_missions_4 = {
 		position = 10
 		provinces_to_highlight = {
 			region = poland_region
-			NOT = { owned_by = ROOT }
+			OR = {
+				AND = {
+					ROOT = { has_country_flag = fra_francia_formed }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					ROOT = { NOT = { has_country_flag = fra_francia_formed } }
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -2221,7 +2302,7 @@ france_missions_4 = {
 					owned_by = ROOT
 				}
 				NOT = { exists = POL }
-			}	
+			}
 		}
 		effect = {
 			custom_tooltip = fra_unlock_russian_campaign_tt
@@ -2232,9 +2313,7 @@ france_missions_4 = {
 				add_prestige = 5
 			}
 			else = {
-				country_event = {
-					id = ME_France_Events.18
-				}
+				country_event = { id = ME_France_Events.18 }
 			}
 		}
 	}
@@ -2333,20 +2412,20 @@ france_missions_4 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			NOT = {
-				any_country = {
-					technology_group = western
-					num_of_owned_provinces_with = {
-						value = 5
-						superregion = india_superregion
+			all_country = {
+				OR = {
+					NOT = { technology_group = western }
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 5
+							superregion = india_superregion
+						}
 					}
 				}
 			}
 		}
 		effect = {
-			country_event = {
-				id = ME_France_Events.19
-			}
+			country_event = { id = ME_France_Events.19 }
 			if = {
 				limit = {
 					OR = {
@@ -2408,7 +2487,7 @@ france_missions_4 = {
 					tooltip = fra_supporting_independence_colonials_tt
 					calc_true_if = {
 						amount = 2
-						all_subject_country = {
+						all_country = {
 							is_colonial_nation = yes
 							OR = {
 								is_colonial_nation_of = ENG
@@ -2444,9 +2523,7 @@ france_missions_4 = {
 				add_prestige = 10
 			}
 			else = {
-				country_event = {
-					id = ME_France_Events.20
-				}
+				country_event = { id = ME_France_Events.20 }
 			}
 		}
 	}
@@ -2463,6 +2540,11 @@ france_missions_4 = {
 				province_id = 199
 				province_id = 190
 				province_id = 4390
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 8 }
+				NOT = { has_production_building_trigger = yes }
 			}
 		}
 		trigger = {
@@ -2509,7 +2591,14 @@ france_missions_4 = {
 		icon = italian_riches
 		position = 21
 		provinces_to_highlight = {
-			OR = { province_id = 203 }
+			province_id = 203
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+				NOT = { base_tax = 10 }
+				NOT = { has_production_building_trigger = yes }
+				NOT = { has_trade_building_trigger = yes }
+			}
 		}
 		trigger = {
 			203 = {
@@ -2632,9 +2721,7 @@ france_missions_4 = {
 				name = fra_mass_production_weapons
 				duration = -1
 			}
-			country_event = {
-				id = ME_France_Events.17
-			}
+			country_event = { id = ME_France_Events.17 }
 		}
 	}
 }
@@ -2660,17 +2747,15 @@ france_missions_5 = {
 				limit = {
 					exists = BUR
 				}
-				BUR = { 
-					NOT = { prestige = ROOT } 
+				BUR = {
+					NOT = { prestige = ROOT }
 				}
 			}
 		}
 		effect = {
 			if = {
 				limit = { exists = BUR }
-				country_event = {
-					id = ME_France_Events.21
-				}
+				country_event = { id = ME_France_Events.21 }
 			}
 			if = {
 				limit = {
@@ -2798,7 +2883,7 @@ france_missions_5 = {
 	}
 
 	fra_rhennish_conquests = {
-		required_missions = { 
+		required_missions = {
 			fra_natural_wall
 			fra_break_neutrality
 		}
@@ -2870,18 +2955,32 @@ france_missions_5 = {
 		icon = boh_humiliate_austria
 		position = 8
 		provinces_to_highlight = {
+			province_id = 134
+			NOT = { owned_by = ROOT }
 			OR = {
-				province_id = 134
+				NOT = { controlled_by = ROOT }
+				NOT = { devastation = 15 }
+				owner = {
+					NOT = {
+						is_in_war = {
+							attacker_leader = ROOT
+							war_score = 50
+						}
+					}
+				}
 			}
 		}
 		trigger = {
-			134 = {
-				controlled_by = ROOT
-				devastation = 15
-				owner = {
-					is_in_war = {
-						attacker_leader = ROOT
-						war_score = 50
+			OR = {
+				owns = 134
+				134 = {
+					controlled_by = ROOT
+					devastation = 15
+					owner = {
+						is_in_war = {
+							attacker_leader = ROOT
+							war_score = 50
+						}
 					}
 				}
 			}
@@ -2893,38 +2992,9 @@ france_missions_5 = {
 			}
 			if = {
 				limit = {
-					HAB = { is_emperor = yes}
-					imperial_influence = 30
+					HAB = { is_emperor = yes }
 				}
 				HAB = { add_imperial_influence = -30 }
-			}
-			else_if = {
-				limit = { hre_reform_level = 1 }
-				revoke_reform = reichsreform
-			}
-			else_if = {
-				limit = { hre_reform_level = 2 }
-				revoke_reform = reichsregiment
-			}
-			else_if = {
-				limit = { hre_reform_level = 3 }
-				revoke_reform = hofgericht
-			}
-			else_if = {
-				limit = { hre_reform_level = 4 }
-				revoke_reform = gemeinerpfennig
-			}
-			else_if = {
-				limit = { hre_reform_level = 4 }
-				revoke_reform = landfriede
-			}
-			else_if = {
-				limit = { hre_reform_level = 5 }
-				revoke_reform = erbkaisertum
-			}
-			else_if = {
-				limit = { hre_reform_level = 6 }
-				revoke_reform = privilegia_de_non_appelando
 			}
 		}
 	}
@@ -2935,7 +3005,16 @@ france_missions_5 = {
 		position = 10
 		provinces_to_highlight = {
 			region = russia_region
-			NOT = { owned_by = ROOT }
+			OR = {
+				AND = {
+					ROOT = { has_country_flag = fra_francia_formed }
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					ROOT = { NOT = { has_country_flag = fra_francia_formed } }
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -2964,9 +3043,7 @@ france_missions_5 = {
 				add_prestige = 5
 			}
 			else = {
-				country_event = {
-					id = ME_France_Events.68
-				}
+				country_event = { id = ME_France_Events.68 }
 			}
 		}
 	}
@@ -3020,9 +3097,7 @@ france_missions_5 = {
 				name = fra_royal_monopoly_force_modifier
 				duration = -1
 			}
-			country_event = {
-				id = ME_France_Events.27
-			}
+			country_event = { id = ME_France_Events.27 }
 			country_event = {
 				id = ME_France_Events.31
 				days = 30
@@ -3054,6 +3129,43 @@ france_missions_5 = {
 		required_missions = { fra_journey_eastwards }
 		icon = mission_establish_high_seas_navy
 		position = 14
+		provinces_to_highlight = {
+			area = guinea_region
+			OR = {
+				AND = {
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					province_has_center_of_trade_of_level = 1
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 3
+								region = guinea_region
+								province_has_center_of_trade_of_level = 1
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { owned_by = ROOT }
+					OR = {
+						province_has_center_of_trade_of_level = 1
+						base_production = 10
+					}
+					ROOT = {
+						NOT = {
+							guinea_region = {
+								owned_by = ROOT
+								province_has_center_of_trade_of_level = 1
+							}
+							guinea_region = {
+								owned_by = ROOT
+								base_production = 10
+							}
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 3
@@ -3092,6 +3204,10 @@ france_missions_5 = {
 		required_missions = { fra_frontier_west }
 		icon = mission_establish_high_seas_navy
 		position = 15
+		provinces_to_highlight = {
+			province_id = 1177
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			1177 = { country_or_non_sovereign_subject_holds = ROOT }
 			1460 = {
@@ -3186,29 +3302,25 @@ france_missions_5 = {
 		required_missions = { }
 		icon = mission_advance_to_the_dnieper
 		position = 19
-		provinces_to_highlight = {
-			owned_by = ROOT
-			trade_goods = wine
-			NOT = { base_production = 8 }
-			NOT = { has_manufactory_trigger = yes }
+		trigger = {
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
 				}
-				NOT = { has_building = road_network }
-			}
-		}
-		trigger = {
-			num_of_owned_provinces_with = {
-				value = 5
-				trade_goods = wine
-				base_production = 8
-				has_manufactory_trigger = yes
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = trade_goods }
-					}
+				num_of_owned_provinces_with = {
+					value = 5
+					trade_goods = wine
+					base_production = 8
+					has_manufactory_trigger = yes
 					has_building = road_network
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 5
+					trade_goods = wine
+					base_production = 8
+					has_manufactory_trigger = yes
 				}
 			}
 		}
@@ -3287,6 +3399,10 @@ france_missions_5 = {
 			NOT = { num_of_times_improved = 2 }
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = fra_plantation_economy_done_tt
+				has_country_flag = fra_plantation_economy
+			}
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
@@ -3353,10 +3469,6 @@ france_missions_5 = {
 						num_of_times_improved = 2
 					}
 				}
-			}
-			custom_trigger_tooltip = {
-				tooltip = fra_plantation_economy_done_tt
-				has_country_flag = fra_plantation_economy
 			}
 		}
 		effect = {
@@ -3432,7 +3544,7 @@ france_missions_5 = {
 			custom_tooltip = fra_protectionalism_tt
 			hidden_effect = {
 				every_owned_province = {
-					limit = { 
+					limit = {
 						OR = {
 							province_id = 186
 							any_trade_node_member_province = { province_id = 186 }
@@ -3444,7 +3556,7 @@ france_missions_5 = {
 					}
 				}
 				every_owned_province = {
-					limit = { 
+					limit = {
 						OR = {
 							province_id = 1276
 							any_trade_node_member_province = { province_id = 1276 }

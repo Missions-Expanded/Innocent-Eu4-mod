@@ -11,14 +11,15 @@ country_decisions = {
 						continent = south_america
 					}
                 }
+				NOT = { has_country_modifier = fra_the_plantation_economy }
             }
-			NOT = { has_country_modifier = fra_the_plantation_economy }
         }
 		allow = {
 			calc_true_if = {
 				amount = 1
 				all_subject_country = {
-					is_colonial_nation_of = FRA
+					is_colonial_nation = yes
+					NOT = { has_country_modifier = fra_the_plantation_economy }
 					capital_scope = {
 						OR = {
 							continent = north_america
@@ -81,30 +82,56 @@ country_decisions = {
 		effect = {
 			custom_tooltip = fra_the_plantation_economy_reward_tt
 			hidden_effect = {
+				set_country_flag = fra_plantation_economy
 				random_subject_country = {
 					limit = {
-						is_colonial_nation_of = FRA
+						is_colonial_nation = yes
 						capital_scope = {
 							region = carribeans_region
 						}
 						total_development = 100
-						num_of_owned_provinces_with = {
-							value = 2
-							trade_goods = sugar
-							base_production = 5
-							has_manufactory_trigger = yes
+						if = {
+							limit = {
+								is_expanded_mod_active = { mod = trade_goods }
+							}
+							num_of_owned_provinces_with = {
+								value = 2
+								trade_goods = tomato
+								base_production = 5
+								has_manufactory_trigger = yes
+							}
+							num_of_owned_provinces_with = {
+								value = 2
+								trade_goods = potato
+								base_production = 5
+								has_manufactory_trigger = yes
+							}
+							num_of_owned_provinces_with = {
+								value = 2
+								trade_goods = citrus
+								base_production = 5
+								has_manufactory_trigger = yes
+							}
 						}
-						num_of_owned_provinces_with = {
-							value = 2
-							trade_goods = tobacco
-							base_production = 5
-							has_manufactory_trigger = yes
-						}
-						num_of_owned_provinces_with = {
-							value = 2
-							trade_goods = cotton
-							base_production = 5
-							has_manufactory_trigger = yes
+						else = {
+							num_of_owned_provinces_with = {
+								value = 2
+								trade_goods = sugar
+								base_production = 5
+								has_manufactory_trigger = yes
+							}
+							num_of_owned_provinces_with = {
+								value = 2
+								trade_goods = tobacco
+								base_production = 5
+								has_manufactory_trigger = yes
+							}
+							num_of_owned_provinces_with = {
+								value = 2
+								trade_goods = cotton
+								base_production = 5
+								has_manufactory_trigger = yes
+							}
 						}
 						1516 = {
 							trade_share = {
@@ -113,15 +140,14 @@ country_decisions = {
 							}
 						}
 					}
+					add_tariff_value = 0.1
+					add_liberty_desire = 10
 					add_country_modifier = {
 						name = fra_the_plantation_economy
 						duration = -1
 					}
 				}
 			}
-			add_tariff_value = 0.1
-			add_liberty_desire = 10
-			set_country_flag = fra_plantation_economy
 		}
 	}
 
@@ -154,11 +180,11 @@ country_decisions = {
 			}
 		}
 		effect = {
+			add_mercantilism = 5
 			add_country_modifier = {
 				name = fra_dirigiste
 				duration = -1
 			}
-			add_mercantilism = 5
 		}
 	}
 
@@ -173,8 +199,8 @@ country_decisions = {
 				num_of_subjects = 3
 				calc_true_if = {
 					amount = 2
-					all_country = {
-						is_client_nation_of = ROOT
+					all_subject_country = {
+						is_client_nation = yes
 					}
 				}
 			}
@@ -204,20 +230,19 @@ country_decisions = {
 			NOT = { has_country_flag = fra_end_decision_taken }
 		}
 		allow = {
+			is_emperor = yes
 			custom_trigger_tooltip = {
 				tooltip = fra_electors_as_subjects_tt
 				calc_true_if = {
 					all_elector = {
-						is_subject_of = FRA
+						is_subject_of = ROOT
 					}
 					amount = 4
 				}
 			}
 			if = {
 				limit = {
-					FRA = {
-						religion = catholic
-					}
+					religion = catholic
 				}
 				custom_trigger_tooltip = {
 					tooltip = fra_pope_conversion_tt
@@ -227,26 +252,16 @@ country_decisions = {
 					}
 				}
 			}
-			custom_trigger_tooltip = {
-				tooltip = fight_or_support_reformation
-				always = yes
-			}
 			if = {
 				limit = {
 					has_dlc = "Art of War"
-					FRA = {
-						religion = catholic
-					}
 				}
-				FRA = {
-					religion = catholic
-				}
+				hre_religion = ROOT
+				hre_religion_locked = yes
 				custom_trigger_tooltip = {
 					tooltip = fra_fight_reformation_tt
 					OR = {
-						FRA = {
-							has_country_flag = religious_league_war_on_winning_side
-						}
+						has_country_flag = religious_league_war_on_winning_side
 						AND = {
 							is_year = 1550
 							all_elector = {
@@ -255,125 +270,40 @@ country_decisions = {
 						}
 					}
 				}
-				hre_religion = catholic
-				custom_trigger_tooltip = {
-					tooltip = fra_hre_religion_same_france
-					all_countries_including_self = {
-						OR = {
-							NOT = { is_part_of_hre = yes }
-							religion = catholic
-						}
-					}
-				}
 			}
-			else_if = {
-				limit = {
-					NOT = { has_dlc = "Art of War" }
-					FRA = {
-						religion = catholic
-					}
-				}
-				FRA = {
-					religion = catholic
-				}
+			else = {
 				custom_trigger_tooltip = {
 					tooltip = obj_force_converted_tooltip
-					FRA = {
-						has_country_flag = force_converted
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = fra_hre_religion_same_france
-					all_countries_including_self = {
-						OR = {
-							NOT = { is_part_of_hre = yes }
-							religion = catholic
-						}
-					}
+					has_country_flag = force_converted
 				}
 			}
-			else_if = {
-				limit = {
-					has_dlc = "Art of War"
-					FRA = {
-						NOT = { religion = catholic }
-					}
-				}
-				FRA = {
-					NOT = { religion = catholic }
-				}
-				custom_trigger_tooltip = {
-					tooltip = fra_support_reformation_tt
+			custom_trigger_tooltip = {
+				tooltip = fra_hre_religion_same_france
+				all_country = {
 					OR = {
-						FRA = {
-							has_country_flag = religious_league_war_on_winning_side
-						}
-						AND = {
-							is_year = 1550
-							all_elector = {
-								religion = ROOT
-							}
-						}
-					}
-				}
-				hre_religion = FRA
-				custom_trigger_tooltip = {
-					tooltip = fra_hre_religion_same_france
-					all_countries_including_self = {
-						OR = {
-							NOT = { is_part_of_hre = yes }
-							religion = FRA
-						}
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { has_dlc = "Art of War" }
-					FRA = {
-						NOT = { religion = catholic }
-					}
-				}
-				FRA = {
-					NOT = { religion = catholic }
-				}
-				custom_trigger_tooltip = {
-					tooltip = obj_force_converted_tooltip
-					FRA = {
-						has_country_flag = force_converted
-					}
-				}
-				custom_trigger_tooltip = {
-					tooltip = fra_hre_religion_same_france
-					all_countries_including_self = {
-						OR = {
-							NOT = { is_part_of_hre = yes }
-							religion = FRA
-						}
+						NOT = { is_part_of_hre = yes }
+						religion = ROOT
 					}
 				}
 			}
 			custom_trigger_tooltip = {
 				tooltip = fra_dealt_with_ottomans
-				NOT = {
-					balkan_region = {
-						country_or_non_sovereign_subject_holds = TUR
-					}
+				balkan_region = {
+					type = all
+					NOT = { country_or_non_sovereign_subject_holds = TUR }
 				}
-				NOT = {
-					carpathia_region = {
-						country_or_non_sovereign_subject_holds = TUR
-					}
+				carpathia_region = {
+					type = all
+					NOT = { country_or_non_sovereign_subject_holds = TUR }
 				}
 			}
-			is_emperor = yes
 		}
 		effect = {
 			country_event = { id = ME_France_Events.42 }
 			set_country_flag = fra_end_decision_taken
 		}
 	}
-	
+
 	me_fra_first_reform = {
 		potential = {
 			has_country_flag = fra_hre_first_reform
@@ -454,6 +384,7 @@ country_decisions = {
 			set_country_flag = fra_third_reform_done
 		}
 	}
+
 	me_fra_fourth_reform = {
 		potential = {
 			has_country_flag = fra_hre_fourth_reform
@@ -480,6 +411,7 @@ country_decisions = {
 			set_country_flag = fra_fourth_reform_done
 		}
 	}
+
 	me_fra_fifth_reform = {
 		potential = {
 			has_country_flag = fra_hre_fifth_reform
@@ -498,14 +430,12 @@ country_decisions = {
 				which = french_authority
 				value = 0
 			}
-			country_event = {
-				id = ME_France_Events.60
-			}
+			country_event = { id = ME_France_Events.60 }
 		}
 	}
 
 	me_fra_iberian_campaign = {
-		potential = { 
+		potential = {
 			has_country_flag = fra_spanish_campaign_decision
 			NOT = { has_country_flag = fra_iberia_start }
 		}
@@ -521,13 +451,47 @@ country_decisions = {
 			if = {
 				limit = {
 					exists = SPA
+					SPA = { is_subject = no }
 				}
 				has_spy_network_in = {
 					who = SPA
 					value = 50
 				}
 			}
-			else = {
+			else_if = {
+				limit = {
+					exists = SPA
+					SPA = { is_subject = no }
+				}
+				OR = {
+					overlord_of = SPA
+					SPA = {
+						overlord = {
+							has_spy_network_from = {
+								who = ROOT
+								value = 50
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						CAS = {
+							exists = yes
+							is_subject = no
+						}
+						ARA = {
+							exists = yes
+							is_subject = no
+						}
+						POR = {
+							exists = yes
+							is_subject = no
+						}
+					}
+				}
 				OR = {
 					has_spy_network_in = {
 						who = CAS
@@ -543,9 +507,56 @@ country_decisions = {
 					}
 				}
 			}
+			else_if = {
+				limit = {
+					OR = {
+						CAS = {
+							exists = yes
+							is_subject = yes
+						}
+						ARA = {
+							exists = yes
+							is_subject = yes
+						}
+						POR = {
+							exists = yes
+							is_subject = yes
+						}
+					}
+				}
+				OR = {
+					overlord_of = CAS
+					CAS = {
+						overlord = {
+							has_spy_network_from = {
+								who = ROOT
+								value = 50
+							}
+						}
+					}
+					overlord_of = ARA
+					ARA = {
+						overlord = {
+							has_spy_network_from = {
+								who = ROOT
+								value = 50
+							}
+						}
+					}
+					overlord_of = POR
+					POR = {
+						overlord = {
+							has_spy_network_from = {
+								who = ROOT
+								value = 50
+							}
+						}
+					}
+				}
+			}
 			1293 = {
 				privateer_power = {
-					country = FRA
+					country = ROOT
 					share = 20
 				}
 			}
@@ -553,53 +564,241 @@ country_decisions = {
 		effect = {
 			set_country_flag = fra_iberia_start
 			if = {
-				limit = { exists = SPA }
-				declare_war_with_cb = {
-					who = SPA
-					casus_belli = cb_grand_iberian_campaign
-				}
-			}
-			if = {
-				limit = { exists = CAS }
-				declare_war_with_cb = {
-					who = CAS
-					casus_belli = cb_grand_iberian_campaign
-				}
-			}
-			if = {
-				limit = { exists = ARA }
-				declare_war_with_cb = {
-					who = ARA
-					casus_belli = cb_grand_iberian_campaign
-				}
-			}
-			if = {
-				limit = { exists = POR }
-				declare_war_with_cb = {
-					who = POR
-					casus_belli = cb_grand_iberian_campaign
-				}
-			}
-			custom_tooltip = fra_nations_intervening_tt
-			hidden_effect = {
-				every_country = {
-					limit = {
-						capital_scope = {
-							continent = europe
-						}
-						NOT = { 
-							AND = {
-								tag = FRA
-								is_subject_of = ROOT
+				limit = {
+					OR = {
+						AND = {
+							exists = SPA
+							NOT = { overlord_of = SPA }
+							SPA = {
+								OR = {
+									AND = {
+										is_subject = no
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+									AND = {
+										is_subject = yes
+										overlord = {
+											has_spy_network_from = {
+												who = ROOT
+												value = 50
+											}
+										}
+									}
+								}
 							}
 						}
-						army_strength = {
-							who = ROOT
-								value = 0.6
+						AND = {
+							exists = CAS
+							NOT = { overlord_of = CAS }
+							CAS = {
+								OR = {
+									AND = {
+										is_subject = no
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+									AND = {
+										is_subject = yes
+										overlord = {
+											has_spy_network_from = {
+												who = ROOT
+												value = 50
+											}
+										}
+									}
+								}
+							}
+						}
+						AND = {
+							exists = ARA
+							NOT = { overlord_of = ARA }
+							ARA = {
+								OR = {
+									AND = {
+										is_subject = no
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+									AND = {
+										is_subject = yes
+										overlord = {
+											has_spy_network_from = {
+												who = ROOT
+												value = 50
+											}
+										}
+									}
+								}
+							}
+						}
+						AND = {
+							exists = POR
+							NOT = { overlord_of = POR }
+							POR = {
+								OR = {
+									AND = {
+										is_subject = no
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+									AND = {
+										is_subject = yes
+										overlord = {
+											has_spy_network_from = {
+												who = ROOT
+												value = 50
+											}
+										}
+									}
+								}
+							}
 						}
 					}
-					country_event = {
-						id = ME_France_Events.71
+				}
+				if = {
+					limit = {
+						exists = SPA
+						NOT = { overlord_of = SPA }
+						SPA = {
+							OR = {
+								AND = {
+									is_subject = no
+									has_spy_network_from = {
+										who = ROOT
+										value = 50
+									}
+								}
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+								}
+							}
+						}
+					}
+					declare_war_with_cb = {
+						who = SPA
+						casus_belli = cb_grand_iberian_campaign
+					}
+				}
+				else_if = {
+					limit = {
+						exists = CAS
+						NOT = { overlord_of = CAS }
+						CAS = {
+							OR = {
+								AND = {
+									is_subject = no
+									has_spy_network_from = {
+										who = ROOT
+										value = 50
+									}
+								}
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+								}
+							}
+						}
+					}
+					declare_war_with_cb = {
+						who = CAS
+						casus_belli = cb_grand_iberian_campaign
+					}
+				}
+				else_if = {
+					limit = {
+						exists = ARA
+						NOT = { overlord_of = ARA }
+						ARA = {
+							OR = {
+								AND = {
+									is_subject = no
+									has_spy_network_from = {
+										who = ROOT
+										value = 50
+									}
+								}
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+								}
+							}
+						}
+					}
+					declare_war_with_cb = {
+						who = ARA
+						casus_belli = cb_grand_iberian_campaign
+					}
+				}
+				else_if = {
+					limit = {
+						exists = POR
+						NOT = { overlord_of = POR }
+						POR = {
+							OR = {
+								AND = {
+									is_subject = no
+									has_spy_network_from = {
+										who = ROOT
+										value = 50
+									}
+								}
+								AND = {
+									is_subject = yes
+									overlord = {
+										has_spy_network_from = {
+											who = ROOT
+											value = 50
+										}
+									}
+								}
+							}
+						}
+					}
+					declare_war_with_cb = {
+						who = POR
+						casus_belli = cb_grand_iberian_campaign
+					}
+				}
+				custom_tooltip = fra_nations_intervening_tt
+				hidden_effect = {
+					every_country = {
+						limit = {
+							capital_scope = {
+								continent = europe
+							}
+							NOT = { tag = ROOT }
+							NOT = { is_subject_of = ROOT }
+							army_strength = {
+								who = ROOT
+								value = 0.6
+							}
+						}
+						country_event = { id = ME_France_Events.71 }
 					}
 				}
 			}
@@ -652,9 +851,33 @@ country_decisions = {
 		}
 		effect = {
 			set_country_flag = fra_rhine_start
-			declare_war_with_cb = {
-				who = PREV
-				casus_belli = cb_grand_rhenish_campaign
+			random_country = {
+				limit = {
+					OR = {
+						primary_culture = hessian
+						primary_culture = swabian
+					}
+					capital_scope = {
+						OR = {
+							area = north_rhine_area
+							area = lower_rhineland_area
+							area = hesse_area
+							area = palatinate_area
+							area = upper_rhineland_area
+							area = lower_swabia_area
+						}
+					}
+					has_spy_network_from = {
+						who = ROOT
+						value = 50
+					}
+				}
+				ROOT = {
+					declare_war_with_cb = {
+						who = PREV
+						casus_belli = cb_grand_rhenish_campaign
+					}
+				}
 			}
 			custom_tooltip = fra_nations_intervening_tt
 			hidden_effect = {
@@ -663,64 +886,14 @@ country_decisions = {
 						capital_scope = {
 							continent = europe
 						}
-						NOT = {
-							AND = {
-								tag = FRA
-								is_subject_of = ROOT
-							}
-						}
+						NOT = { tag = ROOT }
+						NOT = { is_subject_of = ROOT }
 						army_strength = {
 							who = ROOT
 							value = 0.6
 						}
 					}
-					country_event = {
-						id = ME_France_Events.72
-					}
-				}
-				else = {
-					north_rhine_area = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-					lower_rhineland_area = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-					hesse_area = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-					palatinate_area = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-					upper_rhineland_area = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
-					lower_swabia_area = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-						}
-						add_permanent_claim = ROOT
-					}
+					country_event = { id = ME_France_Events.72 }
 				}
 			}
 		}
@@ -740,48 +913,115 @@ country_decisions = {
 			mil_power = 300
 			manpower_percentage = 0.95
 			sailors_percentage = 0.95
-			any_country = {
-				capital_scope = {
-					OR = {
-						region = poland_region
+			if = {
+				limit = {
+					exists = PLC
+				}
+				if = {
+					limit = {
+						PLC = { is_subject = no }
+					}
+					has_spy_network_in = {
+						who = PLC
+						value = 50
 					}
 				}
-				has_spy_network_from = {
-					who = ROOT
-					value = 50
+				else = {
+					OR = {
+						overlord_of = PLC
+						PLC = {
+							overlord = {
+								has_spy_network_from = {
+									who = ROOT
+									value = 50
+								}
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = POL
+				}
+				if = {
+					limit = {
+						POL = { is_subject = no }
+					}
+					has_spy_network_in = {
+						who = POL
+						value = 50
+					}
+				}
+				else = {
+					OR = {
+						overlord_of = POL
+						POL = {
+							overlord = {
+								has_spy_network_from = {
+									who = ROOT
+									value = 50
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 		effect = {
-			declare_war_with_cb = {
-				who = PREV
-				casus_belli = cb_grand_polish_campaign
-			}
-			custom_tooltip = fra_nations_intervening_tt
-			hidden_effect = {
-				every_country = {
-					limit = {
-						capital_scope = {
-							continent = europe
+			set_country_flag = fra_poland_start
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							exists = PLC
+							NOT = { overlord_of = PLC }
 						}
-						NOT = {
-							AND = {
-								tag = FRA
-								is_subject_of = ROOT
-							}
-						}
-						army_strength = {
-							who = ROOT
-							value = 0.6
+						AND = {
+							exists = POL
+							NOT = { overlord_of = POL }
 						}
 					}
-					country_event = {
-						id = ME_France_Events.73
+				}
+				if = {
+					limit = {
+						exists = PLC
+						NOT = { overlord_of = PLC }
+					}
+					declare_war_with_cb = {
+						who = PLC
+						casus_belli = cb_grand_polish_campaign
+					}
+				}
+				else_if = {
+					limit = {
+						exists = POL
+						NOT = { overlord_of = POL }
+					}
+					declare_war_with_cb = {
+						who = POL
+						casus_belli = cb_grand_polish_campaign
+					}
+				}
+				custom_tooltip = fra_nations_intervening_tt
+				hidden_effect = {
+					every_country = {
+						limit = {
+							capital_scope = {
+								continent = europe
+							}
+							NOT = { tag = ROOT }
+							NOT = { is_subject_of = ROOT }
+							army_strength = {
+								who = ROOT
+								value = 0.6
+							}
+						}
+						country_event = { id = ME_France_Events.73 }
 					}
 				}
 			}
 			else = {
-				set_country_flag = fra_poland_start
 				poland_region = {
 					limit = {
 						NOT = { owned_by = ROOT }
@@ -807,49 +1047,118 @@ country_decisions = {
 			mil_power = 300
 			manpower_percentage = 0.95
 			sailors_percentage = 0.95
-			any_country = {
-				capital_scope = {
-					region = russia_region
+			if = {
+				limit = {
+					exists = RUS
 				}
-				has_spy_network_from = {
-					who = ROOT
-					value = 50
+				if = {
+					limit = {
+						RUS = { is_subject = no }
+					}
+					has_spy_network_in = {
+						who = RUS
+						value = 50
+					}
+				}
+				else = {
+					OR = {
+						overlord_of = RUS
+						RUS = {
+							overlord = {
+								has_spy_network_from = {
+									who = ROOT
+									value = 50
+								}
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = MOS
+				}
+				if = {
+					limit = {
+						MOS = { is_subject = no }
+					}
+					has_spy_network_in = {
+						who = MOS
+						value = 50
+					}
+				}
+				else = {
+					OR = {
+						overlord_of = MOS
+						MOS = {
+							overlord = {
+								has_spy_network_from = {
+									who = ROOT
+									value = 50
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 		effect = {
 			set_country_flag = fra_russia_start
-			declare_war_with_cb = {
-				who = PREV
-				casus_belli = cb_grand_russian_campaign
-			}
-			custom_tooltip = fra_nations_intervening_tt
-			hidden_effect = {
-				every_country = {
-					limit = {
-						OR = {
-							AND = {
-								capital_scope = {
-									continent = europe
-								}
-								NOT = {
-									AND = {
-										tag = FRA
-										is_subject_of = ROOT
-									} 
-								}
-								army_strength = {
-									who = ROOT
-									value = 0.6
-								}
-							}
-							capital_scope = {
-								region = russia_region
-							}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							exists = RUS
+							NOT = { overlord_of = RUS }
+						}
+						AND = {
+							exists = MOS
+							NOT = { overlord_of = MOS }
 						}
 					}
-					country_event = {
-						id = ME_France_Events.74
+				}
+				if = {
+					limit = {
+						exists = RUS
+						NOT = { overlord_of = RUS }
+					}
+					declare_war_with_cb = {
+						who = RUS
+						casus_belli = cb_grand_russian_campaign
+					}
+				}
+				else_if = {
+					limit = {
+						exists = MOS
+						NOT = { overlord_of = MOS }
+					}
+					declare_war_with_cb = {
+						who = MOS
+						casus_belli = cb_grand_russian_campaign
+					}
+				}
+				custom_tooltip = fra_nations_intervening_tt
+				hidden_effect = {
+					every_country = {
+						limit = {
+							OR = {
+								capital_scope = {
+									region = russia_region
+								}
+								AND = {
+									capital_scope = {
+										continent = europe
+									}
+									NOT = { tag = ROOT }
+									NOT = { is_subject_of = ROOT }
+									army_strength = {
+										who = ROOT
+										value = 0.6
+									}
+								}
+							}
+						}
+						country_event = { id = ME_France_Events.74 }
 					}
 				}
 			}
@@ -879,49 +1188,118 @@ country_decisions = {
 			mil_power = 300
 			manpower_percentage = 0.95
 			sailors_percentage = 0.95
-			any_country = {
-				capital_scope = {
-					region = british_isles_region
+			if = {
+				limit = {
+					exists = GBR
 				}
-				has_spy_network_from = {
-					who = ROOT
-					value = 50
+				if = {
+					limit = {
+						GBR = { is_subject = no }
+					}
+					has_spy_network_in = {
+						who = GBR
+						value = 50
+					}
+				}
+				else = {
+					OR = {
+						overlord_of = GBR
+						GBR = {
+							overlord = {
+								has_spy_network_from = {
+									who = ROOT
+									value = 50
+								}
+							}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					exists = ENG
+				}
+				if = {
+					limit = {
+						ENG = { is_subject = no }
+					}
+					has_spy_network_in = {
+						who = ENG
+						value = 50
+					}
+				}
+				else = {
+					OR = {
+						overlord_of = ENG
+						ENG = {
+							overlord = {
+								has_spy_network_from = {
+									who = ROOT
+									value = 50
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 		effect = {
 			set_country_flag = fra_brittain_start
-			declare_war_with_cb = {
-				who = PREV
-				casus_belli = cb_grand_british_campaign
-			}
-			custom_tooltip = fra_nations_intervening_tt
-			hidden_effect = {
-				every_country = {
-					limit = {
-						OR = {
-							AND = {
-								capital_scope = {
-								continent = europe
-								}
-								NOT = {
-									AND = {
-										tag = FRA
-										is_subject_of = ROOT
-									}
-								}
-								army_strength = {
-									who = ROOT
-									value = 0.6
-								}
-							}
-							capital_scope = {
-								region = british_isles_region
-							}
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							exists = GBR
+							NOT = { overlord_of = GBR }
+						}
+						AND = {
+							exists = ENG
+							NOT = { overlord_of = ENG }
 						}
 					}
-					country_event = {
-						id = ME_France_Events.75
+				}
+				if = {
+					limit = {
+						exists = GBR
+						NOT = { overlord_of = GBR }
+					}
+					declare_war_with_cb = {
+						who = GBR
+						casus_belli = cb_grand_british_campaign
+					}
+				}
+				else_if = {
+					limit = {
+						exists = ENG
+						NOT = { overlord_of = ENG }
+					}
+					declare_war_with_cb = {
+						who = ENG
+						casus_belli = cb_grand_british_campaign
+					}
+				}
+				custom_tooltip = fra_nations_intervening_tt
+				hidden_effect = {
+					every_country = {
+						limit = {
+							OR = {
+								capital_scope = {
+									region = british_isles_region
+								}
+								AND = {
+									capital_scope = {
+										continent = europe
+									}
+									NOT = { tag = ROOT }
+									NOT = { is_subject_of = ROOT }
+									army_strength = {
+										who = ROOT
+										value = 0.6
+									}
+								}
+							}
+						}
+						country_event = { id = ME_France_Events.75 }
 					}
 				}
 			}
