@@ -1656,10 +1656,22 @@ ming_missions_3 = {
 				name = mng_samurai_retainers
 				duration = -1
 			}
-			every_province = {
-				
+			730 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 50
+					key = mng_enforced_kan_he_mao_yi
+				}
 			}
-			# Add 10% trade power to Nippon and Girin trade nodes. key/name = mng_enforced_kan_he_mao_yi
+			1376 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 100
+					key = mng_enforced_kan_he_mao_yi
+				}
+			}
 			shikoku_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -1699,10 +1711,49 @@ ming_missions_3 = {
 		}
 		position = 7
 		provinces_to_highlight = {
+			OR = {
+				AND = {
+					region = japan_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = {
+						ROOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 20
+								region = japan_region
+							}
+						}
+					}
+				}
+				AND = {
+					province_id = 1020
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
 		}
 		trigger = {
+			owns_or_non_sovereign_subject_of = 1020
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 20
+				region = japan_region
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_new_emperor_japan
+				duration = 9125
+			}
+			remove_country_modifier = mng_samurai_retainers
+			add_country_modifier = {
+				name = mng_daimyo_vassals
+				duration = -1
+			}
+			japan_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
 		}
 	}
 
@@ -1711,10 +1762,36 @@ ming_missions_3 = {
 		required_missions = { mng_topple_imperial_throne }
 		position = 8
 		provinces_to_highlight = {
+			region = japan_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			japan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 3
+			}
 		}
 		effect = {
+			add_stability_or_adm_power = yes
+			add_mandate = 10
+			add_legitimacy_equivalent = {
+				amount = 10
+				republican_tradition = 5
+			}
+			add_country_modifier = {
+				name = mng_pacified_east
+				duration = 18250
+			}
+			remove_country_modifier = mng_daimyo_vassals
+			add_country_modifier = {
+				name = mng_sino_japanese_elite
+				duration = -1
+			}
 		}
 	}
 
@@ -1722,11 +1799,19 @@ ming_missions_3 = {
 		icon = mission_aragonese_navy
 		required_missions = { mng_settle_taiwan }
 		position = 9
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = { }
 		trigger = {
+			OR = {
+				north_america = { has_discovered = ROOT }
+				south_america = { has_discovered = ROOT }
+			}
+			oceania = { has_discovered = ROOT }
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_retracing_footsteps
+				duration = 7300
+			}
 		}
 	}
 
@@ -1735,10 +1820,30 @@ ming_missions_3 = {
 		required_missions = { mng_lost_expedition }
 		position = 10
 		provinces_to_highlight = {
+			area = illawara_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			illawara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			any_subject_country = {
+				is_colonial_nation = yes
+				capital_scope = { colonial_region = colonial_australia }
+			}
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 2
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_nanyang_trade
+				duration = -1
+			}
+			country_event = { id = ME_Ming_Events.6 }
 		}
 	}
 
@@ -1746,11 +1851,15 @@ ming_missions_3 = {
 		icon = mission_mnd_khm_protect_the_cham
 		required_missions = { mng_meritocratic_court }
 		position = 11
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = { }
 		trigger = {
+			num_accepted_cultures = 5
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_multiethnic_empire
+				duration = 9125
+			}
 		}
 	}
 
@@ -1759,10 +1868,20 @@ ming_missions_3 = {
 		required_missions = { mng_five_peoples_china }
 		position = 12
 		provinces_to_highlight = {
+			province_id = 1816
+			NOT = { has_building = university }
 		}
 		trigger = {
+			1816 = { has_building = university }
+			university = 5
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_hanlinyuan_reformed
+				duration = 9125
+			}
+			# Fire event Tiangong Kaiwu
+			# Disable event Donglin Movement
 		}
 	}
 }
