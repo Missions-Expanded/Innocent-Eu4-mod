@@ -1703,7 +1703,7 @@ ME_Jaunpuri_Missions_3 = {
 	}
 	dlh_follow_indus = {
 		icon = develop_the_po_valley
-		required_missions = { jnp_control_trunk jnp_where_it_all_began }
+		required_missions = { jnp_control_trunk jnp_kick_out_pashtuns }
 		position = 9
 		provinces_to_highlight = {
 			OR = {
@@ -2064,6 +2064,31 @@ ME_Jaunpuri_Missions_3 = {
 			}
 		}
 	}
+	jnp_lord_of_hindustan = {
+		icon = become_king
+		required_missions = { dlh_returning_gujarat jnp_grand_trunk_road jnp_lord_of_orissa }
+		position = 11
+		trigger = {
+			prestige = 60
+			OR = {
+				great_power_rank = 3
+				grown_by_development = 300
+			}
+			NOT = {
+				any_country = {
+					OR = {
+						india_superregion = { is_capital = yes }
+						army_size = PREV
+					}
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+		}
+	}
 }
 ME_Jaunpuri_Missions_4 = {
 	slot = 4
@@ -2280,6 +2305,184 @@ ME_Jaunpuri_Missions_4 = {
 			}
 			country_event = {
 				id = ME_Delhi_Events.2
+			}
+		}
+	}
+	jnp_wishes_of_harem = {
+		icon = mission_conquer_malwa_bng
+		required_missions = { jnp_thorn_in_our_side }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				culture = vindhyan
+				area = gird_area
+			}
+		}
+		trigger = {
+			OR = {
+				num_of_owned_provinces_with = {
+					culture = vindhyan
+					value = 5
+				}
+				calc_true_if = {
+					amount = 1
+					KLP = { vassal_of = PREV }
+					BND = { vassal_of = PREV }
+				}
+			}
+			gird_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = jnp_avenge_womens_honour_modifier
+				duration = 10950
+			}
+			every_subject_country = {
+				add_liberty_desire = -10
+			}
+			malwa_area = {
+				add_permanent_claim = ROOT
+			}
+			mewar_area = {
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	dlh_malvi_architecture = {
+		icon = mission_malwi_architecture
+		required_missions = { jnp_wishes_of_harem }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 526
+				AND = {
+					culture = malvi
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}	
+				AND = {
+					is_core = MLW
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}	
+			}
+		}
+		trigger = {
+			526 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_building = cathedral
+				development = 20
+			}
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 5
+					culture = malvi
+				}
+				MLW = {
+					all_core_province = {
+						owned_by = FROM
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Delhi_Events.7
+			}
+			if = {
+				limit = { has_dlc = "Leviathan" }
+				add_country_modifier = {
+					name = dlh_monument_preservation_lev_modifier
+					duration = 7300
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = dlh_monument_preservation_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	jnp_push_to_coast = {
+		icon = mission_steer_trade_to_bengal
+		required_missions = { jnp_seek_just_war }
+		position = 9
+		provinces_to_highlight = { 
+			OR = {
+				province_id = 568
+				culture = bengali
+			}
+		}
+		trigger = {
+			568 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				culture = bengali
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			1343 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 18250
+					power = 25
+					key = JNP_BENGAL_RICHES
+				}
+			}
+			1343 = {
+				every_trade_node_member_province = { 
+					limit = { has_port = yes }
+					add_permanent_claim = ROOT
+				} 
+			}
+		}
+	}
+	dlh_bengali_jamdani = {
+		icon = mission_gujarati_textiles
+		required_missions = { jnp_push_to_coast }
+		position = 10
+		provinces_to_highlight = { 
+			province_id = 564
+		}
+		trigger = {
+			564 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					has_building = workshop
+					has_building = counting_house
+				}
+				OR = {
+					has_building = marketplace
+					has_building = trade_depot
+					has_building = stock_exchange
+					province_has_center_of_trade_of_level = 3
+				}
+				is_prosperous = yes
+			}
+		}
+		effect = {
+			564 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			country_event = {
+				id = bng_events.30
+			}
+			define_advisor = {
+				type = jamdani_weaver_advisor
+				skill = 1
+				discount = yes
 			}
 		}
 	}
@@ -2763,6 +2966,131 @@ ME_Jaunpuri_Missions_5 = {
 					}
 				}
 			}
+		}
+	}
+	jnp_thorn_in_our_side = {
+		icon = army_reforms
+		required_missions = { }
+		position = 6
+		trigger = {
+			army_size_percentage = 1
+			NOT = { is_in_deficit = yes }
+			num_of_allies = 2
+		}
+		effect = {
+			gondwana_area = {
+				add_permanent_claim = ROOT
+			}
+			MLW = {
+				every_subject_country = {
+					every_owned_province = {
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	jnp_seek_just_war = {
+		icon = personal_diplomacy
+		required_missions = { jnp_thorn_in_our_side }
+		position = 8
+		trigger = {
+			army_size = BNG
+			NOT = { coalition_target = ROOT }
+			has_dip_advisor_2 = yes
+		}
+		effect = {
+			north_bengal_area = {
+				add_permanent_claim = ROOT
+			}
+			east_bengal_area = {
+				add_permanent_claim = ROOT
+			}
+			west_bengal_area = {
+				add_permanent_claim = ROOT
+			}
+			add_ruler_modifier = {
+				name = jnp_rest_the_tiger_modifier
+				duration = 9125
+			}
+		}
+	}
+	jnp_campaign_in_orissa = {
+		icon = mission_a_million_elephants
+		required_missions = { jnp_seek_just_war }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = west_bengal_area
+				province_id = 2096
+				area = gaur_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			west_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			gaur_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			2096 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			2080 = {
+				add_permanent_claim = ROOT
+			}
+			549 = {
+				add_permanent_claim = ROOT
+			}
+			orissa_area = {
+				add_permanent_claim = ROOT
+			}
+			jharkhand_area = {
+				add_permanent_claim = ROOT
+			}
+			add_casus_belli = {
+				target = ORI
+				type = cb_vassalize_mission
+				months = 120
+			}
+		}
+	}
+	jnp_lord_of_orissa = {
+		icon = mission_servitor_of_jagannath
+		required_missions = { jnp_campaign_in_orissa }
+		position = 10
+		trigger = {
+			OR = {
+				ORI = { vassal_of = PREV }
+				orissa_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			jharkhand_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				num_of_cavalry = 20
+				mil_tech = 10
+			}
+		}
+		effect = {
+			garjat_area = {
+				add_permanent_claim = ROOT				
+			}
+			upper_mahanadi_area = {
+				add_permanent_claim = ROOT
+			}
+			add_army_tradition_or_mil_power = { amount = 20 }
+			custom_tooltip = JNP_ORISSA_ELEPHANTS_MODIFIER_TT
+			set_country_flag = orissa_vassal_modifier
 		}
 	}
 }
