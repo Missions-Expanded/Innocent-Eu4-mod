@@ -43,39 +43,11 @@ nitra_first = {
 				name = "slo_core"
 				duration = 9125
 			}
-			silesia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
 			custom_tooltip = SLO_VELEHRAD_CAPITAL
-		}
-	}
-	
-	slo_silesia = {
-	    icon = take_silesia
-		required_missions = { slo_moravia }
-		position = 5
-		
-		provinces_to_highlight = {
-			area = silesia_area
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		trigger = {
-			silesia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
 			custom_tooltip = SLO_BOH_1
 			tooltip = {
 				add_casus_belli = {
-					type = cb_restore_personal_union
+					type = cb_vassalize_mission 
 					months = 300
 					target = BOH
 				}
@@ -101,14 +73,13 @@ nitra_first = {
 			hidden_effect = {
 				if = {
 					limit = {
-						valid_for_personal_unions_trigger = yes
 						exists = BOH
 						BOH = {
-							valid_for_personal_unions_trigger = yes
+							is_subject = no
 						}
 					}
 					add_casus_belli = {
-						type = cb_restore_personal_union
+						type = cb_vassalize_mission 
 						months = 300
 						target = BOH
 					}
@@ -143,9 +114,60 @@ nitra_first = {
 		}
 	}
 	
+	slo_lion = {
+	    icon = reform_bergordnung
+		required_missions = { slo_moravia }
+		position = 5
+		
+		provinces_to_highlight = {
+			OR = {
+				area = bohemia_area
+				area = erzgebirge_area
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		trigger = {
+			bohemia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			erzgebirge_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						MIL = 6
+					}
+				}
+				change_mil = 1
+			}
+			else = {
+				add_mil_power = 150
+			}
+		    add_accepted_culture_or_dip_power = { culture = czech }
+			add_country_modifier = {
+				name = "slo_svatopluk"
+				duration = -1
+			}
+			silesia_area = {
+				limit = {
+					NOT = { is_permanent_claim = ROOT	}
+					NOT = { is_core = ROOT	}
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	
 	slo_lusatia = {
 	    icon = revenge_for_nicopolis
-		required_missions = { slo_lion }
+		required_missions = { slo_silesia }
 		position = 7
 		
 		provinces_to_highlight = {
@@ -457,46 +479,27 @@ nitra_second = {
 		}
 	}
 	
-	slo_lion = {
-	    icon = reform_bergordnung
-		required_missions = { slo_silesia }
+	slo_silesia = {
+	    icon = take_silesia
+		required_missions = { slo_lion }
 		position = 6
 		
 		provinces_to_highlight = {
-			OR = {
-				area = bohemia_area
-				area = erzgebirge_area
-			}
+			area = silesia_area
 			NOT = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		trigger = {
-			bohemia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			erzgebirge_area = {
+			silesia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					NOT = {
-						MIL = 6
-					}
-				}
-				change_mil = 1
-			}
-			else = {
-				add_mil_power = 150
-			}
-		    add_accepted_culture_or_dip_power = { culture = czech }
 			add_country_modifier = {
-				name = "slo_svatopluk"
-				duration = -1
+				name = "slo_sphere"
+				duration = 9125
 			}
 			1770 = {
 				limit = {
@@ -519,12 +522,28 @@ nitra_second = {
 				}
 				add_permanent_claim = ROOT
 			}
+			custom_tooltip = SLO_BOHEMIAN_VASSAL
+			hidden_effect = {
+				if = {
+					limit = {
+						BOH = {
+							is_subject_of = ROOT
+						}
+					}
+					every_owned_province = {
+						limit = {
+							is_core = BOH
+						}
+						remove_core = BOH
+					}
+				}
+			}
 		}
 	}
 	
 	slo_great_moravia = {
 	    icon = restore_great_moravia
-		required_missions = { slo_lion slo_lusatia slo_austria }
+		required_missions = { slo_silesia slo_lusatia slo_austria }
 		position = 8
 		
 		provinces_to_highlight = {
@@ -951,7 +970,7 @@ nitra_third = {
 	
 	slo_austria = {
 	    icon = glory_to_von_habsburg
-		required_missions = { slo_lion }
+		required_missions = { slo_silesia }
 		position = 7
 		
 		provinces_to_highlight = {
