@@ -305,7 +305,9 @@ ME_Bengali_Missions_1 = {
 				add_corruption = -2
 			}
 			elif = {
-				limit = { NOT = { piety = -0.5 } }
+				limit = { 
+					NOT = { piety = -0.5 }
+				}
 				add_yearly_manpower = 1
 			}
 			else = {
@@ -475,7 +477,8 @@ ME_Bengali_Missions_1 = {
 		effect = {
 			define_advisor = {
 				type = sufi_scholar
-				cost = 0.75
+				skill = 2
+				discount = yes
 			}
 			custom_tooltip = BNG_BENGALI_CONVERSION_TT
 			set_country_flag = allow_bengali_conversions
@@ -952,6 +955,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = hanbali } 
 						has_specific_religious_school_alliance = { school = hanbali } 
+						has_specific_religious_school_invite = { school = hanbali } 
 					}
 				}
 				add_country_modifier = {
@@ -964,6 +968,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = hanafi } 
 						has_specific_religious_school_alliance = { school = hanafi } 
+						has_specific_religious_school_invite = { school = hanafi }
 					}
 				}
 				add_country_modifier = {
@@ -976,6 +981,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = shafii } 
 						has_specific_religious_school_alliance = { school = shafii } 
+						has_specific_religious_school_invite = { school = shafii }
 					}
 				}
 				add_country_modifier = {
@@ -988,6 +994,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = ismaili } 
 						has_specific_religious_school_alliance = { school = ismaili } 
+						has_specific_religious_school_invite = { school = ismaili }
 					}
 				}
 				add_country_modifier = {
@@ -1000,6 +1007,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = jafari } 
 						has_specific_religious_school_alliance = { school = jafari } 
+						has_specific_religious_school_invite = { school = jafari }
 					}
 				}
 				add_country_modifier = {
@@ -1012,6 +1020,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = zaidi } 
 						has_specific_religious_school_alliance = { school = zaidi } 
+						has_specific_religious_school_invite = { school = zaidi }
 					}
 				}
 				add_country_modifier = {
@@ -1024,6 +1033,7 @@ ME_Bengali_Missions_2 = {
 					OR = {
 						has_specific_religious_school_opinion = { school = maliki } 
 						has_specific_religious_school_alliance = { school = maliki } 
+						has_specific_religious_school_invite = { school = maliki }
 					}
 				}
 				add_country_modifier = {
@@ -1492,6 +1502,146 @@ ME_Bengali_Missions_3 = {
 			}
 		}
 	}
+	bng_cities = {
+		icon = mission_imperial_cities
+		required_missions = { bng_lifeblood }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 568
+				province_id = 4474
+				province_id = 564
+				province_id = 2039
+				province_id = 4477
+				province_id = 563
+			}
+		}
+		trigger = { 
+			568 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+			}
+			4474 = {
+				owned_by = ROOT
+				has_courthouse_building_trigger = yes
+			}
+			564 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			2039 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+			4477 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+			}
+			563 = {
+				owned_by = ROOT
+				has_manpower_building_trigger = yes
+			}
+		}
+		effect = { 
+			568 = { add_base_tax = 1 }
+			564 = { add_base_tax = 1 }
+			2039 = { add_base_tax = 1 }
+			563 = { add_base_manpower = 2 }
+			4474 = {
+				add_province_modifier = {
+					name = bng_sonargiya_mints_modifier
+					duration = -1
+				}
+			}
+			4477 = {
+				add_province_modifier = {
+					name = ganges_estuary_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	bng_gaur_affluency = {
+		icon = mission_develop_the_capital
+		required_missions = { bng_bagerhat bng_cities }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				province_id = 563
+			}
+		}
+		trigger = {
+			563 = {
+				has_tax_building_trigger = yes
+				num_of_times_improved_by_owner = 6
+				fort_level = 4
+			}
+		}
+		effect = {
+			563 = {
+				add_province_modifier = {
+					name = bng_dakhil_darwaza_modifier
+					duration = -1
+				}
+				add_development_half_monarch_skill = yes
+			}
+			if = {
+				limit = { 
+					any_country = {
+						technology_group = western
+						knows_country = PREV
+					}
+				}
+				custom_tooltip = BNG_ADD_RELATIONS_WESTERN_TT
+				hidden_effect = {
+					every_country = {
+						limit = {
+							technology_group = western
+							knows_country = PREV
+						}
+						ROOT = {
+							add_opinion = {
+								who = PREV
+								modifier = bng_western_relations_modifier
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	bng_bengali_renaissance = {
+		icon = mission_prosperity_in_bengal
+		required_missions = { bng_gaur_affluency bng_ganga_rashtra }
+		position = 10
+		trigger = {
+			has_institution = enlightenment
+			development_in_provinces = {
+				value = 300
+				culture = bengali
+			}
+			NOT = {
+				any_country = {
+					technology_group = western
+					ROOT = {
+						institution_difference = {
+							who = PREV
+							value = 1
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_revitalising_bengali_modifier
+				duration = 9125
+			}
+			change_national_focus_effect = yes
+			custom_tooltip = BNG_RENAISSANCE_EVENTS_TT
+			set_country_flag = allow_bengal_renaissance
+		}
+	}
 }
 
 ME_Bengali_Missions_4 = {
@@ -1814,6 +1964,128 @@ ME_Bengali_Missions_4 = {
 		effect = {
 			add_country_modifier = {
 				name = bng_paradise_of_nations_modifier
+				duration = -1
+			}
+		}
+	}
+	bng_lifeblood = {
+		icon = mission_clear_the_delta
+		required_missions = { }
+		position = 6
+		trigger = {
+			years_of_income = 2.0
+			num_of_owned_provinces_with = {
+				value = 4
+				has_trade_building_trigger = yes
+			}
+		}
+		effect = {
+			add_adm_power = 50
+			custom_tooltip = BNG_DEVELOP_DELTA_TT
+			set_country_flag = allow_bengal_delta_improvements
+		}
+	}
+	bng_rice = {
+		icon = mission_a_million_rice_fields
+		required_missions = { bng_lifeblood }
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = east_bengal_area 
+				province_id = 4479
+				province_id = 2046
+			}
+		}
+		trigger = {
+			development_in_provinces = {
+				area = east_bengal_area 
+				value = 120
+			}
+			4479 = {
+				owned_by = ROOT
+				development = 20
+			}
+			2046 = {
+				owned_by = ROOT
+				development = 20
+			}
+		}
+		effect = {
+			east_bengal_area = {
+				add_province_modifier = {
+					name = bng_new_rice_paddies_modifier
+					duration = 18250
+				}
+			}
+			4479 = {
+				add_province_modifier = {
+					name = bng_new_rice_paddies_modifier
+					duration = 18250
+				}
+			}
+			2046 = {
+				add_province_modifier = {
+					name = bng_new_rice_paddies_modifier
+					duration = 18250
+				}
+			}
+			add_yearly_manpower = 1
+		}
+	}
+	bng_ganga_rashtra = {
+		icon = se_along_the_river
+		required_missions = { bng_gaur_affluency bng_rice bng_gangajal }
+		position = 9
+		trigger = {
+			has_institution = manufactories
+			num_of_owned_manufactory_combined_trigger = { amount = 10 }
+			custom_trigger_tooltip = {
+				tooltip = JNP_RURAL_DEV_100_TT
+				development_in_provinces = {
+					value = 100
+					if = {
+						limit = { is_expanded_mod_active = { mod = trade_goods } }
+						OR = {
+							trade_goods = apiculture
+       						trade_goods = whaling
+       						trade_goods = lumber
+       						trade_goods = rice
+       						trade_goods = horses
+       						trade_goods = olive_oil
+       						trade_goods = camel
+       						trade_goods = elephants
+       						trade_goods = dates
+       						trade_goods = citrus
+       						trade_goods = seafood
+       						trade_goods = maize
+       						trade_goods = pearls
+       						trade_goods = ebony
+       						trade_goods = maple_syrup
+       						trade_goods = potato
+       						trade_goods = tomato 
+						}
+					}
+					OR = {
+						trade_goods = grain
+        				trade_goods = wine 
+        				trade_goods = wool
+        				trade_goods = livestock
+        				trade_goods = fish
+        				trade_goods = furs
+        				trade_goods = ivory
+        				trade_goods = naval_supplies
+					}
+					owned_by = ROOT
+				}
+			}
+			has_global_modifier_value = {
+				which = global_trade_goods_size_modifier
+				value = 0.4
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_ganga_rashtra_modifier
 				duration = -1
 			}
 		}
