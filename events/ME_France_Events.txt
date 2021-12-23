@@ -401,17 +401,19 @@ country_event = {
 		name = ME_France_Events.16.OPT1
 
 		ai_chance = { factor = 1 }
-
-		british_isles_region = {
-			limit = {
-				OR = {
-					is_core = ENG
-					is_core = GBR
+		custom_tooltip = fra_britain_region_core_tt
+		hidden_effect = {
+			british_isles_region = {
+				limit = {
+					OR = {
+						is_core = ENG
+						is_core = GBR
+					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
+				add_permanent_claim = ROOT
 			}
-			add_permanent_claim = ROOT
 		}
 		if = {
 			limit = {
@@ -2663,5 +2665,47 @@ country_event = {
 	option = {
 		name = ME_France_Events.81.OPT1
 		clr_country_flag = french_hre_subject_enabled
+	}
+}
+
+#HIDDEN EVENT TO CHECK IF FRA IS AT WAR FOR IBERIA MEGACAMPAIGN
+country_event = {
+	id = ME_France_Events.82
+	title = ME_France_Events.82.T
+	desc = ME_France_Events.82.D
+	picture = DIPLOMACY_eventPicture
+	fire_only_once = yes
+	hidden = yes
+	trigger = {
+		tag = FRA
+		is_in_war = {
+			attacker_leader = FRA
+			defender_leader = SPA
+			casus_belli = cb_grand_iberian_campaign
+		}
+	}
+	option = {
+		name = ME_France_Events.82.OPT1
+		every_country = {
+			limit = {
+				NOT = { tag = SPA }
+				NOT = {
+					is_in_war = {
+						participants = THIS
+						casus_belli = cb_grand_iberian_campaign
+					}
+				}
+				capital_scope = {
+					continent = europe
+				}
+				NOT = { tag = ROOT }
+				NOT = { is_subject_of = ROOT }
+				army_strength = {
+					who = ROOT
+					value = 0.6
+				}
+			}
+			country_event = { id = ME_France_Events.71 }
+		}
 	}
 }
