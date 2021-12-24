@@ -464,7 +464,7 @@ nitra_second = {
 		
 		effect = {
 			add_prestige = 15
-			create_general = { tradition = 50 }
+			create_general = { tradition = 75 }
 			add_country_modifier = {
 				name = "slo_rex"
 				duration = -1
@@ -801,7 +801,7 @@ nitra_third = {
 							all_known_country = {
 								is_supporting_independence_of = PREV
 							}
-							amount = 3
+							amount = 2
 						}
 					}
 					add_country_modifier = {
@@ -974,27 +974,44 @@ nitra_third = {
 		position = 7
 		
 		provinces_to_highlight = {
-			OR = {
-				province_id = 1770
-				province_id = 134
-			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			owned_by = HAB
 		}
 		trigger = {
-			1770 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			NOT = {
+				HAB = {
+					army_size = ROOT
+				}
 			}
-			134 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			has_won_war_against = {
+				who = HAB
+				max_years_since = 10
 			}
 		}
 		effect = {
 			add_adm_power = 100
 			add_country_modifier = {
-				name = "slo_capture"
-				duration = 9125
+				name = "slo_imperial"
+				duration = 5475
+			}
+			custom_tooltip = SLO_CONQUER_VIENNA
+			tooltip = {
+				add_country_modifier = {
+					name = "slo_capture"
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				IF = {
+					limit = {
+						134 = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+					add_country_modifier = {
+						name = "slo_capture"
+						duration = 9125
+					}
+				}
 			}
 		}
 	}
@@ -1455,10 +1472,10 @@ nitra_fourth = {
 				every_province = {
 					limit = { 
 						owned_by = TUR
-						NOT = { is_permanent_claim = ROOT	}
+						NOT = { is_claim = ROOT	}
 						NOT = { is_core = ROOT	}
 					}
-					add_permanent_claim = ROOT
+					add_claim = ROOT
 				}
 			}
 		}
@@ -1533,7 +1550,7 @@ nitra_fourth = {
 				}
 				num_of_estate_agendas_completed = {
 					estate = estate_church
-					value = 4
+					value = 3
 				}
 			}
 		}
@@ -1622,8 +1639,8 @@ nitra_fourth = {
 		
 		trigger = {
 			monthly_dip = 12
+			owns = 4236
 			4236 = {
-				owns_or_non_sovereign_subject_of = ROOT 
 				has_building = university
 			}
 			has_adm_advisor_3 = yes
@@ -1667,7 +1684,7 @@ nitra_fourth = {
 							limit = {
 								culture = slovak
 							}
-							add_base_manpower = 1
+							add_base_manpower = 2
 						}
 					"
 				}
@@ -1715,10 +1732,51 @@ nitra_fifth = {
 		}
 		
 		effect = {
-			1772 = {
-				add_province_modifier = {
-					name = "slo_fortress"
-					duration = -1
+			custom_tooltip = SLO_DEVIN_1
+			tooltip = {
+				1772 = {
+					add_province_modifier = {
+						name = "slo_fortress"
+						duration = -1
+					}
+				}
+			}
+			custom_tooltip = SLO_DEVIN_2
+			tooltip = {
+				1772 = {
+					add_province_modifier = {
+						name = "slo_fortress2"
+						duration = -1
+					}
+				}
+			}
+			custom_tooltip = SLO_DEVIN_3
+			hidden_effect = {
+				if = {
+					limit = {
+						1772 = {
+							fort_level = 2
+						}
+					}
+					1772 = {
+						add_province_modifier = {
+							name = "slo_fortress"
+							duration = -1
+						}
+					}
+				}
+				if = {
+					limit = {
+						1772 = {
+							base_manpower = 8
+						}
+					}
+					1772 = {
+						add_province_modifier = {
+							name = "slo_fortress2"
+							duration = -1
+						}
+					}
 				}
 			}
 		}
@@ -1733,31 +1791,15 @@ nitra_fifth = {
 			area = slovakia_area
 			OR = {
 				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				NOT = { base_manpower = 5 }
-				AND = {
-					has_dlc = "Mandate of Heaven"
-					NOT = { has_state_edict = edict_defensive_edict }
-				}
+				NOT = { base_manpower = 6 }
 			}
 		}
 		trigger = {
-		    if = {
-				limit = {
-					has_dlc = "Mandate of Heaven"
-				}
-				slovakia_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
-					has_state_edict = edict_defensive_edict
-				}
-			}
-			else = {
-				advisor = fortification_expert
-			}
+			advisor = fortification_expert
 			slovakia_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
-				base_manpower = 5
+				base_manpower = 6
 			}
 		}
 		effect = {
