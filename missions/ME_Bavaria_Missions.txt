@@ -1242,20 +1242,19 @@ me_bavaria_missions_3 = {
 			OR = {
 				AND = {
 					is_expanded_mod_active = { mod = trade_goods }
+					trade_goods = beer
 					OR = {
 						AND = {
-							NOT = { owned_by = ROOT }
-							trade_goods = beer
-							ROOT = {
-								NOT = { beer = 3 }
-							}
-						}
-						AND = {
 							owned_by = ROOT
-							trade_goods = beer
 							OR = {
 								NOT = { development = 10 }
 								NOT = { num_of_times_improved_by_owner = 3 }
+							}
+						}
+						AND = {
+							NOT = { owned_by = ROOT }
+							ROOT = {
+								NOT = { beer = 3 }
 							}
 						}
 					}
@@ -1263,14 +1262,31 @@ me_bavaria_missions_3 = {
 				AND = {
 					NOT = { is_expanded_mod_active = { mod = trade_goods } }
 					OR = {
-						province_id = 66
-						province_id = 2955
-						province_id = 65
+						trade_goods = wine
+						trade_goods = grain
 					}
 					OR = {
-						NOT = { owned_by = ROOT }
-						NOT = { development = 10 }
-						NOT = { num_of_times_improved_by_owner = 3 }
+						AND = {
+							owned_by = ROOT
+							OR = {
+								NOT = { development = 10 }
+								NOT = { num_of_times_improved_by_owner = 3 }
+							}
+						}
+						AND = {
+							NOT = { owned_by = ROOT }
+							ROOT = {
+								NOT = {
+									num_of_owned_provinces_with = {
+										value = 3
+										OR = {
+											trade_goods = wine
+											trade_goods = grain
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -1288,18 +1304,12 @@ me_bavaria_missions_3 = {
 				}
 			}
 			else = {
-				owns = 66
-				66 = {
-					development = 10
-					num_of_times_improved_by_owner = 3
-				}
-				owns = 2955
-				2955 = {
-					development = 10
-					num_of_times_improved_by_owner = 3
-				}
-				owns = 65
-				65 = {
+				num_of_owned_provinces_with = {
+					value = 3
+					OR = {
+						trade_goods = wine
+						trade_goods = grain
+					}
 					development = 10
 					num_of_times_improved_by_owner = 3
 				}
@@ -1308,11 +1318,11 @@ me_bavaria_missions_3 = {
 		effect = {
 			if = {
 				limit = {
-					is_expanded_mod_active = { mod = trade_goods }
+					has_global_flag = me_bav_muenchner_reinheitsgebot
 				}
 				if = {
 					limit = {
-						has_global_flag = me_bav_muenchner_reinheitsgebot
+						is_expanded_mod_active = { mod = trade_goods }
 					}
 					every_owned_province = {
 						limit = {
@@ -1333,30 +1343,70 @@ me_bavaria_missions_3 = {
 					}
 				}
 				else = {
-					country_event = { id = ME_Bavaria_Events.3 }
+					custom_tooltip = BAVARIA_MUENCHNER_REINHEITSGEBOT_TT
+					hidden_effect = {
+						random_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = wine
+									trade_goods = grain
+								}
+								development = 10
+								num_of_times_improved_by_owner = 3
+								NOT = { has_province_flag = bavaria_muenchner_reinheitsgebot_flag }
+							}
+							set_province_flag = bavaria_muenchner_reinheitsgebot_flag
+							add_base_production = 1
+						}
+						random_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = wine
+									trade_goods = grain
+								}
+								development = 10
+								num_of_times_improved_by_owner = 3
+								NOT = { has_province_flag = bavaria_muenchner_reinheitsgebot_flag }
+							}
+							set_province_flag = bavaria_muenchner_reinheitsgebot_flag
+							add_base_production = 1
+						}
+						random_owned_province = {
+							limit = {
+								OR = {
+									trade_goods = wine
+									trade_goods = grain
+								}
+								development = 10
+								num_of_times_improved_by_owner = 3
+								NOT = { has_province_flag = bavaria_muenchner_reinheitsgebot_flag }
+							}
+							set_province_flag = bavaria_muenchner_reinheitsgebot_flag
+							add_base_production = 1
+						}
+						every_owned_province = {
+							limit = {
+								has_province_flag = bavaria_muenchner_reinheitsgebot_flag
+							}
+							clr_province_flag = bavaria_muenchner_reinheitsgebot_flag
+						}
+					}
+					add_years_of_owned_provinces_production_income = {
+						years = 3
+						trigger = {
+							OR = {
+								trade_goods = wine
+								trade_goods = grain
+							}
+							development = 10
+							num_of_times_improved_by_owner = 3
+						}
+						custom_tooltip = BAV_INCOME_FROM_GRAIN_AND_WINE
+					}
 				}
 			}
 			else = {
-				65 = {
-					add_base_production = 1
-				}
-				2955 = {
-					add_base_production = 1
-				}
-				66 = {
-					add_base_production = 1
-				}
-				add_years_of_owned_provinces_production_income = {
-					years = 5
-					trigger = {
-						OR = {
-							province_id = 66
-							province_id = 2955
-							province_id = 65
-						}
-					}
-					custom_tooltip = BAV_INCOME_FROM_65_2955_66
-				}
+				country_event = { id = ME_Bavaria_Events.3 }
 			}
 		}
 	}
