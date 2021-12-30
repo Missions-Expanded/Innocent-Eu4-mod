@@ -11,159 +11,389 @@ NOV_missions_1 = {
 	}
 	has_country_shield = yes
 
-	nov_gospodin_velikiy_novgorod = {
-		icon = mission_dominate_home_trade_node
+	nov_khan_demise = {
+		icon = mission_asian_trader
 		required_missions = { }
+		position = 1
+		provinces_to_highlight = { }
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = marketplace
-						has_building = trade_depot
-						has_building = stock_exchange
+			if = {
+				limit = { exists = GLH }
+				OR = {
+					alliance_with = GLH
+					is_enemy = GLH
+					is_rival = GLH
+					has_opinion = {
+						who = GLH
+						value = 100
+					}
+					NOT = {
+						has_opinion = {
+							who = GLH
+							value = -50
+						}
 					}
 				}
-				amount = 5
 			}
-			treasury = 200
-			310 = {
-				is_strongest_trade_power = ROOT
+			else_if = {
+				limit = { exists = GOL }
+				OR = {
+					alliance_with = GOL
+					is_enemy = GOL
+					is_rival = GOL
+					has_opinion = {
+						who = GOL
+						value = 100
+					}
+					NOT = {
+						has_opinion = {
+							who = GOL
+							value = -50
+						}
+					}
+				}
 			}
-			1652 = {
-				is_strongest_trade_power = ROOT
+			else = {
+				stability = 1
+				NOT = {
+					any_country = {
+						government = tribal
+						capital_scope = {
+							superregion = eastern_europe_superregion
+						}
+						army_size = ROOT
+					}
+				}
 			}
 		}
 		effect = {
-			add_mercantilism = 2
+			custom_tooltip = NOVGOROD_KHAN_DEMISE_ALLIANCE_TT
+			tooltip = {
+				add_country_modifier = {
+					name = nov_khan_tribute
+					duration = 5475
+				}
+			}
+			custom_tooltip = NOVGOROD_KHAN_DEMISE_ALLIANCE_HORDE_TT
+			tooltip = {
+				add_country_modifier = {
+					name = nov_novgorodian_trading_rights
+					duration = 5475
+				}
+			}
+			custom_tooltip = NOVGOROD_KHAN_DEMISE_RIVALRY_TT
+			tooltip = {
+				add_country_modifier = {
+					name = nov_khan_subversion
+					duration = 5475
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						OR = {
+							alliance_with = GLH
+							alliance_with = GOL
+							has_opinion = {
+								who = GLH
+								value = 100
+							}
+							has_opinion = {
+								who = GOL
+								value = 100
+							}
+						}
+					}
+					add_country_modifier = {
+						name = nov_khan_tribute
+						duration = 5475
+					}
+					if = {
+						limit = { exists = GLH }
+						GLH = {
+							add_country_modifier = {
+								name = nov_novgorodian_trading_rights
+								duration = 5475
+							}
+						}
+					}
+					else = {
+						GOL = {
+							add_country_modifier = {
+								name = nov_novgorodian_trading_rights
+								duration = 5475
+							}
+						}
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = nov_khan_subversion
+						duration = 7300
+					}
+				}
+			}
+		}
+	}
+
+	nov_orthodox_principalities = {
+		icon = mission_asian_trader
+		required_missions = {
+			nov_khan_demise
+			nov_frozen_republic
+		}
+		position = 2
+		provinces_to_highlight = {
+			OR = {
+				area = pskov_area
+				area = tver_area
+				area = yaroslavl_area
+				area = vologda_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				ROOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 10
+						area = pskov_area
+						area = tver_area
+						area = yaroslavl_area
+						area = vologda_area
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				area = pskov_area
+				area = tver_area
+				area = yaroslavl_area
+				area = vologda_area
+			}
+		}
+		effect = {
+			add_army_tradition = 15
+			add_adm_power = 50
+		}
+	}
+
+	nov_dethroning_velikiy_knyaz = {
+		icon = mission_asian_trader
+		required_missions = {
+			nov_orthodox_principalities
+			nov_komi
+		}
+		position = 3
+		provinces_to_highlight = { }
+		trigger = {
+			NOT = {
+				any_country = {
+					dynasty = "Rurikovich"
+					army_size = ROOT
+				}
+			}
+		}
+		effect = {
 			add_country_modifier = {
-				name = "novgorodian_reform"
+				name = nov_frosted_crown
+				duration = 5475
+			}
+		}
+	}
+
+	nov_frozen_assets = {
+		icon = mission_asian_trader
+		required_missions = {
+			nov_dethroning_velikiy_knyaz
+			nov_monomakh_cap
+		}
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				any_trade_node_member_province = {
+					OR = {
+						province_id = 1652
+						province_id = 33
+						province_id = 280
+					}
+				}
+			}
+			province_has_center_of_trade_of_level = 1
+			OR = {
+				NOT = { has_manufactory_trigger = yes }
+				NOT = { has_production_building_trigger = yes }
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NOVGOROD_FROZEN_ASSETS_TT
+				1652 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							AND = {
+								owned_by = ROOT
+								OR = {
+									has_manufactory_trigger = yes
+									has_production_building_trigger = yes
+								}
+							}
+						}
+					}
+				}
+				33 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							AND = {
+								owned_by = ROOT
+								OR = {
+									has_manufactory_trigger = yes
+									has_production_building_trigger = yes
+								}
+							}
+						}
+					}
+				}
+				280 = {
+					all_trade_node_member_province = {
+						OR = {
+							NOT = { province_has_center_of_trade_of_level = 1 }
+							AND = {
+								owned_by = ROOT
+								OR = {
+									has_manufactory_trigger = yes
+									has_production_building_trigger = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Wealth of Nations"
+				}
+				add_country_modifier = {
+					name = nov_frozen_wilds_won
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = nov_frozen_wilds
+					duration = -1
+				}
+			}
+		}
+	}
+
+	nov_stena_dereva = {
+		icon = mission_asian_trader
+		required_missions = { }
+		position = 8
+		provinces_to_highlight = { }
+		trigger = {
+			OR = {
+				naval_reformer = 2
+				DIP = 5
+				monthly_dip = 10
+			}
+			OR = {
+				navy_size_percentage = 0.75
+				navy_size = 20
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = nov_naval_defense
 				duration = 7300
 			}
-			310 = {
-				if = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					add_base_tax = 1
-					add_base_production = 1
-				}
-			}
-			1926 = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = -1
-					power = 20
-					key = swedish_trade_concession
-				}
-			}
 		}
 	}
 
-	nov_opposition_to_moscow = {
-		icon = mission_alliances
-		required_missions = { nov_gospodin_velikiy_novgorod }
-		position = 4
+	nov_moreplavanye = {
+		icon = mission_asian_trader
+		required_missions = { nov_stena_dereva }
+		position = 10
+		provinces_to_highlight = { }
 		trigger = {
-			num_of_allies = 3
-			calc_true_if = {
-				all_ally = {
-					has_opinion = {
-						who = ROOT
-						value = 150
+			33 = { is_strongest_trade_power = ROOT }
+			NOT = {
+				any_country = {
+					33 = {
+						trade_share = {
+							share = 5
+							country = PREV
+						}
+					}
+					army_size = ROOT
+				}
+			}
+			1652 = { is_strongest_trade_power = ROOT }
+			NOT = {
+				any_country = {
+					1926 = {
+						trade_share = {
+							share = 5
+							country = PREV
+						}
+					}
+					army_size = ROOT
+				}
+			}
+			NOT = {
+				any_country = {
+					1652 = {
+						trade_share = {
+							share = 5
+							country = PREV
+						}
+					}
+					army_size = ROOT
+				}
+			}
+			1926 = { is_strongest_trade_power = ROOT }
+			OR = {
+				AND = {
+					1975 = { is_strongest_trade_power = ROOT }
+					NOT = {
+						any_country = {
+							1975 = {
+								trade_share = {
+									share = 5
+									country = PREV
+								}
+							}
+							army_size = ROOT
+						}
 					}
 				}
-				amount = 3
+				AND = {
+					45 = { is_strongest_trade_power = ROOT }
+					NOT = {
+						any_country = {
+							45 = {
+								trade_share = {
+									share = 5
+									country = PREV
+								}
+							}
+							army_size = ROOT
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			add_prestige = 15
-			add_dip_power = 100
-			add_mil_power = 100
-			capital_scope = {
-				add_base_manpower = 2
-			}
-		}
-	}
-
-	nov_maritime_rivalry_with_scandinavia = {
-		icon = mission_establish_high_seas_navy
-		required_missions = { nov_opposition_to_moscow }
-		position = 6
-		trigger = {
-			is_subject = no
-			is_at_war = no
-			naval_forcelimit = 20
-			navy_size_percentage = 0.7
-		}
-		effect = {
-			add_dip_power = 100
-			add_prestige = 10
+			add_mercantilism = 5
 			add_country_modifier = {
-				name = "naval_enthusiasm_mission"
-				duration = 10950
-			}
-		}
-	}
-
-	nov_westernization = {
-		icon = mission_have_manufactories
-		required_missions = { nov_maritime_rivalry_with_scandinavia }
-		position = 7
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = cathedral
-						has_building = university
-						has_building = counting_house
-						has_building = farm_estate
-						has_building = tradecompany
-						has_building = stock_exchange
-						has_building = weapons
-						has_building = wharf
-					}
-				}
-				amount = 35
-			}
-		}
-		effect = {
-			add_mercantilism = 2
-			310 = {
-				if = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					add_base_production = 2
-				}
-			}
-			add_country_modifier = {
-				name = "governmental_reforms"
-				duration = -1
-			}
-		}
-	}
-
-	nov_baltic_bear = {
-		icon = mission_dominate_home_trade_node
-		required_missions = { nov_westernization }
-		position = 8
-		trigger = {
-			1926 = {
-				is_strongest_trade_power = ROOT
-			}
-		}
-		effect = {
-			45 = {
-				add_trade_modifier = {
-					who = ROOT
-					duration = 10950
-					power = 20
-					key = swedish_trade_concession
-				}
-			}
-			add_country_modifier = {
-				name = "free_trade_reforms"
-				duration = -1
+				name = nov_torgovoye_dominirovaniye
+				duration = 7300
 			}
 		}
 	}
@@ -182,114 +412,95 @@ NOV_missions_2 = {
 	}
 	has_country_shield = yes
 
-	great_knyaz_army = {
-		icon = mission_conquer_5_states
+	nov_frozen_republic = {
+		icon = mission_asian_trader
 		required_missions = { }
+		position = 1
+		provinces_to_highlight = { }
 		trigger = {
-			army_size = 25
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = fort_15th
-						has_building = fort_16th
-						has_building = fort_17th
-						has_building = fort_18th
-						has_building = barracks
-						has_building = training_fields
-					}
-				}
-				amount = 5
+			OR = {
+				army_size_percentage = 1
+				army_size = 50
 			}
 		}
 		effect = {
-			if = {
+			pskov_area = {
 				limit = {
-					has_dlc = "Cradle of Civilization"
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
-				add_army_professionalism = 0.05
+				add_permanent_claim = ROOT
 			}
-			else = {
-				add_army_tradition = 10
+			tver_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
-			add_mil_power = 200
-			add_country_modifier = {
-				name = "grand_knyaz_army"
-				duration = 10950
+			yaroslavl_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			vologda_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
 
-	neva_growth = {
-		icon = mission_early_game_buildings
-		required_missions = { great_knyaz_army }
+	nov_komi = {
+		icon = mission_asian_trader
+		required_missions = {
+			nov_frozen_republic
+			nov_cut
+		}
 		position = 2
 		provinces_to_highlight = {
-			province_id = 33
+			any_trade_node_member_province = { province_id = 1652 }
+			region = ural_region
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			owns = 33
- 			stability = 2
-			num_of_admirals = 2
-			num_of_merchants = 3
-		}
-		effect = {
-			33 = {
-				rename_capital = "Nevagrad"
-				add_base_tax = 5
-				add_base_manpower = 5
-				add_province_modifier = {
-					name = "nevagrad"
-					duration = 5475
+			all_province = {
+				OR = {
+					AND = {
+						NOT = { any_trade_node_member_province = { province_id = 1652 } }
+						NOT = { region = ural_region }
+					}
+					owned_by = ROOT
 				}
 			}
 		}
-	}
-
-	veche_reform = {
-		icon = mission_high_income
-		required_missions = { neva_growth }
-		position = 3
-		trigger = {
- 			adm_tech = 10
-			total_development = 200
-		}
 		effect = {
-			add_corruption = -2
-			310 = {
-				if = {
-					limit = {
-						owned_by = ROOT
-					}
-					if = {
-						limit = {
-							NOT = { has_building = cathedral }
-						}
-						add_building = cathedral
-					}
-					else = {
-						add_base_tax = 1
-					}
-				}
-			}
 			add_country_modifier = {
-				name = "veche_reformed"
-				duration = -1
+				name = von_v_lesah_komi
+				duration = 5475
 			}
 		}
 	}
 
-	revive_glory_of_rus = {
-		icon = mission_build_up_to_force_limit
-		required_missions = { veche_reform }
+	nov_monomakh_cap = {
+		icon = mission_asian_trader
+		required_missions = {
+			nov_dethroning_velikiy_knyaz
+			nov_komi
+		}
 		position = 4
 		provinces_to_highlight = {
 			OR = {
-				province_id = 310
-				province_id = 275
+				province_id = 295
+				province_id = 33
 				province_id = 294
-				province_id = 4147
-				province_id = 308
+				province_id = 301
+				province_id = 307
+				province_id = 306
 			}
 			OR = {
 				NOT = { owned_by = ROOT }
@@ -297,293 +508,204 @@ NOV_missions_2 = {
 			}
 		}
 		trigger = {
-			owns_core_province = 275
-			owns_core_province = 310
-			owns_core_province = 4147
+			owns_core_province = 295
+			owns_core_province = 33
 			owns_core_province = 294
-			owns_core_province = 308
+			owns_core_province = 301
+			owns_core_province = 307
+			owns_core_province = 306
+			NOT = {
+				any_country = {
+					culture_group = east_slavic
+					army_size = ROOT
+					total_development = ROOT
+				}
+			}
 		}
 		effect = {
-			1941 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+			add_mana_scaled_on_monarch_skill = yes
+			add_patriarch_authority = 0.10
+			capital_scope = {
+				add_development_scaled_on_monarch_skill = yes
 			}
-			278 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			minsk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
-			289 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			white_ruthenia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
-			280 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			smolensk_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
-			2407 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			chernigov_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
-			301 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
+			west_dniepr_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
+				add_permanent_claim = ROOT
 			}
 		}
 	}
 
-	succesor_of_rus = {
-		icon = mission_empire
-		required_missions = { revive_glory_of_rus }
+	nov_gospodin_velikiy_novgorod = {
+		icon = mission_asian_trader
+		required_missions = { nov_monomakh_cap }
 		position = 5
 		provinces_to_highlight = {
 			OR = {
-				province_id = 1941
-				province_id = 278
-				province_id = 289
-				province_id = 280
-				province_id = 2407
-				province_id = 301
+				area = volhynia_area
+				area = chernigov_area
 			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 1941
-			owns_core_province = 278
-			owns_core_province = 289
-			owns_core_province = 280
-			owns_core_province = 2407
-			owns_core_province = 2407
-		}
-		effect = {
-			add_prestige = 25
-			add_legitimacy_equivalent = { amount = 25 republican_tradition = 25 }
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
-		}
-	}
-
-	novgorodian_patriarchy = {
-		icon = mission_european_church
-		required_missions = { succesor_of_rus }
-		position = 6
-		trigger = {
-			religion = orthodox
-			patriarch_authority = 0.3
-		}
-		effect = {
-			add_country_modifier = {
-				name = "russian_patriarchate"
-				duration = -1
-			}
-		}
-	}
-
-	nov_settle_in_ural = {
-		icon = mission_colonial
-		required_missions = { nov_maritime_rivalry_with_scandinavia }
-		position = 7
-		provinces_to_highlight = {
-			OR = {
-				province_id = 1078
-				province_id = 1080
-				province_id = 1780
-				province_id = 2427
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 1078
-			owns_core_province = 1080
-			owns_core_province = 1780
-			owns_core_province = 2427
-		}
-		effect = {
-			1078 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-			1080 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-			1780 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-			2427 = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-		}
-	}
-
-	novgorodian_colony_in_west_siberia_new = {
-		icon = mission_colonial
-		required_missions = { nov_settle_in_ural }
-		position = 8
-		provinces_to_highlight = {
-			region = west_siberia_region
-			has_discovered = ROOT
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = russia_westsiberia.tooltip
-				num_of_owned_provinces_with = {
-					value = 15
-					region = west_siberia_region
-				}
-			}
+			
 		}
 		effect = {
-			if = {
-				limit = {
-					NOT = { tag = RUS }
-					NOT = { has_dlc = "Third Rome" }
-				}
-				add_country_modifier = {
-					name = "colonial_enthusiasm"
-					duration = 5475
-				}
-			}
-			else = {
-				add_dip_power = 100
-			}
-			west_siberia_region = {
-				limit = {
-					owned_by = ROOT
-					trade_goods = fur
-				}
-				add_province_modifier = {
-					name = "siberian_fur_production"
-					duration = 5475
-				}
-			}
-		}
-	}
-
-	novgorodian_colony_in_east_siberia = {
-		icon = mission_trade_company_region_abroad
-		required_missions = { novgorodian_colony_in_west_siberia_new }
-		position = 9
-		provinces_to_highlight = {
-			OR = {
-				AND = {
-					region = east_siberia_region
-					has_discovered = ROOT
-					NOT = { owned_by = ROOT }
-				}
-				AND = {
-					province_id = 1043
-					OR = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-				}
-			}
-		}
-		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = russia_eastsiberia.tooltip
-				num_of_owned_provinces_with = {
-					value = 10
-					region = east_siberia_region
-				}
-			}
-			owns_core_province = 1043
-		}
-		effect = {
-			add_country_modifier = {
-				name = "colonial_enthusiasm"
-				duration = 5475
-			}
-			1043 = {
+			add_prestige = 15
+			280 = {
 				if = {
 					limit = {
-						num_free_building_slots = 1
-						NOT = { has_building = shipyard }
-						NOT = { has_building = grand_shipyard }
+						has_dlc = Leviathan
 					}
-					add_building = shipyard
+					add_great_project_tier = {
+						type = kiev_pechersk_lavra
+						tier = 1
+					}
 				}
 				else = {
-					add_base_production = 3
+					add_province_modifier = {
+						name = nov_kiev_pechersk_lavra
+						duration = 5475
+					}
 				}
-				add_province_modifier = {
-					name = "novgorodian_pacific_port"
-					duration = -1
+			}
+			262 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 25
+					key = nov_vlast_nad_kievom
+				}
+			}
+			1322 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 25
+					key = nov_vlast_nad_kievom
+				}
+			}
+			464 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 9125
+					power = 25
+					key = nov_vlast_nad_kievom
 				}
 			}
 		}
 	}
 
-	novgorodian_colony_in_alaska = {
-		icon = mission_colonial
-		required_missions = { novgorodian_colony_in_east_siberia }
-		position = 10
+	nov_velikaya_respublika= {
+		icon = mission_asian_trader
+		required_missions = { nov_gospodin_velikiy_novgorod }
+		position = 6
 		provinces_to_highlight = {
-			colonial_region = colonial_alaska
-			has_discovered = ROOT
-			OR = {
-				NOT = { country_or_non_sovereign_subject_holds = ROOT }
-				is_city = no
-			}
+			region = russia_region
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 5
-				colonial_region = colonial_alaska
-				is_city = yes
+			russia_region = {
+				type = all
+				owned_by = ROOT
 			}
+			total_development = 1000
 		}
 		effect = {
+			russia_region = {
+				area = {
+					add_development_third_monarch_skill = yes
+				}
+			}
+			add_mana_scaled_on_monarch_skill = yes
 			add_country_modifier = {
-				name = "novgorodian_alaska"
-				duration = 7300
+				name = nov_vseya_rusi
+				duration = 9125
+			}
+			country_event = {
+				id = ME_Novgorod_Events.1
 			}
 		}
 	}
+}
+
+NOV_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {	
+		tag = NOV
+		OR = {
+			has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			NOT = { has_dlc = "Third Rome" }
+		}
+	}
+	has_country_shield = yes
+
+	nov_cut = {
+		icon = mission_asian_trader
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = { }
+		trigger = {
+			NOT = {
+				any_country = {
+					1652 = {
+						trade_share = {
+							share = 5
+							country = PREV
+						}
+					}
+					army_size = ROOT
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = NOVGOROD_CUT_TT
+			hidden_effect = {
+				1652 = {
+					every_trade_node_member_province = {
+						limit = {
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+	
 }
 
 NOV_missions_4 = {
@@ -599,69 +721,63 @@ NOV_missions_4 = {
 	}
 	has_country_shield = yes
 
-		crush_pretenders = {
-		icon = mission_have_two_subjects
-		required_missions = { novgorodian_patriarchy nov_conquer_suomi }
-		position = 7
+	nov_baltic_preparation = {
+		icon = mission_asian_trader
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = { }
 		trigger = {
-			NOT = { exists = MOS }
-			NOT = { exists = LIT }
-		}
-		effect = {
-			add_prestige = 50
-			add_army_tradition = 10
-			add_patriarch_authority = 0.1
-			add_country_modifier = {
-				name = "the_only_rus"
-				duration = 7300
-			}
-		}
-	}
-	
-	conquer_gotland = {
-		icon = mission_cannons_firing
-		required_missions = { crush_pretenders }
-		position = 8
-		provinces_to_highlight = {
-			province_id = 25
 			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-		trigger = {
-			owns_core_province = 25
-		}
-		effect = {
-			25 = {
-				add_base_tax = 1
-				add_base_manpower = 1
-				add_country_modifier = {
-					name = "rus_gotland"
-					duration = 7300
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = scandinavia_region
+						}
+						army_size = ROOT
+					}
+				}
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = scandinavia_region
+						}
+						navy_size = ROOT
+					}
 				}
 			}
 		}
-	}
-	
-	conquer_scandinavia = {
-		icon = mission_unite_home_region
-		required_missions = { conquer_gotland }
-		position = 9
-		provinces_to_highlight = {
-			region = scandinavia_region
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			scandinavia_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
 		effect = {
-			add_country_modifier = {
-				name = "land_of_rus_founding_fathers"
-				duration = -1
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							capital_scope = {
+								region = scandinavia_region
+							}
+							army_size = ROOT
+						}
+					}
+				}
+				add_country_modifier = {
+					name = nov_berdiche_axemen
+					duration = 5475
+				}
+			}
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							capital_scope = {
+								region = scandinavia_region
+							}
+							navy_size = ROOT
+						}
+					}
+				}
+				add_country_modifier = {
+					name = nov_naval_invasion
+					duration = 5475
+				}
 			}
 		}
 	}
@@ -680,130 +796,56 @@ NOV_missions_5 = {
 	}
 	has_country_shield = yes
 
-	liberation_of_novgorodian_land = {
-		icon = mission_have_two_subjects
+	nov_defying_catholics = {
+		icon = mission_asian_trader
 		required_missions = { }
-		position = 3
-		provinces_to_highlight = {
-			OR = {
-				province_id = 312
-				province_id = 4261
-				province_id = 274
-				province_id = 1960
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
+		position = 2
+		provinces_to_highlight = { }
 		trigger = {
-			owns_core_province = 312
-			owns_core_province = 4261
-			owns_core_province = 274
-			owns_core_province = 1960
+			if = {
+				limit = {
+					exists = LIV
+					exists = TEU
+					exists = SWE
+					exists = DAN
+					exists = NOR
+				}
+				OR = {
+					AND = {
+						army_size = LIV
+						army_size = TEU
+					}
+					AND = {
+						army_size = SWE
+						army_size = DAN
+						army_size = NOR
+					}
+				}
+			}
+			else = {
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = baltic_region
+						}
+						army_size = ROOT
+					}
+				}
+			}
 		}
 		effect = {
-			add_army_tradition = 10
-			perm_area = {
+			add_patriarch_authority = 0.10
+			add_mil_power = 100
+			create_general = { tradition = 50 }
+			baltic_region = {
 				limit = {
+					has_port = yes
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
-			add_country_modifier = {
-				name = "shestnik_reformation"
-				duration = 18250
-			}
 		}
 	}
 	
-	nov_conquest_of_vyatka = {
-		icon = mission_cannons_firing
-		required_missions = { liberation_of_novgorodian_land }
-		position = 4
-		provinces_to_highlight = {
-			OR = {
-				area = perm_area
-				area = kama_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			perm_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			kama_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_prestige = 10
-			add_mil_power = 100
-			add_country_modifier = {
-				name = "ushkuinik_experience"
-				duration = 5475
-			}
-		}
-	}
-	
-	nov_reconquest_of_western_chud = {
-		icon = mission_have_two_subjects
-		required_missions = { nov_conquest_of_vyatka }
-		provinces_to_highlight = {
-			OR = {
-				province_id = 36
-				province_id = 1842
-				province_id = 1834
-				province_id = 37
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { is_core = ROOT }
-			}
-		}
-
-		trigger = {
-			owns_core_province = 36
-			owns_core_province = 1842
-			owns_core_province = 1834
-			owns_core_province = 37
-		}
-		effect = {
-			add_country_modifier = {
-				name = "protected_commerce"
-				duration = 7300
-			}
-		}
-	}
-	
-	nov_conquer_suomi = {
-		icon = mission_assemble_an_army
-		required_missions = { nov_reconquest_of_western_chud }
-		provinces_to_highlight = {
-			OR = {
-				area = finland_area
-				area = bothnia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			finland_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			bothnia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = "conquest_of_finland"
-				duration = 5475
-			}
-		}
-	}
 }
