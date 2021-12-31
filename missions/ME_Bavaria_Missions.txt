@@ -3160,83 +3160,18 @@ me_bavaria_missions_wittelsbach_4 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			NOT = { exists = BRA }
-			NOT = { exists = PRU }
-		}
-		trigger = {
-			if = {
-				limit = {
-					exists = PRU
-				}
-				army_size = 45
-				OR = {
-					overlord_of = PRU
-					AND = {
-						PRU = {
-							is_subject = no
-						}
-						OR = {
-							army_strength = { who = PRU value = 2 }
-							has_global_modifier_value = {
-								which = discipline
-								value = PRU
-								extra_shortcut = yes
-							}
-						}
-						OR = {
-							DIP = PRU
-							variable_arithmetic_trigger = {
-								custom_tooltip = BAV_MONTHLY_DIP_AT_LEAST_PRU
-								export_to_variable = {
-									which = monthly_dip_gain
-									value = trigger_value:monthly_dip
-								}
-								export_to_variable = {
-									which = their_monthly_dip_gain
-									value = trigger_value:monthly_dip
-									who = PRU
-								}
-								check_variable = { which = monthly_mil_gain which = their_monthly_mil_gain }
-							}
-							variable_arithmetic_trigger = {
-								custom_tooltip = BAV_RULER_STATS_COMBINED_AT_LEAST_PRU
-								export_to_variable = {
-									which = ruler_adm_stats
-									value = ADM
-								}
-								export_to_variable = {
-									which = ruler_dip_stats
-									value = DIP
-								}
-								export_to_variable = {
-									which = ruler_mil_stats
-									value = MIL
-								}
-								change_variable = { which = ruler_adm_stats which = ruler_dip_stats }
-								change_variable = { which = ruler_adm_stats which = ruler_mil_stats }
-								export_to_variable = {
-									which = their_ruler_adm_stats
-									value = ADM
-									who = PRU
-								}
-								export_to_variable = {
-									which = their_ruler_dip_stats
-									value = DIP
-									who = PRU
-								}
-								export_to_variable = {
-									which = their_ruler_mil_stats
-									value = MIL
-									who = PRU
-								}
-								change_variable = { which = their_ruler_adm_stats which = their_ruler_dip_stats }
-								change_variable = { which = their_ruler_adm_stats which = their_ruler_mil_stats }
-								check_variable = { which = ruler_adm_stats which = their_ruler_adm_stats }
-							}
-						}
+			OR = {
+				NOT = { exists = PRU }
+				PRU = {
+					OR = {
+						is_subject_of = POL
+						is_subject_of = PLC
 					}
 				}
 			}
-			else_if = {
+		}
+		trigger = {
+			if = {
 				limit = {
 					exists = BRA
 				}
@@ -3309,6 +3244,83 @@ me_bavaria_missions_wittelsbach_4 = {
 					}
 				}
 			}
+			else_if = {
+				limit = {
+					exists = PRU
+					PRU = {
+						NOT = { is_subject_of = POL }
+						NOT = { is_subject_of = PLC }
+					}
+				}
+				army_size = 45
+				OR = {
+					overlord_of = PRU
+					AND = {
+						PRU = {
+							is_subject = no
+						}
+						OR = {
+							army_strength = { who = PRU value = 2 }
+							has_global_modifier_value = {
+								which = discipline
+								value = PRU
+								extra_shortcut = yes
+							}
+						}
+						OR = {
+							DIP = PRU
+							variable_arithmetic_trigger = {
+								custom_tooltip = BAV_MONTHLY_DIP_AT_LEAST_PRU
+								export_to_variable = {
+									which = monthly_dip_gain
+									value = trigger_value:monthly_dip
+								}
+								export_to_variable = {
+									which = their_monthly_dip_gain
+									value = trigger_value:monthly_dip
+									who = PRU
+								}
+								check_variable = { which = monthly_mil_gain which = their_monthly_mil_gain }
+							}
+							variable_arithmetic_trigger = {
+								custom_tooltip = BAV_RULER_STATS_COMBINED_AT_LEAST_PRU
+								export_to_variable = {
+									which = ruler_adm_stats
+									value = ADM
+								}
+								export_to_variable = {
+									which = ruler_dip_stats
+									value = DIP
+								}
+								export_to_variable = {
+									which = ruler_mil_stats
+									value = MIL
+								}
+								change_variable = { which = ruler_adm_stats which = ruler_dip_stats }
+								change_variable = { which = ruler_adm_stats which = ruler_mil_stats }
+								export_to_variable = {
+									which = their_ruler_adm_stats
+									value = ADM
+									who = PRU
+								}
+								export_to_variable = {
+									which = their_ruler_dip_stats
+									value = DIP
+									who = PRU
+								}
+								export_to_variable = {
+									which = their_ruler_mil_stats
+									value = MIL
+									who = PRU
+								}
+								change_variable = { which = their_ruler_adm_stats which = their_ruler_dip_stats }
+								change_variable = { which = their_ruler_adm_stats which = their_ruler_mil_stats }
+								check_variable = { which = ruler_adm_stats which = their_ruler_adm_stats }
+							}
+						}
+					}
+				}
+			}
 			else = {
 				mittelmark_area = {
 					type = all
@@ -3327,6 +3339,10 @@ me_bavaria_missions_wittelsbach_4 = {
 						AND = {
 							exists = PRU
 							NOT = { overlord_of = PRU }
+							PRU = {
+								NOT = { is_subject_of = POL }
+								NOT = { is_subject_of = PLC }
+							}
 						}
 						AND = {
 							exists = BRA
@@ -3336,28 +3352,44 @@ me_bavaria_missions_wittelsbach_4 = {
 				}
 				if = {
 					limit = {
-						valid_for_personal_unions_trigger = yes
-						exists = PRU
-						PRU = {
-							valid_for_personal_unions_trigger = yes
+						OR = {
+							exists = BRA
+							exists = PRU
 						}
 					}
-					add_casus_belli = {
-						target = PRU
-						type = cb_restore_personal_union
-					}
-				}
-				else_if = {
-					limit = {
-						valid_for_personal_unions_trigger = yes
-						exists = BRA
-						BRA = {
-							valid_for_personal_unions_trigger = yes
+					if = {
+						limit = {
+							exists = BRA
+						}
+						if = {
+							limit = {
+								valid_for_personal_unions_trigger = yes
+								BRA = {
+									valid_for_personal_unions_trigger = yes
+								}
+							}
+							add_casus_belli = {
+								target = BRA
+								type = cb_restore_personal_union
+							}
 						}
 					}
-					add_casus_belli = {
-						target = BRA
-						type = cb_restore_personal_union
+					else_if = {
+						limit = {
+							exists = PRU
+						}
+						if = {
+							limit = {
+								valid_for_personal_unions_trigger = yes
+								PRU = {
+									valid_for_personal_unions_trigger = yes
+								}
+							}
+							add_casus_belli = {
+								target = PRU
+								type = cb_restore_personal_union
+							}
+						}
 					}
 				}
 				else = {
@@ -3400,14 +3432,22 @@ me_bavaria_missions_wittelsbach_4 = {
 				NOT = { is_core = ROOT }
 			}
 			NOT = { exists = BRA }
-			NOT = { exists = PRU }
+			OR = {
+				NOT = { exists = PRU }
+				PRU = {
+					OR = {
+						is_subject_of = POL
+						is_subject_of = PLC
+					}
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
-					exists = PRU
+					exists = BRA
 				}
-				PRU = {
+				BRA = {
 					OR = {
 						AND = {
 							vassal_of = ROOT
@@ -3428,9 +3468,13 @@ me_bavaria_missions_wittelsbach_4 = {
 			}
 			else_if = {
 				limit = {
-					exists = BRA
+					exists = PRU
+					PRU = {
+						NOT = { is_subject_of = POL }
+						NOT = { is_subject_of = PLC }
+					}
 				}
-				BRA = {
+				PRU = {
 					OR = {
 						AND = {
 							vassal_of = ROOT
