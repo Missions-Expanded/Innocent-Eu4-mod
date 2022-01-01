@@ -528,6 +528,7 @@ country_event = {
 		if = {
 			limit = {
 				has_regency = yes
+				has_heir = yes
 			}
 			if = {
 				limit = {
@@ -548,6 +549,13 @@ country_event = {
 			}
 			else = {
 				change_dip = 1
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = bavaria_dynasty_wittelsbach_tooltip_modifier
+				duration = -1
+				desc = BAVARIA_DYNASTY_WITTELSBACH_TOOLTIP_MODIFIER_TT
 			}
 		}
 		if = {
@@ -584,6 +592,13 @@ country_event = {
 				max_random_dip = 4
 				max_random_mil = 3
 				dynasty = "von Welf"
+			}
+		}
+		tooltip = {
+			add_country_modifier = {
+				name = bavaria_dynasty_welf_tooltip_modifier
+				duration = -1
+				desc = BAVARIA_DYNASTY_WELF_TOOLTIP_MODIFIER_TT
 			}
 		}
 		if = {
@@ -1320,5 +1335,87 @@ country_event = {
 		name = ME_Bavaria_Events15.EVTOPT1
 
 		ai_chance = { factor = 100 }
+	}
+}
+
+country_event = {
+	id = ME_Bavaria_Events.16
+	title = ME_Bavaria_Events.EVTNAME16
+	desc = {
+		trigger = {
+			has_global_flag = bav_dynasty_wittelsbach
+		}
+		desc = ME_Bavaria_Events.EVTDESC16.1
+	}
+	desc = {
+		trigger = {
+			has_global_flag = bav_dynasty_welf
+		}
+		desc = ME_Bavaria_Events.EVTDESC16.2
+	}
+	picture = NEW_HEIR_eventPicture
+
+	trigger = {
+		OR = {
+			tag = BAV
+			was_tag = BAV
+		}
+		NOT = { has_country_flag = me_bav_rejected_heir }
+		OR = {
+			AND = {
+				has_global_flag = bav_dynasty_wittelsbach
+				NOT = { dynasty = "von Wittelsbach" }
+			}
+			AND = {
+				has_global_flag = bav_dynasty_welf
+				NOT = { dynasty = "von Welf" }
+			}
+		}
+		government = monarchy
+		has_heir = no
+		has_regency = no
+	}
+
+	mean_time_to_happen = {
+		months = 120
+	}
+
+	option = {
+		name = ME_Bavaria_Events16.EVTOPT1
+
+		ai_chance = { factor = 100 }
+
+		if = {
+			limit = {
+				has_global_flag = bav_dynasty_wittelsbach
+			}
+			define_heir = {
+				age = 5
+				male = yes
+				claim = 70
+				dynasty = "von Wittelsbach"
+			}
+		}
+		else = {
+			define_heir = {
+				age = 5
+				male = yes
+				claim = 70
+				dynasty = "von Welf"
+			}
+		}
+		add_country_modifier = {
+			name = bavaria_return_to_dynasty_modifier
+			duration = 3650
+		}
+	}
+
+	option = {
+		name = ME_Bavaria_Events16.EVTOPT2
+
+		ai_chance = { factor = 0 }
+
+		set_country_flag = me_bav_rejected_heir
+		add_legitimacy = 5
 	}
 }
