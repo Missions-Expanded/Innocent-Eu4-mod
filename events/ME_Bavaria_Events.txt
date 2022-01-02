@@ -400,6 +400,7 @@ country_event = {
 				NOT = { exists = BAV }
 				was_tag = BAV
 			}
+			is_emperor = yes
 		}
 	}
 	is_triggered_only = yes
@@ -994,15 +995,6 @@ country_event = {
 	picture = DIPLOMACY_eventPicture
 
 	major = yes
-	major_trigger = {
-		OR = {
-			tag = BAV
-			AND = {
-				NOT = { exists = BAV }
-				was_tag = BAV
-			}
-		}
-	}
 	is_triggered_only = yes
 
 	option = {
@@ -1046,7 +1038,7 @@ country_event = {
 		}
 		reverse_add_casus_belli = {
 			target = FROM
-			type = cb_insult
+			type = cb_vassalize_mission
 		}
 		if = {
 			limit = {
@@ -1063,6 +1055,10 @@ country_event = {
 	desc = ME_Bavaria_Events.EVTDESC13
 	picture = COURT_eventPicture
 
+	major = yes
+	major_trigger = {
+		tag = FER
+	}
 	is_triggered_only = yes
 
 	option = {
@@ -1071,6 +1067,8 @@ country_event = {
 		trigger = {
 			NOT = { exists = FER }
 		}
+
+		ai_chance = { factor = 0.2 }
 
 		po_valley_area = {
 			limit = {
@@ -1094,6 +1092,8 @@ country_event = {
 		trigger = {
 			exists = FER
 		}
+
+		ai_chance = { factor = 0.2 }
 
 		po_valley_area = {
 			limit = {
@@ -1119,6 +1119,8 @@ country_event = {
 		name = ME_Bavaria_Events13.EVTOPT3
 
 		highlight = yes
+
+		ai_chance = { factor = 0.8 }
 
 		if = {
 			limit = {
@@ -1159,19 +1161,31 @@ country_event = {
 			}
 		}
 		else = {
-			every_owned_province = {
+			if = {
 				limit = {
-					area = emilia_romagna_area
+					emilia_romagna_area = {
+						owned_by = ROOT
+					}
 				}
-				remove_core = ROOT
-				add_core = FER
-				cede_province = FER
+				every_owned_province = {
+					limit = {
+						area = emilia_romagna_area
+					}
+					remove_core = ROOT
+					add_core = FER
+					cede_province = FER
+				}
 			}
 			if = {
 				limit = {
 					valid_for_personal_unions_trigger = yes
-					FER = {
-						government = monarchy
+				}
+				FER = {
+					if = {
+						limit = {
+							NOT = { government = monarchy }
+						}
+						change_government = monarchy
 					}
 				}
 				create_union = FER
