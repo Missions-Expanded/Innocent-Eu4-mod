@@ -1819,6 +1819,10 @@ ming_missions_3 = {
 			OR = {
 				north_america = { has_discovered = ROOT }
 				south_america = { has_discovered = ROOT }
+				if = {
+					limit = { is_random_new_world = yes }
+					new_world = { has_discovered = ROOT }
+				}
 			}
 			oceania = { has_discovered = ROOT }
 		}
@@ -2128,12 +2132,30 @@ ming_missions_4 = {
 					region = bengal_region
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
-				
+				province_id = 1340
 			}
 		}
 		trigger = {
+			1340 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			bengal_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_indian_trade
+				duration = 9125
+			}
+			add_country_modifier = {
+				name = mng_sino_indian_company
+				duration = -1
+			}
 		}
 	}
 
@@ -2142,10 +2164,52 @@ ming_missions_4 = {
 		required_missions = {  }
 		position = 6
 		provinces_to_highlight = {
+			area = hokkaido_area
 		}
 		trigger = {
+			hokkaido_area = { has_discovered = ROOT }
+			OR = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 2
+					area = hokkaido_area
+				}
+				ANU = {
+					has_opinion = {
+						who = ROOT
+						value = 100
+					}
+				}
+				if = {
+					limit = {
+						hokkaido_area = {
+							owner = {
+								NOT = { tag = ANU }
+							}
+						}
+					}
+					hokkaido_area = {
+						type = all
+						OR = {
+							owner = { tag = ANU }
+							owner = {
+								has_been_insulted_by_root = yes
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = 0
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_native_contacts
+				duration = 9125
+			}
 		}
 	}
 
@@ -2154,10 +2218,22 @@ ming_missions_4 = {
 		required_missions = { mng_contact_with_ainu }
 		position = 7
 		provinces_to_highlight = {
+			region = oceanea_region
+			is_island = yes
+			is_empty = yes
 		}
 		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				region = oceanea_region
+				is_island = yes
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_islander_traditions
+				duration = 18250
+			}
 		}
 	}
 
@@ -2166,10 +2242,21 @@ ming_missions_4 = {
 		required_missions = {  }
 		position = 8
 		provinces_to_highlight = {
+			area = taiwan_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
+			taiwan_area = {
+				type = all
+				owned_by = ROOT
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_encouraged_settlers
+				duration = 9125
+			}
+			country_event = { id = ME_Ming_Events.4 }
 		}
 	}
 
@@ -2181,10 +2268,46 @@ ming_missions_4 = {
 		}
 		position = 9
 		provinces_to_highlight = {
+			OR = {
+				region = malaya_region
+				province_id = 622
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 2
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 3
+				region = malaya_region
+			}
+			owns_or_non_sovereign_subject_of = 622
+			OR = {
+				PLB = {
+					NOT = { exists = yes }
+				}
+				PLB = {
+					is_subject_of = ROOT
+					NOT = { is_subject_of_type = tributary_state }
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_crushed_pirate_base
+				duration = 7300
+			}
+			country_event = { id = ME_Ming_Events.5 }
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_casus_belli = {
+					type = cb_force_tributary
+					target = CEY
+				}
+			}
 		}
 	}
 
@@ -2192,11 +2315,28 @@ ming_missions_4 = {
 		icon = mission_invade_island
 		required_missions = { mng_lost_expedition }
 		position = 10
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = { }
 		trigger = {
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 2
+			}
+			any_subject_country = {
+				is_colonial_nation = yes
+				capital_scope = {
+					OR = {
+						continent = north_america
+						continent = south_america
+					}
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_chinese_colonisation
+				duration = 9125
+			}
 		}
 	}
 
@@ -2205,10 +2345,30 @@ ming_missions_4 = {
 		required_missions = { mng_journey_to_east }
 		position = 11
 		provinces_to_highlight = {
+			region = mexico_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			OR = {
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 5
+					region = mexico_region
+				}
+				if = {
+					limit = { is_random_new_world = yes }
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 15
+						continent = new_world
+					}	
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_discovered_fusang
+				duration = 3650
+			}
+			country_event = { id = ME_Ming_Events.19 }
 		}
 	}
 
@@ -2216,11 +2376,37 @@ ming_missions_4 = {
 		icon = me_mission_ming_imperial_forces
 		required_missions = { mng_beaten_path }
 		position = 12
-		provinces_to_highlight = {
-		}
+		provinces_to_highlight = { }
 		trigger = {
+			384 = { has_discovered = ROOT }
+			385 = { has_discovered = ROOT }
+			mashriq_region = { has_discovered = ROOT }
+			OR = {
+				384 = { owned_by = ROOT }
+				384 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+				}
+			}
 		}
 		effect = {
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_country_modifier = {
+					name = mng_pilgrimage_hui_moh
+					duration = 9125
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = mng_pilgrimage_hui
+					duration = 9125
+				}
+			}
 		}
 	}
 }
