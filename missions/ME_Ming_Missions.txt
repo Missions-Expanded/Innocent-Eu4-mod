@@ -393,8 +393,10 @@ ming_missions_1 = {
 			}
 			manchuria_region = {
 				type = all
-				culture = manchu
-				owned_by = ROOT
+				OR = {
+					NOT = { culture = manchu } 
+					owned_by = ROOT
+				}
 			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
@@ -422,12 +424,16 @@ ming_missions_1 = {
 		position = 9
 		provinces_to_highlight = {
 			province_id = 1816
-			NOT = {
-				1816 = { development = 40 }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 40 }
 			}
 		}
 		trigger = {
-			1816 = { development = 40 }
+			1816 = {
+				owned_by = ROOT
+				development = 40
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -443,7 +449,16 @@ ming_missions_1 = {
 		position = 10
 		provinces_to_highlight = { }
 		trigger = {
-			marketplace = 5
+			OR = {
+				marketplace = 5
+				trade_depot = 5
+				stock_exchange = 5
+			}
+			#this can just become:
+			#num_of_owned_provinces_with = {
+			#	value = 5
+			#	has_trade_building_trigger = yes
+			#}
 		}
 		effect = {
 			add_mercantilism = 2
@@ -571,7 +586,7 @@ ming_missions_2 = {
 		required_missions = { mng_avert_tumu }
 		position = 2
 		provinces_to_highlight = {
-			OR ={
+			OR = {
 				area = ordos_area
 				area = inner_mongolia_area
 			}
@@ -878,6 +893,7 @@ ming_missions_2 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Ming_Events.14 }
 			chahar_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -960,7 +976,6 @@ ming_missions_2 = {
 					add_permanent_claim = ROOT
 				}
 			}
-			country_event = { id = ME_Ming_Events.14 }
 		}
 	}
 
@@ -990,16 +1005,16 @@ ming_missions_2 = {
 			owns_or_non_sovereign_subject_of = 733
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_korean_officials
+				duration = -1
+			}
 			korea_region = {
 				limit = { owned_by = ROOT }
 				add_province_modifier = {
 					name = mng_han_four_commanderies
 					duration = 9125
 				}
-			}
-			add_country_modifier = {
-				name = mng_korean_officials
-				duration = -1
 			}
 			south_korea_area = {
 				limit= {
@@ -1051,9 +1066,10 @@ ming_missions_2 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			korea_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 3
 			}
 			OR = {
 				if = {
@@ -1068,10 +1084,9 @@ ming_missions_2 = {
 					NOT = { culture = korean }
 				}
 			}
-			if = {
-				limit = { has_dlc = "Mandate of Heaven" }
-				is_emperor_of_china = yes
-				empire_of_china_reform_level = 3
+			korea_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1085,12 +1100,6 @@ ming_missions_2 = {
 				}
 				add_dip_power = -150
 			}
-			every_province = {
-				if = {
-					limit = { culture = korean }
-					change_culture = chaoxian
-				}
-			}
 			add_country_modifier = {
 				name = mng_korea_assimilated
 				duration = 9125
@@ -1099,6 +1108,12 @@ ming_missions_2 = {
 			add_country_modifier = {
 				name = mng_sino_korean_elite
 				duration = -1
+			}
+			every_province = {
+				if = {
+					limit = { culture = korean }
+					change_culture = chaoxian
+				}
 			}
 		}
 	}
@@ -1121,11 +1136,11 @@ ming_missions_2 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Ming_Events.24 }
 			add_country_modifier = {
 				name = mng_feared_agents
 				duration = -1
 			}
-			country_event = { id = ME_Ming_Events.24 }
 		}
 	}
 
@@ -1219,6 +1234,13 @@ ming_missions_2 = {
 		position = 13
 		provinces_to_highlight = { }
 		trigger = {
+			calc_true_if = {
+				amount = 10
+				all_country = {
+					is_subject_of = ROOT
+					total_development = 100
+				}
+			}
 			all_country = {
 				variable_arithmetic_trigger = {
 					custom_tooltip = MNG_HAS_2_TIMES_TOTAL_DEVELOPMENT_THAN_EVERY
@@ -1240,13 +1262,6 @@ ming_missions_2 = {
 						which = our_total_development
 						which = their_total_development
 					}
-				}
-			}
-			calc_true_if = {
-				amount = 10
-				all_country = {
-					is_subject_of = ROOT
-					total_development = 100
 				}
 			}
 		}
@@ -1325,16 +1340,16 @@ ming_missions_3 = {
 			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = mng_tibet_monks
+				duration = -1
+			}
 			tibet_region = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
-			}
-			add_country_modifier = {
-				name = mng_tibet_monks
-				duration = -1
 			}
 		}
 	}
@@ -1521,6 +1536,7 @@ ming_missions_3 = {
 			}
 		}
 		effect = {
+			country_event = { id = ME_Ming_Events.21 }
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
 				add_country_modifier = {
@@ -1547,7 +1563,6 @@ ming_missions_3 = {
 				name = mng_guided_buddha
 				duration = -1
 			}
-			country_event = { id = ME_Ming_Events.21 }
 			india_superregion = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -1625,6 +1640,11 @@ ming_missions_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				empire_of_china_reform_level = 2
+			}
 			northern_kyushu = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
@@ -1637,11 +1657,6 @@ ming_missions_3 = {
 					}
 					country_or_non_sovereign_subject_holds = ROOT
 				}
-			}
-			if = {
-				limit = { has_dlc = "Mandate of Heaven" }
-				is_emperor_of_china = yes
-				empire_of_china_reform_level = 2
 			}
 		}
 		effect = {
@@ -1766,14 +1781,14 @@ ming_missions_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			japan_region = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
 				is_emperor_of_china = yes
 				empire_of_china_reform_level = 3
+			}
+			japan_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1824,26 +1839,26 @@ ming_missions_3 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			illawara_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			any_subject_country = {
-				is_colonial_nation = yes
-				capital_scope = { colonial_region = colonial_australia }
-			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
 				is_emperor_of_china = yes
 				empire_of_china_reform_level = 2
 			}
+			any_subject_country = {
+				is_colonial_nation = yes
+				capital_scope = { colonial_region = colonial_australia }
+			}
+			illawara_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
+			country_event = { id = ME_Ming_Events.6 }
 			add_country_modifier = {
 				name = mng_nanyang_trade
 				duration = -1
 			}
-			country_event = { id = ME_Ming_Events.6 }
 		}
 	}
 
@@ -1876,11 +1891,11 @@ ming_missions_3 = {
 			university = 5
 		}
 		effect = {
+			country_event = { id = ME_Ming_Events.20 }
 			add_country_modifier = {
 				name = mng_hanlinyuan_reformed
 				duration = 9125
 			}
-			country_event = { id = ME_Ming_Events.20 }
 			set_country_flag = mng_stop_donglin_flag
 		}
 	}
@@ -2055,15 +2070,15 @@ ming_missions_4 = {
 			}
 			custom_tooltip = MING_BURMESE_PORTS_EFFECT_TT
 			hidden_effect = {
-    			1343 = {
-        			every_trade_node_member_province = {
-            			limit = { owned_by = ROOT }
-            			add_province_modifier = {
-                			name = mng_burmese_ports_hidden
-                			duration = 9125
-            			}
-        			}
-    			}
+				1343 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = mng_burmese_ports_hidden
+							duration = 9125
+						}
+					}
+				}
 			}
 			if = {
 				limit = {
