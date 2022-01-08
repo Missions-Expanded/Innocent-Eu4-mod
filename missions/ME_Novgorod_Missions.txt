@@ -23,12 +23,12 @@ NOV_missions_1 = {
 					alliance_with = GLH
 					is_enemy = GLH
 					is_rival = GLH
-					has_opinion = {
+					reverse_has_opinion = {
 						who = GLH
 						value = 100
 					}
 					NOT = {
-						has_opinion = {
+						reverse_has_opinion = {
 							who = GLH
 							value = -50
 						}
@@ -41,12 +41,12 @@ NOV_missions_1 = {
 					alliance_with = GOL
 					is_enemy = GOL
 					is_rival = GOL
-					has_opinion = {
+					reverse_has_opinion = {
 						who = GOL
 						value = 100
 					}
 					NOT = {
-						has_opinion = {
+						reverse_has_opinion = {
 							who = GOL
 							value = -50
 						}
@@ -94,11 +94,11 @@ NOV_missions_1 = {
 						OR = {
 							alliance_with = GLH
 							alliance_with = GOL
-							has_opinion = {
+							reverse_has_opinion = {
 								who = GLH
 								value = 100
 							}
-							has_opinion = {
+							reverse_has_opinion = {
 								who = GOL
 								value = 100
 							}
@@ -149,6 +149,7 @@ NOV_missions_1 = {
 				area = tver_area
 				area = yaroslavl_area
 				area = vologda_area
+				area = beloozero_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			NOT = {
@@ -159,6 +160,7 @@ NOV_missions_1 = {
 						area = tver_area
 						area = yaroslavl_area
 						area = vologda_area
+						area = beloozero_area
 					}
 				}
 			}
@@ -323,67 +325,73 @@ NOV_missions_1 = {
 		provinces_to_highlight = { }
 		trigger = {
 			33 = { is_strongest_trade_power = ROOT }
-			NOT = {
-				any_country = {
-					33 = {
-						trade_share = {
-							share = 5
-							country = PREV
-						}
-					}
-					army_size = ROOT
-				}
-			}
 			1652 = { is_strongest_trade_power = ROOT }
-			NOT = {
-				any_country = {
-					1926 = {
-						trade_share = {
-							share = 5
-							country = PREV
-						}
-					}
-					army_size = ROOT
-				}
-			}
-			NOT = {
-				any_country = {
-					1652 = {
-						trade_share = {
-							share = 5
-							country = PREV
-						}
-					}
-					army_size = ROOT
-				}
-			}
 			1926 = { is_strongest_trade_power = ROOT }
-			OR = {
-				AND = {
-					1975 = { is_strongest_trade_power = ROOT }
-					NOT = {
-						any_country = {
-							1975 = {
-								trade_share = {
-									share = 5
-									country = PREV
-								}
+			custom_trigger_tooltip = {
+				tooltip = NOV_MOREPLAVANYE_TT
+				NOT = {
+					any_country = {
+						33 = {
+							trade_share = {
+								share = 5
+								country = PREV
 							}
-							army_size = ROOT
 						}
+						navy_size = ROOT
 					}
 				}
-				AND = {
-					45 = { is_strongest_trade_power = ROOT }
-					NOT = {
-						any_country = {
-							45 = {
-								trade_share = {
-									share = 5
-									country = PREV
-								}
+				NOT = {
+					any_country = {
+						1926 = {
+							trade_share = {
+								share = 5
+								country = PREV
 							}
-							army_size = ROOT
+						}
+						navy_size = ROOT
+					}
+				}
+				NOT = {
+					any_country = {
+						1652 = {
+							trade_share = {
+								share = 5
+								country = PREV
+							}
+						}
+						navy_size = ROOT
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = NOV_MOREPLAVANYE_OR_TT
+				OR = {
+					AND = {
+						1975 = { is_strongest_trade_power = ROOT }
+						NOT = {
+							any_country = {
+								1975 = {
+									trade_share = {
+										share = 5
+										country = PREV
+									}
+								}
+								navy_size = ROOT
+							}
+						}
+					}
+					AND = {
+						45 = { is_strongest_trade_power = ROOT }
+						NOT = {
+							any_country = {
+								45 = {
+									trade_share = {
+										share = 5
+										country = PREV
+									}
+								}
+								navy_size = ROOT
+							}
 						}
 					}
 				}
@@ -452,6 +460,16 @@ NOV_missions_2 = {
 				}
 				add_permanent_claim = ROOT
 			}
+			beloozero_area = {
+				limit = { NOT = { owned_by = ROOT } }
+				add_core = ROOT
+			}
+			4117 = {
+				if = {
+					limit = { NOT = { owned_by = ROOT } }
+					add_core = ROOT
+				}
+			}
 		}
 	}
 
@@ -465,16 +483,19 @@ NOV_missions_2 = {
 		provinces_to_highlight = {
 			any_trade_node_member_province = { province_id = 1652 }
 			region = ural_region
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			all_province = {
-				OR = {
-					AND = {
-						NOT = { any_trade_node_member_province = { province_id = 1652 } }
-						NOT = { region = ural_region }
+			custom_trigger_tooltip = {
+				tooltip = NOV_KOMI_TT
+				all_province = {
+					OR = {
+						AND = {
+							NOT = { any_trade_node_member_province = { province_id = 1652 } }
+							NOT = { region = ural_region }
+						}
+						country_or_non_sovereign_subject_holds = ROOT
 					}
-					owned_by = ROOT
 				}
 			}
 		}
@@ -768,19 +789,22 @@ NOV_missions_2 = {
 		}
 		effect = {
 			add_yearly_sailors = 1
-			random_province = {
-				limit = {
-					has_port = yes
-					num_of_times_improved = 2
+			custom_tooltip = NOV_NATSIYA_TT
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						has_port = yes
+						num_of_times_improved = 2
+					}
+					add_or_upgrade_shipyard_building = yes
 				}
-				add_or_upgrade_shipyard_building = yes
-			}
-			random_province = {
-				limit = {
-					has_port = yes
-					num_of_times_improved = 2
+				random_owned_province = {
+					limit = {
+						has_port = yes
+						num_of_times_improved = 2
+					}
+					add_or_upgrade_shipyard_building = yes
 				}
-				add_or_upgrade_shipyard_building = yes
 			}
 		}
 	}
@@ -801,10 +825,24 @@ NOV_missions_2 = {
 		effect = {
 			custom_tooltip = NOV_SHIPYARD_TT
 			hidden_effect = {
-				every_owned_province = {
-					limit = { has_shipyard_building_trigger = yes }
-					add_base_production = 1
-					add_base_manpower = 1
+				while = {
+					limit = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 10
+								has_province_flag = nov_10_provinces_shipyard
+							}
+						}
+					}
+					random_owned_province = {
+						limit = {
+							NOT = { has_province_flag = nov_10_provinces_shipyard }
+							has_shipyard_building_trigger = yes
+						}
+						set_province_flag = nov_10_provinces_shipyard
+						add_base_production = 1
+						add_base_manpower = 1
+					}
 				}
 			}
 		}
@@ -845,7 +883,7 @@ NOV_missions_2 = {
 		}
 		effect = {
 			add_country_modifier = {
-				name = nov_arctic_admirality
+				name = nov_arctic_admiralty
 				duration = -1
 			}
 		}
@@ -964,10 +1002,10 @@ NOV_missions_3 = {
 		provinces_to_highlight = {
 			region = scandinavia_region
 			has_port = yes
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			NOT = {
 				ROOT = {
-					num_of_owned_provinces_with = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 						value = 15
 						region = scandinavia_region
 						has_port = yes
@@ -976,7 +1014,7 @@ NOV_missions_3 = {
 			}
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 15
 				region = scandinavia_region
 				has_port = yes
@@ -985,10 +1023,10 @@ NOV_missions_3 = {
 		effect = {
 			scandinavia_region = {
 				limit = {
-					owned_by = ROOT
+					country_or_non_sovereign_subject_holds = ROOT
 					has_port = yes
 				}
-				add_province_modifier = {
+				add_permanent_province_modifier = {
 					name = nov_coastal_control
 					duration = 9125
 				}
@@ -1133,12 +1171,12 @@ NOV_missions_4 = {
 		position = 3
 		provinces_to_highlight = {
 			area = laponia_area
-			NOT = { owned_by = ROOT }
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			laponia_area = {
 				type = all
-				owned_by = ROOT
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -1529,28 +1567,20 @@ NOV_missions_4 = {
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			OR = {
-				owns = 2444
-				owns = 1078
-			}
+			owns = 2444
+			owns = 1078
 		}
 		effect = {
-			if = {
-				limit = { owns = 2444 }
-				2444 = {
-					add_permanent_province_modifier = {
-						name = nov_gornoye_delo
-						duration = -1
-					}
+			2444 = {
+				add_permanent_province_modifier = {
+					name = nov_gornoye_delo
+					duration = -1
 				}
 			}
-			if = {
-				limit = { owns = 1078 }
-				1078 = {
-					add_permanent_province_modifier = {
-						name = nov_gornoye_delo
-						duration = -1
-					}
+			1078 = {
+				add_permanent_province_modifier = {
+					name = nov_gornoye_delo
+					duration = -1
 				}
 			}
 		}
@@ -1616,7 +1646,7 @@ NOV_missions_4 = {
 		position = 12
 		trigger = {
 			development_in_provinces = {
-				value = 150
+				value = 225
 				trade_goods = fur
 			}
 			OR = {
@@ -1818,9 +1848,13 @@ NOV_missions_5 = {
 					limit = { is_empty = yes }
 				}
 				add_siberian_construction = 200
+				add_core = ROOT
 				add_province_modifier = {
 					name = von_zauralye
 					duration = -1
+				}
+				else = {
+					add_permanent_claim = ROOT
 				}
 			}
 			custom_tooltip = evenk_expand_federation.TT
@@ -1871,6 +1905,9 @@ NOV_missions_5 = {
 			}
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = NOV_GOLUBOYE_TT
+			}
 			east_siberia_region = {
 				type = all
 				OR = {
@@ -1920,14 +1957,14 @@ NOV_missions_5 = {
 		position = 11
 		trigger = {
 			OR = {
-				all_owned_province = {
+				num_of_owned_provinces_with = {
+					value = 10
 					OR = {
 						has_trade_building_trigger = yes
 						base_production = 10
 					}
 				}
-				num_of_owned_provinces_with = {
-					value = 10
+				all_owned_province = {
 					OR = {
 						has_trade_building_trigger = yes
 						base_production = 10
