@@ -392,11 +392,34 @@ me_bavaria_minor_missions_3 = {
 		required_missions = { bavaria_minor_develop_the_capital bavaria_minor_the_bavarian_economy }
 		position = 2
 		trigger = {
-			trade_income_percentage = 0.2
 			home_trade_node = {
 				trade_share = {
 					country = ROOT
 					share = 10
+				}
+			}
+			OR = {
+				trade_income_percentage = 0.2
+				custom_trigger_tooltip = {
+					tooltip = BAV_AT_LEAST_20_TRADE_INCOME
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = current_trade_income
+							value = monthly_income
+						}
+						export_to_variable = {
+							which = trade_income_share
+							value = trigger_value:trade_income_percentage
+						}
+						multiply_variable = { which = current_trade_income which = trade_income_share }
+						check_variable = { which = current_trade_income value = 20 }
+					}
+				}
+				home_trade_node = {
+					trade_share = {
+						country = ROOT
+						share = 35
+					}
 				}
 			}
 		}
@@ -2535,21 +2558,55 @@ me_bavaria_missions_5_2 = {
 		required_missions = { bavaria_bastion_of_catholicism bavaria_a_new_faith }
 		position = 5
 		trigger = {
-			OR = {
-				in_league = protestant
-				in_league = catholic
-				hidden_trigger = {
-					is_emperor = yes
-					religion = catholic
-					hre_leagues_enabled = yes
+			if = {
+				limit = {
+					has_dlc = "Emperor"
 				}
-				custom_trigger_tooltip = {
-					tooltip = obj_religious_league_war_on_winning_side_tooltip
-					has_country_flag = religious_league_war_on_winning_side
+				OR = {
+					in_league = protestant
+					in_league = catholic
+					hidden_trigger = {
+						is_emperor = yes
+						religion = catholic
+						hre_leagues_enabled = yes
+					}
+					custom_trigger_tooltip = {
+						tooltip = obj_religious_league_war_on_winning_side_tooltip
+						has_country_flag = religious_league_war_on_winning_side
+					}
+					AND = {
+						is_emperor = yes
+						hre_religion_locked = yes
+					}
+					AND = {
+						is_emperor = yes
+						hre_religion_treaty = yes
+						hre_reform_passed = emperor_erbkaisertum
+					}
 				}
-				AND = {
-					is_emperor = yes
-					hre_religion_locked = yes
+			}
+			else = {
+				OR = {
+					in_league = protestant
+					in_league = catholic
+					hidden_trigger = {
+						is_emperor = yes
+						religion = catholic
+						hre_leagues_enabled = yes
+					}
+					custom_trigger_tooltip = {
+						tooltip = obj_religious_league_war_on_winning_side_tooltip
+						has_country_flag = religious_league_war_on_winning_side
+					}
+					AND = {
+						is_emperor = yes
+						hre_religion_locked = yes
+					}
+					AND = {
+						is_emperor = yes
+						hre_religion_treaty = yes
+						hre_reform_passed = erbkaisertum
+					}
 				}
 			}
 		}
@@ -2563,6 +2620,17 @@ me_bavaria_missions_5_2 = {
 			custom_tooltip = BAVARIA_A_FIGHT_FOR_FAITH_AND_POWER_PERMA_PP_MODIFIER_TT
 			custom_tooltip = BAVARIA_A_FIGHT_FOR_FAITH_AND_POWER_TT_2
 			tooltip = {
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
+				add_imperial_influence = 10
+				add_power_projection = {
+					type = mission_rewards_power_projection
+					amount = 10
+				}
+			}
+			custom_tooltip = BAVARIA_A_FIGHT_FOR_FAITH_AND_POWER_TT_3
+			tooltip = {
 				add_power_projection = {
 					type = mission_rewards_power_projection
 					amount = 20
@@ -2572,7 +2640,7 @@ me_bavaria_missions_5_2 = {
 					duration = 9125
 				}
 			}
-			custom_tooltip = BAVARIA_A_FIGHT_FOR_FAITH_AND_POWER_TT_3
+			custom_tooltip = BAVARIA_A_FIGHT_FOR_FAITH_AND_POWER_TT_4
 			hidden_effect = {
 				if = {
 					limit = {
@@ -2590,6 +2658,21 @@ me_bavaria_missions_5_2 = {
 					add_power_projection = {
 						type = me_bavaria_won_league_war_power_projection
 						amount = 20
+					}
+				}
+				else_if = {
+					limit = {
+						is_emperor = yes
+						hre_religion_treaty = yes
+						hre_reform_passed = erbkaisertum
+					}
+					add_adm_power = 50
+					add_dip_power = 50
+					add_mil_power = 50
+					add_imperial_influence = 10
+					add_power_projection = {
+						type = mission_rewards_power_projection
+						amount = 10
 					}
 				}
 				else = {
@@ -2820,12 +2903,24 @@ me_bavaria_missions_wittelsbach_1 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = KOL }
+			OR = {
+				NOT = { exists = KOL }
+				KOL = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					exists = KOL
+					KOL = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				KOL = {
 					vassal_of = ROOT
@@ -2847,7 +2942,13 @@ me_bavaria_missions_wittelsbach_1 = {
 			if = {
 				limit = {
 					exists = KOL
-					KOL = { is_elector = yes }
+					KOL = {
+						is_elector = yes
+						OR = {
+							is_subject = no # for the tooltip
+							is_subject_of = ROOT
+						}
+					}
 				}
 				if = {
 					limit = {
@@ -2945,15 +3046,15 @@ me_bavaria_missions_wittelsbach_2 = {
 				OR = {
 					overlord_of = KOL
 					AND = {
+						prestige = KOL
+						army_strength = { who = KOL value = 3 }
 						KOL = {
-							is_subject = no
-						}
-						OR = {
-							prestige = KOL
-							army_strength = { who = KOL value = 3 }
-							KOL = {
-								is_elector = yes
-								preferred_emperor = ROOT
+							OR = {
+								is_elector = no
+								AND = {
+									is_elector = yes
+									preferred_emperor = ROOT
+								}
 							}
 						}
 					}
@@ -3092,9 +3193,6 @@ me_bavaria_missions_wittelsbach_3 = {
 				OR = {
 					overlord_of = PAL
 					AND = {
-						PAL = {
-							is_subject = no
-						}
 						prestige = PAL
 						OR = {
 							DIP = PAL
@@ -3202,12 +3300,24 @@ me_bavaria_missions_wittelsbach_3 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = PAL }
+			OR = {
+				NOT = { exists = PAL }
+				PAL = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					exists = PAL
+					PAL = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				PAL = {
 					OR = {
@@ -3420,9 +3530,6 @@ me_bavaria_missions_wittelsbach_4 = {
 				OR = {
 					overlord_of = BRA
 					AND = {
-						BRA = {
-							is_subject = no
-						}
 						OR = {
 							army_strength = { who = BRA value = 2 }
 							has_global_modifier_value = {
@@ -3497,9 +3604,6 @@ me_bavaria_missions_wittelsbach_4 = {
 				OR = {
 					overlord_of = PRU
 					AND = {
-						PRU = {
-							is_subject = no
-						}
 						OR = {
 							army_strength = { who = PRU value = 2 }
 							has_global_modifier_value = {
@@ -3664,14 +3768,18 @@ me_bavaria_missions_wittelsbach_4 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = BRA }
+			OR = {
+				NOT = { exists = BRA }
+				BRA = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 			OR = {
 				NOT = { exists = PRU }
 				PRU = {
-					OR = {
-						is_subject_of = POL
-						is_subject_of = PLC
-					}
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
 				}
 			}
 		}
@@ -3679,6 +3787,12 @@ me_bavaria_missions_wittelsbach_4 = {
 			if = {
 				limit = {
 					exists = BRA
+					BRA = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				BRA = {
 					OR = {
@@ -3703,8 +3817,10 @@ me_bavaria_missions_wittelsbach_4 = {
 				limit = {
 					exists = PRU
 					PRU = {
-						NOT = { is_subject_of = POL }
-						NOT = { is_subject_of = PLC }
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
 					}
 				}
 				PRU = {
@@ -3796,9 +3912,6 @@ me_bavaria_missions_wittelsbach_5 = {
 				OR = {
 					overlord_of = DAN
 					AND = {
-						DAN = {
-							is_subject = no
-						}
 						prestige = DAN
 						OR = {
 							DIP = DAN
@@ -3920,12 +4033,24 @@ me_bavaria_missions_wittelsbach_5 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = DAN }
+			OR = {
+				NOT = { exists = DAN }
+				DAN = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					exists = DAN
+					DAN = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				DAN = {
 					OR = {
@@ -4181,12 +4306,24 @@ me_bavaria_missions_welf_1 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = SAX }
+			OR = {
+				NOT = { exists = SAX }
+				SAX = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					exists = SAX
+					SAX = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				SAX = {
 					OR = {
@@ -4297,9 +4434,6 @@ me_bavaria_missions_welf_2 = {
 				OR = {
 					overlord_of = SAX
 					AND = {
-						SAX = {
-							is_subject = no
-						}
 						prestige = SAX
 						army_strength = { who = SAX value = 2 }
 						OR = {
@@ -4520,9 +4654,6 @@ me_bavaria_missions_welf_3 = {
 				OR = {
 					overlord_of = PAL
 					AND = {
-						PAL = {
-							is_subject = no
-						}
 						prestige = PAL
 						OR = {
 							MIL = PAL
@@ -4630,12 +4761,24 @@ me_bavaria_missions_welf_3 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = PAL }
+			OR = {
+				NOT = { exists = PAL }
+				PAL = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					exists = PAL
+					PAL = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				PAL = {
 					OR = {
@@ -4672,6 +4815,12 @@ me_bavaria_missions_welf_3 = {
 			if = {
 				limit = {
 					exists = PAL
+					PAL = {
+						OR = {
+							is_subject = no # for the tooltip
+							is_subject_of = ROOT
+						}
+					}
 					any_owned_province = {
 						is_core = PAL
 					}
@@ -4853,9 +5002,6 @@ me_bavaria_missions_welf_4 = {
 				OR = {
 					overlord_of = BUR
 					AND = {
-						BUR = {
-							is_subject = no
-						}
 						army_size = BUR
 						custom_trigger_tooltip = {
 							tooltip = BAV_BUR_INHERITANCE_INCIDANT_NOT_ACTIVE_TT
@@ -4932,12 +5078,24 @@ me_bavaria_missions_welf_4 = {
 				NOT = { owned_by = ROOT }
 				NOT = { is_core = ROOT }
 			}
-			NOT = { exists = BUR }
+			OR = {
+				NOT = { exists = BUR }
+				BUR = {
+					is_subject = yes
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					exists = BUR
+					BUR = {
+						OR = {
+							is_subject = no
+							is_subject_of = ROOT
+						}
+					}
 				}
 				BUR = {
 					OR = {
