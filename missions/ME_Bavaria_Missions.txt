@@ -995,9 +995,14 @@ me_bavaria_missions_1 = {
 		required_missions = { bavaria_restore_bavarian_triest bavaria_reconquer_verona }
 		position = 11
 		trigger = {
-			navy_size_percentage = 0.8
-			navy_size = 20
 			num_of_heavy_ship = 10
+			OR = {
+				AND = {
+					navy_size = 20
+					navy_size_percentage = 0.8
+				}
+				navy_size = 100
+			}
 		}
 		effect = {
 			add_country_modifier = {
@@ -1210,7 +1215,16 @@ me_bavaria_missions_2 = {
 				area = upper_bavaria_area
 				area = lower_bavaria_area
 			}
-			NOT = { owned_by = ROOT }
+			OR = {
+				AND = {
+					province_id = 1757
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					NOT = { province_id = 1757 }
+					NOT = { owned_by = ROOT }
+				}
+			}
 		}
 		trigger = {
 			east_bavaria_area = {
@@ -1223,7 +1237,13 @@ me_bavaria_missions_2 = {
 			}
 			lower_bavaria_area = {
 				type = all
-				owned_by = ROOT
+				OR = {
+					owned_by = ROOT
+					AND = {
+						province_id = 1757
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
 			}
 		}
 		effect = {
@@ -2355,7 +2375,7 @@ me_bavaria_missions_4 = {
 			austria_proper_area = {
 				add_province_modifier = {
 					name = bavaria_reintegrate_the_eastern_march_modifier
-					duration = 5475
+					duration = 9125
 				}
 			}
 		}
@@ -2393,14 +2413,19 @@ me_bavaria_missions_4 = {
 		}
 		trigger = {
 			OR = {
-				primary_culture = bavarian
-				primary_culture = austrian
-			}
-			OR = {
-				accepted_culture = bavarian
-				accepted_culture = austrian
+				AND = {
+					primary_culture = bavarian
+					accepted_culture = austrian
+				}
+				AND = {
+					primary_culture = austrian
+					accepted_culture = bavarian
+				}
 				hidden_trigger = {
-					culture_group = germanic
+					OR = {
+						primary_culture = bavarian
+						primary_culture = austrian
+					}
 					has_cultural_union = yes
 				}
 			}
