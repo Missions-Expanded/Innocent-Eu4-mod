@@ -26,8 +26,25 @@ ming_missions_1 = {
 				has_building = fort_18th
 			}
 			OR = {
-				has_country_modifier = repaired_great_wall
 				is_year = 1590
+				AND = {
+					1816 = {
+						owned_by = ROOT
+						has_province_modifier = repaired_great_wall
+					}
+					726 = {
+						owned_by = ROOT
+						has_province_modifier = repaired_great_wall
+					}
+					697 = {
+						owned_by = ROOT
+						has_province_modifier = repaired_great_wall
+					}
+					698 = {
+						owned_by = ROOT
+						has_province_modifier = repaired_great_wall
+					}
+				}
 			}
 		}
 		effect = {
@@ -78,6 +95,32 @@ ming_missions_1 = {
 			mng_push_back_four_oirats
 		}
 		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = hebei_area
+				area = shanxi_area
+				area = ordos_area
+				area = gansu_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = fort_18th }
+				NOT = {
+					ROOT = {
+						num_of_owned_provinces_with = {
+							value = 3
+							OR = {
+								area = hebei_area
+								area = shanxi_area
+								area = ordos_area
+								area = gansu_area
+							}
+							has_building = fort_18th
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 3
@@ -454,16 +497,10 @@ ming_missions_1 = {
 		position = 10
 		provinces_to_highlight = { }
 		trigger = {
-			OR = {
-				marketplace = 5
-				trade_depot = 5
-				stock_exchange = 5
+			num_of_owned_provinces_with = {
+				value = 5
+				has_trade_building_trigger = yes
 			}
-			#this can just become:
-			#num_of_owned_provinces_with = {
-			#	value = 5
-			#	has_trade_building_trigger = yes
-			#}
 		}
 		effect = {
 			add_mercantilism = 2
@@ -507,12 +544,27 @@ ming_missions_1 = {
 		position = 12
 		provinces_to_highlight = {
 			OR = {
-				province_id = 2151
-				trade_goods = chinaware
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { has_manufactory_trigger = yes }
+				AND = {
+					province_id = 2151
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_manufactory_trigger = yes }
+					}
+				}
+				AND = {
+					trade_goods = chinaware
+					owned_by = ROOT
+					NOT = { has_manufactory_trigger = yes }
+					NOT = {
+						ROOT = {
+							num_of_owned_provinces_with = {
+								value = 5
+								trade_goods = chinaware
+								has_manufactory_trigger = yes
+							}
+						}
+					}
+				}
 			}
 		}
 		trigger = {
@@ -1257,14 +1309,15 @@ ming_missions_2 = {
 				}
 			}
 			all_country = {
-				custom_tooltip = MNG_HAS_2_TIMES_TOTAL_DEVELOPMENT_THAN_EVERY
-				variable_arithmetic_trigger = {
-					export_to_variable = {
-						which = our_total_development
-						value = trigger_value:total_development
-						who = ROOT
-					}
-					export_to_variable = {
+				custom_trigger_tooltip = {
+					tooltip = MNG_HAS_2_TIMES_TOTAL_DEVELOPMENT_THAN_EVERY
+					variable_arithmetic_trigger = {
+						export_to_variable = {
+							which = our_total_development
+							value = trigger_value:total_development
+							who = ROOT
+						}
+						export_to_variable = {
 						which = their_total_development
 						value = trigger_value:total_development
 						who = THIS
@@ -1626,17 +1679,17 @@ ming_missions_3 = {
 					}
 				}
 			}
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 150
-				superregion = india_superregion
+			calc_true_if = {
+				amount = 150
+				india_superregion = {
+					type = any
+					country_or_subject_holds = ROOT
+				}
 			}
 		}
 		effect = {
 			add_stability_or_adm_power = yes
-			add_legitimacy_equivalent = {
-				amount = 10
-				republican_tradition = 5
-			}
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
 			add_country_modifier = {
 				name = mng_emperor_india
 				duration = 18250
@@ -1811,10 +1864,7 @@ ming_missions_3 = {
 		effect = {
 			add_stability_or_adm_power = yes
 			add_mandate = 10
-			add_legitimacy_equivalent = {
-				amount = 10
-				republican_tradition = 5
-			}
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
 			add_country_modifier = {
 				name = mng_pacified_east
 				duration = 18250
@@ -1833,6 +1883,7 @@ ming_missions_3 = {
 		position = 9
 		provinces_to_highlight = { }
 		trigger = {
+			oceania = { has_discovered = ROOT }
 			OR = {
 				north_america = { has_discovered = ROOT }
 				south_america = { has_discovered = ROOT }
@@ -1841,7 +1892,6 @@ ming_missions_3 = {
 					new_world = { has_discovered = ROOT }
 				}
 			}
-			oceania = { has_discovered = ROOT }
 		}
 		effect = {
 			add_country_modifier = {
@@ -1905,10 +1955,16 @@ ming_missions_3 = {
 		position = 12
 		provinces_to_highlight = {
 			province_id = 1816
-			NOT = { has_building = university }
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
 		}
 		trigger = {
-			1816 = { has_building = university }
+			1816 = {
+				owned_by = ROOT
+				has_building = university
+			}
 			university = 5
 		}
 		effect = {
@@ -2090,6 +2146,12 @@ ming_missions_4 = {
 				duration = 9125
 			}
 			custom_tooltip = MING_BURMESE_PORTS_EFFECT_TT
+			tooltip = {
+				add_province_modifier = {
+					name = mng_burmese_ports_hidden
+					duration = 9125
+				}
+			}
 			hidden_effect = {
 				1343 = {
 					every_trade_node_member_province = {
@@ -2242,6 +2304,15 @@ ming_missions_4 = {
 			region = oceanea_region
 			is_island = yes
 			is_empty = yes
+			NOT = {
+				ROOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						region = oceanea_region
+						is_island = yes
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -2290,10 +2361,23 @@ ming_missions_4 = {
 		position = 9
 		provinces_to_highlight = {
 			OR = {
-				region = malaya_region
-				province_id = 622
+				AND = {
+					province_id = 622
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				AND = {
+					region = malaya_region
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = {
+						ROOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 3
+								region = malaya_region
+							}
+						}
+					}
+				}
 			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			if = {
@@ -3040,6 +3124,14 @@ ming_missions_5 = {
 				AND = {
 					region = indonesia_region
 					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					NOT = {
+						ROOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 3
+								region = indonesia_region
+							}
+						}
+					}
 				}
 				AND = {
 					province_id = 4802
