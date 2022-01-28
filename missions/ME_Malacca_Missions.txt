@@ -12,13 +12,6 @@ MLC_missions_1 = {
 		icon = mission_subjugate_saurashtra
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-			MSA_is_in_borneo = yes
-			is_capital = yes
-			owner = {
-				navy_size = ROOT
-			}
-		}
 		trigger = {
 			num_of_admirals = 1
 			navy_size = 10
@@ -63,17 +56,24 @@ MLC_missions_1 = {
 							}
 						}
 					}
-				}		
+				}
 			}
 		}
 		effect = {
 			set_country_flag = ME_flavorMLC_bypass_flag
 			country_event = { id = flavor_mlc.6 }
-			random_owned_province = {
-				limit = { has_port = yes }
-				create_flagship = {    
-					name = "Mendam Berahi"
-					type = galley
+			if = {
+				limit = {
+					has_dlc = "Golden Century"
+					has_flagship = no
+					num_of_total_ports = 1
+				}
+				random_owned_province = {
+					limit = { has_port = yes }
+					create_flagship = {
+						name = "Mendam Berahi"
+						type = galley
+					}
 				}
 			}
 			brunei_area = {
@@ -99,15 +99,21 @@ MLC_missions_1 = {
             }
 		}
 	}
-	
+
 	MLC_defeat_brunei = {
 		icon = mission_restore_rule_over_mysore
 		required_missions = { MLC_naval_superiority }
 		position = 3
 		provinces_to_highlight = {
-			OR = {
-				owned_by = BEI
-				area = brunei_area
+			area = brunei_area
+			NOT = { owned_by = ROOT }
+			NOT = {
+				brunei_area = {
+					owned_by = ROOT
+				}
+			}
+			ROOT = {
+				NOT = { has_won_war_against = { who = BEI } }
 			}
 		}
 		trigger = {
@@ -149,7 +155,7 @@ MLC_missions_1 = {
             }
 		}
 	}
-	
+
 	MLC_conquer_borneo = {
 		icon = mission_mnd_maj_rein_in_brunei
 		required_missions = { MLC_defeat_brunei }
@@ -157,6 +163,14 @@ MLC_missions_1 = {
 		provinces_to_highlight = {
 			MSA_is_in_borneo = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_borneo = yes
+						value = 13
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -189,13 +203,11 @@ MLC_missions_1 = {
             }
 		}
 	}
-	
+
 	MLC_import_firearms = {
 		icon = mission_gunpowder_warfare
 		required_missions = { }
 		position = 7
-		provinces_to_highlight = {
-		}
 		trigger = {
 			is_ahead_of_time_in_specific_tech = { type = mil }
 			mil_tech = 6 #Arquebus
@@ -207,13 +219,11 @@ MLC_missions_1 = {
 			}
 		}
 	}
-	
+
 	MLC_malay_lela = {
 		icon = mission_new_army
 		required_missions = { MLC_import_firearms }
 		position = 8
-		provinces_to_highlight = {
-		}
 		trigger = {
 			num_of_artillery = 10
 			is_ahead_of_time_in_specific_tech = { type = mil }
@@ -230,7 +240,6 @@ MLC_missions_1 = {
 				name = MLC_pioneering_new_cannon_technologies
 				duration = 10950
 			}
-			
 			add_mil_power = 50
 		}
 	}
@@ -256,6 +265,17 @@ MLC_missions_2 = {
 				area = central_sumatra_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = jambi_area
+							area = central_sumatra_area
+						}
+						value = 4
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -313,23 +333,39 @@ MLC_missions_2 = {
             }
 		}
 	}
-	
+
 	MLC_conquer_sumatra = {
 		icon = mission_assert_control_over_delhi
 		required_missions = { MLC_intervene_in_siak }
 		position = 4
 		provinces_to_highlight = {
-			MSA_is_in_sumatra = yes
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				AND = {
+					province_id = 622
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				AND = {
+					MSA_is_in_sumatra = yes
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_sumatra = yes
+								value = 15
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
+			owns_core_province = 622
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				MSA_is_in_sumatra = yes
 				value = 15
-			}
-			622 = {
-				owned_by = ROOT
-				is_core = ROOT
 			}
 		}
 		effect = {
@@ -375,7 +411,7 @@ MLC_missions_2 = {
             }
 		}
 	}
-	
+
 	MLC_sulawesi = {
 		icon = mission_mnd_maj_cloves
 		required_missions = { MLC_conquer_borneo }
@@ -383,6 +419,14 @@ MLC_missions_2 = {
 		provinces_to_highlight = {
 			MSA_is_in_sulawesi = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_sulawesi = yes
+						value = 5
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -414,8 +458,6 @@ MLC_missions_3 = {
 		icon = me_mission_malay_ruler
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				army_size = 10
@@ -465,7 +507,7 @@ MLC_missions_3 = {
             }
 		}
 	}
-	
+
 	MLC_dominate_malay_peninsula = {
 		icon = mission_shipyards_of_gujarat
 		required_missions = { MLC_succession }
@@ -488,7 +530,7 @@ MLC_missions_3 = {
 			}
 		}
 	}
-	
+
 	MLC_kedah_pattani = {
 		icon = me_mission_conquer_malay_states
 		required_missions = { MLC_dominate_malay_peninsula }
@@ -548,7 +590,7 @@ MLC_missions_3 = {
             }
 			if = {
 				limit = {
-					2391 = { 
+					2391 = {
 						NOT = { is_core = ROOT }
 						religion_group = muslim
 					}
@@ -557,17 +599,33 @@ MLC_missions_3 = {
 			}
 		}
 	}
-	
+
 	MLC_majapahit = {
 		icon = mission_mnd_maj_end_disaster
 		required_missions = { MLC_conquer_sumatra }
 		position = 5
 		provinces_to_highlight = {
-			MSA_is_in_java = yes
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				AND = {
+					province_id = 628
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					MSA_is_in_java = yes
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_java = yes
+								value = 10
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
-			628 = { owned_by = ROOT }
+			owns = 628
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				MSA_is_in_java = yes
 				value = 10
@@ -578,7 +636,7 @@ MLC_missions_3 = {
 			add_prestige_or_monarch_power = { amount = 10 }
 		}
 	}
-	
+
 	MLC_malaya = {
 		icon = mission_sail_to_the_east_indies
 		required_missions = { MLC_majapahit MLC_sulawesi }
@@ -604,18 +662,23 @@ MLC_missions_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MLC_resist_the_siamese_invasion = {
 		icon = me_mission_garuda
 		required_missions = { MLC_tun_perak }
 		position = 2
 		provinces_to_highlight = {
+			province_id = 600
+			NOT = { owned_by = ROOT }
 			owner = {
-				owns = 600
+				ROOT = {
+					NOT = { has_won_war_against = { who = PREV } }
+				}
 			}
 		}
 		trigger = {
 			OR = {
+				owns = 600
 				600 = {
 					owner = {
 						custom_trigger_tooltip = {
@@ -626,7 +689,6 @@ MLC_missions_4 = {
 						}
 					}
 				}
-				owns = 600
 			}
 		}
 		effect = {
@@ -636,11 +698,10 @@ MLC_missions_4 = {
 				add_shock = 1
 			}
 			custom_tooltip = MLC_general_pips
-			
 			add_army_tradition_or_mil_power = { amount = 15 }
 		}
 	}
-	
+
 	MLC_punitive_campaign = {
 		icon = mission_spoils_of_war
 		required_missions = { MLC_resist_the_siamese_invasion MLC_kedah_pattani }
@@ -668,13 +729,11 @@ MLC_missions_4 = {
 			}
 		}
 	}
-	
+
 	MLC_orang_laut = {
 		icon = mission_seize_the_bengal_coast
 		required_missions = { MLC_entrepot }
 		position = 5
-		provinces_to_highlight = {
-		}
 		trigger = {
 			MSA_orang_laut_trigger = yes
 		}
@@ -682,13 +741,11 @@ MLC_missions_4 = {
 			MSA_orang_laut_effect = yes
 		}
 	}
-	
+
 	MLC_welcoming_traders = {
 		icon = mission_rajput_trade_guilds
 		required_missions = { }
 		position = 6
-		provinces_to_highlight = {
-		}
 		trigger = {
 			home_trade_node = {
 				trade_share = {
@@ -706,17 +763,32 @@ MLC_missions_4 = {
 				name = MLC_foreign_merchants_in_our_lands
 				duration = 10950
 			}
-			
 			add_mercantilism = 2
 		}
 	}
-	
+
 	MLC_chinese_expedition = {
 		icon = mission_open_up_china
 		required_missions = { MLC_welcoming_traders }
 		position = 7
 		provinces_to_highlight = {
-			owned_by = event_target:EmperorOfChina
+			is_capital_of = ROOT
+			NOT = { province_trade_power = 50 }
+			OR = {
+				NOT = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				all_countries_including_self = {
+					is_emperor_of_china = no
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_insulting_flag }
+					NOT = { has_country_flag = MSA_in_defiance_flag }
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_swayed_flag }
+					NOT = { has_country_flag = MSA_absolutely_loyal_flag }
+				}
+			}
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -725,6 +797,11 @@ MLC_missions_4 = {
 			}
 			if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
 					OR = {
 						has_country_flag = MSA_insulting_flag
 						has_country_flag = MSA_in_defiance_flag
@@ -736,6 +813,11 @@ MLC_missions_4 = {
 			}
 			else_if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
 					OR = {
 						has_country_flag = MSA_swayed_flag
 						has_country_flag = MSA_absolutely_loyal_flag
@@ -756,7 +838,7 @@ MLC_missions_4 = {
 		}
 		effect = {
 			custom_tooltip = MLC_if_we_were_swayed
-			tooltip = {	
+			tooltip = {
 				add_country_modifier = {
 					name = MLC_diplomats
 					duration = 9125
@@ -832,10 +914,8 @@ MLC_missions_5 = {
 		icon = mission_abu_saids_dream
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-		}
 		trigger = {
-			legitimacy = 75
+			legitimacy_equivalent = 75
 			OR = {
 				estate_loyalty = {
 					estate = estate_nobles
@@ -848,13 +928,11 @@ MLC_missions_5 = {
 			country_event = { id = ME_Malacca_Events.2 }
 		}
 	}
-	
+
 	MLC_malaccan_bendahara = {
 		icon = mission_reliable_allies
 		required_missions = { MLC_tun_perak }
 		position = 2
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				statesman = 1
@@ -868,13 +946,11 @@ MLC_missions_5 = {
 			country_event = { id = ME_Malacca_Events.6 }
 		}
 	}
-	
+
 	MLC_temenggung = {
 		icon = mission_conquer_rajputana
 		required_missions = { MLC_malaccan_bendahara }
 		position = 3
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -939,15 +1015,25 @@ MLC_missions_5 = {
 			set_country_flag = MLC_temenggung
 		}
 	}
-	
+
 	MLC_entrepot = {
 		icon = mission_defeat_jaunpur
 		required_missions = { }
 		position = 4
 		provinces_to_highlight = {
 			province_id = 596
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { development = 18 }
+				AND = {
+					has_dlc = "Dharma"
+					NOT = { province_has_center_of_trade_of_level = 2 }
+				}
+			}
 		}
 		trigger = {
+			owns = 596
 			596 = {
 				if = {
 					limit = {
@@ -968,20 +1054,26 @@ MLC_missions_5 = {
 			}
 		}
 	}
-	
+
 	MLC_restore_singapura = {
 		icon = mission_subdue_rajputana
 		required_missions = { MLC_entrepot }
 		position = 5
 		provinces_to_highlight = {
 			province_id = 4815
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 18 }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { higher_development_than = 628 }
+			}
 		}
 		trigger = {
 			4815 = {
 				owned_by = ROOT
 				if = {
 					limit = {
-						owner = { ai = yes }
+						ROOT = { ai = yes }
 					}
 					development = 10
 				}
@@ -999,7 +1091,7 @@ MLC_missions_5 = {
 			country_event = { id = ME_Malacca_Events.4 }
 		}
 	}
-	
+
 	MLC_golden_peninsula = {
 		icon = mission_restore_pagodas
 		required_missions = { MLC_restore_singapura MLC_orang_laut }
@@ -1077,23 +1169,13 @@ MLC_missions_5 = {
 			}
 		}
 	}
-	
+
 	MLC_tin = {
 		icon = dominant_economy
 		required_missions = { MLC_welcoming_traders }
 		position = 7
-		provinces_to_highlight = {
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = trade_goods }
-				}
-				trade_goods = tin
-			}
-			else = {
-				trade_goods = copper
-			}
-		}
 		trigger = {
+			master_of_mint = 1
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
@@ -1109,7 +1191,6 @@ MLC_missions_5 = {
 					has_production_building_trigger = yes
 				}
 			}
-			master_of_mint = 1
 		}
 		effect = {
 			add_country_modifier = {

@@ -12,12 +12,11 @@ MSA_Missions_Expansion_1 = {
 		icon = mission_integrate_the_purbias
 		required_missions = { MSA_land }
 		position = 9
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_global_modifier_value = {
 				which = discipline
 				value = 0.1
+				extra_shortcut = yes
 			}
 			army_tradition = 60
 		}
@@ -26,19 +25,27 @@ MSA_Missions_Expansion_1 = {
 				name = MSA_valour_of_hang_nadim
 				duration = 7300
 			}
-			
 			add_army_tradition_or_mil_power = { amount = 20 }
 		}
 	}
-	
+
 	MSA_great_power = {
 		icon = mission_found_udaipur
 		required_missions = { MSA_army_reforms }
 		position = 11
-		provinces_to_highlight = {
-		}
 		trigger = {
-			is_great_power = yes
+			if = {
+				limit = {
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
+				}
+				is_great_power = yes
+			}
+			else = {
+				total_development = 1000
+			}
 			army_size = 150
 			navy_size = 150
 			num_of_generals = 1
@@ -61,15 +68,41 @@ MSA_Missions_Expansion_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_land = {
 		icon = mission_defeat_mewar
 		required_missions = { }
 		position = 8
 		provinces_to_highlight = {
 			OR = {
-				area = tenasserim_area
-				area = north_tenasserim_area
+				AND = {
+					area = tenasserim_area
+					NOT = {
+						tenasserim_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+				AND = {
+					area = north_tenasserim_area
+					NOT = {
+						north_tenasserim_area = {
+							owned_by = ROOT
+							fort_level = 2
+						}
+					}
+				}
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { fort_level = 2 }
+			}
+			ROOT = {
+				OR = {
+					NOT = { army_size = 40 }
+					NOT = { army_size_percentage = 0.75 }
+				}
 			}
 		}
 		trigger = {
@@ -186,7 +219,7 @@ MSA_Missions_Expansion_2 = {
 			}
 		}
 	}
-	
+
 	MSA_elephant = {
 		icon = mission_a_million_elephants
 		required_missions = { MSA_land }
@@ -200,6 +233,20 @@ MSA_Missions_Expansion_2 = {
 				area = tenasserim_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = khorat_area
+							area = central_thai_area
+							area = sukhothai_area
+							area = north_tenasserim_area
+							area = tenasserim_area
+						}
+						value = 12
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -269,7 +316,7 @@ MSA_Missions_Expansion_2 = {
             }
 		}
 	}
-	
+
 	MSA_indochina = {
 		icon = mission_restore_pagodas
 		required_missions = { MSA_end_the_angkor MSA_elephant }
@@ -292,6 +339,29 @@ MSA_Missions_Expansion_2 = {
 				area = north_laos_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = champasak_area
+							area = sukhothai_area
+							area = vientiane_area
+							area = northern_thai_area
+							area = cambodia_area
+							area = mekong_area
+							area = angkor_area
+							area = central_thai_area
+							area = khorat_area
+							area = tenasserim_area
+							area = north_tenasserim_area
+							area = tay_nguyen_area
+							area = champa_area
+							area = north_laos_area
+						}
+						value = 40
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -321,20 +391,66 @@ MSA_Missions_Expansion_2 = {
 			}
 		}
 	}
-	
+
 	MSA_china = {
 		icon = mission_seize_the_dragon_throne
 		required_missions = { MSA_indochina }
 		position = 12
 		provinces_to_highlight = {
+			superregion = china_superregion
+			NOT = { owned_by = ROOT }
+			NOT = {
+				china_superregion = {
+					owned_by = ROOT
+				}
+			}
+			OR = {
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					all_country = {
+						is_emperor_of_china = no
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { exists = MNG }
+				}
+			}
 		}
 		trigger = {
-			custom_trigger_tooltip = {
-				tooltip = MSA_defeated_emperor_of_china
-				any_country = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					custom_trigger_tooltip = {
+						tooltip = MSA_defeated_emperor_of_china
+						any_country = {
+							is_emperor_of_china = yes
+							ROOT = {
+								has_won_war_against = { who = PREV }
+							}
+						}
+					}
 					is_emperor_of_china = yes
-					ROOT = {
-						has_won_war_against = { who = PREV }
+					AND = {
+						all_countries_including_self = {
+							is_emperor_of_china = no
+						}
+						china_superregion = {
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					has_won_war_against = { who = MNG }
+					AND = {
+						NOT = { exists = MNG }
+						china_superregion = {
+							owned_by = ROOT
+						}
 					}
 				}
 			}
@@ -361,18 +477,34 @@ MSA_Missions_Expansion_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_champa = {
 		icon = mission_mnd_khm_protect_the_cham
 		required_missions = { MSA_navy }
 		position = 9
 		provinces_to_highlight = {
 			OR = {
-				owned_by = CHA
 				area = champa_area
 				area = tay_nguyen_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = champa_area
+							area = tay_nguyen_area
+						}
+						value = 3
+					}
+				}
+				OR = {
+					NOT = { alliance_with = CHA }
+					CHA = {
+						num_of_cities = 11
+					}
+				}
+			}
 		}
 		trigger = {
 			OR = {
@@ -451,7 +583,7 @@ MSA_Missions_Expansion_3 = {
 			}
 		}
 	}
-	
+
 	MSA_end_the_angkor = {
 		icon = mission_rule_indochina
 		required_missions = { MSA_champa MSA_elephant }
@@ -463,6 +595,18 @@ MSA_Missions_Expansion_3 = {
 				area = cambodia_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = mekong_area
+							area = angkor_area
+							area = cambodia_area
+						}
+						value = 7
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -489,25 +633,38 @@ MSA_Missions_Expansion_3 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						religion = hindu 
+						religion = hindu
 					}
 					add_country_modifier = {
 						name = MSA_legacy_of_the_hindu_empire
 						duration = 7300
 					}
 				}
-				
+
 			}
 		}
 	}
-	
+
 	MSA_import_spice_crops = {
 		icon = mission_coromandel_expansion
 		required_missions = { MSA_colonize_australia }
 		position = 12
 		provinces_to_highlight = {
 			colonial_region = colonial_australia
-			NOT = { has_production_building_trigger = yes }
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_production_building_trigger = yes }
+			}
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						colonial_region = colonial_australia
+						has_production_building_trigger = yes
+						value = 7
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -532,15 +689,16 @@ MSA_Missions_Expansion_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_navy = {
 		icon = mission_follow_the_brahmaputra
 		required_missions = { }
 		position = 8
-		provinces_to_highlight = {
-		}
 		trigger = {
-			has_country_flag = MSA_workaround
+			custom_trigger_tooltip = {
+				tooltip = MSA_workaround_tt
+				has_country_flag = MSA_workaround
+			}
 			OR = {
 				navy_size = 60
 				navy_size_percentage = 0.9
@@ -561,24 +719,49 @@ MSA_Missions_Expansion_4 = {
                 }
                 add_permanent_claim = ROOT
             }
-			MSA_claims_philippines = yes 
+			MSA_claims_philippines = yes
 			add_country_modifier = {
 				name = MSA_nation_of_seafarers
 				duration = 5475
 			}
 		}
 	}
-	
+
 	MSA_spice_islands = {
 		icon = mission_mnd_maj_cloves
 		required_missions = { MSA_navy }
-		position = 10 
+		position = 10
 		provinces_to_highlight = {
 			OR = {
 				province_id = 649
 				province_id = 650
+				area = south_sulawesi_area
+				area = sulawesi_area
+				area = makassar_area
+				area = spice_islands_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				649 = {
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				650 = {
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+				ROOT = {
+					NOT = {
+						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+							OR = {
+								area = south_sulawesi_area
+								area = sulawesi_area
+								area = makassar_area
+								area = spice_islands_area
+							}
+							value = 7
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			OR = {
@@ -605,14 +788,27 @@ MSA_Missions_Expansion_4 = {
 			}
 		}
 	}
-	
+
 	MSA_colonize_australia = {
 		icon = colonize_australia
 		required_missions = { MSA_spice_islands }
 		position = 11
 		provinces_to_highlight = {
 			colonial_region = colonial_australia
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			has_discovered = ROOT
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				is_city = no
+			}
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						colonial_region = colonial_australia
+						is_city = yes
+						value = 10
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -626,25 +822,28 @@ MSA_Missions_Expansion_4 = {
 				name = MSA_new_frontiers
 				duration = 10950
 			}
-			
 			add_dip_power = 50
 		}
 	}
-	
+
 	MSA_wealth = {
 		icon = mission_african_gold
 		required_missions = { MSA_colonize_australia }
 		position = 12
 		provinces_to_highlight = {
 			region = australia_region
-			OR = {
-				is_empty = yes
-				AND = {
-					OR = {
-						trade_goods = gold
-						trade_goods = silver
+			has_discovered = ROOT
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						region = australia_region
+						OR = {
+							trade_goods = gold
+							trade_goods = silver
+						}
+						value = 3
 					}
-					NOT = { country_or_non_sovereign_subject_holds = ROOT }
 				}
 			}
 		}
@@ -695,6 +894,20 @@ MSA_Missions_Expansion_5 = {
 				area = southern_luzon_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = luzon_area
+							area = visayas_area
+							area = west_mindanao_area
+							area = mindanao_area
+							area = southern_luzon_area
+						}
+						value = 9
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -711,18 +924,28 @@ MSA_Missions_Expansion_5 = {
 		effect = {
 			custom_tooltip = MSA_events_will_gradually_fire_to_colonize_the_rest_of_phillipines
 			set_country_flag = MSA_events_will_gradually_fire_to_colonize_the_rest_of_phillipines
-			
 			add_mercantilism = 3
 		}
 	}
-	
+
 	MSA_taiwan = {
 		icon = mission_portuguese_malacca
 		required_missions = { MSA_philippines }
-		position = 10 
+		position = 10
 		provinces_to_highlight = {
 			area = taiwan_area
-			NOT = { owned_by = ROOT }
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+				NOT = { has_shipyard_building_trigger = yes }
+			}
+			NOT = {
+				taiwan_area = {
+					owned_by = ROOT
+					is_city = yes
+					has_shipyard_building_trigger = yes
+				}
+			}
 		}
 		trigger = {
 			taiwan_area = {
@@ -755,11 +978,11 @@ MSA_Missions_Expansion_5 = {
 			}
 		}
 	}
-	
+
 	MSA_settle_the_islands = {
 		icon = mission_rajputana_frontier
 		required_missions = { MSA_spice_islands }
-		position = 11 
+		position = 11
 		provinces_to_highlight = {
 			OR = {
 				area = south_sulawesi_area
@@ -804,7 +1027,6 @@ MSA_Missions_Expansion_5 = {
 		}
 		effect = {
 			custom_tooltip = MSA_distribute_5_base_tax_and_5_base_production
-			
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = governments }
@@ -863,21 +1085,30 @@ MSA_Missions_Trade_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_capitalize = {
 		icon = the_shape_of_trades_to_come
 		required_missions = { }
 		position = 13
 		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_production_building_trigger = yes }
+			OR = {
+				province_id = 623
+				province_id = 639
+				AND = {
+					NOT = { is_expanded_mod_active = { mod = trade_goods } }
+					province_id = 2715
+				}
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_production_building_trigger = yes }
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				has_production_building_trigger = yes
 				value = 20
 			}
-			
 			623 = {
 				owned_by = ROOT
 				has_production_building_trigger = yes
@@ -897,7 +1128,7 @@ MSA_Missions_Trade_1 = {
 				owned_by = ROOT
 				has_production_building_trigger = yes
 			}
-			
+
 			num_of_trading_bonuses = 3
 		}
 		effect = {
@@ -906,11 +1137,10 @@ MSA_Missions_Trade_1 = {
 				duration = -1
 			}
 			add_mercantilism = 2
-			
 			if = {
 				limit = {
 					NOT = {
-						is_expanded_mod_active = { mod = trade_goods }						
+						is_expanded_mod_active = { mod = trade_goods }
 					}
 				}
 				2715 = {
@@ -934,20 +1164,11 @@ MSA_Missions_Trade_1 = {
 			}
 		}
 	}
-	
+
 	MSA_masters = {
 		icon = mission_rb_colonise_spice_islands
 		required_missions = { MSA_capitalize }
 		position = 14
-		provinces_to_highlight = {
-			owned_by = ROOT
-			OR = {
-				trade_goods = spices
-				trade_goods = nutmeg
-				trade_goods = cloves
-				trade_goods = vanilla
-			}
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -1033,90 +1254,11 @@ MSA_Missions_Trade_1 = {
 			}
 		}
 	}
-	
+
 	MSA_spice_flows = {
 		icon = mission_dominate_persian_gulf
 		required_missions = { MSA_masters }
 		position = 15
-		provinces_to_highlight = {
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = trade_goods }
-				}
-				OR = {
-					AND = {
-						trade_goods = spices
-						NOT = {
-							ROOT = {	
-								trading_part = {
-									trade_goods = spices
-									value = 0.33
-								}
-							}
-						}
-					}
-					AND = {
-						trade_goods = nutmeg
-						NOT = {
-							ROOT = {	
-								trading_part = {
-									trade_goods = nutmeg
-									value = 0.75
-								}
-							}
-						}
-					}
-					AND = {
-						trade_goods = vanilla
-						NOT = {
-							ROOT = {	
-								trading_part = {
-									trade_goods = vanilla
-									value = 0.75
-								}
-							}
-						}
-					}
-					AND = {
-						trade_goods = cloves
-						NOT = {
-							ROOT = {	
-								trading_part = {
-									trade_goods = cloves
-									value = 0.75
-								}
-							}
-						}
-					}
-				}
-			}
-			else = {
-				OR = {
-					AND = {
-						trade_goods = spices
-						NOT = {
-							ROOT = {	
-								trading_part = {
-									trade_goods = spices
-									value = 0.6
-								}
-							}
-						}
-					}
-					AND = {
-						trade_goods = cloves
-						NOT = {
-							ROOT = {	
-								trading_part = {
-									trade_goods = cloves
-									value = 0.9
-								}
-							}
-						}
-					}
-				}
-			}
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -1162,19 +1304,11 @@ MSA_Missions_Trade_1 = {
 			}
 		}
 	}
-	
+
 	MSA_coffee_plant = {
 		icon = mission_a_million_rice_fields
 		required_missions = { MSA_spice_flows }
 		position = 16
-		provinces_to_highlight = {
-			owner = {
-				OR = {
-					coffee = 1
-					cocoa = 1
-				}
-			}
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MSA_coffee_event_happened
@@ -1212,17 +1346,11 @@ MSA_Missions_Trade_1 = {
 			}
 		}
 	}
-	
+
 	MSA_straits_of_malaya = {
 		icon = mission_malayan_viceroyalty
 		required_missions = { MSA_wealth_of_the_strait }
 		position = 17
-		provinces_to_highlight = {
-			province_id = 1361
-			NOT = {
-				highest_value_trade_node = yes
-			}
-		}
 		trigger = {
 			1361 = { highest_value_trade_node = yes }
 			trade_efficiency = 0.5
@@ -1271,7 +1399,7 @@ MSA_Missions_Trade_1 = {
 			1348 = { change_province_name = "Straits of Malaya" }
 		}
 	}
-	
+
 	MSA_onset_of_modern_trade = {
 		icon = indonesian_trade
 		required_missions = { MSA_straits_of_malaya MSA_masters_of_trade }
@@ -1282,10 +1410,10 @@ MSA_Missions_Trade_1 = {
 		}
 		trigger = {
 			has_institution = global_trade
+			monthly_income = 300
 			capital_scope = {
 				has_building = stock_exchange
 			}
-			monthly_income = 300
 		}
 		effect = {
 			add_country_modifier = {
@@ -1297,7 +1425,7 @@ MSA_Missions_Trade_1 = {
 				every_province = {
 					limit = {
 						province_is_trade_node_center_province = yes
-						trade_range = ROOT 
+						trade_range = ROOT
 					}
 					if = {
 						limit = {
@@ -1333,20 +1461,11 @@ MSA_Missions_Trade_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_wood = {
 		icon = mission_clear_the_delta
 		required_missions = { MSA_capitalize }
 		position = 14
-		provinces_to_highlight = {
-			owned_by = ROOT
-			OR = {
-				trade_goods = tropical_wood
-				trade_goods = ebony
-				trade_goods = incense
-			}
-			NOT = { has_production_building_trigger = yes }
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -1405,20 +1524,13 @@ MSA_Missions_Trade_2 = {
 			country_event = { id = ME_Malaya_Events.53 }
 		}
 	}
-	
+
 	MSA_wealth_of_the_strait = {
 		icon = mission_entrepot_of_india
 		required_missions = { MSA_controlling_the_strait MSA_wood MSA_spice_flows }
 		position = 16
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_manufactory_trigger = yes }
-		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				has_manufactory_trigger = yes
-				value = 50
-			}
+			monthly_income = 100
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
@@ -1428,7 +1540,10 @@ MSA_Missions_Trade_2 = {
 			else = {
 				num_of_trading_bonuses = 3
 			}
-			monthly_income = 100
+			num_of_owned_provinces_with = {
+				has_manufactory_trigger = yes
+				value = 50
+			}
 		}
 		effect = {
 			1361 = {
@@ -1445,14 +1560,13 @@ MSA_Missions_Trade_2 = {
 			}
 		}
 	}
-	
+
 	MSA_masters_of_trade = {
 		icon = mission_steer_trade_to_bengal
 		required_missions = { MSA_straits_of_malaya MSA_wealth_of_the_strait MSA_trade_giant }
 		position = 18
-		provinces_to_highlight = {
-		}
 		trigger = {
+			monthly_income = 200
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = trade_goods }
@@ -1462,7 +1576,6 @@ MSA_Missions_Trade_2 = {
 			else = {
 				num_of_trading_bonuses = 7
 			}
-			monthly_income = 200
 			calc_true_if = {
 				amount = 5
 				all_trade_node = {
@@ -1475,7 +1588,7 @@ MSA_Missions_Trade_2 = {
 		}
 		effect = {
 			custom_tooltip = MSA_travelling_merchant
-			set_country_flag = HNS_travelling_merchant 
+			set_country_flag = HNS_travelling_merchant
 			custom_tooltip = MSA_modify_mastery_of_the_trade
 			hidden_effect = {
 				remove_country_modifier = MSA_mastery_of_the_trade
@@ -1497,13 +1610,11 @@ MSA_Missions_Trade_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_cornerstone = {
 		icon = mission_bengal_entrepot
 		required_missions = { }
 		position = 13
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				advisor = trader
@@ -1526,19 +1637,11 @@ MSA_Missions_Trade_3 = {
 			}
 		}
 	}
-	
+
 	MSA_great_trading_cities = {
 		icon = mission_dominate_trade_in_aden
 		required_missions = { MSA_cornerstone }
 		position = 14
-		provinces_to_highlight = {
-			owned_by = ROOT
-			province_has_center_of_trade_of_level = 1
-			OR = {
-				NOT = { has_trade_building_trigger = yes }
-				NOT = { development = 15 }
-			}
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				province_has_center_of_trade_of_level = 1
@@ -1554,9 +1657,7 @@ MSA_Missions_Trade_3 = {
 				}
 				custom_tooltip = MSA_every_state_with_trigger
 			}
-			
 			custom_tooltip = MSA_every_such_province
-			
 			add_mercantilism = 2
 			hidden_effect = {
 				every_owned_province = {
@@ -1576,23 +1677,11 @@ MSA_Missions_Trade_3 = {
 			}
 		}
 	}
-	
+
 	MSA_controlling_the_strait = {
 		icon = mission_look_west
 		required_missions = { MSA_great_trading_cities }
 		position = 15
-		provinces_to_highlight = {
-			OR = {
-				province_id = 1361
-				province_id = 1357
-			}
-			NOT = {
-				trade_share = {
-					country = ROOT
-					share = 90
-				}
-			}
-		}
 		trigger = {
 			1361 = {
 				trade_share = {
@@ -1626,19 +1715,16 @@ MSA_Missions_Trade_3 = {
 			}
 		}
 	}
-	
+
 	MSA_trade_giant = {
 		icon = mission_sail_to_the_east_indies
 		required_missions = { MSA_controlling_the_strait }
 		position = 17
-		provinces_to_highlight = {
-		}
 		trigger = {
 			num_of_centers_of_trade = 20
 		}
 		effect = {
 			custom_tooltip = MSA_for_every_center_of_trade_with_a_marketplace
-			
 			hidden_effect = {
 				if = {
 					limit = {
@@ -1665,22 +1751,16 @@ MSA_Missions_Trade_3 = {
 			}
 		}
 	}
-	
+
 	MSA_ports = {
 		icon = expand_the_arsenal
 		required_missions = { MSA_protecting_existing_routes }
 		position = 18
-		provinces_to_highlight = {
-			owned_by = ROOT
-			has_port = yes
-			NOT = { has_shipyard_building_trigger = yes }
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				has_shipyard_building_trigger = yes
 				value = 10
 			}
-			
 			num_of_owned_provinces_with = {
 				has_shipyard_building_trigger = yes
 				province_has_center_of_trade_of_level = 1
@@ -1726,16 +1806,13 @@ MSA_Missions_Trade_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_great_merchant_fleet = {
 		icon = mission_south_indian_trade
 		required_missions = { MSA_foreign_powers MSA_cornerstone }
 		position = 14
-		provinces_to_highlight = {
-		}
 		trigger = {
 			num_of_light_ship = 60
-			
 			has_leader_with = {
 				admiral = yes
 				manuever = 3
@@ -1747,7 +1824,6 @@ MSA_Missions_Trade_4 = {
 				name = MSA_great_merchant_fleet_modifier
 				duration = 7300
 			}
-			
 			custom_tooltip = MSA_if_we_have_naval_commander
 			tooltip = {
 				add_country_modifier = {
@@ -1758,7 +1834,7 @@ MSA_Missions_Trade_4 = {
 			hidden_effect = {
 				if = {
 					limit = {
-						advisor = naval_reformer 
+						advisor = naval_reformer
 					}
 					add_country_modifier = {
 						name = MSA_innovations
@@ -1768,16 +1844,11 @@ MSA_Missions_Trade_4 = {
 			}
 		}
 	}
-	
+
 	MSA_at_the_shores_of_india = {
 		icon = mission_coromandel_trade
 		required_missions = { MSA_great_merchant_fleet }
 		position = 16
-		provinces_to_highlight = {
-			owner = {
-				owns = 536
-			}
-		}
 		trigger = {
 			OR = {
 				1340 = {
@@ -1823,18 +1894,16 @@ MSA_Missions_Trade_4 = {
 			}
 		}
 	}
-	
+
 	MSA_protecting_existing_routes = {
 		icon = mission_grand_bengali_shipyards
 		required_missions = { }
 		position = 17
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				navy_tradition = 30
 				has_global_modifier_value = {
-					which = galley_power 
+					which = galley_power
 					value = 0.15
 				}
 			}
@@ -1845,17 +1914,14 @@ MSA_Missions_Trade_4 = {
 				add_manuever = 1
 			}
 			custom_tooltip = MSA_admiral_1_manueverpip
-			
 			add_mercantilism = 2
 		}
 	}
-	
+
 	MSA_fleet_to_topple_empires = {
 		icon = mission_naval_dominance
 		required_missions = { MSA_protecting_existing_routes }
 		position = 19
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -1896,12 +1962,8 @@ MSA_Missions_Trade_5 = {
 		icon = mission_to_the_south_china_sea
 		required_missions = { }
 		position = 13
-		provinces_to_highlight = {
-			owner = {
-				NOT = { alliance_with = ROOT }
-			}
-		}
 		trigger = {
+			num_of_allies = 2
 			calc_true_if = {
 				all_ally = {
 					has_opinion = {
@@ -1916,14 +1978,11 @@ MSA_Missions_Trade_5 = {
 			country_event = { id = ME_Malaya_Events.52 }
 		}
 	}
-	
+
 	MSA_malay_community = {
 		icon = mission_asian_trader
 		required_missions = { MSA_foreign_powers }
 		position = 2
-		provinces_to_highlight = {
-			province_id = 667
-		}
 		trigger = {
 			OR = {
 				667 = {
@@ -1954,13 +2013,11 @@ MSA_Missions_Trade_5 = {
 			country_event = { id = ME_Malaya_Events.49 }
 		}
 	}
-	
+
 	MSA_expedition_into_canton = {
 		icon = mission_dominate_gujarati_trade
 		required_missions = { MSA_malay_community MSA_great_merchant_fleet }
 		position = 15
-		provinces_to_highlight = {
-		}
 		trigger = {
 			navy_tradition = 20
 			OR = {
@@ -1970,7 +2027,6 @@ MSA_Missions_Trade_5 = {
 		}
 		effect = {
 			MSA_expand_canton_effect = yes
-			
 			if = {
 				limit = {
 					has_country_flag = MSA_chinese_expedition_concluded
@@ -2012,17 +2068,11 @@ MSA_Missions_Trade_5 = {
 			}
 		}
 	}
-	
+
 	MSA_tea_trade = {
 		icon = mission_trade_with_cathay
 		required_missions = { MSA_expedition_into_canton }
 		position = 17
-		provinces_to_highlight = {	
-			OR = {
-				trade_goods = tea
-				trade_goods = chinaware
-			}
-		}
 		trigger = {
 			trading_part = {
 				trade_goods = tea
@@ -2038,17 +2088,14 @@ MSA_Missions_Trade_5 = {
 				name = MSA_trading_in_tea
 				duration = 7300
 			}
-			
 			add_dip_power = 50
 		}
 	}
-	
+
 	MSA_minting = {
 		icon = mission_establish_mint_towns
 		required_missions = { }
 		position = 18
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				advisor = treasurer
@@ -2063,13 +2110,11 @@ MSA_Missions_Trade_5 = {
 			}
 		}
 	}
-	
+
 	MSA_spread_the_mint = {
 		icon = dominant_economy
 		required_missions = { MSA_minting }
 		position = 21
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -2078,6 +2123,9 @@ MSA_Missions_Trade_5 = {
 				mission_completed = MSA_wealth
 			}
 			else = {
+				NOT = { inflation = 0.25 }
+				NOT = { num_of_loans = 1 }
+				NOT = { corruption = 0.1 }
 				calc_true_if = {
 					all_trade_node = {
 						AND = {
@@ -2090,9 +2138,6 @@ MSA_Missions_Trade_5 = {
 					}
 					amount = 3
 				}
-				NOT = { inflation = 0.25 }
-				NOT = { num_of_loans = 1 }
-				NOT = { corruption = 0.1 }
 			}
 		}
 		effect = {
@@ -2131,13 +2176,17 @@ MSA_Missions_General_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_build_a_new_capital = {
 		icon = mission_reclaim_dehli
 		required_missions = { MSA_splendor_of_malaya }
 		position = 20
 		provinces_to_highlight = {
 			is_capital_of = ROOT
+			OR = {
+				NOT = { development = 50 }
+				NOT = { num_of_buildings_in_province = 5 }
+			}
 		}
 		trigger = {
 			capital_scope = {
@@ -2172,14 +2221,13 @@ MSA_Missions_General_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_splendor_of_malaya = {
 		icon = mission_conquer_rajputana
 		required_missions = { }
 		position = 19
-		provinces_to_highlight = {
-		}
 		trigger = {
+			stability = 3
 			prestige = 60
 			OR = {
 				power_projection = 50
@@ -2189,7 +2237,6 @@ MSA_Missions_General_2 = {
 					monthly_mil = 8
 				}
 			}
-			stability = 3
 		}
 		effect = {
 			add_country_modifier = {
@@ -2198,13 +2245,11 @@ MSA_Missions_General_2 = {
 			}
 		}
 	}
-	
+
 	MSA_impose_new_laws = {
 		icon = mission_court_education
 		required_missions = { MSA_splendor_of_malaya }
 		position = 21
-		provinces_to_highlight = {
-		}
 		trigger = {
 			has_adm_advisor_3 = yes
 			is_ahead_of_time_in_tech = { type = all }
@@ -2215,7 +2260,6 @@ MSA_Missions_General_2 = {
 				name = MSA_new_laws
 				duration = 10950
 			}
-			
 			add_stability_or_adm_power = yes
 		}
 	}
@@ -2230,38 +2274,29 @@ MSA_Missions_General_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_people_of_nusantara = {
 		icon = mission_gharbianss
 		required_missions = { }
 		position = 19
-		provinces_to_highlight = {
-			culture_group = malay
-			NOT = {
-				ROOT = { accepted_culture = PREV }
-			}
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				culture_group = malay
-				ROOT = { accepted_culture = PREV } 
+				has_owner_accepted_culture = yes
 				value = 50
 			}
 		}
 		effect = {
 			custom_tooltip = MSA_events_for_missing_provs
 			set_country_flag = MSA_events_for_missing_provs
-			
 			add_dip_power = 50
 		}
 	}
-	
+
 	MSA_alliances_with_sea_nomads = {
 		icon = mission_growth_of_surat
 		required_missions = { MSA_people_of_nusantara }
 		position = 21
-		provinces_to_highlight = {
-		}
 		trigger = {
 			MSA_orang_laut_trigger = yes
 		}
@@ -2296,13 +2331,11 @@ MSA_Missions_General_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_melayu_terenggung = {
 		icon = mission_deccanis
 		required_missions = { MSA_people_of_nusantara }
 		position = 20
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				NOT = { has_estate = estate_nobles }
@@ -2321,7 +2354,6 @@ MSA_Missions_General_4 = {
 				name = MSA_managing_the_nobles
 				duration = 7300
 			}
-			
 			add_mil_power = 50
 		}
 	}
@@ -2332,12 +2364,12 @@ MSA_Missions_General_5 = {
 	generic = no
 	ai = yes
 	potential = {
-		always = no #unused 
+		always = no #unused
 		tag = MSA
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 }
 
 MSA_Missions_Muslim_1 = {
@@ -2350,7 +2382,7 @@ MSA_Missions_Muslim_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_populate_the_islands = {
 		icon = mission_mosque
 		required_missions = { }
@@ -2367,32 +2399,30 @@ MSA_Missions_Muslim_1 = {
 						area = minangkabau_area
 					}
 					NOT = {
-						ROOT = {
-							OR = {
-								north_sumatra_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								central_sumatra_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								south_sumatra_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								jambi_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								batak_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								minangkabau_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
+						OR = {
+							north_sumatra_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							central_sumatra_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							south_sumatra_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							jambi_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							batak_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							minangkabau_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
 							}
 						}
 					}
@@ -2407,53 +2437,49 @@ MSA_Missions_Muslim_1 = {
 						area = minangkabau_area
 					}
 					NOT = {
-						ROOT = {
-							OR = {
-								tenasserim_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								malaya_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								johor_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								north_malaya_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								north_tenasserim_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-								malacca_area = {
-									owned_by = ROOT
-									has_tax_building_trigger = yes
-								}
-							}
-						}
-					}
-				}
-				AND = {
-					owned_by = ROOT
-					NOT = {
-						ROOT = {
-							num_of_owned_provinces_with = {
+						OR = {
+							tenasserim_area = {
+								owned_by = ROOT
 								has_tax_building_trigger = yes
-								value = 10
+							}
+							malaya_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							johor_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							north_malaya_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							north_tenasserim_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
+							}
+							malacca_area = {
+								owned_by = ROOT
+								has_tax_building_trigger = yes
 							}
 						}
 					}
 				}
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
 			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				has_tax_building_trigger = yes
 				value = 10
+			}
+			num_of_owned_provinces_with = {
+				development = 15
+				has_tax_building_trigger = yes
+				value = 2
 			}
 			custom_trigger_tooltip = {
 				tooltip = MSA_sumatra_tax_building
@@ -2513,18 +2539,13 @@ MSA_Missions_Muslim_1 = {
 					}
 				}
 			}
-			num_of_owned_provinces_with = {
-				development = 15
-				has_tax_building_trigger = yes
-				value = 2
-			}
 		}
 		effect = {
 			country_event = { id = ME_Malaya_Events.45 } #Dealing with the Beliefs
 			add_stability_or_adm_power = yes
 		}
 	}
-	
+
 	MSA_mosque_of_demak = {
 		icon = mission_conquer_gujarat_bah
 		required_missions = { MSA_populate_the_islands }
@@ -2560,7 +2581,6 @@ MSA_Missions_Muslim_1 = {
 				estate = estate_church
 				loyalty = 10
 			}
-			
 			custom_tooltip = MSA_if_we_have_theologian
 			tooltip = {
 				add_country_modifier = {
@@ -2581,15 +2601,11 @@ MSA_Missions_Muslim_1 = {
 			}
 		}
 	}
-	
+
 	MSA_grand_mosques = {
 		icon = mission_conquer_rewakantha
 		required_missions = { MSA_commons MSA_mosque_of_demak }
 		position = 26
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { has_building = cathedral }
-		}
 		trigger = {
 			cathedral = 15
 		}
@@ -2629,13 +2645,11 @@ MSA_Missions_Muslim_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_spread_the_jawi_script = {
 		icon = mission_court_education
 		required_missions = { }
 		position = 22
-		provinces_to_highlight = {
-		}
 		trigger = {
 			stability = 2
 			has_adm_advisor = yes
@@ -2648,13 +2662,11 @@ MSA_Missions_Muslim_2 = {
 			add_adm_power = 50
 		}
 	}
-	
+
 	MSA_jawi_in_administration = {
 		icon = mission_taula_de_canvi
 		required_missions = { MSA_porch_of_mecca MSA_populate_the_islands MSA_spread_the_jawi_script }
 		position = 23
-		provinces_to_highlight = {
-		}
 		trigger = {
 			ME_has_reform_on_level = { level = 4 }
 		}
@@ -2667,11 +2679,10 @@ MSA_Missions_Muslim_2 = {
 					duration = -1
 				}
 			}
-			
 			change_government_reform_progress  = 25
 		}
 	}
-	
+
 	MSA_pereulak = {
 		icon = mission_into_persia_1
 		required_missions = { MSA_mosque_of_demak }
@@ -2698,15 +2709,11 @@ MSA_Missions_Muslim_2 = {
 			}
 		}
 	}
-	
+
 	MSA_commons = {
 		icon = me_mission_muslim_family
 		required_missions = { }
 		position = 25
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { religion = ROOT }
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MSA_convert_25_provinces
@@ -2728,13 +2735,11 @@ MSA_Missions_Muslim_2 = {
 			}
 		}
 	}
-	
+
 	MSA_overseas = {
 		icon = mission_demand_garjat_fealty
 		required_missions = { MSA_commons }
 		position = 26
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -2744,8 +2749,8 @@ MSA_Missions_Muslim_2 = {
 					all_trade_node = {
 						custom_trigger_tooltip = {
 							tooltip = MSA_is_not_malacca_nor_moluccas_nor_philippines
-							NOT = { 
-								OR = { 
+							NOT = {
+								OR = {
 									province_id = 1361
 									province_id = 1357
 									province_id = 4358
@@ -2759,7 +2764,6 @@ MSA_Missions_Muslim_2 = {
 							}
 						}
 					}
-					
 					amount = 2
 				}
 			}
@@ -2778,7 +2782,6 @@ MSA_Missions_Muslim_2 = {
 				name = MSA_propagating
 				duration = 9125
 			}
-			
 			add_yearly_sailors = 0.5
 		}
 	}
@@ -2794,19 +2797,30 @@ MSA_Missions_Muslim_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_porch_of_mecca = {
 		icon = mission_mnd_maj_porch_of_mecca
 		required_missions = { }
 		position = 22
 		provinces_to_highlight = {
-			province_has_center_of_trade_of_level = 1
 			owned_by = ROOT
+			province_has_center_of_trade_of_level = 1
 			OR = {
 				NOT = { religion = ROOT }
 				NOT = { has_tax_building_trigger = yes }
 				NOT = { has_trade_building_trigger = yes }
 				NOT = { development = 30 }
+			}
+			ROOT = {
+				NOT = {
+					any_owned_province = {
+						province_has_center_of_trade_of_level = 1
+						religion = ROOT
+						has_tax_building_trigger = yes
+						has_trade_building_trigger = yes
+						development = 30
+					}
+				}
 			}
 		}
 		trigger = {
@@ -2850,15 +2864,11 @@ MSA_Missions_Muslim_3 = {
 			}
 		}
 	}
-	
+
 	MSA_saint = {
 		icon = mission_viceroyalty_of_the_deccan
 		required_missions = { MSA_porch_of_mecca }
 		position = 23
-		provinces_to_highlight = {
-			MSA_is_in_java = yes
-			NOT = { religion_group = ROOT }
-		}
 		trigger = {
 			has_global_modifier_value = {
 				which = global_missionary_strength
@@ -2868,30 +2878,26 @@ MSA_Missions_Muslim_3 = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				religion_group = ROOT
 				MSA_is_in_java = yes
-				
 				value = 10
 			}
 		}
 		effect = {
 			custom_tooltip = MSA_requirement_for_spreading
 			hidden_effect = { complete_mission = atj_porch_of_mecca }
-			
 			define_advisor = {
 				type = theologian #specific saint?
 				skill = 3
 				culture = ROOT
-				religion = ROOT 
+				religion = ROOT
 				cost_multiplier = 0.33
 			}
 		}
 	}
-	
+
 	MSA_spreading = {
 		icon = mission_reliable_allies
 		required_missions = { MSA_saint MSA_jawi_in_administration }
 		position = 24
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				custom_trigger_tooltip = {
@@ -2915,7 +2921,7 @@ MSA_Missions_Muslim_3 = {
 						check_variable = { which = num_converted_religion value = 3 }
 					}
 				}
-			}	
+			}
 		}
 		effect = {
 			custom_tooltip = MSA_completed_by_propagation
@@ -2968,15 +2974,11 @@ MSA_Missions_Muslim_3 = {
 			}
 		}
 	}
-	
+
 	MSA_hub_of_islam = {
 		icon = mission_vedic_education
 		required_missions = { MSA_diplomacy MSA_spreading MSA_commons }
 		position = 26
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { religion_group = ROOT }
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				religion_group = ROOT
@@ -2995,13 +2997,13 @@ MSA_Missions_Muslim_3 = {
 				custom_trigger_tooltip = {
 					tooltip = MSA_has_invited_foreign_scholar
 					OR = {
-						has_country_modifier = hanafi_scholar_modifier 
-						has_country_modifier = hanbali_scholar_modifier  
-						has_country_modifier = maliki_scholar_modifier  
-						has_country_modifier = shafii_scholar_modifier  
-						has_country_modifier = ismaili_scholar_modifier  
-						has_country_modifier = jafari_scholar_modifier  
-						has_country_modifier = zaidi_scholar_modifier  
+						has_country_modifier = hanafi_scholar_modifier
+						has_country_modifier = hanbali_scholar_modifier
+						has_country_modifier = maliki_scholar_modifier
+						has_country_modifier = shafii_scholar_modifier
+						has_country_modifier = ismaili_scholar_modifier
+						has_country_modifier = jafari_scholar_modifier
+						has_country_modifier = zaidi_scholar_modifier
 					}
 				}
 			}
@@ -3009,14 +3011,13 @@ MSA_Missions_Muslim_3 = {
 			has_dip_advisor_3 = yes
 			has_mil_advisor_3 = yes
 			religious_unity = 0.9
-			mission_completed = 
+			#mission_completed = ???
 		}
 		effect = {
 			add_country_modifier = {
 				name = MSA_hub_of_islam
 				duration = -1
 			}
-			
 			custom_tooltip = MSA_at_least_90_or_minus_90_piety
 			set_country_flag = MSA_extra_piety_benefits
 		}
@@ -3033,7 +3034,7 @@ MSA_Missions_Muslim_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_safeguard_pilgrim_envoys = {
 		icon = mission_secure_hajj_ports
 		required_missions = { MSA_porch_of_mecca MSA_study_the_manuscripts }
@@ -3049,6 +3050,76 @@ MSA_Missions_Muslim_4 = {
 			}
 			province_has_center_of_trade_of_level = 1
 			has_port = yes
+			OR = {
+				NOT = { country_or_subject_holds = ROOT }
+				owner = {
+					NOT = { alliance_with = ROOT }
+				}
+			}
+			NOT = {
+				OR = {
+					malabar_area = {
+						province_has_center_of_trade_of_level = 1
+						has_port = yes
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								alliance_with = ROOT
+							}
+						}
+					}
+					madura_area = {
+						province_has_center_of_trade_of_level = 1
+						has_port = yes
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								alliance_with = ROOT
+							}
+						}
+					}
+					tanjore_area = {
+						province_has_center_of_trade_of_level = 1
+						has_port = yes
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								alliance_with = ROOT
+							}
+						}
+					}
+					lanka_area = {
+						province_has_center_of_trade_of_level = 1
+						has_port = yes
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								alliance_with = ROOT
+							}
+						}
+					}
+					south_lanka_area = {
+						province_has_center_of_trade_of_level = 1
+						has_port = yes
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								alliance_with = ROOT
+							}
+						}
+					}
+					south_carnatic_area = {
+						province_has_center_of_trade_of_level = 1
+						has_port = yes
+						OR = {
+							country_or_subject_holds = ROOT
+							owner = {
+								alliance_with = ROOT
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			OR = {
@@ -3132,9 +3203,14 @@ MSA_Missions_Muslim_4 = {
 				name = MSA_pilgrim_routes_protected
 				duration = 9125
 			}
-			385 = {
-				owner = {
-					country_event = { id = ME_Malaya_Events.47 }
+			if = {
+				limit = {
+					NOT = { owns = 385 }
+				}
+				385 = {
+					owner = {
+						country_event = { id = ME_Malaya_Events.47 }
+					}
 				}
 			}
 			custom_tooltip = MSA_every_owner
@@ -3149,7 +3225,7 @@ MSA_Missions_Muslim_4 = {
 						country_or_subject_holds = ROOT
 					}
 					owner = {
-						province_event = { id = ME_Malaya_Events.48 }
+						country_event = { id = ME_Malaya_Events.48 }
 					}
 				}
 				madura_area = {
@@ -3159,7 +3235,7 @@ MSA_Missions_Muslim_4 = {
 						country_or_subject_holds = ROOT
 					}
 					owner = {
-						province_event = { id = ME_Malaya_Events.48 }
+						country_event = { id = ME_Malaya_Events.48 }
 					}
 				}
 				tanjore_area = {
@@ -3169,7 +3245,7 @@ MSA_Missions_Muslim_4 = {
 						country_or_subject_holds = ROOT
 					}
 					owner = {
-						province_event = { id = ME_Malaya_Events.48 }
+						country_event = { id = ME_Malaya_Events.48 }
 					}
 				}
 				lanka_area = {
@@ -3179,7 +3255,7 @@ MSA_Missions_Muslim_4 = {
 						country_or_subject_holds = ROOT
 					}
 					owner = {
-						province_event = { id = ME_Malaya_Events.48 }
+						country_event = { id = ME_Malaya_Events.48 }
 					}
 				}
 				south_lanka_area = {
@@ -3189,7 +3265,7 @@ MSA_Missions_Muslim_4 = {
 						country_or_subject_holds = ROOT
 					}
 					owner = {
-						province_event = { id = ME_Malaya_Events.48 }
+						country_event = { id = ME_Malaya_Events.48 }
 					}
 				}
 				south_carnatic_area = {
@@ -3199,42 +3275,25 @@ MSA_Missions_Muslim_4 = {
 						country_or_subject_holds = ROOT
 					}
 					owner = {
-						province_event = { id = ME_Malaya_Events.48 }
+						country_event = { id = ME_Malaya_Events.48 }
 					}
 				}
 			}
 		}
 	}
-	
+
 	MSA_diplomacy = {
 		icon = mission_deccanis
 		required_missions = { MSA_safeguard_pilgrim_envoys }
 		position = 25
-		provinces_to_highlight = {
-			owner = {
-				religion_group = muslim
-				NOT = {
-					capital_scope = {
-						OR = {
-							superregion = india_superregion
-							superregion = east_indies_superregion 
-						}
-					}
-				}
-				NOT = { alliance_with = ROOT }
-			}
-		}
 		trigger = {
+			num_of_allies = 2
 			calc_true_if = {
 				all_ally = {
 					religion_group = muslim
-					NOT = {
-						capital_scope = {
-							OR = {
-								superregion = india_superregion
-								superregion = east_indies_superregion 
-							}
-						}
+					capital_scope = {
+						NOT = { superregion = india_superregion }
+						NOT = { superregion = east_indies_superregion }
 					}
 				}
 				amount = 2
@@ -3248,7 +3307,6 @@ MSA_Missions_Muslim_4 = {
 				religion = ROOT
 				cost_multiplier = 0.5
 			}
-			
 			add_dip_power = 100
 		}
 	}
@@ -3264,14 +3322,13 @@ MSA_Missions_Muslim_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_study_the_manuscripts = {
 		icon = mission_ahmadabad_paper
 		required_missions = { }
 		position = 22
-		provinces_to_highlight = {
-		}
 		trigger = {
+			religion_group = muslim
 			OR = {
 				piety = 0.9
 				NOT = { piety = -0.9 }
@@ -3311,13 +3368,11 @@ MSA_Missions_Muslim_5 = {
 			}
 		}
 	}
-	
+
 	MSA_scholars = {
 		icon = mission_fatimid_caliphate
 		required_missions = { MSA_study_the_manuscripts }
 		position = 24
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -3326,13 +3381,13 @@ MSA_Missions_Muslim_5 = {
 				custom_trigger_tooltip = {
 					tooltip = MSA_has_invited_foreign_scholar
 					OR = {
-						has_country_modifier = hanafi_scholar_modifier 
-						has_country_modifier = hanbali_scholar_modifier  
-						has_country_modifier = maliki_scholar_modifier  
-						has_country_modifier = shafii_scholar_modifier  
-						has_country_modifier = ismaili_scholar_modifier  
-						has_country_modifier = jafari_scholar_modifier  
-						has_country_modifier = zaidi_scholar_modifier  
+						has_country_modifier = hanafi_scholar_modifier
+						has_country_modifier = hanbali_scholar_modifier
+						has_country_modifier = maliki_scholar_modifier
+						has_country_modifier = shafii_scholar_modifier
+						has_country_modifier = ismaili_scholar_modifier
+						has_country_modifier = jafari_scholar_modifier
+						has_country_modifier = zaidi_scholar_modifier
 					}
 				}
 			}
@@ -3355,13 +3410,11 @@ MSA_Missions_Muslim_5 = {
 			country_event = { id = ME_Malaya_Events.46 } #Scribes
 		}
 	}
-	
+
 	MSA_islamic_center = {
 		icon = mission_into_persia_2
 		required_missions = { MSA_scholars }
 		position = 26
-		provinces_to_highlight = {
-		}
 		trigger = {
 			is_ahead_of_time_in_tech = { type = all }
 			num_of_owned_states_with = {
@@ -3401,42 +3454,40 @@ MSA_Missions_Hindu_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_disciples = {
 		icon = mission_a_great_mandala
 		required_missions = { }
 		position = 22
-		provinces_to_highlight = {
-			owned_by = ROOT
-			unrest = 1
-		}
 		trigger = {
-			legitimacy = 90
-			NOT = { average_unrest = 1 }
+			legitimacy_equivalent = 90
 			prestige = 40
 			religious_unity = 0.25
+			NOT = { average_unrest = 1 }
 		}
 		effect = {
 			add_ruler_modifier = {
 				name = MSA_foremost_servant_of_shiva
 				duration = -1
 			}
-			
-			capital_scope = {
-				add_prosperity = 50
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				capital_scope = {
+					add_prosperity = 50
+				}
 			}
 		}
 	}
-	
+
 	MSA_looking_for_enlightenment = {
 		icon = mission_din_i_llahi
 		required_missions = { MSA_disciples }
 		position = 24
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
-				has_ruler_modifier = hindu_withdrawn_contemplation 
+				has_ruler_modifier = hindu_withdrawn_contemplation
 				has_ruler_modifier = jnana
 			}
 		}
@@ -3445,7 +3496,6 @@ MSA_Missions_Hindu_1 = {
 				name = MSA_pranidhana
 				duration = 9125
 			}
-			
 			custom_tooltip = MSA_if_brahmans_are_loyal
 			tooltip = {
 				add_country_modifier = {
@@ -3469,20 +3519,16 @@ MSA_Missions_Hindu_1 = {
 			}
 		}
 	}
-	
+
 	MSA_dharmasraja = {
 		icon = mission_chakravarti
 		required_missions = { MSA_looking_for_enlightenment MSA_bring_back }
 		position = 26
-		provinces_to_highlight = {
-			unrest = 0
-			owned_by = ROOT
-		}
 		trigger = {
 			stability = 2
+			religious_unity = 0.75
 			NOT = { average_unrest = 0 }
 			NOT = { average_autonomy = 33 }
-			religious_unity = 0.75
 			if = {
 				limit = {
 					has_dlc = "Mandate of Heaven"
@@ -3501,7 +3547,6 @@ MSA_Missions_Hindu_1 = {
 				name = MSA_devaraja_modifier
 				duration = -1
 			}
-			
 			add_mil_power = 50
 		}
 	}
@@ -3517,24 +3562,20 @@ MSA_Missions_Hindu_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_spread_the_sanskrit = {
 		icon = mission_court_education
 		required_missions = { MSA_invite_brahmans_from_india }
 		position = 23
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { is_state = yes }
-		}
 		trigger = {
 			prestige = 80
+			stability = 3
+			NOT = { war_exhaustion = 0.1 }
+			num_of_states = 20
 			OR = {
 				artist = 2
 				has_adm_advisor_3 = yes
 			}
-			stability = 3
-			NOT = { war_exhaustion = 0.1 }
-			num_of_states = 20
 		}
 		effect = {
 			define_advisor = {
@@ -3544,19 +3585,14 @@ MSA_Missions_Hindu_2 = {
 				religion = ROOT
 				cost_multiplier = 0.25
 			}
-			
 			add_stability_or_adm_power = yes
 		}
 	}
-	
+
 	MSA_repel_muslims = {
 		icon = mission_restore_caliphate_of_cordoba
 		required_missions = { }
 		position = 24
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { religion = ROOT }
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = obj_convert_10_provinces_tooltip
@@ -3569,40 +3605,27 @@ MSA_Missions_Hindu_2 = {
 				name = MSA_vijaya_strikes
 				duration = 5475
 			}
-			
 			add_estate_loyalty =  {
 				estate = estate_church
 				loyalty = 10
 			}
 		}
 	}
-	
+
 	MSA_bring_back = {
 		icon = mission_rajput_mansabdars
 		required_missions = { MSA_repel_muslims }
 		position = 25
-		provinces_to_highlight = {
-			OR = {
-				region = indonesia_region
-				region = malaya_region
-			}
-			owner = {
-				religion_group = muslim
-			}
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MSA_less_than_10_provinces
 				NOT = {
 					calc_true_if = {
-						indonesia_region = {
-							type = all
-							owner = {
-								religion_group = muslim
+						all_province = {
+							OR = {
+								region = indonesia_region
+								region = malaya_region
 							}
-						}
-						malaya_region = {
-							type = all
 							owner = {
 								religion_group = muslim
 							}
@@ -3641,18 +3664,13 @@ MSA_Missions_Hindu_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_invite_brahmans_from_india = {
 		icon = mission_brahmin_administrators
 		required_missions = { }
 		position = 22
-		provinces_to_highlight = {
-			owner = {
-				NOT = { tag = ROOT }
-				religion = hinduism
-			}
-		}
 		trigger = {
+			num_of_allies = 2
 			calc_true_if = {
 				all_ally = {
 					religion = hinduism
@@ -3669,7 +3687,6 @@ MSA_Missions_Hindu_3 = {
 				estate = estate_church
 				loyalty = 10
 			}
-			
 			custom_tooltip = MSA_gain_a_theologian
 			hidden_effect = {
 				random_ally = {
@@ -3693,7 +3710,7 @@ MSA_Missions_Hindu_3 = {
 			}
 		}
 	}
-	
+
 	MSA_secure_hindu_holy_sites = {
 		icon = mission_reclaim_dehli
 		required_missions = { MSA_invite_brahmans_from_india }
@@ -3705,8 +3722,8 @@ MSA_Missions_Hindu_3 = {
 				province_id = 2052
 				province_id = 511
 			}
-			NOT = {
-				owner = {
+			owner = {
+				NOT = {
 					religion = hinduism
 				}
 			}
@@ -3738,7 +3755,6 @@ MSA_Missions_Hindu_3 = {
 				name = MSA_holy_sites_of_hindu
 				duration = -1
 			}
-			
 			custom_tooltip = MSA_every_Hindu_province
 			hidden_effect = {
 				every_owned_province = {
@@ -3750,14 +3766,11 @@ MSA_Missions_Hindu_3 = {
 			}
 		}
 	}
-	
+
 	MSA_saber_of_shiva = {
 		icon = mission_rajendras_ambition
 		required_missions = { MSA_secure_hindu_holy_sites MSA_bring_back }
 		position = 26
-		provinces_to_highlight = {
-			NOT = { religion = ROOT }
-		}
 		trigger = {
 			calc_true_if = {
 				all_province = {
@@ -3769,11 +3782,10 @@ MSA_Missions_Hindu_3 = {
 		effect = {
 			set_country_flag = MSA_hindu_decision_flag
 			custom_tooltip = MSA_switch_diety
-			
 			custom_tooltip = MSA_strengthen_holy_sites_of_hindu
 			hidden_effect = {
 				remove_country_modifier = MSA_holy_sites_of_hindu
-				add_country_modifier = { 
+				add_country_modifier = {
 					name = MSA_holy_sites_of_hindu_2
 					duration = -1
 				}
@@ -3792,13 +3804,11 @@ MSA_Missions_Hindu_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_study_scriptures = {
 		icon = mission_vedic_education
 		required_missions = { MSA_renew_ancient_temples MSA_invite_brahmans_from_india }
 		position = 23
-		provinces_to_highlight = {
-		}
 		trigger = {
 			monthly_adm = 10
 			ME_has_reform_on_level = { level = 4 }
@@ -3808,24 +3818,46 @@ MSA_Missions_Hindu_4 = {
 				name = MSA_scholarly_practices
 				duration = 9125
 			}
-			change_innovativeness = 2
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 2
+			}
 		}
 	}
-	
+
 	MSA_great_pilgrimage = {
 		icon = me_mission_garuda
 		required_missions = { MSA_secure_hindu_holy_sites MSA_prambanan }
 		position = 25
 		provinces_to_highlight = {
-			OR = {
-				religion_group = eastern
-				owner = { religion_group = eastern }
-				province_id = 558
+			province_id = 558
+			NOT = { owned_by = ROOT }
+			ROOT = {
+				NOT = {
+					any_ally = {
+						religion_group = eastern
+						has_opinion = {
+							who = ROOT
+							value = 200
+						}
+					}
+				}
+				NOT = {
+					num_of_owned_provinces_with = {
+						religion_group = eastern
+						NOT = { unrest = 0 }
+						NOT = { nationalism = 1 }
+						value = 5
+					}
+				}
 			}
 		}
 		trigger = {
 			OR = {
-				any_ally = { 
+				owns = 558
+				any_ally = {
 					religion_group = eastern
 					has_opinion = {
 						who = ROOT
@@ -3838,13 +3870,12 @@ MSA_Missions_Hindu_4 = {
 					NOT = { nationalism = 1 }
 					value = 5
 				}
-				558 = { owned_by = ROOT }
 			}
 		}
 		effect = {
 			custom_tooltip = buddha_deity_tt
 			hidden_effect = {
-				complete_mission = sun_candi_temples 
+				complete_mission = sun_candi_temples
 			}
 			add_stability_or_adm_power = yes
 			add_country_modifier = {
@@ -3865,25 +3896,11 @@ MSA_Missions_Hindu_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_renew_ancient_temples = {
 		icon = mission_protect_lankan_buddhism
 		required_missions = { }
 		position = 22
-		provinces_to_highlight = {
-			owned_by = ROOT
-			religion = ROOT
-			OR = {
-				development = 10
-				has_tax_building_trigger = yes
-			}
-			NOT = {
-				AND = {
-					development = 10
-					has_tax_building_trigger = yes
-				}
-			}
-		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				has_tax_building_trigger = yes
@@ -3914,7 +3931,7 @@ MSA_Missions_Hindu_5 = {
 			}
 		}
 	}
-	
+
 	MSA_prambanan = {
 		icon = mission_temple_patronage
 		required_missions = { MSA_renew_ancient_temples }
@@ -3922,15 +3939,25 @@ MSA_Missions_Hindu_5 = {
 		provinces_to_highlight = {
 			has_dlc = "Leviathan"
 			province_id = 2690
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = {
+					has_great_project = {
+						type = monument
+						tier = 3
+					}
+				}
+			}
 		}
 		trigger = {
 			if = {
 				limit = {
 					has_dlc = "Leviathan"
 				}
+				owns = 2690
 				2690 = {
 					has_great_project = {
-						type = any
+						type = monument
 						tier = 3
 					}
 				}
@@ -3947,17 +3974,14 @@ MSA_Missions_Hindu_5 = {
 				name = MSA_great_project
 				duration = -1
 			}
-			
 			add_prestige_or_monarch_power = { amount = 60 }
 		}
 	}
-	
+
 	MSA_testament_of_the_empire = {
 		icon = mission_restore_pagodas
 		required_missions = { MSA_prambanan }
 		position = 26
-		provinces_to_highlight = {
-		}
 		trigger = {
 			any_owned_province = {
 				num_of_times_improved = 45
@@ -3966,11 +3990,13 @@ MSA_Missions_Hindu_5 = {
 		}
 		effect = {
 			#custom_tooltip = MSA_upgrade_great_project
-			
 			country_event = { id = ME_Malaya_Events.86 } #event to pick reward
-			
-			
-			add_splendor = 600
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 600
+			}
 		}
 	}
 }
@@ -3985,7 +4011,7 @@ MSA_Missions_Hindu_5 = {
 		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	# }
 	# has_country_shield = yes
-	
+
 	# MSA_invite_missionaries = {
 		# icon = mission_religious
 		# required_missions = { }
@@ -4006,11 +4032,11 @@ MSA_Missions_Hindu_5 = {
 				# name = MSA_evangelization
 				# duration = 9125
 			# }
-			
+
 			# change_religious_influence_equivalent = { add = 10 }
 		# }
 	# }
-	
+
 	# MSA_helping_the_poor = {
 		# icon = mission_establish_jesuit_missions
 		# required_missions = { MSA_invite_missionaries MSA_proselytize }
@@ -4028,7 +4054,7 @@ MSA_Missions_Hindu_5 = {
 		# effect = {
 			# if = {
 				# limit = {
-					# religion = catholic 
+					# religion = catholic
 				# }
 				# add_country_modifier = {
 					# name = MSA_jesuit
@@ -4041,24 +4067,24 @@ MSA_Missions_Hindu_5 = {
 					# duration = -1
 				# }
 			# }
-			
+
 			# add_stability_or_adm_power = yes
 		# }
 	# }
-	
+
 	# MSA_growing_community = {
 		# icon = catholic_volunteers
 		# required_missions = { MSA_enroot }
 		# position = 25
 		# provinces_to_highlight = {
-			
+
 		# }
 		# trigger = {
 		# }
 		# effect = {
 		# }
 	# }
-	
+
 	# MSA_kingdom_of_heaven = {
 		# icon = mission_trade_with_cathay
 		# required_missions = { MSA_growing_community }
@@ -4091,7 +4117,7 @@ MSA_Missions_Hindu_5 = {
 		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	# }
 	# has_country_shield = yes
-	
+
 	# MSA_proselytize = {
 		# icon = show_piety
 		# required_missions = { }
@@ -4109,7 +4135,7 @@ MSA_Missions_Hindu_5 = {
 		# effect = {
 		# }
 	# }
-	
+
 	# MSA_enroot = {
 		# icon = chivalry_is_not_dead
 		# required_missions = { MSA_proselytize }
@@ -4118,12 +4144,12 @@ MSA_Missions_Hindu_5 = {
 		# }
 		# trigger = {
 			# religious_unity = 0.75
-			
+
 		# }
 		# effect = {
 		# }
 	# }
-	
+
 	# MSA_faithful = {
 		# icon = counter_reformation
 		# required_missions = { MSA_enroot MSA_growing_community }
@@ -4146,8 +4172,8 @@ MSA_Missions_Hindu_5 = {
 		# tag = MSA
 		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	# }
-	# has_country_shield = yes	
-	
+	# has_country_shield = yes
+
 	# MSA_convert_temples = {
 		# icon = mission_european_church
 		# required_missions = { MSA_relations_with_the_faithful MSA_proselytize }
@@ -4165,7 +4191,7 @@ MSA_Missions_Hindu_5 = {
 		# effect = {
 		# }
 	# }
-	
+
 	# MSA_cathedral = {
 		# icon = les_invalides
 		# required_missions = { MSA_convert_temples }
@@ -4193,7 +4219,7 @@ MSA_Missions_Hindu_5 = {
 			# }
 		# }
 	# }
-	
+
 	# MSA_adopt_latin_script = {
 		# icon = mission_vedic_education
 		# required_missions = { MSA_enroot MSA_culture }
@@ -4219,7 +4245,7 @@ MSA_Missions_Hindu_5 = {
 		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	# }
 	# has_country_shield = yes
-	
+
 	# MSA_relations_with_the_faithful = {
 		# icon = mission_reliable_allies
 		# required_missions = { }
@@ -4231,7 +4257,7 @@ MSA_Missions_Hindu_5 = {
 		# effect = {
 		# }
 	# }
-	
+
 	# MSA_culture = {
 		# icon = convert_the_holy_lands
 		# required_missions = { MSA_bible_study MSA_relations_with_the_faithful }
@@ -4255,7 +4281,7 @@ MSA_Missions_Hindu_5 = {
 		# has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	# }
 	# has_country_shield = yes
-	
+
 	# MSA_bible_study = {
 		# icon = expand_the_confederacy
 		# required_missions = { }
@@ -4269,7 +4295,7 @@ MSA_Missions_Hindu_5 = {
 				# has_adm_advisor_3 = yes
 			# }
 			# ME_has_reform_on_level = { level = 4 }
-			
+
 			# if = {
 				# limit = {
 					# religion = catholic
@@ -4300,7 +4326,7 @@ MSA_Missions_Hindu_5 = {
 		# effect = {
 		# }
 	# }
-	
+
 	# MSA_eliminate_heresy = {
 		# icon = spread_piety
 		# required_missions = { MSA_bible_study }
@@ -4333,25 +4359,20 @@ MSA_Missions_Europe_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_finding_partners = {
 		icon = mission_caribbean_cn
 		required_missions = { }
 		position = 27
-		provinces_to_highlight = {
-			is_capital = yes
-			continent = europe
-		}
 		trigger = {
-			any_country = {
+			num_of_allies = 1
+			any_ally = {
 				capital_scope = { continent = europe }
-				alliance_with = ROOT
 			}
 		}
 		effect = {
 			custom_tooltip = MSA_the_european_nations
 			add_dip_power = 50
-			
 			custom_tooltip = MSA_every_country_we_allied_with
 			tooltip = {
 				add_country_modifier = {
@@ -4359,12 +4380,10 @@ MSA_Missions_Europe_1 = {
 					duration = 9125
 				}
 			}
-			
 			hidden_effect = {
-				every_country = {
+				every_ally = {
 					limit = {
 						capital_scope = { continent = europe }
-						alliance_with = ROOT
 					}
 					add_country_modifier = {
 						name = MSA_partners_in_the_spice_trade
@@ -4374,19 +4393,16 @@ MSA_Missions_Europe_1 = {
 			}
 		}
 	}
-	
+
 	MSA_foreign_traders = {
 		icon = support_the_bulk_trades
 		required_missions = { MSA_finding_partners }
 		position = 29
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				trade_efficiency = 0.9
-				any_country = {
+				any_ally = {
 					capital_scope = { continent = europe }
-					alliance_with = ROOT
 					NOT = {
 						border_distance = {
 							who = ROOT
@@ -4402,13 +4418,11 @@ MSA_Missions_Europe_1 = {
 			add_years_of_income = 0.25
 		}
 	}
-	
+
 	MSA_mastery_of_the_coin = {
 		icon = invest_in_the_rich_trades
 		required_missions = { MSA_foreign_traders }
 		position = 31
-		provinces_to_highlight = {
-		}
 		trigger = {
 			monthly_income = 600
 			trade_efficiency = 1.2
@@ -4433,7 +4447,6 @@ MSA_Missions_Europe_1 = {
 				}
 			}
 			add_years_of_income = 1
-			
 			capital_scope = {
 				add_institution_embracement = {
 					which = global_trade
@@ -4454,45 +4467,16 @@ MSA_Missions_Europe_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_negotations = {
 		icon = control_coromandel
 		required_missions = { MSA_finding_partners MSA_foreign_powers_placate }
 		position = 28
-		provinces_to_highlight = {
-			OR = {
-				owner = {
-					capital_scope = { 
-						continent = europe
-					}
-					alliance_with = ROOT
-					NOT = { has_trade_deal_with_root_trigger  = yes }
-				}
-				AND = {
-					country_or_non_sovereign_subject_holds = ROOT
-					OR = {
-						if = {
-							limit = {
-								has_dlc = "Dharma"
-							}
-							province_has_center_of_trade_of_level = 1
-						}
-						else = {
-							province_has_center_of_trade_of_level = 2
-						}
-					}
-					OR = {
-						NOT = { has_trade_building_trigger = yes }
-						NOT = { development = 25 }
-					}
-				}
-			}
-		}
 		trigger = {
-			any_country = {
+			num_of_allies = 1
+			any_ally = {
 				capital_scope = { continent = europe }
-				alliance_with = ROOT
-				has_trade_deal_with_root_trigger  = yes
+				has_trade_deal_with_root_trigger = yes
 			}
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				province_has_center_of_trade_of_level = 2
@@ -4509,13 +4493,11 @@ MSA_Missions_Europe_2 = {
 			add_dip_power = 50
 		}
 	}
-	
+
 	MSA_foreign_companies = {
 		icon = chater_the_voc
 		required_missions = { MSA_foreign_traders }
 		position = 30
-		provinces_to_highlight = {
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MSA_has_done_at_least_10_request
@@ -4552,55 +4534,17 @@ MSA_Missions_Europe_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_foreign_powers_placate = {
 		icon = mission_rule_the_garjats
 		required_missions = { }
 		position = 27
-		provinces_to_highlight = {
-			if = {
-				limit = {
-					OR = {
-						has_dlc = "Emperor"
-						has_dlc = "Rights of Man"
-					}
-				}
-				owner = {
-					is_great_power = yes
-					NOT = {
-						OR = {
-							marriage_with = ROOT
-							alliance_with = ROOT
-							has_opinion = {
-								who = ROOT
-								value = 100
-							}
-						}
-					}
-				}
-			}
-			else = {
-				owner = {
-					total_development = 400
-					NOT = {
-						OR = {
-							marriage_with = ROOT
-							alliance_with = ROOT
-							has_opinion = {
-								who = ROOT
-								value = 100
-							}
-						}
-					}
-				}
-			}
-		}
 		trigger = {
 			if = {
 				limit = {
 					OR = {
-						has_dlc = "Emperor"
 						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
 					}
 				}
 				calc_true_if = {
@@ -4640,7 +4584,6 @@ MSA_Missions_Europe_3 = {
 				name = MSA_great_power_diplomacy
 				duration = 5475
 			}
-			
 			define_advisor = {
 				type = diplomat
 				skill = 3
@@ -4650,15 +4593,15 @@ MSA_Missions_Europe_3 = {
 			}
 		}
 	}
-	
+
 	MSA_shipbuilding = {
 		icon = mission_naval_dominance
 		required_missions = { MSA_technology_sharing MSA_foreign_powers_placate }
 		position = 29
-		provinces_to_highlight = {
-		}
 		trigger = {
 			is_ahead_of_time_in_tech = { type = dip }
+			navy_tradition = 20
+			num_of_admirals = 2
 			OR = {
 				has_global_modifier_value = {
 					which = ship_durability
@@ -4669,15 +4612,12 @@ MSA_Missions_Europe_3 = {
 					value = 0.2
 				}
 			}
-			navy_tradition = 20
-			num_of_admirals = 2
 		}
 		effect = {
 			add_country_modifier = {
 				name = MSA_high_seas
 				duration = 7300
 			}
-			
 			create_admiral = {
 				tradition = 75
 			}
@@ -4695,23 +4635,21 @@ MSA_Missions_Europe_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_technology_sharing = {
 		icon = mission_konkani_pirates
 		required_missions = { MSA_foreign_powers_placate MSA_embrace_colonial_thought }
 		position = 28
-		provinces_to_highlight = {
-			owner = {
-				tech_difference = 1
-			}
-		}
 		trigger = {
-			NOT = {
-				any_country = {
-					capital_scope = {
-						continent = europe
+			custom_trigger_tooltip = {
+				tooltip = MSA_technology_sharing_tt
+				NOT = {
+					any_country = {
+						capital_scope = {
+							continent = europe
+						}
+						tech_difference = 1
 					}
-					tech_difference = 1
 				}
 			}
 		}
@@ -4720,19 +4658,19 @@ MSA_Missions_Europe_4 = {
 				name = MSA_perma_institution
 				duration = -1
 			}
-			
-			change_innovativeness = 5
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 5
+			}
 		}
 	}
-	
+
 	MSA_influence = {
 		icon = mission_metropolis_of_the_deccan
 		required_missions = { MSA_technology_sharing }
 		position = 30
-		provinces_to_highlight = {
-			owned_by = ROOT
-			NOT = { global_trade = 100 }
-		}
 		trigger = {
 			has_institution = global_trade
 			num_of_owned_provinces_with = {
@@ -4764,15 +4702,11 @@ MSA_Missions_Europe_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_embrace_colonial_thought = {
 		icon = mission_look_west
 		required_missions = { }
 		position = 27
-		provinces_to_highlight = {
-			owned_by = ROOT
-			new_world_i = 100
-		}
 		trigger = {
 			has_institution = new_world_i
 		}
@@ -4784,16 +4718,11 @@ MSA_Missions_Europe_5 = {
 			create_explorer = { tradition = 25 }
 		}
 	}
-	
+
 	MSA_printing = {
 		icon = mission_court_education
 		required_missions = { MSA_technology_sharing MSA_embrace_colonial_thought }
 		position = 29
-		provinces_to_highlight = {
-			owned_by = ROOT
-			development = 20
-			has_institution = printing_press
-		}
 		trigger = {
 			is_ahead_of_time_in_tech = { type = any }
 			any_owned_province = {
@@ -4811,7 +4740,12 @@ MSA_Missions_Europe_5 = {
 					duration = -1
 				}
 			}
-			change_innovativeness = 3
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				change_innovativeness = 3
+			}
 			#depending on jawi/sanskrit
 			custom_tooltip = MSA_if_we_are_hindu
 			tooltip = {
@@ -4880,13 +4814,11 @@ MSA_Missions_Europe_5 = {
 			}
 		}
 	}
-	
+
 	MSA_beacon = {
 		icon = mission_patronize_art_and_religion
 		required_missions = { MSA_printing MSA_influence }
 		position = 31
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -4959,35 +4891,11 @@ MSA_Missions_Independence_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_securing_resources = {
 		icon = mission_jawal_silver_mine
 		required_missions = { MSA_rising_power }
 		position = 28
-		provinces_to_highlight = {
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = trade_goods }
-				}
-				OR = {
-					trade_goods = iron
-					trade_goods = zinc
-					trade_goods = copper
-					trade_goods = tin
-				}
-			}
-			else = {
-				OR = {
-					trade_goods = iron
-					trade_goods = copper
-				}
-			}
-			OR = {
-				NOT = { owned_by = ROOT }
-				NOT = { has_manufactory_trigger = yes }
-				NOT = { has_production_building_trigger = yes }
-			}
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -5036,13 +4944,11 @@ MSA_Missions_Independence_1 = {
 			}
 		}
 	}
-	
+
 	MSA_rallying_the_mob = {
 		icon = mission_order_in_the_domain
 		required_missions = { }
 		position = 29
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				manpower_percentage = 0.6
@@ -5052,27 +4958,14 @@ MSA_Missions_Independence_1 = {
 		effect = {
 			set_country_flag = MSA_10_morale_against_colonizers
 			custom_tooltip = MSA_10_morale_against_colonizers
-			
 			add_mil_power = 50
 		}
 	}
-	
+
 	MSA_win_several_wars = {
 		icon = mission_end_tamil_insurgency
 		required_missions = { MSA_rallying_the_mob }
 		position = 31
-		provinces_to_highlight = {
-			owner = {
-				capital_scope = {
-					continent = europe
-				}
-				NOT = {
-					ROOT = {
-						has_won_war_against = { who = PREV }
-					}
-				}
-			}
-		}
 		trigger = {
 			calc_true_if = {
 				all_country = {
@@ -5091,7 +4984,6 @@ MSA_Missions_Independence_1 = {
 				name = MSA_rallied_against_colonizers
 				duration = 7300
 			}
-			
 			create_general = {
 				tradition = 90
 			}
@@ -5109,30 +5001,18 @@ MSA_Missions_Independence_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_rising_power = {
 		icon = mission_new_army
 		required_missions = { }
 		position = 27
-		provinces_to_highlight = {
-			if = {
-				limit = {
-					has_dlc = "Rights of Man"
-				}
-				owner = {
-					great_power_rank = ROOT
-				}
-			}
-			else = {
-				owner = {
-					total_development = ROOT
-				}
-			}
-		}
 		trigger = {
 			if = {
 				limit = {
-					has_dlc = "Rights of Man"
+					OR = {
+						has_dlc = "Rights of Man"
+						has_dlc = "Emperor"
+					}
 				}
 				custom_trigger_tooltip = {
 					tooltip = MSA_no_1
@@ -5141,10 +5021,8 @@ MSA_Missions_Independence_2 = {
 				}
 			}
 			else = {
-				NOT = {
-					any_country = {
-						total_development = ROOT
-					}
+				all_country = {
+					NOT = { total_development = ROOT }
 				}
 			}
 		}
@@ -5153,20 +5031,17 @@ MSA_Missions_Independence_2 = {
 				name = MSA_power_on_the_rise
 				duration = 10950
 			}
-			
 			add_power_projection = {
 				type = mission_rewards_power_projection
 				amount = 40
 			}
 		}
 	}
-	
+
 	MSA_greatest_power = {
 		icon = mission_persianate_empire
 		required_missions = { MSA_rising_power }
 		position = 29
-		provinces_to_highlight = {
-		}
 		trigger = {
 			grown_by_development = 2000
 		}
@@ -5178,19 +5053,13 @@ MSA_Missions_Independence_2 = {
 			}
 		}
 	}
-	
+
 	MSA_seeking_allies = {
 		icon = mission_prosperity_in_bengal
 		required_missions = { MSA_rallying_the_mob }
 		position = 30
-		provinces_to_highlight = {
-			owner = {
-				capital_scope = {
-					continent = asia
-				}
-			}
-		}
 		trigger = {
+			num_of_allies = 3
 			calc_true_if = {
 				all_ally = {
 					capital_scope = {
@@ -5219,19 +5088,11 @@ MSA_Missions_Independence_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_naval_europe = {
 		icon = mission_launch_a_flagship
 		required_missions = { }
 		position = 28
-		provinces_to_highlight = {
-			owner = {
-				naval_strength = {
-					who = ROOT
-					value = 0.5
-				}
-			}
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MSA_naval_strength
@@ -5247,26 +5108,17 @@ MSA_Missions_Independence_3 = {
 		}
 		effect = {
 			add_navy_tradition = 20
-			
 			add_country_modifier = {
 				name = MSA_navy_reward
 				duration = 14600
 			}
 		}
 	}
-	
+
 	MSA_army_independent = {
 		icon = mission_the_battle_for_raichur
 		required_missions = { MSA_naval_europe }
 		position = 30
-		provinces_to_highlight = {
-			owner = {
-				army_strength = {
-					who = ROOT
-					value = 0.5
-				}
-			}
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = MSA_army_strength
@@ -5282,7 +5134,6 @@ MSA_Missions_Independence_3 = {
 		}
 		effect = {
 			add_army_tradition_or_mil_power = { amount = 20 }
-			
 			add_country_modifier = {
 				name = MSA_army_reward
 				duration = 14600
@@ -5301,17 +5152,16 @@ MSA_Missions_Independence_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_first_encounters = {
 		icon = mission_emperor_of_hindusthan
 		required_missions = { }
 		position = 27
-		provinces_to_highlight = {
-		}
 		trigger = {
+			is_at_war = yes
 			any_country = {
-				capital_scope = { continent = europe }
 				war_with = ROOT
+				capital_scope = { continent = europe }
 			}
 		}
 		effect = {
@@ -5347,7 +5197,7 @@ MSA_Missions_Independence_4 = {
 			}
 		}
 	}
-	
+
 	MSA_seize_the_islands = {
 		icon = mission_invade_gujarat
 		required_missions = { MSA_first_encounters MSA_naval_europe }
@@ -5363,6 +5213,18 @@ MSA_Missions_Independence_4 = {
 				province_id = 1103
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				calc_true_if = {
+					amount = 4
+					1998 = { country_or_non_sovereign_subject_holds = ROOT }
+					1999 = { country_or_non_sovereign_subject_holds = ROOT }
+					1248 = { country_or_non_sovereign_subject_holds = ROOT }
+					1101 = { country_or_non_sovereign_subject_holds = ROOT }
+					1100 = { country_or_non_sovereign_subject_holds = ROOT }
+					1102 = { country_or_non_sovereign_subject_holds = ROOT }
+					1103 = { country_or_non_sovereign_subject_holds = ROOT }
+				}
+			}
 		}
 		trigger = {
 			calc_true_if = {
@@ -5409,7 +5271,7 @@ MSA_Missions_Independence_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	MSA_heathens = {
 		icon = mission_integrate_the_gonds
 		required_missions = { MSA_first_encounters }
@@ -5417,7 +5279,7 @@ MSA_Missions_Independence_5 = {
 		provinces_to_highlight = {
 			OR = {
 				region = indonesia_region
-				region = malaya_region 
+				region = malaya_region
 				region = moluccas_region
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -5428,7 +5290,7 @@ MSA_Missions_Independence_5 = {
 				type = all
 				OR = {
 					country_or_non_sovereign_subject_holds = ROOT
-					NOT = { area = indian_ocean_islands_area }
+					area = indian_ocean_islands_area
 				}
 			}
 			malaya_region = {
@@ -5447,7 +5309,7 @@ MSA_Missions_Independence_5 = {
 			}
 		}
 	}
-	
+
 	MSA_reroute_muslim_traders = {
 		icon = mission_rein_in_the_velamas
 		required_missions = { MSA_heathens MSA_seize_the_islands }
@@ -5458,6 +5320,17 @@ MSA_Missions_Independence_5 = {
 				region = south_africa_region
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							region = east_africa_region
+							region = south_africa_region
+						}
+						value = 40
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
