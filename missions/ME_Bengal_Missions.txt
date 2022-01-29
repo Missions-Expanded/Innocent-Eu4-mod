@@ -1829,9 +1829,11 @@ ME_Bengali_Missions_3 = {
 					limit = { 
 						NOT = { has_flagship = yes } 
 					}
-					create_flagship = {    
-						name = "Sedgewick"
-						type = light_ship
+					ROOT = {
+						create_flagship = {    
+							name = "Sedgewick"
+							type = light_ship
+						}
 					}
 				}
 			}
@@ -2228,9 +2230,11 @@ ME_Bengali_Missions_3 = {
 		position = 14
 		trigger = {
 			tripura_area = {
+				type = all
 				owned_by = ROOT
 			}
 			naga_hills_area = {
+				type = all
 				owned_by = ROOT
 			}
 			568 = {
@@ -2558,7 +2562,7 @@ ME_Bengali_Missions_3 = {
 	}
 	bng_roar_tiger = {
 		icon = mission_the_tiger_triumphant
-		required_missions = { bng_dar_ul_ilm bng_kick_out_pashtuns bng_grand_trunk_road bng_monopoly_on_spices }
+		required_missions = { bng_dar_ul_ilm bng_kick_out_pashtuns bng_grand_trunk_road bng_eastern_frontiers }
 		position = 18
 		trigger = {
 			NOT = { 
@@ -2878,7 +2882,7 @@ ME_Bengali_Missions_4 = {
 	}
 	bng_inferno = {
 		icon = mission_dominate_persian_gulf
-		required_missions = { bng_maritime_silk_road bng_royal_port }
+		required_missions = { bng_maritime_silk_road bng_royal_port bng_persian_immigrants }
 		position = 5
 		provinces_to_highlight = {
 			OR = {
@@ -2903,6 +2907,13 @@ ME_Bengali_Missions_4 = {
 			add_country_modifier = {
 				name = bng_paradise_of_nations_modifier
 				duration = -1
+			
+			}
+			define_advisor = {
+				type = travelling_merchant
+				skill = 3
+				name = "Sawaroop Chand"
+				cost_multiplier = 0.25
 			}
 		}
 	}
@@ -3059,6 +3070,165 @@ ME_Bengali_Missions_4 = {
 			}
 		}
 	}
+	bng_romantic_general = {
+		icon = mission_rajendras_ambition
+		required_missions = { }
+		position = 11
+		trigger = {
+			has_mil_advisor = yes
+			OR = {
+				army_tradition = 30
+				army_professionalism = 0.05
+				has_mil_advisor_3 = yes
+				2038 = { owned_by = ROOT }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_diplomatic_warfare_modifier
+				duration = 9125
+			}
+			country_event = {
+				id = ME_Bengal_Events.20
+			}
+		}
+	}
+	bng_brahmaputra = {
+		icon = mission_conquer_assam
+		required_missions = { bng_romantic_general }
+		position = 13
+		trigger = {
+			assam_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_bengal_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_country_modifier = {
+				name = bng_expanded_paik_corvee_modifier
+				duration = 7300
+			}
+		}
+	}
+	bng_expeditions_to_burma = {
+		icon = mission_portuguese_burma
+		required_missions = { bng_consolidate_bengal bng_brahmaputra }
+		position = 14
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 8
+				region = burma_region
+			}
+			OR = {
+				NOT = {
+					any_country = {
+						capital_scope = { region = burma_region }
+						army_size = BNG
+					}
+				}
+				AND = {
+					584 = {
+						trade_share = {
+							country = ROOT
+							share = 60
+						}
+					}
+					any_subject_country = { 
+						capital_scope = { region = burma_region }
+					}
+				}
+			}
+		}
+		effect = {
+			burma_region = {
+				add_permanent_claim = ROOT
+			}
+			add_country_modifier = {
+				name = bng_burma_expeditions_modifier
+				duration = 10950
+			}
+		}
+	}
+	bng_woo_burma = {
+		icon = mission_portuguese_burma
+		required_missions = { bng_brahmaputra bng_fortify_passes }
+		position = 14
+		trigger = {
+			burma_region = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+				OR = {
+					NOT = { local_autonomy_above_min = 40 }
+					is_owned_by_trade_company = yes
+				}
+			}
+			NOT = { exists = TAU }
+			NOT = { exists = ARK }
+			NOT = { exists = PEG }
+		}
+		effect = {
+			568 = {
+				add_permanent_province_modifier = {
+					name = bng_port_of_burma_modifier
+					duration = -1
+				}
+				add_base_production = 4
+			}
+			north_tenasserim_area = { add_permanent_claim = ROOT }
+			sukhothai_area = { add_permanent_claim = ROOT }
+			northern_thai_area = { add_permanent_claim = ROOT }
+			660 = { add_permanent_claim = ROOT }
+			2166 = { add_permanent_claim = ROOT }
+			north_laos_area = { add_permanent_claim = ROOT }
+			country_event = {
+				id = ME_Bengal_Events.23
+			}
+		}
+	}
+	bng_eastern_frontiers = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = { bng_woo_burma bng_grand_bengali_shipyards }
+		position = 17
+		provinces_to_highlight = {
+			
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 15
+				region = coromandel_region
+			}
+			1361 = {
+				trade_share = {
+					country = ROOT
+					share = 60
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_eastern_sword_of_islam_modifier
+				duration = 18250
+			}
+			custom_tooltip = BNG_CLAIM_ALL_EAST_INDIES_MUSLIM_PROVINCES
+			tooltip = {	add_permanent_claim = ROOT }
+			hidden_effect = {
+				east_indies_superregion = {
+					limit = { 
+						OR = {
+							owner = { religion_group = muslim }
+							religion_group = muslim
+						}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
 }
 ME_Bengali_Missions_5 = {
 	slot = 5
@@ -3124,23 +3294,6 @@ ME_Bengali_Missions_5 = {
 			}
 			custom_tooltip = DEFENCE_OF_DELTA_TT
 			set_country_flag = defence_of_delta_decision
-		}
-	}
-}
-
-ME_Bengali_Missions_5 = {
-	slot = 5
-	generic = no
-	ai = yes
-	has_country_shield = yes
-	potential = {
-		tag = BNG
-		OR = {
-			NOT = { has_dlc = "Dharma" }
-			AND = {
-				has_dlc = "Dharma"
-				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
-			}
 		}
 	}
 	bng_royal_port = {
@@ -3256,4 +3409,296 @@ ME_Bengali_Missions_5 = {
 			}
 		}	
 	}
+	bng_renovate_ekdala = {
+		icon = mission_junnagadh_fort
+		required_missions = { bng_romantic_general }
+		position = 12
+		trigger = {
+			563 = { owned_by = ROOT base_manpower = 8 }
+			num_of_owned_provinces_with = {
+				value = 4
+				base_manpower = 6
+				NOT = { province_id = 563 }
+			}
+		}
+		effect = {
+			every_owned_province = {
+				limit = { base_manpower = 6 NOT = { province_id = 563 } }
+				add_province_modifier = {
+					name = bng_mud_walls_modifier
+					duration = 18250
+				}
+			}
+			563 = {
+				add_permanent_province_modifier = {
+					name = bng_ekdala_fort_modifier
+					duration = -1
+				}
+			}
+		}	
+	}
+	bng_consolidate_bengal = {
+		icon = mission_bengal_campaign
+		required_missions = { bng_renovate_ekdala }
+		position = 13
+		trigger = {
+			all_province = {
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { culture = bengali }
+				}
+			}
+			NOT = {
+				any_country = {
+					capital_scope = { region = bengal_region }
+					army_size = ROOT
+				}
+			}
+			1343 = { has_most_province_trade_power = ROOT }
+		}
+		effect = {
+			bengal_region = {
+				add_permanent_claim = ROOT
+			}
+			add_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+		}	
+	}
+	bng_islands_of_indian_ocean = {
+		icon = indian_dominance
+		required_missions = { }
+		position = 14
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				has_shipyard_building_trigger = yes
+			}
+			navy_size = 25
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_mir_bahar_exploration_modifier
+				duration = 18250
+			}
+			create_explorer = { tradition = 60 }
+			1340 = {
+				every_trade_node_member_province = {
+					limit = { is_island = yes }
+					add_permanent_claim = ROOT
+				}
+			}
+		}	
+	}
+	bng_grand_bengali_shipyards = {
+		icon = mission_grand_bengali_shipyards
+		required_missions = { bng_islands_of_indian_ocean }
+		position = 16
+		trigger = {
+			has_flagship = yes
+			num_of_allies = 2
+			navy_size = 100
+			grand_shipyard = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = bng_nouh_bahini_modifier
+				duration = -1
+			}
+			custom_tooltip = BNG_GAIN_SHIPS_PER_ALLIANCE_TT
+			add_dip_power = 100
+			hidden_effect = {
+				if = {
+					limit = { num_of_allies = 1 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 2 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 3 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 4 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 5 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 6 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 7 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 8 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 9 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+				else_if = {
+					limit = { num_of_allies = 10 }
+					random_owned_province = {
+						limit = { has_port = yes }
+						ROOT = {
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+							heavy_ship = PREV
+						}
+					}
+				}
+			}
+		}	
+	} 
 }
