@@ -414,7 +414,7 @@ PLB_missions_3_1 = {
 	has_country_shield = yes
 	
 	PLB_privateer_problem = {
-		icon = mission_riches_of_golconda
+		icon = mission_to_the_south_china_sea
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
@@ -662,14 +662,44 @@ PLB_missions_3_pirate = {
 	has_country_shield = yes
 	
 	PLB_plunder_china = {
-		icon = mission_riches_of_golconda
+		icon = mission_open_up_china
 		required_missions = { PLB_privateer_problem }
 		position = 3
 		provinces_to_highlight = {
+			OR = {
+				region = north_china_region
+				region = south_china_region
+			}
+			has_port = yes
+			NOT = { owned_by = ROOT }
+			NOT = { has_province_modifier = slaves_raided }
 		}
 		trigger = {
+			calc_true_if = {
+				south_china_region = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						has_province_modifier = slaves_raided
+					}
+				}
+				north_china_region = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						has_province_modifier = slaves_raided
+					}
+				}
+				amount = 25
+			}
 		}
 		effect = {
+			add_power_projection = {
+				type = mission_rewards_power_projection
+				amount = 40
+			}
+			
+			add_years_of_income = 0.5
 		}
 	}
 }
@@ -752,14 +782,67 @@ PLB_missions_4_non_pirate = {
 	has_country_shield = yes
 	
 	PLB_a_new_spice_route = {
-		icon = mission_riches_of_golconda
+		icon = mission_dominate_persian_gulf
 		required_missions = { PLB_privateer_problem PLB_ryukyu }
 		position = 2
 		provinces_to_highlight = {
+			OR = {
+				province_id = 684
+				province_id = 1371
+				province_id = 4233
+				province_id = 1376
+			}
+			OR = {
+				NOT = { has_merchant = ROOT }
+				NOT = { 
+					trade_share = {
+						share = 10
+						country = ROOT
+					}
+				}
+			}
 		}
 		trigger = {
+			calc_true_if = {
+				684 = {
+					has_merchant = ROOT
+					trade_share = {
+						share = 10
+						country = ROOT
+					}
+				}
+				1371 = {
+					has_merchant = ROOT
+					trade_share = {
+						share = 10
+						country = ROOT
+					}
+				}
+				4233 = {
+					has_merchant = ROOT
+					trade_share = {
+						share = 10
+						country = ROOT
+					}
+				}
+				1376 = {
+					has_merchant = ROOT
+					trade_share = {
+						share = 10
+						country = ROOT
+					}
+				}
+				num_of_light_ship = 20
+				value = 2
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PLB_loopholes
+				duration = 10950
+			}
+			add_dip_power = 50
+			#add_years_of_trade_income = { years = 2 }
 		}
 	}
 	
@@ -967,7 +1050,7 @@ PLB_missions_4_pirate = {
 	has_country_shield = yes
 	
 	PLB_wokou_piracy = {
-		icon = mission_riches_of_golconda
+		icon = mission_to_the_south_china_sea
 		required_missions = { PLB_privateer_problem PLB_ryukyu }
 		position = 2
 		provinces_to_highlight = {
@@ -992,7 +1075,7 @@ PLB_missions_4_pirate = {
 			custom_tooltip = PLB_ryukyu_might_become_a_pirate
 			tooltip = {
 				RYU = {
-					country_event = { id = ME_Palembang_Events.1 }
+					country_event = { id = ME_Ryukyu_Events.2 }
 				}
 				add_dip_power = 100
 			}
@@ -1012,7 +1095,7 @@ PLB_missions_4_pirate = {
 						alliance_with = RYU
 					}
 					RYU = {
-						country_event = { id = ME_Palembang_Events.1 }
+						country_event = { id = ME_Ryukyu_Events.2 }
 					}
 					add_dip_power = 100
 				}
@@ -1029,46 +1112,72 @@ PLB_missions_4_pirate = {
 		}
 	}
 	
-	PLB_a_pirate_haven = {
-		icon = mission_riches_of_golconda
-		required_missions = { PLB_hub_of_piracy }
-		position = 4
-		provinces_to_highlight = {
-			is_capital_of = ROOT
-		}
-		trigger = {
-			capital_scope = {
-				has_shipyard_building_trigger = yes
-				has_dock_building_trigger = yes
-				development = 25
-			}
-			num_of_total_ports = 10
-		}
-		effect = {
-		}
-	}
-	
 	PLB_naval_superiority = {
-		icon = mission_riches_of_golconda
+		icon = mission_dharma_mission_arabian_trade
 		required_missions = { }
 		position = 5
 		provinces_to_highlight = {
+			OR = {
+				owned_by = MLC
+				owned_by = MAJ
+			}
+			owner = { navy_size = ROOT }
 		}
 		trigger = {
+			navy_size = MLC
+			navy_size = MAJ
 		}
 		effect = {
+			add_country_modifier = {
+				name = PLB_unrestricted_raiding
+				duration = 10950
+			}
+			
+			create_admiral = { tradition = 40 }
+			add_dip_power = 50
 		}
 	}
 	
 	PLB_raid_foreign_ships = {
-		icon = mission_riches_of_golconda
+		icon = mission_follow_the_brahmaputra
 		required_missions = { PLB_naval_superiority }
 		position = 6
 		provinces_to_highlight = {
+			has_merchant = ROOT
 		}
 		trigger = {
+			#privateer trigger
+			any_active_trade_node = {
+				has_privateer_share_in_trade_node = {
+					who = ROOT
+					share = 0.25
+				}
+			}
 		}
 		effect = {
+			add_country_modifier = {
+				name = PLB_issue_shipping_permits
+				duration = 10950
+			}
+			add_years_of_income = 1
+			custom_tooltip = BEI_if_we_have_galleys
+			tooltip = {
+				add_country_modifier = {
+					name = PLB_supreme_control
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_galley = 20
+					}
+					add_country_modifier = {
+						name = PLB_supreme_control
+						duration = 7300
+					}
+				}
+			}
 		}
 	}
 }
@@ -1192,10 +1301,72 @@ PLB_missions_5_non_pirate = {
 		required_missions = { PLB_restore_palembang }
 		position = 5
 		provinces_to_highlight = {
+			province_id = 622
 		}
 		trigger = {
+			owns = 622
+			OR = {
+				home_trade_node = {
+					trade_share = {
+						country = ROOT
+						share = 15
+					}
+				}
+				gold = 1
+			}
 		}
 		effect = {
+			custom_tooltip = PLB_if_completed_by_trade_share
+			tooltip = {
+				622 = {
+					add_province_modifier = {
+						name = PLB_lembang
+						duration = -1
+					}
+				}
+			}
+			custom_tooltip = PLB_if_completed_by_gold
+			tooltip = {
+				622 = {
+					add_province_modifier = {
+						name = PLB_pelimbang
+						duration = -1
+					}
+				}
+			}
+			
+			add_stability_or_adm_power = yes
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						home_trade_node = {
+							trade_share = {
+								country = ROOT
+								share = 15
+							}
+						}
+					}
+					622 = {
+						add_province_modifier = {
+							name = PLB_lembang
+							duration = -1
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						gold = 1
+					}
+					622 = {
+						add_province_modifier = {
+							name = PLB_pelimbang
+							duration = -1
+						}
+					}
+				}
+				else = { }
+			}
 		}
 	}
 	
@@ -1242,7 +1413,7 @@ PLB_missions_5_pirate = {
 	has_country_shield = yes
 	
 	PLB_hub_of_piracy = {
-		icon = mission_riches_of_golconda
+		icon = mission_growth_of_surat
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
@@ -1266,27 +1437,34 @@ PLB_missions_5_pirate = {
 		}
 	}
 	
-	PLB_privateering = {
-		icon = mission_riches_of_golconda
+	PLB_a_pirate_haven = {
+		icon = mission_konkani_pirates
 		required_missions = { PLB_hub_of_piracy }
 		position = 4
 		provinces_to_highlight = {
+			is_capital_of = ROOT
 		}
 		trigger = {
-			#privateer trigger
-			any_active_trade_node = {
-				has_privateer_share_in_trade_node = {
-					who = ROOT
-					share = 10
-				}
+			capital_scope = {
+				has_shipyard_building_trigger = yes
+				has_dock_building_trigger = yes
+				development = 25
 			}
+			num_of_total_ports = 10
 		}
 		effect = {
+			capital_scope = {
+				add_province_modifier = {
+					name = PLB_pirate
+					duration = -1
+				}
+				add_or_upgrade_dock_building = yes
+			}
 		}
 	}
 	
 	PLB_plunder	= {
-		icon = mission_riches_of_golconda
+		icon = mission_dominate_gujarati_trade
 		required_missions = { PLB_naval_superiority }
 		position = 6
 		provinces_to_highlight = {
@@ -1295,30 +1473,40 @@ PLB_missions_5_pirate = {
 			calc_true_if = {
 				capital_scope = {
 					region_for_scope_province = {
-						has_province_modifier = slaves_raided 
+						OR = {
+							has_province_modifier = slaves_raided 
+							owned_by = ROOT
+						}
 					}
 				}
 				amount = 15
 			}
 		}
 		effect = {
-			add_years_of_income = 1
+			add_republican_tradition = 5
 			custom_tooltip = PLB_every_province_within_certain_distance
+			hidden_effect = {
+				capital_scope = {
+					region = {
+						remove_province_modifier = slaves_raided
+					}
+				}
+			}
 		}
 	}
 	
 	PLB_pirate_king = {
-		icon = mission_riches_of_golconda
+		icon = mission_end_of_the_shan_domination
 		required_missions = { PLB_raid_foreign_ships PLB_plunder }
 		position = 7
 		provinces_to_highlight = {
 		}
 		trigger = {
 			calc_true_if = {
-				all_trade_node_active_trade_node = {
+				all_trade_node = {
 					has_privateer_share_in_trade_node = {
 						who = ROOT
-						share = 50
+						share = 0.50
 					}
 				}
 				amount = 3
@@ -1326,6 +1514,10 @@ PLB_missions_5_pirate = {
 			treasury = 300
 		}
 		effect = {
+			add_country_modifier = {
+				name = PLB_king_of_all_pirates
+				duration = -1
+			}
 		}
 	}
 }
