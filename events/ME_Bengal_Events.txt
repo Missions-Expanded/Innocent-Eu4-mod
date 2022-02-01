@@ -466,7 +466,7 @@ country_event = { #Dominion Over Burma
 	is_triggered_only = yes
 
 	option = {
-		name = ME_Bengal_Events.22.opt1
+		name = ME_Bengal_Events.23.opt1
 		burma_region = {
 			add_province_modifier = {
 				name = bng_bengali_overlords_modifier
@@ -480,75 +480,242 @@ country_event = { #Dominion Over Burma
 		add_dip_power = -100
 		add_adm_power = -100
 		add_mil_power = -100
-		every_province = {
-			limit = {
-				country_or_non_sovereign_subject_holds = ROOT
-				OR = {
-					province_id = 2402
-					province_id = 579
+		hidden_effect = {
+			every_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						province_id = 2402
+						province_id = 579
+					}
 				}
+				remove_core = owner
+				cede_province = ARK
+				add_core = ARK
 			}
-			remove_core = owner
-			cede_province = ARK
-			add_core = ARK
-		}
-		create_subject = {
-			subject = ARK
-			subject_type = vassal
-		}
-		ARK = { add_government_reform = pirate_republic_reform }
-		every_province = {
-			limit = {
-				country_or_non_sovereign_subject_holds = ROOT
-				OR = {
-					area = central_burma_area
-					area = upper_burma_area
-					area = chindwin_area
-					area = kachin_area
-					area = shan_hill_area
-					area = karenni_area
+			create_subject = {
+				subject = ARK
+				subject_type = vassal
+			}
+			ARK = { add_government_reform = pirate_republic_reform }
+			TAU = { override_country_name = MRAUKU }
+			every_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						area = central_burma_area
+						area = upper_burma_area
+						area = chindwin_area
+						area = kachin_area
+						area = shan_hill_area
+						area = karenni_area
+					}
 				}
+				remove_core = owner
+				cede_province = TAU
+				add_core = TAU
 			}
-			remove_core = owner
-			cede_province = TAU
-			add_core = TAU
-		}
-		create_subject = {
-			subject = TAU
-			subject_type = vassal
-		}
-		TAU = { override_country_name = BURMA }
-		every_province = {
-			limit = {
-				country_or_non_sovereign_subject_holds = ROOT
-				OR = {
-					province_id = 1815
-					province_id = 4399
-					province_id = 590
-					province_id = 2403
-					province_id = 586
+			create_subject = {
+				subject = TAU
+				subject_type = vassal
+			}
+			TAU = { override_country_name = BURMA }
+			every_province = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+					OR = {
+						province_id = 1815
+						province_id = 4399
+						province_id = 590
+						province_id = 2403
+						province_id = 586
+					}
 				}
+				remove_core = owner
+				cede_province = PEG
+				add_core = PEG
 			}
-			remove_core = owner
-			cede_province = PEG
-			add_core = PEG
+			create_subject = {
+				subject = PEG
+				subject_type = vassal
+			}
+			PEG = { add_government_reform = eastern_plutocracy_reform  override_country_name = HANTHAWADDY }
 		}
-		create_subject = {
-			subject = PEG
-			subject_type = vassal
-		}
-		PEG = { add_government_reform = eastern_plutocracy_reform  override_country_name = HANTHAWADDY }
 		custom_tooltip = BNG_ARAKAN_VASSAL_TT
 		custom_tooltip = BNG_BURMA_VASSAL_TT
 		custom_tooltip = BNG_PEGU_VASSAL_TT
 		set_country_flag = bng_arakan_bonuses
 		set_country_flag = bng_burma_bonuses
 		set_country_flag = bng_pegu_bonuses
+		set_country_flag = bng_start_burma_vassal_stuff
 		every_subject_country = { add_liberty_desire = -20 }
 		add_country_modifier = {
 			name = bng_dominion_over_burma_modifier
 			duration = -1
 		}
+	}
+}
+country_event = { #The Ayuddhya Tribute
+	id = ME_Bengal_Events.24
+	title = ME_Bengal_Events.24.t
+	desc = ME_Bengal_Events.24.d
+	picture = TRADEGOODS_eventPicture
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	mean_time_to_happen = {
+		months = 240
+		modifier = {
+			factor = 0.8
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 15
+				OR = {
+					culture = central_thai
+					culture = northern_thai
+				}
+			}
+		}
+
+		modifier = {
+			factor = 0.5
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					culture = central_thai
+					culture = northern_thai
+				}
+				average_autonomy_above_min = 25
+			}
+		}
+	}
+
+	trigger = {
+		has_country_flag = bng_start_burma_vassal_stuff
+		num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+			value = 10
+			OR = {
+				culture = central_thai
+				culture = northern_thai
+			}
+		}
+		NOT = { exists = SIA }
+		NOT = { exists = AYU }
+	}
+
+	option = {
+		name = ME_Bengal_Events.24.opt1
+		add_adm_power = 100
+		add_prestige = 15
+	}
+	option = {
+		name = ME_Bengal_Events.24.opt2
+		hidden_effect = {
+			every_province = {
+				limit = { 
+					OR = {
+						culture = central_thai
+						culture = northern_thai
+					}
+				}
+				add_core = AYU
+			}
+			every_province = {
+				limit = { 
+					OR = {
+						area = khorat_area
+						area = sukhothai_area
+						area = northern_thai_area
+						area = north_tenasserim_area 
+						area = tenasserim_area
+					}
+				}
+				add_permanent_claim = AYU
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						is_core = AYU
+						is_claim = AYU
+					}
+				}
+				remove_core = owner
+				cede_province = AYU
+				add_core = AYU
+			}
+			set_country_flag = bng_thailand_bonuses
+		}
+		create_subject = {
+			subject = AYU
+			subject_type = vassal
+		}
+		AYU = {  
+			define_ruler = {
+				adm = 4
+				dip = 5
+				mil = 2
+				fixed = yes
+				name = "Narai"
+				dynasty = "Prasat Thong"
+				male = yes
+			}
+			add_liberty_desire = -20
+		}
+		custom_tooltip = BNG_AYUTTHAYAN_VASSAL_TT
+	}
+	option = {
+		name = ME_Bengal_Events.24.opt3
+		hidden_effect = {
+			every_province = {
+				limit = { 
+					OR = {
+						culture = central_thai
+						culture = northern_thai
+					}
+				}
+				add_core = SIA
+			}
+			every_province = {
+				limit = { 
+					OR = {
+						area = khorat_area
+						area = sukhothai_area
+						area = northern_thai_area
+						area = north_tenasserim_area 
+						area = tenasserim_area
+					}
+				}
+				add_permanent_claim = SIA
+			}
+			every_owned_province = {
+				limit = {
+					OR = {
+						is_core = SIA
+						is_claim = SIA
+					}
+				}
+				remove_core = owner
+				cede_province = SIA
+				add_core = SIA
+			}
+			set_country_flag = bng_thailand_bonuses
+		}
+		create_subject = {
+			subject = SIA
+			subject_type = vassal
+		}
+		SIA = {  
+			define_ruler = {
+				adm = 4
+				dip = 2
+				mil = 5
+				fixed = yes
+				name = "Phetracha"
+				dynasty = "Ban Phlu Luang"
+				male = yes
+			}
+			add_liberty_desire = -20
+		}
+		custom_tooltip = BNG_SIAM_VASSAL_TT
 	}
 }
 ### BAGERHAT EVENTS ###
