@@ -17,7 +17,7 @@ PHI_missions_1 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	PHI_phil_top = {
 		icon = mission_rajendras_ambition
 		required_missions = { PHI_rally_the_timawa }
@@ -67,7 +67,7 @@ PHI_missions_1 = {
 			}
 		}
 	}
-	
+
 	PHI_taiwan = {
 		icon = mission_onward_to_gaur
 		required_missions = { PHI_phil_top }
@@ -79,7 +79,7 @@ PHI_missions_1 = {
 		effect = {
 		}
 	}
-	
+
 	PHI_java = {
 		icon = mission_protect_jain_communities
 		required_missions = { PHI_borneo }
@@ -103,7 +103,7 @@ PHI_missions_1 = {
 			MSA_claims_sumatra = yes
 		}
 	}
-	
+
 	PHI_sumatra = {
 		icon = mission_entrepot_of_india
 		required_missions = { PHI_java PHI_malay_peninsula }
@@ -143,7 +143,7 @@ PHI_missions_2 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	PHI_rally_the_timawa = {
 		icon = mission_upper_burma_campaign
 		required_missions = { }
@@ -176,7 +176,7 @@ PHI_missions_2 = {
 			MSA_claims_philippines = yes
 		}
 	}
-	
+
 	PHI_phil_mid = {
 		icon = mission_las_islas_filipinas
 		required_missions = { PHI_rally_the_timawa }
@@ -207,7 +207,7 @@ PHI_missions_2 = {
 			}
 		}
 	}
-	
+
 	PHI_borneo = {
 		icon = me_mission_brunei_flag
 		required_missions = { PHI_phil_mid PHI_phil_bot PHI_phil_top }
@@ -229,7 +229,7 @@ PHI_missions_2 = {
 			MSA_claims_java = yes
 		}
 	}
-	
+
 	PHI_malay_peninsula = {
 		icon = me_mission_sack_malacca
 		required_missions = { PHI_borneo }
@@ -238,7 +238,7 @@ PHI_missions_2 = {
 			MSA_is_in_malaya = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
-		trigger = {	
+		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				MSA_is_in_malaya = yes
 				value = 8
@@ -279,7 +279,7 @@ PHI_missions_3 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	PHI_phil_bot = {
 		icon = mission_restore_rule_over_mysore
 		required_missions = { PHI_rally_the_timawa }
@@ -329,7 +329,7 @@ PHI_missions_3 = {
 			}
 		}
 	}
-	
+
 	PHI_sulawesi = {
 		icon = mission_secure_khandesh
 		required_missions = { PHI_borneo }
@@ -348,7 +348,7 @@ PHI_missions_3 = {
 			MSA_sulawesi_reward = yes
 		}
 	}
-	
+
 	PHI_alam_melayu = {
 		icon = mission_sail_to_the_east_indies
 		required_missions = { PHI_sumatra PHI_sulawesi }
@@ -384,30 +384,74 @@ PHI_missions_4 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	PHI_envoys_to_china = {
 		icon = mission_open_up_china
 		required_missions = { }
 		position = 1
 		provinces_to_highlight = {
-			owned_by = event_target:EmperorOfChina
+			superregion = china_superregion
+			OR = {
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					all_countries_including_self = {
+						is_emperor_of_china = no
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { exists = MNG }
+				}
+			}
 		}
 		trigger = {
-			event_target:EmperorOfChina = {
-				has_opinion = {
-					who = ROOT
-					value = 50
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					is_emperor_of_china = yes
+					event_target:EmperorOfChina = {
+						has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+					AND = {
+						all_countries_including_self = {
+							is_emperor_of_china = no
+						}
+						china_superregion = {
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					MNG = {
+						has_opinion = {
+							who = ROOT
+							value = 50
+						}
+					}
+					AND = {
+						NOT = { exists = MNG }
+						china_superregion = {
+							owned_by = ROOT
+						}
+					}
 				}
 			}
 		}
 		effect = {
 			add_dip_power = 25
-			
+
 			add_country_modifier = {
 				name = PHI_supported_by_the_empire
 				duration = 7300
 			}
-		
+
 			custom_tooltip = MKS_if_we_are_the_first
 			tooltip = {
 				add_country_modifier = {
@@ -429,13 +473,29 @@ PHI_missions_4 = {
 			}
 		}
 	}
-	
+
 	PHI_welcome_the_expedition = {
 		icon = mission_the_chola_campaigns
 		required_missions = { PHI_envoys_to_china }
 		position = 2
 		provinces_to_highlight = {
-			owned_by = event_target:EmperorOfChina
+			is_capital_of = ROOT
+			NOT = { province_trade_power = 50 }
+			OR = {
+				NOT = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				all_countries_including_self = {
+					is_emperor_of_china = no
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_insulting_flag }
+					NOT = { has_country_flag = MSA_in_defiance_flag }
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_swayed_flag }
+					NOT = { has_country_flag = MSA_absolutely_loyal_flag }
+				}
+			}
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -444,6 +504,11 @@ PHI_missions_4 = {
 			}
 			if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
 					OR = {
 						has_country_flag = MSA_insulting_flag
 						has_country_flag = MSA_in_defiance_flag
@@ -455,6 +520,11 @@ PHI_missions_4 = {
 			}
 			else_if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
 					OR = {
 						has_country_flag = MSA_swayed_flag
 						has_country_flag = MSA_absolutely_loyal_flag
@@ -463,7 +533,7 @@ PHI_missions_4 = {
 				event_target:EmperorOfChina = {
 					has_opinion = {
 						who = ROOT
-						value = 150
+						value = 100
 					}
 				}
 			}
@@ -475,7 +545,7 @@ PHI_missions_4 = {
 		}
 		effect = {
 			custom_tooltip = MLC_if_we_were_swayed
-			tooltip = {	
+			tooltip = {
 				add_country_modifier = {
 					name = MLC_diplomats
 					duration = 9125
@@ -535,7 +605,7 @@ PHI_missions_4 = {
 			}
 		}
 	}
-	
+
 	PHI_manigoos = {
 		icon = mission_bankers_of_cambay
 		required_missions = { PHI_grow_the_barangay }
@@ -576,7 +646,7 @@ PHI_missions_4 = {
 			}
 		}
 	}
-	
+
 	PHI_maritime_traditions = {
 		icon = mission_grand_bengali_shipyards
 		required_missions = { }
@@ -597,7 +667,7 @@ PHI_missions_4 = {
 			}
 		}
 	}
-	
+
 	PHI_philippine_goods = {
 		icon = mission_dominate_trade_in_bengal
 		required_missions = { PHI_maritime_traditions }
@@ -622,7 +692,7 @@ PHI_missions_4 = {
 				add_or_upgrade_trade_building = yes
 				add_or_upgrade_shipyard_building = yes
 			}
-			
+
 			custom_tooltip = MSA_space_lol
 			custom_tooltip = MSA_space_lol
 			custom_tooltip = PHI_10_production
@@ -663,7 +733,7 @@ PHI_missions_5 = {
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
+
 	PHI_grow_the_barangay = {
 		icon = mission_shipyards_of_gujarat
 		required_missions = { }
@@ -675,14 +745,14 @@ PHI_missions_5 = {
 		}
 		effect = {
 			add_adm_power = 50
-			
+
 			add_estate_loyalty = {
 				estate = estate_nobles
 				loyalty = 5
 			}
 		}
 	}
-	
+
 	PHI_datus = {
 		icon = mission_the_tamil_trade_guilds
 		required_missions = { PHI_grow_the_barangay }

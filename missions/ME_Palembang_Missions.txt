@@ -16,7 +16,7 @@ PLB_missions_1 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	PLB_tarumanagara = {
 		icon = mnd_maj_sunda_relations
 		required_missions = { PLB_legacy_of_srivijaya }
@@ -24,16 +24,28 @@ PLB_missions_1 = {
 		provinces_to_highlight = {
 			OR = {
 				area = central_java_area
-				area = west_java_area 
+				area = west_java_area
 				area = banten_area
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							area = central_java_area
+							area = west_java_area
+							area = banten_area
+						}
+						value = 6
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				OR = {
 					area = central_java_area
-					area = west_java_area 
+					area = west_java_area
 					area = banten_area
 				}
 				value = 6
@@ -60,7 +72,7 @@ PLB_missions_1 = {
             }
 		}
 	}
-	
+
 	PLB_majapahit_kneels = {
 		icon = mission_mnd_maj_end_disaster
 		required_missions = { PLB_tarumanagara }
@@ -68,6 +80,14 @@ PLB_missions_1 = {
 		provinces_to_highlight = {
 			MSA_is_in_java = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_java = yes
+						value = 14
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -104,7 +124,7 @@ PLB_missions_1 = {
             }
 		}
 	}
-	
+
 	PLB_sri_tri_buana = {
 		icon = me_mission_malay_leader
 		required_missions = { PLB_majapahit_kneels PLB_langkasuka }
@@ -214,7 +234,7 @@ PLB_missions_1 = {
 			}
 		}
 	}
-	
+
 	PLB_eastern_peripheries = {
 		icon = mission_mnd_maj_cloves
 		required_missions = { PLB_sri_tri_buana }
@@ -222,6 +242,14 @@ PLB_missions_1 = {
 		provinces_to_highlight = {
 			MSA_is_in_sulawesi = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_sulawesi = yes
+						value = 5
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -230,7 +258,7 @@ PLB_missions_1 = {
 			}
 		}
 		effect = {
-			add_country_modifier = { 
+			add_country_modifier = {
 				name = PLB_the_spice_does_flow
 				duration = 7300
 			}
@@ -264,13 +292,11 @@ PLB_missions_2 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	PLB_legacy_of_srivijaya = {
 		icon = mission_mnd_khm_resurgence
 		required_missions = { PLB_privateer_problem }
 		position = 2
-		provinces_to_highlight = {
-		}
 		trigger = {
 			OR = {
 				is_at_war = yes
@@ -345,14 +371,30 @@ PLB_missions_2 = {
             }
 		}
 	}
-	
+
 	PLB_malayu = {
 		icon = me_mission_malay_ruler
 		required_missions = { PLB_legacy_of_srivijaya }
 		position = 4
 		provinces_to_highlight = {
-			MSA_is_in_sumatra = yes
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			OR = {
+				AND = {
+					province_id = 2677
+					NOT = { owned_by = ROOT }
+				}
+				AND = {
+					MSA_is_in_sumatra = yes
+					NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					ROOT = {
+						NOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								MSA_is_in_sumatra = yes
+								value = 18
+							}
+						}
+					}
+				}
+			}
 		}
 		trigger = {
 			2677 = {
@@ -371,13 +413,22 @@ PLB_missions_2 = {
 			MSA_claims_malaya = yes
 		}
 	}
-	
+
 	PLB_langkasuka = {
 		icon = me_mission_sack_malacca
 		required_missions = { PLB_malayu }
 		position = 6
 		provinces_to_highlight = {
 			MSA_is_in_malaya = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_malaya = yes
+						value = 10
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -412,13 +463,11 @@ PLB_missions_3_1 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	PLB_privateer_problem = {
 		icon = mission_to_the_south_china_sea
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-		}
 		trigger = {
 			if = {
 				limit = {
@@ -510,19 +559,63 @@ PLB_missions_3_non_pirate = {
 		NOT = { has_country_flag = PLB_pirate }
 	}
 	has_country_shield = yes
-	
+
 	PLB_ming = {
 		icon = mission_open_up_china
 		required_missions = { PLB_privateer_problem }
 		position = 2
 		provinces_to_highlight = {
-			owned_by = event_target:EmperorOfChina
+			superregion = china_superregion
+			OR = {
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					all_countries_including_self = {
+						is_emperor_of_china = no
+					}
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					NOT = { exists = MNG }
+				}
+			}
 		}
 		trigger = {
-			event_target:EmperorOfChina = {
-				has_opinion = {
-					who = ROOT
-					value = 75
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				OR = {
+					is_emperor_of_china = yes
+					event_target:EmperorOfChina = {
+						has_opinion = {
+							who = ROOT
+							value = 75
+						}
+					}
+					AND = {
+						all_countries_including_self = {
+							is_emperor_of_china = no
+						}
+						china_superregion = {
+							owned_by = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					MNG = {
+						has_opinion = {
+							who = ROOT
+							value = 75
+						}
+					}
+					AND = {
+						NOT = { exists = MNG }
+						china_superregion = {
+							owned_by = ROOT
+						}
+					}
 				}
 			}
 		}
@@ -533,13 +626,29 @@ PLB_missions_3_non_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_expedition = {
 		icon = mission_trade_with_cathay
 		required_missions = { PLB_ming }
 		position = 3
 		provinces_to_highlight = {
-			owned_by = event_target:EmperorOfChina
+			is_capital_of = ROOT
+			NOT = { province_trade_power = 50 }
+			OR = {
+				NOT = { has_dlc = "Mandate of Heaven" }
+				is_emperor_of_china = yes
+				all_countries_including_self = {
+					is_emperor_of_china = no
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_insulting_flag }
+					NOT = { has_country_flag = MSA_in_defiance_flag }
+				}
+				AND = {
+					NOT = { has_country_flag = MSA_swayed_flag }
+					NOT = { has_country_flag = MSA_absolutely_loyal_flag }
+				}
+			}
 		}
 		trigger = {
 			custom_trigger_tooltip = {
@@ -548,6 +657,11 @@ PLB_missions_3_non_pirate = {
 			}
 			if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
 					OR = {
 						has_country_flag = MSA_insulting_flag
 						has_country_flag = MSA_in_defiance_flag
@@ -559,6 +673,11 @@ PLB_missions_3_non_pirate = {
 			}
 			else_if = {
 				limit = {
+					has_dlc = "Mandate of Heaven"
+					is_emperor_of_china = no
+					any_country = {
+						is_emperor_of_china = yes
+					}
 					OR = {
 						has_country_flag = MSA_swayed_flag
 						has_country_flag = MSA_absolutely_loyal_flag
@@ -567,7 +686,7 @@ PLB_missions_3_non_pirate = {
 				event_target:EmperorOfChina = {
 					has_opinion = {
 						who = ROOT
-						value = 150
+						value = 100
 					}
 				}
 			}
@@ -579,7 +698,7 @@ PLB_missions_3_non_pirate = {
 		}
 		effect = {
 			custom_tooltip = MLC_if_we_were_swayed
-			tooltip = {	
+			tooltip = {
 				add_country_modifier = {
 					name = MLC_diplomats
 					duration = 9125
@@ -660,7 +779,7 @@ PLB_missions_3_pirate = {
 		has_country_flag = PLB_pirate
 	}
 	has_country_shield = yes
-	
+
 	PLB_plunder_china = {
 		icon = mission_open_up_china
 		required_missions = { PLB_privateer_problem }
@@ -676,15 +795,11 @@ PLB_missions_3_pirate = {
 		}
 		trigger = {
 			calc_true_if = {
-				south_china_region = {
-					type = all
+				all_province = {
 					OR = {
-						owned_by = ROOT
-						has_province_modifier = slaves_raided
+						region = south_china_region
+						region = north_china_region
 					}
-				}
-				north_china_region = {
-					type = all
 					OR = {
 						owned_by = ROOT
 						has_province_modifier = slaves_raided
@@ -698,7 +813,6 @@ PLB_missions_3_pirate = {
 				type = mission_rewards_power_projection
 				amount = 40
 			}
-			
 			add_years_of_income = 0.5
 		}
 	}
@@ -708,7 +822,7 @@ PLB_missions_3_2 = {
 	slot = 3
 	generic = no
 	ai = yes
-	potential = {	
+	potential = {
 		OR = {
 			NOT = { has_dlc = "Leviathan" }
 			has_country_flag = use_missions_expanded_missions_instead_of_paradox
@@ -722,7 +836,7 @@ PLB_missions_3_2 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	PLB_seas_never_conquered = {
 		icon = mission_mnd_maj_rein_in_brunei
 		required_missions = { PLB_malayu }
@@ -730,6 +844,14 @@ PLB_missions_3_2 = {
 		provinces_to_highlight = {
 			MSA_is_in_borneo = yes
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			ROOT = {
+				NOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						MSA_is_in_borneo = yes
+						value = 12
+					}
+				}
+			}
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
@@ -744,7 +866,7 @@ PLB_missions_3_2 = {
 			MSA_borneo_reward = yes
 		}
 	}
-	
+
 	PLB_srivijaya = {
 		icon = mission_sail_to_the_east_indies
 		required_missions = { PLB_seas_never_conquered PLB_langkasuka }
@@ -780,28 +902,11 @@ PLB_missions_4_non_pirate = {
 		NOT = { has_country_flag = PLB_pirate }
 	}
 	has_country_shield = yes
-	
+
 	PLB_a_new_spice_route = {
 		icon = mission_dominate_persian_gulf
 		required_missions = { PLB_privateer_problem PLB_ryukyu }
 		position = 2
-		provinces_to_highlight = {
-			OR = {
-				province_id = 684
-				province_id = 1371
-				province_id = 4233
-				province_id = 1376
-			}
-			OR = {
-				NOT = { has_merchant = ROOT }
-				NOT = { 
-					trade_share = {
-						share = 10
-						country = ROOT
-					}
-				}
-			}
-		}
 		trigger = {
 			calc_true_if = {
 				684 = {
@@ -845,7 +950,7 @@ PLB_missions_4_non_pirate = {
 			#add_years_of_trade_income = { years = 2 }
 		}
 	}
-	
+
 	PLB_peppers_of_lampung = {
 		icon = mission_rb_colonise_spice_islands
 		required_missions = { PLB_restore_palembang }
@@ -875,13 +980,11 @@ PLB_missions_4_non_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_allying_the_natives = {
 		icon = mission_follow_the_brahmaputra
 		required_missions = { }
 		position = 5
-		provinces_to_highlight = {
-		}
 		trigger = {
 			MSA_orang_laut_trigger = yes
 		}
@@ -889,13 +992,11 @@ PLB_missions_4_non_pirate = {
 			MSA_orang_laut_effect = yes
 		}
 	}
-	
+
 	PLB_control_the_seas = {
 		icon = mission_dharma_mission_arabian_trade
 		required_missions = { PLB_allying_the_natives }
 		position = 6
-		provinces_to_highlight = {
-		}
 		trigger = {
 			home_trade_node = {
 				trade_share = {
@@ -914,64 +1015,11 @@ PLB_missions_4_non_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_trade_superiority = {
 		icon = mission_subjugate_saurashtra
 		required_missions = { PLB_control_the_seas PLB_malacca }
 		position = 7
-		provinces_to_highlight = {
-			if = {
-				limit = {
-					is_expanded_mod_active = { mod = trade_goods }
-				}
-				OR = {
-					AND = {
-						trade_goods = nutmeg
-						NOT = {
-							ROOT = {
-								trading_part = {
-									trade_goods = nutmeg
-									value = 0.25
-								}
-							}
-						}
-					}
-					AND = {
-						trade_goods = cloves
-						NOT = {
-							ROOT = {
-								trading_part = {
-									trade_goods = cloves
-									value = 0.25
-								}
-							}
-						}
-					}
-					AND = {
-						trade_goods = vanilla
-						NOT = {
-							ROOT = {
-								trading_part = {
-									trade_goods = vanilla
-									value = 0.25
-								}
-							}
-						}
-					}
-				}
-			}
-			else = {
-				trade_goods = spices
-				NOT = {
-					ROOT = {
-						trading_part = {
-							trade_goods = spices
-							value = 0.25
-						}
-					}
-				}
-			}
-		}
 		trigger = {
 			monthly_income = 15
 			capital_scope = {
@@ -1007,7 +1055,6 @@ PLB_missions_4_non_pirate = {
 			capital_scope = {
 				add_or_upgrade_trade_building = yes
 			}
-			
 			1361 = {
 				add_trade_modifier = {
 					who = ROOT
@@ -1016,7 +1063,6 @@ PLB_missions_4_non_pirate = {
 					key = MAJ_spice_trade
 				}
 			}
-			
 			1357 = {
 				add_trade_modifier = {
 					who = ROOT
@@ -1048,20 +1094,21 @@ PLB_missions_4_pirate = {
 		has_country_flag = PLB_pirate
 	}
 	has_country_shield = yes
-	
+
 	PLB_wokou_piracy = {
 		icon = mission_to_the_south_china_sea
 		required_missions = { PLB_privateer_problem PLB_ryukyu }
 		position = 2
 		provinces_to_highlight = {
-			OR = {
-				province_id = 1015
-				owned_by = RYU
-			}
+			province_id = 1015
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = RYU }
 		}
 		trigger = {
 			if = {
-				limit = { exists = RYU }
+				limit = {
+					exists = RYU
+				}
 				alliance_with = RYU
 			}
 			else = {
@@ -1111,18 +1158,11 @@ PLB_missions_4_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_naval_superiority = {
 		icon = mission_dharma_mission_arabian_trade
 		required_missions = { }
 		position = 5
-		provinces_to_highlight = {
-			OR = {
-				owned_by = MLC
-				owned_by = MAJ
-			}
-			owner = { navy_size = ROOT }
-		}
 		trigger = {
 			navy_size = MLC
 			navy_size = MAJ
@@ -1132,25 +1172,21 @@ PLB_missions_4_pirate = {
 				name = PLB_unrestricted_raiding
 				duration = 10950
 			}
-			
 			create_admiral = { tradition = 40 }
 			add_dip_power = 50
 		}
 	}
-	
+
 	PLB_raid_foreign_ships = {
 		icon = mission_follow_the_brahmaputra
 		required_missions = { PLB_naval_superiority }
 		position = 6
-		provinces_to_highlight = {
-			has_merchant = ROOT
-		}
 		trigger = {
 			#privateer trigger
 			any_active_trade_node = {
 				has_privateer_share_in_trade_node = {
 					who = ROOT
-					share = 0.25
+					share = 25
 				}
 			}
 		}
@@ -1200,20 +1236,16 @@ PLB_missions_5_1 = {
 		}
 	}
 	has_country_shield = yes
-	
+
 	PLB_ryukyu = {
 		icon = mission_the_chola_campaigns
 		required_missions = { }
 		position = 1
-		provinces_to_highlight = {
-			OR = {
-				province_id = 1015
-				owned_by = RYU
-			}
-		}
 		trigger = {
 			if = {
-				limit = { exists = RYU }
+				limit = {
+					exists = RYU
+				}
 				reverse_has_opinion = {
 					who = RYU
 					value = 75
@@ -1256,13 +1288,21 @@ PLB_missions_5_non_pirate = {
 		NOT = { has_country_flag = PLB_pirate }
 	}
 	has_country_shield = yes
-	
+
 	PLB_restore_palembang = {
 		icon = mission_defeat_jaunpur
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
 			province_id = 622
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				AND = {
+					has_dlc = "Dharma"
+					NOT = { province_has_center_of_trade_of_level = 2 }
+				}
+			}
 		}
 		trigger = {
 			if = {
@@ -1295,13 +1335,14 @@ PLB_missions_5_non_pirate = {
 			add_mercantilism = 3
 		}
 	}
-	
+
 	PLB_the_founding = {
 		icon = mission_riches_of_golconda
 		required_missions = { PLB_restore_palembang }
 		position = 5
 		provinces_to_highlight = {
 			province_id = 622
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
 			owns = 622
@@ -1334,9 +1375,7 @@ PLB_missions_5_non_pirate = {
 					}
 				}
 			}
-			
 			add_stability_or_adm_power = yes
-			
 			hidden_effect = {
 				if = {
 					limit = {
@@ -1365,22 +1404,21 @@ PLB_missions_5_non_pirate = {
 						}
 					}
 				}
-				else = { }
 			}
 		}
 	}
-	
+
 	PLB_malacca = {
 		icon = mission_look_west
 		required_missions = { PLB_allying_the_natives }
 		position = 6
-		provinces_to_highlight = {
-			owned_by = MLC
-		}
 		trigger = {
 			OR = {
 				navy_size = MLC
-				NOT = { exists = MLC }
+				AND = {
+					NOT = { exists = MLC }
+					navy_size = 15
+				}
 			}
 		}
 		effect = {
@@ -1411,13 +1449,18 @@ PLB_missions_5_pirate = {
 		has_country_flag = PLB_pirate
 	}
 	has_country_shield = yes
-	
+
 	PLB_hub_of_piracy = {
 		icon = mission_growth_of_surat
 		required_missions = { }
 		position = 3
 		provinces_to_highlight = {
 			is_capital_of = ROOT
+			OR = {
+				NOT = { num_of_times_improved_by_owner = 10 }
+				NOT = { num_of_buildings_in_province = 2 }
+				NOT = { has_shipyard_building_trigger = yes }
+			}
 		}
 		trigger = {
 			capital_scope = {
@@ -1436,21 +1479,26 @@ PLB_missions_5_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_a_pirate_haven = {
 		icon = mission_konkani_pirates
 		required_missions = { PLB_hub_of_piracy }
 		position = 4
 		provinces_to_highlight = {
 			is_capital_of = ROOT
+			OR = {
+				NOT = { has_shipyard_building_trigger = yes }
+				NOT = { has_dock_building_trigger = yes }
+				NOT = { development = 25 }
+			}
 		}
 		trigger = {
+			num_of_total_ports = 10
 			capital_scope = {
 				has_shipyard_building_trigger = yes
 				has_dock_building_trigger = yes
 				development = 25
 			}
-			num_of_total_ports = 10
 		}
 		effect = {
 			capital_scope = {
@@ -1462,19 +1510,17 @@ PLB_missions_5_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_plunder	= {
 		icon = mission_dominate_gujarati_trade
 		required_missions = { PLB_naval_superiority }
 		position = 6
-		provinces_to_highlight = {
-		}
 		trigger = {
 			calc_true_if = {
 				capital_scope = {
 					region_for_scope_province = {
 						OR = {
-							has_province_modifier = slaves_raided 
+							has_province_modifier = slaves_raided
 							owned_by = ROOT
 						}
 					}
@@ -1494,14 +1540,13 @@ PLB_missions_5_pirate = {
 			}
 		}
 	}
-	
+
 	PLB_pirate_king = {
 		icon = mission_end_the_shan_domination
 		required_missions = { PLB_raid_foreign_ships PLB_plunder }
 		position = 7
-		provinces_to_highlight = {
-		}
 		trigger = {
+			treasury = 300
 			calc_true_if = {
 				all_trade_node = {
 					has_privateer_share_in_trade_node = {
@@ -1511,7 +1556,6 @@ PLB_missions_5_pirate = {
 				}
 				amount = 3
 			}
-			treasury = 300
 		}
 		effect = {
 			add_country_modifier = {
