@@ -65,6 +65,39 @@ PHI_missions_1 = {
 				}
 				else = { add_core = ROOT }
 			}
+			
+			738 = {
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 10
+				}
+				else = { add_core = ROOT }
+			}
+			4356 = {
+				if = {
+					limit = {
+						is_empty = yes
+					}
+					add_siberian_construction = 10
+				}
+				else = { add_core = ROOT }
+			}
+			
+			custom_tooltip = PHI_phil_borneo_claim_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = PHI_phil_bot
+						mission_completed = PHI_phil_mid
+						#mission_completed = PHI_phil_top
+					}
+					MSA_claims_borneo = yes
+				}
+			}
+			
+			
 		}
 	}
 
@@ -73,10 +106,45 @@ PHI_missions_1 = {
 		required_missions = { PHI_phil_top }
 		position = 3
 		provinces_to_highlight = {
+			area = taiwan_area
+			OR = {
+				NOT = { owned_by = ROOT }
+				is_city = no
+			}
+			NOT = {
+				taiwan_area = {
+					owned_by = ROOT
+					is_city = yes
+				}
+			}
 		}
 		trigger = {
+			taiwan_area = {
+				owned_by = ROOT
+				is_city = yes
+			}
 		}
 		effect = {
+			add_dip_power = 50
+			custom_tooltip = MSA_random_province_fulfilling_the_requirements
+			tooltip = {
+				change_culture = ROOT
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			hidden_effect = {
+				random_owned_province = {
+					limit = {
+						area = taiwan_area
+						is_city = yes
+					}
+					change_culture = ROOT
+					add_base_tax = 1
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
 		}
 	}
 
@@ -119,7 +187,11 @@ PHI_missions_1 = {
 			}
 		}
 		effect = {
-			MSA_sumatra_reward = yes
+			add_country_modifier = {
+				name = PHI_maharlika_ascendant_2
+				duration = -1
+			}
+			remove_country_modifier = PHI_maharlika_ascendant
 		}
 	}
 }
@@ -205,6 +277,18 @@ PHI_missions_2 = {
 				}
 				else = { add_core = ROOT }
 			}
+			
+			custom_tooltip = PHI_phil_borneo_claim_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = PHI_phil_bot
+						#mission_completed = PHI_phil_mid
+						mission_completed = PHI_phil_top
+					}
+					MSA_claims_borneo = yes
+				}
+			}
 		}
 	}
 
@@ -223,7 +307,13 @@ PHI_missions_2 = {
 			}
 		}
 		effect = {
-			MSA_borneo_reward = yes
+			#MSA_borneo_reward = yes
+			add_navy_tradition = 10
+			add_country_modifier = {
+				name = PHI_maharlika_ascendant
+				duration = -1
+			}
+			
 			MSA_claims_sulawesi = yes
 			MSA_claims_malaya = yes
 			MSA_claims_java = yes
@@ -256,6 +346,8 @@ PHI_missions_2 = {
 					key = MKS_gateway
 				}
 			}
+			
+			MSA_claims_sumatra = yes
 		}
 	}
 }
@@ -327,6 +419,18 @@ PHI_missions_3 = {
 				}
 				else = { add_core = ROOT }
 			}
+			
+			custom_tooltip = PHI_phil_borneo_claim_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						#mission_completed = PHI_phil_bot
+						mission_completed = PHI_phil_mid
+						mission_completed = PHI_phil_top
+					}
+					MSA_claims_borneo = yes
+				}
+			}
 		}
 	}
 
@@ -346,6 +450,7 @@ PHI_missions_3 = {
 		}
 		effect = {
 			MSA_sulawesi_reward = yes
+			MSA_claims_spice_islands = yes
 		}
 	}
 
@@ -412,9 +517,20 @@ PHI_missions_4 = {
 				OR = {
 					is_emperor_of_china = yes
 					event_target:EmperorOfChina = {
-						has_opinion = {
-							who = ROOT
-							value = 50
+						if = {
+							limit = {
+								ROOT = { tag = PGS }
+							}
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+						else = {
+							has_opinion = {
+								who = ROOT
+								value = 50
+							}
 						}
 					}
 					AND = {
@@ -452,7 +568,7 @@ PHI_missions_4 = {
 				duration = 7300
 			}
 
-			custom_tooltip = MKS_if_we_are_the_first
+			custom_tooltip = PHI_if_we_are_the_first
 			tooltip = {
 				add_country_modifier = {
 					name = PHI_primary
@@ -694,7 +810,6 @@ PHI_missions_4 = {
 			}
 
 			custom_tooltip = MSA_space_lol
-			custom_tooltip = MSA_space_lol
 			custom_tooltip = PHI_10_production
 			hidden_effect = {
 				for = {
@@ -759,11 +874,11 @@ PHI_missions_5 = {
 		position = 4
 		provinces_to_highlight = {
 			owned_by = ROOT
-			local_autonomy = 25
+			local_autonomy_above_min = 25
 		}
 		trigger = {
 			num_of_cities = 7
-			NOT = { average_autonomy = 25 }
+			NOT = { average_autonomy_above_min = 25 }
 		}
 		effect = {
 			add_country_modifier = {
