@@ -695,16 +695,68 @@ perugia_mission_4 = {
 		position = 3
 		completed_by = 1444.1.1
 		trigger = {
-			PAP = {
-				OR = {
-					has_opinion = {
-						who = ROOT
-						value = 125
-					}
-					NOT = {
-						has_opinion = {
-							who = ROOT
-							value = -50
+			OR = {
+				owns = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_PAPAL_RELATIONS_TT
+						PAP = {
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+						PAP = {
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+						118 = {
+							owner = {
+								OR = {
+									has_opinion = {
+										who = ROOT
+										value = 125
+									}
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -50
+										}
+									}
+								}
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
 						}
 					}
 				}
@@ -884,19 +936,12 @@ perugia_mission_5 = {
 		position = 2
 		completed_by = 1444.1.1
 		trigger = {
-			OR = {
-				emperor = {
-					OR = {
-						alliance_with = ROOT
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
+			if = {
+				limit = {
+					hre_size = 1
 				}
-				calc_true_if = {
-					amount = 2
-					all_elector = {
+				OR = {
+					emperor = {
 						OR = {
 							alliance_with = ROOT
 							has_opinion = {
@@ -905,11 +950,38 @@ perugia_mission_5 = {
 							}
 						}
 					}
+					calc_true_if = {
+						amount = 2
+						all_elector = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+					if = {
+						limit = {
+							is_expanded_mod_active = { mod = subjects }
+							is_subject_of_type = imperial_feud_subject
+						}
+					}
 				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = subjects }
-						is_subject_of_type = imperial_feud_subject
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ITALY_CONQUEST_ROME_TT
+					NOT = {
+						any_country = {
+							culture_group = latin
+							capital_scope = {
+								region = italy_region
+							}
+							army_size = 1
+							total_development = ROOT
+						}
 					}
 				}
 			}
@@ -919,24 +991,42 @@ perugia_mission_5 = {
 				name = man_imperial_consecration
 				duration = 7300
 			}
-			every_country = {
+			if = {
 				limit = {
-					is_part_of_hre = yes
-					OR = {
-						capital_scope = {
-							region = italy_region
-						}
-						is_elector = yes
-						is_emperor = yes
+					hre_size = 1
+				}
+				custom_tooltip = MAN_IMPERIAL_CONSECRATION
+				tooltip = {
+					add_opinion = {
+						who = ROOT
+						modifier = man_imperial_consecration_opinion
+					}
+					reverse_add_opinion = {
+						who = ROOT
+						modifier = man_imperial_consecration_opinion
 					}
 				}
-				add_opinion = {
-					who = ROOT
-					modifier = man_imperial_consecration_opinion
-				}
-				reverse_add_opinion = {
-					who = ROOT
-					modifier = man_imperial_consecration_opinion
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+							OR = {
+								capital_scope = {
+									region = italy_region
+								}
+								is_elector = yes
+								is_emperor = yes
+							}
+						}
+						add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+					}
 				}
 			}
 		}
@@ -952,63 +1042,117 @@ perugia_mission_5 = {
 		completed_by = 1444.1.1
 		trigger = {
 			OR = {
-				AND = {
-					any_country = {
+				controls = 134
+				controls = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_CHOOSING_SIDE
+					AND = {
 						OR = {
-							is_emperor = yes
-							owns = 134
-							tag = HAB
-						}
-						has_opinion = {
-							who = ROOT
-							value = 75
-						}
-					}
-					any_country = {
-						OR = {
-							tag = PAP
-							is_papal_controller = yes
-							AND = {
-								is_defender_of_faith = yes
-								religion = catholic
+							emperor = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
 							}
-							owns = 118
+							HAB = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
+							134 = {
+								owner = {
+									has_opinion = {
+										who = ROOT
+										value = 75
+									}
+								}
+							}
 						}
-						NOT = {
-							has_opinion = {
-								who = ROOT
-								value = -25
+						OR = {
+							PAP = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							118 = {
+								owner = {
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -25
+										}
+									}
+								}
+							}
+							any_country = {
+								is_papal_controller = yes
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
 							}
 						}
 					}
 				}
-				AND = {
-					any_country = {
+				custom_trigger_tooltip = {
+					tooltip = PGA_CHOOSING_SIDE_SECOND
+					AND = {
 						OR = {
-							is_emperor = yes
-							owns = 134
-							tag = HAB
-						}
-						NOT = {
-							has_opinion = {
-								who = ROOT
-								value = -25
+							emperor = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							HAB = {
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -25
+									}
+								}
+							}
+							134 = {
+								owner = {
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -25
+										}
+									}
+								}
 							}
 						}
-					}
-					any_country = {
 						OR = {
-							tag = PAP
-							is_papal_controller = yes
-							AND = {
-								is_defender_of_faith = yes
-								religion = catholic
+							PAP = {
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
 							}
-							owns = 118
-						}
-						has_opinion = {
-							who = ROOT
-							value = 75
+							118 = {
+								owner = {
+									has_opinion = {
+										who = ROOT
+										value = 75
+									}
+								}
+							}
+							any_country = {
+								is_papal_controller = yes
+								has_opinion = {
+									who = ROOT
+									value = 75
+								}
+							}
 						}
 					}
 				}
@@ -1034,25 +1178,41 @@ perugia_mission_5 = {
 			OR = {
 				controls = 118
 				controls = 134
-				any_country = {
+				custom_trigger_tooltip = {
+					tooltip = PGA_GUERRA_SALE_EMPEROR
 					OR = {
-						is_emperor = yes
-						owns = 134
-						tag = HAB
-					}
-					war_with = ROOT
-				}
-				any_country = {
-					OR = {
-						tag = PAP
-						is_papal_controller = yes
-						AND = {
-							is_defender_of_faith = yes
-							religion = catholic
+						emperor = {
+							war_with = ROOT
 						}
-						owns = 118
+						HAB = {
+							war_with = ROOT
+						}
+						134 = {
+							owner = {
+								war_with = ROOT
+							}
+						}
 					}
-					war_with = ROOT
+				}
+				custom_trigger_tooltip = {
+					tooltip = PGA_GUERRA_SALE_POPE
+					OR = {
+						PAP = {
+							war_with = ROOT
+						}
+						HAB = {
+							war_with = ROOT
+						}
+						118 = {
+							owner = {
+								war_with = ROOT
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							war_with = ROOT
+						}
+					}
 				}
 			}
 		}
@@ -1072,31 +1232,67 @@ perugia_mission_5 = {
 			OR = {
 				owns = 118
 				owns = 134
-				any_country = {
+				custom_trigger_tooltip = {
+					tooltip = PGA_HEAVEN_NOR_HELL_EMPEROR
 					OR = {
-						is_emperor = yes
-						owns = 134
-						tag = HAB
-					}
-					ROOT = {
-						has_won_war_against = {
-							who = PREV
+						emperor = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						HAB = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						134 = {
+							owner = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+							}
 						}
 					}
 				}
-				any_country = {
+				custom_trigger_tooltip = {
+					tooltip = PGA_HEAVEN_NOR_HELL_POPE
 					OR = {
-						tag = PAP
-						is_papal_controller = yes
-						AND = {
-							is_defender_of_faith = yes
-							religion = catholic
+						PAP = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
 						}
-						owns = 118
-					}
-					ROOT = {
-						has_won_war_against = {
-							who = PREV
+						HAB = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+						}
+						118 = {
+							owner = {
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							ROOT = {
+								has_won_war_against = {
+									who = PREV
+								}
+							}
 						}
 					}
 				}
