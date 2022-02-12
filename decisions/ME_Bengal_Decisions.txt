@@ -463,6 +463,7 @@ country_decisions = {
 	pwe_kyaung = {
 		potential = {
 			has_country_flag = bng_burmese_integration_allowed
+			NOT = { has_country_flag = enacted_pwe_kyaung }
 		}
 		allow = {
 			TAU = {
@@ -489,12 +490,14 @@ country_decisions = {
 					duration = 10950
 				}
 			}
+			set_country_flag = enacted_pwe_kyaung
 		}
 	}
 	modernise_the_ahmudan = {
 		potential = {
 			has_country_flag = bng_burmese_integration_allowed
 			has_country_flag = bng_burma_bonuses
+			NOT = { has_country_flag = bng_reformed_civil_service }
 		}
 		allow = {
 			OR = {
@@ -542,7 +545,10 @@ country_decisions = {
 		}
 	}
 	solar_guidance = {
-		potential = { has_country_flag = bng_burmese_integration_allowed }
+		potential = { 
+			has_country_flag = bng_burmese_integration_allowed 
+			NOT = { has_country_flag = enacted_solar_guidance }
+		}
 		allow = {
 			OR = {
 				any_owned_province = { religion_group = buddhist }
@@ -577,12 +583,14 @@ country_decisions = {
 			else = {
 				country_event = { id = flavor_lna.3 }
 			}
+			set_country_flag = enacted_solar_guidance
 		}
 	}
 	mal_jasmani = {
 		potential = { 
 			has_country_flag = bng_burmese_integration_allowed 
 			has_country_flag = bng_reformed_civil_service
+			NOT = { has_country_flag = bng_mal_jasmani_reform_allowed }
 		}
 		allow = {
 			OR = {
@@ -610,10 +618,7 @@ country_decisions = {
 				adm_tech = 24
 			}
 			monthly_adm = 15
-			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				amount = 10
-				has_manufactory = yes
-			}
+			num_of_owned_manufactory_combined_trigger = { amount = 5 }
 		}
 		effect = {
 			define_advisor = {
@@ -630,27 +635,115 @@ country_decisions = {
 		}
 	}
 	nizamat_imambara = {
-		potential = { has_country_flag = bng_burmese_integration_allowed }
-		allow = {}
-		effect = {}
+		potential = {
+			has_country_flag = bng_burmese_integration_allowed 
+			NOT = { has_country_flag = enacted_nizamat_imambra }
+		}
+		allow = {
+			OR = {
+				full_idea_group = humanist_ideas
+				mission_completed = bng_islamic_cooperation
+			}
+			4479 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+				has_tax_building_trigger = yes 
+			}
+			TAU = {
+				vassal_of = ROOT
+				OR = {
+					religion_group = muslim
+					num_of_owned_provinces_with = {
+						amount = 4
+						has_tax_building_trigger = 6
+					}
+				}
+			}
+			adm_power = 150
+		}
+		effect = {
+			add_adm_power = -150
+			TAU = {
+				capital_scope = {
+					add_province_modifier = {
+						name = bng_nizamat_imambara_modifier
+						duration = -1
+					}
+					add_base_tax = 2
+					add_base_production = 1
+					add_base_manpower = 1
+				}
+			}
+			4479 = {
+				add_province_modifier = {
+					name = bng_nizamat_imambara_modifier
+					duration = -1
+				}
+				add_base_tax = 2
+				add_base_production = 1
+				add_base_manpower = 1
+			}
+			define_advisor = {
+				name = "Siraj ud-Daulah"
+				type = theologian
+				skill = 2
+				discount = yes
+			}
+			set_country_flag = enacted_nizamat_imambra
+		}
 	}
 	phrai_corvee = {
-		potential = { has_country_flag = bng_thailand_integration_allowed }
-		allow = {}
-		effect = {}
+		potential = {
+			has_country_flag = bng_thailand_integration_allowed 
+			NOT = { has_country_flag = enacted_phrai_corvee }
+		}
+		allow = {
+			if = {
+				limit = { SIA = { vassal_of = ROOT } }
+				SIA = { 
+					NOT = { liberty_desire = 40 }
+					num_of_owned_provinces_with = {
+						amount = 8
+						has_manpower_building_trigger = yes
+					}
+				}
+			}
+			else_if = {
+				limit = { AYU = { vassal_of = ROOT } }
+				AYU = { 
+					NOT = { liberty_desire = 40 }
+					num_of_owned_provinces_with = {
+						amount = 8
+						has_manpower_building_trigger = yes
+					}
+				}
+			}
+			years_of_income = 1
+		}
+		effect = {
+			add_years_of_income = -1
+			set_country_flag = enacted_phrai_corvee
+			set_country_flag = bng_phrai_corvee
+			custom_tooltip = BNG_REPLACE_PHRAI_LUANG_WITH_PHRAI_CORVEE
+		}
 	}
 	dual_capital = {
-		potential = { has_country_flag = bng_thailand_integration_allowed }
+		potential = {
+			has_country_flag = bng_thailand_integration_allowed 
+		}
 		allow = {}
 		effect = {}
 	}
 	krom_kalahom = {
-		potential = { has_country_flag = bng_thailand_integration_allowed }
+		potential = {
+			has_country_flag = bng_thailand_integration_allowed 
+		}
 		allow = {}
 		effect = {}
 	}
 	union_of_bangkok = {
-		potential = { has_country_flag = bng_thailand_integration_allowed }
+		potential = {
+			has_country_flag = bng_thailand_integration_allowed 
+		}
 		allow = {}
 		effect = {}
 	}
