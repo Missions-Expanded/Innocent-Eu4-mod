@@ -54,26 +54,53 @@ naples_missions_1 = {
 		position = 1
 		trigger = {
 			OR = {
-				alliance_with = PAP
-				is_rival = PAP
-				has_opinion = {
-					who = PAP
-					value = 100
-				}
-				reverse_has_opinion = {
-					who = PAP
-					value = 100
-				}
-				NOT = {
-					has_opinion = {
-						who = PAP
-						value = -75
+				owns = 118
+				custom_trigger_tooltip = {
+					tooltip = PGA_PAPAL_RELATIONS_TT
+					PAP = {
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
 					}
-				}
-				NOT = {
-					reverse_has_opinion = {
-						who = PAP
-						value = -75
+					118 = {
+						owner = {
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+					}
+					any_country = {
+						is_papal_controller = yes
+						OR = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+							NOT = {
+								has_opinion = {
+									who = ROOT
+									value = -50
+								}
+							}
+						}
 					}
 				}
 			}
@@ -81,7 +108,11 @@ naples_missions_1 = {
 		effect = {
 			capital_scope = {
 				if = {
-					limit = { has_cardinal = no }
+					limit = {
+						has_cardinal = no
+						religion = catholic
+						has_owner_religion = yes
+					}
 					add_cardinal = yes
 				}
 				else = {
@@ -109,66 +140,64 @@ naples_missions_1 = {
 					}
 				}
 			}
-			custom_tooltip = NAP_PAPAL_RELATIONS_GOOD_TT
-			tooltip = {
+			if = {
+				limit = {
+					OR = {
+						owns = 118
+						PAP = {
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+						118 = {
+							owner = {
+								OR = {
+									has_opinion = {
+										who = ROOT
+										value = 125
+									}
+									NOT = {
+										has_opinion = {
+											who = ROOT
+											value = -50
+										}
+									}
+								}
+							}
+						}
+						any_country = {
+							is_papal_controller = yes
+							OR = {
+								has_opinion = {
+									who = ROOT
+									value = 125
+								}
+								NOT = {
+									has_opinion = {
+										who = ROOT
+										value = -50
+									}
+								}
+							}
+						}
+					}
+				}
 				add_country_modifier = {
 					name = nap_dominus_vobiscum
 					duration = 9125
 				}
 			}
-			custom_tooltip = NAP_PAPAL_RELATIONS_BAD_TT
-			tooltip = {
-				add_casus_belli = {
-					type = cb_insult
-					target = PAP
-				}
-				PAP = {
-					every_owned_province = {
-						limit = {
-							region = italy_region
-							NOT = { province_id = 118 }
-						}
-						add_permanent_claim = ROOT
-					}
-				}
-			}
-			hidden_effect = {
-				if = {
-					limit = {
-						OR = {
-							alliance_with = PAP
-							AND = {
-								has_opinion = {
-									who = PAP
-									value = 100
-								}
-								reverse_has_opinion = {
-									who = PAP
-									value = 100
-								}
-							}
-						}
-					}
-					add_country_modifier = {
-						name = nap_dominus_vobiscum
-						duration = 9125
-					}
-				}
-				else = {
-					add_casus_belli = {
-						type = cb_insult
-						target = PAP
-					}
-					PAP = {
-						every_owned_province = {
-							limit = {
-								region = italy_region
-								NOT = { province_id = 118 }
-							}
-							add_permanent_claim = ROOT
-						}
-					}
-				}
+			else = {
+				add_mana_scaled_on_monthly_monarch_power = yes
 			}
 		}
 	}
