@@ -119,10 +119,9 @@ mantua_mission_1 = {
 			OR = {
 				NOT = { exists = VEN }
 				overlord_of = VEN
-				VEN = {
-					NOT = {
-						any_province = { region = italy_region }
-					}
+				italy_region = {
+					type = all
+					NOT = { owned_by = VEN }
 				}
 			}
 		}
@@ -376,23 +375,51 @@ mantua_mission_3 = {
 		required_missions = { man_gonzaga_ruling }
 		position = 2
 		trigger = {
-			emperor = {
+			if = {
+				limit = {
+					hre_size = 1
+				}
 				OR = {
-					alliance_with = ROOT
-					has_opinion = {
-						who = ROOT
-						value = 100
+					emperor = {
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
+						}
+					}
+					calc_true_if = {
+						amount = 2
+						all_elector = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+					}
+					if = {
+						limit = {
+							is_expanded_mod_active = { mod = subjects }
+							is_subject_of_type = imperial_feud_subject
+						}
 					}
 				}
 			}
-			calc_true_if = {
-				amount = 2
-				all_elector = {
-					OR = {
-						alliance_with = ROOT
-						has_opinion = {
-							who = ROOT
-							value = 100
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ITALY_CONQUEST_ROME_TT
+					NOT = {
+						any_country = {
+							culture_group = latin
+							capital_scope = {
+								region = italy_region
+							}
+							army_size = 1
+							total_development = ROOT
 						}
 					}
 				}
@@ -403,24 +430,42 @@ mantua_mission_3 = {
 				name = man_imperial_consecration
 				duration = 7300
 			}
-			every_country = {
+			if = {
 				limit = {
-					is_part_of_hre = yes
-					OR = {
-						capital_scope = {
-							region = italy_region
-						}
-						is_elector = yes
-						is_emperor = yes
+					hre_size = 1
+				}
+				custom_tooltip = MAN_IMPERIAL_CONSECRATION
+				tooltip = {
+					add_opinion = {
+						who = ROOT
+						modifier = man_imperial_consecration_opinion
+					}
+					reverse_add_opinion = {
+						who = ROOT
+						modifier = man_imperial_consecration_opinion
 					}
 				}
-				add_opinion = {
-					who = ROOT
-					modifier = man_imperial_consecration_opinion
-				}
-				reverse_add_opinion = {
-					who = ROOT
-					modifier = man_imperial_consecration_opinion
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+							OR = {
+								capital_scope = {
+									region = italy_region
+								}
+								is_elector = yes
+								is_emperor = yes
+							}
+						}
+						add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+					}
 				}
 			}
 		}
@@ -505,12 +550,9 @@ mantua_mission_3 = {
 			OR = {
 				NOT = { exists = MLO }
 				overlord_of = MLO
-				MLO = {
-					NOT = {
-						any_province = {
-							region = italy_region
-						}
-					}
+				italy_region = {
+					type = all
+					NOT = { owned_by = MLO }
 				}
 			}
 		}
@@ -548,21 +590,26 @@ mantua_mission_3 = {
 		}
 		position = 13
 		trigger = {
-			NOT = {
-				any_country = {
-					culture_group = latin
-					capital_scope = {
-						region = italy_region
-					}
-					army_strength = {
-						who = ROOT
-						value = 1
+			custom_trigger_tooltip = {
+				tooltip = ITALY_CONQUEST_ROME_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = 1
+						total_development = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			118 = { add_core = ROOT }
+			capital_scope = {
+				add_development_scaled_on_monthly_monarch_power = yes
+			}
+			add_mana_scaled_on_monthly_monarch_power = yes
 			complete_conquest_of_rome_missions = yes
 		}
 	}
@@ -858,7 +905,7 @@ mantua_mission_4 = {
 			}
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
 		}
 	}
 }
