@@ -71,22 +71,13 @@ ferrara_missions_1 = {
 		position = 3
 		trigger = {
 			if = {
-				limit = {
-					hre_size = 1
-				}
-				OR = {
-					emperor = {
-						OR = {
-							alliance_with = ROOT
-							has_opinion = {
-								who = ROOT
-								value = 100
-							}
-						}
+				limit = { hre_size = 1 }
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
 					}
-					calc_true_if = {
-						amount = 2
-						all_elector = {
+					OR = {
+						emperor = {
 							OR = {
 								alliance_with = ROOT
 								has_opinion = {
@@ -95,11 +86,43 @@ ferrara_missions_1 = {
 								}
 							}
 						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
+						is_subject_of_type = imperial_feud_subject
 					}
-					if = {
-						limit = {
-							is_expanded_mod_active = { mod = subjects }
-							is_subject_of_type = imperial_feud_subject
+				}
+				else = {
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
 						}
 					}
 				}
@@ -126,20 +149,8 @@ ferrara_missions_1 = {
 				duration = 7300
 			}
 			if = {
-				limit = {
-					hre_size = 1
-				}
+				limit = { hre_size = 1 }
 				custom_tooltip = MAN_IMPERIAL_CONSECRATION
-				tooltip = {
-					add_opinion = {
-						who = ROOT
-						modifier = man_imperial_consecration_opinion
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = man_imperial_consecration_opinion
-					}
-				}
 				hidden_effect = {
 					every_country = {
 						limit = {
@@ -263,21 +274,24 @@ ferrara_missions_2 = {
 		}
 		position = 2
 		trigger = {
-			calc_true_if = {
-				amount = 2
-				all_country = {
-					OR = {
-						army_strength = {
-							who = ROOT
-							value = 1.5
+			OR = {
+				num_of_allies = 4
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						OR = {
+							army_strength = {
+								who = ROOT
+								value = 1.5
+							}
+							total_development = ROOT
 						}
-						total_development = ROOT
-					}
-					OR = {
-						alliance_with = ROOT
-						has_opinion = {
-							who = ROOT
-							value = 100
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
 						}
 					}
 				}
@@ -315,6 +329,10 @@ ferrara_missions_2 = {
 		icon = jageillonian_union
 		required_missions = { fer_ward_save }
 		position = 4
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 4
@@ -711,7 +729,13 @@ ferrara_mission_4 = {
 		}
 		effect = {
 			add_prestige = 10
-			add_splendor = 50
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 50
+			}
+			else = {
+				add_adm_power = 50
+			}
 			add_country_modifier = {
 				name = fer_universita_ferrara
 				duration = -1
@@ -901,6 +925,7 @@ ferrara_mission_5 = {
 			OR = {
 				artist = 2
 				ADM = 3
+				monthly_adm = 8
 			}
 		}
 		effect = {
