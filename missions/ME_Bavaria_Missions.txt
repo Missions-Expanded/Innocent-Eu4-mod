@@ -398,17 +398,25 @@ me_bavaria_minor_missions_3 = {
 				monthly_income = 15
 				custom_trigger_tooltip = {
 					tooltip = BAV_AT_LEAST_3_PRODUCTION_INCOME
-					variable_arithmetic_trigger = {
-						export_to_variable = {
-							which = current_production_income
-							value = monthly_income
+					if = {
+						limit = {
+							production_income_percentage = 0.01 # ok this should fix the freeze now, I hope
 						}
-						export_to_variable = {
-							which = production_income_share
-							value = trigger_value:production_income_percentage
+						variable_arithmetic_trigger = {
+							export_to_variable = {
+								which = current_production_income
+								value = monthly_income
+							}
+							export_to_variable = {
+								which = production_income_share
+								value = trigger_value:production_income_percentage
+							}
+							multiply_variable = { which = current_production_income which = production_income_share }
+							check_variable = { which = current_production_income value = 3 }
 						}
-						multiply_variable = { which = current_production_income which = production_income_share }
-						check_variable = { which = current_production_income value = 3 }
+					}
+					else = {
+						always = no
 					}
 				}
 			}
@@ -449,7 +457,7 @@ me_bavaria_minor_missions_3 = {
 						}
 						export_to_variable = {
 							which = trade_income_share
-							value = trigger_value:trade_income_percentage
+							value = trade_income_percentage
 						}
 						multiply_variable = { which = current_trade_income which = trade_income_share }
 						check_variable = { which = current_trade_income value = 20 }
