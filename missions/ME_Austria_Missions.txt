@@ -800,10 +800,46 @@ ME_hab_slot_2 = {
 		required_missions = {  }
 
 		trigger = {
-
+			OR = {
+				45 = {
+					owner = {
+						has_opinion = {
+							who = ROOT
+							value = 150
+						}
+					}
+				}
+				45 = {
+					owned_by = ROOT
+				}
+			}			
 		}
 		effect = {
-
+			if = {
+				limit = {
+					NOT = {
+						45 = {
+							owned_by = ROOT
+						}
+					}
+				}
+				add_years_of_income = 0.5
+				45 = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT	}
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			else = {
+				45 = {
+					add_province_modifier = {
+						name = me_hab_the_seat_of_trade
+						duration = 18250
+					}
+				}
+			}
 		}
 	}
 
@@ -813,10 +849,60 @@ ME_hab_slot_2 = {
 		required_missions = { ME_hab_secure_lubeck }
 
 		trigger = {
-
+			calc_true_if = {
+				desc = build_manufactories_mission_tooltip
+				all_owned_province = {
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 20
+			}
+			calc_true_if = {
+				all_owned_province = {
+					base_production = 10
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				amount = 10
+			}
 		}
 		effect = {
-
+			every_owned_province = {
+				limit = {
+					base_production = 10
+					OR = {
+						has_building = mills
+						has_building = farm_estate
+						has_building = tradecompany
+						has_building = plantations
+						has_building = textile
+						has_building = weapons
+						has_building = wharf
+						has_building = furnace
+					}
+				}
+				add_province_modifier = {
+					name = me_hab_a_push_to_industralisation
+					duration = 7300
+				}
+			}
+			add_years_of_income = 2
 		}
 	}
 }
@@ -2319,10 +2405,58 @@ ME_hab_slot_5 = {
 		required_missions = { ME_hab_avenge_christedom }
 
 		trigger = {
-
+			if = {
+				limit = {
+					exists = TUR
+				}
+				offensive_war_with = TUR
+				war_score_against = {
+					who = TUR
+					value = 50
+				}
+			}
+			else = {
+				bulgaria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				silistria_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}	
 		}
 		effect = {
-
+			if = {
+				limit = {
+					exists = TUR
+				}
+				balkan_region = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+						owned_by = TUR
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			else = {
+				thrace_area = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+				macedonia_area = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			add_yearly_manpower = 1
 		}
 	}
 
