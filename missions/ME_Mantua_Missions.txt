@@ -5,10 +5,14 @@ mantua_mission_1 = {
 	potential = {
 		OR = {
 			tag = MAN
-			#AND = {
-			#	was_tag = MAN
-			#	tag = ITA
-			#}
+			AND = {
+				was_tag = MAN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -23,6 +27,7 @@ mantua_mission_1 = {
 			OR = {
 				artist = 2
 				ADM = 3
+				monthly_adm = 8
 			}
 		}
 		effect = {
@@ -52,7 +57,13 @@ mantua_mission_1 = {
 		}
 		effect = {
 			add_prestige = 10
-			add_splendor = 50
+			if = {
+				limit = { has_dlc = "Mandate of Heaven" }
+				add_splendor = 50
+			}
+			else = {
+				add_adm_power = 50
+			}
 			add_country_modifier = {
 				name = man_celeste_galleria
 				duration = -1
@@ -84,14 +95,17 @@ mantua_mission_1 = {
 		icon = control_the_means_of_transaction
 		required_missions = { man_po_valley }
 		position = 6
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			venetia_area = {
-				NOT = { province_id = 112 }
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_legitimacy_equivalent = { value = 10 }
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 10 }
 			add_dip_power = 25
 		}
 	}
@@ -100,11 +114,22 @@ mantua_mission_1 = {
 		icon = nuova_promissione_ducale
 		required_missions = { man_conquest_venetia }
 		position = 7
+		provinces_to_highlight = {
+			area = venetia_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			owns = 112
+			venetia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = VEN }
 				overlord_of = VEN
+				italy_region = {
+					type = all
+					NOT = { owned_by = VEN }
+				}
 			}
 		}
 		effect = {
@@ -123,10 +148,14 @@ mantua_mission_2 = {
 	potential = {
 		OR = {
 			tag = MAN
-			#AND = {
-			#	was_tag = MAN
-			#	tag = ITA
-			#}
+			AND = {
+				was_tag = MAN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -139,18 +168,24 @@ mantua_mission_2 = {
 		}
 		position = 2
 		trigger = {
-			calc_true_if = {
-				amount = 2
-				all_country = {
-					army_strength = {
-						who = ROOT
-						value = 1.5
-					}
-					OR = {
-						alliance_with = ROOT
-						has_opinion = {
-							who = ROOT
-							value = 100
+			OR = {
+				num_of_allies = 4
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						OR = {
+							army_strength = {
+								who = ROOT
+								value = 1.5
+							}
+							total_development = ROOT
+						}
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 100
+							}
 						}
 					}
 				}
@@ -332,10 +367,14 @@ mantua_mission_3 = {
 	potential = {
 		OR = {
 			tag = MAN
-			#AND = {
-			#	was_tag = MAN
-			#	tag = ITA
-			#}
+			AND = {
+				was_tag = MAN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -346,23 +385,74 @@ mantua_mission_3 = {
 		required_missions = { man_gonzaga_ruling }
 		position = 2
 		trigger = {
-			emperor = {
-				OR = {
-					alliance_with = ROOT
-					has_opinion = {
-						who = ROOT
-						value = 100
+			if = {
+				limit = { hre_size = 1 }
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
+						is_subject_of_type = imperial_feud_subject
+					}
+				}
+				else = {
+					OR = {
+						emperor = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						calc_true_if = {
+							amount = 2
+							all_elector = {
+								OR = {
+									alliance_with = ROOT
+									has_opinion = {
+										who = ROOT
+										value = 100
+									}
+								}
+							}
+						}
 					}
 				}
 			}
-			calc_true_if = {
-				amount = 2
-				all_elector = {
-					OR = {
-						alliance_with = ROOT
-						has_opinion = {
-							who = ROOT
-							value = 100
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ITALY_CONQUEST_ROME_TT
+					NOT = {
+						any_country = {
+							culture_group = latin
+							capital_scope = {
+								region = italy_region
+							}
+							army_size = 1
+							total_development = ROOT
 						}
 					}
 				}
@@ -373,24 +463,30 @@ mantua_mission_3 = {
 				name = man_imperial_consecration
 				duration = 7300
 			}
-			every_country = {
-				limit = {
-					is_part_of_hre = yes
-					OR = {
-						capital_scope = {
-							region = italy_region
+			if = {
+				limit = { hre_size = 1 }
+				custom_tooltip = MAN_IMPERIAL_CONSECRATION
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+							OR = {
+								capital_scope = {
+									region = italy_region
+								}
+								is_elector = yes
+								is_emperor = yes
+							}
 						}
-						is_elector = yes
-						is_emperor = yes
+						add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
+						reverse_add_opinion = {
+							who = ROOT
+							modifier = man_imperial_consecration_opinion
+						}
 					}
-				}
-				add_opinion = {
-					who = ROOT
-					modifier = man_imperial_consecration_opinion
-				}
-				reverse_add_opinion = {
-					who = ROOT
-					modifier = man_imperial_consecration_opinion
 				}
 			}
 		}
@@ -400,6 +496,10 @@ mantua_mission_3 = {
 		icon = jageillonian_union
 		required_missions = { man_ward_save }
 		position = 3
+		provinces_to_highlight = {
+			area = emilia_romagna_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			emilia_romagna_area = {
 				type = all
@@ -444,9 +544,12 @@ mantua_mission_3 = {
 		icon = all_roads_lead_to_milan
 		required_missions = { man_po_valley }
 		position = 6
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
 			lombardy_area = {
-				NOT = { province_id = 104 }
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
@@ -460,11 +563,22 @@ mantua_mission_3 = {
 		icon = italian_riches
 		required_missions = { man_war_lombardy }
 		position = 7
+		provinces_to_highlight = {
+			area = lombardy_area
+			NOT = { owned_by = ROOT }
+		}
 		trigger = {
-			owns = 104
+			lombardy_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 			OR = {
 				NOT = { exists = MLO }
 				overlord_of = MLO
+				italy_region = {
+					type = all
+					NOT = { owned_by = MLO }
+				}
 			}
 		}
 		effect = {
@@ -480,7 +594,6 @@ mantua_mission_3 = {
 		required_missions = {
 			man_lombardo_veneto
 			man_marquisate_montferrat
-			man_forte_gonzaga
 		}
 		position = 9
 		trigger = {
@@ -502,21 +615,27 @@ mantua_mission_3 = {
 		}
 		position = 13
 		trigger = {
-			NOT = {
-				any_country = {
-					culture_group = latin
-					capital_scope = {
-						region = italy_region
-					}
-					army_strength = {
-						who = ROOT
-						value = 1
+			custom_trigger_tooltip = {
+				tooltip = ITALY_CONQUEST_ROME_TT
+				NOT = {
+					any_country = {
+						culture_group = latin
+						capital_scope = {
+							region = italy_region
+						}
+						army_size = 1
+						total_development = ROOT
 					}
 				}
 			}
 		}
 		effect = {
 			118 = { add_core = ROOT }
+			capital_scope = {
+				add_development_scaled_on_monthly_monarch_power = yes
+			}
+			add_mana_scaled_on_monthly_monarch_power = yes
+			complete_conquest_of_rome_missions = yes
 		}
 	}
 }
@@ -528,10 +647,14 @@ mantua_mission_4 = {
 	potential = {
 		OR = {
 			tag = MAN
-			#AND = {
-			#	was_tag = MAN
-			#	tag = ITA
-			#}
+			AND = {
+				was_tag = MAN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -558,6 +681,7 @@ mantua_mission_4 = {
 				add_casus_belli = {
 					type = cb_italy_humiliation_rivals
 					target = MLO
+					months = 300
 				}
 			}
 			if = {
@@ -567,6 +691,7 @@ mantua_mission_4 = {
 				add_casus_belli = {
 					type = cb_italy_humiliation_rivals
 					target = VEN
+					months = 300
 				}
 			}
 			if = {
@@ -576,6 +701,7 @@ mantua_mission_4 = {
 				add_casus_belli = {
 					type = cb_italy_humiliation_rivals
 					target = FER
+					months = 300
 				}
 			}
 		}
@@ -590,9 +716,7 @@ mantua_mission_4 = {
 		}
 		trigger = {
 			if = {
-				limit = {
-					hre_size = 1
-				}
+				limit = { hre_size = 1 }
 				if = {
 					limit = {
 						emperor = {
@@ -618,26 +742,49 @@ mantua_mission_4 = {
 								}
 							}
 						}
+						any_elector = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
 					}
 				}
 				else = {
-					HAB = {
-						OR = {
-							alliance_with = ROOT
-							has_opinion = {
-								who = ROOT
-								value = 100
+					OR = {
+						HAB = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
+							}
+						}
+						any_elector = {
+							OR = {
+								alliance_with = ROOT
+								has_opinion = {
+									who = ROOT
+									value = 100
+								}
 							}
 						}
 					}
 				}
 			}
-			PAP = {
-				OR = {
-					alliance_with = ROOT
-					has_opinion = {
-						who = ROOT
-						value = 100
+			if = {
+				limit = { exists = PAP }
+				PAP = {
+					OR = {
+						alliance_with = ROOT
+						has_opinion = {
+							who = ROOT
+							value = 100
+						}
 					}
 				}
 			}
@@ -646,10 +793,6 @@ mantua_mission_4 = {
 				NOT = { tag = HAB }
 				NOT = { tag = PAP }
 				total_development = ROOT
-				army_strength = {
-					who = ROOT
-					value = 2
-				}
 				OR = {
 					alliance_with = ROOT
 					has_opinion = {
@@ -665,22 +808,27 @@ mantua_mission_4 = {
 				duration = 9125
 			}
 			if = {
-				limit = {
-					exists = MFA
-				}
+				limit = { exists = MFA }
 				add_casus_belli = {
 					target = MFA
 					type = cb_restore_personal_union
 				}
 			}
 			if = {
-				limit = {
-					exists = NEV
-				}
+				limit = { exists = NEV }
 				add_casus_belli = {
 					target = NEV
 					type = cb_restore_personal_union
 				}
+			}
+			191 = { 
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+				}
+				add_permanent_claim = ROOT
 			}
 			2981 = { 
 				if = {
@@ -782,7 +930,7 @@ mantua_mission_4 = {
 			}
 		}
 		effect = {
-			add_legitimacy = 10
+			add_legitimacy_equivalent = { amount = 10 republican_tradition = 5 }
 		}
 	}
 }
@@ -794,10 +942,14 @@ mantua_mission_5 = {
 	potential = {
 		OR = {
 			tag = MAN
-			#AND = {
-			#	was_tag = MAN
-			#	tag = ITA
-			#}
+			AND = {
+				was_tag = MAN
+				tag = ITA
+				NOT = { was_tag = SPI }
+				NOT = { was_tag = TUS }
+				NOT = { was_tag = TTS }
+				NOT = { was_tag = LML }
+			}
 		}
 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
@@ -809,9 +961,18 @@ mantua_mission_5 = {
 		position = 4
 		trigger = {
 			PAP = {
-				has_opinion = {
-					who = ROOT
-					value = 125
+				OR = {
+					has_opinion = {
+						who = ROOT
+						value = 125
+					}
+					is_rival = ROOT
+					NOT = {
+						has_opinion = {
+							who = ROOT
+							value = -50
+						}
+					}
 				}
 			}
 		}

@@ -1,1404 +1,648 @@
-lucca_missions_slot_1 = {
+lucca_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
-		tag = LUC
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						NOT = { was_tag = LML }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	}
 	has_country_shield = yes
 
-	lucca_gain_control_of_tuscany = {
-		icon = mission_conquer_50_development
-		position = 1
+	luc_legacy_castruccio_castracani = {
+		icon = me_mission_get_pu
 		required_missions = { }
-		provinces_to_highlight = {
-			area = tuscany_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
+		position = 1
 		trigger = {
-			tuscany_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				army_size_percentage = 1
+				army_size = 25
 			}
+			manpower_percentage = 0.75
 		}
 		effect = {
-			add_country_modifier = {
-				name = lucca_home_area_conquest
-				duration = 5475
+			add_army_tradition = 10
+			if = {
+				limit = { has_dlc = "Cradle of Civilization" }
+				add_army_professionalism = 0.05
 			}
-			tuscany_area = {
-				add_base_tax = 1
-				add_base_production = 1
-				add_base_manpower = 1
-			}
-			lombardy_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			emilia_romagna_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+			else = {
+				add_mil_power = 50
 			}
 		}
 	}
-	
-	lucca_conquer_northern_italy = {
-		icon = mission_assemble_an_army
+
+	luc_walls_lucca = {
+		icon = reclaim_the_ducal_lands
+		required_missions = {
+			luc_legacy_castruccio_castracani
+		}
 		position = 3
-		required_missions = { lucca_gain_control_of_tuscany }
-		provinces_to_highlight = {
-			OR = {
-				area = lombardy_area
-				area = emilia_romagna_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			lombardy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			emilia_romagna_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			stability = 1
+			treasury = 300
+			OR = {
+				calc_true_if = {
+					amount = 3
+					all_country = {
+						is_rival = ROOT
+					}
+				}
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						is_enemy = ROOT
+					}
+				}
+				any_country = {
+					has_guaranteed = ROOT
+				}
+				calc_true_if = {
+					amount = 2
+					all_country = {
+						alliance_with = ROOT
+					}
+				}
 			}
 		}
 		effect = {
-			add_prestige = 10
-			po_valley_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+			capital_scope = {	
+				add_province_modifier = {
+					name = luc_luccan_city_walls
+					duration = 9125
 				}
-				add_permanent_claim = ROOT
-			}
-			venetia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	lucca_conquer_venice = {
-		icon = mission_unite_home_region
-		position = 4
-		required_missions = { lucca_conquer_northern_italy }
-		provinces_to_highlight = {
-			OR = {
-				area = venetia_area
-				area = po_valley_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+
+	luc_luccan_trading_ports = {
+		icon = geneva_conventions
+		required_missions = {
+			luc_walls_lucca
+			luc_take_pisa
 		}
-		trigger = {
-			po_valley_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			venetia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			liguria_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			piedmont_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	lucca_conquer_western_italy = {
-		icon = mission_cannons_firing
 		position = 5
-		required_missions = { lucca_conquer_venice }
-		provinces_to_highlight = {
-			OR = {
-				area = liguria_area
-				area = piedmont_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
 		trigger = {
-			liguria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			piedmont_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				marketplace = 1
+				trade_depot = 1
+				stock_exchange = 1
 			}
 		}
 		effect = {
-			central_italy_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			lazio_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	lucca_conquer_central_italy = {
-		icon = mission_conquer_5_states
-		position = 8
-		required_missions = { lucca_conquer_western_italy }
-		provinces_to_highlight = {
-			OR = {
-				area = central_italy_area
-				province_id = 118
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			central_italy_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			118 = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			naples_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-					NOT = { province_id = 118 }
-				}
-				add_permanent_claim = ROOT
-			}
-			calabria_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			apulia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	lucca_conquer_southern_italy = {
-		icon = mission_assemble_an_army
-		position = 9
-		required_missions = { lucca_conquer_central_italy }
-		provinces_to_highlight = {
-			OR = {
-				area = naples_area
-				area = calabria_area
-				area = apulia_area
-			}
-			NOT = { province_id = 118 }
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			121 = {
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			2983 = {
-				country_or_non_sovereign_subject_holds = ROOT	
-			}
-			calabria_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			apulia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			western_sicily_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			sicily_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			corsica_sardinia_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	lucca_conquer_italian_islands = {
-		icon = mission_unite_home_region
-		position = 10
-		required_missions = { lucca_conquer_southern_italy }
-		provinces_to_highlight = {
-			OR = {
-				area = western_sicily_area
-				area = sicily_area
-				area = corsica_sardinia_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			western_sicily_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			sicily_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			corsica_sardinia_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_prestige = 25
-			add_mil_power = 100
 			add_country_modifier = {
-				name = lucca_italian_islands_conquest
-				duration = 10950
+				name = luc_ports_lucca
+				duration = 7300
+			}
+		}
+	}
+
+	luc_tutta_seta_porta_lucca = {
+		icon = me_mission_venice_small_ship_in_port
+		required_missions = { luc_luccan_trading_ports }
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2980
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_manufactory_trigger = yes }
+			}
+		}
+		trigger = {
+			2980 = {
+				owned_by = ROOT
+				has_manufactory_trigger = yes
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_luccan_silk_trade
+				duration = 9125
 			}
 		}
 	}
 }
 
-lucca_missions_slot_2 = {
+lucca_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
 	potential = {
-		tag = LUC
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						NOT = { was_tag = LML }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	}
 	has_country_shield = yes
-	
-	lucca_turn_towards_france = {
-		icon = mission_have_two_subjects
-		position = 6
-		required_missions = { lucca_conquer_western_italy }
-		provinces_to_highlight = {
-			NOT = { exists = FRA }
-			183 = {
-				owned_by = ROOT
-			}
-			region = france_region
-			NOT = { owned_by = ROOT }
-		}
+
+	luc_northern_allies = {
+		icon = public_works
+		required_missions = { }
+		position = 2
 		trigger = {
-			NOT = { has_country_modifier = lucca_turned_to_them_modifier }
-			if = {
-				limit = {
-					exists = FRA
-				}
-				FRA = {
-					has_opinion = {
-						who = ROOT
-						value = 100
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						owns = 183
-					}
-				}
-				183 = {
-					owner = {
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-				}
-			}
-			else = {
-				OR = {
-					france_region = {
-						type = all
-						owned_by = ROOT
-					}
-					any_country = {
-						capital_scope = {
-							region = france_region
-						}
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					exists = FRA
-				}
-				FRA = {
-					add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_us
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_them
-					}
-					add_country_modifier = {
-						name = lucca_turned_to_us_modifier
-						duration = 365
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						owns = 183
-					}
-				}
-				183 = {
-					owner = {
-						add_opinion = {
-							who = ROOT
-							modifier = lucca_turned_to_us
-						}
-						reverse_add_opinion = {
-							who = ROOT
-							modifier = lucca_turned_to_them
-						}
-						add_country_modifier = {
-							name = lucca_turned_to_us_modifier
-							duration = 365
-						}
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_country = {
-						capital_scope = {
-							region = france_region
-						}
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-				}
-				random_country = {
-					limit = {
-						capital_scope = {
-							region = france_region
-						}
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-					add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_us
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_them
-					}
-					add_country_modifier = {
-						name = lucca_turned_to_us_modifier
-						duration = 365
-					}
-				}
-			}
-			else = {
-				add_prestige = 10
-			}
-			add_country_modifier = {
-				name = lucca_turned_to_them_modifier
-				duration = 365
-			}
-		}
-	}
-	
-	lucca_ally_france = {
-		icon = mission_alliances
-		position = 7
-		required_missions = { lucca_turn_towards_france }
-		provinces_to_highlight = {
-			NOT = { exists = FRA }
-			183 = {
-				owned_by = ROOT
-			}
-			region = france_region
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			if = {
-				limit = {
-					exists = FRA
-				}
-				alliance_with = FRA
-			}
-			else_if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						owns = 183
-					}
-				}
-				183 = {
-					owner = {
-						alliance_with = ROOT
-					}
-				}
-			}
-			else = {
-				OR = {
-					france_region = {
-						type = all
-						owned_by = ROOT
-					}
-					any_country = {
-						capital_scope = {
-							region = france_region
-						}
-						alliance_with = ROOT
-					}
-				}
-			}
-			if = {
-				limit = {
-					any_country = {
-						is_emperor = yes
-					}
-				}
-				NOT = { alliance_with = emperor }
-			}
-			else_if = {
-				limit = {
-					exists = HAB
-				}
-				NOT = { alliance_with = HAB }
-			}
-			else_if = {
-				limit = {
-					exists = GER
-				}
-				NOT = { alliance_with = GER }
-			}
-			else = {
-				NOT = {
-					any_country = {
+			OR = {
+				calc_true_if = {
+					amount = 2
+					all_country = {
 						capital_scope = {
 							OR = {
-								region = north_german_region
-								region = south_german_region
+								area = piedmont_area
+								area = liguria_area
+								area = lombardy_area
+								area = po_valley_area
+								area = venetia_area
+								area = emilia_romagna_area
 							}
 						}
-						alliance_with = ROOT
+						OR = {
+							alliance_with = ROOT
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+					}
+				}
+				AND = {
+					is_year = 1494
+					is_part_of_hre = yes
+				}
+				alliance_with = LAN
+				is_in_trade_league_with = LAN
+				LAN = {
+					has_opinion = {
+						who = ROOT
+						value = 125
 					}
 				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = lucca_allied_france_or_emperor
-				duration = 7300
-			}
-			tirol_area = {
+			add_yearly_manpower = 1
+			tuscany_area = {
 				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			switzerland_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			romandie_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	lucca_gain_foothold_in_hre = {
-		icon = mission_unite_home_region
-		position = 8
-		required_missions = { lucca_ally_france }
+
+	luc_take_pisa = {
+		icon = interest_of_holland
+		required_missions = {
+			luc_northern_allies
+			luc_marmo_carrara
+		}
+		position = 4
 		provinces_to_highlight = {
-			OR = {
-				area = tirol_area
-				area = switzerland_area
-				area = romandie_area
-			}
+			province_id = 115
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			NOT = { has_country_modifier = lucca_foothold_in_hre_or_france }
-			tirol_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			switzerland_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			romandie_area = {
-				type = all
+			115 = {
 				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
-			add_prestige = 20
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
-			add_country_modifier = {
-				name = lucca_foothold_in_hre_or_france
-				duration = 9125
-			}
+			add_prestige = 15
 		}
 	}
-	
-	lucca_become_complete_papal_controller = {
-		icon = mission_hands_praying
-		position = 8
-		required_missions = { }
+
+	luc_end_florence = {
+		icon = contracts_of_correspondence
+		required_missions = {
+			luc_take_pisa
+		}
+		position = 5
 		provinces_to_highlight = {
-			NOT = { exists = PAP }
-			province_id = 118
+			OR = {
+				province_id = 116
+				province_id = 2978
+			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			OR = {
-				AND = {
-					exists = PAP
-					overlord_of = PAP
-				}
-				AND = {
-					NOT = { exists = PAP }
-					118 = { country_or_non_sovereign_subject_holds = ROOT }
-				}
+			116 = {
+				country_or_non_sovereign_subject_holds = ROOT
 			}
-			religion = catholic
-			is_papal_controller = yes
+			2978 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
-			add_papal_influence = 50
 			add_country_modifier = {
-				name = lucca_complete_papal_controller
+				name = luc_end_florentine_threat
 				duration = 7300
 			}
 		}
 	}
 }
 
-lucca_missions_slot_3 = {
+lucca_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
 	potential = {
-		tag = LUC
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						NOT = { was_tag = LML }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	}
 	has_country_shield = yes
-	
-	lucca_build_tax_buildings = {
-		icon = mission_european_church
+
+	luc_volto_santo_lucca = {
+		icon = control_the_church
+		required_missions = {}
 		position = 1
-		required_missions = { }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = temple
-						has_building = cathedral
-					}
-				}
-				amount = 10
-			}
-		}
-		effect = {
-			add_years_of_income = 5
-			add_country_modifier = {
-				name = lucca_tax_buildings
-				duration = 7300
-			}
-		}
-	}
-	
-	lucca_build_government_buildings = {
-		icon = mission_early_game_buildings
-		position = 2
-		required_missions = { lucca_build_tax_buildings }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = courthouse
-						has_building = town_hall
-						has_building = university
-					}
-				}
-				amount = 10
-			}
-		}
-		effect = {
-			add_adm_power = 50
-			add_country_modifier = {
-				name = lucca_government_buildings
-				duration = 7300
-			}
-		}
-	}
-	
-	lucca_become_monarchy = {
-		icon = mission_empire
-		position = 5
-		required_missions = { lucca_absolutism }
-		trigger = {
-			NOT = { mission_completed = lucca_become_merchant_republic }
-			NOT = { legitimacy_equivalent = 50 }
-			estate_influence = {
-				estate = estate_nobles
-				influence = 60
-			}
-			estate_loyalty = {
-				estate = estate_nobles
-				loyalty = 40
-			}
-			NOT = { government = monarchy }
-			NOT = { has_reform = merchants_reform }
-		}
-		effect = {
-			change_government = monarchy
-			if = {
-				limit = {
-					NOT = { has_dlc = "Dharma" }
-					adm_tech = 29
-				}
-				set_legacy_government = enlightened_despotism
-			}
-			else = {
-				add_government_reform = feudalism_reform
-			}
-		}
-	}
-	
-	lucca_become_emperor_of_the_hre = {
-		icon = mission_empire
-		position = 8
-		required_missions = { }
-		trigger = {
-			is_emperor = yes
-		}
-		effect = {
-			add_imperial_influence = 5
-			add_country_modifier = {
-				name = gen_hre_emperor_mod
-				duration = 5475
-			}
-		}
-	}
-	
-	lucca_build_naval_buildings = {
-		icon = mission_early_game_buildings
-		position = 9
-		required_missions = { }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = dock
-						has_building = drydock
-						has_building = shipyard
-						has_building = grand_shipyard
-					}
-				}
-				amount = 10
-			}
-		}
-		effect = {
-			add_yearly_sailors = 3
-			add_country_modifier = {
-				name = lucca_naval_buildings
-				duration = 7300
-			}
-		}
-	}
-	
-	lucca_build_large_navy = {
-		icon = mission_galleys_in_port
-		position = 10
-		required_missions = { lucca_build_naval_buildings }
-		trigger = {
+		provinces_to_highlight = {
+			province_id = 2980
 			OR = {
-				num_of_heavy_ship = 10
-				num_of_galley = 30
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
 			}
-			navy_size_percentage = 0.75
+		}
+		trigger = {
+			2980 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+			}
+		}
+		effect = {
+			2980 = {
+				add_province_modifier = {
+					name = luc_holy_face_lucca
+					duration = 18250
+				}
+			}
+			country_event = {
+				id = ME_Lucca_Events.1
+			}
+		}
+	}
+
+	luc_marmo_carrara = {
+		icon = mission_land_of_churches
+		position = 3
+		required_missions = {
+			luc_volto_santo_lucca
+		}
+		trigger = {
+			num_of_galley = 5
+			num_of_light_ship = 5
 		}
 		effect = {
 			add_country_modifier = {
-				name = naval_enthusiasm_mission
+				name = luc_office_marble
 				duration = 9125
 			}
 		}
 	}
-	
-	lucca_navy_tradition = {
-		icon = mission_establish_high_seas_navy
-		position = 11
-		required_missions = { lucca_build_large_navy }
+
+	luc_city_siena = {
+		icon = catholic_confraternity
+		required_missions = { luc_take_pisa }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 117
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
-			navy_tradition = 50
+			117 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = lucca_navy_tradition_modifier
-				duration = 9125
+				name = luc_secured_southern_tuscany
+				duration = 7300
+			}
+		}
+	}
+
+	luc_independence_secured = {
+		icon = reform_the_monte
+		required_missions = {
+			luc_luccan_trading_ports
+			luc_end_florence
+			luc_city_siena
+			luc_luccan_reinassance
+		}
+		position = 6
+		provinces_to_highlight = {
+			area = tuscany_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			tuscany_area = {
+				type = all
+				owned_by = ROOT
+			}
+			legitimacy_equivalent = 80
+			army_size = 20
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_libertas_secured
+				duration = 7300
+			}
+			hidden_effect = {
+				complete_mission = pis_republic_reunited
+				complete_mission = lan_granducato
+				complete_mission = sie_triumph_good_governance
 			}
 		}
 	}
 }
 
-lucca_missions_slot_4 = {
+lucca_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
 	potential = {
-		tag = LUC
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						NOT = { was_tag = LML }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	}
 	has_country_shield = yes
-	
-	lucca_develop_country = {
-		icon = mission_conquer_50_development
-		position = 3
-		required_missions = { lucca_build_trade_buildings lucca_build_government_buildings }
+
+	luc_cavalieri_tau = {
+		icon = the_italian_league
+		required_missions = {
+			luc_volto_santo_lucca
+			luc_papal_diplomacy
+		}
+		position = 2
 		trigger = {
-			total_development = 100
+			army_tradition = 40
+			manpower = 12
+			OR = {
+				is_year = 1500
+				AND = {
+					is_year = 1459
+					custom_trigger_tooltip = {
+						tooltip = LUC_ITALIAN_WARS_FIRED_TT
+						has_global_flag =  italian_wars_global_flag
+					}
+				}
+			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = lucca_developed_country
-				duration = 9125
+				name = luc_knights_tau
+				duration = 7300
 			}
 		}
 	}
-	
-	lucca_absolutism = {
-		icon = mission_monarch_in_throne_room
+
+	luc_bagni_lucca = {
+		icon = reclaim_the_aegean
+		required_missions = {
+			luc_marmo_carrara
+		}
 		position = 4
-		required_missions = { lucca_develop_country }
-		trigger = {
-			OR = {
-				absolutism = 30
-				variable_arithmetic_trigger = {
-					custom_tooltip = LUC_HAS_MAX_ABSOLUTISM
-					export_to_variable = {
-						which = luc_absolutism_var
-						value = trigger_value:absolutism
-					}
-					variable_arithmetic_trigger = {
-						change_variable = { which = luc_absolutism_var value = -1 }
-					}
-					export_to_variable = {
-						which = luc_max_absolutism_var
-						value = modifier:max_absolutism
-					}
-					
-					absolutism = 1
-					check_variable = { which = luc_absolutism_var which = luc_max_absolutism_var }
-				}
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = lucca_absolutism_modifier
-				duration = 3650
-			}
-		}
-	}
-	
-	lucca_great_power = {
-		icon = mission_conquer_50_development
-		position = 5
-		required_missions = { }
-		trigger = {
-			if = {
-				limit = {
-					has_dlc = "Rights of Man"
-				}
-				is_great_power = yes
-			}
-			else = {
-				custom_trigger_tooltip = {
-					tooltip = NOT_MORE_THAN_7_HIGHER_DEVELOPED_COUNTRIES_THAN_LUC
-					NOT = {
-						calc_true_if = {
-							all_country = {
-								NOT = { tag = ROOT }
-								ROOT = {
-									NOT = { total_development = PREV }
-								}
-							}
-							amount = 8
-						}
-					}
-				}
-			}
-		}
-		effect = {
-			add_prestige = 25
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
-			add_country_modifier = {
-				name = lucca_great_power_modifier
-				duration = 10950
-			}
-		}
-	}
-	
-	lucca_turn_towards_emperor = {
-		icon = mission_have_two_subjects
-		position = 6
-		required_missions = { lucca_conquer_western_italy }
 		provinces_to_highlight = {
-			NOT = {
-				any_country = {
-					NOT = { tag = ROOT }
-					is_emperor = yes
-				}
-			}
-			NOT = { exists = HAB }
-			NOT = { exists = GER }
+			province_id = 2980
 			OR = {
-				region = north_german_region
-				region = south_german_region
+				NOT = { owned_by = ROOT }
+				NOT = { has_production_building_trigger = yes }
 			}
-			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			NOT = { has_country_modifier = lucca_turned_to_them_modifier }
-			if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						is_emperor = yes
-					}
-				}
-				emperor = {
-					has_opinion = {
-						who = ROOT
-						value = 100
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					exists = HAB
-				}
-				HAB = {
-					has_opinion = {
-						who = ROOT
-						value = 100
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					exists = GER
-				}
-				GER = {
-					has_opinion = {
-						who = ROOT
-						value = 100
-					}
-				}
-			}
-			else = {
-				OR = {
-					is_emperor = yes
-					north_german_region = {
-						type = all
-						owned_by = ROOT
-					}
-					south_german_region = {
-						type = all
-						owned_by = ROOT
-					}
-					any_country = {
-						capital_scope = {
-							OR = {
-								region = north_german_region
-								region = south_german_region
-							}
-						}
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-				}
-			}
-		}
-		effect = {
-			if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						is_emperor = yes
-					}
-				}
-				emperor = {
-					add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_us
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_them
-					}
-					add_country_modifier = {
-						name = lucca_turned_to_us_modifier
-						duration = 365
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					exists = HAB
-				}
-				HAB = {
-					add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_us
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_them
-					}
-					add_country_modifier = {
-						name = lucca_turned_to_us_modifier
-						duration = 365
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					exists = GER
-				}
-				GER = {
-					add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_us
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_them
-					}
-					add_country_modifier = {
-						name = lucca_turned_to_us_modifier
-						duration = 365
-					}
-				}
-			}
-			else_if = {
-				limit = {
-					any_country = {
-						capital_scope = {
-							OR = {
-								region = north_german_region
-								region = south_german_region
-							}
-						}
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-				}
-				random_country = {
-					limit = {
-						capital_scope = {
-							OR = {
-								region = north_german_region
-								region = south_german_region
-							}
-						}
-						has_opinion = {
-							who = ROOT
-							value = 100
-						}
-					}
-					add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_us
-					}
-					reverse_add_opinion = {
-						who = ROOT
-						modifier = lucca_turned_to_them
-					}
-					add_country_modifier = {
-						name = lucca_turned_to_us_modifier
-						duration = 365
-					}
-				}
-			}
-			else = {
-				add_prestige = 10
-			}
-			add_country_modifier = {
-				name = lucca_turned_to_them_modifier
-				duration = 365
-			}
-		}
-	}
-	
-	lucca_ally_emperor = {
-		icon = mission_alliances
-		position = 7
-		required_missions = { lucca_turn_towards_emperor }
-		provinces_to_highlight = {
-			NOT = {
-				any_country = {
-					NOT = { tag = ROOT }
-					is_emperor = yes
-				}
-			}
-			NOT = { exists = HAB }
-			NOT = { exists = GER }
 			OR = {
-				region = north_german_region
-				region = south_german_region
-			}
-			NOT = { owned_by = ROOT }
-		}
-		trigger = {
-			if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						is_emperor = yes
-					}
+				2980 = {
+					owned_by = ROOT
+					has_production_building_trigger = yes
 				}
-				alliance_with = emperor
-			}
-			else_if = {
-				limit = {
-					exists = HAB
-				}
-				alliance_with = HAB
-			}
-			else_if = {
-				limit = {
-					exists = GER
-				}
-				alliance_with = GER
-			}
-			else = {
-				OR = {
-					north_german_region = {
-						type = all
-						owned_by = ROOT
-					}
-					south_german_region = {
-						type = all
-						owned_by = ROOT
-					}
-					any_country = {
-						capital_scope = {
-							OR = {
-								region = north_german_region
-								region = south_german_region
-							}
-						}
-						alliance_with = ROOT
-					}
-				}
-			}
-			if = {
-				limit = {
-					exists = FRA
-				}
-				NOT = { alliance_with = FRA }
-			}
-			else_if = {
-				limit = {
-					any_country = {
-						NOT = { tag = ROOT }
-						owns = 183
-					}
-				}
-				183 = {
-					owner = {
-						NOT = { alliance_with = ROOT }
-					}
-				}
-			}
-			else = {
-				NOT = {
-					any_country = {
-						capital_scope = {
-							region = france_region
-						}
-						alliance_with = ROOT
-					}
-				}
+				diplomat = 1
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = lucca_allied_france_or_emperor
+				name = luc_luccan_spring_water
 				duration = 7300
 			}
-			provence_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			languedoc_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-			savoy_dauphine_area = {
-				limit = {
-					NOT = { owned_by = ROOT	}
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
-			}
-		}
-	}
-	
-	lucca_gain_foothold_in_france = {
-		icon = mission_unite_home_region
-		position = 8
-		required_missions = { lucca_ally_emperor }
-		provinces_to_highlight = {
-			OR = {
-				area = provence_area
-				area = languedoc_area
-				area = savoy_dauphine_area
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			NOT = { has_country_modifier = lucca_foothold_in_hre_or_france }
-			provence_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			languedoc_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-			savoy_dauphine_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_prestige = 20
-			add_adm_power = 50
-			add_dip_power = 50
-			add_mil_power = 50
-			add_country_modifier = {
-				name = lucca_foothold_in_hre_or_france
-				duration = 9125
-			}
-		}
-	}
-	
-	lucca_build_army_buildings = {
-		icon = mission_early_game_buildings
-		position = 9
-		required_missions = { }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = barracks
-						has_building = training_fields
-						has_building = regimental_camp
-						has_building = conscription_center
-					}
-				}
-				amount = 10
-			}
-		}
-		effect = {
-			add_mil_power = 50
-			add_country_modifier = {
-				name = lucca_army_buildings
-				duration = 7300
-			}
-		}
-	}
-	
-	lucca_build_much_artillery = {
-		icon = mission_cannons_firing
-		position = 10
-		required_missions = { lucca_build_army_buildings }
-		trigger = {
-			num_of_artillery = 30
-			monthly_income = 0
-		}
-		effect = {
-			add_country_modifier = {
-				name = lucca_artillery_modifier
-				duration = 9125
-			}
-		}
-	}
-	
-	lucca_army_tradition = {
-		icon = mission_assemble_an_army
-		position = 11
-		required_missions = { lucca_build_much_artillery }
-		trigger = {
-			army_tradition = 50
-		}
-		effect = {
-			add_country_modifier = {
-				name = lucca_army_tradition_modifier
-				duration = 9125
+			country_event = {
+				id = ME_Lucca_Events.2
 			}
 		}
 	}
 }
 
-lucca_missions_slot_5 = {
+lucca_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
 	potential = {
-		tag = LUC
-		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+		OR = {
+			tag = LUC
+			AND = {
+				was_tag = LUC
+				OR = {
+					tag = TUS
+					AND = {
+						tag = ITA
+						NOT = { was_tag = SPI }
+						NOT = { was_tag = TTS }
+						NOT = { was_tag = LML }
+						country_was_not_more_than_one_italian_formable = yes
+					}
+				}
+			}
+		}
+		OR = {
+			NOT = { has_dlc = "Emperor" }
+			AND = {
+				has_dlc = "Emperor"
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+		}
 	}
 	has_country_shield = yes
-	
-	lucca_build_production_buildings = {
-		icon = mission_have_manufactories
+
+	luc_papal_diplomacy = {
+		icon = sources_of_trade
+		required_missions = { }
 		position = 1
-		required_missions = { }
 		trigger = {
-			calc_true_if = {
-				all_owned_province = {
-					OR = {
-						has_building = workshop
-						has_building = counting_house
+			if = {
+				limit = {
+					exists = PAP
+				}
+				OR = {
+					PAP = {
+						has_opinion = {
+							who = ROOT
+							value = 125
+						}
+					}
+					alliance_with = PAP
+					is_rival = PAP
+					is_enemy = PAP
+					NOT = {
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = -50
+							}
+						}
 					}
 				}
-				amount = 10
+			}
+			else = {
+				OR = {
+					papal_influence = 50
+					is_excommunicated = yes
+					NOT = { religion = catholic }
+				}
 			}
 		}
 		effect = {
-			add_dip_power = 50
-			add_country_modifier = {
-				name = lucca_production_buildings
-				duration = 7300
-			}
-		}
-	}
-	
-	lucca_build_trade_buildings = {
-		icon = mission_early_game_buildings
-		position = 2
-		required_missions = { lucca_build_production_buildings }
-		trigger = {
-			calc_true_if = {
-				all_owned_province = {
+			if = {
+				limit = {
 					OR = {
-						has_building = marketplace
-						has_building = trade_depot
-						has_building = stock_exchange
+						alliance_with = PAP
+						PAP = {
+							has_opinion = {
+								who = ROOT
+								value = 125
+							}
+						}
+						papal_influence = 50
 					}
 				}
-				amount = 10
+				add_country_modifier = {
+					name = luc_legacy_lucius_iii
+					duration = 7300
+				}
 			}
-		}
-		effect = {
-			add_mercantilism = 3
-			add_country_modifier = {
-				name = lucca_trade_buildings
-				duration = 7300
+			else = {
+				add_adm_power = 50
+				add_dip_power = 100
 			}
 		}
 	}
-	
-	lucca_become_merchant_republic = {
-		icon = mission_trade_company_region_abroad
+
+	luc_luccan_reinassance = {
+		icon = florentine_renaissance
+		required_missions = {
+			luc_papal_diplomacy
+		}
 		position = 5
-		required_missions = { }
 		trigger = {
-			NOT = { mission_completed = lucca_become_monarchy }
-			trade_income_percentage = 0.5
-			mercantilism = 50
-			NOT = { has_reform = merchants_reform }
-			NOT = { has_reform = feudalism_reform }
+			has_institution = renaissance
 		}
 		effect = {
-			change_government = republic
-			add_government_reform = merchants_reform
+			add_country_modifier = {
+				name = luc_luccan_art_schoool
+				duration = 7300
+			}
+		}
+	}
+
+	luc_university_lucca = {
+		icon = interest_of_holland
+		required_missions = {
+			luc_luccan_reinassance
+		}
+		position = 6
+		provinces_to_highlight = {
+			province_id = 2980
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_building = university }
+			}
+		}
+		trigger = {
+			2980 = {
+				owned_by = ROOT
+				has_building = university
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = luc_university_lucca
+				duration = 7300
+			}
 		}
 	}
 }

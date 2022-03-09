@@ -1,5 +1,7 @@
 namespace = ME_Naples_Events
-country_event = { #Neapolitan Renaissance
+
+#Neapolitan Renaissance
+country_event = {
 	id = ME_Naples_Events.1
 	title = ME_Naples_Events.1.T
 	desc = ME_Naples_Events.1.D
@@ -20,7 +22,7 @@ country_event = { #Neapolitan Renaissance
 			culture = neapolitan
 			religion = catholic
 			cost_multiplier = 0.5
-		}		
+		}
 	}
 
 	option = {
@@ -36,7 +38,7 @@ country_event = { #Neapolitan Renaissance
 			culture = flemish
 			religion = catholic
 			cost_multiplier = 0.5
-		}		
+		}
 	}
 
 	option = {
@@ -52,7 +54,7 @@ country_event = { #Neapolitan Renaissance
 			culture = neapolitan
 			religion = catholic
 			cost_multiplier = 0.5
-		}		
+		}
 	}
 
 	option = {
@@ -68,11 +70,12 @@ country_event = { #Neapolitan Renaissance
 			culture = swiss
 			religion = catholic
 			cost_multiplier = 0.5
-		}		
+		}
 	}
 }
 
-country_event = { #Repubblica Marinara d'Amalfi
+#Repubblica Marinara d'Amalfi
+country_event = {
 	id = ME_Naples_Events.2
 	title = ME_Naples_Events.2.T
 	desc = ME_Naples_Events.2.D
@@ -85,7 +88,8 @@ country_event = { #Repubblica Marinara d'Amalfi
 	}
 
 	trigger = {
-		2983 = { 
+		culture_group = latin
+		2983 = {
 			owned_by = ROOT
 			has_province_modifier = nap_restore_republic
 		}
@@ -102,7 +106,7 @@ country_event = { #Repubblica Marinara d'Amalfi
 		ai_chance = {
 			factor = 25
 		}
-		
+
 		2983 = {
 			change_trade_goods = naval_supplies
 			add_permanent_province_modifier = {
@@ -122,7 +126,7 @@ country_event = { #Repubblica Marinara d'Amalfi
 		trigger = {
 			is_expanded_mod_active = { mod = trade_goods }
 		}
-		
+
 		2983 = {
 			change_trade_goods = lumber
 			add_permanent_province_modifier = {
@@ -143,7 +147,7 @@ country_event = { #Repubblica Marinara d'Amalfi
 		ai_chance = {
 			factor = 25
 		}
-		
+
 		2983 = {
 			change_trade_goods = paper
 			add_base_tax = 3
@@ -163,7 +167,7 @@ country_event = { #Repubblica Marinara d'Amalfi
 		trigger = {
 			is_expanded_mod_active = { mod = trade_goods }
 		}
-		
+
 		2983 = {
 			if = {
 				limit = {
@@ -180,25 +184,80 @@ country_event = { #Repubblica Marinara d'Amalfi
 	}
 }
 
-country_event = { #The Throne of Provence for Provence
+#The Throne of Provence for Provence
+country_event = {
 	id = ME_Naples_Events.3
 	title = ME_Naples_Events.3.T
 	desc = ME_Naples_Events.3.D
 	picture = COURT_eventPicture
-	
+
 	is_triggered_only = yes
 	major = yes
+	major_trigger = {
+		tag = event_target:major_notification_receiver
+	}
+
+	immediate = {
+		hidden_effect = {
+			FROM = {
+				save_event_target_as = major_notification_receiver
+			}
+		}
+	}
 
 	option = {
 		name = ME_Naples_Events.3.OPT1
-
 		ai_chance = {
-			factor = 50
+			factor = 20
+			modifier = {
+				factor = 3
+				army_strength = {
+					who = FROM
+					value = 0.25
+				}
+			}
 			modifier = {
 				factor = 2
 				army_strength = {
 					who = FROM
 					value = 0.50
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {
+					diplomatic_reputation = 3
+				}
+			}
+			modifier = {
+				factor = 2
+				NOT = { legitimacy = 50 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { stability = 1 }
+			}
+		}
+
+		trigger = {
+			hidden_trigger = {
+				is_subject = no
+				OR = {
+					AND = {
+						valid_for_personal_unions_trigger = yes
+						FROM = {
+							valid_for_personal_unions_trigger = yes
+						}
+					}
+					AND = {
+						is_expanded_mod_active = { mod = subjects }
+						FROM = {
+							can_create_subject_type = {
+								subject = ROOT
+								subject_type = brother_kingdom
+							}
+						}
+					}
 				}
 			}
 		}
@@ -208,9 +267,11 @@ country_event = { #The Throne of Provence for Provence
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = subjects }
-					can_create_subject_type = {
-						subject = ROOT
-						subject_type = brother_kingdom
+					FROM = {
+						can_create_subject_type = {
+							subject = ROOT
+							subject_type = brother_kingdom
+						}
 					}
 				}
 				create_subject = {
@@ -229,17 +290,19 @@ country_event = { #The Throne of Provence for Provence
 
 	option = {
 		name = ME_Naples_Events.3.OPT2
-
 		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 0
-				is_subject = yes
-			}
+			factor = 80
 		}
+
 		add_casus_belli = {
 			type = cb_insult
 			target = FROM
+		}
+		every_owned_province = {
+			limit = {
+				NOT = { is_core = FROM }
+			}
+			add_permanent_claim = FROM
 		}
 		FROM = {
 			add_casus_belli = {
@@ -251,26 +314,73 @@ country_event = { #The Throne of Provence for Provence
 	}
 }
 
-country_event = { #The bond with Naples for Hungary
+#The bond with Naples for Hungary
+country_event = {
 	id = ME_Naples_Events.4
 	title = ME_Naples_Events.4.T
 	desc = ME_Naples_Events.4.D
 	picture = COURT_eventPicture
 
 	major = yes
-	
+	major_trigger = {
+		tag = FROM
+	}
+
 	is_triggered_only = yes
 
 	option = {
 		name = ME_Naples_Events.4.OPT1
-
 		ai_chance = {
-			factor = 50
+			factor = 20
+			modifier = {
+				factor = 3
+				army_strength = {
+					who = FROM
+					value = 0.25
+				}
+			}
 			modifier = {
 				factor = 2
 				army_strength = {
 					who = FROM
 					value = 0.50
+				}
+			}
+			modifier = {
+				factor = 1.5
+				FROM = {
+					diplomatic_reputation = 3
+				}
+			}
+			modifier = {
+				factor = 2
+				NOT = { legitimacy = 50 }
+			}
+			modifier = {
+				factor = 2
+				NOT = { stability = 1 }
+			}
+		}
+
+		trigger = {
+			hidden_trigger = {
+				is_subject = no
+				OR = {
+					AND = {
+						valid_for_personal_unions_trigger = yes
+						FROM = {
+							valid_for_personal_unions_trigger = yes
+						}
+					}
+					AND = {
+						is_expanded_mod_active = { mod = subjects }
+						FROM = {
+							can_create_subject_type = {
+								subject = ROOT
+								subject_type = brother_kingdom
+							}
+						}
+					}
 				}
 			}
 		}
@@ -280,9 +390,11 @@ country_event = { #The bond with Naples for Hungary
 			if = {
 				limit = {
 					is_expanded_mod_active = { mod = subjects }
-					can_create_subject_type = {
-						subject = ROOT
-						subject_type = brother_kingdom
+					FROM = {
+						can_create_subject_type = {
+							subject = ROOT
+							subject_type = brother_kingdom
+						}
 					}
 				}
 				create_subject = {
@@ -301,18 +413,19 @@ country_event = { #The bond with Naples for Hungary
 
 	option = {
 		name = ME_Naples_Events.4.OPT2
-
 		ai_chance = {
-			factor = 50
-			modifier = {
-				factor = 0
-				is_subject = yes
-			}
+			factor = 80
 		}
 
 		add_casus_belli = {
 			type = cb_insult
 			target = FROM
+		}
+		every_owned_province = {
+			limit = {
+				NOT = { is_core = FROM }
+			}
+			add_permanent_claim = FROM
 		}
 		FROM = {
 			add_casus_belli = {
@@ -324,17 +437,18 @@ country_event = { #The bond with Naples for Hungary
 	}
 }
 
-country_event = { #The Crown of Jerusalem
+#The Crown of Jerusalem
+country_event = {
 	id = ME_Naples_Events.5
 	title = ME_Naples_Events.5.T
 	desc = ME_Naples_Events.5.D
 	picture = GOOD_WITH_MONARCH_eventPicture
-	
+
 	is_triggered_only = yes
-	
+
 	option = {
 		name = ME_Naples_Events.5.OPT1
-		
+
 		ai_chance = {
 			factor = 50
 		}
