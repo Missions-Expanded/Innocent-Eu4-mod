@@ -1,0 +1,148 @@
+me_greek_nation = {
+		major = yes
+		potential = {
+			normal_or_historical_nations = yes
+			was_never_end_game_tag_trigger = yes
+			NOT = { has_country_flag = me_formed_greece_flag }
+			has_country_flag = me_greek_minors_earlier_formation_of_greece
+			OR = {
+				ai = no
+				is_playing_custom_nation = no
+			}
+			NOT = { tag = HLR }
+			NOT = { tag = PAP }
+			NOT = { tag = TUR }
+			NOT = { tag = BYZ }
+			NOT = { exists = BYZ }
+			NOT = { exists = GRE }
+			primary_culture = greek
+			is_colonial_nation = no
+			OR = {
+				ai = no
+				AND = {
+					ai = yes
+					num_of_cities = 5
+				}
+			}			
+			OR = {
+				is_former_colonial_nation = no
+				AND = {
+					is_former_colonial_nation = yes
+					ai = no
+				}
+			}
+		}
+		provinces_to_highlight = {
+			OR = {
+				province_id = 146
+				AND = {
+					culture = greek
+					OR = {
+						region = balkan_region
+						region = anatolia_region
+					}
+					ROOT = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 10
+								culture = greek
+								OR = {
+									region = balkan_region
+									region = anatolia_region
+								}
+								is_core = root
+							}
+						}
+						owns_core_province = 146
+					}
+				}
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+		}
+		allow = {
+			is_free_or_tributary_trigger = yes
+			is_nomad = no
+			is_at_war = no
+			owns_core_province = 146 #Athens
+			num_of_owned_provinces_with = {
+				value = 10
+				culture = greek
+				OR = {
+					region = balkan_region
+					region = anatolia_region
+				}
+				is_core = root
+			}
+		}
+		effect = {
+			change_tag = GRE
+			remove_non_electors_emperors_from_empire_effect = yes
+			if = {
+				limit = {
+					NOT = { government_rank = 2 }
+				}
+				set_government_rank = 2
+			}
+			random_owned_province = {
+				limit = { culture = greek }
+				add_base_tax = 1
+			}
+			add_country_modifier = {
+				name = "centralization_modifier"
+				duration = 7300
+			}
+			aegean_archipelago_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { province_id = 143 }
+				}
+				add_permanent_claim = GRE
+			}
+			northern_greece_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { province_id = 143 }
+				}
+				add_permanent_claim = GRE
+			}
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { province_id = 143 }
+				}
+				add_permanent_claim = GRE
+			}
+			macedonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { province_id = 143 }
+				}
+				add_permanent_claim = GRE
+			}
+			add_prestige = 10
+			if = {
+				limit = {
+					NOT = {
+						capital_scope = { area = morea_area }
+						capital_scope = { area = northern_greece_area }
+						capital_scope = { area = macedonia_area }
+					}
+				}
+				set_capital = 146
+			}
+			set_country_flag = me_formed_greece_flag
+			if = {
+				limit = {
+					NOT = { has_idea_group = greek_ideas } 
+					is_playing_custom_nation = no
+				}
+				country_event = { id = ideagroups.1 } #Swap Ideas
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
