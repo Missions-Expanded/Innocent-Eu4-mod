@@ -687,22 +687,16 @@ ming_missions_2 = {
 			region = mongolia_region
 			NOT = { country_or_subject_holds = ROOT }
 			NOT = {
-				calc_true_if = {
-					amount = 45
-					mongolia_region = {
-						type = any
-						country_or_subject_holds = ROOT
-					}
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 45
+					region = mongolia_region
 				}
 			}
 		}
 		trigger = {
-			calc_true_if = {
-				amount = 45
-				mongolia_region = {
-					type = any
-					country_or_subject_holds = ROOT
-				}
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 45
+				region = mongolia_region
 			}
 			OR = {
 				KHA = {
@@ -1072,7 +1066,7 @@ ming_missions_2 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
-			owns_or_non_sovereign_subject_of = 4213
+			owns_or_non_sovereign_subject_of = 4231
 			owns_or_non_sovereign_subject_of = 733
 		}
 		effect = {
@@ -1169,7 +1163,7 @@ ming_missions_2 = {
 				amount = 5
 				republican_tradition = 2.5
 			}
-			custom_tooltip = MING_NOT_ACCEPT_KOREA_TT
+			custom_tooltip = MNG_NOT_ACCEPT_KOREA_TT
 			hidden_effect = {
 				if = {
 					limit = {
@@ -1187,7 +1181,7 @@ ming_missions_2 = {
 				add = mng_sino_korean_elite
 				time = -1
 			}
-			custom_tooltip = MING_ACCEPT_KOREA_TT
+			custom_tooltip = MNG_ACCEPT_KOREA_TT
 			hidden_effect = {
 				every_province = {
 					if = {
@@ -1241,7 +1235,7 @@ ming_missions_2 = {
 		effect = {
 			add_country_modifier = {
 				name = mng_reformed_cabinet
-				duration = 1925
+				duration = 9125
 			}
 		}
 	}
@@ -1320,7 +1314,7 @@ ming_missions_2 = {
 		provinces_to_highlight = { }
 		trigger = {
 			custom_trigger_tooltip = {
-				tooltip = MING_HAS_10_100_SUBJECTS_TT
+				tooltip = MNG_HAS_10_100_SUBJECTS_TT
 				calc_true_if = {
 					amount = 10
 					all_country = {
@@ -1417,7 +1411,10 @@ ming_missions_3 = {
 		trigger = {
 			OR = {
 				NOT = { exists = KAM }
-				KAM = { is_subject_of = ROOT }
+				KAM = {
+					is_subject_of = ROOT
+					NOT = { is_subject_of_type = tributary_state }
+				}
 			}
 			amdo_area = {
 				type = all
@@ -1678,21 +1675,33 @@ ming_missions_3 = {
 			superregion = india_superregion
 			NOT = { country_or_subject_holds = ROOT }
 			NOT = {
-				# calc_true_if is used here because mission includes ALL subjects
-				calc_true_if = {
-					amount = 150
-					india_superregion = {
-						type = any
-						country_or_subject_holds = ROOT
-					}
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 150
+					superregion = india_superregion
 				}
 			}
 		}
 		trigger = {
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
-				religion = confucianism
-				has_harmonized_with = dharmic
+				if = {
+					limit = { religion = confucianism }
+					has_harmonized_with = dharmic
+				}
+				else = {
+					india_superregion = {
+						type = all
+						if = {
+							limit = { owned_by = ROOT }
+							NOT = {
+								OR = {
+									religion = hinduism
+									religion = sikhism
+								}
+							}
+						}
+					}
+				}
 			}
 			else = {
 				india_superregion = {
@@ -1708,12 +1717,9 @@ ming_missions_3 = {
 					}
 				}
 			}
-			calc_true_if = {
-				amount = 150
-				india_superregion = {
-					type = any
-					country_or_subject_holds = ROOT
-				}
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 150
+				superregion = india_superregion
 			}
 		}
 		effect = {
@@ -1733,9 +1739,10 @@ ming_missions_3 = {
 		provinces_to_highlight = {
 			OR = {
 				area = northern_kyushu
-				area = kyushu_area
+				province_id = 4181
+				province_id = 4180
+				province_id = 1012
 			}
-			NOT = { province_id = 1015 }
 			NOT = { country_or_subject_holds = ROOT }
 		}
 		trigger = {
@@ -1752,15 +1759,9 @@ ming_missions_3 = {
 				type = all
 				country_or_subject_holds = ROOT
 			}
-			kyushu_area = {
-				type = all
-				if = {
-					limit = {
-						NOT = { province_id = 1015 }
-					}
-					country_or_subject_holds = ROOT
-				}
-			}
+			4181 = { country_or_subject_holds = ROOT }
+			4180 = { country_or_subject_holds = ROOT }
+			1012 = { country_or_subject_holds = ROOT }
 		}
 		effect = {
 			define_general = {
@@ -1921,12 +1922,14 @@ ming_missions_3 = {
 		provinces_to_highlight = { }
 		trigger = {
 			oceania = { has_discovered = ROOT }
-			OR = {
-				north_america = { has_discovered = ROOT }
-				south_america = { has_discovered = ROOT }
-				if = {
-					limit = { is_random_new_world = yes }
-					new_world = { has_discovered = ROOT }
+			if = {
+				limit = { is_random_new_world = yes }
+				new_world = { has_discovered = ROOT }
+			}
+			else = {
+				OR = {
+					north_america = { has_discovered = ROOT }
+					south_america = { has_discovered = ROOT }
 				}
 			}
 		}
@@ -2014,7 +2017,8 @@ ming_missions_3 = {
 				name = mng_hanlinyuan_reformed
 				duration = 9125
 			}
-			set_country_flag = mng_stop_donglin_flag
+			hidden_effect = { set_country_flag = mng_stop_donglin_flag }
+			custom_tooltip = MNG_STOP_DONGLIN_TT
 		}
 	}
 }
@@ -2046,7 +2050,7 @@ ming_missions_4 = {
 		effect = {
 			add_country_modifier = {
 				name = mng_pacified_nanman_tribes
-				duration = 1825
+				duration = 3650
 			}
 			burma_region = {
 				limit = {
@@ -2190,7 +2194,7 @@ ming_missions_4 = {
 				name = mng_burmese_ports
 				duration = 9125
 			}
-			custom_tooltip = MING_BURMESE_PORTS_EFFECT_TT
+			custom_tooltip = MNG_BURMESE_PORTS_EFFECT_TT
 			tooltip = {
 				add_province_modifier = {
 					name = mng_burmese_ports_hidden
@@ -2268,7 +2272,7 @@ ming_missions_4 = {
 			}
 			bengal_region = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				country_or_subject_holds = ROOT
 			}
 		}
 		effect = {
@@ -2292,42 +2296,54 @@ ming_missions_4 = {
 		}
 		trigger = {
 			hokkaido_area = { has_discovered = ROOT }
-			OR = {
-				# I'm using calc_true_if here because the trigger includes tributaries
-				calc_true_if = {
-					amount = 2
+			if = {
+				limit = {
 					hokkaido_area = {
-						type = any
-						ROOT = { owns_or_subject_of = PREV }
+						NOT = { owned_by = ANU }
 					}
 				}
-				ANU = {
-					has_opinion = {
-						value = 100
-						who = ROOT
+				OR = {
+					num_of_provinces_owned_or_owned_by_subjects_with = {
+						value = 2
+						area = hokkaido_area
 					}
-				}
-				if = {
-					limit = {
-						hokkaido_area = {
-							owner = {
-								NOT = { tag = ANU }
-							}
+					ANU = {
+						has_opinion = {
+							value = 100
+							who = ROOT
 						}
 					}
-					hokkaido_area = {
-						type = all
-						OR = {
-							owner = { tag = ANU }
-							owner = {
-								has_been_insulted_by_root = yes
-								NOT = {
-									has_opinion = {
-										value = 0
-										who = ROOT
+					custom_trigger_tooltip = {
+						tooltip = MNG_INSTULTED_OWNERS_OF_HOKKAIDO_EXCEPT_ANU_TT
+						hokkaido_area = {
+							type = all
+							OR = {
+								owned_by = ROOT
+								owned_by = ANU
+								owner = {
+									has_been_insulted_by_root = yes
+									NOT = {
+										has_opinion = {
+											value = 0
+											who = ROOT
+										}
 									}
 								}
 							}
+						}
+					}
+				}
+			}
+			else = {
+				OR = {
+					num_of_provinces_owned_or_owned_by_subjects_with = {
+						value = 2
+						area = hokkaido_area
+					}
+					ANU = {
+						has_opinion = {
+							value = 100
+							who = ROOT
 						}
 					}
 				}
@@ -2507,17 +2523,17 @@ ming_missions_4 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			OR = {
+			if = {
+				limit = { is_random_new_world = yes }
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					value = 15
+					continent = new_world
+				}
+			}
+			else = {
 				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 					value = 5
 					region = mexico_region
-				}
-				if = {
-					limit = { is_random_new_world = yes }
-					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-						value = 15
-						continent = new_world
-					}	
 				}
 			}
 		}
@@ -2584,44 +2600,40 @@ ming_missions_5 = {
 		required_missions = { }
 		position = 1
 		trigger = {
-			if = {
-				limit = { exists = DAI }
-				OR = {
-					DAI = {
-						is_subject_of = ROOT
-						has_opinion = {
-							value = 150
-							who = ROOT
-						}
-						marriage_with = ROOT
+			OR = {
+				DAI = {
+					is_subject_of = ROOT
+					has_opinion = {
+						value = 150
+						who = ROOT
 					}
-					DAI = {
-						NOT = { is_subject = yes }
-						OR = {
-							has_opinion_modifier = {
+					marriage_with = ROOT
+				}
+				DAI = {
+					NOT = { is_subject = yes }
+					OR = {
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = insulted
+						}
+						has_opinion_modifier = {
+							who = ROOT
+							modifier = scornfully_insulted
+						}
+						NOT = {
+							has_opinion = {
+								value = 0
 								who = ROOT
-								modifier = insulted
-							}
-							has_opinion_modifier = {
-								who = ROOT
-								modifier = scornfully_insulted
-							}
-							is_rival = ROOT
-							is_enemy = ROOT
-							NOT = {
-								has_opinion = {
-									value = -50
-									who = ROOT
-								}
 							}
 						}
 					}
 				}
-			}
-			else = {
-				red_river_delta_area = {
-					type = all
-					country_or_non_sovereign_subject_holds = ROOT
+				AND = {
+					NOT = { exists = DAI }
+					red_river_delta_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
 				}
 			}
 		}
@@ -2681,28 +2693,25 @@ ming_missions_5 = {
 			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
-				luzon_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
+				every_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						NOT = { is_subject_of = ROOT }
+						OR = {
+							luzon_area = {
+								owned_by = PREV
+							}
+							southern_luzon_area = {
+								owned_by = PREV
+							}
+							visayas_area = {
+								owned_by = PREV
+							}
 						}
 					}
-				}
-				southern_luzon_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				visayas_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
+					reverse_add_casus_belli = {
+						type = cb_force_tributary
+						target = ROOT
 					}
 				}
 			}
@@ -2715,14 +2724,23 @@ ming_missions_5 = {
 		position = 3
 		provinces_to_highlight = { }
 		trigger = {
-			luzon_area = {
-				owner = { is_subject_of = ROOT }
-			}
-			southern_luzon_area = {
-				owner = { is_subject_of = ROOT }
-			}
-			visayas_area = {
-				owner = { is_subject_of = ROOT }
+			all_country = {
+				if = {
+					limit = {
+						OR = {
+							luzon_area = {
+								owned_by = PREV
+							}
+							southern_luzon_area = {
+								owned_by = PREV
+							}
+							visayas_area = {
+								owned_by = PREV
+							}
+						}
+					}
+					is_subject_of = ROOT
+				}
 			}
 		}
 		effect = {
@@ -2804,92 +2822,49 @@ ming_missions_5 = {
 			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
-				indo_china_region = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
+				every_country = {
+					limit = {
+						NOT = { tag = ROOT }
+						NOT = { is_subject_of = ROOT }
+						OR = {
+							indo_china_region = {
+								owned_by = PREV
+							}
+							tenasserim_area = {
+								owned_by = PREV
+							}
+							north_tenasserim_area = {
+								owned_by = PREV
+							}
+							north_malaya_area = {
+								owned_by = PREV
+							}
+							malaya_area = {
+								owned_by = PREV
+							}
+							malacca_area = {
+								owned_by = PREV
+							}
+							johor_area = {
+								owned_by = PREV
+							}
+							kalimantan_area = {
+								owned_by = PREV
+							}
+							brunei_area = {
+								owned_by = PREV
+							}
+							sabah_area = {
+								owned_by = PREV
+							}
+							palawan_area = {
+								owned_by = PREV
+							}
 						}
 					}
-				}
-				tenasserim_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				north_tenasserim_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				north_malaya_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				malaya_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				malacca_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				johor_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				kalimantan_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				brunei_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				sabah_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
-					}
-				}
-				palawan_area = {
-					owner = {
-						reverse_add_casus_belli = {
-							type = cb_force_tributary
-							target = ROOT
-						}
+					reverse_add_casus_belli = {
+						type = cb_force_tributary
+						target = ROOT
 					}
 				}
 			}
@@ -3081,9 +3056,10 @@ ming_missions_5 = {
 		trigger = {
 			if = {
 				limit = {
-					any_country = { culture = melanesian }
+					any_country = { primary_culture = melanesian }
 				}
 				any_country = {
+					primary_culture = melanesian
 					has_opinion = {
 						value = 50
 						who = ROOT
@@ -3092,9 +3068,10 @@ ming_missions_5 = {
 			}
 			if = {
 				limit = {
-					any_country = { culture = polynesian }
+					any_country = { primary_culture = polynesian }
 				}
 				any_country = {
+					primary_culture = polynesian
 					has_opinion = {
 						value = 50
 						who = ROOT
@@ -3103,9 +3080,10 @@ ming_missions_5 = {
 			}
 			if = {
 				limit = {
-					any_country = { culture = maori }
+					any_country = { primary_culture = maori }
 				}
 				any_country = {
+					primary_culture = maori
 					has_opinion = {
 						value = 50
 						who = ROOT
@@ -3349,22 +3327,16 @@ ming_missions_5 = {
 			region = south_africa_region
 			NOT = { country_or_subject_holds = ROOT }
 			NOT = {
-				calc_true_if = {
-					amount = 3
-					south_africa_region = {
-						type = any
-						country_or_subject_holds = ROOT
-					}
+				num_of_provinces_owned_or_owned_by_subjects_with = {
+					value = 3
+					region = south_africa_region
 				}
 			}
 		}
 		trigger = {
-			calc_true_if = {
-				amount = 3
-				south_africa_region = {
-					type = any
-					country_or_subject_holds = ROOT
-				}
+			num_of_provinces_owned_or_owned_by_subjects_with = {
+				value = 3
+				region = south_africa_region
 			}
 			kongo_region = { has_discovered = ROOT }
 			guinea_region = { has_discovered = ROOT }
