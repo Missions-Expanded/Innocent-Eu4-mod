@@ -431,11 +431,14 @@ ming_missions_1 = {
 				value = 35
 				region = manchuria_region
 			}
-			manchuria_region = {
-				type = all
-				OR = {
-					NOT = { culture = manchu } 
-					owned_by = ROOT
+			custom_trigger_tooltip = {
+				tooltip = MNG_OWN_ALL_MANCHU_JURCHEN_TT
+				manchuria_region = {
+					type = all
+					OR = {
+						NOT = { culture = manchu } 
+						owned_by = ROOT
+					}
 				}
 			}
 			if = {
@@ -1411,9 +1414,12 @@ ming_missions_3 = {
 		trigger = {
 			OR = {
 				NOT = { exists = KAM }
-				KAM = {
-					is_subject_of = ROOT
-					NOT = { is_subject_of_type = tributary_state }
+				custom_trigger_tooltip = {
+					tooltip = MNG_KAM_NON_TRIB_SUBJECT_TT
+					KAM = {
+						is_subject_of = ROOT
+						NOT = { is_subject_of_type = tributary_state }
+					}
 				}
 			}
 			amdo_area = {
@@ -1959,9 +1965,12 @@ ming_missions_3 = {
 					empire_of_china_reform_passed = seaban_decision
 				}
 			}
-			any_subject_country = {
-				is_colonial_nation = yes
-				capital_scope = { colonial_region = colonial_australia }
+			custom_trigger_tooltip = {
+				tooltip = MNG_COLONIAL_AUS_TT
+				any_subject_country = {
+					is_colonial_nation = yes
+					capital_scope = { colonial_region = colonial_australia }
+				}
 			}
 			illawara_area = {
 				type = all
@@ -2042,7 +2051,7 @@ ming_missions_4 = {
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
-			yun_gui_area = {
+			yun_gui_borderland_area = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
@@ -2182,10 +2191,13 @@ ming_missions_4 = {
 			province_id = 1343
 		}
 		trigger = {
-			1343 = {
-				trade_share = {
-					share = 50
-					country = ROOT
+			custom_trigger_tooltip = {
+				tooltip = MNG_50_TP_BENGAL_TT
+				1343 = {
+					trade_share = {
+						share = 50
+						country = ROOT
+					}
 				}
 			}
 		}
@@ -2264,10 +2276,13 @@ ming_missions_4 = {
 			}
 		}
 		trigger = {
-			1340 = {
-				trade_share = {
-					share = 50
-					country = ROOT
+			custom_trigger_tooltip = {
+				tooltip = MNG_50_TP_COROMANDEL_TT
+				1340 = {
+					trade_share = {
+						share = 50
+						country = ROOT
+					}
 				}
 			}
 			bengal_region = {
@@ -2307,10 +2322,13 @@ ming_missions_4 = {
 						value = 2
 						area = hokkaido_area
 					}
-					ANU = {
-						has_opinion = {
-							value = 100
-							who = ROOT
+					custom_trigger_tooltip = {
+						tooltip = MNG_ANU_GOOD_REL_TT
+						ANU = {
+							has_opinion = {
+								value = 100
+								who = ROOT
+							}
 						}
 					}
 					custom_trigger_tooltip = {
@@ -2456,12 +2474,13 @@ ming_missions_4 = {
 			}
 			owns_or_non_sovereign_subject_of = 622
 			OR = {
-				PLB = {
-					NOT = { exists = yes }
-				}
-				PLB = {
-					is_subject_of = ROOT
-					NOT = { is_subject_of_type = tributary_state }
+				NOT = { exists = PLB }
+				custom_trigger_tooltip = {
+					tooltip = MNG_PLB_NON_TRIB_SUBJECT_TT
+					PLB = {
+						is_subject_of = ROOT
+						NOT = { is_subject_of_type = tributary_state }
+					}
 				}
 			}
 		}
@@ -2496,12 +2515,29 @@ ming_missions_4 = {
 					empire_of_china_reform_passed = seaban_decision
 				}
 			}
-			any_subject_country = {
-				is_colonial_nation = yes
-				capital_scope = {
-					OR = {
-						continent = north_america
-						continent = south_america
+			if = {
+				limit = { is_random_new_world = yes }
+				custom_trigger_tooltip = {
+					tooltip = MNG_COLONIAL_NW_TT
+					any_subject_country = {
+						is_colonial_nation = yes
+						capital_scope = {
+							continent = new_world
+						}
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = MNG_COLONIAL_NW_TT
+					any_subject_country = {
+						is_colonial_nation = yes
+						capital_scope = {
+							OR = {
+								continent = north_america
+								continent = south_america
+							}
+						}
 					}
 				}
 			}
@@ -2620,11 +2656,11 @@ ming_missions_5 = {
 							who = ROOT
 							modifier = scornfully_insulted
 						}
-						NOT = {
-							has_opinion = {
-								value = 0
-								who = ROOT
-							}
+					}
+					NOT = {
+						has_opinion = {
+							value = 0
+							who = ROOT
 						}
 					}
 				}
@@ -2722,24 +2758,35 @@ ming_missions_5 = {
 		icon = mission_portuguese_malacca
 		required_missions = { mng_burmese_expeditions }
 		position = 3
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				area = luzon_area
+				area = southern_luzon_area
+				area = visayas_area
+			}
+			NOT = { country_or_subject_holds = ROOT }
+			NOT = { is_empty = yes }
+		}
 		trigger = {
-			all_country = {
-				if = {
-					limit = {
-						OR = {
-							luzon_area = {
-								owned_by = PREV
-							}
-							southern_luzon_area = {
-								owned_by = PREV
-							}
-							visayas_area = {
-								owned_by = PREV
-							}
-						}
-					}
-					is_subject_of = ROOT
+			luzon_area = {
+				type = all
+				OR = {
+					is_empty = yes
+					country_or_subject_holds = ROOT
+				}
+			}
+			southern_luzon_area = {
+				type = all
+				OR = {
+					is_empty = yes
+					country_or_subject_holds = ROOT
+				}
+			}
+			visayas_area = {
+				type = all
+				OR = {
+					is_empty = yes
+					country_or_subject_holds = ROOT
 				}
 			}
 		}
@@ -2822,49 +2869,52 @@ ming_missions_5 = {
 			}
 			if = {
 				limit = { has_dlc = "Mandate of Heaven" }
-				every_country = {
-					limit = {
-						NOT = { tag = ROOT }
-						NOT = { is_subject_of = ROOT }
-						OR = {
-							indo_china_region = {
-								owned_by = PREV
-							}
-							tenasserim_area = {
-								owned_by = PREV
-							}
-							north_tenasserim_area = {
-								owned_by = PREV
-							}
-							north_malaya_area = {
-								owned_by = PREV
-							}
-							malaya_area = {
-								owned_by = PREV
-							}
-							malacca_area = {
-								owned_by = PREV
-							}
-							johor_area = {
-								owned_by = PREV
-							}
-							kalimantan_area = {
-								owned_by = PREV
-							}
-							brunei_area = {
-								owned_by = PREV
-							}
-							sabah_area = {
-								owned_by = PREV
-							}
-							palawan_area = {
-								owned_by = PREV
+				custom_tooltip = MNG_FORCE_TRIB_SEA_TT
+				hidden_effect = {
+					every_country = {
+						limit = {
+							NOT = { tag = ROOT }
+							NOT = { is_subject_of = ROOT }
+							OR = {
+								indo_china_region = {
+									owned_by = PREV
+								}
+								tenasserim_area = {
+									owned_by = PREV
+								}
+								north_tenasserim_area = {
+									owned_by = PREV
+								}
+								north_malaya_area = {
+									owned_by = PREV
+								}
+								malaya_area = {
+									owned_by = PREV
+								}
+								malacca_area = {
+									owned_by = PREV
+								}
+								johor_area = {
+									owned_by = PREV
+								}
+								kalimantan_area = {
+									owned_by = PREV
+								}
+								brunei_area = {
+									owned_by = PREV
+								}
+								sabah_area = {
+									owned_by = PREV
+								}
+								palawan_area = {
+									owned_by = PREV
+								}
 							}
 						}
-					}
-					reverse_add_casus_belli = {
-						type = cb_force_tributary
-						target = ROOT
+						reverse_add_casus_belli = {
+							type = cb_force_tributary
+							target = ROOT
+						}
 					}
 				}
 			}
@@ -3021,16 +3071,21 @@ ming_missions_5 = {
 				type = all
 				country_or_subject_holds = ROOT
 			}
-			1365 = {
-				trade_share = {
-					share = 50
-					country = ROOT
+			custom_trigger_tooltip = {
+				tooltip = MNG_50_TP_SIAM_TT
+				1365 = {
+					trade_share = {
+						share = 50
+						country = ROOT
+					}
 				}
-			}
-			1361 = {
-				trade_share = {
-					share = 50
-					country = ROOT
+			}custom_trigger_tooltip = {
+				tooltip = MNG_50_TP_MALACCA_TT
+				1361 = {
+					trade_share = {
+						share = 50
+						country = ROOT
+					}
 				}
 			}
 		}
@@ -3184,10 +3239,11 @@ ming_missions_5 = {
 					empire_of_china_reform_passed = seaban_decision
 				}
 			}
-			PLB = {
-				OR = {
-					NOT = { exists = yes }
-					AND = {
+			OR = {
+				NOT = { exists = PLB }
+				custom_trigger_tooltip = {
+					tooltip = MNG_PLB_NON_TRIB_SUBJECT_TT
+					PLB = {
 						is_subject_of = ROOT
 						NOT = { is_subject_of_type = tributary_state }
 					}
@@ -3241,11 +3297,9 @@ ming_missions_5 = {
 			572 = { country_or_subject_holds = ROOT }
 			4407 = { country_or_subject_holds = ROOT }
 			4408 = { country_or_subject_holds = ROOT }
-			CEY = {
-				OR = {
-					NOT = { exists = yes }
-					is_subject_of = ROOT
-				}
+			OR = {
+				NOT = { exists = CEY }
+				CEY = { is_subject_of = ROOT }
 			}
 		}
 		effect = {
@@ -3358,11 +3412,14 @@ ming_missions_5 = {
 			maghreb_region = { has_discovered = ROOT }
 			iberia_region = { has_discovered = ROOT }
 			british_isles_region = { has_discovered = ROOT }
-			any_country = {
-				capital_scope = { superregion = europe_superregion }
-				has_opinion = {
-					value = 50
-					who = ROOT
+			custom_trigger_tooltip = {
+				tooltip = MNG_FRIENDS_EUROPE_TT
+				any_country = {
+					capital_scope = { superregion = europe_superregion }
+					has_opinion = {
+						value = 50
+						who = ROOT
+					}
 				}
 			}
 		}
