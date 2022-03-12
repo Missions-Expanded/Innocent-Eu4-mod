@@ -734,43 +734,7 @@ POL_Missions_1 = {
 			NOT = { has_institution = enlightenment }
 		}
 		trigger = {
-			if = {
-				limit = {
-					government = monarchy
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = governments }
-					}
-					has_reform_on_level = 9
-				}
-				else = { has_reform_on_level = 7 }
-			}
-			else_if = {
-				limit = {
-					government = republic
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = governments }
-					}
-					has_reform_on_level = 11
-				}
-				else = { has_reform_on_level = 10 }
-			}
-			else_if = {
-				limit = {
-					government = theocracy
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = governments }
-					}
-					has_reform_on_level = 12
-				}
-				else = { has_reform_on_level = 8 }
-			}
-			else = { has_reform_on_level = 5 }
+			ME_has_completed_all_reforms = yes
 			has_adm_advisor_3 = yes
 			OR = {
 				current_age = age_of_revolutions
@@ -1707,11 +1671,7 @@ POL_Missions_3_2 = {
 			NOT = { exists = LIT }
 		}
 		effect = {
-			add_casus_belli = {
-				target = LIV
-				type = cb_livonian_wars 
-				months = 1200
-			}
+			change_national_focus_effect = yes
 			add_country_modifier = {
 				name = POL_golden_age_of_a_power
 				duration = -1
@@ -1811,24 +1771,56 @@ POL_Missions_3_2 = {
 		position = 12
 		required_missions = { }
 		provinces_to_highlight = {
-			OR = {
-				trade_goods = livestock
-				trade_goods = grain
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					trade_goods = livestock
+					trade_goods = grain
+					trade_goods = horses
+					trade_goods = apiculture 
+				}
 			}
+			else = {
+				OR = {
+					trade_goods = livestock
+					trade_goods = grain
+				}
+			}
+			owned_by = ROOT
 			OR = {
 				NOT = { development = 8 }
 				NOT = { has_building = farm_estate }
 			}
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				OR = {
-					trade_goods = livestock
-					trade_goods = grain
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
 				}
-				development = 8
-				has_building = farm_estate
-				value = 5
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain
+						trade_goods = horses
+						trade_goods = apiculture 
+					}
+					development = 8
+					has_building = farm_estate
+					value = 5
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain
+					}
+					development = 8
+					has_building = farm_estate
+					value = 5
+				}
 			}
 		}
 		effect = {
@@ -1889,10 +1881,18 @@ POL_Missions_3_2 = {
 			owned_by = ROOT
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				trade_goods = coal
-				has_building = furnace
-				value = 2
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				num_of_owned_provinces_with = {
+					trade_goods = coal
+					has_building = furnace
+					value = 2
+				}
+			}
+			else = {
+				has_institution = industrialization
 			}
 		}
 		effect = {
@@ -3081,46 +3081,54 @@ POL_Missions_5_Jagiellon = {
 			owned_by = HUN
 		}
 		trigger = {
-			variable_arithmetic_trigger = {
-				custom_tooltip = POL_larger_army_than_HUN
-				export_to_variable = {
-					variable_name = BRA_HUN_Army
-					value = army_size
-					who = HUN
+			OR = {
+				slovakia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
 				}
-				export_to_variable = {
-					variable_name = BRA_POL_Army
-					value = army_size
-					who = ROOT
-				}
-				multiply_variable = {
-					which = BRA_HUN_Army
-					value = 3
-				}
-				check_variable = {
-					which = BRA_POL_Army
-					which = BRA_HUN_Army
-				}
-			}
-			variable_arithmetic_trigger = {
-				custom_tooltip = POL_greater_development_than_HUN
-				export_to_variable = {
-					variable_name = BRA_HUN_Development
-					value = total_development
-					who = HUN
-				}
-				export_to_variable = {
-					variable_name = BRA_POL_Development
-					value = total_development
-					who = ROOT
-				}
-				multiply_variable = {
-					which = BRA_HUN_Development
-					value = 3
-				}
-				check_variable = {
-					which = BRA_POL_Development
-					which = BRA_HUN_Development
+				AND = {
+					variable_arithmetic_trigger = {
+						custom_tooltip = POL_larger_army_than_HUN
+						export_to_variable = {
+							variable_name = BRA_HUN_Army
+							value = army_size
+							who = HUN
+						}
+						export_to_variable = {
+							variable_name = BRA_POL_Army
+							value = army_size
+							who = ROOT
+						}
+						multiply_variable = {
+							which = BRA_HUN_Army
+							value = 3
+						}
+						check_variable = {
+							which = BRA_POL_Army
+							which = BRA_HUN_Army
+						}
+					}
+					variable_arithmetic_trigger = {
+						custom_tooltip = POL_greater_development_than_HUN
+						export_to_variable = {
+							variable_name = BRA_HUN_Development
+							value = total_development
+							who = HUN
+						}
+						export_to_variable = {
+							variable_name = BRA_POL_Development
+							value = total_development
+							who = ROOT
+						}
+						multiply_variable = {
+							which = BRA_HUN_Development
+							value = 3
+						}
+						check_variable = {
+							which = BRA_POL_Development
+							which = BRA_HUN_Development
+						}
+					}
 				}
 			}
 		}

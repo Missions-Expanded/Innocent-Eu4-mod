@@ -1,209 +1,6 @@
 # Missions Expanded on actions
 # Remember to keep the vanilla effects
 
-on_startup = {
-	emperor = {
-		save_global_event_target_as = Emperor
-	}
-	if = {
-		limit = {
-			is_emperor_of_china = yes
-		}
-		save_global_event_target_as = EmperorOfChina
-	}
-	events = {
-		muslim_school_events.20 #Pick School
-#		flavor_fra.15000 #Make the French Revolution happen if starting in 1789
-	}
-	if = {
-		limit = {
-			has_dlc = "Cradle of Civilization"
-			has_country_modifier = tur_janissary
-		}
-		remove_country_modifier = tur_janissary
-	}
-	initialize_schools_effect = yes #This is only used here but is used for readability of on_action file.
-	if = {
-		limit = {
-			NOT = { has_country_flag = new_flavour_bav_13_has_been_triggered }
-			OR = {
-				tag = UBV
-				tag = LBV
-				tag = ING
-			}
-		}
-		set_country_flag = new_flavour_bav_13_has_been_triggered
-		country_event = { id = new_flavour_bav.13 days = 90 } #better not to allow almost instant DOWs
-	}
-	if = {
-		limit = {
-			tag = FRA
-			started_in = 1789.7.14
-			NOT = { is_year = 1790 }
-			NOT = { has_disaster = french_revolution }
-		}
-		add_disaster_progress = {
-			value = 100
-			disaster = french_revolution
-		}
-	}
-	if = {
-		limit = {
-			exists = AVR
-		}
-		AVR = {
-			country_event = { id = ME_Avaria_Events.1 }
-		}
-	}
-	if = {
-		limit = {
-			tag = TKD
-		}
-		change_variable = { which = num_of_won_battles value = 0 }
-	}
-	if = {
-		limit = {
-			tag = SWE
-		}
-		change_variable = { swe_num_of_wars_against_non_catholics = 0 }
-	}
-	change_variable = { num_of_culture_converted_provinces = 0 }
-	change_variable = { num_converted_religion = 0 }
-}
-
-on_monarch_death = {
-	if = {
-		limit = {
-			tag = ANS
-			BRA = {
-				has_country_flag = albrecht_achilles_flag
-			}
-		}
-		BRA = {
-			clr_country_flag = albrecht_achilles_flag #Just to be sure
-			kill_heir = yes #If Albrecht Achilles dies in Ansbach he will also be dead in Brandenburg, will appear as normal death of heir to BRA.
-		}
-	}
-	if = {
-		limit = { has_country_modifier = sought_after_bachelor }
-		remove_country_modifier = sought_after_bachelor
-	}
-	if = {
-		limit = {
-			tag = SAX
-			has_country_flag = sax_thuringen_split_to_happen
-			OR = {
-				NOT = { dynasty = "von Wettin" }
-				NOT = { senior_union_with = THU }
-				has_regency = yes
-			}
-		}
-		clr_country_flag = sax_thuringen_split_to_happen
-	}
-	burgundian_inheritance_start_effect = yes
-	ladislaus_postumus_king_died_effect = yes
-	if = {
-		limit = {
-			has_ruler_flag = Ulugh_beg_is_ruler
-		}
-		ROOT = {
-			country_event = { id = ME_Timurid_Princes_Event.11 }
-		}
-	}
-	events = {
-		flavor_wal.1 # Vlad the Impaler. So that he doesn't try to usurp his father.
-		flavor_nav.4 # Navarra succession event
-		flavor_sax.8 # Treaty of Leipzig
-		flavor_pap.16 # Borgia Pope
-		flavor_pap.19 # death of borgia pope
-		flavor_tus.22 # Medici Pope
-		flavor_tus.24 # death of the Medici Pope
-		ME_Spain_Events.8
-		ME_Reform_Events.1
-		ME_Korea_Events.6
-		ME_Korea_Events.8
-	}
-	if = {
-		limit = {
-			tag = CRI
-			is_subject_of_type = timar
-		}
-		TUR = {
-			country_event = { id = ME_Crimea_Events.1 }
-		}
-	}
-	if = {
-		limit = {
-			has_reform = west_slavic_monarchy
-			NOT = { has_country_flag = ME_FFS_STAP }
-		}
-		set_country_flag = ME_FFS_STAP
-		country_event = { id = ME_Zapadoslavia_Events.9 }
-	}
-	if = {
-		limit = {
-			tag = ERE
-			mission_completed = ERE_tombs
-		}
-		random_owned_province = {
-			province_event = {
-				id = ME_Beylik_Events.14
-			}
-		}
-	}
-}
-
-on_heir_death = {
-	if = {
-		limit = { has_country_flag = heir_dip_education }
-		clr_country_flag = heir_dip_education
-	}
-	if = {
-		limit = { has_country_flag = heir_mil_education }
-		clr_country_flag = heir_mil_education
-	}
-	if = {
-		limit = { has_country_flag = heir_adm_education }
-		clr_country_flag = heir_adm_education
-	}
-	if = {
-		limit = { has_ruler_flag = well_advised_tutored_heir }
-		clr_ruler_flag = well_advised_tutored_heir
-	}
-	if = {
-		limit = { has_ruler_flag = heir_went_on_grand_tour }
-		clr_ruler_flag = heir_went_on_grand_tour
-	}
-	if = {
-		limit = { has_country_flag = albrecht_achilles_flag }
-		clr_country_flag = albrecht_achilles_flag #Death of original Albrecht Achilles
-	}
-	if = {
-		limit = { has_ruler_flag = sancaga_cikma }
-		clr_ruler_flag = sancaga_cikma
-		every_owned_province = {
-			limit = {
-				has_province_modifier = heir_in_training
-			}
-			remove_province_modifier = heir_in_training
-		}
-	}
-	if = {
-		limit = { has_ruler_flag = returned_from_sancaga_sikma_province }
-		clr_ruler_flag = returned_from_sancaga_sikma_province
-	}
-	ladislaus_postumus_heir_died_effect = yes
-	if = {
-		limit = {
-			tag = CRI
-			is_subject_of_type = timar
-		}
-		TUR = {
-			country_event = { id = ME_Crimea_Events.1 }
-		}
-	}
-}
-
 # province
 on_adm_development = {
 	 if = {
@@ -313,6 +110,9 @@ on_mil_development = {
 }
 
 on_province_culture_converted = {
+	on_province_culture_converted_estate_privilges_effect = yes
+	judaism_on_province_culture_converted_effect = yes
+	kongo_on_province_change_culture_or_change_owner_effect = yes
 	if = {
 		limit = {
 			has_province_flag = got_loyalty_for_culture
@@ -389,26 +189,7 @@ on_flagship_captured = {
 # ROOT = Tag that destroyed the flagship, FROM = Tag that lost the flagship
 on_flagship_destroyed = {
 	FROM = {
-		set_country_flag = sunk_flagship_country_flag
-	}
-	ROOT = {
-		country_event = { id = flagship_events.4 }
-		set_country_flag = sunk_flagship_of_@FROM
-	}
-	FROM = {
-		country_event = { id = flagship_events.3 }
-		if = {
-			limit = {
-				has_country_modifier = netherlands_holland_dutch_naval_pride_modifier
-			}
-			remove_country_modifier = netherlands_holland_dutch_naval_pride_modifier
-		}
-		if = {
-			limit = {
-				has_country_modifier = japan_a_fleets_pride_modifier
-			}
-			remove_country_modifier = japan_a_fleets_pride_modifier
-		}
+		country_event = { id = flagship_events.1 }
 	}
 }
 
@@ -428,6 +209,17 @@ on_battle_won_country = {
 	}
 	if = {
 		limit = {
+			ROOT = {
+				religion = jewish
+				has_church_aspect = judaism_purim_teachings_aspect
+			}
+		}
+		ROOT = {
+			add_war_exhaustion = -0.05
+		}
+	}
+	if = {
+		limit = {
 			tag = ILK
 			FROM = {
 				tag = MAM
@@ -443,6 +235,36 @@ on_battle_won_country = {
 	}
 }
 
+# THIS = Province, FROM = Country, ROOT = Merc Unit
+on_mercenary_recruited = {
+	if = {
+		limit = {
+			FROM = { NOT = { has_country_flag = me_mercenary_professionalism } }
+			OR = {
+				FROM = { NOT = { has_country_flag = oyo_cavalry_do_not_consume_ap } }
+				ROOT = { NOT = { mercenary_company = merc_oyo_cavalry } }
+			}
+		}
+		FROM = {
+			add_army_professionalism = -0.05
+		}
+	}
+}
+
+
+#on_four_year_pulse_4 = {
+#	random_events = {
+#		# Board of Personnel chain
+#		100 = ME_Manchu_Events.17
+#		100 = ME_Manchu_Events.18
+#		100 = ME_Manchu_Events.19
+#
+#		# Bourd of Revenue chain
+#		100 = ME_Manchu_Events.21
+#		100 = ME_Manchu_Events.22
+#		100 = ME_Manchu_Events.23
+#	}
+#}
 on_four_year_pulse_4 = {
 	random_events = {
 		# Board of Personnel chain
