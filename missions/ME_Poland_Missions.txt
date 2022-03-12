@@ -137,6 +137,11 @@ POL_Missions_1 = {
 		position = 4
 		required_missions = { POL_expand_krakow }
 		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				NOT = { development = 24 }
+				NOT = { has_production_building_trigger = yes }
+			}
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
@@ -202,7 +207,7 @@ POL_Missions_1 = {
 		trigger = {
 			development_in_provinces = {
 				culture = polish
-				value = 450
+				value = 400
 			}
 		}
 		effect = {
@@ -261,6 +266,7 @@ POL_Missions_1 = {
 				name = POL_athelta_christi
 				duration = 10950
 			}
+			add_prestige_or_monarch_power = { amount = 20 }
 			custom_tooltip = POL_if_before_1500
 			hidden_effect = {
 				if = {
@@ -273,7 +279,6 @@ POL_Missions_1 = {
 					}
 				}
 			}
-			add_prestige_or_monarch_power = { amount = 20 }
 		}
 	}
 	
@@ -304,6 +309,24 @@ POL_Missions_1 = {
 				add_country_modifier = {
 					name = POL_autorament_narodowy
 					duration = 10950
+				}
+			}
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_mercenaries = 20
+					}
+					add_country_modifier = {
+						name = POL_autorament_cudzoziemski
+						duration = 10950
+					}
+				}
+				else = {
+					add_country_modifier = {
+						name = POL_autorament_narodowy
+						duration = 10950
+					}
 				}
 			}
 		}
@@ -660,12 +683,24 @@ POL_Missions_1 = {
 				development = 20
 				has_production_building_trigger = yes
 				has_manufactory_trigger = yes
-				OR = {
-					trade_goods = jewellery
-					trade_goods = gems
-					trade_goods = amber
-					trade_goods = cloth
-					trade_goods = dyes
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = trade_goods }
+					}
+					OR = {
+						trade_goods = jewellery
+						trade_goods = gems
+						trade_goods = amber
+						trade_goods = cloth
+						trade_goods = dyes
+					}
+				}
+				else = {
+					OR = {
+						trade_goods = gems
+						trade_goods = cloth
+						trade_goods = dyes
+					}
 				}
 				value = 3
 			}
@@ -699,43 +734,7 @@ POL_Missions_1 = {
 			NOT = { has_institution = enlightenment }
 		}
 		trigger = {
-			if = {
-				limit = {
-					government = monarchy
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = governments }
-					}
-					has_reform_on_level = 9
-				}
-				else = { has_reform_on_level = 7 }
-			}
-			else_if = {
-				limit = {
-					government = republic
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = governments }
-					}
-					has_reform_on_level = 11
-				}
-				else = { has_reform_on_level = 10 }
-			}
-			else_if = {
-				limit = {
-					government = theocracy
-				}
-				if = {
-					limit = {
-						is_expanded_mod_active = { mod = governments }
-					}
-					has_reform_on_level = 12
-				}
-				else = { has_reform_on_level = 8 }
-			}
-			else = { has_reform_on_level = 5 }
+			ME_has_completed_all_reforms = yes
 			has_adm_advisor_3 = yes
 			OR = {
 				current_age = age_of_revolutions
@@ -808,7 +807,12 @@ POL_Missions_2 = {
 				set_province_flag = POL_can_convert
 			}
 			set_country_flag = POL_mission
-			custom_tooltip = POL_ruthenia_will_convert
+			if = {
+				limit = {
+					primary_culture = polish
+				}
+				custom_tooltip = POL_ruthenia_will_convert
+			}
 		}
 	}
 	
@@ -888,9 +892,14 @@ POL_Missions_2 = {
 			}
 		}
 		trigger = {
-			num_of_estate_agendas_completed = {
-				estate = estate_burghers
-				value = 2
+			if = {
+				limit = {
+					has_estate = estate_burghers
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_burghers
+					value = 2
+				}
 			}
 			43  = {
 				owned_by = ROOT
@@ -1178,9 +1187,14 @@ POL_Missions_2 = {
 				owned_by = ROOT
 				has_building = university
 			}
-			num_of_estate_agendas_completed = {
-				estate = estate_nobles
-				value = 6
+			if = {
+				limit = {
+					has_estate = estate_nobles
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_nobles
+					value = 4
+				}
 			}
 		}
 		effect = {
@@ -1402,10 +1416,6 @@ POL_Missions_3_1 = {
 			custom_tooltip = POL_reward_if_piast
 			custom_tooltip = POL_mission_tree_will_alter
 			tooltip = {
-				add_ruler_modifier = {
-					name = POL_a_piast_ruler
-					duration = -1
-				}
 				silesia_area = { add_permanent_claim = ROOT }
 				slovakia_area = { add_permanent_claim = ROOT }
 				moravia_area = { add_permanent_claim = ROOT }
@@ -1413,6 +1423,10 @@ POL_Missions_3_1 = {
 				bohemia_area = { add_permanent_claim = ROOT }
 				neumark_area = { add_permanent_claim = ROOT }
 				hinter_pommern_area = { add_permanent_claim = ROOT }
+				add_ruler_modifier = {
+					name = POL_a_piast_ruler
+					duration = -1
+				}
 			}
 			
 			hidden_effect = {
@@ -1657,11 +1671,7 @@ POL_Missions_3_2 = {
 			NOT = { exists = LIT }
 		}
 		effect = {
-			add_casus_belli = {
-				target = LIV
-				type = cb_livonian_wars 
-				months = 1200
-			}
+			change_national_focus_effect = yes
 			add_country_modifier = {
 				name = POL_golden_age_of_a_power
 				duration = -1
@@ -1708,7 +1718,7 @@ POL_Missions_3_2 = {
 		}
 		trigger = {
 			accepted_culture = lithuanian
-			num_of_different_cultures_in_court = 3
+			num_of_different_cultures_in_court = 2
 			NOT = { average_autonomy_above_min = 40 }
 		}
 		effect = {
@@ -1735,9 +1745,14 @@ POL_Missions_3_2 = {
 				owned_by = ROOT
 				development = 30
 			}
-			num_of_estate_agendas_completed = {
-				estate = estate_church
-				value = 4
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				num_of_estate_agendas_completed = {
+					estate = estate_church
+					value = 2
+				}
 			}
 		}
 		effect = {
@@ -1756,24 +1771,56 @@ POL_Missions_3_2 = {
 		position = 12
 		required_missions = { }
 		provinces_to_highlight = {
-			OR = {
-				trade_goods = livestock
-				trade_goods = grain
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				OR = {
+					trade_goods = livestock
+					trade_goods = grain
+					trade_goods = horses
+					trade_goods = apiculture 
+				}
 			}
-			OR = {
-				NOT = { development = 10 }
-				NOT = { has_building = farm_estate }
-			}
-		}
-		trigger = {
-			num_of_owned_provinces_with = {
+			else = {
 				OR = {
 					trade_goods = livestock
 					trade_goods = grain
 				}
-				development = 10
-				has_building = farm_estate
-				value = 5
+			}
+			owned_by = ROOT
+			OR = {
+				NOT = { development = 8 }
+				NOT = { has_building = farm_estate }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = { mod = trade_goods }
+				}
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain
+						trade_goods = horses
+						trade_goods = apiculture 
+					}
+					development = 8
+					has_building = farm_estate
+					value = 5
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					OR = {
+						trade_goods = livestock
+						trade_goods = grain
+					}
+					development = 8
+					has_building = farm_estate
+					value = 5
+				}
 			}
 		}
 		effect = {
@@ -1834,10 +1881,18 @@ POL_Missions_3_2 = {
 			owned_by = ROOT
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				trade_goods = coal
-				has_building = furnace
-				value = 2
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				num_of_owned_provinces_with = {
+					trade_goods = coal
+					has_building = furnace
+					value = 2
+				}
+			}
+			else = {
+				has_institution = industrialization
 			}
 		}
 		effect = {
@@ -2002,6 +2057,13 @@ POL_Missions_4_1 = {
 			set_country_flag = POL_flota_kaperska_flag
 			
 			1859 = {
+				if = {
+					limit = {
+						NOT = { is_permanent_claim = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
 				add_province_modifier = {
 					name = POL_polish_land
 					duration = 3650
@@ -2010,6 +2072,7 @@ POL_Missions_4_1 = {
 			hidden_effect = {
 				if = {
 					limit = {
+						exists = DNZ
 						OR = {
 							alliance_with = DNZ
 							DNZ = { is_subject_of = ROOT }
@@ -2083,7 +2146,18 @@ POL_Missions_4_Jagiellon_2 = {
 			}
 			custom_tooltip = POL_rewards_if_pu
 			tooltip = {
-				country_event = { id = ME_Poland_Events.9 }
+				if = {
+					limit = {
+						NOT = {
+							silesia_area = {
+								type = all
+								owned_by = ROOT
+							}
+						}
+					}
+					country_event = { id = ME_Poland_Events.9 }
+				}
+				add_dip_power = 50
 			}
 			custom_tooltip = POL_rewards_if_conquest
 			custom_tooltip = POL_every_czech
@@ -2094,6 +2168,12 @@ POL_Missions_4_Jagiellon_2 = {
 				if = {
 					limit = {
 						senior_union_with = BOH
+						NOT = {
+							silesia_area = {
+								type = all
+								owned_by = ROOT
+							}
+						}
 					}
 					country_event = { id = ME_Poland_Events.9 }
 				}
@@ -2321,13 +2401,29 @@ POL_Missions_4_2 = {
 		position = 8
 		required_missions = { POL_union_of_lublin }
 		provinces_to_highlight = {
+			has_terrain = steppe
 		}
 		trigger = {
-			num_of_estate_agendas_completed = {
-				value = 2
-				estate = estate_cossacks
+			if = {
+				limit = {
+					has_dlc = "The Cossacks"
+				}
+				num_of_estate_agendas_completed = {
+					value = 2
+					estate = estate_cossacks
+				}
+				num_of_cossacks = 10
 			}
-			num_of_cossacks = 10
+			else = {
+				OR = {
+					num_of_cavalry = 10
+					cavalry_fraction = 0.2
+				}
+				has_global_modifier_value = {
+					which = cavalry_power
+					value = 0.15
+				}
+			}
 		}
 		effect = {
 			country_event = { id = ME_Poland_Events.18 }
@@ -2375,12 +2471,12 @@ POL_Missions_4_2 = {
 		provinces_to_highlight = {
 			culture_group = east_slavic
 			owned_by = ROOT
-			NOT = { development = 20 }
+			NOT = { development = 15 }
 		}
 		trigger = {
 			num_of_owned_provinces_with = {
 				culture_group = east_slavic
-				development = 20
+				development = 15
 				value = 5
 			}
 		}
@@ -2450,7 +2546,6 @@ POL_Missions_4_2 = {
 		}
 		trigger = {
 			is_defender_of_faith = yes
-			mission_completed = POL_union_of_lublin
 			if = {
 				limit = {
 					exists = TUR
@@ -2548,7 +2643,7 @@ POL_Missions_4_2 = {
 					is_expanded_mod_active = { mod = trade_goods }
 				}
 				development_in_provinces = {
-					value = 175
+					value = 150
 					OR = {
 						trade_goods = grain
 						trade_goods = livestock
@@ -2562,7 +2657,7 @@ POL_Missions_4_2 = {
 			}
 			else = {
 				development_in_provinces = {
-					value = 250
+					value = 200
 					OR = {
 						trade_goods = grain
 						trade_goods = livestock
@@ -2986,46 +3081,54 @@ POL_Missions_5_Jagiellon = {
 			owned_by = HUN
 		}
 		trigger = {
-			variable_arithmetic_trigger = {
-				custom_tooltip = POL_larger_army_than_HUN
-				export_to_variable = {
-					variable_name = BRA_HUN_Army
-					value = army_size
-					who = HUN
+			OR = {
+				slovakia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
 				}
-				export_to_variable = {
-					variable_name = BRA_POL_Army
-					value = army_size
-					who = ROOT
-				}
-				multiply_variable = {
-					which = BRA_HUN_Army
-					value = 3
-				}
-				check_variable = {
-					which = BRA_POL_Army
-					which = BRA_HUN_Army
-				}
-			}
-			variable_arithmetic_trigger = {
-				custom_tooltip = POL_greater_development_than_HUN
-				export_to_variable = {
-					variable_name = BRA_HUN_Development
-					value = total_development
-					who = HUN
-				}
-				export_to_variable = {
-					variable_name = BRA_POL_Development
-					value = total_development
-					who = ROOT
-				}
-				multiply_variable = {
-					which = BRA_HUN_Development
-					value = 3
-				}
-				check_variable = {
-					which = BRA_POL_Development
-					which = BRA_HUN_Development
+				AND = {
+					variable_arithmetic_trigger = {
+						custom_tooltip = POL_larger_army_than_HUN
+						export_to_variable = {
+							variable_name = BRA_HUN_Army
+							value = army_size
+							who = HUN
+						}
+						export_to_variable = {
+							variable_name = BRA_POL_Army
+							value = army_size
+							who = ROOT
+						}
+						multiply_variable = {
+							which = BRA_HUN_Army
+							value = 3
+						}
+						check_variable = {
+							which = BRA_POL_Army
+							which = BRA_HUN_Army
+						}
+					}
+					variable_arithmetic_trigger = {
+						custom_tooltip = POL_greater_development_than_HUN
+						export_to_variable = {
+							variable_name = BRA_HUN_Development
+							value = total_development
+							who = HUN
+						}
+						export_to_variable = {
+							variable_name = BRA_POL_Development
+							value = total_development
+							who = ROOT
+						}
+						multiply_variable = {
+							which = BRA_HUN_Development
+							value = 3
+						}
+						check_variable = {
+							which = BRA_POL_Development
+							which = BRA_HUN_Development
+						}
+					}
 				}
 			}
 		}
@@ -3639,7 +3742,6 @@ POL_Missions_5_2 = {
 			
 		}
 		trigger = {
-			mission_completed = POL_culture_mission
 			280 = {
 				owned_by = ROOT
 				has_tax_building_trigger = yes
@@ -3676,9 +3778,20 @@ POL_Missions_5_2 = {
 			}
 		}
 		effect = {
-			country_event = { id = ME_Poland_Events.26 } #Union of brest
-			custom_tooltip = POL_east_slavic_provinces
-			set_country_flag = POL_unitary_church_flag
+			if = {
+				limit = {
+					religion = catholic
+				}
+				country_event = { id = ME_Poland_Events.26 } #Union of brest
+				custom_tooltip = POL_east_slavic_provinces
+				set_country_flag = POL_unitary_church_flag
+			}
+			else = {
+				add_stability_or_adm_power = yes
+				add_church_power = 25
+				add_patriarch_authority = 0.05
+				add_fervor = 25
+			}
 		}
 	}
 	
