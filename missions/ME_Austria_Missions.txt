@@ -88,8 +88,8 @@ ME_hab_slot_1 = {
 				num_of_owned_provinces_with = {
 					value = 30
 					OR = {
-						region = north_germany_region
-						region = south_germany_region
+						region = noth_german_region
+						region = south_german_region
 					}
 				}
 			}
@@ -1156,7 +1156,7 @@ ME_hab_slot_3 = {
 					months = 300
 					target = BOH
 				}
-				#STIOPA TO DO, add tooltip
+				custom_tooltip = ME_cb_25
 			}
 			else = {
 				bohemia_area = {
@@ -1965,41 +1965,51 @@ ME_hab_slot_4 = {
 		}
 		effect = {
 			4752 = {
+				hidden_effect = {
+					if = {
+						limit = {
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						create_or_add_center_of_trade_level = { level = 1 }
+						add_base_production = 2
+					}
+				}
+				custom_tooltip = HAB_if_owned_by_root_or_non_sovereign
+				tooltip = {
+					create_or_add_center_of_trade_level = { level = 1 }
+					add_base_production = 2
+				}
+			}
+			custom_tooltip = " "
+			custom_tooltip = HAB_distribute_3_manpower_in_croatia
+			hidden_effect = {
+				for = {
+					amount = 3
+					effect = "
+						random_province = {
+							limit = {
+								OR = {
+									area = croatia_area
+									area = slavonia_area
+								}
+								country_or_non_sovereign_subject_holds = ROOT 
+							}
+							add_base_manpower = 1
+						}
+					"
+				}
+			}
+			custom_tooltip = " "
+			custom_tooltip = HAB_if_seize_croatia_has_been_completed
+			hidden_effect = {
 				if = {
 					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
+						mission_completed = ME_hab_the_kingdom_of_hungary
 					}
-				}
-				add_center_of_trade_level = 1
-				add_base_production = 2
-			}
-			random_owned_province = {
-				limit = {
-					OR = {
-						area = croatia_area
-						area = slavonia_area
-					}
-					add_base_manpower = 1
+					ME_give_claims = { area = southern_transylvania_area }
+					ME_give_claims = { area = transylvania_area }
 				}
 			}
-			random_owned_province = {
-				limit = {
-					OR = {
-						area = croatia_area
-						area = slavonia_area
-					}
-					add_base_manpower = 1
-				}
-			}
-			random_owned_province = {
-				limit = {
-					OR = {
-						area = croatia_area
-						area = slavonia_area
-					}
-					add_base_manpower = 1
-				}
-			} #TODO, for with loop
 		}
 	}
 
@@ -2154,9 +2164,9 @@ ME_hab_slot_4 = {
 			if = {
 				limit = {
 					NOT = { government_rank = 3 }
-					set_government_rank = 3
 					government = monarchy
 				}
+				set_government_rank = 3
 			}
 			add_country_modifier = {
 				name = me_hab_aeiou_modifier
@@ -2218,9 +2228,13 @@ ME_hab_slot_4 = {
 			prestige = 50
 			if = {
 				limit = {
-					has_dlc = "Rights of Man"
+					OR = {
+						has_dlc = "Emperor"
+						has_dlc = "Rights of Man"
+					}
 				}
-				great_power_rank = 4
+				is_great_power = yes
+				NOT = { great_power_rank = 4 }
 			}
 			has_mil_advisor_3 = yes
 			has_adm_advisor_3 = yes
@@ -2286,7 +2300,7 @@ ME_hab_slot_4 = {
 		required_missions = { ME_hab_the_iberian_peninsula }
 
 		trigger = {
-
+			
 		}
 		effect = {
 
@@ -2297,80 +2311,40 @@ ME_hab_slot_4 = {
 		icon = mission_guilds_of_barcelona
 		position = 15
 		required_missions = { ME_hab_shadowbringer }
-
+		provinces_to_highlight = {
+			OR = {
+				area = venetia_area
+				area = po_valley_area
+				area = lombardy_area
+				area = emilia_romagna_area
+				area = tuscany_area
+				area = liguria_area
+				area = piedmont_area
+				area = lazio_area
+				province_id = 2977
+				province_id = 119
+			}
+		}
 		trigger = {
 			OR = {
 				AND = {
 					is_emperor = yes
-					venetia_area = {
-						is_part_of_hre = yes
-					}
-					po_valley_area = {
-						is_part_of_hre = yes
-					}
-					lombardy_area = {
-						is_part_of_hre = yes
-					}
-					emilia_romagna_area = {
-						is_part_of_hre = yes
-					}
-					tuscany_area = {
-						is_part_of_hre = yes
-					}
-					liguria_area = {
-						is_part_of_hre = yes
-					}
-					piedmont_area = {
-						is_part_of_hre = yes
-					}
-					lazio_area = {
-						is_part_of_hre = yes
-					}
-					2977 = {
-						is_part_of_hre = yes
-					}
-					119 = {
-						is_part_of_hre = yes
+					#this trigger requires all provinces in the highlighting to fulfill the triggers, when editing the trigger or highlighting change the other one too!
+					custom_trigger_tooltip = {
+						tooltip = HAB_all_highlighted_provs_are_hre
+						HAB_reorganize_the_kingdom_group_trigger = {
+							trigger = " is_part_of_hre = yes "
+						}
 					}
 				}
 				AND = {
-					venetia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					po_valley_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					lombardy_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					emilia_romagna_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					tuscany_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					liguria_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					piedmont_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					lazio_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					2977 = {
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					119 = {
-						country_or_non_sovereign_subject_holds = ROOT
+					custom_trigger_tooltip = {
+						tooltip = HAB_all_highlighted_provs_are_country_or_non_sov_owned
+						HAB_reorganize_the_kingdom_group_trigger = {
+							trigger = "
+								country_or_non_sovereign_subject_holds = ROOT
+							"
+						}
 					}
 				}
 			}
@@ -2384,7 +2358,13 @@ ME_hab_slot_4 = {
 		icon = dominant_economy
 		position = 16
 		required_missions = { }
-
+		provinces_to_highlight = {
+			province_id = 73
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 8 }
+			}
+		}
 		trigger = {
 			mission_completed = ME_hab_unite_the_realm
 			num_of_owned_provinces_with = {
@@ -2397,7 +2377,17 @@ ME_hab_slot_4 = {
 			}
 		}
 		effect = {
-			country_event = { id = flavor_hab.11 }
+			if = {
+				limit = {
+					owns = 73
+					is_year = 1460
+					NOT = { is_year = 1480 }
+					73 = {
+						NOT = { has_province_modifier = hab_schwaz_mine }
+					}
+				}
+				country_event = { id = flavor_hab.11 }
+			}
 			73 = {
 				add_province_modifier = {
 					name = me_hab_the_austrian_economy
@@ -2411,7 +2401,19 @@ ME_hab_slot_4 = {
 		icon = the_ostend_company
 		position = 18
 		required_missions = { ME_hab_expand_bohemian_cities ME_hab_strengthen_our_capital }
-
+		provinces_to_highlight = {
+			OR = {
+				province_id = 266
+				province_id = 153
+				province_id = 131
+			}
+			OR = {
+				NOT = {
+					owned_by = ROOT
+					development = 40
+				}
+			}
+		}
 		trigger = {
 			266 = {
 				owned_by = ROOT
@@ -2472,62 +2474,61 @@ ME_hab_slot_5 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					alliance_with = HUN
-				}
+			ME_give_claims = { area = croatia_area }
+			ME_give_claims = { area = slavonia_area }
+			custom_tooltip = HAB_if_completed_by_alliance
+			tooltip = {
 				HUN = {
 					country_event = { id = ME_Austria_Events.10 }
 				}
-			} #TODO Tooltip, of course
-			else_if = {
-				limit = {
-					NOT = {
-						exists = HUN
-					}
-				}
-				slovakia_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-				transdanubia_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-				alfold_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
+				custom_tooltip = HAB_if_hungary_declines
+				custom_tooltip = " "
 			}
-			else = {
+			custom_tooltip = HAB_if_completed_by_valid_personal_union
+			tooltip = {
 				add_casus_belli = {
 					target = HUN
 					type = cb_restore_personal_union
-					months = 60
+					months = 300
 				}
+				custom_tooltip = ME_cb_25
+				custom_tooltip = " "
 			}
-			croatia_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT }
-					NOT = { is_core = ROOT	}
-				}
-				add_permanent_claim = ROOT
+			custom_tooltip = HAB_if_completed_by_neither_of_above
+			tooltip = {
+				ME_give_claims = { area = slovakia_area }
+				ME_give_claims = { area = transdanubia_area }
+				ME_give_claims = { area = alfold_area }
 			}
-			slavonia_area = {
-				limit = {
-					NOT = { is_permanent_claim = ROOT }
-					NOT = { is_core = ROOT	}
+			hidden_effect = {
+				if = {
+					limit = {
+						alliance_with = HUN
+					}
+					HUN = {
+						country_event = { id = ME_Austria_Events.10 }
+					}
+				} #TODO Tooltip, of course
+				else_if = {
+					limit = {
+						exists = HUN
+						HUN = {
+							valid_for_personal_unions_trigger = yes
+						}
+						valid_for_personal_unions_trigger = yes
+					}
+					add_casus_belli = {
+						target = HUN
+						type = cb_restore_personal_union
+						months = 300
+					}
+					custom_tooltip = ME_cb_25
 				}
-				add_permanent_claim = ROOT
+				else = {
+					ME_give_claims = { area = slovakia_area }
+					ME_give_claims = { area = transdanubia_area }
+					ME_give_claims = { area = alfold_area }
+				}
 			}
 		}
 	}
@@ -2536,7 +2537,17 @@ ME_hab_slot_5 = {
 		icon = a_strong_government
 		position = 3
 		required_missions = { ME_hab_decline_of_hungary }
-
+		provinces_to_highlight = {
+			OR = {
+				area = slovakia_area
+				area = transdanubia_area
+				area = alfold_area
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				local_autonomy = 20
+			}
+		}
 		trigger = {
 			OR = {
 				HUN = {
@@ -2547,25 +2558,51 @@ ME_hab_slot_5 = {
 					OR = {
 						area = slovakia_area
 						area = transdanubia_area
-						area = alford_area
+						area = alfold_area
 					}
 					NOT = { local_autonomy = 20 }
 				}
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					HUN = {
-						junior_union_with = ROOT
+			custom_tooltip = HAB_if_seize_croatia_has_been_completed
+			hidden_effect = {
+				if = {
+					limit = {
+						mission_completed = ME_hab_seize_croatia
 					}
+					ME_give_claims = { area = southern_transylvania_area }
+					ME_give_claims = { area = transylvania_area }
 				}
-				country_event = { id = ME_Austrian_Events.11 }
 			}
-			else = {
+			custom_tooltip = " "
+			custom_tooltip = HAB_if_completed_by_pu_with_hun
+			tooltip ={
+				country_event = { id = ME_Austria_Events.11 }
+				custom_tooltip = " "
+			}
+			custom_tooltip = HAB_if_completed_province_ownership
+			tooltip = {
 				add_country_modifier = {
 					name = royal_hungary
 					duration = 5475
+				}
+			}
+			
+			hidden_effect = {
+				if = {
+					limit = {
+						HUN = {
+							junior_union_with = ROOT
+						}
+					}
+					country_event = { id = ME_Austria_Events.11 }
+				}
+				else = {
+					add_country_modifier = {
+						name = royal_hungary
+						duration = 5475
+					}
 				}
 			}
 		}
@@ -2575,7 +2612,23 @@ ME_hab_slot_5 = {
 		icon = revenge_for_nicopolis
 		position = 5
 		required_missions = { ME_hab_the_castles_of_transylvania }
-
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					exists = TUR
+					area = carpathia_region
+					country_or_non_sovereign_subject_holds = TUR
+				}
+				AND = {
+					NOT = { exists = TUR } 
+					region = balkan_region
+					is_capital = yes
+					owner = {
+						army_size = ROOT
+					}
+				}
+			}
+		}
 		trigger = {
 			is_at_war = yes
 			if = {
@@ -2625,7 +2678,21 @@ ME_hab_slot_5 = {
 		icon = the_holy_league
 		position = 7
 		required_missions = { ME_hab_avenge_christedom }
-
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					exists = TUR
+				}
+				owned_by = TUR
+			}
+			else = {
+				OR = {
+					area = bulgaria_area
+					area = silistria_area
+				}
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -2653,30 +2720,21 @@ ME_hab_slot_5 = {
 				limit = {
 					exists = TUR
 				}
-				balkan_region = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT }
-						owned_by = TUR
+				custom_tooltip = HAB_gain_claim_on_turkish_balkans
+				hidden_effect = {
+					balkan_region = {
+						limit = {
+							NOT = { is_permanent_claim = ROOT }
+							NOT = { is_core = ROOT }
+							owned_by = TUR
+						}
+						add_permanent_claim = ROOT
 					}
-					add_permanent_claim = ROOT
 				}
 			}
 			else = {
-				thrace_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-				macedonia_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
+				ME_give_claims = { area = thrace_area }
+				ME_give_claims = { area = macedonia_area }
 			}
 			add_yearly_manpower = 1
 		}
@@ -2699,32 +2757,68 @@ ME_hab_slot_5 = {
 		icon = the_viennese_waltz
 		position = 17
 		required_missions = { ME_hab_inward_perfection }
-
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					province_id = 134
+				}
+				OR = {
+					NOT = { owned_by = ROOT }
+					NOT = { development = 30 }
+					NOT = { num_of_buildings_in_province = 4 }
+				}
+			}
+			else = {
+				OR = {
+					region = north_german_region
+					region = south_german_region
+				}
+				higher_development_than = 134
+			}
+		}
 		trigger = {
-			num_of_buildings_in_province = 4
 			134 = {
+				num_of_buildings_in_province = 4
 				development = 30
+				owned_by = ROOT
 			}
 			custom_trigger_tooltip = {
                 tooltip = ME_HAB_VIENNA_BEST_GERMAN_PROVINCE
                 north_german_region = {
                     type = all
-                    OR = {
-                        NOT = { higher_development_than = 134 }
-                    }
+					NOT = { higher_development_than = 134 }
                 }
 				south_german_region = {
                     type = all
                     OR = {
-						province_id = 541
+						province_id = 134
                         NOT = { higher_development_than = 134 }
                     }
                 }
             }
 		}
 		effect = {
-			#Melv, I am waiting until you add the monument
-
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+					is_expanded_mod_active = { mod = great_monuments }
+					134 = {
+						NOT = {
+							has_great_project = {
+								type = gme_schonbrunn
+								tier = 3
+							}
+						}
+					}
+				}
+				134 = {
+					add_great_project_tier = {
+						type = gme_schonbrunn
+						tier = 1
+					}
+				}
+			}
+			
 			add_estate_loyalty = {
 				estate = estate_nobles
 				loyalty = 10
