@@ -2035,37 +2035,56 @@ ME_hab_slot_4 = {
 			}
 		}
 		effect = {
-			4128 = {
-				if = {
-					limit = {
-						owner = {
-							OR = {
-								accepted_culture = carpathian
-								primary_culture = carpathian
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+				custom_tooltip = HAB_upgrade_bran_castle
+				hidden_effect = {
+					4128 = {
+						if = {
+							limit = {
+								owner = {
+									OR = {
+										accepted_culture = carpathian
+										primary_culture = carpathian
+									}
+								}
+								OR = {
+									has_great_project = {
+										type = bran_castle
+										tier = 1
+									}
+									has_great_project = {
+										type = bran_castle
+										tier = 2
+									}
+								}
 							}
-						}
-						OR = {
-							has_great_project = {
-								type = bran_castle
-								tier = 1
-							}
-							has_great_project = {
-								type = bran_castle
-								tier = 2
-							}
+							add_great_project_tier = { type = bran_castle tier = 1 }
 						}
 					}
-					add_great_project_tier = { type = bran_castle tier = 1 }
 				}
 			}
-			carpathia_region = {
-				limit = {
-					country_or_non_sovereign_subject_holds = ROOT
-					fort_level = 2
-				}
+			custom_tooltip = " "
+			custom_tooltip = HAB_every_fort_in_carpathia
+			tooltip = {
 				add_province_modifier = {
 					name = me_hab_unshakable_fortresses
 					duration = -1
+				}
+			}
+			
+			hidden_effect = {
+				carpathia_region = {
+					limit = {
+						country_or_non_sovereign_subject_holds = ROOT
+						fort_level = 2
+					}
+					add_province_modifier = {
+						name = me_hab_unshakable_fortresses
+						duration = -1
+					}
 				}
 			}
 		}
@@ -2093,19 +2112,28 @@ ME_hab_slot_4 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					transylvania_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
+			hidden_effect = {
+				if = {
+					limit = {
+						transylvania_area = {
+							type = all
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						southern_transylvania_area = {
+							type = all
+							country_or_non_sovereign_subject_holds = ROOT
+						}
 					}
-					southern_transylvania_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
+					country_event = { id = ME_Austria_Events.5 }
 				}
+			}
+			custom_tooltip = HAB_if_we_also_own_transylvania
+			tooltip = {
 				country_event = { id = ME_Austria_Events.5 }
 			}
+			
+			custom_tooltip = " "
+			
 			add_country_modifier = {
 				name = me_hab_order_of_the_dragon
 				duration = 5475
@@ -2117,7 +2145,10 @@ ME_hab_slot_4 = {
 		icon = eastern_catholicization
 		position = 6
 		required_missions = { ME_hab_the_dracula_at_romania ME_hab_the_polish_realm }
-		
+		provinces_to_highlight = {
+			area = red_ruthenia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
 		trigger = {
 			total_development = 500
 			red_ruthenia_area = {
@@ -2142,7 +2173,18 @@ ME_hab_slot_4 = {
 		icon = powerhouse_of_the_north
 		position = 7
 		required_missions = { ME_hab_footfalls_of_an_empire }
-
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					is_capital_of = ROOT
+					NOT = { development = 30 }
+				}
+				AND = {
+					owned_by = ROOT
+					NOT = { culture = ROOT }
+				}
+			}
+		}
 		trigger = {
 			total_development = 1000
 			capital_scope = {
@@ -2179,7 +2221,18 @@ ME_hab_slot_4 = {
 		icon = take_constantinople
 		position = 8
 		required_missions = { ME_hab_crusade }
-
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 151
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { religion = ROOT }
+					}
+				}
+				owned_by = BYZ
+			}
+		}
 		trigger = {
 			151 = {
 				country_or_non_sovereign_subject_holds = ROOT
@@ -2201,7 +2254,16 @@ ME_hab_slot_4 = {
 		icon = multicultural_empire
 		position = 9
 		required_missions = { }
-
+		provinces_to_highlight = {
+			NOT = { culture_group = ROOT }
+			owned_by = ROOT
+			has_owner_accepted_culture = yes
+			OR = {
+				local_autonomy = 10
+				unrest = 1
+				nationalism = 1
+			}
+		}
 		trigger = {
 			num_accepted_cultures = 4
 			num_of_owned_provinces_with = {
@@ -2222,7 +2284,6 @@ ME_hab_slot_4 = {
 		icon = imperial_ascendancy
 		position = 10
 		required_missions = { ME_hab_the_cultures_of_the_realm }
-
 		trigger = {
 			has_institution = enlightenment
 			prestige = 50
@@ -2235,7 +2296,7 @@ ME_hab_slot_4 = {
 				}
 				is_great_power = yes
 				NOT = { great_power_rank = 4 }
-			}
+			} #TODO: scripted trigger this 
 			has_mil_advisor_3 = yes
 			has_adm_advisor_3 = yes
 			has_dip_advisor_3 = yes
