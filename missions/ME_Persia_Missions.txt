@@ -1752,6 +1752,294 @@ Persian_missions_3_great_persia = {
 			}
 		}
 	}
+
+	persia_indian_dominance = {
+		icon = mission_indian_trade_company
+		required_missions = {
+			persia_indian_riches
+		}
+		completed_by = 1444.1.1
+		position = 10
+		provinces_to_highlight = {
+			OR = {
+				any_trade_node_member_province = { province_id = 504 }
+				any_trade_node_member_province = { province_id = 507 }
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			504 = {
+				all_trade_node_member_province = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+			507 = {
+				all_trade_node_member_province = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = PERSIA_INDIAN_DOMINANCE_EFFECT_TT
+			tooltip = {
+				504 = {
+					add_province_modifier = {
+						name = persia_persian_hegemony_india
+						duration = 7300
+					}
+				}
+			}
+			hidden_effect = {
+				504 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = persia_persian_hegemony_india
+							duration = 7300
+						}
+					}
+				}
+				507 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = persia_persian_hegemony_india
+							duration = 7300
+						}
+					}
+				}
+			}
+		}
+	}
+
+	persia_great_city_delhi = {
+		icon = mission_the_sultanate_restored
+		required_missions = {
+			persia_indian_dominance
+		}
+		completed_by = 1444.1.1
+		position = 11
+		provinces_to_highlight = {
+			province_id = 522
+		}
+		trigger = {
+			OR = {
+				owns = 522
+				custom_trigger_tooltip = {
+					tooltip = PERSIA_GREAT_CITY_DELHI_TT
+					522 = {
+						owner = {
+							is_in_war = {
+								defender_leader = THIS
+								attacker_leader = ROOT
+							}
+							NOT = { war_score = -80 }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					owns = 522
+				}
+				504 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						extend_province_modifier = {
+							name = persia_persian_hegemony_india
+							duration = 7300
+						}
+					}
+				}
+				507 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						extend_province_modifier = {
+							name = persia_persian_hegemony_india
+							duration = 7300
+						}
+					}
+				}
+			}
+			else = {
+				522 = {
+					add_base_tax = -5
+					add_base_production = -5
+					add_base_manpower = -5
+				}
+				capital_scope = {
+					add_base_tax = 3
+					add_base_production = 3
+					add_base_manpower = 3
+				}
+				custom_tooltip = PERSIA_HEGEMONY_TRIGGERED_MODIFIER_TT
+				set_country_flag = persia_sacking_delhi
+			}
+		}
+	}
+
+	persia_eastern_border = {
+		icon = mission_fortify_mandu
+		required_missions = {
+			persia_great_city_delhi
+		}
+		completed_by = 1444.1.1
+		position = 12
+		provinces_to_highlight = {
+			OR = {
+				any_trade_node_member_province = { province_id = 504 }
+				any_trade_node_member_province = { province_id = 507 }
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				devastation = 1
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = PERSIA_DEVELOPMENT_EASTER_BORDER_TRIGGER_TT
+				NOT = {
+					any_country = {
+						capital_scope = {
+							superregion = india_superregion
+						}
+						truce_with = ROOT
+					}
+				}
+			}
+			504 = {
+				all_trade_node_member_province = {
+					owned_by = ROOT
+					NOT = { devastation = 1 }
+				}
+			}
+			507 = {
+				all_trade_node_member_province = {
+					owned_by = ROOT
+					NOT = { devastation = 1 }
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = PERSIA_DEVELOPMENT_EASTER_BORDER_EFFECT_TT
+			tooltip = {
+				504 = {
+					add_province_modifier = {
+						name = persia_prosperity_eastern_border
+						duration = 18250
+					}
+				}
+			}
+			hidden_effect = {
+				504 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = persia_prosperity_eastern_border
+							duration = 18250
+						}
+					}
+				}
+				507 = {
+					every_trade_node_member_province = {
+						limit = { owned_by = ROOT }
+						add_province_modifier = {
+							name = persia_prosperity_eastern_border
+							duration = 18250
+						}
+					}
+				}
+			}
+		}
+	}
+
+	persia_domination_over_india = {
+		icon = mission_indian_empire
+		required_missions = {
+			persia_eastern_border
+		}
+		completed_by = 1444.1.1
+		position = 13
+		provinces_to_highlight = {
+			OR = {
+				any_trade_node_member_province = { province_id = 504 }
+				any_trade_node_member_province = { province_id = 507 }
+			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				nationalism = 0
+			}
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = PERSIA_DOMINATION_OVER_INDIA_TRIGGER_TT
+				NOT = {
+					any_country = {
+						capital_scope = {
+							NOT = { superregion = india_superregion }
+						}
+						india_superregion = {
+							owned_by = THIS
+						}
+						total_development = 250
+					}
+				}
+			}
+			504 = {
+				all_trade_node_member_province = {
+					owned_by = ROOT
+					NOT = { nationalism = 0 }
+				}
+			}
+			507 = {
+				all_trade_node_member_province = {
+					owned_by = ROOT
+					NOT = { nationalism = 0 }
+				}
+			}
+			NOT = {
+				num_of_owned_provinces_with = {
+					value = 6
+					superregion = india_superregion
+					NOT = {
+						any_trade_node_member_province = {
+							OR = {
+								province_id = 504
+								province_id = 507
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Persia_Events.1
+				days = 1
+			}
+		}
+	}
+
+	persia_symbols_domination = {
+		icon = mission_indian_empire
+		required_missions = {
+			persia_domination_over_india
+		}
+		completed_by = 1444.1.1
+		position = 14
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Leviathan"
+				}
+			}
+		}
+		effect = {
+			add_prestige_or_monarch_power = { amount = 20 }
+		}
+	}
 }
 
 Persian_missions_4_great_persia = {
