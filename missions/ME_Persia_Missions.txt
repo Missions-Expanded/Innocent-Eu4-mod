@@ -2793,6 +2793,210 @@ Persian_missions_1_trade = {
 			}
 		}
 	}
+
+	persia_purely_for_commerce = {
+		icon = me_mission_persia_goa_pigments
+		required_missions = {
+			persia_persian_trade
+		}
+		position = 15
+		provinces_to_highlight = {}
+		trigger = {
+			home_trade_node = {
+				calc_true_if = {
+					amount = 10
+					desc = PERSIA_PURELY_FOR_COMMERCE_TRIGGER_TT
+					all_trade_node_member_province = {
+						owned_by = ROOT
+						has_trade_building_trigger = yes
+					}
+				}
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			custom_tooltip = PERSIA_PURELY_FOR_COMMERCE_EFFECT_TT
+			hidden_effect = {
+				while = {
+					limit = {
+						NOT = {
+							num_of_owned_provinces_with = {
+								value = 5
+								has_province_flag = persian_trade_flag
+							}
+						}
+					}
+				}
+				if = {
+					limit = {
+						DIP = 6
+					}
+					home_trade_node_effect_scope = {
+						random_trade_node_member_province = {
+							limit = {
+								owned_by = ROOT
+								NOT = { has_province_flag = persian_trade_flag }
+							}
+							set_province_flag = persian_trade_flag
+							add_base_production = 2
+						}
+					}
+				}
+				else = {
+					home_trade_node_effect_scope = {
+						random_trade_node_member_province = {
+							limit = {
+								owned_by = ROOT
+								NOT = { has_province_flag = persian_trade_flag }
+							}
+							set_province_flag = persian_trade_flag
+							add_base_production = 1
+						}
+					}
+				}
+			}
+		}
+	}
+
+	persia_trading_cities = {
+		icon = mission_dominate_trade_in_aden
+		required_missions = {
+			persia_purely_for_commerce
+			persia_gulf_supremacy
+		}
+		position = 16
+		provinces_to_highlight = {}
+		trigger = {
+			num_of_owned_provinces_with = {
+				province_has_center_of_trade_of_level = 1
+				development = 15
+				has_trade_building_trigger = yes
+				value = 5
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				custom_tooltip = MSA_every_state_with_trigger
+			}
+			custom_tooltip = MSA_every_such_province
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						province_has_center_of_trade_of_level = 1
+						development = 15
+						has_trade_building_trigger = yes
+					}
+					add_trade_modifier = {
+						who = ROOT
+						duration = 9125
+						power = 10
+						key = MSA_great_trading_city
+					}
+					add_prosperity = 25
+				}
+			}
+		}
+	}
+
+	persia_trading_center_world = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = {
+			persia_trading_cities
+		}
+		position = 17
+		provinces_to_highlight = {}
+		trigger = {
+			num_of_centers_of_trade = 20
+		}
+		effect = {
+			custom_tooltip = MSA_for_every_center_of_trade_with_a_marketplace
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_owned_provinces_with = {
+							has_trade_building_trigger = yes
+							province_has_center_of_trade_of_level = 1
+							value = 15
+						}
+					}
+					change_government_reform_progress = 75
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							has_trade_building_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						ROOT = { change_government_reform_progress = 5 }
+					}
+				}
+			}
+			home_trade_node_effect_scope = {
+				add_trade_node_income = 10
+			}
+		}
+	}
+
+	persia_persian_caravan = {
+		icon = mission_sail_to_the_east_indies
+		required_missions = {
+			persia_trading_center_world
+		}
+		position = 18
+		provinces_to_highlight = {
+			region = persia_region
+			OR = {
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { has_manufactory_trigger = yes }
+					NOT = { base_production = 10 }
+				}
+			}
+		}
+		trigger = {
+			4341 = {
+				highest_value_trade_node = yes
+			}
+			persia_region = {
+				type = all
+				owned_by = ROOT
+				OR = {
+					has_manufactory_trigger = yes
+					base_production = 10
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = MSA_for_every_center_of_trade_with_a_marketplace
+			hidden_effect = {
+				if = {
+					limit = {
+						num_of_owned_provinces_with = {
+							has_trade_building_trigger = yes
+							province_has_center_of_trade_of_level = 1
+							value = 15
+						}
+					}
+					change_government_reform_progress = 75
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							has_trade_building_trigger = yes
+							province_has_center_of_trade_of_level = 1
+						}
+						ROOT = { change_government_reform_progress = 5 }
+					}
+				}
+			}
+			home_trade_node_effect_scope = {
+				add_trade_node_income = 10
+			}
+		}
+	}
 }
 
 Persian_missions_2_trade = {
