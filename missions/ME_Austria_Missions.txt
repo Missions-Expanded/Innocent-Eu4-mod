@@ -1094,7 +1094,6 @@ ME_hab_slot_3 = {
 		icon = a.e.i.o.u.
 		position = 1
 		required_missions = { }
-
 		trigger = {
 			army_size = 25
 		}
@@ -1116,7 +1115,22 @@ ME_hab_slot_3 = {
 		icon = catholic_confraternity
 		position = 2
 		required_missions = { ME_hab_aeiou }
-
+		provinces_to_highlight = {
+			owner = {
+				is_elector = yes
+				OR = {
+					NOT = {
+						preferred_emperor = ROOT
+					}
+					NOT = {
+						has_opinion = { 
+							who = ROOT 
+							value = 100
+						}
+					}
+				}
+			}
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -1142,15 +1156,8 @@ ME_hab_slot_3 = {
 				name = me_hab_successful_bid_for_the_imperial_crown
 				duration = 5475
 			}
-			#STIOPA TO DO, add two tooltips for diff rewards
-			if = {
-				limit = {
-					exists = BOH
-					valid_for_personal_unions_trigger = yes
-					BOH = {
-						valid_for_personal_unions_trigger = yes
-					}
-				}
+			custom_tooltip = HAB_if_completed_by_valid_personal_union_boh
+			tooltip = {
 				add_casus_belli = {
 					type = cb_restore_personal_union
 					months = 300
@@ -1158,27 +1165,32 @@ ME_hab_slot_3 = {
 				}
 				custom_tooltip = ME_cb_25
 			}
-			else = {
-				bohemia_area = {
+			custom_tooltip = HAB_if_completed_by_valid_personal_union_boh_not
+			tooltip = {
+				ME_give_claims = { area = bohemia_area }
+				ME_give_claims = { area = erzgebirge_area }
+				ME_give_claims = { area = moravia_area }
+			}
+			hidden_effect = {
+				if = {
 					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT	}
+						exists = BOH
+						valid_for_personal_unions_trigger = yes
+						BOH = {
+							valid_for_personal_unions_trigger = yes
+						}
 					}
-					add_permanent_claim = ROOT
+					add_casus_belli = {
+						type = cb_restore_personal_union
+						months = 300
+						target = BOH
+					}
+					custom_tooltip = ME_cb_25
 				}
-				erzgebirge_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
-				}
-				moravia_area = {
-					limit = {
-						NOT = { is_permanent_claim = ROOT }
-						NOT = { is_core = ROOT	}
-					}
-					add_permanent_claim = ROOT
+				else = {
+					ME_give_claims = { area = bohemia_area }
+					ME_give_claims = { area = erzgebirge_area }
+					ME_give_claims = { area = moravia_area }
 				}
 			}
 		}
@@ -1220,48 +1232,12 @@ ME_hab_slot_3 = {
 				name = me_hab_kingdom_of_bohemia
 				duration = 5475
 			}
-			silesia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			wielkopolska_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			central_poland_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			malopolska_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			mazovia_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
-			sandomierz_area = {
-				limit = {
-					NOT = { is_core = ROOT }
-					NOT = { is_permanent_claim = ROOT }
-				}
-				add_permanent_claim = ROOT
-			}
+			ME_give_claims = { area = silesia_area }
+			ME_give_claims = { area = wielkopolska_area }
+			ME_give_claims = { area = central_poland_area }
+			ME_give_claims = { area = malopolska_area }
+			ME_give_claims = { area = mazovia_area }
+			ME_give_claims = { area = sandomierz_area }
 		}
 	}
 
@@ -1833,7 +1809,13 @@ ME_hab_slot_3 = {
 		icon = bohemian_commonwealth
 		position = 15
 		required_missions = { ME_hab_talks_with_the_hansa ME_hab_inward_perfection }
-
+		provinces_to_highlight = {
+			OR = {
+				area = bohemia_area
+				area = erzgebirge_area
+				area = moravia_area
+			}
+		}
 		trigger = {
 			bohemia_area = {
 				type = all
@@ -1898,7 +1880,19 @@ ME_hab_slot_3 = {
 		icon = develop_konigsberg
 		position = 19
 		required_missions = { ME_hab_early_industralization ME_hab_provinces_of_the_realm }
-
+		provinces_to_highlight = {
+			OR = {
+				area = bohemia_area
+				area = erzgebirge_area
+				area = moravia_area
+				area = lusatia_area
+				area = transdanubia_area
+				area = slovakia_area
+				area = alfold_area
+				area = transylvania_area
+				area = southern_transylvania_area
+			}
+		}
 		trigger = {
 			development_in_provinces = {
 				value = 500
@@ -2193,11 +2187,9 @@ ME_hab_slot_4 = {
 			army_size = 150
 			OR = {
 				num_accepted_cultures = 5
-				calc_true_if = {
-					all_owned_province = {
-						culture = ROOT
-					}
-					amount = 30
+				num_of_owned_provinces_with = {
+					culture = ROOT
+					value = 30 
 				}
 			}
 		}
@@ -2315,6 +2307,7 @@ ME_hab_slot_4 = {
 		required_missions = { ME_hab_burgundian_inheritance }
 
 		trigger = {
+			#TODO: Idk how to even 'fix' this
 			OR = {
 				AND = {
 					exists = CAS
