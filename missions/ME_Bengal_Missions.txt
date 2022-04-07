@@ -59,9 +59,9 @@ ME_Bengali_Missions_1 = {
 						}
 					}
 				}
-				custom_trigger_tooltip = {
-					tooltip = TOLERANCE_HEATHEN_TT
-					hinduism = 3
+				has_global_modifier_value = {
+					which = tolerance_heathen
+					value = 2
 				}
 				piety = 0.5
 			}
@@ -138,46 +138,6 @@ ME_Bengali_Missions_1 = {
 				add_country_modifier = {
 					name = bng_noble_crownland_modifier
 					duration = 18250
-				}
-			}
-			if = {
-				limit = {
-					AND = {
-						estate_loyalty = {
-							estate = estate_nobles
-							loyalty = 60
-						}
-						estate_loyalty = {
-							estate = estate_brahmins
-							loyalty = 60
-						}
-					}
-				}
-				add_country_modifier = {
-					name = bng_noble_brahmins_loyalty_modifier
-					duration = -1
-				}
-			}
-			if = {
-				limit = {
-					AND = {
-						NOT = {
-							estate_territory = {
-						 		estate = estate_nobles
-						    	territory = 15
-							}
-						}
-						NOT = {
-							estate_territory = {
-						 		estate = estate_brahmins
-						    	territory = 15
-							}
-						}
-					}
-				}
-				add_country_modifier = {
-					name = bng_noble_brahmins_crownland_modifier
-					duration = -1
 				}
 			}
 		}
@@ -285,9 +245,9 @@ ME_Bengali_Missions_1 = {
 		position = 6
 		trigger = {
 			religious_unity = 1
-			custom_trigger_tooltip = {
-				hinduism = 2
-				tooltip = TOLERANCE_HEATHEN_TT_2
+			has_global_modifier_value = {
+				which = tolerance_heathen
+				value = 2
 			}
 			tolerance_to_this = 6
 		}
@@ -488,20 +448,18 @@ ME_Bengali_Missions_1 = {
 		required_missions = { }
 		position = 11
 		trigger = {
-			OR = {
-				if = {
-					limit = { has_estate = estate_brahmins }
-					estate_loyalty = {
-						estate = estate_brahmins
-						loyalty = 60
-					}
+			if = {
+				limit = { has_estate = estate_brahmins }
+				estate_loyalty = {
+					estate = estate_brahmins
+					loyalty = 60
 				}
-				else_if = {
-					limit = { has_estate = estate_dhimmi }
-					estate_loyalty = {
-						estate = estate_dhimmi
-						loyalty = 60
-					}
+			}
+			else_if = {
+				limit = { has_estate = estate_dhimmi }
+				estate_loyalty = {
+					estate = estate_dhimmi
+					loyalty = 60
 				}
 			}
 			employed_advisor = { religion = hinduism }
@@ -1255,8 +1213,10 @@ ME_Bengali_Missions_2 = {
 		required_missions = { }
 		position = 11
 		trigger = {
-			army_size_percentage = 1
-			manpower_percentage = 0.5
+			OR = {
+				army_size_percentage = 1
+				manpower_percentage = 0.5
+			}
 			OR = {
 				monthly_mil = 10
 				army_tradition = 25
@@ -3333,11 +3293,11 @@ ME_Bengali_Missions_5 = {
 		position = 4
 		provinces_to_highlight = {
 			OR = {
-				area = 4477
+				province_id = 4477
 			}
 		}
 		trigger = {
-			447 = {
+			4477 = {
 				OR = {
 					has_building = trade_depot
 					has_building = stock_exchange
@@ -3353,8 +3313,8 @@ ME_Bengali_Missions_5 = {
 					}
 					is_neighbor_of = ROOT
 				}
-				mercantilism = 25
 			}
+			mercantilism = 25
 		}
 		effect = {
 			4477 = {
@@ -3378,16 +3338,8 @@ ME_Bengali_Missions_5 = {
 		trigger = {
 			564 = {
 				country_or_non_sovereign_subject_holds = ROOT
-				OR = {
-					has_building = workshop
-					has_building = counting_house
-				}
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-					province_has_center_of_trade_of_level = 3
-				}
+				has_production_building_trigger = yes
+				has_trade_building_trigger = yes
 				is_prosperous = yes
 			}
 		}
@@ -3432,11 +3384,20 @@ ME_Bengali_Missions_5 = {
 			}
 		}
 		effect = {
-			every_owned_province = {
-				limit = { trade_goods = cloth }
+			custom_tooltip = BNG_EVERY_OWNED_WITH_CLOTH_TT
+			tooltip = {
 				add_province_modifier = {
 					name = bng_looms_modifier
 					duration = 10950
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = { trade_goods = cloth }
+					add_province_modifier = {
+						name = bng_looms_modifier
+						duration = 10950
+					}
 				}
 			}
 			country_event = {
@@ -3492,9 +3453,7 @@ ME_Bengali_Missions_5 = {
 			1343 = { has_most_province_trade_power = ROOT }
 		}
 		effect = {
-			bengal_region = {
-				add_permanent_claim = ROOT
-			}
+			ME_give_claims = { region = bengal_region }
 			add_adm_power = 50
 			add_dip_power = 50
 			add_mil_power = 50
