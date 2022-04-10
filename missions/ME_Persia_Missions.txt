@@ -2578,7 +2578,7 @@ Persian_missions_5_great_persia = {
 	}
 
 	persia_dominating_silk_road = {
-		icon = me_mission_persia_silk_road
+		icon = me_mission_china_silk_road_zhang_hongnian
 		required_missions = {
 			persia_northern_trade_route
 		}
@@ -3605,6 +3605,118 @@ Persian_missions_4_trade = {
 	}
 	has_country_shield = yes
 
+	persia_sino_iranian_relations = {
+		icon = me_mission_china_zhang_qian_voyage_zhang
+		required_missions = {
+			persia_persian_trade
+		}
+		position = 16
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				is_capital = yes
+				owner = { is_emperor_of_china = yes }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				any_country = {
+					is_emperor_of_china = yes
+					capital_scope = {
+						has_discovered = ROOT
+					}
+				}
+			}
+			OR = {
+				707 = {
+					custom_trigger_tooltip = {
+						tooltip = ME_BORDER_TRADE_NODE
+						any_trade_node_member_province = {
+							any_neighbor_province = {
+								owned_by = ROOT
+							}
+						}
+					}
+				}
+				1371 = { trade_range = ROOT }
+				684 = { trade_range = ROOT }
+				700 = { trade_range = ROOT }
+				4233 = { trade_range = ROOT }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = persia_first_contact
+				duration = 3650
+			}
+		}
+	}
+
+	persia_technological_exchange = {
+		icon = me_mission_china_changan_woodblock_warehouse
+		required_missions = {
+			persia_sino_iranian_relations
+		}
+		position = 17
+		provinces_to_highlight = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				is_capital = yes
+				owner = { is_emperor_of_china = yes }
+			}
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+					any_country = {
+						is_emperor_of_china = yes
+					}
+				}
+				any_country = {
+					is_emperor_of_china = yes
+					NOT = { tech_difference = 0 }
+				}
+			}
+			else = {
+				any_country = {
+					capital_scope = {
+						superregion = china_superregion
+					}
+					NOT = { tech_difference = 0 }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = persia_chinese_scientist_persia
+				duration = 7300
+			}
+			random_country = {
+				add_country_modifier = {
+					name = persia_persian_scientist_china
+					duration = 7300
+				}
+			}
+		}
+	}
+
 	persia_importance_ivory = {
 		icon = me_mission_persia_elephant_warfare
 		required_missions = {
@@ -3680,18 +3792,200 @@ Persian_missions_4_trade = {
 			}
 		}
 	}
+
+	persia_new_allies = {
+		icon = me_mission_deadly_lake
+		required_missions = { }
+		position = 20
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					province_id = 295
+					province_id = 310
+					province_id = 33
+					NOT = { has_discovered = ROOT }
+				}
+				AND = {
+					region = russia_region
+					NOT = { has_discovered = ROOT }
+					NOT = {
+						ROOT = {
+							calc_true_if = {
+								amount = 10
+								all_province = {
+									region = russia_region
+									has_discovered = ROOT
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			OR = {
+				295 = { has_discovered = ROOT }
+				310 = { has_discovered = ROOT }
+				33 = { has_discovered = ROOT }
+			}
+			calc_true_if = {
+				amount = 10
+				all_province = {
+					region = russia_region
+					has_discovered = ROOT
+				}
+			}
+			1326 = {
+				any_neighbor_province = {
+					owned_by = ROOT
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = persia_foes_friends
+				duration = 3650
+			}
+			custom_tooltip = PERSIA_SILK_OUTPOST_RUSSIA_TT
+		}
+	}
+
+	persia_caspian_trade = {
+		icon = me_mission_russia_cossacks_siberia_landing
+		required_missions = {
+			persia_new_allies
+		}
+		position = 21
+		provinces_to_highlight = {
+			OR = {
+				province_id = 464
+				province_id = 466
+				province_id = 286
+				province_id = 285
+				province_id = 465
+				province_id = 302
+				province_id = 303
+				province_id = 288
+				province_id = 284
+				province_id = 295
+				province_id = 310
+				province_id = 33
+			}
+		}
+		trigger = {
+			calc_true_if = {
+				desc = PERSIA_SILK_OUTPOST_CASPIAN_TRADE_TT
+				amount = 9
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = persia_caspian_trade_modifier
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = persia_trade_with_persia
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = persia_trade_with_persia_peramenent
+				duration = -1
+			}
+		}
+	}
 }
 
-#Persian_missions_5_trade = {
-#	slot = 5
-#	generic = no
-#	ai = yes
-#	potential = {
-#		tag = PER
-#		has_country_flag = use_missions_expanded_missions_instead_of_paradox
-#	}
-#	has_country_shield = yes
-#}
+Persian_missions_5_trade = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = PER
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	persia_cultural_exchange = {
+		icon = me_mission_china_changan_woodblock_warehouse_scholars
+		required_missions = { }
+		position = 15
+		provinces_to_highlight = { }
+		trigger = { }
+		effect = {
+			add_country_modifier = {
+				name = persia_chinese_cultural_influence
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = persia_persian_cultural_influence
+				duration = 7300
+			}
+		}
+	}
+
+	persia_trade_with_far_east = {
+		icon = me_mission_china_port_quanzhou_top_sun
+		required_missions = {
+			persia_sino_iranian_relations
+			persia_cultural_exchange
+		}
+		position = 17
+		provinces_to_highlight = { }
+		trigger = { }
+		effect = {
+			add_country_modifier = {
+				name = persia_chinese_cultural_influence
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = persia_persian_cultural_influence
+				duration = 7300
+			}
+		}
+	}
+
+	persia_chinese_porcelain = {
+		icon = me_mission_china_porcelain_vases
+		required_missions = {
+			persia_technological_exchange
+			persia_trade_with_far_east
+		}
+		position = 18
+		provinces_to_highlight = { }
+		trigger = { }
+		effect = {
+			add_country_modifier = {
+				name = persia_chinese_cultural_influence
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = persia_persian_cultural_influence
+				duration = 7300
+			}
+		}
+	}
+
+	persia_great_silk_road = {
+		icon = me_mission_china_silk_road_zhang_hongnian_rugs
+		required_missions = {
+			persia_caspian_trade
+			persia_chinese_porcelain
+		}
+		position = 22
+		provinces_to_highlight = { }
+		trigger = { }
+		effect = {
+			add_country_modifier = {
+				name = persia_chinese_cultural_influence
+				duration = 7300
+			}
+			add_country_modifier = {
+				name = persia_persian_cultural_influence
+				duration = 7300
+			}
+		}
+	}
+}
 
 Persian_missions_1_tall = {
 	slot = 1
