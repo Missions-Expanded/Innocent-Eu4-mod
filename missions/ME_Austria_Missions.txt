@@ -63,9 +63,8 @@ ME_hab_slot_1 = {
 				amount = 10
 			}
 			add_imperial_influence = 5
-			add_dip_power = 50
-			add_mil_power = 50
-			add_adm_power = 50
+			change_mil_power = 50
+			change_adm_power = 50
 		}
 	}
 
@@ -198,17 +197,8 @@ ME_hab_slot_1 = {
 			}
 			else_if = {
 				limit = {
-					OR = {
-						hre_reform_passed =	emperor_privilegia_de_non_appelando
-						hre_reform_passed = privilegia_de_non_appelando
-					}
+					NOT = { hre_size = 1 }
 				}
-				add_country_modifier = {
-					name = me_hab_the_empire_stands_triumphant
-					duration = -1
-				}
-			}
-			else = {
 				set_country_flag = me_hab_easier_german_formation
 				custom_tooltip = me_hab_easier_german_formation
 				random_owned_province = {
@@ -269,6 +259,13 @@ ME_hab_slot_1 = {
 				add_power_projection = {
 					type = mission_rewards_power_projection
 					amount = 25
+				}
+			}
+			
+			else = {
+				add_country_modifier = {
+					name = me_hab_the_empire_stands_triumphant
+					duration = -1
 				}
 			}
 		}
@@ -995,7 +992,63 @@ ME_hab_slot_2 = {
 			}
 		}
 		effect = {
-
+			if = {
+				limit = {
+					is_emperor = yes
+					PAP = {
+						capital_scope = {
+							is_part_of_hre = yes
+						}
+					}
+					papal_influence = 50
+				}
+				add_country_modifier = {
+					name = me_hab_papal_authority
+					duration = 5475
+				}
+			}
+			else_if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 4
+						OR = {
+							area = umbria_area
+							province_id = 119
+							province_id = 2977
+						}
+					}
+				}
+				umbria_area = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = me_hab_under_new_management
+						duration = 5475
+					}
+				}
+				119 = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = me_hab_under_new_management
+						duration = 5475
+					}
+				}
+				2977 = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_province_modifier = {
+						name = me_hab_under_new_management
+						duration = 5475
+					}
+				}
+			}
+			else = {
+				country_event = { id = ME_Austria_Events.23 }
+			}
 		}
 	}
 
@@ -2429,16 +2482,20 @@ ME_hab_slot_4 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					owns = 73
-					is_year = 1460
-					NOT = { is_year = 1480 }
-					73 = {
-						NOT = { has_province_modifier = hab_schwaz_mine }
+			hidden_effect = {
+				if = {
+					limit = {
+						owns = 73
+						73 = {
+							NOT = { has_province_modifier = hab_schwaz_mine }
+						}
 					}
+					country_event = { id = ME_Austria_Events.21 }
 				}
-				country_event = { id = flavor_hab.11 }
+			}
+			custom_tooltip = me_hab_if_is_between_year_1460_and_1480
+			tooltip = {
+				country_event = { id = ME_Austria_Events.21 }
 			}
 			73 = {
 				add_province_modifier = {
@@ -2448,6 +2505,7 @@ ME_hab_slot_4 = {
 			}
 		}
 	}
+
 
 	ME_hab_provinces_of_the_realm = {
 		icon = the_ostend_company
@@ -2798,10 +2856,36 @@ ME_hab_slot_5 = {
 		required_missions = { ME_hab_crusade }
 
 		trigger = {
-
+			balkan_region = {
+				type = all
+				NOT = {
+					country_or_non_sovereign_subject_holds = TUR
+					religion_group = muslim
+				}
+			}
+			num_of_owned_provinces_with = {
+				value = 30
+				region = balkan_region
+			}
 		}
 		effect = {
-
+			custom_tooltip = every_country_in_europe
+			tooltip = {
+				country_event = { id = ME_Austria_Events.22 }
+			}
+			hidden_effect = {
+				balkan_region = {
+					remove_core = TUR
+				}
+				every_country = {
+					limit = {
+						capital_scope = {
+							region = europe
+						}
+					}
+					country_event = { id = ME_Austria_Events.22 }
+				}
+			}
 		}
 	}
 	
