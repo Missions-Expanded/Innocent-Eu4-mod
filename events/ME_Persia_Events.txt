@@ -11,6 +11,7 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.1.OPT1
+
 		ai_chance = {
 			factor = 1
 		}
@@ -35,12 +36,13 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.1.OPT2
-		ai_chance = {
-			factor = 0
-		}
 
 		trigger = {
 			has_dlc = "Art of War"
+		}
+
+		ai_chance = {
+			factor = 0
 		}
 
 		custom_tooltip = PERSIA_INDIAN_HEGEMONY_TT
@@ -222,7 +224,7 @@ country_event = {
 	id = ME_Persia_Events.3
 	title = ME_Persia_Events.3.T
 	desc = ME_Persia_Events.3.D
-	picture = 	GENERALS_DISCUSSING_eventPicture
+	picture = GENERALS_DISCUSSING_eventPicture
 
 	is_triggered_only = yes
 
@@ -334,11 +336,14 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.5.OPT1
+
 		trigger = {
 			any_country = {
-				has_country_flag = persia_venetian_trade_flag
-				has_country_flag = persia_genoese_trade_flag
-				has_country_flag = persia_iberian_trade_flag
+				OR = {
+					has_country_flag = persia_venetian_trade_flag
+					has_country_flag = persia_genoese_trade_flag
+					has_country_flag = persia_iberian_trade_flag
+				}
 			}
 		}
 
@@ -347,10 +352,19 @@ country_event = {
 			duration = -1
 		}
 		random_country = {
+			limit = {
+				OR = {
+					has_country_flag = persia_venetian_trade_flag
+					has_country_flag = persia_genoese_trade_flag
+					has_country_flag = persia_iberian_trade_flag
+				}
+			}
 			if = {
-				limit = { has_country_flag = persia_venetian_trade_flag }
+				limit = {
+					has_country_flag = persia_venetian_trade_flag
+				}
 				add_country_modifier = {
-					name = persia_new_silk_road_trade
+					name = persia_venetian_trade_partner
 					duration = -1
 				}
 				add_opinion = {
@@ -363,9 +377,11 @@ country_event = {
 				}
 			}
 			else_if = {
-				limit = { has_country_flag = persia_genoese_trade_flag }
+				limit = {
+					has_country_flag = persia_genoese_trade_flag
+				}
 				add_country_modifier = {
-					name = persia_new_silk_road_trade
+					name = persia_genoese_trade_partner
 					duration = -1
 				}
 				add_opinion = {
@@ -378,6 +394,10 @@ country_event = {
 				}
 			}
 			else = {
+				add_country_modifier = {
+					name = persia_iberian_trade_partner
+					duration = -1
+				}
 				add_opinion = {
 					who = ROOT
 					modifier = persia_prioritise
@@ -385,10 +405,6 @@ country_event = {
 				reverse_add_opinion = {
 					who = ROOT
 					modifier = persia_prioritise
-				}
-				add_country_modifier = {
-					name = persia_new_silk_road_trade
-					duration = -1
 				}
 			}
 		}
@@ -423,8 +439,17 @@ country_event = {
 			}
 		}
 		random_country = {
+			limit = {
+				OR = {
+					has_country_flag = persia_venetian_trade_flag
+					has_country_flag = persia_genoese_trade_flag
+					has_country_flag = persia_iberian_trade_flag
+				}
+			}
 			if = {
-				limit = { has_country_flag = persia_venetian_trade_flag }
+				limit = {
+					has_country_flag = persia_venetian_trade_flag
+				}
 				remove_country_modifier = persia_new_silk_road_trade
 				add_opinion = {
 					who = ROOT
@@ -436,7 +461,9 @@ country_event = {
 				}
 			}
 			if = {
-				limit = { has_country_flag = persia_genoese_trade_flag }
+				limit = {
+					has_country_flag = persia_genoese_trade_flag
+				}
 				remove_country_modifier = persia_new_silk_road_trade
 				add_opinion = {
 					who = ROOT
@@ -448,7 +475,9 @@ country_event = {
 				}
 			}
 			if = {
-				limit = { has_country_flag = persia_iberian_trade_flag }
+				limit = {
+					has_country_flag = persia_iberian_trade_flag
+				}
 				remove_country_modifier = persia_new_silk_road_trade
 				add_opinion = {
 					who = ROOT
@@ -470,10 +499,6 @@ country_event = {
 	desc = ME_Persia_Events.6.D
 	picture = CULTURE_eventPicture
 
-	mean_time_to_happen = {
-		months = 90
-	}
-
 	trigger = {
 		tag = PER
 		mission_completed = persia_persian_renaissance
@@ -485,14 +510,16 @@ country_event = {
 			}
 		}
 		OR = {
-			NOT = {
-				has_country_flag = persia_culture_flag_turkmeni
-			}
+			NOT = { has_country_flag = persia_culture_flag_turkmeni }
 			had_country_flag = {
 				flag = persia_culture_flag_turkmeni
 				days = 1095
 			}
 		}
+	}
+
+	mean_time_to_happen = {
+		months = 90
 	}
 
 	immediate = {
@@ -501,11 +528,11 @@ country_event = {
 			set_country_flag = persia_culture_flag_turkmeni
 			random_owned_province = {
 				limit = {
+					culture = turkmeni
 					any_neighbor_province = {
 						owned_by = ROOT
 						culture_group = iranian
 					}
-					culture = turkmeni
 				}
 				save_event_target_as = persia_turkmeni_province_assimilated
 			}
@@ -530,10 +557,6 @@ country_event = {
 	desc = ME_Persia_Events.7.D
 	picture = CULTURE_eventPicture
 
-	mean_time_to_happen = {
-		months = 90
-	}
-
 	trigger = {
 		tag = PER
 		mission_completed = persia_persian_renaissance
@@ -545,14 +568,16 @@ country_event = {
 			}
 		}
 		OR = {
-			NOT = {
-				has_country_flag = persia_culture_flag_tajiks
-			}
+			NOT = { has_country_flag = persia_culture_flag_tajiks }
 			had_country_flag = {
 				flag = persia_culture_flag_tajiks
 				days = 1095
 			}
 		}
+	}
+
+	mean_time_to_happen = {
+		months = 90
 	}
 
 	immediate = {
@@ -561,11 +586,11 @@ country_event = {
 			set_country_flag = persia_culture_flag_tajiks
 			random_owned_province = {
 				limit = {
+					culture = uzbehk
 					any_neighbor_province = {
 						owned_by = ROOT
 						culture_group = iranian
 					}
-					culture = uzbehk
 				}
 				save_event_target_as = persia_uzbehk_province_assimilated
 			}
@@ -590,10 +615,6 @@ country_event = {
 	desc = ME_Persia_Events.8.D
 	picture = CULTURE_eventPicture
 
-	mean_time_to_happen = {
-		months = 90
-	}
-
 	trigger = {
 		tag = PER
 		mission_completed = persia_persian_renaissance
@@ -605,14 +626,16 @@ country_event = {
 			}
 		}
 		OR = {
-			NOT = {
-				has_country_flag = persia_culture_flag_dagestani
-			}
+			NOT = { has_country_flag = persia_culture_flag_dagestani }
 			had_country_flag = {
 				flag = persia_culture_flag_dagestani
 				days = 1095
 			}
 		}
+	}
+
+	mean_time_to_happen = {
+		months = 90
 	}
 
 	immediate = {
@@ -621,11 +644,11 @@ country_event = {
 			set_country_flag = persia_culture_flag_dagestani
 			random_owned_province = {
 				limit = {
+					culture = dagestani
 					any_neighbor_province = {
 						owned_by = ROOT
 						culture_group = iranian
 					}
-					culture = dagestani
 				}
 				save_event_target_as = persia_dagestani_province_assimilated
 			}
@@ -650,10 +673,6 @@ country_event = {
 	desc = ME_Persia_Events.9.D
 	picture = CULTURE_eventPicture
 
-	mean_time_to_happen = {
-		months = 90
-	}
-
 	trigger = {
 		tag = PER
 		mission_completed = persia_persian_renaissance
@@ -665,14 +684,16 @@ country_event = {
 			}
 		}
 		OR = {
-			NOT = {
-				has_country_flag = persia_culture_flag_mashriqi
-			}
+			NOT = { has_country_flag = persia_culture_flag_mashriqi }
 			had_country_flag = {
 				flag = persia_culture_flag_mashriqi
 				days = 1095
 			}
 		}
+	}
+
+	mean_time_to_happen = {
+		months = 90
 	}
 
 	immediate = {
@@ -681,11 +702,11 @@ country_event = {
 			set_country_flag = persia_culture_flag_mashriqi
 			random_owned_province = {
 				limit = {
+					culture = al_iraqiya_arabic
 					any_neighbor_province = {
 						owned_by = ROOT
 						culture_group = iranian
 					}
-					culture = al_iraqiya_arabic
 				}
 				save_event_target_as = persia_al_iraqiya_arabic_province_assimilated
 			}
@@ -708,7 +729,7 @@ country_event = {
 	id = ME_Persia_Events.10
 	title = ME_Persia_Events.10.T
 	desc = ME_Persia_Events.10.D
-	picture = MILITARISTICALLY_TALENTED_RULER_eventPicture
+	picture = GOOD_WITH_MONARCH_eventPicture
 
 	is_triggered_only = yes
 
@@ -725,19 +746,14 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.10.OPT2
+
 		trigger = {
 			is_expanded_mod_active = { mod = trade_goods }
 		}
 
-		country_event = {
-			id = ME_Persia_Events.11
-		}
-		country_event = {
-			id = ME_Persia_Events.12
-		}
-		country_event = {
-			id = ME_Persia_Events.13
-		}
+		country_event = { id = ME_Persia_Events.11 }
+		country_event = { id = ME_Persia_Events.12 }
+		country_event = { id = ME_Persia_Events.13 }
 	}
 }
 
@@ -756,10 +772,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT2
+
 		trigger = {
 			owns = 412
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 412
 
 		412 = {
@@ -775,10 +793,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT3
+
 		trigger = {
 			owns = 430
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 430
 
 		430 = {
@@ -794,10 +814,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT4
+
 		trigger = {
 			owns = 4332
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 4332
 
 		4332 = {
@@ -813,10 +835,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT5
+
 		trigger = {
 			owns = 2219
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 2219
 
 		2219 = {
@@ -832,10 +856,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT6
+
 		trigger = {
 			owns = 4319
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 4319
 
 		4319 = {
@@ -851,10 +877,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT7
+
 		trigger = {
 			owns = 4327
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 4327
 
 		4327 = {
@@ -870,10 +898,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.11.OPT8
+
 		trigger = {
 			owns = 431
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 431
 
 		431 = {
@@ -903,10 +933,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.12.OPT2
+
 		trigger = {
 			owns = 2233
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 2233
 
 		2233 = {
@@ -922,10 +954,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.12.OPT3
+
 		trigger = {
 			owns = 575
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 575
 
 		575 = {
@@ -941,10 +975,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.12.OPT4
+
 		trigger = {
 			owns = 2231
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 2231
 
 		2231 = {
@@ -974,10 +1010,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT2
+
 		trigger = {
 			owns = 406
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 406
 
 		406 = {
@@ -993,10 +1031,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT3
+
 		trigger = {
 			owns = 2310
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 2310
 
 		2310 = {
@@ -1012,10 +1052,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT4
+
 		trigger = {
 			owns = 409
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 409
 
 		409 = {
@@ -1031,10 +1073,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT5
+
 		trigger = {
 			owns = 410
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 410
 
 		410 = {
@@ -1050,10 +1094,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT6
+
 		trigger = {
 			owns = 4291
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 4291
 
 		4291 = {
@@ -1069,10 +1115,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT7
+
 		trigger = {
 			owns = 2311
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 2311
 
 		2311 = {
@@ -1088,10 +1136,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT8
+
 		trigger = {
 			owns = 2312
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 2312
 
 		2312 = {
@@ -1107,10 +1157,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT9
+
 		trigger = {
 			owns = 4288
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 4288
 
 		4288 = {
@@ -1126,10 +1178,12 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.13.OPT10
+
 		trigger = {
 			owns = 408
 			is_expanded_mod_active = { mod = trade_goods }
 		}
+
 		goto = 408
 
 		408 = {
@@ -1156,19 +1210,23 @@ country_event = {
 	option = {
 		name = ME_Persia_Events.14.OPT1
 
-		set_country_flag = persia_choose_ancient
-		clr_country_flag = persia_choose_new
 		override_country_name = PERSIA_ERANSHAR
-		swap_non_generic_missions = yes
+		hidden_effect = {
+			set_country_flag = persia_choose_ancient
+			clr_country_flag = persia_choose_new
+			swap_non_generic_missions = yes
+		}
 		custom_tooltip = PERSIA_GOVERNANCE_ZORO_TT
 	}
 
 	option = {
 		name = ME_Persia_Events.14.OPT2
 
-		set_country_flag = persia_choose_new
-		clr_country_flag = persia_choose_ancient
-		swap_non_generic_missions = yes
+		hidden_effect = {
+			set_country_flag = persia_choose_new
+			clr_country_flag = persia_choose_ancient
+			swap_non_generic_missions = yes
+		}
 		custom_tooltip = PERSIA_GOVERNANCE_MUSLIM_TT
 	}
 }
@@ -1184,6 +1242,7 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.15.OPT1
+
 		trigger = {
 			NOT = { exists = YEM }
 		}
@@ -1216,10 +1275,11 @@ country_event = {
 		if = {
 			limit = {
 				is_expanded_mod_active = { mod = subjects }
+				can_be_overlord = persian_satrapy
 			}
 			create_subject = {
-				subject_type = persian_satrapy
 				subject = YEM
+				subject_type = persian_satrapy
 			}
 		}
 		else = { vassalize = YEM }
@@ -1256,12 +1316,13 @@ country_event = {
 
 	option = {
 		name = ME_Persia_Events.16.OPT1
+
 		trigger = {
 			NOT = { exists = MDA }
 		}
 
 		release = MDA
-		else = { vassalize = MDA }
+		vassalize = MDA
 		hidden_effect = {
 			MDA = {
 				add_treasury = 150
@@ -1295,9 +1356,7 @@ country_event = {
 
 	trigger = {
 		mission_completed = persia_saoshyant
-		NOT = {
-			has_ruler_modifier = persia_empire_peace
-		}
+		NOT = { has_ruler_modifier = persia_empire_peace }
 	}
 
 	option = {
@@ -1376,6 +1435,9 @@ country_event = {
 				}
 				if = {
 					limit = {
+						has_great_project = {
+							type = gme_golestan_palace
+						}
 						NOT = {
 							has_great_project = {
 								type = gme_golestan_palace
@@ -1413,6 +1475,9 @@ country_event = {
 				}
 				if = {
 					limit = {
+						has_great_project = {
+							type = gme_sheikh_safi
+						}
 						NOT = {
 							has_great_project = {
 								type = gme_sheikh_safi
@@ -1446,6 +1511,9 @@ country_event = {
 				if = {
 					limit = {
 						is_expanded_mod_active = { mod = great_monuments }
+						has_great_project = {
+							type = gme_ali_qapu_palace
+						}
 						NOT = {
 							has_great_project = {
 								type = gme_ali_qapu_palace
@@ -1460,6 +1528,9 @@ country_event = {
 				}
 				else_if = {
 					limit = {
+						has_great_project = {
+							type = maidan-e_naqsh-e_jahan
+						}
 						NOT = {
 							has_great_project = {
 								type = maidan-e_naqsh-e_jahan
