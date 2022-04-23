@@ -63,9 +63,9 @@ ME_hab_slot_1 = {
 				amount = 10
 			}
 			add_imperial_influence = 5
-			change_dip_power = 50
-			change_mil_power = 50
-			change_adm_power = 50
+			add_dip_power = 50
+			add_mil_power = 50
+			add_adm_power = 50
 		}
 	}
 
@@ -2430,7 +2430,124 @@ ME_hab_slot_4 = {
 			}
 		}
 	}
+	
+	ME_hab_the_spanish_throne = {
+		icon = mission_intervene_in_castile
+		position = 12
+		required_missions = { ME_hab_the_iberian_peninsula }
 
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 40
+				region = iberia_region
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					CAS = {
+						vassal_of = ROOT
+					}
+				}
+				CAS = {
+					add_country_modifier = {
+						name = me_hab_habsburg_domination
+						duration = 18250
+					}
+				}
+			}
+			if = {
+				limit = {
+					SPA = {
+						vassal_of = ROOT
+					}
+				}
+				SPA = {
+					add_country_modifier = {
+						name = me_hab_habsburg_domination
+						duration = 18250
+					}
+				}
+			}
+			add_country_modifier = {
+				name = me_hab_domination_of_iberia
+				duration = 7300
+			}
+		}
+	}
+}
+
+ME_hab_slot_4_catholic = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	ME_hab_rally_the_men = {
+		icon = mission_guilds_of_barcelona
+		position = 13
+		required_missions = { ME_hab_loyalty_to_the_pope }
+		trigger = {
+			OR = {
+				calc_true_if = {
+				  all_country = {
+					OR = {
+						religion = protestant
+						religion = reformed
+						religion = hussite
+						religion = anglican
+					}
+					ROOT = {
+					  has_won_war_against = { who = PREV }
+					}
+				  }
+				  amount = 3
+				}
+				NOT = {
+				  any_country = {
+					religion = protestant
+					religion = reformed
+				  }
+				}
+			}
+		}
+		effect = {
+			set_country_flag = me_hab_reformation_cb
+			custom_tooltip = me_hab_unlock_order_in_empire_cb
+			add_yearly_manpower = 1
+		}
+	}
+}
+ME_hab_slot_4_1 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+	
 	ME_hab_reorganize_the_kingdom = {
 		icon = mission_guilds_of_barcelona
 		position = 15
@@ -2524,7 +2641,6 @@ ME_hab_slot_4 = {
 			}
 		}
 	}
-
 
 	ME_hab_provinces_of_the_realm = {
 		icon = the_ostend_company
@@ -2908,7 +3024,7 @@ ME_hab_slot_5 = {
 		}
 	}
 	
-		ME_hab_habsburg_magnificence = {
+	ME_hab_habsburg_magnificence = {
 		icon = imperial_ascendancy
 		position = 10
 		required_missions = { ME_hab_the_cultures_of_the_realm }
@@ -2937,19 +3053,469 @@ ME_hab_slot_5 = {
 		}
 	}
 	
-	ME_hab_the_spanish_throne = {
-		icon = mission_intervene_in_castile
-		position = 12
-		required_missions = { ME_hab_the_iberian_peninsula }
-
+	ME_hab_rising_unrest = {
+		icon = catholic_confraternity
+		position = 11
+		required_missions = {  }
 		trigger = {
-			
+			custom_trigger_tooltip = {
+				tooltip = me_hab_reformation_started
+				has_global_flag = reformation_started
+			}
+			OR = {
+				religion = protestant
+				religion = reformed
+				has_country_modifier = counter_reformation 
+			}
 		}
 		effect = {
-
+			custom_tooltip = me_hab_get_new_missions
+			swap_non_generic_missions = yes
+			add_prestige_or_monarch_power = { amount = 20 }
 		}
 	}
+}
 
+ME_hab_slot_5_catholic = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	ME_hab_loyalty_to_the_pope = {
+		icon = sway_the_pope
+		position = 12
+		required_missions = { ME_hab_rising_unrest }
+		trigger = {
+			PAP = {
+				has_opinion = {
+					who = ROOT
+					value = 10
+				}
+			}
+			if = {
+				limit = {
+					has_estate = estate_church
+				}
+				estate_loyalty = {
+					estate = estate_church
+					loyalty = 60
+				}
+			}
+			else = {
+				papal_influence = 50
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_hab_papal_approval
+				duration = 7300
+			}
+		}
+	}
+	
+	ME_hab_cleanse_the_unbelievers = {
+		icon = mission_religious
+		position = 13
+		required_missions = { ME_hab_loyalty_to_the_pope }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_convert_20_provinces_tooltip
+				check_variable = { which = num_converted_religion value = 20 }
+			}
+			religious_unity = 1
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = me_hab_bulward_against_the_reformation
+				duration = -1
+			}
+		}
+	}
+	
+	ME_hab_heavensward = {
+		icon = mission_european_church
+		position = 14
+		required_missions = { ME_hab_cleanse_the_unbelievers ME_hab_rally_the_men }
+		trigger = {
+			OR = {
+				temple = 20
+				cathedral = 20
+			}
+			OR = {
+				full_idea_group = religious_ideas
+				has_estate_privilege = estate_church_one_faith_one_culture
+			}
+		}
+		effect = {
+			add_papal_influence = 20
+			add_curia_treasury = 300
+		}
+	}
+}
+
+ME_hab_slot_5_catholic_dlc = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		has_dlc = "Art of War"
+	}
+	has_country_shield = yes
+	
+	ME_hab_stormblood_catholic = {
+		icon = me_mission_army
+		position = 15
+		required_missions = { ME_hab_heavensward }
+		trigger = {
+			OR = {
+				AND = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				AND = {
+					hre_religion_locked = yes
+					hre_religion = ROOT
+				}
+				AND = {
+					hre_religion_treaty = yes
+					emperor = {
+						religion = ROOT
+					}
+				}
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = obj_religious_league_war_on_winning_side_tooltip
+						has_country_flag = religious_league_war_on_winning_side
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				add_country_modifier = {
+					name = me_hab_born_from_blood
+					duration = 3650
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							hre_religion_locked = yes
+							hre_religion = ROOT
+						}
+						AND = {
+							hre_religion_treaty = yes
+							emperor = {
+								religion = ROOT
+							}
+						}
+					}
+				}
+				add_ruler_modifier = {
+					name = me_hab_end_of_a_conflict
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_country_modifier = {
+						name = me_hab_peace_in_the_empire
+						duration = -1
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_explot_the_german_discord
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+ME_hab_slot_5_protestant = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		has_country_flag = ME_hab_went_protestant
+	}
+	has_country_shield = yes
+	
+	ME_hab_fall_from_grace = {
+		icon = sway_the_pope
+		position = 12
+		required_missions = { ME_hab_rising_unrest }
+		trigger = {
+			religious_unity = 0.75
+			calc_true_if = {
+				all_country = {
+					has_opinion = {
+						who = ROOT
+						value = 70
+					}
+				}
+				amount = 2
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = me_hab_regain_our_seat
+				duration = -1
+			}
+			custom_tooltip = me_hab_modifier_will_go_away
+		}
+	}
+	
+	ME_hab_we_fall = {
+		icon = mission_religious
+		position = 13
+		required_missions = { ME_hab_loyalty_to_the_pope }
+		trigger = {
+			OR = {
+				calc_true_if = {
+					any_elector = {
+						religion = ROOT
+						reverse_has_opinion = {
+							who = ROOT
+							amount = 100
+						}
+					}
+				}
+				any_elector = {
+					religion = catholic
+					capital_scope = {
+						controlled_by = ROOT
+					}
+				}
+				OR = {
+					118 = {
+						owner = {
+							OR = {
+								has_opinion_modifier = {
+									who = ROOT
+									modifier = insulted
+								}
+								has_opinion_modifier = {
+									who = ROOT
+									modifier = scornfully_insulted
+								}
+							}
+						}
+					}
+					118 = {
+						controlled_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			every_known_country = {
+				limit = {
+					religion = ROOT
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = me_hab_champion_of_reformation
+				}
+			}
+			add_years_of_income = 0.8
+		}
+	}
+	
+	ME_hab_steps_of_faith = {
+		icon = mission_european_church
+		position = 14
+		required_missions = { ME_hab_cleanse_the_unbelievers }
+		trigger = {
+			OR = {
+				calc_true_if = {
+					any_country = {
+						NOT = {
+							tag = ROOT
+						}
+						capital_scope = {
+							continent = europe
+						}
+						religion = ROOT
+						total_development = 200
+					}
+					amount = 5
+				}
+				AND = {
+					north_german_region = {
+						type = all
+						religion = ROOT
+					}
+					south_german_region = {
+						type = all
+						religion = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			#eveeeeeeeeeeeeeent
+		}
+	}
+}
+
+ME_hab_slot_5_protestant_dlc = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+		has_country_flag = ME_hab_went_protestant
+		has_dlc = "Art of War"
+	}
+	has_country_shield = yes
+	
+	ME_hab_stormblood_protestant = {
+		icon = me_mission_army
+		position = 15
+		required_missions = { ME_hab_steps_of_faith }
+		trigger = {
+			OR = {
+				AND = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				AND = {
+					hre_religion_locked = yes
+					hre_religion = ROOT
+				}
+				AND = {
+					hre_religion_treaty = yes
+					emperor = {
+						religion = ROOT
+					}
+				}
+				AND = {
+					custom_trigger_tooltip = {
+						tooltip = obj_religious_league_war_on_winning_side_tooltip
+						has_country_flag = religious_league_war_on_winning_side
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					is_in_league_war = yes
+					war_score = 50
+				}
+				add_country_modifier = {
+					name = me_hab_born_from_blood
+					duration = 3650
+				}
+			}
+			else_if = {
+				limit = {
+					OR = {
+						AND = {
+							hre_religion_locked = yes
+							hre_religion = ROOT
+						}
+						AND = {
+							hre_religion_treaty = yes
+							emperor = {
+								religion = ROOT
+							}
+						}
+					}
+				}
+				add_ruler_modifier = {
+					name = me_hab_end_of_a_conflict
+					duration = -1
+				}
+				if = {
+					limit = {
+						is_emperor = yes
+					}
+					add_country_modifier = {
+						name = me_hab_peace_in_the_empire
+						duration = -1
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_explot_the_german_discord
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+ME_hab_slot_5_1 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+	
 	ME_hab_strengthen_our_capital = {
 		icon = the_viennese_waltz
 		position = 17
