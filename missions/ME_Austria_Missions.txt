@@ -158,7 +158,7 @@ ME_hab_slot_1 = {
 	ME_hab_a_realm_reborn = {
 		icon = lead_the_empire
 		position = 5
-		required_missions = { ME_hab_steps_of_reform }
+		required_missions = { ME_hab_steps_of_reform ME_hab_redraw_imperial_borders }
 		provinces_to_highlight = {
 			OR = {
 				province_id = 50
@@ -877,19 +877,14 @@ ME_hab_slot_2 = {
 		effect = {
 			if = {
 				limit = {
-					alliance_with = PAP
-					is_emperor = yes
-					is_papal_controller = yes
-					NOT = {
-						118 = {
-							country_or_non_sovereign_subject_holds = ROOT
-						}
-					}
+					118 = {
+					country_or_non_sovereign_subject_holds = ROOT
 				}
-				country_event = { id = ME_Austria_Events.18 }
+				}
+				country_event = { id = ME_Austria_Events.19 }
 			}
 			else = {
-				country_event = { id = ME_Austria_Events.19 }
+				country_event = { id = ME_Austria_Events.18 }
 			}
 		}
 	}
@@ -1082,7 +1077,7 @@ ME_hab_slot_2 = {
 					num_of_owned_provinces_with = {
 						value = 4
 						OR = {
-							area = umbria_area
+							area = central_italy_area
 							province_id = 119
 							province_id = 2977
 						}
@@ -1111,13 +1106,13 @@ ME_hab_slot_2 = {
 					num_of_owned_provinces_with = {
 						value = 4
 						OR = {
-							area = umbria_area
+							area = central_italy_area
 							province_id = 119
 							province_id = 2977
 						}
 					}
 				}
-				umbria_area = {
+				central_italy_area = {
 					limit = {
 						owned_by = ROOT
 					}
@@ -1203,7 +1198,7 @@ ME_hab_slot_2 = {
 	ME_hab_early_industralization = {
 		icon = explore_caribbean
 		position = 18
-		required_missions = { ME_hab_secure_lubeck }
+		required_missions = { ME_hab_secure_lubeck ME_hab_expand_bohemian_cities }
 
 		trigger = {
 			calc_true_if = {
@@ -1620,6 +1615,12 @@ ME_hab_slot_3 = {
 		effect = {
 			set_country_flag = me_hab_start_germanization
 			custom_tooltip = me_hab_germanization_tt
+			hidden_effect = {
+				set_variable = {
+					which = germanization
+					value = 0
+				}
+			}
 		}
 	}
 
@@ -2628,6 +2629,44 @@ ME_hab_slot_4_catholic = {
 		}
 	}
 }
+
+ME_hab_slot_4_catholic = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		OR = {
+			AND = {
+				tag = HAB
+				has_country_flag = use_missions_expanded_missions_instead_of_paradox
+			}
+			AND = {
+				tag = AUB
+				primary_culture = austrian
+			}
+		}
+	}
+	has_country_shield = yes
+	
+	ME_hab_spread_the_religion = {
+		icon = mission_guilds_of_barcelona
+		position = 13
+		required_missions = { ME_hab_fall_from_grace }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = obj_convert_20_provinces_tooltip
+				check_variable = { which = num_converted_religion value = 20 }
+			}
+		}
+		effect = {
+			add_ruler_modifier = {
+				name = me_hab_forge_ahead
+				duration = -1
+			}
+		}
+	}
+}
+
 ME_hab_slot_4_1 = {
 	slot = 4
 	generic = no
@@ -3408,7 +3447,7 @@ ME_hab_slot_5_protestant = {
 	ME_hab_we_fall = {
 		icon = mission_religious
 		position = 13
-		required_missions = { ME_hab_loyalty_to_the_pope }
+		required_missions = { ME_hab_fall_from_grace }
 		trigger = {
 			OR = {
 				calc_true_if = {
@@ -3464,7 +3503,7 @@ ME_hab_slot_5_protestant = {
 	ME_hab_steps_of_faith = {
 		icon = mission_european_church
 		position = 14
-		required_missions = { ME_hab_cleanse_the_unbelievers }
+		required_missions = { ME_hab_we_fall ME_hab_spread_the_religion }
 		trigger = {
 			OR = {
 				calc_true_if = {
@@ -3493,7 +3532,22 @@ ME_hab_slot_5_protestant = {
 			}
 		}
 		effect = {
-			#eveeeeeeeeeeeeeent
+			every_country = {
+				limit = {
+					OR = {
+						religion = catholic
+						religion = protestant
+						religion = hussite
+					}
+					capital_scope = {
+						OR = {
+							region = north_german_region
+							region = south_german_region
+						}
+					}
+				}
+				country_event = { id = ME_Austria_Events.30 }
+			}
 		}
 	}
 }

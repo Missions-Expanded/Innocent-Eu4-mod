@@ -11,11 +11,38 @@ country_event = {
 	option = {
 		name = ME_Austria_Events.1.a
 		set_country_flag = me_hab_shadow_kingdom_peaceful
+		
+		every_country = {
+			limit = {
+				is_part_of_hre = yes
+				capital_scope = {
+					region = italy_region
+				}
+			}
+			add_opinion = {
+				who = ROOT
+				name = me_hab_shadow_kingdom_opinion
+			}
+		}
 	}
 
 	option = {
 		name = ME_Austria_Events.1.b
 		set_country_flag = me_hab_shadow_kingdom_military
+		
+		every_country = {
+			limit = {
+				is_part_of_hre = yes
+				capital_scope = {
+					region = italy_region
+				}
+			}
+			reverse_add_casus_belli = {
+				target = ROOT
+				type = cb_vassalize_mission
+				months = 120
+			}
+		}
 	}
 }
 
@@ -751,7 +778,11 @@ country_event = {
 	
 	option = {
 		name = ME_Austria_Events.19.a
-
+		
+		set_country_flag = me_hab_negative_occupation_of_rome
+		custom_tooltip = me_hab_gain_6_pi_as_long_as_rome_is_controlled
+		add_stability_or_adm_power = yes
+		add_prestige_or_monarch_power = { amount = 25 }
 	}
 }
 
@@ -940,11 +971,26 @@ country_event = {
 	desc = ME_Austria_Events.23.d
 	
 	is_triggered_only = yes
+	major = yes
 	
 	option = {
 		name = ME_Austria_Events.23.a
 		
-		custom_tooltip = me_hab_ottomans_lose_cores
+		every_owned_province = {
+			set_in_empire = yes
+		}
+	}
+	
+	option = {
+		name = ME_Austria_Events.23.b
+		
+		FROM = {
+			add_casus_belli = {
+				target = ROOT
+				type = cb_force_join_hre 
+				months = 120
+			}
+		}
 	}
 }
 
@@ -1171,6 +1217,267 @@ country_event = {
 		
 		PAP = {
 			country_event = { id = ME_Austria_Events.28 }
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.30
+	title = ME_Austria_Events.30.t
+	desc = ME_Austria_Events.30.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.30.a
+		
+		ai_chance = { 
+			factor = 70
+			modifier = {
+				factor = 0
+				is_emperor = yes
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					has_opinion = {
+						who = FROM
+						value = 0
+					}
+				}
+			}
+			modifier = {
+				factor = 2
+				has_opinion = {
+					who = FROM
+					value = 50
+				}
+			}
+			modifier = {
+				factor = 0
+				FROM = {
+					OR = {
+						is_rival = FROM
+						is_enemy = FROM
+					}
+				}
+			}
+		}
+		
+		change_religion = FROM
+	}
+	
+	option = {
+		name = ME_Austria_Events.30.b
+		
+		ai_chance = { factor = 0.30 }
+		
+		add_prestige = 10
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.31
+	title = ME_Austria_Events.31.t
+	desc = ME_Austria_Events.31.d
+	
+	mean_time_to_happen = {
+		months = 100
+	}
+	
+	trigger = {
+		has_country_flag = me_hab_start_germanization
+		culture_group = germanic
+		NOT = {
+			check_variable = {
+				which = germanization
+			    value = 10
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Austria_Events.31.a
+		
+		ai_chance = { factor = 1 }
+		
+		random_owned_province = {
+			limit = {
+				NOT = {
+					culture_group = ROOT
+					has_province_modifier = me_hab_german_settlers
+				}
+			}
+			change_culture = ROOT
+			add_province_modifier = {
+				name = me_hab_german_settlers
+				duration = -1
+			}
+		}
+		hidden_effect = {
+			change_variable = {
+				which = germanization
+				value = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.32
+	title = ME_Austria_Events.32.t
+	desc = ME_Austria_Events.32.d
+	
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.32.a
+		
+		hidden = {
+			if = {
+				limit = {
+					check_variable = {
+						which = habsburg_glory
+						value = 30
+					}
+					NOT = {
+						has_country_modifier = me_hab_glory_of_habsburg
+					}
+				}
+				add_country_modifier = {
+					name = me_hab_glory_of_habsburg
+					duration = 10950
+				}
+			}
+		}
+		custom_tooltip = me_hab_if_we_have_30_habsburg_glory
+		tooltip = {
+			add_country_modifier = {
+				name = me_hab_glory_of_habsburg
+				duration = 10950
+			}
+		}
+	}
+	
+	option = {
+		name = ME_Austria_Events.32.b
+		
+		hidden = {
+			if = {
+				limit = {
+					check_variable = {
+						which = habsburg_glory
+						value = 30
+					}
+					NOT = {
+						has_country_modifier = me_hab_unshaken_reputation
+					}
+				}
+				add_country_modifier = {
+					name = me_hab_unshaken_reputation
+					duration = 10950
+				}
+			}
+		}
+		custom_tooltip = me_hab_if_we_have_10_habsburg_glory
+		tooltip = {
+			add_country_modifier = {
+				name = me_hab_unshaken_reputation
+				duration = 10950
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.33
+	title = ME_Austria_Events.33.t
+	desc = ME_Austria_Events.33.d
+	
+	hidden = yes
+	fire_only_once = yes 
+	
+	trigger = {
+		has_dlc = "Art of War"
+		hre_leagues_enabled = yes
+	}
+	
+	option = {
+		name = ME_Austria_Events.33.a
+		
+		if = {
+			limit = {
+				in_league = protestant
+			}
+			set_country_flag = me_hab_joined_protestants
+		}
+		else_if = {
+			limit = {
+				OR = {
+					in_league = catholic
+					is_emperor = yes
+				}
+			}
+			set_country_flag = me_hab_joined_catholics
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.34
+	title = ME_Austria_Events.34.t
+	desc = ME_Austria_Events.34.d
+	
+	hidden = yes
+	fire_only_once = yes
+	
+	trigger = {
+		has_dlc = "Art of War"
+		hre_religion_locked = yes
+	}
+	
+	option = {
+		name = ME_Austria_Events.33.a
+		
+		if = {
+			limit = {
+				has_country_flag = me_hab_joined_protestants
+				hre_religion = protestant
+			}
+			change_variable = {
+				name = habsburg_glory
+				value = 50
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = me_hab_joined_catholics
+				hre_religion = catholic
+			}
+			change_variable = {
+				name = habsburg_glory
+				value = 50
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = me_hab_joined_catholics
+				hre_religion = protestant
+			}
+			subtract_variable = {
+				name = habsburg_glory
+				value = 70
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = me_hab_joined_protestants
+				hre_religion = catholic
+			}
+			subtract_variable = {
+				name = habsburg_glory
+				value = 70
+			}
 		}
 	}
 }
