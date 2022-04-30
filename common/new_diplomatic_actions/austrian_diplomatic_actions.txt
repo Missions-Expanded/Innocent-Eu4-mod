@@ -1,30 +1,36 @@
 austria_increase_relations = {
 	category = influence
-	
+
 	require_acceptance = no
-	
+
 	is_visible = {
 		has_country_flag = habsburg_glory_unlocked
 		dynasty = "von Habsburg"
 	}
-	
+
 	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = habsburg_glory_unlocked
+			dynasty = "von Habsburg"
+		}
 		check_variable = {
 			which = habsburg_glory
 			value = 20
 		}
 	}
-	
+
 	on_accept = {
-		add_opinion = {
-			who = FROM
-			modifier = me_hab_spent_glory
+		FROM = {
+			add_opinion = {
+				who = ROOT
+				modifier = me_hab_spent_glory
+			}
 		}
 		HAB_change_habsburg_glory = { amount = -20 }
 		clr_country_flag = me_hab_improved_relations
 		set_country_flag = me_hab_improved_relations
 	}
-	
+
 	ai_will_do = {
 		check_variable = {
 			which = habsburg_glory
@@ -43,9 +49,9 @@ austria_increase_relations = {
 
 austria_put_relative_as_heir = {
 	category = influence
-	
+
 	require_acceptance = yes
-	
+
 	is_visible = {
 		has_country_flag = habsburg_glory_unlocked
 		dynasty = "von Habsburg"
@@ -53,17 +59,30 @@ austria_put_relative_as_heir = {
 			government = monarchy
 			has_government_attribute = heir
 			religion_group = ROOT
+			NOT = { dynasty = ROOT }
 		}
 	}
-	
+
 	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = habsburg_glory_unlocked
+			dynasty = "von Habsburg"
+			FROM = {
+				government = monarchy
+				has_government_attribute = heir
+				religion_group = ROOT
+				NOT = { dynasty = ROOT }
+			}
+		}
 		check_variable = {
 			which = habsburg_glory
 			value = 81 #The actual interaction requires the last tier of Habsburg Glory, hence why this
 		}
-		has_heir = no
+		FROM = {
+			has_heir = no
+		}
 	}
-	
+
 	on_accept = {
 		FROM = {
 			define_heir = {
@@ -81,14 +100,14 @@ austria_put_relative_as_heir = {
 		}
 		HAB_change_habsburg_glory = { amount = -50 }
 	}
-	
+
 	on_decline = {
 		FROM = {
 			clr_country_flag = declined_heir_from_@ROOT
 			set_country_flag = declined_heir_from_@ROOT
 		}
 	}
-	
+
 	ai_acceptance = {
 		add_entry = {
 			name = HAB_FROM_ATTITUDE_TOWARDS_ROOT
@@ -204,6 +223,7 @@ austria_put_relative_as_heir = {
 			multiply_variable = { which = ai_value value = -1 }
 		}
 	}
+
 	ai_will_do = {
 		check_variable = {
 			which = habsburg_glory
@@ -212,10 +232,10 @@ austria_put_relative_as_heir = {
 		FROM = {
 			total_development = 200
 			religion = ROOT
-			NOT = {	
+			NOT = {
 				historical_rival_with = ROOT
-				is_rival = FROM
-				is_enemy = FROM
+				is_rival = ROOT
+				is_enemy = ROOT
 			}
 			OR = {
 				ai_attitude = { who = ROOT attitude = attitude_allied }
