@@ -881,6 +881,8 @@ ME_hab_slot_2 = {
 			set_country_flag = habsburg_glory_unlocked
 			HAB_change_habsburg_glory = { amount = 10 }
 			country_event = { id = ME_Austria_Events.36 }
+			ME_give_claims = { id = 4751 }
+			ME_give_claims = { id = 110 }
 		}
 	}
 
@@ -901,24 +903,18 @@ ME_hab_slot_2 = {
 		}
 		trigger = {
 			OR = {
-				AND = {
-					tirol_area = {
-						type = all
-						NOT = { is_core = TIR }
-						NOT = { is_core = STY }
-					}
-					inner_austria_area = {
-						type = all
-						NOT = { is_core = TIR }
-						NOT = { is_core = STY }
-					}
-					austria_proper_area = {
-						type = all
-						NOT = { is_core = TIR }
-						NOT = { is_core = STY }
+				custom_trigger_tooltip = {
+					tooltip = me_hab_less_than_4_province_have_core_of_styria_and_tirol
+					NOT = {
+						num_of_owned_provinces_with = {
+							OR = {
+								is_core = TIR
+								is_core = STY
+							}
+							value = 4
+						}	
 					}
 				}
-				#FEE
 			}
 		}
 		effect = {
@@ -2244,9 +2240,10 @@ ME_hab_slot_3 = {
 				}
 			}
 			else = {
-				NAP = {
-					country_event = { id = ME_Austria_Events.2 }
-				}
+				add_imperial_influence = 5
+				add_adm_power = 50
+				add_dip_power = 50
+				add_mil_power = 50
 			}
 		}
 	}
@@ -2868,7 +2865,6 @@ ME_hab_slot_4 = {
 			else = {
 				country_event = {
 					id = ME_Austria_Events.24
-					days = 3650
 				}
 			}
 		}
@@ -2891,9 +2887,23 @@ ME_hab_slot_4 = {
 			}
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				value = 40
-				region = iberia_region
+			OR = {
+				num_of_owned_provinces_with = {
+					value = 40
+					region = iberia_region
+				}
+				CAS = {
+					junior_union_with = ROOT
+					NOT = {
+						liberty_desire = 20
+					}
+				}
+				SPA = {
+					junior_union_with = ROOT
+					NOT = {
+						liberty_desire = 20
+					}
+				}
 			}
 		}
 		effect = {
@@ -2921,7 +2931,7 @@ ME_hab_slot_4 = {
 			}
 			add_country_modifier = {
 				name = me_hab_domination_of_iberia
-				duration = 7300
+				duration = -1
 			}
 		}
 	}
@@ -3348,17 +3358,16 @@ ME_hab_slot_5 = {
 			country_or_non_sovereign_subject_holds = TUR
 		}
 		trigger = {
-			is_at_war = yes
 			if = {
 				limit = {
 					TUR = {
 						exists = yes
 					}
-					army_size = TUR
-					carpathia_region = {
-						type = all
-						NOT = { country_or_non_sovereign_subject_holds = TUR }
-					}
+				}
+				army_size = TUR
+				carpathia_region = {
+					type = all
+					NOT = { country_or_non_sovereign_subject_holds = TUR }
 				}
 			}
 			else = {
