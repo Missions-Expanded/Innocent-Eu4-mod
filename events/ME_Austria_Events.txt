@@ -1601,3 +1601,67 @@ country_event = {
 		}
 	}
 }
+
+country_event = {
+	id = ME_Austria_Events.37
+	title = ME_Austria_Events.37.t #What to do with Poland
+	desc = ME_Austria_Events.37.d
+
+	is_triggered_only = yes
+	
+	major = yes
+
+	immediate = {
+		hidden_effect = {
+			if = {
+				limit = {
+					exists = PLC
+				}
+				PLC = { save_event_target_as = Austria_Poland }
+			}
+			else_if = {
+				limit = {
+					exists = POL
+				}
+				POL = { save_event_target_as = Austria_Poland }
+			}
+			else = {
+				set_country_flag = HAB_POL_missing
+			}
+		}
+	}
+	option = {
+		name = ME_Austria_Events.37.a
+
+		trigger = {
+			NOT = { has_country_flag = HAB_POL_missing }
+		}
+		
+		ai_chance = { factor = 100 }
+		
+		add_casus_belli = {
+			target = event_target:Austria_Poland
+			type = cb_austria_balkanize_poland
+			months = 10000
+		}
+		set_country_flag = HAB_may_balkanize_poland
+		
+		custom_tooltip = HAB_poland_balkanize_tt
+	}
+	
+	option = {
+		name = ME_Austria_Events.37.b
+		
+		ai_chance = { factor = 0 }
+		
+		ME_give_claims = { area = sandomierz_area }
+		ME_give_claims = { area = malopolska_area }
+		ME_give_claims = { area = red_ruthenia_area }
+		
+		set_country_flag = HAB_chose_to_conquer_poland
+	}
+	
+	after = {
+		clr_country_flag = HAB_POL_missing
+	}
+}
