@@ -20,11 +20,7 @@ mazandaran_missions_1 = {
 			}
 			num_of_owned_provinces_with = {
 				value = 3
-				OR = {
-					has_building = marketplace
-					has_building = trade_depot
-					has_building = stock_exchange
-				}
+				has_trade_building_trigger = yes
 			}
 		}
 		effect = {
@@ -75,11 +71,7 @@ mazandaran_missions_1 = {
 					limit = {
 						NOT = { has_building = textile }
 					}
-					add_building_construction = {
-						building = textile
-						speed = 2
-						cost = 0
-					}
+					add_building = textile
 				}
 			}
 		}
@@ -338,29 +330,52 @@ mazandaran_missions_3 = {
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 			NOT = {
-				any_province = {
-					OR = {
-						is_core = KRY
-						is_core = BPI
+				ROOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						OR = {
+							is_core = KRY
+							is_core = BPI
+						}
+						value = 1
 					}
-					country_or_non_sovereign_subject_holds = ROOT
 				}
 			}
 		}
 		trigger = {
 			stability = 1
-			any_province = {
-				OR = {
-					is_core = KRY
-					is_core = BPI
+			if = {
+				limit = {
+					persia_region = {
+						OR = {
+							is_core = KRY
+							is_core = BPI
+						}
+					}
 				}
-				country_or_non_sovereign_subject_holds = ROOT
+				num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+					region = persia_region
+					OR = {
+						is_core = KRY
+						is_core = BPI
+					}
+					value = 1
+				}
+			}
+			else = {
+				grown_by_development = 50
 			}
 		}
 		effect = {
 			country_event = { id = ME_Mazandaran_Events.7 }
 			every_owned_province = {
 				add_local_autonomy = -15
+				add_devastation = -15
+				if = {
+					limit = {
+						has_dlc = "Mandate of Heaven"
+					}
+					add_prosperity = 15
+				}
 			}
 		}
 	}
@@ -476,10 +491,7 @@ mazandaran_missions_3 = {
 			has_mil_advisor_2 = yes
 			num_of_owned_provinces_with = {
 				value = 7
-				OR = {
-					has_building = temple
-					has_building = cathedral
-				}
+				has_tax_building_trigger = yes
 			}
 		}
 		effect = {
@@ -489,10 +501,7 @@ mazandaran_missions_3 = {
 			}
 			every_owned_province = {
 				limit = {
-					OR = {
-						has_building = temple
-						has_building = cathedral
-					}
+					has_tax_building_trigger = yes
 				}
 				add_base_tax = 1
 			}
@@ -907,20 +916,14 @@ mazandaran_missions_5_islam = {
 		trigger = {
 			num_of_owned_provinces_with = {
 				value = 3
-				OR = {
-					has_building = town_hall
-					has_building = courthouse
-				}
+				has_courthouse_building_trigger = yes
 			}
 		}
 		effect = {
 			every_owned_province = {
 				limit = {
 					is_state = yes
-					OR = {
-						has_building = town_hall
-						has_building = courthouse
-					}
+					has_courthouse_building_trigger = yes
 				}
 				add_province_modifier = {
 					name = maz_house_law
