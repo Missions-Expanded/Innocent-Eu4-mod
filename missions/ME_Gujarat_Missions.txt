@@ -53,7 +53,7 @@ ME_Gujarat_Missions_1 = {
 	}
 	guj_bab_al_makkah = {
 		icon = mission_growth_of_surat
-		required_missions = { guj_chaulukya_style guj_tri_ports }
+		required_missions = { guj_chaulukya_style guj_manufacture }
 		position = 3
 		provinces_to_highlight = {
 			province_id = 517
@@ -79,9 +79,66 @@ ME_Gujarat_Missions_1 = {
 		icon = mission_secure_hajj_ports
 		required_missions = { guj_bab_al_makkah guj_transactions_between_theology }
 		position = 6
-		provinces_to_highlight = { }
-		trigger = { }
-		effect = { }
+		provinces_to_highlight = { 
+			OR = {
+				province_id = 358
+				province_id = 1335
+			}
+		}
+		trigger = { 
+			OR = {
+				1335 = {
+					trade_share = {
+						country = ROOT
+						share = 5
+					}
+				}
+				358 = {
+					trade_share = {
+						country = ROOT
+						share = 5
+					}
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = GUJ_LARGEST_NAVY_IN_BASRA_OR_ALEXANDRIA_TT
+				NOT = {
+					any_country = {
+						navy_size = ROOT
+						OR = {
+							1335 = {
+								trade_share = {
+									country = ROOT
+									share = 5
+								}
+							}
+							358 = {
+								trade_share = {
+									country = ROOT
+									share = 5
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = { 
+			add_country_modifier = {
+				name = guj_maritime_hajj_modifier
+				duration = -1
+			}
+			custom_tooltip = GUJ_EMPOWER_GATEWAY_TO_MECCA_MODIFIER_TT
+			hidden_effect = {
+				517 = {
+					remove_province_modifier = guj_bab_al_makkah_modifier
+					add_province_modifier = {
+						name = guj_bab_al_makkah_empowered_modifier
+						duration = -1
+					}
+				}
+			}
+		}
 	}
 }
 ME_Gujarat_Missions_2 = {
@@ -96,6 +153,416 @@ ME_Gujarat_Missions_2 = {
 			AND = {
 				has_dlc = "Dharma"
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+	guj_facilitate_trade = {
+		icon = mission_conquer_cuttack 
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			OR = {
+				province_id = 4457
+				province_id = 504
+			}
+		}
+		trigger = {
+			4457 = {
+				country_or_non_sovereign_subject_holds = ROOT 
+				OR = {
+					has_trade_building_trigger = yes
+					province_trade_power = 50
+				}
+			}
+			504 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			num_of_light_ship = 10
+		}
+		effect = {
+			add_mercantilism = 3
+			4457 = {
+				add_base_production = 1
+				add_or_upgrade_trade_building = yes
+			}
+			504 = { #Gujarat
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			1335 = { #Basra
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			4346 = { #Aden
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			1448 = { #Zanzibar
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			1947 = { #Deccan
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			1340 = { #Coromandel
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			1334 = { #Hormuz
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			1361 = { #Malacca
+				add_trade_modifier = {
+					who = ROOT
+					duration = 36500
+					power = 30		
+					key = BNG_INFLUENTIAL_MERCHANTS
+				}
+			}
+			add_country_modifier = {
+				name = guj_porch_of_khambay_modifier
+				duration = 9125
+			}
+		}
+	}
+	guj_manufacture = {
+		icon = mission_guilds_of_barcelona
+		required_missions = { guj_facilitate_trade guj_issue_land }
+		position = 2
+		provinces_to_highlight = { 
+			OR = {
+				province_id = 2054
+				province_id = 517
+				province_id = 4457
+			}
+			NOT = { has_production_building_trigger = yes }
+		}
+		trigger = { 
+			2054 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			517 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			4457 = {
+				owned_by = ROOT
+				has_production_building_trigger = yes
+			}
+			OR = {
+				num_of_trading_bonuses = 1
+				is_production_leader_of_any_trade_good = yes
+			}
+		}
+		effect = { 
+			add_country_modifier = {
+				name = guj_silk_and_paper_guilds_modifier
+				duration = 7300
+			}
+			2054 = { add_base_production = 2 }
+			517 = { add_base_production = 2 }
+			4457 = { add_base_production = 2 }
+		}
+	}
+	guj_textiles = {
+		icon = mission_gujarati_textiles
+		required_missions = { guj_manufacture }
+		position = 3
+		provinces_to_highlight = { 
+			OR = {
+				trade_goods = cloth
+				trade_goods = silk
+			}
+			country_or_non_sovereign_subject_holds = ROOT
+		}
+		trigger = { 
+			development_in_provinces = {
+				value = 80
+				OR = {
+					trade_goods = cloth
+					trade_goods = silk
+				}
+			}
+			textile = 4
+		}
+		effect = { 
+			country_event = {
+				id = ME_Delhi_Events.5
+			}
+			change_price = {
+				trade_goods = cloth
+				key = GUJ_CLOTH_TT
+				value = 0.33
+				duration = 36500
+			}
+			add_dip_power = 100
+		}
+	}
+	guj_balance_of_trade = {
+		icon = mission_steer_trade_to_bengal
+		required_missions = { guj_textiles guj_bab_al_makkah guj_ahmedabad_paper }
+		position = 4
+		provinces_to_highlight = {
+			OR = {
+				province_id = 504
+				province_id = 1343
+				OR = {
+					AND = {
+						province_has_center_of_trade_of_level = 1
+						NOT = { province_has_center_of_trade_of_level = 2 }
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}			
+			}
+		}
+		trigger = {
+			504 = { #Thatta
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			1343 = {
+				trade_share = {
+					country = ROOT
+					share = 50
+				}
+			}
+			OR = {
+				num_of_merchants = 6
+				num_of_owned_provinces_with = {
+					value = 12
+					province_has_center_of_trade_of_level = 2
+				}
+			}
+			
+		}
+		effect = {
+			add_years_of_income = 1
+			add_country_modifier = {
+				name = dlh_favourable_balance_modifier
+				duration = 10950
+			}
+			custom_tooltip = EVERY_OWNED_WITH_COT_2_TT
+			tooltip = {
+				add_province_modifier = {
+					name = dlh_fruitful_trade_modifier
+					duration = 9125
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = { province_has_center_of_trade_of_level = 2 }
+					add_province_modifier = {
+						name = dlh_fruitful_trade_modifier
+						duration = 9125
+					}
+				}
+			}
+		}
+	}
+	guj_transactions_between_theology = {
+		icon = mission_merchant_of_gujarat
+		required_missions = { }
+		position = 5
+		trigger = { 
+			has_global_modifier_value = {
+				which = tolerance_heathen
+				value = 3
+			}
+			OR = {
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+				estate_territory = {
+					estate = estate_jains
+				   	territory = 20
+			   }
+			   NOT = { inflation = 0.5 }
+			}
+		}
+		effect = { 
+			define_advisor = {
+				religion = hinduism
+				type = trader
+				skill = 3
+				discount = yes
+			}
+			custom_tooltip = GUJ_ADD_100_ADM_POWER_REDUCED_BY_LOANS_TT
+			custom_tooltip = GUJ_ADD_100_DIP_POWER_REDUCED_BY_LOANS_TT
+			custom_tooltip = GUJ_ADD_100_MIL_POWER_REDUCED_BY_LOANS_TT
+			hidden_effect = {
+				if = {
+					limit = {
+						NOT = { num_of_loans = 10 }
+					}
+					if = {
+						limit = {
+							NOT = { num_of_loans = 9 }
+						}
+						if = {
+							limit = {
+								NOT = { num_of_loans = 8 }
+							}
+							if = {
+								limit = {
+									NOT = { num_of_loans = 7 }
+								}
+								if = {
+									limit = {
+										NOT = { num_of_loans = 6 }
+									}
+									if = {
+										limit = {
+											NOT = { num_of_loans = 5 }
+										}
+										if = {
+											limit = {
+												NOT = { num_of_loans = 4 }
+											}
+											if = {
+												limit = {
+													NOT = { num_of_loans = 3 }
+												}
+												if = {
+													limit = {
+														NOT = { num_of_loans = 2 }
+													}
+													if = {
+														limit = {
+															NOT = { num_of_loans = 1 }
+														}
+														add_adm_power = 100
+														add_dip_power = 100
+														add_mil_power = 100
+													}
+													else = {
+														add_adm_power = 90
+														add_dip_power = 90
+														add_mil_power = 90
+													}
+												}
+												else = {
+													add_adm_power = 80
+													add_dip_power = 80
+													add_mil_power = 80
+												}
+											}
+											else = {
+												add_adm_power = 70
+												add_dip_power = 70
+												add_mil_power = 70
+											}
+										}
+										else = {
+											add_adm_power = 60
+											add_dip_power = 60
+											add_mil_power = 60
+										}
+									}
+									else = {
+										add_adm_power = 50
+										add_dip_power = 50
+										add_mil_power = 50
+									}
+								}
+								else = {
+									add_adm_power = 40
+									add_dip_power = 40
+									add_mil_power = 40
+								}
+							}
+							else = {
+								add_adm_power = 30
+								add_dip_power = 30
+								add_mil_power = 30
+							}
+						}
+						else = {
+							add_adm_power = 20
+							add_dip_power = 20
+							add_mil_power = 20
+						}
+					}
+					else = {
+						add_adm_power = 10
+						add_dip_power = 10
+						add_mil_power = 10
+					}
+				}
+			}
+		}
+	}
+	guj_rumi_elites = {
+		icon = mission_the_sultanate_restored
+		required_missions = { guj_transactions_between_theology guj_alliance_with_caliph }
+		position = 6
+		trigger = {
+			if = {
+				limit = { is_expanded_mod_active = { mod = governments } }
+				OR = {
+					absolutism = 50
+					OR = {
+						has_country_modifier = GE_liberalism_50
+						has_country_modifier = GE_liberalism_60
+						has_country_modifier = GE_liberalism_70
+						has_country_modifier = GE_liberalism_80
+						has_country_modifier = GE_liberalism_90
+						has_country_modifier = GE_liberalism_100
+					}
+				}
+			}
+			else = {
+				absolutism = 50
+			}
+			NOT = {
+				estate_influence = {
+					estate = estate_nobles
+					influence = 50
+				}
+			}
+			NOT = { is_bankrupt = yes }
+			NOT = { corruption = 1 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = guj_controlled_aristocracy_modifier
+				duration = 18250
 			}
 		}
 	}
@@ -115,6 +582,290 @@ ME_Gujarat_Missions_3 = {
 			}
 		}
 	}
+	guj_issue_land = {
+		icon = mission_general_land_assessment
+		required_missions = { }
+		position = 1
+		trigger = {
+			custom_trigger_tooltip = {	
+				tooltip = DLH_ESTATE_LOYALTY_2
+				calc_true_if = {
+					amount = 2
+					if = {
+						limit = { has_estate = estate_nobles }
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_burghers }
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_church }
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_cossacks }
+						estate_loyalty = {
+							estate = estate_cossacks
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_dhimmi }
+						estate_loyalty = {
+							estate = estate_dhimmi
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_nomadic_tribes }
+						estate_loyalty = {
+							estate = estate_nomadic_tribes
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_brahmins }
+						estate_loyalty = {
+							estate = estate_brahmins
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_jains }
+						estate_loyalty = {
+							estate = estate_jains
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_maratha }
+						estate_loyalty = {
+							estate = estate_maratha
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_rajput }
+						estate_loyalty = {
+							estate = estate_rajput
+							loyalty = 60
+						}
+					}
+					if = {
+						limit = { has_estate = estate_vaisyas }
+						estate_loyalty = {
+							estate = estate_vaisyas
+							loyalty = 60
+						}
+					}
+				}
+			}
+			if = {
+				limit = { 
+					AND = {
+						has_government_mechanic = iqta_mechanic 
+						has_dlc = "Dharma"
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = JAGIRDAR_CHECK_TT
+					OR = {
+						has_country_modifier = efficient_tax_farming_modifier
+						has_country_modifier = land_acquisition_modifier
+						has_country_modifier = lenient_taxation_modifier
+					}
+				}
+			}
+			else = {
+				crown_land_share = 45
+			}
+		}
+		effect = {
+			custom_tooltip = DLH_ESTATE_LAND_TT
+			if = {
+				limit = {
+					OR = {
+						estate_loyalty = {
+							estate = estate_church
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_brahmins
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_dhimmi
+							loyalty = 60
+						}
+					}
+				}
+				add_country_modifier = {
+					name = dlh_inam_land_modifier
+					duration = 7300
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						estate_loyalty = {
+							estate = estate_jains
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_burghers
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_vaisyas
+							loyalty = 60
+						}
+					}
+				}
+				add_country_modifier = {
+					name = dlh_khalisa_land_modifier
+					duration = 7300
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						estate_loyalty = {
+							estate = estate_nobles
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_rajput
+							loyalty = 60
+						}
+						estate_loyalty = {
+							estate = estate_maratha
+							loyalty = 60
+						}
+					}
+				}
+				add_country_modifier = {
+					name = dlh_iqta_land_modifier
+					duration = 7300
+				}
+			}
+		}
+	}
+	guj_fiscal_matters = {
+		icon = medici_bank_ledgers
+		required_missions = { guj_issue_land }
+		position = 2
+		trigger = {
+			government_reform_progress = 150
+			NOT = { overextension_percentage = 0.01 }
+			has_adm_advisor_2 = yes
+		}
+		effect = {
+			add_country_modifier = {
+				name = guj_prepare_for_parganah_expansion
+				duration = -1
+			}
+			add_adm_power = 50
+		}
+	}
+	guj_ahmedabad_paper = {
+		icon = mission_ahmadabad_paper
+		required_missions = { guj_manufacture }
+		position = 3
+		provinces_to_highlight = {
+			province_id = 2054
+		}
+		trigger = {
+			2054 = {
+				owned_by = ROOT
+				has_building = mill
+				printing_press = 50
+			}
+			OR = {
+				custom_trigger_tooltip = {
+					tooltip = GUJ_ADMINISTRATING_EMPIRE_HAS_HAPPENED_TT
+					has_global_flag = paper_in_bureaucracies
+				}
+				estate_loyalty = {
+					estate = estate_jains
+					loyalty = 60
+				}
+			}
+		}
+		effect = {
+			2054 = {
+				add_province_modifier = {
+					name = guj_paper_of_ahmedabad
+					duration = -1
+				}
+			}
+			country_event = {
+				id = ME_Gujarat_Events.2
+			}
+		}
+	}
+	guj_alliance_with_caliph = {
+		icon = mission_reliable_allies
+		required_missions = { }
+		position = 5
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = GUJ_ALLIANCE_WITH_MAM_TUR_RUM_ANATOLIAN
+				OR = {
+					alliance_with = TUR
+					alliance_with = MAM
+					alliance_with = RUM
+					any_country = {
+						NOT = { tag = TUR }
+						primary_culture = turkish
+						alliance_with = ROOT
+					}
+				}
+			}
+			navy_size = 40
+			any_country = {
+				technology_group = western
+				OR = {
+					has_opinion = {
+						who = ROOT
+						value = -100
+					}
+					is_neighbor_of = ROOT
+				}
+			}
+		}
+		effect = {
+			add_yearly_sailors = 2
+			tooltip = GUJ_NAVY_BONUS_TT
+			set_country_flag = guj_surat_pack
+			all_country = {
+				technology_group = western
+				OR = {
+					has_opinion = {
+						who = ROOT
+						value = -100
+					}
+					is_neighbor_of = ROOT
+				}
+				ROOT = {
+					add_casus_belli = {
+						target = PREV
+						type = cb_trade_conflict
+						months = 240
+					}
+				}
+			}
+		}
+	}
 }
 ME_Gujarat_Missions_4 = {
 	slot = 4
@@ -128,6 +879,36 @@ ME_Gujarat_Missions_4 = {
 			AND = {
 				has_dlc = "Dharma"
 				has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+			}
+		}
+	}
+	guj_deter_with_gold = {
+		icon = mission_african_gold
+		required_missions = { guj_reinvigorate_ties }
+		position = 2
+		trigger = {
+			if = {
+				limit = { is_expanded_mod_active = { mod = trade_goods } }
+				num_of_owned_provinces_with = {
+					amount = 1
+					OR = {
+						trade_goods = gold
+						trade_goods = silver
+					}
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					amount = 1
+					trade_goods = gold
+				}
+			}
+			NOT = { inflation = 0.5 }
+		}
+		effect = {
+			add_country_modifier = {
+				name = guj_deterrence_modifier
+				duration = 14600
 			}
 		}
 	}
