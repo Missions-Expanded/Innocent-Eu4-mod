@@ -282,22 +282,16 @@ ME_Swedish_Missions_1 = {
 		required_missions = { swe_looking_overseas }
 		position = 11
 		provinces_to_highlight = {
-			OR = {
-				region = north_east_pacific_region
-				region = south_east_pacific_region
-			}
+			colonial_region = colonial_eastern_america
 		}
 		trigger = {	
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
 				value = 10
-				OR = {
-					region = northeast_america_region
-					region = southeast_america_region
-				}
+				colonial_region = colonial_eastern_america
 			}
 			1500 = {
 				trade_share = {
-					who = ROOT
+					country = ROOT
 					share = 10
 				}
 			}
@@ -310,10 +304,7 @@ ME_Swedish_Missions_1 = {
 			random_province = {
 				limit = { 
 					country_or_non_sovereign_subject_holds = ROOT 
-					OR = {
-						region = northeast_america_region
-						region = southeast_america_region
-					}
+					colonial_region = colonial_eastern_america
 				}
 				add_base_tax = 1
 				add_base_production = 1
@@ -323,7 +314,7 @@ ME_Swedish_Missions_1 = {
 	}
 	swe_overseas_empire = {
 		icon = mission_establish_high_seas_navy
-		required_missions = { swe_looking_overseas }
+		required_missions = { swe_new_sweden swe_charter_india }
 		position = 11
 		trigger = {	
 			is_great_power = yes
@@ -335,8 +326,25 @@ ME_Swedish_Missions_1 = {
 				name = swe_right_to_defend_modifier
 				duration = 9125
 			}
-			custom_tooltip = SWE_MODIFY_STORMAKSTIDEN_BY_NAVY_TT
-			hidden_effect = {}
+			custom_tooltip = SWE_MODIFY_STORMAKTSTIDEN_BY_NAVY_TT
+			hidden_effect = {
+				if = {
+					limit = { has_country_modifier = swe_stormaktstiden_modifier }
+					remove_country_modifier = swe_stormaktstiden_modifier
+					add_country_modifier = {
+						name = swe_stormaktstiden_overseas_modifier
+						duration = -1
+					}
+				}
+				else_if = {
+					limit = { has_country_modifier = swe_stormaktstiden_baltic_modifier }
+					remove_country_modifier = swe_stormaktstiden_baltic_modifier
+					add_country_modifier = {
+						name = swe_stormaktstiden_final_modifier
+						duration = -1
+					}
+				}
+			}
 		}
 	}
 }
@@ -552,6 +560,332 @@ ME_Swedish_Missions_2 = {
 				ME_give_claims = { area = vastra_gotaland_area }
 			}
 			ME_give_claims = { area = denmark_area }
+		}
+	}
+	swe_norway_crown = {
+		icon = mission_rb_colonise_canada
+		required_missions = { swe_skaneland }
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				area = northern_norway
+				area = eastern_norway
+				area = western_norway
+				area = vastra_gotaland_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {	
+			OR = {
+				NOR = { junior_union_with = ROOT }
+				AND = {
+					northern_norway = {
+						type = all
+						owned_by = ROOT
+					}
+					eastern_norway = {
+						type = all
+						owned_by = ROOT
+					}
+					western_norway = {
+						type = all
+						owned_by = ROOT
+					}
+					vastra_gotaland_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = { 10 = { owned_by = ROOT } }
+				10 = { change_culture = swedish }
+			}
+			if = {
+				limit = { 10 = { owned_by = ROOT } }
+				16 = { change_culture = swedish }
+			}
+			if = {
+				limit = {
+					DAN = { valid_for_personal_unions_trigger = yes }
+				}
+				add_casus_belli = {
+					target = DAN
+					type = cb_restore_personal_union 
+				}
+			}
+			custom_tooltip = SWE_IF_NORWAY_IS_PARTNER_TT
+			tooltip = {
+				NOR = { add_liberty_desire = -20 }
+				add_country_modifier = {
+					name = swe_nordic_unity_modifier
+					duration = 9125
+				}
+			}
+			custom_tooltip = SWE_IF_OWN_PROVINCES_TT	
+			tooltip = {
+				add_mil_power = 100
+				northern_norway = { add_local_autonomy = -50 }
+				eastern_norway = { add_local_autonomy = -50 }
+				western_norway = { add_local_autonomy = -50 }
+				vastra_gotaland_area = { add_local_autonomy = -50 }
+			}
+			hidden_effect = {
+				if = {
+					limit = { NOR = { junior_union_with = ROOT } }
+					NOR = { add_liberty_desire = -20 }
+					add_country_modifier = {
+						name = swe_nordic_unity_modifier
+						duration = 9125
+					}
+				}
+				else_if = {
+					limit = {
+						northern_norway = {
+							type = all
+							owned_by = ROOT
+						}
+						eastern_norway = {
+							type = all
+							owned_by = ROOT
+						}
+						western_norway = {
+							type = all
+							owned_by = ROOT
+						}
+						vastra_gotaland_area = {
+							type = all
+							owned_by = ROOT
+						}
+					}
+					add_mil_power = 100
+					northern_norway = { add_local_autonomy = -50 }
+					eastern_norway = { add_local_autonomy = -50 }
+					western_norway = { add_local_autonomy = -50 }
+					vastra_gotaland_area = { add_local_autonomy = -50 }
+				}
+			}
+		}
+	}
+	swe_hanseatic_rivalry = {
+		icon = mission_rb_control_the_hansa
+		required_missions = { swe_sound_toll_dominance swe_stormaktstiden }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 25
+				province_id = 38
+				province_id = 2977
+				province_id = 47
+				province_id = 45
+				province_id = 44
+				province_id = 1874
+				province_id = 4471
+				province_id = 41
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			calc_true_if = {
+				amount = 4
+				25 = { country_or_non_sovereign_subject_holds = ROOT }
+				38 = { country_or_non_sovereign_subject_holds = ROOT }
+				2977 = { country_or_non_sovereign_subject_holds = ROOT }
+				47 = { country_or_non_sovereign_subject_holds = ROOT }
+				45 = { country_or_non_sovereign_subject_holds = ROOT }
+				44 = { country_or_non_sovereign_subject_holds = ROOT }
+				1874 = { country_or_non_sovereign_subject_holds = ROOT }
+				4471 = { country_or_non_sovereign_subject_holds = ROOT }
+				41 = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+			custom_trigger_tooltip = {
+				tooltip = SWE_NO_TRADE_LEAGUE_HAS_TRADE_POWER_IN_LUBECK_TT
+				NOT = {
+					any_country = {
+						is_in_trade_league_with = HSA
+						45 = {
+							trade_share = {
+								country = PREV
+								share = 2
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = swe_slayer_of_queen_modifier
+				duration = 7300
+			}
+			ME_give_claims = { area = weser_area }
+			ME_give_claims = { area = lower_saxony_area }
+			ME_give_claims = { area = holstein_area }
+		}
+	}
+	swe_river_tolls = {
+		icon = mission_rb_control_the_hansa
+		required_missions = { swe_hanseatic_rivalry }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					OR = {
+						province_id = 1858
+						province_id = 44
+						province_id = 1874
+					}
+					OR = {
+						NOT = {
+							has_trade_building_trigger = yes
+							has_tax_building_trigger = yes
+						}
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+				province_id = 45
+			}
+		}
+		trigger = {
+			1858 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_trade_building_trigger = yes
+				has_tax_building_trigger = yes
+			}
+			44 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_trade_building_trigger = yes
+				has_tax_building_trigger = yes
+			}
+			1874 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_trade_building_trigger = yes
+				has_tax_building_trigger = yes
+			}
+			45 = {
+				trade_share = {
+					country = ROOT
+					share = 40
+				}
+			}
+		}
+		effect = {
+			1858 = {
+				add_province_modifier = {
+					name = swe_increased_tarrifs_modifier
+					duration = -1
+				}
+			}
+			44 = {
+				add_province_modifier = {
+					name = swe_increased_tarrifs_modifier
+					duration = -1
+				}
+			}
+			1874 = {
+				add_province_modifier = {
+					name = swe_increased_tarrifs_modifier
+					duration = -1
+				}
+			}
+			add_mercantilism = 6
+			custom_tooltip = SWE_IF_OWN_EXTRA_PROVINCES_TT
+			hidden_effect = {
+				if = {
+					limit = { 1931 = { country_or_non_sovereign_subject_holds = ROOT } }
+					1931 = {
+						add_province_modifier = {
+							name = swe_increased_tarrifs_modifier
+							duration = -1
+						}
+						add_mercantilism = 1
+					}
+				}
+				if = {
+					limit = { 43 = { country_or_non_sovereign_subject_holds = ROOT } }
+					43 = {
+						add_province_modifier = {
+							name = swe_increased_tarrifs_modifier
+							duration = -1
+						}
+						add_mercantilism = 1
+					}
+				}
+				if = {
+					limit = { 38 = { country_or_non_sovereign_subject_holds = ROOT } }
+					38 = {
+						add_province_modifier = {
+							name = swe_increased_tarrifs_modifier
+							duration = -1
+						}
+						add_mercantilism = 1
+					}
+				}
+				if = {
+					limit = { 40 = { country_or_non_sovereign_subject_holds = ROOT } }
+					40 = {
+						add_province_modifier = {
+							name = swe_increased_tarrifs_modifier
+							duration = -1
+						}
+						add_mercantilism = 1
+					}
+				}
+			}
+		}
+	}
+	swe_secure_the_landings = {
+		icon = mission_reclaim_the_aegean
+		required_missions = { swe_river_tolls }
+		position = 8
+		trigger = {
+			dip_tech = 20
+			navy_size = 50
+			num_of_owned_provinces_with = {
+				OR = {
+					has_building = grand_shipyard
+					has_building = coastal_defence
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = swe_march_over_baltic_modifier
+				duration = -1
+			} 
+			add_navy_tradition = 25
+		}
+	}
+	swe_gold_coast = {
+		icon = mission_trade_in_gold_coast
+		required_missions = { swe_looking_overseas }
+		position = 9
+		provinces_to_highlight = {
+			trade_company_region = trade_company_west_africa
+			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				province_has_center_of_trade_of_level = 2
+				trade_company_region = trade_company_west_africa
+			}
+		}
+		effect = {
+			define_advisor = {
+				type = trader
+				skill = 2 
+				name = "Hendrik Carloff"
+			}
+			1466 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 18250
+					power = 25
+					key = SWE_GOLD_COAST_TRADE
+				}
+			}
 		}
 	}
 }
