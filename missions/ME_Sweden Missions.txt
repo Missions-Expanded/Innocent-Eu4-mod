@@ -473,7 +473,7 @@ ME_Swedish_Missions_2 = {
 			8 = {
 				if = {
 					limit = { has_province_modifier = stora_kopparberget_modifier }
-					remove_country_modifier = stora_kopparberget_modifier
+					remove_province_modifier = stora_kopparberget_modifier
 				}
 			}
 			8 = { custom_tooltip = SWE_BUFF_DALASKOGEN_TT }
@@ -523,7 +523,7 @@ ME_Swedish_Missions_2 = {
 		}
 	}
 	swe_skaneland = {
-		icon = league_of_the_public_weal
+		icon = mission_sweden_scania
 		required_missions = { swe_freedom_war }
 		position = 5
 		provinces_to_highlight = {
@@ -677,12 +677,12 @@ ME_Swedish_Missions_2 = {
 			OR = {
 				province_id = 25
 				province_id = 38
-				province_id = 2977
+				province_id = 33
 				province_id = 47
 				province_id = 45
 				province_id = 44
 				province_id = 1874
-				province_id = 4471
+				province_id = 43
 				province_id = 41
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -692,12 +692,12 @@ ME_Swedish_Missions_2 = {
 				amount = 4
 				25 = { country_or_non_sovereign_subject_holds = ROOT }
 				38 = { country_or_non_sovereign_subject_holds = ROOT }
-				2977 = { country_or_non_sovereign_subject_holds = ROOT }
+				33 = { country_or_non_sovereign_subject_holds = ROOT }
 				47 = { country_or_non_sovereign_subject_holds = ROOT }
 				45 = { country_or_non_sovereign_subject_holds = ROOT }
 				44 = { country_or_non_sovereign_subject_holds = ROOT }
 				1874 = { country_or_non_sovereign_subject_holds = ROOT }
-				4471 = { country_or_non_sovereign_subject_holds = ROOT }
+				43 = { country_or_non_sovereign_subject_holds = ROOT }
 				41 = { country_or_non_sovereign_subject_holds = ROOT }
 			}
 			custom_trigger_tooltip = {
@@ -726,7 +726,7 @@ ME_Swedish_Missions_2 = {
 		}
 	}
 	swe_river_tolls = {
-		icon = mission_rb_control_the_hansa
+		icon = se_along_the_river
 		required_missions = { swe_hanseatic_rivalry }
 		position = 7
 		provinces_to_highlight = {
@@ -837,9 +837,9 @@ ME_Swedish_Missions_2 = {
 		}
 	}
 	swe_secure_the_landings = {
-		icon = mission_reclaim_the_aegean
+		icon = reclaim_the_aegean
 		required_missions = { swe_river_tolls }
-		position = 8
+		position = 9
 		trigger = {
 			dip_tech = 20
 			navy_size = 50
@@ -861,13 +861,14 @@ ME_Swedish_Missions_2 = {
 	swe_gold_coast = {
 		icon = mission_trade_in_gold_coast
 		required_missions = { swe_looking_overseas }
-		position = 9
+		position = 10
 		provinces_to_highlight = {
 			trade_company_region = trade_company_west_africa
 			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 2
 				province_has_center_of_trade_of_level = 2
 				trade_company_region = trade_company_west_africa
 			}
@@ -888,6 +889,73 @@ ME_Swedish_Missions_2 = {
 			}
 		}
 	}
+	swe_charter_india = {
+		icon = mission_indian_trade_company
+		required_missions = { swe_gold_coast }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				province_id = 504
+				province_id = 1340
+				province_id = 1343
+			}
+		}
+		trigger = {
+			OR = {
+				504 = {
+					trade_share = {
+						country = ROOT
+						share = 10
+					}
+				}
+				1340 = {
+					trade_share = {
+						country = ROOT
+						share = 10
+					}
+				}
+				1343 = {
+					trade_share = {
+						country = ROOT
+						share = 10
+					}
+				}
+			}
+			4163 = { owned_by = ROOT }
+			any_owned_province = {
+				supperegion = india_superregion
+				province_has_center_of_trade_of_level = 1
+			}
+		}
+		effect = {
+			4163 = {
+				add_or_upgrade_trade_building = yes
+				if = {
+					limit = { has_province_modifier = swe_gothenburg_fortifications_modifier }
+					custom_tooltip = SWE_MODIFY_GOTHENBURG_MODIFIER_TT
+					hidden_effect = {
+						remove_province_modifier = swe_gothenburg_fortifications_enhanced_modifier
+						add_province_modifier = {
+							name = swe_gothenburg_fortifications_enhanced_modifier
+							duration = -1
+						}
+					}
+				}
+				else = {
+					add_province_modifier = {
+						name = swe_gothenburg_fortifications_enhanced_modifier
+						duration = -1
+					}
+				}
+			}
+			define_advisor = {
+				type = trader
+				skill = 3 
+				name = "Colin Campbell"
+				culture = scottish
+			}
+		}
+	}
 }
 ME_Swedish_Missions_3 = {
 	slot = 3
@@ -900,7 +968,7 @@ ME_Swedish_Missions_3 = {
 	has_country_shield = yes
 
 	swe_flames_of_freedom = {
-		icon = mission_sweden_gather_supporters
+		icon = me_mission_sweden_gather_supporters
 		required_missions = {}
 		position = 1
 		trigger = {	
@@ -994,6 +1062,91 @@ ME_Swedish_Missions_3 = {
 			add_country_modifier = {
 				name = swe_storhetsid_modifier
 				duration = -1
+			}
+		}
+	}
+	swe_stormaktstiden = {
+		icon = league_of_the_public_weal
+		required_missions = { swe_skaneland swe_swedish_tiger swe_mouth_of_neva }
+		position = 6
+		trigger = {
+			OR = {
+				grown_by_development = 300
+				is_great_power = yes
+			}
+			NOT = { 
+				any_country = {
+					army_size = ROOT
+					OR = {
+						baltic_region = { is_capital = PREV }
+						scandinavia_region = { is_capital = PREV }
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = SWE_REPLACE_STORHETSTID_WITH_STORMAKTSTIDEN_MODIFIER_TT
+			ME_give_claims = { region = baltic_region }
+			ME_give_claims = { area = vorpommern_area }
+			add_army_tradition = 20
+			add_navy_tradition = 20
+			custom_tooltip = SWE_UNLOCK_BALTIC_DECISIONS_TT
+			hidden_effect = {
+				remove_country_modifier = swe_storhetsid_modifier
+				add_country_modifier = {
+					name = swe_stormaktstiden_modifier
+					duration = -1
+				}
+			}
+		}
+	}
+	swe_pomerania = {
+		icon = me_mission_sweden_pomerania
+		required_missions = { swe_stormaktstiden }
+		position = 7
+		provinces_to_highlight = {
+			area = vorpommern_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			vorpommern_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 2
+				area = vorpommern_area
+				has_courthouse_building_trigger = yes
+			}
+			4745 = {
+				OR = {
+					AND = {
+						has_trade_building_trigger = yes
+						has_tax_building_trigger = yes
+					}
+					num_of_times_improved = 5 
+				}
+			}
+		}
+		effect = {
+			vorpommern_area = {
+				add_province_modifier = {
+					name = swe_general_governor_modifier
+					duration = -1
+				}
+			}
+			if = {
+				limit = { hinter_pommern_area = { type = all country_or_non_sovereign_subject_holds = ROOT } }
+				hinter_pommern_area = {
+					add_province_modifier = {
+						name = swe_general_governor_modifier
+						duration = -1
+					}
+				}
+			}
+			custom_tooltip = SWE_IF_POMERANIA_IS_VASSAL_TT
+			tooltip = {
+
 			}
 		}
 	}
@@ -1169,7 +1322,7 @@ ME_Swedish_Missions_5 = {
 	}
 	swe_allotted_for_war = {
 		icon = army_reforms
-		required_missions = {}
+		required_missions = { swe_shock_and_awe }
 		position = 3
 		trigger = {
 			num_of_owned_provinces_with = {
