@@ -15,4 +15,193 @@ country_decisions = {
 			custom_tooltip = HAB_currently_available_interactions
 		}
 	}
+	
+	me_hab_kingdom_of_italy = {
+		potential = {
+			has_country_flag = me_hab_shadow_kingdom_peaceful
+		}
+		allow = {
+			always = yes 
+		}
+		effect = {
+			pick_best_tags = {
+				scope = " every_subject_country  "
+				global_trigger = " capital_scope = { region = italy_region } "
+				event_target_name = "Italy_kingdom_target"
+				scale = " total_development "
+				1 = yes
+			}
+			italy_region  = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				cede_province = event_target:Italy_kingdom_target_1
+				add_core = event_target:Italy_kingdom_target_1
+			}
+			event_target:Italy_kingdom_target_1 = {
+				change_tag = ITA
+			}
+			add_country_modifier = {
+				name = HAB_kingdom_of_italy
+				duration = -1
+				hidden = yes
+			}
+		}
+	}
+	
+	me_hab_bohemia = {
+		potential = {
+			tag = HAB
+			BOH = {
+				has_country_flag = ME_boh_pu_missions
+				junior_union_with = ROOT
+			}
+		}
+		allow = {
+			always = no 
+		}
+		effect = {
+			custom_tooltip = me_hab_boh_current_problems
+			if = {
+				limit = {
+					BOH = {
+						has_country_modifier = HAB_hussite_resistance
+					}
+				}
+				tooltip = {
+					BOH = {
+						add_country_modifier = {
+							name = HAB_hussite_resistance
+							duration = -1
+						}
+					}
+					custom_tooltip = ME_HAB_HUSSITE_REVOLTS
+				}
+			}
+			if = {
+				limit = {
+					BOH = {
+						has_country_modifier = HAB_disloyal_nobility
+					}
+				}
+				tooltip = {
+					BOH = {
+						add_country_modifier = {
+							name = HAB_disloyal_nobility
+							duration = -1
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					BOH = {
+						has_country_modifier = HAB_fractured_military
+					}
+				}
+				tooltip = {
+					BOH = {
+						add_country_modifier = {
+							name = HAB_fractured_military
+							duration = -1
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	me_hab_crackdown_on_hussites = {
+		potential = {
+			tag = HAB
+			BOH = {
+				has_country_flag = ME_boh_pu_missions
+				any_owned_province = {
+					has_province_modifier = HAB_hussite_stronghold
+				}
+			}
+		}
+		allow = {
+			BOH = {
+				any_owned_province = {
+					has_province_modifier = HAB_hussite_stronghold
+					infantry_in_province = 20
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = me_hab_crackdown_allowed
+				OR = {
+					NOT = {
+						has_country_flag = me_hab_crackdown_cooldown
+					}
+					had_country_flag = {
+						flag = me_hab_crackdown_cooldown
+						days = 700
+					}
+				}
+			}
+		}
+		effect = {
+			hidden_effect = {
+				BOH = {
+					random_owned_province = {
+						limit = {
+							has_province_modifier = HAB_hussite_stronghold
+							infantry_in_province = 10
+						}
+						remove_province_modifier = HAB_hussite_stronghold
+					}
+				}
+				set_country_flag = me_hab_crackdown_cooldown
+				set_variable = {
+					which = timerVariable
+					value = 24
+				}
+				country_event = { id = ME_Austria_Events.39 }
+			}
+			custom_tooltip = me_hab_remove_random_province_modifier_hussite_stronghold
+		}
+	}
+	
+	me_hab_placate_nobility = {
+		potential = {
+			tag = HAB
+			BOH = {
+				has_country_flag = ME_boh_pu_missions
+				OR = {
+					has_country_modifier = HAB_disloyal_nobility
+					has_country_modifier = HAB_disloyal_nobility_2
+					has_country_modifier = HAB_disloyal_nobility_3
+					has_country_modifier = HAB_disloyal_nobility_4
+				}
+			}
+		}
+		allow = {
+			custom_trigger_tooltip = {
+				tooltip = me_hab_placating_allowed
+				OR = {
+					NOT = {
+						has_country_flag = me_hab_placate_cooldown
+					}
+					had_country_flag = {
+						flag = me_hab_placate_cooldown
+						days = 700
+					}
+				}
+			}
+		}
+		effect = {
+			BOH = {
+				HAB_reduce_disloyal_nobility = yes
+			}
+			hidden_effect = {
+				set_country_flag = me_hab_placate_cooldown
+				set_variable = {
+					which = placateTimerVariable
+					value = 60
+				}
+				country_event = { id = ME_Austria_Events.40 }
+			}
+		}
+	}
 }
