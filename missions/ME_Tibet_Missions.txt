@@ -87,7 +87,6 @@ me_tibet_missions_1 = {
 		}
 		effect = {
 			set_country_flag = dalai_lama_flag
-			country_event = { id = flavor_tib.1 }
 			add_country_modifier = {
 				name = tibetan_highest_lama
 				duration = 9125
@@ -114,8 +113,8 @@ me_tibet_missions_1 = {
 				NOT = { owned_by = ROOT }
 				NOT = { has_tax_building_trigger = yes }
 			}
-			NOT = {
-				ROOT = {
+			ROOT = {
+				NOT = {
 					num_of_owned_provinces_with = {
 						value = 10
 						region = tibet_region
@@ -138,6 +137,7 @@ me_tibet_missions_1 = {
 			}
 			tibet_region = {
 				limit = {
+					owned_by = ROOT
 					has_tax_building_trigger = yes
 				}
 				add_base_tax = 1
@@ -190,7 +190,7 @@ me_tibet_missions_1 = {
 					limit = {
 						has_dlc = "Mandate of Heaven"
 					}
-					add_prosperity = 15
+					add_prosperity = 100
 				}
 				add_permanent_province_modifier = {
 					name = tibetan_bon_dzongs
@@ -231,10 +231,12 @@ me_tibet_missions_2 = {
 				area = ngari_area
 				area = bhutan_area
 			}
-			NOT = { owned_by = ROOT }
 			OR = {
-				devastation = 1
-				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { is_core = ROOT }
+					devastation = 1
+				}
 			}
 		}
 		trigger = {
@@ -354,24 +356,38 @@ me_tibet_missions_2 = {
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { has_tax_building_trigger = yes }
+				AND = {
+					has_dlc = "Mandate of Heaven"
+					NOT = { base_tax = 5 }
+					NOT = { prosperity = 50 }
+				}
+				AND = {
+					NOT = { has_dlc = "Mandate of Heaven" }
+					OR = {
+						NOT = { base_tax = 5 }
+						devastation = 1
+					}
+				}
 			}
-			NOT = { base_tax = 5 }
-			NOT = { prosperity = 50 }
+
 		}
 		trigger = {
-			677 = {
-				owned_by = ROOT
-				has_tax_building_trigger = yes
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
-					}
+			owns = 677
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				677 = {
+					has_tax_building_trigger = yes
 					OR = {
 						base_tax = 5
 						prosperity = 50
 					}
 				}
-				else = {
+			}
+			else = {
+				677 = {
+					has_tax_building_trigger = yes
 					base_tax = 5
 					NOT = { devastation = 1 }
 				}
@@ -396,7 +412,16 @@ me_tibet_missions_2 = {
 				}
 				else = {
 					add_base_tax = 3
-					add_prosperity = 25
+					if = {
+						limit = {
+							has_dlc = "Mandate of Heaven"
+							NOT = { prosperity = 100 }
+						}
+						add_prosperity = 25
+					}
+					else = {
+						add_base_production = 1
+					}
 				}
 			}
 		}
@@ -457,21 +482,30 @@ me_tibet_missions_2 = {
 				}
 			}
 			random_owned_province = {
-				limit = { area = nepal_area }
+				limit = {
+					area = nepal_area
+					has_owner_religion = no
+				}
 				change_religion = ROOT
 			}
 			random_owned_province = {
-				limit = { area = himalayan_hills_area }
+				limit = {
+					area = himalayan_hills_area
+					has_owner_religion = no
+				}
 				change_religion = ROOT
 			}
 			random_owned_province = {
-				limit = { area = baisi_rajya_area }
+				limit = {
+					area = baisi_rajya_area
+					has_owner_religion = no
+				}
 				change_religion = ROOT
 			}
 		}
 	}
 }
-			
+
 me_tibet_missions_3 = {
 	slot = 3
 	generic = no
@@ -493,14 +527,6 @@ me_tibet_missions_3 = {
 		icon = me_mission_china_tibet_potala_palace_foreground
 		position = 1
 		required_missions = { }
-		provinces_to_highlight = {
-			region = tibet_region
-			owner = {
-				NOT = { tag = ROOT }
-				army_size = ROOT
-				total_development = ROOT
-			}
-		}
 		trigger = {
 			army_size_percentage = 1
 			custom_trigger_tooltip = {
@@ -510,8 +536,10 @@ me_tibet_missions_3 = {
 						capital_scope = {
 							region = tibet_region
 						}
-						total_development = ROOT
-						army_size = ROOT
+						OR = {
+							total_development = ROOT
+							army_size = ROOT
+						}
 					}
 				}
 			}
@@ -601,11 +629,11 @@ me_tibet_missions_3 = {
 			capital_scope = {
 				add_development_scaled_on_monthly_monarch_power = yes
 			}
-			677 = {
-				if = {
-					limit = {
-						has_dlc = Leviathan
-						is_expanded_mod_active = { mod = great_monuments }
+			if = {
+				limit = {
+					has_dlc = Leviathan
+					is_expanded_mod_active = { mod = great_monuments }
+					677 = {
 						NOT = {
 							has_great_project = {
 								type = gme_potala_palace
@@ -613,27 +641,35 @@ me_tibet_missions_3 = {
 							}
 						}
 					}
+				}
+				677 = {
 					add_great_project_tier = {
 						type = gme_potala_palace
 						tier = 1
 					}
 				}
-				else = {
-					ROOT = {
-						add_mana_scaled_on_monthly_monarch_power = yes
+			}
+			else = {
+				add_mana_scaled_on_monthly_monarch_power = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				tibet_region = {
+					add_prosperity = 100
+					add_permanent_province_modifier = {
+						name = tibetan_plateau_sustainability
+						duration = -1
 					}
 				}
 			}
-			tibet_region = {
-				if = {
-					limit = {
-						has_dlc = "Mandate of Heaven"
+			else = {
+				tibet_region = {
+					add_permanent_province_modifier = {
+						name = tibetan_plateau_sustainability
+						duration = -1
 					}
-					add_prosperity = 25
-				}
-				add_permanent_province_modifier = {
-					name = tibetan_plateau_sustainability
-					duration = -1
 				}
 			}
 		}
@@ -789,43 +825,43 @@ me_tibet_missions_3 = {
 				area = north_bengal_area
 				area = east_bengal_area
 			}
-			NOT = {
-				country_or_non_sovereign_subject_holds = ROOT
-			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			gaur_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			west_bengal_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			north_bengal_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 			east_bengal_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT	
+				country_or_non_sovereign_subject_holds = ROOT
 			}
 		}
 		effect = {
 			custom_tooltip = tib_restore_the_pala_kingdom.tooltip # to tell the player that this can happen
-			if = {
-				limit = {
-					BNG = {
-						is_subject_of = ROOT
-						NOT = { religion = ROOT }
+			hidden_effect = {
+				if = {
+					limit = {
+						BNG = {
+							is_subject_of = ROOT
+							NOT = { religion = ROOT }
+						}
 					}
-				}
-				BNG = {
-					add_liberty_desire = -50
-					change_religion = ROOT
-					define_ruler = {
-						dynasty= "Pala"
-						religion = ROOT
+					BNG = {
+						add_liberty_desire = -50
+						change_religion = ROOT
+						define_ruler = {
+							dynasty = "Pala"
+							religion = ROOT
+						}
 					}
 				}
 			}
@@ -961,10 +997,12 @@ me_tibet_missions_4 = {
 				area = kham_area
 				area = tsang_area
 			}
-			NOT = { owned_by = ROOT }
 			OR = {
-				devastation = 1
-				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+				AND = {
+					NOT = { is_core = ROOT }
+					devastation = 1
+				}
 			}
 		}
 		trigger = {
@@ -1024,23 +1062,33 @@ me_tibet_missions_4 = {
 		position = 5
 		provinces_to_highlight = {
 			region = tibet_region
-			any_neighbor_province = {
-				superregion = china_superregion
-			}
 			OR = {
 				NOT = { owned_by = ROOT }
 				NOT = { fort_level = 1 }
 				NOT = { base_manpower = 3 }
 			}
+			any_neighbor_province = {
+				superregion = china_superregion
+			}
+			NOT = {
+				tibet_region = {
+					owned_by = ROOT
+					fort_level = 1
+					base_manpower = 3
+					any_neighbor_province = {
+						superregion = china_superregion
+					}
+				}
+			}
 		}
 		trigger = {
 			tibet_region = {
-				any_neighbor_province = {
-					superregion = china_superregion
-				}
 				owned_by = ROOT
 				fort_level = 1
 				base_manpower = 3
+				any_neighbor_province = {
+					superregion = china_superregion
+				}
 			}
 		}
 		effect = {
@@ -1066,9 +1114,28 @@ me_tibet_missions_4 = {
 		}
 		position = 7
 		provinces_to_highlight = {
-			region = xinan_region
-			any_trade_node_member_province = {
-				province_id = 679
+			OR = {
+				AND = {
+					region = xinan_region
+					679 = {
+						NOT = {
+							all_trade_node_member_province = {
+								country_or_non_sovereign_subject_holds = ROOT
+							}
+						}
+					}
+				}
+				AND = {
+					any_trade_node_member_province = {
+						province_id = 679
+					}
+					NOT = {
+						xinan_region = {
+							type = all
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
 			}
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
@@ -1086,6 +1153,26 @@ me_tibet_missions_4 = {
 			}
 		}
 		effect = {
+			xinan_region = {
+				limit = {
+					owned_by = ROOT
+				}
+				add_permanent_province_modifier = {
+					name = tibetan_chinese_production
+					duration = 18250
+				}
+			}
+			679 = {
+				every_trade_node_member_province = {
+					limit = {
+						owned_by = ROOT
+					}
+					add_permanent_province_modifier = {
+						name = tibetan_chinese_production
+						duration = 18250
+					}
+				}
+			}
 			custom_tooltip = ME_TIBET_TIBETAN_PROVINCES_CLAIM_TT
 			hidden_effect = {
 				china_superregion = {
@@ -1147,26 +1234,6 @@ me_tibet_missions_4 = {
 						NOT = { is_wasteland = yes }
 					}
 					add_permanent_claim = ROOT
-				}
-			}
-			xinan_region = {
-				limit = {
-					owned_by = ROOT
-				}
-				add_permanent_province_modifier = {
-					name = tibetan_chinese_production
-					duration = 18250
-				}
-			}
-			679 = {
-				every_trade_node_member_province = {
-					limit = {
-						owned_by = ROOT
-					}
-					add_permanent_province_modifier = {
-						name = tibetan_chinese_production
-						duration = 18250
-					}
 				}
 			}
 		}
@@ -1245,7 +1312,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 					random_list = {
 						50 = { add_base_tax = 1 }
@@ -1267,7 +1334,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 				}
 				tibet_region = {
@@ -1283,7 +1350,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 				}
 				kashmir_area = {
@@ -1299,7 +1366,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 				}
 				kashgaria_area = {
@@ -1315,7 +1382,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 				}
 				tarim_basin_area = {
@@ -1331,7 +1398,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 				}
 				shanshan_area = {
@@ -1347,7 +1414,7 @@ me_tibet_missions_4 = {
 						limit = {
 							has_dlc = "Mandate of Heaven"
 						}
-						add_prosperity = 15
+						add_prosperity = 100
 					}
 				}
 			}
@@ -1413,14 +1480,6 @@ me_tibet_missions_5 = {
 		icon = me_mission_china_attack_gate
 		required_missions = { }
 		position = 4
-		provinces_to_highlight = {
-			owner = {
-				has_reform = steppe_horde
-				army_size = ROOT
-				total_development = ROOT
-				is_neighbor_of = ROOT
-			}
-		}
 		trigger = {
 			army_size_percentage = 1
 			custom_trigger_tooltip = {
@@ -1438,7 +1497,6 @@ me_tibet_missions_5 = {
 		}
 		effect = {
 			add_mil_power = 100
-			country_event = { id = flavor_tib.2 }
 			kashmir_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
@@ -1578,28 +1636,6 @@ me_tibet_missions_5 = {
 			me_tibet_middle_silk_road
 		}
 		position = 9
-		provinces_to_highlight = {
-			owner = {
-				OR = {
-					AND = {
-						has_reform = steppe_horde
-						total_development = ROOT
-						army_size = ROOT
-					}
-					AND = {
-						OR = {
-							culture_group = east_asian
-							capital_scope = {
-								superregion = china_superregion
-							}
-							is_emperor_of_china = yes
-						}
-						total_development = ROOT
-						army_size = ROOT
-					}
-				}
-			}
-		}
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = TIBET_END_EVERY_EMPIRE_HORDE_TT
@@ -1631,13 +1667,37 @@ me_tibet_missions_5 = {
 		effect = {
 			add_stability = 1
 			add_prestige_or_monarch_power = { value = 50 }
-			add_legitimacy_equivalent = { value = 25, republican_tradition = 13 }
-			add_adm_power = 100
-			add_dip_power = 100
-			add_mil_power = 100
-			change_adm = 1
-			change_dip = 1
-			change_mil = 1
+			add_legitimacy_equivalent = { value = 25 republican_tradition = 13 }
+			if = {
+				limit = {
+					ADM = 6
+				}
+				add_adm_power = 200
+			}
+			else = {
+				add_adm_power = 100
+				change_adm = 1
+			}
+			if = {
+				limit = {
+					DIP = 6
+				}
+				add_dip_power = 200
+			}
+			else = {
+				add_dip_power = 100
+				change_dip = 1
+			}
+			if = {
+				limit = {
+					MIL = 6
+				}
+				add_mil_power = 200
+			}
+			else = {
+				add_mil_power = 100
+				change_mil = 1
+			}
 		}
 	}
 }
