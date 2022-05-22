@@ -315,7 +315,7 @@ ME_Swedish_Missions_1 = {
 	swe_overseas_empire = {
 		icon = mission_establish_high_seas_navy
 		required_missions = { swe_new_sweden swe_charter_india }
-		position = 11
+		position = 13
 		trigger = {	
 			is_great_power = yes
 			colony = 4
@@ -523,7 +523,7 @@ ME_Swedish_Missions_2 = {
 		}
 	}
 	swe_skaneland = {
-		icon = mission_sweden_scania
+		icon = me_mission_sweden_scania
 		required_missions = { swe_freedom_war }
 		position = 5
 		provinces_to_highlight = {
@@ -551,6 +551,7 @@ ME_Swedish_Missions_2 = {
 				add_casus_belli = {
 					target = NOR
 					type = cb_restore_personal_union 
+					months = 240
 				}
 			}
 			else = {
@@ -614,6 +615,7 @@ ME_Swedish_Missions_2 = {
 				add_casus_belli = {
 					target = DAN
 					type = cb_restore_personal_union 
+					months = 240
 				}
 			}
 			custom_tooltip = SWE_IF_NORWAY_IS_PARTNER_TT
@@ -728,7 +730,7 @@ ME_Swedish_Missions_2 = {
 	swe_river_tolls = {
 		icon = se_along_the_river
 		required_missions = { swe_hanseatic_rivalry }
-		position = 7
+		position = 9
 		provinces_to_highlight = {
 			OR = {
 				AND = {
@@ -839,7 +841,7 @@ ME_Swedish_Missions_2 = {
 	swe_secure_the_landings = {
 		icon = reclaim_the_aegean
 		required_missions = { swe_river_tolls }
-		position = 9
+		position = 10
 		trigger = {
 			dip_tech = 20
 			navy_size = 50
@@ -861,7 +863,7 @@ ME_Swedish_Missions_2 = {
 	swe_gold_coast = {
 		icon = mission_trade_in_gold_coast
 		required_missions = { swe_looking_overseas }
-		position = 10
+		position = 11
 		provinces_to_highlight = {
 			trade_company_region = trade_company_west_africa
 			NOT = { country_or_non_sovereign_subject_holds = ROOT } 
@@ -892,7 +894,7 @@ ME_Swedish_Missions_2 = {
 	swe_charter_india = {
 		icon = mission_indian_trade_company
 		required_missions = { swe_gold_coast }
-		position = 11
+		position = 12
 		provinces_to_highlight = {
 			OR = {
 				province_id = 504
@@ -953,6 +955,22 @@ ME_Swedish_Missions_2 = {
 				skill = 3 
 				name = "Colin Campbell"
 				culture = scottish
+			}
+			custom_tooltip = SWE_EVERY_OWNED_PROVINCE_IN_INDIA
+			tooltip = {
+				add_province_modifier = {
+					name = swe_east_india_company_modifier
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				every_owned_province = {
+					limit = { supperegion = india_superregion }
+					add_province_modifier = {
+						name = swe_east_india_company_modifier
+						duration = 7300
+					}
+				}
 			}
 		}
 	}
@@ -1098,6 +1116,14 @@ ME_Swedish_Missions_3 = {
 					duration = -1
 				}
 			}
+			if = {
+				limit = { exists = POM }
+				add_casus_belli = {
+					target = POM
+					cb = cb_vassalize_mission
+					months = 120
+				}
+			}
 		}
 	}
 	swe_pomerania = {
@@ -1129,6 +1155,19 @@ ME_Swedish_Missions_3 = {
 			}
 		}
 		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						POM = { vassal_of = ROOT }
+						if = {
+							limit = { 4745 = { owned_by = POM } }
+							4745 = { cede_province = ROOT }
+						}
+						add_dip_power = 100
+						POM = { add_liberty_desire = -20 }
+					}
+				}
+			}
 			vorpommern_area = {
 				add_province_modifier = {
 					name = swe_general_governor_modifier
@@ -1144,9 +1183,139 @@ ME_Swedish_Missions_3 = {
 					}
 				}
 			}
+			4745 = {
+				change_province_name = "Gustavia"
+				add_or_upgrade_shipyard_building = yes
+			}
 			custom_tooltip = SWE_IF_POMERANIA_IS_VASSAL_TT
 			tooltip = {
-
+				if = {
+					limit = { 4745 = { owned_by = POM } }
+					4745 = { cede_province = ROOT }
+				}
+				add_dip_power = 100
+				POM = { add_liberty_desire = -20 }
+			}
+		}
+	}
+	swe_eclipse_eagle = {
+		icon = a_place_among_the_great_powers
+		required_missions = { swe_hanseatic_rivalry swe_pomerania }
+		position = 8
+		trigger = {
+			OR = {
+				is_emperor = yes
+				is_elector = yes
+				NOT = {
+					any_country = {
+						army_size = ROOT
+						is_part_of_hre = yes
+					}
+				}
+			}
+		}
+		effect = {
+			262 = {
+				owner = {
+					reverse_add_casus_belli = {
+						target = ROOT
+						type = cb_poland_deluge
+						months = 1200
+					}
+				}
+			}
+			add_ruler_modifier = {
+				name = swe_evigt_minne_modifier
+				duration = -1
+			}
+		}
+	}
+	swe_deluge = {
+		icon = mission_scandinavian_port_authority
+		required_missions = { swe_eclipse_eagle swe_livonian_war }
+		position = 10
+		provinces_to_highlight = {
+			region = baltic_region
+			has_port = yes
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 8
+				has_port = yes
+				region = baltic_region
+			}
+			262 = {
+				owner = {
+					OR = {
+						is_enemy = ROOT
+						war_with = ROOT
+						junior_union_with = ROOT
+					}
+				}				
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = swe_deluge_modifier
+				duration = 3650
+			}
+			add_war_exhaustion = -2
+			ME_give_claims = { area = wielkopolska_area }
+			ME_give_claims = { area = central_poland_area }
+			ME_give_claims = { area = mazovia_area }
+			ME_give_claims = { area = sandomierz_area }
+			ME_give_claims = { area = kuyavia_area }
+			ME_give_claims = { area = red_ruthenia_area }
+		}
+	}
+	swe_union_of_kedainai = {
+		icon = mission_russian_patriarchatee
+		required_missions = { swe_deluge }
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				area = samogitia_area
+				area = lithuania_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				262 = {
+					owner = {
+						war_with = ROOT
+						has_spy_network_from = {
+							who = ROOT
+							value = 60
+						}
+					}	
+				}
+				samogitia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				lithuania_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}		
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					LIT = {
+						OR = {
+							NOT = { is_vassal = yes }
+							is_lesser_in_union = no
+						}
+					}
+				}
+				country_event = { id = ME_Sweden_Events.7 }
+			}
+			else = {
+				add_prestige = 20
+				add_mil_power = 50
 			}
 		}
 	}
@@ -1200,7 +1369,7 @@ ME_Swedish_Missions_4 = {
 		}
 	}
 	swe_cut_them_down = {
-		icon = mission_conquer_finland
+		icon = mission_recruit_the_cossacks
 		required_missions = { swe_finnish_development swe_shock_and_awe }
 		position = 3
 		provinces_to_highlight = {
@@ -1308,7 +1477,7 @@ ME_Swedish_Missions_5 = {
 			}
 		}
 		effect = {
-			add_army_professionalism = 10
+			add_army_professionalism = 0.1
 			define_advisor = {
 				name = "Lennart Torstensson"
 				type = commandant
