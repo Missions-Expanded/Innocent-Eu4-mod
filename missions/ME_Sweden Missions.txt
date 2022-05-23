@@ -846,6 +846,7 @@ ME_Swedish_Missions_2 = {
 			dip_tech = 20
 			navy_size = 50
 			num_of_owned_provinces_with = {
+				value = 6
 				OR = {
 					has_building = grand_shipyard
 					has_building = coastal_defence
@@ -1095,10 +1096,7 @@ ME_Swedish_Missions_3 = {
 			NOT = { 
 				any_country = {
 					army_size = ROOT
-					OR = {
-						baltic_region = { is_capital = PREV }
-						scandinavia_region = { is_capital = PREV }
-					}
+					scandinavia_region = { is_capital = THIS }
 				}
 			}
 		}
@@ -1241,7 +1239,7 @@ ME_Swedish_Missions_3 = {
 		}
 		trigger = {
 			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-				value = 8
+				value = 6
 				has_port = yes
 				region = baltic_region
 			}
@@ -1452,6 +1450,184 @@ ME_Swedish_Missions_4 = {
 			add_country_modifier = {
 				name = swe_cold_steel_modifier
 				duration = 3650
+			}
+		}
+	}
+	swe_mouth_of_neva = {
+		icon = mission_develop_nevas_port
+		required_missions = { swe_freedom_war }
+		position = 5
+		provinces_to_highlight = {
+			OR = {
+				province_id = 33
+				province_id = 34
+				province_id = 30	
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			33 = { country_or_non_sovereign_subject_holds = ROOT }
+			34 = { country_or_non_sovereign_subject_holds = ROOT }
+			30 = { country_or_non_sovereign_subject_holds = ROOT }
+			33 = {
+				trade_share = {
+					country = ROOT
+					share = 15
+				}
+			}
+		}
+		effect = {
+			33 = {
+				change_province_name = "Nyenskans"
+				if = {
+					limit = { accepted_culture = finnish }
+					change_culture = finnish
+				}
+				add_or_upgrade_fort_building = yes
+			}
+			ME_give_claims = { area = north_karelia }
+			ME_give_claims = { area = pomor_area }
+			ME_give_claims = { area = karelia_area }
+			ME_give_claims = { area = novgorod_area }
+		}
+	}
+	swe_estonian_shores = {
+		icon = capture_adriatic_ports
+		required_missions = { swe_stormaktstiden }
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				province_id = 1842
+				province_id = 36
+				province_id = 35
+			}
+			NOT = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_tax_building_trigger = yes
+			}
+		}
+		trigger = {
+			1842 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+				has_tax_building_trigger = yes
+			} 
+			36 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+				has_tax_building_trigger = yes
+			} 
+			35 = { 
+				country_or_non_sovereign_subject_holds = ROOT
+				has_tax_building_trigger = yes
+			} 
+		}
+		effect = {
+			1842 = {
+				add_base_tax = 1
+				add_local_autonomy = -50
+			}
+			36 = {
+				add_base_tax = 1
+				add_local_autonomy = -50
+				change_culture = swedish
+			}
+			35 = {
+				add_base_tax = 1
+				add_local_autonomy = -50
+			}
+		}
+	}
+	swe_livonian_war = {
+		icon = mission_recover_konkan_ports
+		required_missions = { swe_estonian_shores }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = livonia_area
+				area = curonia_area
+				province_id = 38
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			OR = {
+				LIV = { vassal_of = ROOT }
+				AND = {
+					livonia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					curonia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = SWE_USED_LIVONIAN_ASPIRATIONS_DECISION_TT
+					has_country_flag = swe_livonian_aspirations_complete
+				}
+			}
+			38 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_fort_building_trigger = yes
+				num_of_times_improved = 4
+			}
+		}
+		effect = {
+			hidden_effect = {
+				if = {
+					limit = {
+						LIV = { vassal_of = ROOT }
+					}
+					if = {
+						limit = { 38 = { owned_by = POM } }
+						38 = { cede_province = ROOT }
+					}
+					add_mil_power = 100
+				}
+			}
+			38 = {
+				add_base_tax = 1
+				add_base_production = 1
+				add_base_manpower = 1
+				add_province_modifier = {
+					name = swe_pearl_of_the_baltic_modifier
+					duration = -1
+				}
+			}
+			custom_tooltip = SWE_IF_LIVONIA_IS_VASSAL_TT
+			tooltip = {
+				if = {
+					limit = { 38 = { owned_by = POM } }
+					38 = { cede_province = ROOT }
+				}
+				add_mil_power = 100
+			}
+		}
+	}
+	swe_curtail_prussia = {
+		icon = mission_teutonic_knights
+		required_missions = { swe_livonian_war }
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				area = east_prussia_area
+				area = west_prussia_area
+			}
+		}
+		trigger = {
+			east_prussia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			west_prussia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = swe_gdansk_flows_modifier
+				duration = -1
 			}
 		}
 	}
