@@ -50,10 +50,11 @@ country_event = { # Gustav Vasa - Parens Patriae
 			mil = 6			
 			fixed = yes
 		}
+		kill_heir = { allow_new_heir = no }
 		add_ruler_personality = inspiring_leader_personality
 		define_ruler_to_general = {
-			fire = 2
-			shock = 4
+			fire = 3
+			shock = 5
 			manuever = 3
 			siege = 1
 			trait = ruthless_personality
@@ -63,8 +64,8 @@ country_event = { # Gustav Vasa - Parens Patriae
 		name = ME_Sweden_Events.2.opt2
 		define_general = {
 			name = "Gustav Vasa"
-			fire = 2
-			shock = 4
+			fire = 3
+			shock = 5
 			manuever = 3
 			siege = 1
 			trait = ruthless_personality
@@ -264,6 +265,7 @@ country_event = { # De la Gardie's Proposal
 				break_union = RUS
 				vassalize = RUS
 				RUS = {
+					kill_heir = { allow_new_heir = no }
 					define_ruler = {
 						name = "Jacob"
 						dynasty = "de la Gardie"
@@ -284,6 +286,7 @@ country_event = { # De la Gardie's Proposal
 				break_union = MOS
 				vassalize = MOS
 				MOS = {
+					kill_heir = { allow_new_heir = no }
 					define_ruler = {
 						name = "Jacob"
 						dynasty = "de la Gardie"
@@ -300,18 +303,19 @@ country_event = { # De la Gardie's Proposal
 				every_owned_province = {
 					limit = { is_core = MOS }
 					cede_province = MOS
-					vassalize = MOS
-					MOS = {
-						define_ruler = {
-							name = "Jacob"
-							dynasty = "de la Gardie"
-							fixed = yes
-							adm = 2
-							dip = 3
-							mil = 6
-							culture = swedish
-							religion = protestant
-						}
+				}
+				vassalize = MOS
+				MOS = {
+					kill_heir = { allow_new_heir = no }
+					define_ruler = {
+						name = "Jacob"
+						dynasty = "de la Gardie"
+						fixed = yes
+						adm = 2
+						dip = 3
+						mil = 6
+						culture = swedish
+						religion = protestant
 					}
 				}
 			}
@@ -356,8 +360,8 @@ country_event = { # De la Gardie's Proposal
 				every_owned_province = {
 					limit = { is_core = MOS }
 					cede_province = MOS
-					create_union = MOS
 				}
+				create_union = MOS
 			}
 		}
 	}
@@ -373,5 +377,252 @@ country_event = { # De la Gardie's Proposal
 		}
 		add_absolutism = 20
 		ME_give_claims = { region = russia_region }
+	}
+}
+country_event = { # Novgorod Besittning
+	id = ME_Sweden_Events.9
+	title = ME_Sweden_Events.9.t
+	desc = ME_Sweden_Events.9.d
+	picture = ST_PETERS_CHURCH_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sweden_Events.9.opt1
+		if = {
+			limit = { 
+				NOV = { exists = no }
+			}
+			custom_tooltip = SWE_RELEASE_NOVGOROD_TT
+			hidden_effect = {
+				karelia_area = { remove_core = NOV }
+				32 = { remove_core = NOV }
+				4124 = { remove_core = NOV }
+				every_owned_province = {
+					limit = { is_core = NOV }
+					cede_province = NOV
+				}
+				vassalize = NOV
+				NOV = {
+					define_ruler = {
+						dynasty = ROOT
+						culture = ROOT
+						religion = ROOT
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { NOV = { vassal_of = ROOT } }
+			NOV = { add_liberty_desire = -50 }
+			hidden_effect = {
+				karelia_area = { remove_core = NOV }
+				32 = { remove_core = NOV }
+				4124 = { remove_core = NOV }
+			}
+		}
+		custom_tooltip = SWE_WHILE_NOVGOROD_IS_VASSAL_TT
+		hidden_effect = { set_country_flag = swe_vassalised_novgorod }
+	}
+	option = {
+		name = ME_Sweden_Events.9.opt2
+		310 = {
+			add_base_tax = 1
+			add_base_production = 1
+			add_base_manpower = 1
+			add_unrest = 10
+		}
+		add_absolutism = 10
+	}
+}
+country_event = { # Founding Karlskrona
+	id = ME_Sweden_Events.10
+	title = ME_Sweden_Events.10.t
+	desc = ME_Sweden_Events.10.d
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sweden_Events.10.opt1
+		add_dip_power = -25
+		add_adm_power = -25
+		add_prestige = 20
+		set_capital  = 1982
+		1982 = {
+			add_base_tax = 2
+			add_base_production = 2
+			add_base_manpower = 1
+			if = {
+				limit = {
+					has_building = shipyard
+				}
+				add_building = grand_shipyard 
+			}
+			else = {
+				add_building = shipyard
+			}
+			if = {
+				limit = {
+					has_building = dock
+				}
+				add_building = drydock
+			}
+			else = {
+				add_building = dock
+			}
+		}
+	}
+	option = {
+		name = ME_Sweden_Events.10.opt2
+		1982 = {
+			add_base_tax = 1
+			add_base_production = 1
+			if = {
+				limit = {
+					has_building = shipyard
+				}
+				add_building = grand_shipyard 
+			}
+			else = {
+				add_building = shipyard
+			}
+		}
+	}
+}
+country_event = { # The Swedish Da Vinci
+	id = ME_Sweden_Events.11
+	title = ME_Sweden_Events.11.t
+	desc = ME_Sweden_Events.11.d
+	picture = CITY_DEVELOPMENT_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sweden_Events.11.opt1
+		add_adm_power = -100
+		add_treasury = -200
+		define_advisor = {
+			name = "Christopher Polhem"
+			type = natural_scientist
+			cost_multiplier = 0.1
+			skill = 3
+		}
+		8 = {
+			add_institution_embracement = {
+				which = industrialization
+				value = 20
+			}
+			add_institution_embracement = {
+				which = manufactories
+				value = 20
+			}
+			add_province_modifier = {
+				name = swe_water_excavation_modifier
+				duration = -1
+			}
+		}
+		1 = {
+			add_institution_embracement = {
+				which = industrialization
+				value = 20
+			}
+			add_institution_embracement = {
+				which = manufactories
+				value = 20
+			}
+			add_province_modifier = {
+				name = swe_cloth_manufacture_modifier
+				duration = -1
+			}
+			change_trade_goods = cloth
+		}
+		4 = {
+			add_institution_embracement = {
+				which = industrialization
+				value = 20
+			}
+			add_institution_embracement = {
+				which = manufactories
+				value = 20
+			}
+			add_province_modifier = {
+				name = swe_clock_manufacture_modifier
+				duration = -1
+			}
+			if = {
+				limit = { is_expanded_mod_active = { mod = trade_goods } }
+				change_trade_goods = metalworking
+			}
+		}
+		1982 = {
+			add_institution_embracement = {
+				which = industrialization
+				value = 20
+			}
+			add_institution_embracement = {
+				which = manufactories
+				value = 20
+			}
+			add_province_modifier = {
+				name = swe_karlskrona_shipyard_modifier
+				duration = -1
+			}
+		}
+	}
+	option = {
+		name = ME_Sweden_Events.11.opt2
+		add_stability_or_adm_power = yes
+	}
+}
+country_event = { # Formation of the Caroleans
+	id = ME_Sweden_Events.12
+	title = ME_Sweden_Events.12.t
+	desc = ME_Sweden_Events.12.d
+	picture = LAND_MILITARY_eventPicture
+
+	is_triggered_only = yes
+
+	option = {
+		name = ME_Sweden_Events.12.opt1
+		add_mil_power = 100
+		if = {
+			limit = { is_expanded_mod_active = { mod = governments } }
+			add_country_modifier = {
+				name = swe_ga_pa_modifier
+				duration = -1
+			}
+			custom_tooltip = SWE_SPAWN_CAROLEANS_TT
+			hidden_effect = {
+				1 = {
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+					rajput_infantry = ROOT
+				}
+			}
+		}
+		else = {
+			add_country_modifier = {
+				name = swe_ga_pa_no_ge_modifier
+				duration = -1
+			}
+		}
 	}
 }

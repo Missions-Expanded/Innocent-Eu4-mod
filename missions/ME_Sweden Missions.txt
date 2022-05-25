@@ -141,34 +141,13 @@ ME_Swedish_Missions_1 = {
 			num_of_owned_manufactory_trigger = { amount = 10 }
 			1 = { owned_by = ROOT }
 			4 = { owned_by = ROOT }
+			8 = { owned_by = ROOT }
 		}
 		effect = {
-			1 = {
-				add_province_modifier = {
-					name = swe_cloth_manufacture_modifier
-					duration = -1
-				}
-				change_trade_goods = cloth
-			}
-			4 = {
-				add_province_modifier = {
-					name = swe_clock_manufacture_modifier
-					duration = -1
-				}
-				if = {
-					limit = { is_expanded_mod_active = { mod = trade_goods } }
-					change_trade_goods = metalworking
-				}
-			}
+			country_event = { id = ME_Sweden_Events.11 }
 			if = {
 				limit = { has_dlc = "Rule Brittania" }
 				change_innovativeness = 5
-			}
-			define_advisor = {
-				name = "Christopher Polhem"
-				type = natural_scientist
-				cost_multiplier = 0.25
-				skill = 3
 			}
 		}
 	}
@@ -194,8 +173,10 @@ ME_Swedish_Missions_1 = {
 			}
 			NOT = {
 				any_country = {
-					scandinavia_region = { is_capital = yes }
-					navy_size = ROOT
+					OR = {
+						scandinavia_region = { is_capital = yes }
+						navy_size = ROOT
+					}
 				}
 			}
 		}
@@ -345,6 +326,37 @@ ME_Swedish_Missions_1 = {
 					}
 				}
 			}
+		}
+	}
+	swe_displays_of_strength = {
+		icon = mission_seize_north_sea_trade
+		required_missions = { swe_royal_majesty }
+		position = 15
+		provinces_to_highlight = {
+			province_id = 1982
+			NOT = { development = 15 }
+		}
+		trigger = {	
+			15 = {
+				owned_by = ROOT
+				development = 15
+			}
+			crown_land_share = 60
+		}
+		effect = {
+			define_advisor = {
+				type = military_engineer
+				name = "Erik Dahlbergh"
+				skill = 2
+				discount = yes
+				culture = swedish
+			}
+			add_absolutism = 20
+			1982 = {
+				change_province_name = "Karlskrona"
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			country_event = { id = ME_Sweden_Events.10 }
 		}
 	}
 }
@@ -924,7 +936,7 @@ ME_Swedish_Missions_2 = {
 			}
 			4163 = { owned_by = ROOT }
 			any_owned_province = {
-				supperegion = india_superregion
+				superregion = india_superregion
 				province_has_center_of_trade_of_level = 1
 			}
 		}
@@ -964,11 +976,112 @@ ME_Swedish_Missions_2 = {
 			}
 			hidden_effect = {
 				every_owned_province = {
-					limit = { supperegion = india_superregion }
+					limit = { superregion = india_superregion }
 					add_province_modifier = {
 						name = swe_east_india_company_modifier
 						duration = 7300
 					}
+				}
+			}
+		}
+	}
+	swe_geat_revival = {
+		icon = concert_of_europe
+		required_missions = { swe_renaissance }
+		position = 13
+		trigger = {
+			has_institution = renaissance
+			religious_unity = 1
+			OR = {
+				is_defender_of_faith = yes
+				tolerance_to_this = 5
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = swe_goticism_modifier
+				duration = -1
+			}
+			define_advisor = {
+				name = "Olaus Magnus"
+				skill = 1
+				discount = yes
+				religion = catholic
+			}
+			add_prestige = 20
+			add_papal_influence = 20
+		}
+	}
+	swe_royal_majesty = {
+		icon = a_show_of_strength
+		required_missions = { swe_regeringsinstrument }
+		position = 13
+		trigger = {
+			has_adm_advisor_2 = yes
+			has_dip_advisor_2 = yes
+			has_mil_advisor_2 = yes
+			OR = {
+				absolutism = 25
+				current_size_of_parliament = 20
+			}
+			NOT = { corruption = 1 }
+		}
+		effect = {
+			change_reform_progress = 50
+			change_adm = 1
+			add_ruler_modifier = {
+				name = swe_advisory_modifier
+				duration = -1
+			}
+		}
+	}
+	swe_gods_will = {
+		icon = evengelize_the_faith
+		required_missions = { swe_royal_majesty }
+		position = 14
+		trigger = {
+			NOT = { num_of_powerful_estates = 1 }
+			crown_land_share = 75
+			has_global_modifier_value = {
+				which = discipline
+				value = 0.15
+			}
+			army_professionalism = 0.80
+		}
+		effect = {
+			add_country_modifier = {
+				name = swe_carolean_autocracy_modifier
+				duration = -1
+			}
+			country_event = { id = ME_Sweden_Events.12 }
+		}
+	}
+	swe_machtstaat = {
+		icon = carolingian_empire
+		required_missions = { swe_gods_will swe_displays_of_strength }
+		position = 15
+		trigger = {
+			has_institution = enlightenment
+			prestige = 80
+		}
+		effect = {
+			1 = {
+				add_province_modifier = {
+					name = swe_stora_bollhuset_modifier
+					duration = -1
+				}
+			}
+			add_absolutism = 20
+			add_power_projection = {
+				type = SWE_POWER_STATE
+				amount = 20
+			}
+			custom_tooltip = SWE_EMPOWER_CAROLEAN_AUTOCRACY_TT
+			hidden_effect = {
+				remove_country_modifier = swe_carolean_autocracy_modifier
+				add_country_modifier = {
+					name = swe_carolean_autocracy_machtstaat_modifier 
+					duration = -1
 				}
 			}
 		}
@@ -1094,7 +1207,7 @@ ME_Swedish_Missions_3 = {
 			NOT = { 
 				any_country = {
 					army_size = ROOT
-					scandinavia_region = { is_capital = THIS }
+					scandinavia_region = { is_capital = yes }
 				}
 			}
 		}
@@ -1106,6 +1219,7 @@ ME_Swedish_Missions_3 = {
 			add_army_tradition = 20
 			add_navy_tradition = 20
 			custom_tooltip = SWE_UNLOCK_BALTIC_DECISIONS_TT
+			set_country_flag = swe_dominium_marius_baltici_unlock
 			hidden_effect = {
 				remove_country_modifier = swe_storhetsid_modifier
 				add_country_modifier = {
@@ -1117,6 +1231,22 @@ ME_Swedish_Missions_3 = {
 				limit = { exists = POM }
 				add_casus_belli = {
 					target = POM
+					cb = cb_vassalize_mission
+					months = 120
+				}
+			}
+			if = {
+				limit = { exists = STE }
+				add_casus_belli = {
+					target = STE
+					cb = cb_vassalize_mission
+					months = 120
+				}
+			}
+			if = {
+				limit = { exists = WOL }
+				add_casus_belli = {
+					target = WOL
 					cb = cb_vassalize_mission
 					months = 120
 				}
@@ -1426,7 +1556,7 @@ ME_Swedish_Missions_4 = {
 		trigger = {
 			OR = {
 				grown_by_development = 500
-				coalition_target = ROOT
+				any_country = { coalition_target = ROOT }
 			}
 			is_ahead_of_time_in_specific_tech = { type = mil }
 		}
@@ -1660,7 +1790,7 @@ ME_Swedish_Missions_4 = {
 					NOT = { area = western_norway }
 				}
 				AND = {
-					region = region = north_germany_region
+					region = north_german_region
 					has_port = yes
 					NOT = { area = weser_area }
 					NOT = { area = lower_saxony_area }
@@ -1680,6 +1810,7 @@ ME_Swedish_Missions_4 = {
 			custom_trigger_tooltip = {
 				tooltip = SWE_OWN_ALL_OF_THE_BALTIC_COAST_TT
 				scandinavia_region = {
+					type = all
 					OR = {
 						country_or_non_sovereign_subject_holds = ROOT
 						NOT = { has_port = yes }
@@ -1688,7 +1819,8 @@ ME_Swedish_Missions_4 = {
 						area = western_norway 
 					}
 				}
-				north_germany_region = {
+				north_german_region = {
+					type = all
 					OR = {
 						country_or_non_sovereign_subject_holds = ROOT
 						NOT = { has_port = yes }
@@ -1697,12 +1829,14 @@ ME_Swedish_Missions_4 = {
 					}
 				}
 				baltic_region = {
+					type = all
 					OR = {
 						country_or_non_sovereign_subject_holds = ROOT
 						NOT = { has_port = yes }
 					}
 				}
 				karelia_area = {
+					type = all
 					OR = {
 						has_port = yes
 						country_or_non_sovereign_subject_holds = ROOT
@@ -1731,7 +1865,7 @@ ME_Swedish_Missions_4 = {
 								NOT = { area = western_norway }
 							}
 							AND = {
-								region = region = north_germany_region
+								region = north_german_region
 								has_port = yes
 								NOT = { area = weser_area }
 								NOT = { area = lower_saxony_area }
@@ -1873,6 +2007,7 @@ ME_Swedish_Missions_5 = {
 				area = novgorod_area
 				province_id = 274
 			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		trigger = {
 			karelia_area = {
@@ -1919,14 +2054,6 @@ ME_Swedish_Missions_5 = {
 					NOV = { vassal_of = ROOT }
 				}
 				NOV = { add_liberty_desire = -50 }
-				33 = {
-					add_trade_modifier = {
-						who = ROOT
-						duration = 7300
-						power = 20
-						key = SWE_NOVGOROD_TRADE
-					}
-				}
 				1652 = {
 					add_trade_modifier = {
 						who = ROOT
@@ -1944,6 +2071,14 @@ ME_Swedish_Missions_5 = {
 					}
 				}
 				add_mercantilism = 3
+			}
+			33 = {
+				add_trade_modifier = {
+					who = ROOT
+					duration = 7300
+					power = 20
+					key = SWE_NOVGOROD_TRADE
+				}
 			}
 		}
 	}
@@ -2000,8 +2135,16 @@ ME_Swedish_Missions_5 = {
 				province_id = 33
 				province_id = 43
 			}
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved_by_owner = 2 }
+			}
 		}
 		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = SWE_USED_UNIFORMITY_POLICY_DECISION_TT
+				has_country_flag = swe_uniformity_policy_complete
+			}
 			38 = {
 				owned_by = ROOT
 				num_of_times_improved_by_owner = 2
@@ -2039,7 +2182,6 @@ ME_Swedish_Missions_5 = {
 			4745 = {
 				change_province_name = "Gustavia"
 				add_or_upgrade_dockyard_building = yes
-				change_culture = swedish
 				create_or_add_center_of_trade_level = { level = 1 }
 			}
 			38 = {

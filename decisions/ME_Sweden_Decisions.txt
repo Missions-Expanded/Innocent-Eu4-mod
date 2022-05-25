@@ -16,6 +16,7 @@ country_decisions = {
 			manpower = 5
 		}
 		effect = {
+			clr_country_flag = swe_used_hakka_paalle
 			set_country_flag = swe_used_hakka_paalle
 			add_mil_power = -50
 			add_manpower = -5
@@ -33,6 +34,337 @@ country_decisions = {
 		}
 		ai_will_do = {
 			factor = 1
+		}
+	}
+	swe_the_implementation = {
+		potential = {
+			has_country_flag = swe_dominium_marius_baltici_unlock
+			NOT = { has_country_flag = swe_invaded_pomerania }
+		}
+		allow = {
+			if = {
+				limit = {
+					vorpommern_area = {
+						type = all
+						OR = {
+							owner = { ai = yes }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+					hinter_pommern_area = {
+						type = all
+						OR = {
+							owner = { ai = yes }
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+					}
+				}
+				OR = {
+					OR = {
+						vorpommern_area = {
+							type = all
+							owner = { vassal_of = ROOT }
+						}
+						hinter_pommern_area = {
+							type = all
+							owner = { vassal_of = ROOT }
+						}
+					}
+					AND = {
+						vorpommern_area = { controlled_by = ROOT }
+						hinter_pommern_area = { controlled_by = ROOT }
+					}
+					AND = {
+						vorpommern_area = { country_or_non_sovereign_subject_holds = ROOT }
+						hinter_pommern_area = { country_or_non_sovereign_subject_holds = ROOT }
+					}
+				}
+			}
+			else = {
+				vorpommern_area = { country_or_non_sovereign_subject_holds = ROOT }
+				hinter_pommern_area = { country_or_non_sovereign_subject_holds = ROOT }
+			}
+		}
+		effect = {
+			set_country_flag = swe_invaded_pomerania
+			if = {
+				limit = {
+					POM = { exists = no }
+				}
+				vorpommern_area = { cede_province = POM }
+				hinter_pommern_area = { cede_province = POM }
+				vassalize = POM
+				POM = {
+					every_province = {
+						limit = { 
+							OR = {
+								culture = pommeranian
+								culture = pommeranian_SWE
+							} 
+						}
+						add_core = POM
+					}
+				}
+			}
+			else = {
+				vorpommern_area = { cede_province = ROOT }
+				hinter_pommern_area = { cede_province = ROOT }
+			}
+			add_country_modifier = {
+				name = swe_implementation_modifier
+				duration = 1825
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	swe_uniformity_policy = {
+		potential = {
+			has_country_flag = swe_dominium_marius_baltici_unlock
+			NOT = { has_country_flag = swe_uniformity_policy_complete }
+		}
+		allow = {
+			OR = {
+				AND = {
+					accepted_culture = estonian
+					accepted_culture = latvian
+					accepted_culture = pommeranian
+				}
+				absolutism = 40
+			}
+			any_owned_province = { culture = estonian }
+			any_owned_province = { culture = latvian }
+			any_owned_province = { culture = pommeranian }
+			NOT = {
+				any_owned_province = {
+					OR = {
+						culture = estonian 
+						culture = latvian 
+						culture = pommeranian 
+					}
+					local_autonomy = 20 
+				}
+			}
+		}
+		effect = {
+			set_country_flag = swe_uniformity_policy_complete
+			custom_tooltip = SWE_MOVE_CULTURES_TO_SCANDNAVIAN_TT
+			add_country_modifier = {
+				name = swe_uniformity_policy_modifier
+				duartion = 7300
+			}
+			hidden_effect = {
+				every_province = {
+					if = {
+						limit = { culture = pommeranian }
+						change_culture = pommeranian_SWE
+					}
+					if = {
+						limit = { culture = latvian }
+						change_culture = latvian_SWE
+					}
+					if = {
+						limit = { culture = estonian }
+						change_culture = estonian_SWE
+					}
+				}
+				every_country = {
+					if = {
+						limit = { primary_culture = pommeranian }
+						change_primary_culture = pommeranian_SWE
+					}
+					if = {
+						limit = { primary_culture = latvian }
+						change_primary_culture = latvian_SWE
+					}
+					if = {
+						limit = { primary_culture = estonian }
+						change_primary_culture = estonian_SWE
+					}
+					if = {
+						limit = { accepted_culture = pommeranian }
+						remove_accepted_culture = pommeranian
+						add_accepted_culture = pommeranian_SWE
+					}
+					if = {
+						limit = { accepted_culture = latvian }
+						remove_accepted_culture = latvian
+						add_accepted_culture = latvian_SWE
+					}
+					if = {
+						limit = { accepted_culture = estonian }
+						remove_accepted_culture = estonian
+						add_accepted_culture = estonian_SWE
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+	swe_livonian_aspirations = {
+		potential = {
+			has_country_flag = swe_dominium_marius_baltici_unlock
+			NOT = { has_country_flag = swe_livonian_aspirations_complete }
+		}
+		allow = {
+			OR = {
+				AND = {
+					baltic_region = { is_capital = LIV }
+					variable_arithmetic_trigger = {
+						custom_tooltip = SWE_LARGE_ARMY_THAN_LIV_TT
+						export_to_variable = {
+							variable_name = LIV_ARMY_SIZE
+							value = army_size
+							who = LIV
+						}
+						export_to_variable = {
+							variable_name = SWE_ARMY_SIZE
+							value = army_size
+							who = ROOT
+						}
+						multiply_variable = {
+							which = LIV_ARMY_SIZE
+							value = 2
+						}
+						check_variable = {
+							which = SWE_ARMY_SIZE
+							which = LIV_ARMY_SIZE
+						}
+					}
+				}
+				AND = {
+					curonia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					estonia_ingria_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					livonia_area = {
+						type = all
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			set_country_flag = swe_livonian_aspirations_complete
+			if = {
+				limit = {
+					baltic_region = { is_capital = LIV }
+					variable_arithmetic_trigger = {
+						custom_tooltip = SWE_LARGE_ARMY_THAN_LIV_TT
+						export_to_variable = {
+							variable_name = LIV_ARMY_SIZE
+							value = army_size
+							who = LIV
+						}
+						export_to_variable = {
+							variable_name = SWE_ARMY_SIZE
+							value = army_size
+							who = ROOT
+						}
+						multiply_variable = {
+							which = LIV_ARMY_SIZE
+							value = 2
+						}
+						check_variable = {
+							which = SWE_ARMY_SIZE
+							which = LIV_ARMY_SIZE
+						}
+					}
+				}
+				add_casus_belli = {
+					target = LIV
+					type = cb_vassalize_mission
+					months = 1200
+				}
+				custom_tooltip = SWE_EVERY_LIVONIAN_PROVINCE_TT
+				tooltip = {
+					add_province_modifier = {
+						name = swe_unruly_order_modifier
+						duration = 3650
+					}
+				}
+				hidden_effect = {
+					LIV = {
+						every_owned_province = {
+							add_province_modifier = {
+								name = swe_unruly_order_modifier
+								duration = 3650
+							}
+						}
+					}
+				}
+			}
+			else = {
+				curonia_area = {
+					add_province_modifier = {
+						name = swe_unruly_order_modifier
+						duration = 3650
+					}
+				}
+				estonia_ingria_area = {
+					add_province_modifier = {
+						name = swe_unruly_order_modifier
+						duration = 3650
+					}
+				}
+				livonia_area = {
+					add_province_modifier = {
+						name = swe_unruly_order_modifier
+						duration = 3650
+					}
+				}
+			}
+		}
+	}
+	swe_russian_reorganisation = {
+		potential = {
+			has_country_flag = swe_dominium_marius_baltici_unlock
+			NOT = { has_country_flag = swe_reorganised_novgorod }
+		}
+		allow = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 10
+				province_is_in_trade_node = { center = 33 }
+			}
+			OR = {
+				310 = { country_or_non_sovereign_subject_holds = ROOT }
+				NOV = { vassal_of = ROOT }
+			}
+			NOT = {
+				any_country = {
+					russia_region = { is_capital }
+					total_development = ROOT
+				}
+			}
+		}
+		effect = {
+			set_country_flag = swe_reorganised_novgorod
+			custom_tooltip = SWE_MOVE_KARELIAN_TO_SCANDINAVIAN_TT
+			hidden_effect = {
+				every_province = {
+					limit = { culture = karelian }
+					change_culture = karelian_SWE
+				}
+				every_country = {
+					if = {
+						limit = { primary_culture = karelian }
+						change_primary_culture = karelian_SWE
+					}
+					else_if = {
+						limit = { accepted_culture = karelian }
+						remove_accepted_culture = karelian
+						add_accepted_culture = karelian_SWE
+					}
+				}
+			}
+			country_event = { id = ME_Sweden_Events.9 }
 		}
 	}
 }
