@@ -10,9 +10,6 @@ ME_Ottomans_missions_1 = {
 
 	TUR_madman_rise = { 
 		icon = me_mission_ottomans_balkan_domination 
-		required_missions = { 
-			me_crusade_aftermath
-		}
 		position = 2
 		provinces_to_highlight = {
 			area = wallachia_area
@@ -51,14 +48,9 @@ ME_Ottomans_missions_1 = {
 						name = ME_Ottoman_Suzeranity
 						duration = -1
 					}
-				}
-				custom_tooltip = ME_Ottoman_Supplying_Army_TT
-				tooltip = {
-					WAL = {
-						add_country_modifier = {
-							name = ME_Ottoman_supplying_army
-							duration = -1
-						}	
+					add_country_modifier = {
+						name = ME_Ottoman_supplying_army
+						duration = -1
 					}
 				}
 			}
@@ -88,6 +80,366 @@ ME_Ottomans_missions_1 = {
 					add_permanent_claim = ROOT
 				}
 			}
+		}
+	}
+
+	TUR_Plots_Closed_Curtains = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 4
+		required_missions = {
+			TUR_madman_rise
+		}
+		provinces_to_highlight = {
+			area = moldavia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = { 
+			OR = {
+				if = {
+					limit = {
+						is_expanded_mod_active = { mod = subjects }
+					}
+					MOL = { 
+						is_subject_of_type = muslim_tributary_vassal
+						is_subject_of = ROOT
+					}
+				}
+				else = {
+					MOL = { 
+						is_subject_of = ROOT
+						is_vassal = yes
+					}
+				}
+				moldavia_area = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = { 
+			if = {
+				limit = {
+					MOL = { is_subject_of = ROOT }
+				}
+				MOL = {
+					add_country_modifier = {
+						name = ME_Ottoman_Suzeranity
+						duration = -1
+					}
+				}
+				MOL = {
+					add_country_modifier = {
+						name = ME_Ottoman_supplying_army
+						duration = -1
+					}	
+				}
+			}
+			else = {
+				moldavia_area = {
+					add_province_modifier = {
+						name = ME_Ottoman_Agricultural_Economy
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	TUR_Springboard_Europe = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 5
+		required_missions = {
+			TUR_Plots_Closed_Curtains
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = alfold_area
+				area = transylvania_area
+				area = southern_transylvania_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			TRA = {
+				exists = no
+			}
+			alfold_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			southern_transylvania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Ottoman_Events.1
+			}
+		}
+	}
+
+	TUR_Taste_Fear = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 6
+		required_missions = {
+			TUR_Springboard_Europe
+		}
+		provinces_to_highlight = {
+			OR = {
+				area = slovakia_area
+				area = transdanubia_area
+				area = slavonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			slovakia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			transdanubia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			slavonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			RAM = { exists = no }
+		}
+		effect = {
+			if = {
+				limit = {
+					slovakia_area = {
+						type = all
+						owned_by = TRA
+					}
+					transdanubia_area = {
+						type = all
+						owned_by = TRA
+					}
+					slavonia_area = {
+						type = all
+						owned_by = TRA
+					}
+				}
+				TRA = {
+					add_country_modifier = {
+						name = ME_Ottomans_New_Hungary
+						duration = 18250
+					}
+					add_country_modifier = {
+						name = ME_Ottomans_Black_Army
+						duration = -1
+					}
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_Ottomans_New_Black_Army
+					duration = -1
+				}
+			}
+			country_event = {
+				id = ME_Ottoman_Events.3
+			}
+		}
+	}
+
+	TUR_New_Fatih = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 7
+		required_missions = {
+			TUR_Taste_Fear
+		}
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = ME_TUR_Roman_Facade_Start
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ME_Ottomans_finished_incident_tt
+				has_country_flag = ME_TUR_Roman_Facade_End
+			}
+			else = {
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = emperor
+					war_score = 75
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = ME_TUR_Roman_Facade_End
+				}
+				custom_tooltip = ME_TUR_Fatih_tt
+				hidden_effect = {
+					every_country = {
+						limit = {
+							is_part_of_hre = yes
+						}
+						reverse_add_casus_belli = {
+							type = ME_Ottomans_Futuh_CB
+							target = ROOT
+						}
+					}
+				}
+			}
+			else = {
+				add_prestige = 10
+			}
+		}
+	}
+
+	TUR_Golden_Opportunity = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = lower_don_area
+				area = saratov_area
+				area = tambov_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				area = lower_don_area
+				area = saratov_area
+				area = tambov_area
+				value = 8
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_Lifetime_Raids
+				duration = 9125
+			}
+			custom_tooltip = ME_TUR_Cleansing_Fire_CB_TT
+			hidden_effect = {
+				pick_best_countries = {
+					scale = total_development
+					global_trigger = "
+					  capital_scope = {
+						region = russia_region
+					  }
+					"
+					1 = yes
+					event_target_name = "Ottomans_Target"
+				}
+				  event_target:Ottomans_Target_1 = {
+					reverse_add_casus_belli = {
+						type = ME_TUR_Cleansing_Fire_CB
+						target = ROOT
+					}
+				}
+			}
+		}
+	}
+	TUR_Sanctified_Fire = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 9
+		required_missions = { TUR_Golden_Opportunity }
+		trigger = {
+			is_in_war = {
+				attacker_leader = ROOT
+				casus_belli = ME_TUR_Cleansing_Fire_CB
+				war_score = 75
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_Secured_Commerce_Hajj
+				duration = -1
+			}
+		}
+	}
+	TUR_Rising_Force = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 10
+		provinces_to_highlight = {
+			AND = {
+				owned_by = ROOT
+				OR = {
+					religion = catholic
+					religion = protestant
+					religion = reformed
+					religion = coptic
+				}
+				OR = {
+					has_manpower_building_trigger = yes
+					base_manpower = 5
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				OR = {
+					religion = catholic
+					religion = orthodox
+					religion = protestant
+					religion = reformed
+					religion = coptic
+				}
+				has_manpower_building_trigger = yes
+				base_manpower = 5
+			}
+		}
+		effect = {
+			hidden_effect = { remove_country_modifier = the_devshirme_system }
+			every_owned_province = {
+				limit = {
+					religion = catholic
+					religion = orthodox
+					religion = protestant
+					religion = reformed
+					religion = coptic
+				}
+				add_province_modifier = {
+					name = ME_TUR_Devshirme
+					duration = -1
+				}
+			}
+		}
+	}
+	TUR_Cream_Crops = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 14
+		required_missions = { TUR_Rising_Force }
+		trigger = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+					has_government_mechanic = ottoman_mechanic
+				}
+				janissary_percentage = 0.3
+			}
+			else = {
+				num_of_infantry = 25
+			}
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					religion = catholic
+					religion = orthodox
+					religion = protestant
+					religion = reformed
+					religion = coptic
+				}
+				base_manpower = 15
+			}
+		}
+		effect = {
+			custom_tooltip = ME_TUR_Askeri_Estate_Active_tt
 		}
 	}
 }
