@@ -350,7 +350,7 @@ ME_Ottomans_missions_1 = {
 	}
 	TUR_Rising_Force = { 
 		icon = me_mission_ottomans_balkan_domination 
-		position = 10
+		position = 14
 		provinces_to_highlight = {
 			AND = {
 				owned_by = ROOT
@@ -399,7 +399,7 @@ ME_Ottomans_missions_1 = {
 	}
 	TUR_Cream_Crops = { 
 		icon = me_mission_ottomans_balkan_domination 
-		position = 14
+		position = 15
 		required_missions = { TUR_Rising_Force }
 		trigger = {
 			if = {
@@ -428,9 +428,9 @@ ME_Ottomans_missions_1 = {
 			custom_tooltip = ME_TUR_Askeri_Estate_Active_tt
 		}
 	}
-	TUR_Cream_Crops = { 
+	TUR_Chaplain_Army = { 
 		icon = me_mission_ottomans_balkan_domination 
-		position = 15
+		position = 16
 		required_missions = { TUR_Cream_Crops }
 		provinces_to_highlight = {
 			owned_by = ROOT
@@ -466,8 +466,130 @@ ME_Ottomans_missions_1 = {
 					has_dlc = "Golden Century"
 				}
 				custom_tooltip = ME_TUR_Bektashi_tt
-				set_country_flag = ME_TUR_Bektashi
+				add_country_modifier = {
+					name = ME_TUR_Bektashi_Capacity
+					duration = -1
+				}
 			}
+			else = {
+				add_country_modifier = {
+					name = ME_TUR_Bektashi_Capacity_NoDLC
+					duration = -1
+				}
+			}
+		}
+	}
+	TUR_Blessing_Curse = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 18
+		required_missions = { TUR_Chaplain_Army }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			OR = {
+				religion = catholic
+				religion = orthodox
+				religion = protestant
+				religion = reformed
+				religion = coptic
+			}
+			unrest = 0
+		}
+		trigger = {
+			any_country = {
+				technology_group = western
+				has_opinion = {
+					who = ROOT
+					value = 50
+				}
+				OR = {
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = enemy_of_my_enemy
+					}
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = opinion_common_enemy
+					}
+					has_opinion_modifier = {
+						who = ROOT
+						modifier = the_enemy_of_my_enemy
+					}
+				}
+			}
+			mil_tech = 22
+			monthly_mil = 13
+		}
+		effect = {
+			country_event = {
+				id = ME_Ottoman_Events.5
+			}
+		}
+	}
+	TUR_Ever_Growing_Dillema = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 19
+		provinces_to_highlight = {
+			owned_by = ROOT
+			NOT = { local_autonomy = 0.1 }
+		}
+		trigger = {
+			adm_tech = 12
+			OR = {
+				monthly_adm = 14
+				adm = 5
+				if = {
+					limit = {
+						is_expanded_mod_active = {
+							mod = advisors
+						}
+					}
+					ate_advisor_steward = 3
+				}
+				else = { has_adm_advisor_3 = yes }
+			}
+			calc_true_if = {
+				all_region = {
+					any_owned_province = {
+						base_tax = 10
+						has_courthouse_building_trigger = yes
+						is_state = yes
+						NOT = { local_autonomy = 0.1 }
+					}
+				}
+				amount = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_Eyalet_System
+				duration = -1
+			}
+		}
+	}
+	TUR_Blessing_Curse = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 20
+		required_missions = { TUR_Ever_Growing_Dillema }
+		trigger = {
+			adm_tech = 17
+			calc_true_if = {
+				all_owned_province = {
+					has_building = state_house
+				}
+				amount = 20
+			}
+			total_development = 1200
+			custom_trigger_tooltip = {
+				tooltip = ME_TUR_Beylerbeys_Installed_tt
+			}
+		}
+		effect = {
+			remove_country_modifier = ME_TUR_Eyalet_System
+			add_country_modifier = {
+				name = ME_TUR_Villayet_System
+				duration = -1
+			}
+			custom_tooltip = ME_TUR_Upgrade_Beyberlik_Count_tt
 		}
 	}
 }
