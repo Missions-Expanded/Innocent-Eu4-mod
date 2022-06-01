@@ -202,37 +202,17 @@ FIN_missions_1 = {
 		effect = {
 			if = {
 				limit = { has_country_flag = finnish_cyrillic_flag }
-				bothnia_area = {
-					change_culture = finnish_cyrillic
-				}
-				finland_area = {
-					change_culture = finnish_cyrillic
-				}
-				4124 = {
-					change_culture = finnish_cyrillic
-				}
-				32 = {
-					change_culture = finnish_cyrillic
-				}
-				4151 = {
-					change_culture = finnish_cyrillic
-				}
+				bothnia_area = { change_culture = finnish_cyrillic }
+				finland_area = { change_culture = finnish_cyrillic }
+				4124 = { change_culture = finnish_cyrillic }
+				32 = { change_culture = finnish_cyrillic }
+				4151 = { change_culture = finnish_cyrillic }
 			} else = {
-				bothnia_area = {
-					change_culture = finnish
-				}
-				finland_area = {
-					change_culture = finnish
-				}
-				4124 = {
-					change_culture = finnish
-				}
-				32 = {
-					change_culture = finnish
-				}
-				4151 = {
-					change_culture = finnish
-				}
+				bothnia_area = { change_culture = finnish }
+				finland_area = { change_culture = finnish }
+				4124 = { change_culture = finnish }
+				32 = { change_culture = finnish }
+				4151 = { change_culture = finnish }
 			}
 			1930 = {
 				if = {
@@ -299,38 +279,143 @@ FIN_missions_2 = {
 
 	fin_economic_crisis = {
 		icon = mission_empire
-		required_missions = { }
-		provinces_to_highlight = { }
 		position = 1
-		trigger = { }
-		effect = { }
+		trigger = { current_income_balance = 1 }
+		effect = {
+			add_country_modifier = {
+				name = fin_reliable_credit
+				duration = 9125
+			}
+			add_estate_loyalty = {
+				estate = estate_nobles
+				loyalty = 10
+			}
+		}
 	}
 
 	fin_sisu = {
 		icon = mission_empire
 		required_missions = { fin_finnishization }
-		provinces_to_highlight = { }
 		position = 3
-		trigger = { }
-		effect = { }
+		trigger = { NOT = { average_autonomy = 5 } }
+		effect = {
+			if = {
+				limit = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 14
+							owned_by = FIN
+						}
+					}
+				}
+				add_country_modifier = {
+					name = fin_sisu_modifier
+					duration = -1
+				}
+			}
+			4124 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4152 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4113 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+			4151 = {
+				if = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
 	}
 
 	fin_war_retribution = {
 		icon = mission_empire
 		required_missions = { fin_unite_finland }
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			province_id = 1
+			NOT = { owned_by = ROOT }
+		}
 		position = 5
-		trigger = { }
-		effect = { }
+		trigger = {
+			OR = {
+				owns = 1
+				1 = { owner = { war_with = ROOT } }
+			}
+		}
+		effect = {
+			norrland_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ostra_svealand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			svealand_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
 	}
 
 	fin_finnish_them_off = {
 		icon = mission_empire
 		required_missions = { fin_war_retribution }
 		position = 6
-		provinces_to_highlight = { }
-		trigger = { }
-		effect = { }
+		provinces_to_highlight = { owned_by = SWE }
+		trigger = { NOT = { exists = SWE } }
+		effect = {
+			if = {
+				limit = { exists = NOR }
+				add_casus_belli = {
+					target = NOR
+					type = cb_restore_personal_union
+					months = -1
+				}
+			} else = {
+				every_province = {
+					limit = {
+						is_core = NOR
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
 	}
 }
 
