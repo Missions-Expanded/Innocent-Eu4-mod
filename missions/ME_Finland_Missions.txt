@@ -516,36 +516,122 @@ FIN_missions_4 = {
 	slot = 4
 	generic = no
 	ai = yes
-	potential = {
-		tag = FIN
-	}
+	potential = { tag = FIN }
 	has_country_shield = yes
 
 	fin_alone_snowdrift = {
 		icon = mission_empire
-		required_missions = { }
 		position = 1
-		provinces_to_highlight = { }
-		trigger = { }
-		effect = { }
+		trigger = {
+			NOT = { is_subject = yes }
+			NOT = { is_at_war = yes }
+		}
+		effect = {
+			add_country_modifier = {
+				name = fin_swedish_no_more
+				duration = 10950
+			}
+		}
 	}
 
 	fin_denounce_treaty = {
 		icon = mission_empire
 		required_missions = { fin_alone_snowdrift }
 		position = 2
-		provinces_to_highlight = { }
-		trigger = { }
-		effect = { }
+		trigger = {
+			any_province = {
+				religion = orthodox
+				OR = {
+					owned_by = ROOT
+					owner = { war_with = ROOT }
+				}	
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = fin_offset_status_quo
+				duration = 9125
+			}
+			north_karelia = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			karelia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
 	}
 
 	fin_rival_town = {
 		icon = mission_empire
 		required_missions = { fin_denounce_treaty }
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				province_id = 30
+				province_id = 33
+			}
+			NOT = { owned_by = ROOT }
+		}
 		position = 3
-		trigger = { }
-		effect = { }
+		trigger = {
+			owns = 30
+			OR = {
+				owns = 33
+				controls = 33
+				# variable_arithmetic_trigger = {
+				# 	custom_tooltip = 30_dev_bigger_than_33
+				# 	export_to_variable = {
+				# 		which = 30_dev
+				# 		value = trigger_value:development
+				# 		who = 
+				# 	}
+				# 	export_to_variable = {
+				# 		which = 33_dev
+				# 		value = trigger_value:development
+				# 		who = 
+				# 	}
+				# 	change_variable = {
+				# 		which = 33_dev
+				# 		value = 1
+				# 	}
+				# 	check_variable = {
+				# 		which = 30_dev
+				# 		which = 33_dev
+				# 	}
+				# }
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						owns = 33
+						controls = 33
+					}
+				}
+				30 = {
+					add_province_modifier = {
+						name = fin_jewel_gulf
+						duration = -1
+					}
+					center_of_trade = 1
+				}
+			} else = { country_event = { id = ME_Finland_Events.1 } }
+			novgorod_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
 	}
 
 	fin_supply_demand = {
@@ -554,10 +640,22 @@ FIN_missions_4 = {
 			fin_finnish_nation_state
 			fin_baltic_dominance
 		}
-		provinces_to_highlight = { }
+		provinces_to_highlight = { trade_goods = fur }
 		position = 5
-		trigger = { }
-		effect = { }
+		trigger = {
+			calc_true_if = {
+				amount = 15
+				any_owned_province = { trade_goods = fur }
+			}
+		}
+		effect = {
+			change_price = {
+				trade_goods = fur
+				key = fin_finnish_charter
+				value = 0.15
+				duration = 10950
+			}
+		}
 	}
 }
 
