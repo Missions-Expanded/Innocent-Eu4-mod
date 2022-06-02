@@ -2,9 +2,7 @@ FIN_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
-	potential = {
-		tag = FIN
-	}
+	potential = { tag = FIN }
 	has_country_shield = yes
 
 	fin_modernized_finland = {
@@ -272,9 +270,7 @@ FIN_missions_2 = {
 	slot = 2
 	generic = no
 	ai = yes
-	potential = {
-		tag = FIN
-	}
+	potential = { tag = FIN }
 	has_country_shield = yes
 
 	fin_economic_crisis = {
@@ -423,9 +419,7 @@ FIN_missions_3 = {
 	slot = 3
 	generic = no
 	ai = yes
-	potential = {
-		tag = FIN
-	}
+	potential = { tag = FIN }
 	has_country_shield = yes
 
 	fin_finnishization = {
@@ -435,18 +429,68 @@ FIN_missions_3 = {
 			fin_alone_snowdrift
 		}
 		position = 2
-		provinces_to_highlight = { }
-		trigger = { }
-		effect = { }
+		provinces_to_highlight = {
+			province_id = 27
+			NOT = { owned_by = ROOT }
+			NOT = { has_owner_culture = yes }
+		}
+		trigger = {
+			27 = {
+				owned_by = ROOT
+				has_owner_culture = yes
+			}
+		}
+		effect = {
+			27 = { change_province_name = "Turku" }
+			country_event = { id = ME_Finland_Events.2 }
+		}
 	}
 
 	fin_mend_karjala = {
 		icon = mission_empire
 		required_missions = { fin_denounce_treaty }
-		provinces_to_highlight = { }
+		provinces_to_highlight = {
+			OR = {
+				area = north_karelia
+				area = karelia_area
+			}
+			NOT = { country_or_subject_holds = ROOT }
+		}
 		position = 3
-		trigger = { }
-		effect = { }
+		trigger = {
+			north_karelia = { country_or_subject_holds = ROOT }
+			karelia_area = { country_or_subject_holds = ROOT }
+			OR = {
+				accepted_culture = karelian
+				all_province = { NOT = { culture = karelian } }
+			}
+		}
+		effect = {
+			add_stability = 1
+			every_province = {
+				limit = {
+					OR = {
+						culture = karelian
+						culture = sapmi
+					}
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = { humanist_ideas = 0 }
+				add_country_modifier = {
+					name = fin_mending_karelian_tribes
+					duration = 10950
+				}
+			} else = {
+				add_country_modifier = {
+					name = fin_consolidate_karelian_tribes
+					duration = 7300
+				}
+			}
+		}
 	}
 
 	fin_finnish_nation_state = {
@@ -456,10 +500,15 @@ FIN_missions_3 = {
 			fin_mend_karjala
 			fin_rival_town
 		}
-		provinces_to_highlight = { }
 		position = 4
-		trigger = { }
-		effect = { }
+		trigger = {
+			stability = 2
+			legitimacy_equivalent = 100
+		}
+		effect = {
+			add_adm_power = 100
+			country_event = { id = ME_Finland_Events.5 }
+		}
 	}
 }
 
