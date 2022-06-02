@@ -612,3 +612,333 @@ ME_Ottomans_missions_1 = {
 		}
 	}
 }
+ME_Ottomans_missions_2 = { 
+	slot = 2
+	ai = yes 
+	generic = no 
+	potential = { 
+		tag = TUR 
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+	} 
+	has_country_shield = yes 
+
+	TUR_crusade_aftermath = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 1
+		trigger = {
+			manpower_percentage = 0.6
+			stability = 1
+		}
+		effect = {
+			151 = { add_permanent_claim = ROOT }
+			4701 = { add_permanent_claim = ROOT }
+			1773 = { add_permanent_claim = ROOT }
+			145 = { add_permanent_claim = ROOT }
+			146 = { add_permanent_claim = ROOT }
+			apulia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			calabria_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = { id = ME_Ottoman_Events.6 }
+			if = {
+				limit = {
+					has_heir = "Mehmet II"
+					NOT = { heir_age = 15 }
+				}
+				country_event = { id = ME_Ottoman_Events.7 }
+			}
+			if = {
+				limit = {
+					exists = WAL
+					is_subject = no
+				}
+				add_casus_belli = {
+					target = WAL
+					type = cb_vassalize_mission
+				}
+			}
+			else = {
+				wallachia_area = {
+					limit = {
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+	TUR_end_era = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 2
+		required_missions = { TUR_crusade_aftermath }
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				
+				province_id = 151
+				province_id = 4701
+				province_id = 1773
+				province_id = 145
+				province_id = 146
+			}
+		}
+		trigger = {
+			151 = { country_or_non_sovereign_subject_holds = ROOT }
+			4701 = { country_or_non_sovereign_subject_holds = ROOT }
+			1773 = { country_or_non_sovereign_subject_holds = ROOT }
+			145 = { country_or_non_sovereign_subject_holds = ROOT }
+			146 = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		effect = {
+			every_country = {
+				limit = {
+					OR = {
+						religion = catholic
+						religion = orthodox
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = ME_TUR_Scourge_Europe
+				}
+			}
+			add_prestige = 10
+			northern_greece_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			albania_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			serbia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			rascia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_promises_unfulfilled = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 3
+		required_missions = { TUR_end_era }
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				
+				province_id = 151
+				province_id = 4701
+				province_id = 1773
+				province_id = 145
+				province_id = 146
+			}
+		}
+		trigger = {
+			rascia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			serbia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			serbia_area = {
+				add_province_modifier = {
+					name = ME_TUR_Just_Example
+					duration = 7300
+				}
+			}
+			rascia_area = {
+				add_province_modifier = {
+					name = ME_TUR_Just_Example
+					duration = 7300
+				}
+			}
+			1766 = {
+				add_province_modifier = {
+					name = ME_TUR_Serbian_Gold
+					duration = -1
+				}
+			}
+			bosnia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			east_adriatic_coast_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			croatia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_Bosansko_Krajiste = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 4
+		required_missions = { TUR_promises_unfulfilled }
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = bosnia_area
+				area = east_adriatic_coast_area
+				area = croatia_area
+			}
+		}
+		trigger = {
+			bosnia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			croatia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			east_adriatic_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			bosnia_area = {
+				add_province_modifier = {
+					name = ME_TUR_Militaristic_Administration
+					duration = -1
+				}
+			}
+			croatia_area = {
+				add_province_modifier = {
+					name = ME_TUR_Militaristic_Administration
+					duration = -1
+				}
+			}
+			east_adriatic_coast_area = {
+				add_province_modifier = {
+					name = ME_TUR_Militaristic_Administration
+					duration = -1
+				}
+			}
+			alfold_area = {
+				limit = {
+					NOT = { is_core = ROOT } 
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			transylvania_area = {
+				limit = {
+					NOT = { is_core = ROOT } 
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			southern_transylvania_area = {
+				limit = {
+					NOT = { is_core = ROOT } 
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			country_event = { id = ME_Ottoman_Events.8 }
+		}
+	}
+	TUR_opportunity_amidst_chaos = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 5
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = apulia_area
+				area = calabria_area
+			}
+		}
+		trigger = {
+			apulia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			calabria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			apulia_area = {
+				add_province_modifier = {
+					name = ME_TUR_Italian_Front
+					duration = 9125
+				}
+			}
+			calabria_area = {
+				add_province_modifier = {
+					name = ME_TUR_Italian_Front
+					duration = 9125
+				}
+			}
+			apulia_area = {
+				add_province_modifier = {
+					name = ME_TUR_christian_resistance
+					duration = 18250
+				}
+			}
+			calabria_area = {
+				add_province_modifier = {
+					name = ME_TUR_christian_resistance
+					duration = 18250
+				}
+			}
+			western_sicily_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			western_sicily_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+}
