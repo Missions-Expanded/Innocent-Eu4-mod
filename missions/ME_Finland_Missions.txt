@@ -638,35 +638,74 @@ FIN_missions_5 = {
 	slot = 5
 	generic = no
 	ai = yes
-	potential = {
-		tag = FIN
-	}
+	potential = { tag = FIN }
 	has_country_shield = yes
 
 	fin_fringe_faithful = {
 		icon = mission_empire
-		required_missions = { }
-		provinces_to_highlight = { }
 		position = 1
-		trigger = { }
-		effect = { }
+		trigger = {
+			OR = {
+				papal_influence = 50
+				NOT = { religion = catholic }
+			}
+		}
+		effect = {
+			if = {
+				limit = { religion = catholic }
+				add_country_modifier = {
+					name = fin_loyal_pope
+					duration = 9125
+				}
+			} else = {
+				add_country_modifier = {
+					name = fin_catholicism_upturned
+					duration = 9125
+				}
+			}
+		}
 	}
 
 	fin_northern_beacon = {
 		icon = mission_empire
 		required_missions = { fin_fringe_faithful }
-		provinces_to_highlight = { }
 		position = 2
-		trigger = { }
-		effect = { }
+		trigger = {
+			calc_true_if = {
+				amount = 3
+				any_owned_province = { has_tax_building_trigger = yes }
+			}
+		}
+		effect = {
+			if = {
+				limit = { religion = catholic }
+				add_papal_influence = 30
+			} else_if = {
+				limit = { religion = orthodox }
+				add_patriarch_authority = 10
+			} else = {
+				add_country_modifier = {
+					name = fin_religious_fervor
+					duration = 5475
+				}
+			}
+		}
 	}
 
 	fin_baltic_dominance = {
 		icon = mission_empire
 		required_missions = { fin_rival_town }
-		provinces_to_highlight = { }
+		provinces_to_highlight = { province_id = 1926 }
 		position = 4
-		trigger = { }
-		effect = { }
+		trigger = { 1926 = { has_most_province_trade_power = ROOT } }
+		effect = {
+			every_owned_province = {
+				limit = { trade_goods = fur }
+				add_province_modifier = {
+					name = fin_influx_trappers
+					duration = 7300
+				}
+			}
+		}
 	}
 }
