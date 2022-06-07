@@ -358,6 +358,7 @@ ME_Ottomans_missions_1 = {
 	TUR_Rising_Force = { 
 		icon = me_mission_ottomans_balkan_domination 
 		position = 13
+		required_missions = { TUR_autonomy_loyalty }
 		provinces_to_highlight = {
 			AND = {
 				owned_by = ROOT
@@ -535,6 +536,7 @@ ME_Ottomans_missions_1 = {
 	TUR_Ever_Growing_Dillema = { 
 		icon = me_mission_ottomans_balkan_domination 
 		position = 18
+		required_missions = { TUR_administrative_structures }
 		provinces_to_highlight = {
 			owned_by = ROOT
 			NOT = { local_autonomy = 0.1 }
@@ -1256,4 +1258,207 @@ ME_Ottomans_missions_2 = {
 			}
 		}
 	}
+	TUR_autonomy_loyalty = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 13
+		trigger = {	
+			estate_loyalty = {
+    			estate = estate_dhimmi
+    			loyalty = 60
+			}
+			num_of_owned_provinces_with = {
+				value = 10
+				region = balkan_region
+				NOT = { religion_group = muslim }
+				development = 10
+			}
+		}
+		effect = {
+			custom_tooltip = ME_TUR_Millet_tt
+			set_country_flag = TUR_Millet_start
+		}
+	}
+	TUR_semaniyye = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 14
+		required_missions = { TUR_autonomy_loyalty }
+		trigger = {
+			OR = {
+				estate_influence = {
+					estate = estate_nobles
+					influence = 50
+				}
+				num_of_estate_privileges = {
+					estate = estate_nobles
+					value = 2
+				}
+			}
+			151 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+				base_tax = 15
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					has_dlc = "Cradle of Civilization"
+				}
+				custom_tooltip = ME_TUR_Sahn_Semaan_Unlock_TT
+				set_country_flag = ME_TUR_Sahn_Semaan_decision	
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_TUR_Sahn_Semaan
+					duration = -1
+				}
+			}
+		}
+	}
+	TUR_imperial_scholarship = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 15
+		required_missions = { TUR_semaniyye }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			has_tax_building_trigger = yes
+			unrest = 0
+			religion = sunni
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 15
+				has_tax_building_trigger = yes
+				unrest = 0
+				religion = sunni
+				base_tax = 5
+			}
+		}
+		effect = {
+			country_event = {
+				id = ME_Ottoman_Events.19
+			}
+		}
+	}
+	TUR_yerliyya_kapikulu = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 16
+		required_missions = { TUR_Cream_Crops }
+		provinces_to_highlight = {
+			owned_by = ROOT
+			religion_group = christian
+			has_manpower_building_trigger = yes
+		}
+		trigger = {
+			manpower = 100
+			manpower_percentage = 0.9
+			num_of_owned_provinces_with = {
+				religion_group = christian
+				development = 20
+				has_manpower_building_trigger = yes
+				value = 20
+			}
+		}
+		effect = {
+			custom_tooltip = ME_TUR_civic_duties_tt
+		}
+	}
+	TUR_like_music_ears = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 17
+		required_missions = { TUR_yerliyya_kapikulu }
+		trigger = {
+			prestige = 75
+			has_adm_advisor_3 = yes
+			has_mil_advisor_3 = yes
+			stability = 2
+			war_exhaustion = 0
+		}
+		effect = {
+			custom_tooltip = ME_TUR_mehteran
+		}
+	}
+	TUR_administrative_structures = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 18
+		trigger = {
+			adm_tech = 8
+			OR = {
+				monthly_adm = 12
+				adm = 5
+				custom_trigger_tooltip = {
+					tooltip = ME_TUR_provincial_government_tt
+					has_country_flag = the_provinical_system
+				}
+				if = {
+					limit = {
+						is_expanded_mod_active = {
+							mod = advisor_types
+						}
+					}
+					ate_advisor_steward = 3
+				}
+				else = { has_adm_advisor_3 = yes }
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_sanjakbeys_beylerbeys
+				duration = -1
+			}
+		}
+	}
+	TUR_easing_burdain = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 18
+		required_missions = { TUR_administrative_structures }
+		provinces_to_highlight = {
+			development = 30
+		}
+		trigger = {
+			anatolia_region = {
+				any_province = {
+					owned_by = ROOT
+					development = 30
+					has_courthouse_building_trigger = yes
+				}
+			}
+			balkan_region = {
+				any_province = {
+					owned_by = ROOT
+					development = 30
+					has_courthouse_building_trigger = yes
+				}
+			}
+			mashriq_region = {
+				any_province = {
+					owned_by = ROOT
+					development = 30
+					has_courthouse_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = ME_TUR_first_tt
+			custom_tooltip = ME_TUR_second_tt
+			custom_tooltip = ME_TUR_third_tt
+			custom_tooltip = ME_TUR_fourth_tt
+			custom_tooltip = ME_TUR_fifth_tt
+		}
+	}
+	TUR_sublime_porte = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 20
+		required_missions = { TUR_easing_burdain }
+		trigger = {
+			government_reform_progress = 10
+			monthly_adm = 13
+			monthly_mil = 13
+			monthly_dip = 13
+		}
+		effect = {
+			add_prestige = 1
+		}
+	}
 }
+
