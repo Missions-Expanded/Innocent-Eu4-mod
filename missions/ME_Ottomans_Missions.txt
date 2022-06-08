@@ -707,16 +707,19 @@ ME_Ottomans_missions_2 = {
 			146 = { country_or_non_sovereign_subject_holds = ROOT }
 		}
 		effect = {
-			every_country = {
-				limit = {
-					OR = {
-						religion = catholic
-						religion = orthodox
+			custom_tooltip = ME_TUR_Scourge_Europe_tt
+			hidden_effect = {
+				every_country = {
+					limit = {
+						OR = {
+							religion = catholic
+							religion = orthodox
+						}
 					}
-				}
-				add_opinion = {
-					who = ROOT
-					modifier = ME_TUR_Scourge_Europe
+					add_opinion = {
+						who = ROOT
+						modifier = ME_TUR_Scourge_Europe
+					}
 				}
 			}
 			add_prestige = 10
@@ -1458,6 +1461,491 @@ ME_Ottomans_missions_2 = {
 		}
 		effect = {
 			add_prestige = 1
+		}
+	}
+}
+ME_Ottomans_missions_3 = { 
+	slot = 3
+	ai = yes 
+	generic = no 
+	potential = { 
+		tag = TUR 
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox 
+	} 
+	has_country_shield = yes 
+
+	TUR_unwanted_neighbors = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 3
+		required_missions = { TUR_end_era }
+		provinces_to_highlight = {
+			OR = {
+				NOT = { owned_by = ROOT }
+				area = northern_greece_area
+				area = albania_area
+			}
+		}
+		trigger = {
+			northern_greece_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			albania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_Iskandar
+				duration = 10950
+			}
+			albania_area = {
+				add_province_modifier = {
+					name = ME_TUR_islamization
+					duration = 10950
+				}
+			}
+			morea_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			aegean_archipelago_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_hideout_rats = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 3
+		required_missions = { TUR_unwanted_neighbors }
+		provinces_to_highlight = {
+			OR = {
+				NOT = { owned_by = ROOT }
+				area = morea_area
+				area = aegean_archipelago_area
+			}
+		}
+		trigger = {
+			morea_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			aegean_archipelago_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_exterminated_cursader_pirates
+				duration = 9125
+			}
+			163 = {
+				add_province_modifier = {
+					name = ME_TUR_protector_aegean
+					duration = -1
+				}
+			}
+		}
+	}
+	TUR_religious_obligation = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 5
+		required_missions = { TUR_opportunity_amidst_chaos }
+		provinces_to_highlight = {
+			OR = {
+				NOT = { owned_by = ROOT }
+				area = calabria_area
+				province_id = 120
+				province_id = 327
+			}
+		}
+		trigger = {
+			calabria_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			120 = { country_or_non_sovereign_subject_holds = ROOT }
+			327 = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = { exists = CND }
+		}
+		effect = {
+			calabria_area = {
+				add_province_modifier = {
+					name = ME_TUR_looting_khums
+					duration = 9125
+				}
+			}
+			120 = {
+				add_province_modifier = {
+					name = ME_TUR_looting_khums
+					duration = 9125
+				}
+			}
+			calabria_area = { add_devastation = 10 }
+			120 = { add_devastation = 10 }
+			add_years_of_income = 0.5
+			country_event = {
+				id = ME_Ottoman_Events.21
+			}
+		}
+	}
+	TUR_mantle_rome = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 6
+		required_missions = { TUR_religious_obligation }
+		trigger = {
+			if = {
+				limit = {
+					has_country_flag = ME_TUR_Mantle_Rome_Start
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ME_Ottomans_finished_incident_tt
+				has_country_flag = ME_TUR_Mantle_Rome_end
+			}
+			else = {
+				is_in_war = {
+					attacker_leader = ROOT
+					defender_leader = PAP
+					war_score = 75
+				}
+			}
+		}
+		effect = {
+			country_event = { id = ME_Ottoman_Events.22 }
+			custom_tooltip = ME_TUR_before_1550
+			if = {
+				limit = { 
+					NOT = { is_year = 1550 }
+				}
+				set_country_flag = ME_TUR_Imbaratoriya_flag
+			}
+		}
+	}
+	TUR_mamlukean_capitulation = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 7
+		provinces_to_highlight = {
+			region = egypt_region
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				MAM = { is_subject_of = ROOT }
+				egypt_region = {
+					type = all
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					MAM = { is_subject_of = ROOT }
+				}
+				add_country_modifier = {
+					name = ME_TUR_caliphate_rise
+					duration = 18250
+				}
+			}
+			else = {
+				egypt_region = {
+					add_province_modifier = {
+						name = ME_TUR_eyalet_egypt
+						duration = 9125
+					}
+				}
+			}
+			tripolitania_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			fezzan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			djerba_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			north_saharan_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_great_march_westwards = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 8
+		required_missions = { TUR_mamlukean_capitulation }
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = tripolitania_area
+				area = djerba_area
+				area = north_saharan_area
+				area = fezzan_area
+			}
+		}
+		trigger = {
+			tripolitania_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			fezzan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			djerba_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			north_saharan_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			tripolitania_area = {
+				add_province_modifier = {
+					name = ME_TUR_ottoman_investments
+					duration = 9125
+				}
+			}
+			fezzan_area = {
+				add_province_modifier = {
+					name = ME_TUR_ottoman_investments
+					duration = 9125
+				}
+			}
+			djerba_area = {
+				add_province_modifier = {
+					name = ME_TUR_ottoman_investments
+					duration = 9125
+				}
+			}
+			north_saharan_area = {
+				add_province_modifier = {
+					name = ME_TUR_ottoman_investments
+					duration = 9125
+				}
+			}
+			add_adm_power = 75
+			add_dip_power = 75
+			add_mil_power = 75
+			tunisia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			kabylia_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			ouled_nail_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_friendly_competition = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 9
+		required_missions = { TUR_great_march_westwards }
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = tunisia_area
+				area = ouled_nail_area
+				area = kabylia_area
+			}
+		}
+		trigger = {
+			tunisia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			kabylia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			ouled_nail_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			tunisia_area = {
+				add_province_modifier = {
+					name = ME_TUR_ottoman_commercial_capital
+					duration = 18250
+				}
+			}
+			341 = { add_center_of_trade_level = 1 }
+			add_country_modifier = {
+				name = ME_TUR_competition_meditteranean
+				duration = 10950
+			}
+			barbary_coast_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			hautes_plaines_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			algiers_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			tafilalt_area = {
+				limit = {
+					NOT = { is_core = ROOT }
+					NOT = { owned_by = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+	TUR_gaining_edge = { 
+		icon = me_mission_ottomans_balkan_domination 
+		position = 9
+		required_missions = { TUR_friendly_competition }
+		provinces_to_highlight = {
+			NOT = { owned_by = ROOT }
+			OR = {
+				area = barbary_coast_area
+				area = hautes_plaines_area
+				area = algiers_area
+				area = tafilalt_area
+			}
+		}
+		trigger = {
+			ALG = { 
+				NOT = { exists = yes }
+			}
+			barbary_coast_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			hautes_plaines_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			algiers_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			tafilalt_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			country_event = { id = ME_Ottoman_Events.23 }
+			sus_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			southern_morocco_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			western_morocco_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			marrekesh_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			northern_morocco_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+				}
+				add_permanent_claim = ROOT
+			}
+			if = {
+				limit = {
+					exists = ADU
+					ADU = { 
+						NOT = { is_rival = ROOT }
+					}
+				}
+				country_event = { id = ME_Ottoman_Events.24 }
+			}
+			if = {
+				limit = {
+					exists = GRA
+					GRA = { 
+						NOT = { is_rival = ROOT }
+					}
+				}
+				country_event = { id = ME_Ottoman_Events.24 }
+			}
+			if = {
+				limit = {
+					NOT = { exists = GRA }
+					NOT = { exists = ADU }
+				}
+				upper_andalucia_area = {
+					limit = {
+						NOT = { is_core = ROOT }
+						NOT = { owned_by = ROOT }
+					}
+				}
+			}
 		}
 	}
 }
