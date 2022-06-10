@@ -2342,6 +2342,7 @@ country_event = { #An Ottoman Envoy
 				subject = MAM
 			}
 		}
+		set_country_flag = ME_TUR_MAM_vassalized
 		add_treasury = 300
 	}
 	option = {
@@ -2759,6 +2760,390 @@ country_event = { #Hidden event to remove flag in stronghold if units leave
 				has_province_flag = ME_TUR_jannis_started_dissolving
 			}
 			clr_province_flag = ME_TUR_jannis_started_dissolving
+		}
+	}
+}
+country_event = { #A New Shepherd
+	id = ME_Ottoman_Events.56
+	title = ME_Ottoman_Events.56.t 
+	desc = ME_Ottoman_Events.56.d
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.56.OPT1
+		ai_chance = {
+			factor = 0
+		}
+		custom_tooltip = ME_TUR_claimant_tt
+		custom_tooltip = ME_TUR_claimant_reinforcements_tt
+		AKK = {
+			country_event = { id = ME_Ottoman_Events.57 }
+		}
+		add_treasury = -50
+		add_manpower = -5
+		set_country_flag = ME_TUR_AKK_start
+	}
+	option = {
+		name = ME_Ottoman_Events.56.OPT2
+		erzurum_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		north_kurdistan_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		al_jazira_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+country_event = { #A Claimant from Abroad
+	id = ME_Ottoman_Events.57
+	title = ME_Ottoman_Events.57.t 
+	desc = ME_Ottoman_Events.57.d
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.57.OPT1
+		set_country_flag = ME_TUR_AKK_unlock_pretender
+		random_owned_province = {
+			limit = {
+				any_neighbor_province = {
+					owned_by = FROM
+				}
+			}
+			spawn_rebels = {
+				type = pretender_rebels
+				size = 2
+				friend = FROM	
+				leader_dynasty = name
+			}
+		}
+		set_country_flag = ME_TUR_AKK_last
+	}
+}
+country_event = { #A Claimant from Abroad
+	id = ME_Ottoman_Events.57
+	title = ME_Ottoman_Events.57.t 
+	desc = ME_Ottoman_Events.57.d
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.57.OPT1
+		set_country_flag = ME_TUR_AKK_unlock_pretender
+		if = {
+			limit = {
+				any_owned_province = {
+					any_neighbor_province = {
+						owned_by = FROM
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_neighbor_province = {
+						owned_by = FROM
+					}
+				}
+				spawn_rebels = {
+					type = ME_TUR_AQQ_pretender_rebels
+					size = 2
+					friend = FROM	
+					leader_dynasty = "Aq Qoyunlu"
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				spawn_rebels = {
+					type = ME_TUR_AQQ_pretender_rebels
+					size = 2
+					friend = FROM	
+					leader_dynasty = "Aq Qoyunlu"
+				}
+			}
+		}
+	}
+}
+country_event = { #A Call for help
+	id = ME_Ottoman_Events.58
+	title = ME_Ottoman_Events.58.t 
+	desc = ME_Ottoman_Events.58.d
+	trigger = {
+		had_country_flag = {
+			flag = ME_TUR_AKK_start
+			days = 60
+		}
+		NOT = {
+			AKK = { 
+				has_spawned_rebels = ME_TUR_AQQ_pretender_rebels
+				any_owned_province = { has_rebel_faction = ME_TUR_AQQ_pretender_rebels }
+			}
+		}
+	}
+	immediate = { clr_country_flag = ME_TUR_AKK_start }
+	option = {
+		name = ME_Ottoman_Events.58.OPT1
+		add_treasury = -100
+		add_manpower = -10
+		AKK = {
+			country_event = { id = ME_Ottoman_Events.59 }
+		}
+		custom_tooltip = ME_TUR_winning_condition
+	}
+	option = {
+		name = ME_Ottoman_Events.58.OPT2
+		erzurum_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		north_kurdistan_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		al_jazira_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+country_event = { #Ottoman Reinforcements
+	id = ME_Ottoman_Events.59
+	title = ME_Ottoman_Events.59.t 
+	desc = ME_Ottoman_Events.59.d
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.58.OPT1
+		if = {
+			limit = {
+				any_owned_province = {
+					any_neighbor_province = {
+						owned_by = FROM
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					any_neighbor_province = {
+						owned_by = FROM
+					}
+				}
+				spawn_rebels = {
+					type = ME_TUR_AQQ_pretender_rebels
+					size = 3
+					friend = FROM	
+					leader_dynasty = "Aq Qoyunlu"
+				}
+			}
+		}
+		else = {
+			capital_scope = {
+				spawn_rebels = {
+					type = ME_TUR_AQQ_pretender_rebels
+					size = 3
+					friend = FROM	
+					leader_dynasty = "Aq Qoyunlu"
+				}
+			}
+		}
+		custom_tooltip = ME_TUR_pretender_wins_condition
+		set_country_flag = ME_TUR_AKK_rebels_last
+	}
+}
+country_event = { #A New Monarch
+	id = ME_Ottoman_Events.60
+	title = ME_Ottoman_Events.60.t 
+	desc = ME_Ottoman_Events.60.d
+	trigger = {
+		tag = TUR
+		has_country_flag = ME_TUR_AKK_last
+		AKK = {
+			calc_true_if = {
+				amount = 5
+				all_owned_province = {
+					has_rebel_faction = ME_TUR_AQQ_pretender_rebels
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.60.OPT1
+		vassalize = AKK
+		clr_country_flag = ME_TUR_AKK_last
+		clr_country_flag = ME_TUR_AKK_rebels_last
+	}
+}
+country_event = { #A Failed Attempt
+	id = ME_Ottoman_Events.61
+	title = ME_Ottoman_Events.61.t 
+	desc = ME_Ottoman_Events.61.d
+	trigger = {
+		tag = TUR
+		has_country_flag = ME_TUR_AKK_last
+		AKK = {
+			NOT = {
+				OR = {
+					any_owned_province = { has_rebel_faction = ME_TUR_AQQ_pretender_rebels }
+					has_spawned_rebels = ME_TUR_AQQ_pretender_rebels
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.60.OPT1
+		erzurum_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		north_kurdistan_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		al_jazira_area = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		add_adm_power = -100
+		add_dip_power = -100
+		add_mil_power = -100
+		add_prestige = -25
+		clr_country_flag = ME_TUR_AKK_last
+		clr_country_flag = ME_TUR_AKK_rebels_last
+	}
+}
+country_event = { #Mamlukean Rebels
+	id = ME_Ottoman_Events.62
+	title = ME_Ottoman_Events.62.t 
+	desc = ME_Ottoman_Events.62.d
+	trigger = {
+		tag = TUR
+		had_country_flag = {
+			flag = ME_TUR_MAM_vassalized
+			days = 1825
+		}
+		exists = MAM
+		MAM = { is_subject_of = ROOT }
+	}
+	mean_time_to_happen = {
+		months = 3
+	}
+	option = {
+		name = ME_Ottoman_Events.62.OPT1
+		MAM = {
+			capital_scope = {
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 3
+				}
+			}
+			random_owned_province = {
+				limit = {
+					NOT = { is_capital = yes }
+				}
+				spawn_rebels = {
+					type = pretender_rebels
+					size = 3
+				}
+			}
+			clr_country_flag = ME_TUR_MAM_vassalized
+			set_country_flag = ME_TUR_MAM_vassalized
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.62.OPT2
+		MAM = { grant_independence = yes }
+	}
+}
+country_event = { #Hidden event for Baghdad
+	id = ME_Ottoman_Events.63
+	title = ME_Ottoman_Events.63.t 
+	desc = ME_Ottoman_Events.63.d
+	trigger = {
+		tag = TUR
+		410 = {
+			owned_by = ROOT
+			num_of_times_improved_by_owner = 5
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.63.OPT1
+		410 = {
+			add_province_modifier = {
+				name = ME_TUR_restored_wisdom
+				duration = -1
+			}
+		}
+	}
+}
+country_event = { #An Ottoman Expedition
+	id = ME_Ottoman_Events.64
+	title = ME_Ottoman_Events.64.t 
+	desc = ME_Ottoman_Events.64.d
+	major = yes
+	is_triggered_only = yes
+	option = {
+		ai_chance = {
+			factor = 0.75
+			modifier = {
+				factor = 0.60
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = malaya_region
+						}
+						total_development = 100
+					}
+				}
+			}
+			modifier = {
+				factor = 1
+				any_country = {
+					capital_scope = {
+						region = malaya_region
+					}
+					total_development = 150
+				}
+			}
+		}
+		name = ME_Ottoman_Events.64.OPT1
+		FROM = { vassalize = THIS }
+		add_country_modifier = {
+			name = ME_TUR_ottoman_gunpower
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.64.OPT2
+		add_mil_power = 150
+		add_country_modifier = {
+			name = ME_TUR_ottoman_technology
+			duration = -1
 		}
 	}
 }
