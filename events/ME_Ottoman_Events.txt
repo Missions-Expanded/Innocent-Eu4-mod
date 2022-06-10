@@ -2186,17 +2186,20 @@ country_event = { #Auspicious Incident
 		hidden_effect = {
 			while = {
 				limit = {
-					num_of_owned_provinces_with = {
-						value = 5
-						religion_group = christian
-						has_province_modifier = ME_TUR_janni_stronghold
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 5
+							has_province_flag = ME_TUR_janns_stronghold_flag
+						}
 					}
 				}
 				random_owned_province = {
 					limit = {
 						religion_group = christian
 						NOT = { has_province_modifier = ME_TUR_janni_stronghold }
+						NOT = { has_province_flag = ME_TUR_janns_stronghold_flag }
 					}
+					set_province_flag = ME_TUR_janns_stronghold_flag
 					add_province_modifier = {
 						name = ME_TUR_janni_stronghold
 						duration = -1
@@ -2275,6 +2278,413 @@ country_event = { #A New Stronghold
 				}
 			}
 		}
+	}
+}
+country_event = { #A Different Approach
+	id = ME_Ottoman_Events.44
+	title = ME_Ottoman_Events.44.t
+	desc = ME_Ottoman_Events.44.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.44.OPT1
+		add_years_of_income = -0.5
+		custom_tooltip = ME_TUR_vassalization_offer_tt
+		custom_tooltip = ME_TUR_vassalization_chance_tt
+		custom_tooltip = ME_TUR_vassalization_debuffs_tt
+		custom_tooltip = ME_TUR_vassal_rebels
+		MAM = {
+			country_event = {
+				id = ME_Ottoman_Events.45
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.44.OPT2
+		egypt_region = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+country_event = { #An Ottoman Envoy
+	id = ME_Ottoman_Events.45
+	title = ME_Ottoman_Events.45.t
+	desc = ME_Ottoman_Events.45.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	major = yes
+	option = {
+		name = ME_Ottoman_Events.45.OPT1
+		ai_chance = {
+			factor = 0.75
+			modifier = {
+				factor = 0
+				FROM = {
+					NOT = { 
+						AND = {
+							army_strength = {
+								who = MAM
+								value = 2
+							}
+							development = 700
+						}
+					}
+				}
+			}
+		}
+		FROM = {
+			create_subject = {
+				subject_type = mamluk_vassal
+				subject = MAM
+			}
+		}
+		add_treasury = 300
+	}
+	option = {
+		name = ME_Ottoman_Events.45.OPT2
+		add_opinion = {
+			who = FROM
+			modifier = ME_TUR_rejected_offer
+			years = 10
+		}
+		custom_tooltip = ME_TUR_increased_efforts
+		TUR = {
+			country_event = {
+				id = ME_Ottoman_Events.46
+			}
+		}
+	}
+}
+country_event = { #Subjugation by Force
+	id = ME_Ottoman_Events.46
+	title = ME_Ottoman_Events.46.t
+	desc = ME_Ottoman_Events.46.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.46.OPT1
+		add_casus_belli = {
+			target = MAM
+			type = cb_annex
+		}
+	}
+}
+country_event = { #Royal Style
+	id = ME_Ottoman_Events.47
+	title = ME_Ottoman_Events.47.t
+	desc = ME_Ottoman_Events.47.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.47.OPT1
+		mecca_area = {
+			add_province_modifier = {
+				name = ME_TUR_new_caliph
+				duration = -1
+			}
+		}
+		medina_area = {
+			add_province_modifier = {
+				name = ME_TUR_new_caliph
+				duration = -1
+			}
+		}
+		if = {
+			limit = {
+				has_dlc = "Leviathan"
+			}
+			385 = {
+				add_great_project_tier = {
+					type = kaaba
+					tier = 1
+				}
+			}
+		}
+		add_country_modifier = {
+			name = ME_TUR_outrageous_claim
+			duration = -1
+		}
+		change_adm = 1
+		change_dip = 1
+		change_mil = 1
+
+	}
+	option = {
+		release = MDA
+		create_vassal = HED
+		HED = { 
+			inherit = MDA
+			add_country_modifier = {
+				name = ME_TUR_new_custodian
+				duration = -1
+			} 
+		}
+		custom_tooltip = ME_TUR_protector_faith_tt
+		hidden_effect = {
+			add_country_modifier = {
+				name = ME_TUR_protector_faith
+				duration = -1
+			}
+		}
+		add_country_modifier = {
+			name = ME_TUR_upkeep_mosques
+			duration = -1
+		}
+	}
+}
+country_event = { #hidden event to remove modifier
+	id = ME_Ottoman_Events.48
+	title = ME_Ottoman_Events.48.t
+	desc = ME_Ottoman_Events.48.d
+	picture = PAINTER_ARTIST_eventPicture
+	hidden = yes
+	trigger = {
+		HED = {
+			NOT = {
+				is_subject_of = ROOT
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.48.OPT1
+		remove_country_modifier = ME_TUR_protector_faith
+	}
+}
+country_event = { #Muslim Brethren
+	id = ME_Ottoman_Events.49
+	title = ME_Ottoman_Events.49.t
+	desc = ME_Ottoman_Events.49.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	major = yes
+	option = {
+		name = ME_Ottoman_Events.49.OPT1
+		ai_chance = {
+			factor = 0.75
+			modifier = {
+				factor = 1
+				NOT = {
+					army_strength = {
+						who = TUR
+						value = 0.25
+					}
+				}
+			}
+			modifier = {
+				factor = 0.5
+				NOT = {
+					army_strength = {
+						who = TUR
+						value = 0.5
+					}
+				}
+				army_strength = {
+					who = TUR
+					value = 0.26
+				}
+			}
+			modifier = {
+				factor = 0.25
+				NOT = {
+					army_strength = {
+						who = TUR
+						value = 0.75
+					}
+				}
+				army_strength = {
+					who = TUR
+					value = 0.51
+				}
+			}
+			modifier = {
+				factor = 0
+				army_strength = {
+					who = TUR
+					value = 0.76
+				}
+			}
+		}
+		FROM = { vassalize = ROOT }
+		west_india_region = {
+			limit = {
+				NOT = { owned_by = ROOT }
+				NOT = { is_core = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+		add_country_modifier = {
+			name = ME_TUR_ottoman_tech
+			duration = -1
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.49.OPT2
+		FROM = {
+			country_event = {
+				id = ME_Ottoman_Events.50
+			}
+		}
+	}
+}
+country_event = { #Great Humiliation
+	id = ME_Ottoman_Events.50
+	title = ME_Ottoman_Events.50.t
+	desc = ME_Ottoman_Events.50.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.50.OPT1
+		west_india_region = {
+			limit = {
+				NOT = { is_core = ROOT }
+				NOT = { owned_by = ROOT }
+			}
+			add_permanent_claim = ROOT
+		}
+	}
+}
+country_event = { #Prosecuted Refugees
+	id = ME_Ottoman_Events.51
+	title = ME_Ottoman_Events.51.t
+	desc = ME_Ottoman_Events.51.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.51.OPT1
+		custom_tooltip = ME_TUR_anatolia_jews_tt
+		while = {
+			limit = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_province_flag = ME_TUR_invited_jews
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					region = anatolia_region
+					NOT = { is_capital_of = ROOT }
+					province_has_center_of_trade_of_level = 1
+					NOT = { has_province_flag = ME_TUR_invited_jews }
+				}
+				add_base_production = 1
+				change_religion = jewish
+				set_province_flag = ME_TUR_invited_jews
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.51.OPT2
+		custom_tooltip = ME_TUR_balkans_jews_tt
+		while = {
+			limit = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						has_province_flag = ME_TUR_invited_jews
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					region = balkan_region
+					NOT = { is_capital_of = ROOT }
+					province_has_center_of_trade_of_level = 1
+					NOT = { has_province_flag = ME_TUR_invited_jews }
+				}
+				add_base_production = 1
+				change_religion = jewish
+				set_province_flag = ME_TUR_invited_jews
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.51.OPT3
+	}
+}
+country_event = { #Ottoman Printing Press
+	id = ME_Ottoman_Events.52
+	title = ME_Ottoman_Events.52.t
+	desc = ME_Ottoman_Events.52.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.52.OPT1
+		custom_tooltip = ME_TUR_change_to_paper
+		while = {
+			limit = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						has_province_flag = ME_TUR_paper_placed_flag
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					OR = {
+						trade_goods = grain
+						trade_goods = livestock
+						trade_goods = wool
+					}
+					NOT = { has_province_flag = ME_TUR_paper_placed_flag }
+				}
+				change_trade_goods = paper
+				set_province_flag = ME_TUR_paper_placed_flag
+			}
+		}
+		custom_tooltip = ME_TUR_buff_to_paper
+		while = {
+			limit = {
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 5
+						NOT = { has_province_flag = ME_TUR_paper_buffed_flag }
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					trade_goods = paper
+					NOT = { has_province_modifier = ME_TUR_high_paper_demand }
+					NOT = { has_province_flag = ME_TUR_paper_buffed_flag }
+				}
+				add_province_modifier = {
+					name = ME_TUR_high_paper_demand
+					duration = -1
+				}
+				set_province_flag = ME_TUR_paper_buffed_flag
+			}
+		}
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = -20
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = -20
+		}
+		define_advisor = {
+			type = diplomat
+			name = "Ibrahim Muteferrika"
+			skill = 3
+			discount = yes
+		}
+	}
+	option = {
+		add_estate_loyalty = {
+			estate = estate_church
+			loyalty = 10
+		}
+		add_estate_loyalty = {
+			estate = estate_burghers
+			loyalty = 10
+		}	
 	}
 }
 
