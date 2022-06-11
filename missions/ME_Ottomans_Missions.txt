@@ -2650,7 +2650,10 @@ ME_Ottomans_missions_4 = {
 	TUR_educating_masses = {
 		icon = me_mission_ottomans_balkan_domination 
 		position = 14
-		required_missions = { TUR_improving_suburbs }
+		required_missions = { 
+			TUR_improving_suburbs 
+			TUR_beginning_cag
+		}
 		trigger = {
 			all_owned_province = { development = 8 }
 			if = {
@@ -3289,6 +3292,265 @@ ME_Ottomans_missions_5 = {
 			}
 		}
 	}
+	TUR_beginning_cag = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 8
+		trigger = {
+			149 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+				has_trade_building_trigger = yes
+				num_of_times_improved_by_owner = 3
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_klasik_cag
+				duration = 18250
+			}
+			country_event = {
+				id = ME_Ottoman_Events.65
+			}
+		}
+	}
+	TUR_raiding_countermeasures = {
+		icon = me_mission_ottomans_balkan_domination 
+		required_missions = { TUR_beginning_cag }
+		position = 9
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 5
+				OR = {
+					region = anatolia_region
+					region = balkan_region
+				}
+				has_port = yes
+				base_manpower = 5
+			}
+			dip_tech = 5
+		}
+		effect = {
+			if = {
+				limit = { dip_tech = 12 }
+				every_owned_province = {
+					limit = {
+						has_port = yes
+						OR = {
+							region = anatolia_region
+							region = balkan_region
+						}
+					}
+					add_province_modifier = {
+						name = ME_TUR_defence_shore
+						duration = -1
+					}
+					add_building = naval_battery
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						has_port = yes
+						OR = {
+							region = anatolia_region
+							region = balkan_region
+						}
+					}
+					add_province_modifier = {
+						name = ME_TUR_defence_shore
+						duration = -1
+					}
+					add_building = coastal_defence
+				}
+			}
+		}
+	}
+	TUR_caravanserai = {
+		icon = me_mission_ottomans_balkan_domination 
+		required_missions = { TUR_raiding_countermeasures }
+		position = 10
+		trigger = {
+			if = {
+				limit = {
+					is_expanded_mod_active = {
+						mod = trade_goods
+					}
+				}
+				num_of_owned_provinces_with = {
+					value = 10
+					region = anatolia_region
+					has_building = road_network
+				}
+			}
+			else = {
+				num_of_owned_provinces_with = {
+					value = 10
+					region = anatolia_region
+					has_building = marketplace
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = ME_TUR_caravanserai
+				duration = 18250
+			}
+			every_owned_province = {
+				limit = {
+					region = anatolia_region
+				}
+				custom_tooltip = ME_TUR_caravanserai_local_tt
+				hidden_effect = {
+					add_province_modifier = {
+						name = ME_TUR_province_caravanserai
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+	TUR_commerce_sea = {
+		icon = me_mission_ottomans_balkan_domination 
+		required_missions = { TUR_caravanserai }
+		position = 11
+		trigger = {
+			if = {
+				limit = { has_dlc = "Dharma" }
+				custom_trigger_tooltip = {
+					tooltip = ME_TUR_commerce_sea_dlc_tt
+					num_of_owned_provinces_with = {
+						value = 2
+						has_port = yes
+						OR = {
+							OR = {
+								province_id = 377
+								any_trade_node_member_province = { province_id = 377 }
+							}
+							OR = {
+								province_id = 358
+								any_trade_node_member_province = { province_id = 358 }
+							}
+						}
+						province_has_center_of_trade_of_level = 2
+					}
+				}
+			}
+			else = {
+				custom_trigger_tooltip = {
+					tooltip = ME_TUR_commerce_sea_nodlc_tt
+					num_of_owned_provinces_with = {
+						value = 2
+						has_port = yes
+						OR = {
+							OR = {
+								province_id = 377
+								any_trade_node_member_province = { province_id = 377 }
+							}
+							OR = {
+								province_id = 358
+								any_trade_node_member_province = { province_id = 358 }
+							}
+						}
+						development = 30
+						has_trade_building_trigger = yes
+					}
+				}
+				
+			}
+		}
+		effect = {
+			if = {
+				limit = { has_dlc = "Dharma" }
+				every_owned_province = {
+					limit = {
+						has_port = yes
+						OR = {
+							OR = {
+								province_id = 377
+								any_trade_node_member_province = { province_id = 377 }
+							}
+							OR = {
+								province_id = 358
+								any_trade_node_member_province = { province_id = 358 }
+							}
+						}
+						province_has_center_of_trade_of_level = 2
+					}
+					add_province_modifier = {
+						name = ME_TUR_entrepot_europe
+						duration = -1
+					}
+				}
+			}
+			else = {
+				every_owned_province = {
+					limit = {
+						has_port = yes
+						OR = {
+							OR = {
+								province_id = 377
+								any_trade_node_member_province = { province_id = 377 }
+							}
+							OR = {
+								province_id = 358
+								any_trade_node_member_province = { province_id = 358 }
+							}
+						}
+						development = 30
+						has_trade_building_trigger = yes
+					}
+					add_province_modifier = {
+						name = ME_TUR_entrepot_europe_nodlc
+						duration = -1
+					}
+				}
+			}
+			custom_tooltip = ME_TUR_extra_reward_tt
+			if = {
+				limit = {
+					num_of_owned_provinces_with = {
+						value = 4
+						has_port = yes
+						superregion = near_east_superregion
+						province_has_center_of_trade_of_level = 1
+					}
+				}
+				add_mercantilism = 10
+			}
+		}
+	}
+	TUR_profitable_engagement = {
+		icon = me_mission_ottomans_balkan_domination 
+		required_missions = { TUR_commerce_sea }
+		position = 12
+		trigger = {
+			1320 = {
+				trade_share = {
+					country = ROOT
+					share = 80
+				}
+			}
+			377 = { is_strongest_trade_power = ROOT }
+			358 = {
+				trade_share = {
+					country = ROOT
+					share = 30
+				}
+			}
+			mercantilism = 25
+		}
+		effect = {
+			country_event = {
+				id = ME_Ottoman_Events.66
+			}
+		}
+	}
+	TUR_donanma_homayun = {
+		icon = me_mission_ottomans_balkan_domination 
+		position = 13
+		trigger = {
+			navy_size_percentage = 0.9
+			OR = {
+				
+			}
 }
-
-
