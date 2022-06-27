@@ -1,73 +1,110 @@
-CAT_missions_1 = {
+catalonia_missions_1 = {
 	slot = 1
 	generic = no
 	ai = yes
 	potential = {
 		tag = CAT
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
 	}
 	has_country_shield = yes
-	
-	Catalonia_Independence = {
-		icon = mission_monarch_in_throne_room
-		required_missions = { }
-		trigger = {
-			is_subject = no
-			is_at_war = no
+
+	cat_principality_valencia = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_autonomous_region_catalonia
 		}
-		effect = {
-			127 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-			2986 = {
-				if = {
-					limit = {
-						NOT = { owned_by = ROOT }
-						NOT = { is_core = ROOT }
-					}
-					add_permanent_claim = ROOT
-				}
-			}
-		}
-	}
-	
-	Catalonia_Conquer_Sardinia = {
-		icon = mission_galleys_in_port
-		required_missions = { Catalonia_Independence }
+		position = 2
 		provinces_to_highlight = {
-			OR = {
-				province_id = 127
-				province_id = 2986
-			}
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			area = valencia_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			127 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			valencia_area = {
+				type = all
+				owned_by = ROOT
 			}
-			2986 = {
-				country_or_non_sovereign_subject_holds = ROOT
+			OR = {
+				NOT = { exists = VAL }
+				overlord_of = VAL
+				iberia_region = {
+					NOT = { owned_by = VAL }
+				}
 			}
 		}
 		effect = {
-			aragon_area = {
-				limit = {
-					NOT = { owned_by = ROOT }
-					NOT = { is_core = ROOT }
-				}
-				add_permanent_claim = ROOT
+			add_country_modifier = {
+				name = cat_emirate_balansiyya
+				duration = 9125
 			}
 		}
 	}
-	
-	Catalonia_Conquer_Aragon = {
-		icon = mission_cannons_firing
-		required_missions = { Catalonia_Conquer_Sardinia }
+
+	cat_lonja_de_la_seda = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_true_aragonese_heir
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 220
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { num_of_times_improved = 3 }
+			}
+		}
+		trigger = {
+			220 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_trade_building_trigger = yes
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			220 = {
+				if = {
+					limit = {
+						has_dlc = "Leviathan"
+						is_expanded_mod_active = { mod = great_monuments }
+						NOT = {
+							has_great_project = {
+								type = gme_lonja_seda
+								tier = 3
+							}
+						}
+					}
+					add_great_project_tier = {
+						type = gme_lonja_seda
+						tier = 1
+					}
+				}
+				else = {
+					add_permanent_province_modifier = {
+						name = cat_lonja_seda
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+catalonia_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAT
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	cat_crown_aragon = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_autonomous_region_catalonia
+		}
+		position = 2
 		provinces_to_highlight = {
 			area = aragon_area
 			NOT = { country_or_non_sovereign_subject_holds = ROOT }
@@ -77,112 +114,680 @@ CAT_missions_1 = {
 				type = all
 				country_or_non_sovereign_subject_holds = ROOT
 			}
+			OR = {
+				NOT = { exists = ARA }
+				overlord_of = ARA
+				iberia_region = {
+					NOT = { owned_by = ARA }
+				}
+			}
 		}
 		effect = {
-			sicily_area = {
+			add_country_modifier = {
+				name = cat_crown_aragon_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	cat_true_aragonese_heir = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_principality_valencia
+			cat_crown_aragon
+		}
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = aragon_area
+				area = valencia_area
+				area = catalonia_area
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			aragon_area = {
+				type = all
+				owned_by = ROOT
+			}
+			valencia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			catalonia_area = {
+				type = all
+				owned_by = ROOT
+			}
+			NOT = {
+				any_country = {
+					capital_scope = {
+						region = iberia_region
+					}
+					OR = {
+						total_development = ROOT
+						army_size = ROOT
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = CAT
+				}
+				add_country_modifier = {
+					name = cat_consell_de_cent
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = cat_consell_de_cent_weak
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	cat_llotja_de_mar = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_true_aragonese_heir
+		}
+		position = 4
+		provinces_to_highlight = {
+			province_id = 213
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { num_of_times_improved = 3 }
+			}
+		}
+		trigger = {
+			213 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				has_trade_building_trigger = yes
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			213 = {
+				add_or_upgrade_trade_building = yes
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+
+	cat_silk_dominance = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_lonja_de_la_seda
+			cat_llotja_de_mar
+			cat_iberian_silk
+		}
+		position = 5
+		provinces_to_highlight = { }
+		trigger = {
+			development_in_provinces = {
+				value = 100
+				OR = {
+					trade_goods = silk
+					trade_goods = cloth
+				}
+			}
+			OR = {
+				trading_bonus = {
+					trade_goods = cloth
+					value = yes
+				}
+				production_leader = {
+					trade_goods = cloth
+				}
+				production_leader = {
+					trade_goods = silk
+				}
+				trading_bonus = {
+					trade_goods = silk
+					value = yes
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = CAT
+				}
+				add_country_modifier = {
+					name = cat_remenca_de_los_pagesos
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = cat_remenca_de_los_pagesos_weak
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	cat_palau_reial_major = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_principat_catalunya
+		}
+		position = 7
+		provinces_to_highlight = {
+			province_id = 231
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_tax_building_trigger = yes }
+				NOT = { num_of_buildings_in_province = 3 }
+			}
+			NOT = { base_tax = 10 }
+			NOT = { base_production = 10 }
+		}
+		trigger = {
+			231 = {
+				owned_by = ROOT
+				has_tax_building_trigger = yes
+				num_of_buildings_in_province = 3
+				OR = {
+					base_tax = 10
+					base_production = 10
+				}
+			}
+		}
+		effect = {
+			add_adm_power = 100
+			add_dip_power = 100
+			add_mil_power = 100
+			if = {
+				limit = {
+					has_dlc = "Mandate of Heaven"
+				}
+				add_splendor = 100
+				231 = { add_prosperity = 50 }
+			}
+		}
+	}
+
+	cat_estudi_general_medicina_arts = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_palau_reial_major
+		}
+		position = 7
+		provinces_to_highlight = {
+			province_id = 231
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 36 }
+			}
+			NOT = { province_has_center_of_trade_of_level = 3 }
+			NOT = { num_free_building_slots = 1 }
+		}
+		trigger = {
+			231 = {
+				owned_by = ROOT
+				development = 36
+				OR = {
+					province_has_center_of_trade_of_level = 3
+					num_free_building_slots = 1
+				}
+			}
+		}
+		effect = {
+			213 = {
+				add_or_upgrade_university_building = yes
+				add_permanent_province_modifier = {
+					name = cat_estudi_general_barcelona
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+catalonia_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAT
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	cat_autonomous_region_catalonia = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_autonomous_region_catalonia
+		}
+		position = 1
+		provinces_to_highlight = { }
+		trigger = {
+			OR = {
+				army_size_percentage = 1
+				army_size = 20
+			}
+		}
+		effect = {
+			add_yearly_manpower = 10
+			add_treasury = 100
+			add_country_modifier = {
+				name = cat_lliures_morts
+				duration = 9125
+			}
+			aragon_area = {
 				limit = {
 					NOT = { owned_by = ROOT }
 					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			catalonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			valencia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			baleares_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
 				}
 				add_permanent_claim = ROOT
 			}
 		}
 	}
-	
-	Catalonia_Conquer_Sicily = {
-		icon = mission_assemble_an_army
-		required_missions = { Catalonia_Conquer_Aragon }
+
+	cat_privative_kingdom = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_autonomous_region_catalonia
+			cat_catalan_galleys
+		}
+		position = 3
 		provinces_to_highlight = {
-			area = sicily_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			area = baleares_area
+			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			sicily_area = {
+			baleares_area = {
 				type = all
-				country_or_non_sovereign_subject_holds = ROOT
+				owned_by = ROOT
+			}
+			OR = {
+				NOT = { exists = MJO }
+				overlord_of = MJO
+				iberia_region = {
+					NOT = { owned_by = MJO }
+				}
 			}
 		}
 		effect = {
 			add_country_modifier = {
-				name = hegemonic_ambition
-				duration = 36500
+				name = cat_haven_slave_trade
+				duration = 9125
 			}
 		}
 	}
-	
-	Catalonian_Claim_To_Naples = {
-		icon = mission_have_two_subjects
-		required_missions = { Catalonia_Conquer_Sicily }
-		provinces_to_highlight = {
-			NOT = { exists = NAP }
-			is_core = NAP
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+
+	cat_almogavars = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_true_aragonese_heir
+			cat_privative_kingdom
 		}
+		position = 4
+		provinces_to_highlight = { }
 		trigger = {
+			NOT = { average_autonomy = 30 }
+		}
+		effect = {
 			if = {
 				limit = {
-					exists = NAP
+					tag = CAT
 				}
-				has_spy_network_in = {
-					who = NAP
-					value = 50
+				add_country_modifier = {
+					name = cat_catalan_company
+					desc = me_until_tag_switch_tt
+					duration = -1
 				}
 			}
 			else = {
-				all_province = {
-					OR = {
-						country_or_non_sovereign_subject_holds = ROOT
-						NOT = { is_core = NAP }
-					}
+				add_country_modifier = {
+					name = cat_catalan_company_weak
+					duration = 7300
 				}
+			}
+		}
+	}
+
+	cat_principat_catalunya = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 6
+		provinces_to_highlight = {
+			area = catalonia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				ADM = 6
+				has_adm_advisor_3 = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					is_ahead_of_time_in_specific_tech = { type = adm }
+					innovativeness = 50
+				}
+			}
+			OR = {
+				monthly_income = 25
+				share_of_starting_income = 10
+			}
+		}
+		effect = {
+			catalonia_area = {
+				add_permanent_province_modifier = {
+					name = cat_sentencia_arbitral
+					duration = -1
+				}
+			}
+		}
+	}
+
+	cat_war_paesants = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_principat_catalunya
+		}
+		position = 7
+		provinces_to_highlight = {
+			area = catalonia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				ADM = 6
+				has_dip_advisor_3 = yes
+			}
+			is_ahead_of_time_in_specific_tech = { type = dip }
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = CAT
+				}
+				add_country_modifier = {
+					name = cat_generalitat_catalunya_modifier
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = cat_generalitat_catalunya_weak
+					duration = 7300
+				}
+			}
+			catalonia_area = {
+				add_permanent_province_modifier = {
+					name = cat_remensa
+					duration = -1
+				}
+			}
+		}
+	}
+
+	cat_generalitat_catalunya = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_palau_reial_major
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 213
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			ME_has_reform_on_level = { level = 3 }
+			NOT = {
+				has_global_modifier_value = {
+					which = global_unrest
+					value = -5
+				}
+			}
+			213 = {
+				owned_by = ROOT
+				num_of_times_improved = 6
 			}
 		}
 		effect = {
 			if = {
 				limit = {
-					exists = NAP
+					tag = CAT
 				}
-				add_casus_belli = {
-					target = NAP
-					type = cb_restore_personal_union
-					months = 600
-				}
-				2753 = {
-					if = {
-						limit = {
-							NOT = { owned_by = ROOT }
-							NOT = { is_core = ROOT }
-							NOT = { is_permanent_claim = ROOT }
-						}
-						add_claim = ROOT
-					}
+				add_country_modifier = {
+					name = cat_catalan_constitution
+					desc = me_until_tag_switch_tt
+					duration = -1
 				}
 			}
 			else = {
-				add_prestige = 10
-				add_legitimacy_equivalent = { amount = 10 republican_tradition = 10 }
+				add_country_modifier = {
+					name = cat_catalan_constitution_weak
+					duration = 7300
+				}
 			}
-		}
-	}
-	
-	Catalonia_Conquer_Languedoc = {
-		icon = mission_conquer_50_development
-		required_missions = { Catalonian_Claim_To_Naples }
-		provinces_to_highlight = {
-			area = languedoc_area
-			NOT = { country_or_non_sovereign_subject_holds = ROOT }
-		}
-		trigger = {
-			languedoc_area = {
-				type = all
-				country_or_non_sovereign_subject_holds = ROOT
-			}
-		}
-		effect = {
-			add_country_modifier = {
-				name = thriving_arms_industry
-				duration = 36500
+			213 = {
+				add_or_upgrade_courthouse_building = yes
 			}
 		}
 	}
 }
+
+catalonia_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = CAT
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	cat_catalan_galleys = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_autonomous_region_catalonia
+		}
+		position = 2
+		provinces_to_highlight = { }
+		trigger = {
+			num_of_galley = 12
+		}
+		effect = {
+			create_admiral = {
+				tradition = 75
+			}
+			baleares_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	cat_iberian_silk = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = { }
+		trigger = {
+			development_in_provinces = {
+				value = 50
+				OR = {
+					trade_goods = cloth
+					trade_goods = silk
+				}
+			}
+		}
+		effect = {
+			define_advisor = {
+				type = trader
+				skill = 2
+				culture = ROOT
+				religion = ROOT
+				discount = yes
+			}
+			add_mercantilism = 5
+			add_years_of_owned_provinces_production_income = {
+				years = 10
+				trigger = {
+					OR = {
+						trade_goods = cloth
+						trade_goods = silk
+					}
+				}
+			}
+			1295 = {
+				every_trade_node_member_province = {
+					limit = {
+						OR = {
+							trade_goods = silk
+							trade_goods = cloth
+						}
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_empty = yes }
+						NOT = { is_wasteland = yes }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	cat_purely_silk_commerce = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_iberian_silk
+		}
+		position = 5
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1295
+			}
+		}
+		trigger = {
+			1295 = {
+				any_trade_node_member_province = {
+					OR = {
+						owned_by = ROOT
+						AND = {
+							NOT = { trade_goods = silk }
+							NOT = { trade_goods = cloth }
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			1295 = {
+				every_trade_node_member_province = {
+					limit = {
+						trade_goods = silk
+						trade_goods = cloth
+						owned_by = ROOT
+					}
+					add_permanent_province_modifier = {
+						name = cat_consulate_sea
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	cat_princeps_namque = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			cat_principat_catalunya
+		}
+		position = 6
+		provinces_to_highlight = {
+			area = catalonia_area
+		}
+		trigger = {
+			catalonia_area = {
+				type = all
+				owned_by = ROOT
+				base_manpower = 10
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = CAT
+				}
+				add_country_modifier = {
+					name = cat_sagramental
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = cat_sagramental_weak
+					duration = 7300
+				}
+			}
+			catalonia_area = {
+				add_permanent_province_modifier = {
+					name = cat_rey_princep
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+# catalonia_missions_5 = {
+# 	slot = 5
+# 	generic = no
+# 	ai = yes
+# 	potential = {
+# 		tag = CAT
+# 		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+# 	}
+# 	has_country_shield = yes
+
+# }
