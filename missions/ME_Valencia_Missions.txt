@@ -1,0 +1,1570 @@
+valencia_missions_1 = {
+	slot = 1
+	generic = no
+	ai = yes
+	potential = {
+		tag = VAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	val_autonomous_region_catalonia = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_principality_valencia
+		}
+		position = 2
+		provinces_to_highlight = {
+			area = catalonia_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			catalonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = CAT }
+				overlord_of = CAT
+				iberia_region = {
+					NOT = { owned_by = CAT }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = val_crown_catalonia
+				duration = 9125
+			}
+		}
+	}
+
+	val_iberian_silk = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 4
+		provinces_to_highlight = { }
+		trigger = {
+			development_in_provinces = {
+				value = 50
+				OR = {
+					trade_goods = cloth
+					trade_goods = silk
+				}
+			}
+		}
+		effect = {
+			define_advisor = {
+				type = trader
+				skill = 2
+				culture = ROOT
+				religion = ROOT
+				discount = yes
+			}
+			add_mercantilism = 5
+			add_years_of_owned_provinces_production_income = {
+				years = 10
+				trigger = {
+					OR = {
+						trade_goods = cloth
+						trade_goods = silk
+					}
+				}
+			}
+			1295 = {
+				custom_tooltip = VAL_IBERIAN_SILK_TT
+				hidden_effect = {
+					every_trade_node_member_province = {
+						limit = {
+							OR = {
+								trade_goods = silk
+								trade_goods = cloth
+							}
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+							NOT = { is_empty = yes }
+							NOT = { is_wasteland = yes }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	val_purely_silk_commerce = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_iberian_silk
+		}
+		position = 5
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1295
+			}
+			OR = {
+				trade_goods = silk
+				trade_goods = cloth
+			}
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			1295 = {
+				custom_trigger_tooltip = {
+					tooltip = VAL_PURELY_SILK_COMMERCE_TRIGGER_TT
+					any_trade_node_member_province = {
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							AND = {
+								NOT = { trade_goods = silk }
+								NOT = { trade_goods = cloth }
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			1295 = {
+				custom_tooltip = VAL_PURELY_SILK_COMMERCE_EFFECT_TT
+				hidden_effect = {
+					every_trade_node_member_province = {
+						limit = {
+							trade_goods = silk
+							trade_goods = cloth
+							country_or_non_sovereign_subject_holds = ROOT
+						}
+						add_permanent_province_modifier = {
+							name = cat_consulate_sea
+							duration = -1
+						}
+					}
+				}
+			}
+			1295 = {
+				random_trade_node_member_province = {
+					limit = {
+						trade_goods = silk
+						trade_goods = cloth
+						country_or_non_sovereign_subject_holds = ROOT
+					}
+					add_permanent_province_modifier = {
+						name = cat_consulate_sea
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	val_new_silk_ports = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_consolat_mar
+		}
+		position = 8
+		provinces_to_highlight = {
+			OR = {
+				area = northern_morocco_area
+				area = toledo_area
+				area = upper_andalucia_area
+				area = lower_andalucia_area
+			}
+			has_port = yes
+			NOT = { owned_by = ROOT }
+			NOT = {
+				ROOT = {
+					num_of_owned_provinces_with = {
+						value = 3
+						OR = {
+							area = northern_morocco_area
+							area = toledo_area
+							area = upper_andalucia_area
+							area = lower_andalucia_area
+						}
+						has_port = yes
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 3
+				OR = {
+					area = northern_morocco_area
+					area = toledo_area
+					area = upper_andalucia_area
+					area = lower_andalucia_area
+				}
+				has_port = yes
+			}
+		}
+		effect = {
+			create_explorer = {
+				tradition = 50
+			}
+			add_country_modifier = {
+				name = val_westward
+				duration = 5475
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					OR = {
+						area = northern_morocco_area
+						area = toledo_area
+						area = upper_andalucia_area
+						area = lower_andalucia_area
+					}
+				}
+				add_or_upgrade_shipyard_building = yes
+				add_or_upgrade_dock_building = yes
+			}
+			macaronesia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			cap_verde_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	val_canaries = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_new_silk_ports
+		}
+		position = 9
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					area = macaronesia_area
+					NOT = { owned_by = ROOT }
+					NOT = {
+						ROOT = {
+							num_of_owned_provinces_with = {
+								value = 2
+								area = macaronesia_area
+							}
+						}
+					}
+				}
+				AND = {
+					area = cap_verde_area
+					NOT = { owned_by = ROOT }
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 2
+				area = macaronesia_area
+			}
+			cap_verde_area = {
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			remove_country_modifier = val_westward
+			add_country_modifier = {
+				name = val_westward_2
+				duration = 18250
+			}
+		}
+	}
+
+	val_sugar_islands = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_canaries
+		}
+		position = 10
+		provinces_to_highlight = {
+			region = carribeans_region
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+			NOT = {
+				ROOT = {
+					num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+						value = 20
+						region = carribeans_region
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 20
+				region = carribeans_region
+			}
+		}
+		effect = {
+			carribeans_region = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_permanent_province_modifier = {
+					name = val_sugar_export
+					duration = -1
+				}
+			}
+			capital_scope = {
+				add_permanent_province_modifier = {
+					name = val_sugar_import
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+valencia_missions_2 = {
+	slot = 2
+	generic = no
+	ai = yes
+	potential = {
+		tag = VAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	val_crown_aragon = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_principality_valencia
+		}
+		position = 2
+		provinces_to_highlight = {
+			area = aragon_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aragon_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = ARA }
+				overlord_of = ARA
+				iberia_region = {
+					NOT = { owned_by = ARA }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cat_crown_aragon_modifier
+				duration = 9125
+			}
+		}
+	}
+
+	val_true_aragonese_heir = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_autonomous_region_catalonia
+			val_crown_aragon
+		}
+		position = 3
+		provinces_to_highlight = {
+			OR = {
+				area = aragon_area
+				area = valencia_area
+				area = catalonia_area
+			}
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			aragon_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			valencia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			catalonia_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			custom_trigger_tooltip = {
+				tooltip = VAL_IBERIA_NOT_BIGGER_TT
+				NOT = {
+					any_country = {
+						capital_scope = {
+							region = iberia_region
+						}
+						OR = {
+							total_development = ROOT
+							army_size = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = VAL
+				}
+				add_country_modifier = {
+					name = val_heritage_balansiyya
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = val_heritage_balansiyya_weak
+					duration = 7300
+				}
+			}
+			iberia_region = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	val_llotja_de_mar = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_true_aragonese_heir
+		}
+		position = 3
+		provinces_to_highlight = {
+			province_id = 213
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { num_of_times_improved = 3 }
+			}
+		}
+		trigger = {
+			213 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			213 = {
+				add_or_upgrade_trade_building = yes
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+		}
+	}
+
+	val_silk_dominance = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_lonja_de_la_seda
+			val_llotja_de_mar
+			val_purely_silk_commerce
+		}
+		position = 6
+		provinces_to_highlight = { }
+		trigger = {
+			development_in_provinces = {
+				value = 100
+				OR = {
+					trade_goods = silk
+					trade_goods = cloth
+				}
+			}
+			OR = {
+				trading_bonus = {
+					trade_goods = cloth
+					value = yes
+				}
+				production_leader = {
+					trade_goods = cloth
+				}
+				production_leader = {
+					trade_goods = silk
+				}
+				trading_bonus = {
+					trade_goods = silk
+					value = yes
+				}
+			}
+			trade_efficiency = 1
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = VAL
+				}
+				add_country_modifier = {
+					name = val_llotja_de_la_seda
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = val_llotja_de_la_seda_weak
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	val_consolat_mar = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			province_id = 220
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_production = 10 }
+			}
+			NOT = { has_dock_building_trigger = yes }
+			NOT = { has_shipyard_building_trigger = yes }
+		}
+		trigger = {
+			220 = {
+				owned_by = ROOT
+				base_production = 10
+				OR = {
+					has_dock_building_trigger = yes
+					has_shipyard_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			220 = {
+				add_permanent_province_modifier = {
+					name = val_taula_canvi_deposists
+					duration = -1
+				}
+				if = {
+					limit = {
+						has_dock_building_trigger = yes
+					}
+					add_or_upgrade_shipyard_building = yes
+				}
+				else_if = {
+					limit = {
+						has_shipyard_building_trigger = yes
+					}
+					add_or_upgrade_dock_building = yes
+				}
+			}
+			custom_tooltip = VAL_CONSOLAT_MAR_TT
+			hidden_effect = {
+				1295 = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+							NOT = { is_empty = yes }
+							NOT = { is_wasteland = yes }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+				northern_morocco_area = {
+					limit = {
+						has_port = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_empty = yes }
+						NOT = { is_wasteland = yes }
+					}
+					add_permanent_claim = ROOT
+				}
+				lower_andalucia_area = {
+					limit = {
+						has_port = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_empty = yes }
+						NOT = { is_wasteland = yes }
+					}
+					add_permanent_claim = ROOT
+				}
+				upper_andalucia_area = {
+					limit = {
+						has_port = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_empty = yes }
+						NOT = { is_wasteland = yes }
+					}
+					add_permanent_claim = ROOT
+				}
+				toledo_area = {
+					limit = {
+						has_port = yes
+						NOT = { owned_by = ROOT }
+						NOT = { is_core = ROOT }
+						NOT = { is_empty = yes }
+						NOT = { is_wasteland = yes }
+					}
+					add_permanent_claim = ROOT
+				}
+			}
+		}
+	}
+
+	val_valencian_dominance = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_consolat_mar
+		}
+		position = 9
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1295
+			}
+			NOT = { owned_by = ROOT }
+			has_port = yes
+			NOT = { has_shipyard_building_trigger = yes }
+			NOT = { has_dock_building_trigger = yes }
+			NOT = {
+				ROOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						any_trade_node_member_province = {
+							province_id = 1295
+						}
+						has_port = yes
+						OR = {
+							has_shipyard_building_trigger = yes
+							has_dock_building_trigger = yes
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 10
+				custom_trigger_tooltip = {
+					tooltip = VAL_VALENCIAN_DOMINANCE_TT
+					any_trade_node_member_province = {
+						province_id = 1295
+					}
+				}
+				has_port = yes
+				OR = {
+					has_shipyard_building_trigger = yes
+					has_dock_building_trigger = yes
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = val_valencian_stato_mar
+				duration = -1
+			}
+		}
+	}
+
+	val_port_panama = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_canaries
+		}
+		position = 10
+		provinces_to_highlight = {
+			province_id = 835
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			835 = {
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+		}
+		effect = {
+			add_mercantilism = 5
+			835 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+				add_base_production = 3
+				add_permanent_province_modifier = {
+					name = val_port_new_world
+					duration = -1
+				}
+			}
+		}
+	}
+}
+
+valencia_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = VAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	val_principality_valencia = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = { }
+		trigger = {
+			OR = {
+				army_size_percentage = 1
+				army_size = 20
+			}
+		}
+		effect = {
+			add_yearly_manpower = 10
+			add_treasury = 100
+			add_country_modifier = {
+				name = cat_lliures_morts
+				duration = 9125
+			}
+			aragon_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			catalonia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			valencia_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+			baleares_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	val_privative_kingdom = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_principality_valencia
+			val_valencian_galleys
+		}
+		position = 3
+		provinces_to_highlight = {
+			area = baleares_area
+			NOT = { country_or_non_sovereign_subject_holds = ROOT }
+		}
+		trigger = {
+			baleares_area = {
+				type = all
+				country_or_non_sovereign_subject_holds = ROOT
+			}
+			OR = {
+				NOT = { exists = MJO }
+				overlord_of = MJO
+				iberia_region = {
+					NOT = { owned_by = MJO }
+				}
+			}
+		}
+		effect = {
+			add_country_modifier = {
+				name = cat_haven_slave_trade
+				duration = 9125
+			}
+		}
+	}
+
+	val_lonja_de_la_seda = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 5
+		provinces_to_highlight = {
+			province_id = 220
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { has_trade_building_trigger = yes }
+				NOT = { num_of_times_improved = 3 }
+			}
+		}
+		trigger = {
+			220 = {
+				owned_by = ROOT
+				has_trade_building_trigger = yes
+				num_of_times_improved = 3
+			}
+		}
+		effect = {
+			220 = {
+				if = {
+					limit = {
+						has_dlc = "Leviathan"
+						is_expanded_mod_active = { mod = great_monuments }
+						NOT = {
+							has_great_project = {
+								type = gme_lonja_seda
+								tier = 3
+							}
+						}
+					}
+					add_great_project_tier = {
+						type = gme_lonja_seda
+						tier = 1
+					}
+				}
+				else = {
+					add_permanent_province_modifier = {
+						name = cat_lonja_seda
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+
+	val_regne_valencia = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = { }
+		position = 7
+		provinces_to_highlight = {
+			area = valencia_area
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			OR = {
+				ADM = 6
+				has_adm_advisor_3 = yes
+			}
+			if = {
+				limit = {
+					has_dlc = "Rule Britannia"
+				}
+				OR = {
+					is_ahead_of_time_in_specific_tech = { type = adm }
+					innovativeness = 50
+				}
+			}
+			OR = {
+				monthly_income = 25
+				share_of_starting_income = 10
+			}
+			valencia_area = {
+				type = all
+				owned_by = ROOT
+			}
+		}
+		effect = {
+			valencia_area = {
+				add_permanent_province_modifier = {
+					name = val_generalitat_valenciana
+					duration = -1
+				}
+			}
+		}
+	}
+
+	val_les_corts_valenciane = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_regne_valencia
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 220
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { num_of_times_improved = 6 }
+			}
+		}
+		trigger = {
+			ME_has_reform_on_level = { level = 3 }
+			NOT = {
+				has_global_modifier_value = {
+					which = global_unrest
+					value = -5
+				}
+			}
+			220 = {
+				owned_by = ROOT
+				num_of_times_improved = 6
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = VAL
+				}
+				add_country_modifier = {
+					name = val_valencian_parliament
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = val_valencian_parliament_weak
+					duration = 7300
+				}
+			}
+			220 = {
+				add_or_upgrade_courthouse_building = yes
+			}
+		}
+	}
+
+	val_crest_valencia = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_les_corts_valenciane
+		}
+		position = 9
+		provinces_to_highlight = {
+			province_id = 220
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { development = 36 }
+			}
+			NOT = { province_has_center_of_trade_of_level = 3 }
+			num_free_building_slots = 0
+		}
+		trigger = {
+			220 = {
+				owned_by = ROOT
+				development = 36
+				OR = {
+					province_has_center_of_trade_of_level = 3
+					NOT = { num_free_building_slots = 1 }
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = VAL
+				}
+				add_country_modifier = {
+					name = val_twice_loyal
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = val_twice_loyal_weak
+					duration = 7300
+				}
+			}
+			220 = {
+				add_or_upgrade_manpower_building = yes
+				add_or_upgrade_forcelimit_building = yes
+				add_permanent_province_modifier = {
+					name = val_twice_loyal_province
+					duration = -1
+				}
+			}
+		}
+	}
+
+	val_mediterranean_superiority = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_valencian_dominance
+		}
+		position = 10
+		provinces_to_highlight = {
+			any_trade_node_member_province = {
+				province_id = 1295
+			}
+			NOT = { owned_by = ROOT }
+			has_port = yes
+			NOT = { has_shipyard_building_trigger = yes }
+			NOT = { has_dock_building_trigger = yes }
+		}
+		trigger = {
+			1295 = {
+				all_trade_node_member_province = {
+					OR = {
+						NOT = { has_port = yes }
+						AND = {
+							owned_by = ROOT
+							OR = {
+								has_shipyard_building_trigger = yes
+								has_dock_building_trigger = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = VAL
+				}
+				add_country_modifier = {
+					name = val_germanies
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = val_germanies_weak
+					duration = 7300
+				}
+			}
+		}
+	}
+}
+
+valencia_missions_4 = {
+	slot = 4
+	generic = no
+	ai = yes
+	potential = {
+		tag = VAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	val_valencian_galleys = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_principality_valencia
+			val_nation_sailors
+		}
+		position = 2
+		provinces_to_highlight = { }
+		trigger = {
+			num_of_galley = 12
+		}
+		effect = {
+			create_admiral = {
+				tradition = 75
+			}
+			baleares_area = {
+				limit = {
+					NOT = { owned_by = ROOT }
+					NOT = { is_core = ROOT }
+					NOT = { is_empty = yes }
+					NOT = { is_wasteland = yes }
+				}
+				add_permanent_claim = ROOT
+			}
+		}
+	}
+
+	val_piracy_protection = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_privative_kingdom
+			val_valencian_galleys
+		}
+		position = 4
+		provinces_to_highlight = { }
+		trigger = {
+			1295 = {
+				custom_trigger_tooltip = {
+					tooltip = ME_5_TRADE_SHARE_NAVY_ROOT
+					NOT = {
+						any_country = {
+							NOT = { tag = ROOT }
+							PREV = {
+								trade_share = {
+									share = 10
+									country = PREV 
+								}
+							}
+							navy_size = ROOT
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			341 = {
+				custom_tooltip = COUNTRY_PERMANENT_CLAIM_TRADE_PORT_NODE
+				hidden_effect = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+							NOT = { is_empty = yes }
+							NOT = { is_wasteland = yes }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	val_fortress_piracy = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_piracy_protection
+		}
+		position = 6
+		provinces_to_highlight = {
+			OR = {
+				province_id = 341
+				province_id = 339
+			}
+			OR = {
+				NOT = { country_or_non_sovereign_subject_holds = ROOT }
+				devastation = 1
+			}
+		}
+		trigger = {
+			341 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { devastation = 1 }
+			}
+			339 = {
+				country_or_non_sovereign_subject_holds = ROOT
+				NOT = { devastation = 1 }
+			}
+		}
+		effect = {
+			if = {
+				limit = { religion = catholic }
+				add_papal_influence = 10
+			}
+			add_country_modifier = {
+				name = sar_piracy_defeaten
+				duration = 9125
+			}
+			341 = {
+				add_province_modifier = {
+					name = sar_purification_land
+					duration = 7300
+				}
+			}
+			339 = {
+				add_province_modifier = {
+					name = sar_purification_land
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	val_castle_santa_barbara = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_regne_valencia
+		}
+		position = 8
+		provinces_to_highlight = {
+			province_id = 1750
+			OR = {
+				NOT = { owned_by = ROOT }
+				NOT = { base_manpower = 10 }
+			}
+		}
+		trigger = {
+			1750 = {
+				owned_by = ROOT
+				base_manpower = 10
+			}
+		}
+		effect = {
+			1750 = {
+				if = {
+					limit = {
+						has_dlc = "Leviathan"
+						is_expanded_mod_active = { mod = great_monuments }
+						NOT = {
+							has_great_project = {
+								type = gme_santa_barbara_castle
+								tier = 3
+							}
+						}
+					}
+					add_great_project_tier = {
+						type = gme_santa_barbara_castle
+						tier = 1
+					}
+				}
+				else = {
+					add_permanent_province_modifier = {
+						name = val_castle_santa_barbara_modifier
+						duration = -1
+					}
+				}
+			}
+		}
+	}
+}
+
+valencia_missions_5 = {
+	slot = 5
+	generic = no
+	ai = yes
+	potential = {
+		tag = VAL
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	has_country_shield = yes
+
+	val_nation_sailors = {
+		icon = overshadow_venice
+		required_missions = { }
+		position = 1
+		provinces_to_highlight = {
+			has_port = yes
+			owned_by = ROOT
+			NOT = { num_of_times_improved = 2 }
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 2
+				has_port = yes
+				num_of_times_improved = 2
+			}
+		}
+		effect = {
+			add_yearly_sailors = 10
+			add_country_modifier = {
+				name = val_naval_propaganda
+				duration = 7300
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					num_of_times_improved = 2
+					NOT = { has_province_flag = me_upgraded }
+				}
+				set_province_flag = me_upgraded
+				add_or_upgrade_shipyard_building = yes
+			}
+			random_owned_province = {
+				limit = {
+					has_port = yes
+					num_of_times_improved = 2
+					NOT = { has_province_flag = me_upgraded }
+				}
+				set_province_flag = me_upgraded
+				add_or_upgrade_shipyard_building = yes
+			}
+		}
+	}
+
+	val_overshadow_genoa = {
+		icon = overshadow_venice
+		required_missions = {
+			val_nation_sailors
+		}
+		position = 3
+		provinces_to_highlight = { }
+		trigger = {
+			if = {
+				limit = {
+					exists = GEN
+				}
+				GEN = {
+					NOT = {
+						navy_size = ROOT
+					}
+				}
+			}
+			else = {
+				1298 = {
+					custom_trigger_tooltip = {
+						tooltip = ME_5_TRADE_SHARE_NAVY_ROOT
+						NOT = {
+							any_country = {
+								NOT = { tag = ROOT }
+								PREV = {
+									trade_share = {
+										share = 5
+										country = PREV 
+									}
+								}
+								navy_size = ROOT
+							}
+						}
+					}
+				}
+			}
+		}
+		effect = {
+			1298 = {
+				custom_tooltip = COUNTRY_PERMANENT_CLAIM_TRADE_PORT_NODE
+				hidden_effect = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+							NOT = { is_empty = yes }
+							NOT = { is_wasteland = yes }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+			1295 = {
+				custom_tooltip = COUNTRY_PERMANENT_CLAIM_TRADE_PORT_NODE
+				hidden_effect = {
+					every_trade_node_member_province = {
+						limit = {
+							has_port = yes
+							NOT = { owned_by = ROOT }
+							NOT = { is_core = ROOT }
+							NOT = { is_empty = yes }
+							NOT = { is_wasteland = yes }
+						}
+						add_permanent_claim = ROOT
+					}
+				}
+			}
+		}
+	}
+
+	val_purely_for_commerce = {
+		icon = overshadow_venice
+		required_missions = {
+			val_overshadow_genoa
+		}
+		position = 5
+		provinces_to_highlight = {
+			province_id = 101
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			owns = 101
+		}
+		effect = {
+			101 = {
+				create_or_add_center_of_trade_level = { level = 1 }
+			}
+			1298 = {
+				add_trade_node_income = 10
+			}
+		}
+	}
+
+	val_union_western_mediterranean = {
+		icon = overshadow_venice
+		required_missions = {
+			val_fortress_piracy
+			val_purely_for_commerce
+		}
+		position = 7
+		provinces_to_highlight = {
+			OR = {
+				any_trade_node_member_province = {
+					OR = {
+						province_id = 341
+						province_id = 1295
+						province_id = 1298
+					}
+				}
+				area = lower_andalucia_area
+				area = upper_andalucia_area
+				area = toledo_area
+				area = northern_morocco_area
+				area = algiers_area
+				area = barbary_coast_area
+			}
+			has_port = yes
+			NOT = { owned_by = ROOT }
+		}
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = VAL_UNION_WESTERN_MEDITRREANNEAN_TT
+				341 = {
+					all_trade_node_member_province = {
+						OR = {
+							has_port = no
+							owned_by = ROOT
+						}
+					}
+				}
+				1295 = {
+					all_trade_node_member_province = {
+						OR = {
+							has_port = no
+							owned_by = ROOT
+						}
+					}
+				}
+				1298 = {
+					all_trade_node_member_province = {
+						OR = {
+							has_port = no
+							owned_by = ROOT
+						}
+					}
+				}
+				lower_andalucia_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						NOT = { has_port = yes }
+					}
+				}
+				upper_andalucia_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						NOT = { has_port = yes }
+					}
+				}
+				toledo_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						NOT = { has_port = yes }
+					}
+				}
+				northern_morocco_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						NOT = { has_port = yes }
+					}
+				}
+				algiers_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						NOT = { has_port = yes }
+					}
+				}
+				barbary_coast_area = {
+					type = all
+					OR = {
+						owned_by = ROOT
+						NOT = { has_port = yes }
+					}
+				}
+			}
+		}
+		effect = {
+			if = {
+				limit = {
+					tag = VAL
+				}
+				add_country_modifier = {
+					name = val_valencian_oranges
+					desc = me_until_tag_switch_tt
+					duration = -1
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = val_valencian_oranges_weak
+					duration = 7300
+				}
+			}
+		}
+	}
+
+	val_global_superiority = {
+		icon = me_mission_persia_audience_with_shah
+		required_missions = {
+			val_sugar_islands
+			val_port_panama
+			val_mediterranean_superiority
+			val_union_western_mediterranean
+		}
+		position = 11
+		provinces_to_highlight = {
+			OR = {
+				AND = {
+					continent = europe
+					has_port = yes
+					OR = {
+						NOT = { owned_by = ROOT }
+						NOT = { has_shipyard_building_trigger = yes }
+					}
+					NOT = {
+						ROOT = {
+							num_of_owned_provinces_with = {
+								value = 50
+								continent = europe
+								has_port = yes
+								has_shipyard_building_trigger = yes
+							}
+						}
+					}
+				}
+				AND = {
+					NOT = { continent = europe }
+					has_port = yes
+					OR = {
+						NOT = { country_or_non_sovereign_subject_holds = ROOT }
+						NOT = { has_shipyard_building_trigger = yes }
+					}
+					NOT = {
+						ROOT = {
+							num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+								value = 50
+								continent = europe
+								has_port = yes
+								has_shipyard_building_trigger = yes
+							}
+						}
+					}
+				}
+			}
+		}
+		trigger = {
+			num_of_owned_provinces_with = {
+				value = 50
+				continent = europe
+				has_port = yes
+				has_shipyard_building_trigger = yes
+			}
+			num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
+				value = 50
+				NOT = { continent = europe }
+				has_port = yes
+				has_shipyard_building_trigger = yes
+			}
+		}
+		effect = {
+			remove_country_modifier = val_valencian_stato_mar
+			add_country_modifier = {
+				name = val_valencian_sea_dominance
+				duration = -1
+			}
+		}
+	}
+}
