@@ -220,6 +220,86 @@ ME_Ramazan_incident_missions_2 = {
 	}
 	has_country_shield = yes
 
+	RAM_War_Time_Policies = {
+		icon = me_ram_copt
+		position = 1
+		provinces_to_highlight = {
+			owned_by = ROOT
+			has_manpower_building_trigger = yes
+		}
+		trigger = {
+			calc_true_if = {
+				amount = 5
+				all_province = {
+					has_manpower_building_trigger = yes
+					num_of_times_improved_by_owner = 5
+				}	
+			}
+		}
+		effect = {
+			custom_tooltip = ME_TUR_conscription_center_tt
+			while = {
+				limit = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 10
+							has_province_flag = ME_TUR_conscription_center
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_manpower_building_trigger = yes
+					}
+					set_province_flag = ME_TUR_conscription_center
+					add_province_modifier = {
+						name = ME_TUR_conscription_center
+						duration = -1
+					}
+				}
+			}
+			hidden_effect = {
+				export_to_variable = {
+					which = ME_TUR_starting_army_variable
+					value = trigger_value:army_size
+				}
+			}
+		}
+	}
+
+	RAM_Supplying_Front = {
+		icon = me_ram_copt
+		position = 2
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ME_TUR_increased_army_by_twenty
+				variable_arithmetic_trigger = {
+					export_to_variable = {
+						which = ME_TUR_soldier_current_variable
+						value = trigger_value:army_size
+					}
+					change_variable = {
+						which = ME_TUR_soldier_current_variable
+						value = 20
+					}
+					check_variable = {
+						which = ME_TUR_soldier_current_variable
+						which = ME_TUR_starting_army_variable
+					}
+				}
+			}
+		}
+		effect = {
+			custom_tooltip = ME_TUR_supply_network_reward
+			hidden_effect = {
+				add_country_modifier = {
+					name = ME_TUR_supply_network
+					duration = -1
+				}
+			}
+		}
+	}
+
 	RAM_Time_Need = {
 		icon = me_ram_copt
 		position = 1
@@ -439,7 +519,7 @@ ME_Ramazan_incident_missions_2 = {
 						}
 					}
 				}
-				PLC = { white_peace = TUR }
+				add_years_of_income = 1
 			}
 			else_if = {
 				limit = {
@@ -451,7 +531,7 @@ ME_Ramazan_incident_missions_2 = {
 						}
 					}
 				}
-				POL = { white_peace = TUR }
+				add_years_of_income = 1
 			}
 			else = { add_prestige = 10 }
 		}
