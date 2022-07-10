@@ -2127,3 +2127,162 @@ add_positive_or_negative_piety = {
 
 ME_technology_split_120_power = { #placeholder, I will put the implementation here later!
 }
+
+#ME_add_to_empire = { tag = x }
+ME_add_to_empire = {
+	$tag$ = {
+		custom_tooltip = ME_join_the_empire	
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					continent = europe
+				}
+				set_in_empire = yes
+			}
+			set_country_flag = reined_in_for_shadow_kingdom #in case that happens
+		}
+	}
+}
+
+# ME_distribute_development = { 
+#	development = x //The 3 development types. E.G. development = add_base_production
+#	amount = x //How many development to add. E.G amount = 10
+#	limit = " " OPTIONAL //takes actual triggers. E.G. limit = " NOT = { culture = ROOT } "
+#}
+ME_distribute_development = {
+	hidden_effect = {
+		set_variable = {
+			which = ME_$development$_loop
+			value = 0
+		}
+		while = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = ME_$development$_loop
+						value = $amount$
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					[[limit] $limit$ ]
+				}
+				$development$ = 1
+			}
+			change_variable = {            
+				which = ME_$development$_loop
+				value = 1
+			}
+		}
+	}
+	custom_tooltip = $development$_$amount$
+}
+
+# ME_remove_development_distributed = { 
+#	development = x //The 3 development types. E.G. development = add_base_production
+#	development_check = x //put the trigger version here. E.G. development_check = base_production
+#	amount = x //How many development to add. E.G amount = 10
+#	limit = " " OPTIONAL //takes actual triggers. E.G. limit = " NOT = { culture = ROOT } "
+#}
+ME_remove_development_distributed = {
+	hidden_effect = {
+		set_variable = {
+			which = ME_$development$_loop
+			value = 0
+		}
+		while = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = ME_$development$_loop
+						value = $amount$
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					[[limit] $limit$ ]
+				}
+				$development$ = -1
+			}
+			change_variable = {            
+				which = ME_$development$_loop
+				value = 1
+			}
+		}
+	}
+	custom_tooltip = remove_$development$_$amount$
+}
+
+#ME_add_all_ruler_stats = { amount = x }
+ME_add_all_ruler_stats = {
+	change_adm = $amount$
+	change_dip = $amount$
+	change_mil = $amount$
+}
+
+#ME_country_event_delay = { id = x }
+#Done for some small flavor
+ME_country_event_delay = {
+	hidden_effect = {
+		country_event = { id = $id$ days = 1 }
+	}
+	tooltip = {
+		country_event = { id = $id$ }
+	}
+}
+
+#If need be, we can convert it to something like:
+#ME_build_production_building = { province = x }
+#and add a tooltip
+ME_build_production_building = {
+	if = {
+		limit = {
+			NOT = {
+				has_building = workshop 
+				has_building = counting_house
+			}
+		}
+		add_building = workshop
+	}
+	else_if = {
+		limit = {
+			has_building = workshop 
+		}
+		add_building = counting_house
+	}
+	else_if = {
+		limit = {
+			has_building = counting_house 
+		}
+		add_base_production = 2
+	}
+}
+
+#If need be, we can convert it to something like:
+#ME_build_shipyard_building = { province = x }
+#and add a tooltip
+ME_build_shipyard_building = {
+	if = {
+		limit = {
+			NOT = {
+				has_building = shipyard 
+				has_building = grand_shipyard
+			}
+		}
+		add_building = shipyard
+	}
+	else_if = {
+		limit = {
+			has_building = shipyard 
+		}
+		add_building = grand_shipyard
+	}
+	else_if = {
+		limit = {
+			has_building = grand_shipyard 
+		}
+		add_base_production = 2
+	}
+}
