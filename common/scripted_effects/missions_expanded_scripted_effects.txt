@@ -2104,7 +2104,7 @@ ME_give_claims = {
 	[[region]
 		ME_give_area_claims = { group = $region$ tag = ROOT }
 	]
-	
+
 }
 
 ME_add_years_of_trade_income = {
@@ -2140,7 +2140,7 @@ ME_add_to_empire = {
 		tooltip = {
 			set_in_empire = yes
 		}
-			
+
 		hidden_effect = {
 			every_owned_province = {
 				limit = {
@@ -2153,22 +2153,22 @@ ME_add_to_empire = {
 	}
 }
 
-# ME_distribute_development = { 
-#	development = x //The 3 development types. E.G. development = add_base_production
+# ME_distribute_development = {
+#	type = x //The 3 development types. E.G. type = production
 #	amount = x //How many development to add. E.G amount = 10
 #	limit = " " OPTIONAL //takes actual triggers. E.G. limit = " NOT = { culture = ROOT } "
 #}
 ME_distribute_development = {
 	hidden_effect = {
 		set_variable = {
-			which = ME_$development$_loop
+			which = ME_$type$_loop
 			value = 0
 		}
 		while = {
 			limit = {
 				NOT = {
 					check_variable = {
-						which = ME_$development$_loop
+						which = ME_$type$_loop
 						value = $amount$
 					}
 				}
@@ -2177,34 +2177,33 @@ ME_distribute_development = {
 				limit = {
 					[[limit] $limit$ ]
 				}
-				$development$ = 1
+				add_base_$type$ = 1
 			}
-			change_variable = {            
-				which = ME_$development$_loop
+			change_variable = {
+				which = ME_$type$_loop
 				value = 1
 			}
 		}
 	}
-	custom_tooltip = $development$_$amount$
+	custom_tooltip = $type$_$amount$
 }
 
-# ME_remove_development_distributed = { 
-#	development = x //The 3 development types. E.G. development = add_base_production
-#	development_check = x //put the trigger version here. E.G. development_check = base_production
+# ME_remove_development_distributed = {
+#	type = x //The 3 development types. E.G. type = production
 #	amount = x //How many development to add. E.G amount = 10
 #	limit = " " OPTIONAL //takes actual triggers. E.G. limit = " NOT = { culture = ROOT } "
 #}
 ME_remove_development_distributed = {
 	hidden_effect = {
 		set_variable = {
-			which = ME_$development$_loop
+			which = ME_$type$_loop
 			value = 0
 		}
 		while = {
 			limit = {
 				NOT = {
 					check_variable = {
-						which = ME_$development$_loop
+						which = ME_$type$_loop
 						value = $amount$
 					}
 				}
@@ -2212,17 +2211,17 @@ ME_remove_development_distributed = {
 			random_owned_province = {
 				limit = {
 					[[limit] $limit$ ]
-					$development_check$ = 2 #In case the province has 1 development of that type
+					base_$type$ = 2 #In case the province has 1 development of that type
 				}
-				$development$ = -1
+				add_base_$type$ = -1
 			}
-			change_variable = {            
-				which = ME_$development$_loop
+			change_variable = {
+				which = ME_$type$_loop
 				value = 1
 			}
 		}
 	}
-	custom_tooltip = remove_$development$_$amount$
+	custom_tooltip = remove_$type$_$amount$
 }
 
 #ME_country_event_delay = { id = x }
