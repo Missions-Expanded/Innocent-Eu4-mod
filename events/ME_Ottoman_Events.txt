@@ -21,20 +21,7 @@ country_event = { #Principality of Transylvania
 			cede_province = TRA
 			add_core = TRA
 		}
-		if = {
-			limit = {
-				is_expanded_mod_active = {
-					mod = subjects
-				}
-			}
-			vassalize = TRA
-			TRA = {
-				change_subject_type = {
-					subject_type = muslim_tributary_vassal
-				}
-			}
-		}
-		else = { vassalize = TRA }
+		vassalize = TRA
 		TRA = {
 			slovakia_area = {
 				limit = {
@@ -67,6 +54,39 @@ country_event = { #Principality of Transylvania
 	}
 	option = {
 		name = ME_Ottoman_Events.1.OPT2
+		me_distribute_development = {
+			type = adm
+			amount = 10
+			limit = "
+   				OR = {
+    				area = alfold_area
+					area = transylvania_area
+    				area = southern_transylvania_area
+				}
+			"
+		}
+		me_distribute_development = {
+			type = dip
+			amount = 10
+			limit = "
+   				OR = {
+    				area = alfold_area
+					area = transylvania_area
+    				area = southern_transylvania_area
+				}
+			"
+		}
+		me_distribute_development = {
+			type = mil
+			amount = 10
+			limit = "
+   				OR = {
+    				area = alfold_area
+					area = transylvania_area
+    				area = southern_transylvania_area
+				}
+			"
+		}
 		alfold_area = {
 			add_province_modifier = {
 				name = ME_Ottoman_Ownership
@@ -2658,6 +2678,7 @@ country_event = { #Muslim Brethren
 			}
 		}
 		FROM = { vassalize = ROOT }
+		FROM = { set_country_flag = ME_TUR_obtained_client_state }
 		west_india_region = {
 			limit = {
 				NOT = { owned_by = ROOT }
@@ -2968,31 +2989,6 @@ country_event = { #A Claimant from Abroad
 	option = {
 		name = ME_Ottoman_Events.57.OPT1
 		set_country_flag = ME_TUR_AKK_unlock_pretender
-		random_owned_province = {
-			limit = {
-				any_neighbor_province = {
-					owned_by = FROM
-				}
-			}
-			spawn_rebels = {
-				type = pretender_rebels
-				size = 2
-				friend = FROM	
-				leader_dynasty = name
-			}
-		}
-		set_country_flag = ME_TUR_AKK_last
-	}
-}
-country_event = { #A Claimant from Abroad
-	id = ME_Ottoman_Events.57
-	title = ME_Ottoman_Events.57.t 
-	desc = ME_Ottoman_Events.57.d
-	picture = PAINTER_ARTIST_eventPicture
-	is_triggered_only = yes
-	option = {
-		name = ME_Ottoman_Events.57.OPT1
-		set_country_flag = ME_TUR_AKK_unlock_pretender
 		if = {
 			limit = {
 				any_owned_province = {
@@ -3047,12 +3043,12 @@ country_event = { #A Call for help
 	immediate = { clr_country_flag = ME_TUR_AKK_start }
 	option = {
 		name = ME_Ottoman_Events.58.OPT1
+		custom_tooltip = ME_TUR_winning_condition
 		add_treasury = -100
 		add_manpower = -10
 		AKK = {
 			country_event = { id = ME_Ottoman_Events.59 }
 		}
-		custom_tooltip = ME_TUR_winning_condition
 	}
 	option = {
 		name = ME_Ottoman_Events.58.OPT2
@@ -3130,7 +3126,7 @@ country_event = { #A New Monarch
 	picture = PAINTER_ARTIST_eventPicture
 	trigger = {
 		tag = TUR
-		has_country_flag = ME_TUR_AKK_last
+		has_country_flag = ME_TUR_AKK_rebels_last
 		AKK = {
 			calc_true_if = {
 				amount = 5
@@ -3143,7 +3139,7 @@ country_event = { #A New Monarch
 	option = {
 		name = ME_Ottoman_Events.60.OPT1
 		vassalize = AKK
-		clr_country_flag = ME_TUR_AKK_last
+		AKK = { clr_country_flag = ME_TUR_AKK_unlock_pretender }
 		clr_country_flag = ME_TUR_AKK_rebels_last
 	}
 }
@@ -3154,7 +3150,7 @@ country_event = { #A Failed Attempt
 	picture = PAINTER_ARTIST_eventPicture
 	trigger = {
 		tag = TUR
-		has_country_flag = ME_TUR_AKK_last
+		has_country_flag = ME_TUR_AKK_rebels_last
 		AKK = {
 			NOT = {
 				OR = {
@@ -3191,7 +3187,7 @@ country_event = { #A Failed Attempt
 		add_dip_power = -100
 		add_mil_power = -100
 		add_prestige = -25
-		clr_country_flag = ME_TUR_AKK_last
+		AKK = { clr_country_flag = ME_TUR_AKK_unlock_pretender }
 		clr_country_flag = ME_TUR_AKK_rebels_last
 	}
 }
