@@ -343,7 +343,10 @@ ME_Ramazan_incident_missions_2 = {
 						}
 					}
 				}
-				add_years_of_income = 1
+				add_power_projection = {
+					type = ME_bested_winged_hussars
+					amount = 20
+				}
 			}
 			else_if = {
 				limit = {
@@ -355,7 +358,10 @@ ME_Ramazan_incident_missions_2 = {
 						}
 					}
 				}
-				add_years_of_income = 1
+				add_power_projection = {
+					type = ME_bested_winged_hussars
+					amount = 20
+				}
 			}
 			else = { add_prestige = 10 }
 		}
@@ -371,6 +377,46 @@ ME_Ramazan_incident_missions_3 = {
 		has_country_flag = ME_TUR_Change_Tree
 	}
 	has_country_shield = yes
+
+	RAM_cloak_dagger = {
+		icon = me_ram_copt
+		position = 1
+		trigger = {
+			calc_true_if = {
+				amount = 2
+				all_country = {
+					has_spy_network_from = {
+						who = ROOT
+						value = 25
+					}
+				}
+			}
+		}
+		effect = {
+			random_country = {
+				limit = {
+					is_in_war = {
+						attacker_leader = ROOT
+						casus_belli = ME_Ottomans_Roman_Facade_CB
+						participants = PREV
+					}
+				}
+				set_country_flag = ME_TUR_removed_fow
+				remove_fow = 24
+			}
+			random_country = {
+				limit = {
+					is_in_war = {
+						attacker_leader = ROOT
+						casus_belli = ME_Ottomans_Roman_Facade_CB
+						participants = PREV
+					}
+					NOT = { has_country_flag = ME_TUR_removed_fow }
+				}
+				remove_fow = 24
+			}
+		}
+	}
 
 	RAM_Time_Need = {
 		icon = me_ram_copt
@@ -491,7 +537,9 @@ ME_Ramazan_incident_missions_3 = {
 						}
 					}
 				}
-				TUR = { white_peace = SPA }
+				TUR = { 
+					country_event = { id = ME_Ottoman_Events.82 }
+				}
 			}
 			else_if = {
 				limit = {
@@ -503,7 +551,9 @@ ME_Ramazan_incident_missions_3 = {
 						}
 					}
 				}
-				TUR = { white_peace = CAS }
+				TUR = { 
+					country_event = { id = ME_Ottoman_Events.82 }
+				}
 			}
 			else_if = {
 				limit = {
@@ -515,7 +565,9 @@ ME_Ramazan_incident_missions_3 = {
 						}
 					}
 				}
-				TUR = { white_peace = ARA }
+				TUR = { 
+					country_event = { id = ME_Ottoman_Events.82 }
+				}
 			}
 			else_if = {
 				limit = {
@@ -527,7 +579,9 @@ ME_Ramazan_incident_missions_3 = {
 						}
 					}
 				}
-				TUR = { white_peace = POR }
+				TUR = { 
+					country_event = { id = ME_Ottoman_Events.82 }
+				}
 			}
 			else = { add_prestige = 1 }
 		}
@@ -574,6 +628,10 @@ ME_Ramazan_incident_missions_3 = {
 					add_adm_power = 100
 					add_dip_power = 100
 					add_mil_power = 100
+					add_power_projection = {
+						type = ME_defeated_emperor
+						amount = 50
+					}
 				}
 			}
 			TUR = { inherit = RAM }
@@ -611,7 +669,7 @@ ME_Ramazan_incident_missions_4 = {
 		icon = me_ram_copt
 		position = 1
 		provinces_to_highlight = {
-			owned_by = ROOT
+			owned_by = TUR
 			has_manpower_building_trigger = yes
 		}
 		trigger = {
@@ -624,26 +682,9 @@ ME_Ramazan_incident_missions_4 = {
 			}
 		}
 		effect = {
-			custom_tooltip = ME_TUR_conscription_center_tt
-			while = {
-				limit = {
-					NOT = {
-						num_of_owned_provinces_with = {
-							value = 10
-							has_province_flag = ME_TUR_conscription_center
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						has_manpower_building_trigger = yes
-					}
-					set_province_flag = ME_TUR_conscription_center
-					add_province_modifier = {
-						name = ME_TUR_conscription_center
-						duration = -1
-					}
-				}
+			add_country_modifier = {
+				name = ME_TUR_conscription_center
+				duration = 1825
 			}
 		}
 	}
@@ -662,7 +703,7 @@ ME_Ramazan_incident_missions_4 = {
 			}
 		}
 		effect = {
-			add_army_tradition = 10
+			add_years_of_income = 2
 		}
 	}
 
@@ -747,18 +788,8 @@ ME_Ramazan_incident_missions_4 = {
 			else = { always = yes }
 		}
 		effect = {
-			while = {
-				limit = {
-					calc_true_if = {
-						amount = 10
-						all_province = {
-							owned_by = emperor
-							controlled_by = TUR
-							fort_level = 1
-						}
-					}
-				}
-			}
+			custom_tooltip = ME_TUR_winning_sieges_gives_manpower_tt
+			set_country_flag = ME_TUR_sieges_give_manpower
 		}
 	}
 }
