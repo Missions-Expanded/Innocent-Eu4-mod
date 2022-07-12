@@ -503,6 +503,7 @@ country_event = { #hidden event
 	desc = ME_Ottoman_Events.10.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		is_in_war = {
 			attacker_leader = ROOT
@@ -511,6 +512,10 @@ country_event = { #hidden event
 	}
 	option = {
 		name = ME_Ottoman_Events.10.OPT1
+		set_variable = {
+			which = ME_TUR_roman_facade_battles_won_variable
+			value = 0
+		}
 		if = {
 			limit = { 
 				exists = PLC
@@ -866,6 +871,7 @@ country_event = { #Hidden event
 	desc = ME_Ottoman_Events.15.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		OR = {
 			NOT = { 
@@ -1583,6 +1589,7 @@ country_event = { #Renovating the Capital
 	title = ME_Ottoman_Events.28.t
 	desc = ME_Ottoman_Events.28.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		had_country_flag = {
 			flag = ME_TUR_renovating_capital_start
@@ -1631,6 +1638,7 @@ country_event = { #Renovating the Capital
 	title = ME_Ottoman_Events.29.t
 	desc = ME_Ottoman_Events.29.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		had_country_flag = {
 			flag = ME_TUR_renovating_capital_start
@@ -1679,6 +1687,7 @@ country_event = { #Renovating the Capital
 	title = ME_Ottoman_Events.30.t
 	desc = ME_Ottoman_Events.30.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		had_country_flag = {
 			flag = ME_TUR_renovating_capital_start
@@ -1727,6 +1736,7 @@ country_event = { #Renovating the Capital
 	title = ME_Ottoman_Events.31.t
 	desc = ME_Ottoman_Events.31.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		had_country_flag = {
 			flag = ME_TUR_renovating_capital_start
@@ -1775,6 +1785,7 @@ country_event = { #Renovating the Capital
 	title = ME_Ottoman_Events.32.t
 	desc = ME_Ottoman_Events.32.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		had_country_flag = {
 			flag = ME_TUR_renovating_capital_start
@@ -1864,19 +1875,21 @@ country_event = { #Hidden event for slavery tiers affecting production
 	desc = ME_Ottoman_Events.34.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
-	trigger = { has_country_flag = ME_TUR_slavery_tier_production }
+	trigger = { 
+		me_check_slaves_variable = yes
+	}
 	option = {
 		name = ME_Ottoman_Events.34.OPT1
 		if = {
 			limit = {
 				check_variable = {
 					which = ME_TUR_slave_variable
-					value = 75
+					value = 0
 				}
 				NOT = {
 					check_variable = {
-						which = ME_TUR_slave_variable
-						value = 100
+						which = yourvariable
+						value = 25
 					}
 				}
 			}
@@ -1884,31 +1897,11 @@ country_event = { #Hidden event for slavery tiers affecting production
 				limit = {
 					trade_goods = slaves
 				}
+				remove_province_modifier = ME_TUR_slavery_1
+				remove_province_modifier = ME_TUR_slavery_2
+				remove_province_modifier = ME_TUR_slavery_3
 				add_province_modifier = {
-					name = ME_TUR_slavery_3
-					duration = -1
-				}
-			}
-		}
-		else_if = {
-			limit = {
-				check_variable = {
-					which = ME_TUR_slave_variable
-					value = 50
-				}
-				NOT = {
-					check_variable = {
-						which = ME_TUR_slave_variable
-						value = 75
-					}
-				}
-			}
-			every_owned_province = {
-				limit = {
-					trade_goods = slaves
-				}
-				add_province_modifier = {
-					name = ME_TUR_slavery_2
+					name = ME_TUR_slavery_0
 					duration = -1
 				}
 			}
@@ -1921,7 +1914,7 @@ country_event = { #Hidden event for slavery tiers affecting production
 				}
 				NOT = {
 					check_variable = {
-						which = ME_TUR_slave_variable
+						which = yourvariable
 						value = 50
 					}
 				}
@@ -1930,6 +1923,9 @@ country_event = { #Hidden event for slavery tiers affecting production
 				limit = {
 					trade_goods = slaves
 				}
+				remove_province_modifier = ME_TUR_slavery_0
+				remove_province_modifier = ME_TUR_slavery_2
+				remove_province_modifier = ME_TUR_slavery_3
 				add_province_modifier = {
 					name = ME_TUR_slavery_1
 					duration = -1
@@ -1940,12 +1936,12 @@ country_event = { #Hidden event for slavery tiers affecting production
 			limit = {
 				check_variable = {
 					which = ME_TUR_slave_variable
-					value = 0
+					value = 50
 				}
 				NOT = {
 					check_variable = {
-						which = ME_TUR_slave_variable
-						value = 25
+						which = yourvariable
+						value = 75
 					}
 				}
 			}
@@ -1953,8 +1949,31 @@ country_event = { #Hidden event for slavery tiers affecting production
 				limit = {
 					trade_goods = slaves
 				}
+				remove_province_modifier = ME_TUR_slavery_0
+				remove_province_modifier = ME_TUR_slavery_1
+				remove_province_modifier = ME_TUR_slavery_3
 				add_province_modifier = {
-					name = ME_TUR_slavery_0
+					name = ME_TUR_slavery_2
+					duration = -1
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = ME_TUR_slave_variable
+					value = 75
+				}
+			}
+			every_owned_province = {
+				limit = {
+					trade_goods = slaves
+				}
+				remove_province_modifier = ME_TUR_slavery_0
+				remove_province_modifier = ME_TUR_slavery_1
+				remove_province_modifier = ME_TUR_slavery_2
+				add_province_modifier = {
+					name = ME_TUR_slavery_3
 					duration = -1
 				}
 			}
@@ -2194,6 +2213,7 @@ country_event = { #hidden event
 				duration = -1
 			}
 		}
+		clr_country_flag = ME_TUR_karaman_unrest_start
 	}
 }
 country_event = { #Enderun Graduates
@@ -2601,7 +2621,7 @@ country_event = { #Royal Style
 		}
 		add_country_modifier = {
 			name = ME_TUR_upkeep_mosques
-			duration = -1
+			duration = 18250
 		}
 	}
 }
@@ -2611,6 +2631,7 @@ country_event = { #hidden event to remove modifier
 	desc = ME_Ottoman_Events.48.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		HED = {
 			NOT = {
@@ -3240,6 +3261,7 @@ country_event = { #Hidden event for Baghdad
 	title = ME_Ottoman_Events.63.t 
 	desc = ME_Ottoman_Events.63.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		tag = TUR
 		410 = {
@@ -3388,6 +3410,7 @@ country_event = { #Unfortunate Circumnavigation
 	title = ME_Ottoman_Events.67.t 
 	desc = ME_Ottoman_Events.67.d
 	picture = PAINTER_ARTIST_eventPicture
+	fire_only_once = yes
 	trigger = {
 		has_country_flag = ME_TUR_protectionism_chosen
 		any_country = {
@@ -3609,6 +3632,7 @@ country_event = { #Hidden Event
 	desc = ME_Ottoman_Events.72.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		shirvan_area = {
 			type = all
@@ -3641,6 +3665,7 @@ country_event = { #Hidden Event
 	desc = ME_Ottoman_Events.73.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		tag = TUR
 	}
@@ -3655,6 +3680,7 @@ country_event = { #Hidden Event
 	desc = ME_Ottoman_Events.74.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		has_country_flag = ME_TUR_beylik_mission_completed
 		NOT = { is_year = 1455 }
@@ -3672,6 +3698,7 @@ country_event = { #Hidden event to remove orban decision
 	desc = ME_Ottoman_Events.75.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		tag = TUR
 		had_country_flag = {
@@ -3721,6 +3748,7 @@ country_event = { #hidden event
 	desc = ME_Ottoman_Events.77.d
 	picture = PAINTER_ARTIST_eventPicture
 	hidden = yes
+	fire_only_once = yes
 	trigger = {
 		RMN = {
 			NOT = { is_subject_of = ROOT }
@@ -3816,6 +3844,32 @@ country_event = { #hidden
 		name = ME_Ottoman_Events.80.OPT1
 		capital_scope = {
 			remove_province_modifier = ME_TUR_sicilian_knowledge
+		}
+	}
+}
+country_event = { #Investments in Arabia
+	id = ME_Ottoman_Events.81
+	title = ME_Ottoman_Events.81.t
+	desc = ME_Ottoman_Events.81.d
+	picture = PAINTER_ARTIST_eventPicture
+	trigger = {
+		had_country_flag = {
+			flag = ME_TUR_improve_arabia_start
+			days = 365
+		}
+	}
+	immediate = {
+		clr_country_flag = ME_TUR_improve_arabia_start
+		set_country_flag = ME_TUR_improve_arabia_start
+	}
+	option = {
+		name = ME_Ottoman_Events.81.OPT1
+		random_owned_province = {
+			limit = {
+				region = arabia_region
+			}
+			add_base_production = 1
+			add_base_manpower = 1
 		}
 	}
 }

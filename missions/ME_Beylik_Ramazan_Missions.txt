@@ -164,7 +164,7 @@ ME_Ramazan_incident_missions_1 = {
 
 	RAM_Wing_Plucking = {
 		icon = me_ram_copt
-		position = 1
+		position = 2
 		trigger = {
 			custom_trigger_tooltip = {
 				tooltip = ME_RAM_Occupy_Provinces_tt
@@ -220,42 +220,22 @@ ME_Ramazan_incident_missions_2 = {
 	}
 	has_country_shield = yes
 
-	RAM_War_Time_Policies = {
+	RAM_Preparing_Forces = {
 		icon = me_ram_copt
 		position = 1
-		provinces_to_highlight = {
-			owned_by = ROOT
-			has_manpower_building_trigger = yes
-		}
 		trigger = {
-			calc_true_if = {
-				amount = 5
-				all_province = {
-					has_manpower_building_trigger = yes
-					num_of_times_improved_by_owner = 5
-				}	
+			TUR = {
+				OR = {
+					army_size_percentage = 0.1
+					army_size = 100
+				}
 			}
 		}
 		effect = {
-			custom_tooltip = ME_TUR_conscription_center_tt
-			while = {
-				limit = {
-					NOT = {
-						num_of_owned_provinces_with = {
-							value = 10
-							has_province_flag = ME_TUR_conscription_center
-						}
-					}
-				}
-				random_owned_province = {
-					limit = {
-						has_manpower_building_trigger = yes
-					}
-					set_province_flag = ME_TUR_conscription_center
-					add_province_modifier = {
-						name = ME_TUR_conscription_center
-						duration = -1
-					}
+			TUR = {
+				add_country_modifier = {
+					name = ME_TUR_Ottoman_Storm
+					duration = -1
 				}
 			}
 			hidden_effect = {
@@ -269,6 +249,7 @@ ME_Ramazan_incident_missions_2 = {
 
 	RAM_Supplying_Front = {
 		icon = me_ram_copt
+		required_missions = { RAM_Preparing_Forces }
 		position = 2
 		trigger = {
 			custom_trigger_tooltip = {
@@ -300,9 +281,104 @@ ME_Ramazan_incident_missions_2 = {
 		}
 	}
 
+	RAM_Pride_Humiliation = {
+		icon = me_ram_copt
+		position = 3
+		required_missions = { 
+			RAM_Wing_Plucking
+			RAM_Supplying_Front
+		}
+		trigger = {
+			if = {
+				limit = {
+					exists = PLC
+					TUR = {
+						is_in_war = {
+							attacker_leader = TUR
+							casus_belli = ME_Ottomans_Roman_Facade_CB
+							participants = PLC
+						}
+					}
+				}
+			}
+			PLC = {
+				current_war_losses = { 
+					who_with = TUR
+					type = cavalry
+					cause = battle
+					amount = 30
+				}
+			}
+			else_if = {
+				limit = {
+					NOT = { exists = PLC }
+					exists = POL
+					TUR = {
+						is_in_war = {
+							attacker_leader = TUR
+							casus_belli = ME_Ottomans_Roman_Facade_CB
+							participants = POL
+						}
+					}
+				}
+				POL = {
+					current_war_losses = { 
+						who_with = TUR
+						type = cavalry
+						cause = battle
+						amount = 30
+					}
+				}
+			}
+			else = { always = yes }
+		}
+		effect = {
+			if = {
+				limit = {
+					TUR = {
+						is_in_war = {
+							attacker_leader = TUR
+							casus_belli = ME_Ottomans_Roman_Facade_CB
+							participants = PLC
+						}
+					}
+				}
+				add_years_of_income = 1
+			}
+			else_if = {
+				limit = {
+					TUR = {
+						is_in_war = {
+							attacker_leader = TUR
+							casus_belli = ME_Ottomans_Roman_Facade_CB
+							participants = POL
+						}
+					}
+				}
+				add_years_of_income = 1
+			}
+			else = { add_prestige = 10 }
+		}
+	}
+}
+
+ME_Ramazan_incident_missions_3 = {
+	slot = 3
+	generic = no
+	ai = yes
+	potential = {
+		tag = RAM
+		has_country_flag = ME_TUR_Change_Tree
+	}
+	has_country_shield = yes
+
 	RAM_Time_Need = {
 		icon = me_ram_copt
-		position = 1
+		position = 3
+		required_missions = { 
+			RAM_Supplying_Front 
+			RAM_art_war
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -457,101 +533,14 @@ ME_Ramazan_incident_missions_2 = {
 		}
 	}
 
-	RAM_Pride_Humiliation = {
-		icon = me_ram_copt
-		position = 2
-		required_missions = { 
-			RAM_Time_Need 
-			RAM_Time_Need
-		}
-		trigger = {
-			if = {
-				limit = {
-					exists = PLC
-					TUR = {
-						is_in_war = {
-							attacker_leader = TUR
-							casus_belli = ME_Ottomans_Roman_Facade_CB
-							participants = PLC
-						}
-					}
-				}
-			}
-			PLC = {
-				current_war_losses = { 
-					who_with = TUR
-					type = cavalry
-					cause = battle
-					amount = 30
-				}
-			}
-			else_if = {
-				limit = {
-					NOT = { exists = PLC }
-					exists = POL
-					TUR = {
-						is_in_war = {
-							attacker_leader = TUR
-							casus_belli = ME_Ottomans_Roman_Facade_CB
-							participants = POL
-						}
-					}
-				}
-				POL = {
-					current_war_losses = { 
-						who_with = TUR
-						type = cavalry
-						cause = battle
-						amount = 30
-					}
-				}
-			}
-			else = { always = yes }
-		}
-		effect = {
-			if = {
-				limit = {
-					TUR = {
-						is_in_war = {
-							attacker_leader = TUR
-							casus_belli = ME_Ottomans_Roman_Facade_CB
-							participants = PLC
-						}
-					}
-				}
-				add_years_of_income = 1
-			}
-			else_if = {
-				limit = {
-					TUR = {
-						is_in_war = {
-							attacker_leader = TUR
-							casus_belli = ME_Ottomans_Roman_Facade_CB
-							participants = POL
-						}
-					}
-				}
-				add_years_of_income = 1
-			}
-			else = { add_prestige = 10 }
-		}
-	}
-}
-
-ME_Ramazan_incident_missions_3 = {
-	slot = 3
-	generic = no
-	ai = yes
-	potential = {
-		tag = RAM
-		has_country_flag = ME_TUR_Change_Tree
-	}
-	has_country_shield = yes
-
 	RAM_Show_Strength = {
 		icon = me_ram_copt
-		position = 3
-		required_missions = { RAM_Pride_Humiliation }
+		position = 4
+		required_missions = { 
+			RAM_Pride_Humiliation
+			RAM_Time_Need
+			RAM_Fishing_Off
+		}
 		provinces_to_highlight = {
 			is_capital = yes
 			owner = { is_emperor = yes }
@@ -588,9 +577,21 @@ ME_Ramazan_incident_missions_3 = {
 				}
 			}
 			TUR = { inherit = RAM }
-			remove_country_modifier = ME_TUR_Crippled_Horse_Supply
-			remove_country_modifier = ME_TUR_Ottoman_Storm
-			remove_country_modifier = ME_TUR_Iminent_Surrender
+			hidden_effect = {
+				every_country = {
+					limit = {
+						has_country_modifier = ME_TUR_Crippled_Horse_Supply
+					}
+					remove_country_modifier = ME_TUR_Crippled_Horse_Supply
+				}
+				remove_country_modifier = ME_TUR_Ottoman_Storm
+				every_elector = {
+					remove_opinion = {
+						who = emperor
+						modifier = ME_TUR_abandoned
+					}
+				}
+			}
 			TUR = { set_country_flag = ME_TUR_Roman_Facade_End }
 		}
 	}
@@ -606,31 +607,72 @@ ME_Ramazan_incident_missions_4 = {
 	}
 	has_country_shield = yes
 
-	RAM_Preparing_Forces = {
+	RAM_War_Time_Policies = {
 		icon = me_ram_copt
 		position = 1
+		provinces_to_highlight = {
+			owned_by = ROOT
+			has_manpower_building_trigger = yes
+		}
 		trigger = {
-			TUR = {
-				OR = {
-					army_size_percentage = 0.1
-					army_size = 100
-				}
+			calc_true_if = {
+				amount = 5
+				all_province = {
+					has_manpower_building_trigger = yes
+					num_of_times_improved_by_owner = 5
+				}	
 			}
 		}
 		effect = {
-			TUR = {
-				add_country_modifier = {
-					name = ME_TUR_Ottoman_Storm
-					duration = -1
+			custom_tooltip = ME_TUR_conscription_center_tt
+			while = {
+				limit = {
+					NOT = {
+						num_of_owned_provinces_with = {
+							value = 10
+							has_province_flag = ME_TUR_conscription_center
+						}
+					}
+				}
+				random_owned_province = {
+					limit = {
+						has_manpower_building_trigger = yes
+					}
+					set_province_flag = ME_TUR_conscription_center
+					add_province_modifier = {
+						name = ME_TUR_conscription_center
+						duration = -1
+					}
 				}
 			}
 		}
 	}
 
-	RAM_Fishing_Off = {
+	RAM_art_war = {
 		icon = me_ram_copt
 		position = 2
-		required_missions = { RAM_Preparing_Forces}
+		required_missions = { RAM_War_Time_Policies }
+		trigger = {
+			custom_trigger_tooltip = {
+				tooltip = ME_TUR_won_25_battles
+				check_variable = {
+					which = ME_TUR_roman_facade_battles_won_variable
+					value = 25
+				}
+			}
+		}
+		effect = {
+			add_army_tradition = 10
+		}
+	}
+
+	RAM_Fishing_Off = {
+		icon = me_ram_copt
+		position = 3
+		required_missions = { 
+			RAM_art_war
+			RAM_Council_Fool
+		}
 		trigger = {
 			if = {
 				limit = {
@@ -705,47 +747,18 @@ ME_Ramazan_incident_missions_4 = {
 			else = { always = yes }
 		}
 		effect = {
-			if = {
+			while = {
 				limit = {
-					OR = {
-						emperor = {
-							num_of_owned_provinces_with = {
-								value = 15
-								is_part_of_hre = yes
-								controlled_by = ROOT
-							}
+					calc_true_if = {
+						amount = 10
+						all_province = {
+							owned_by = emperor
+							controlled_by = TUR
+							fort_level = 1
 						}
-						emperor = {
-							num_of_owned_provinces_with = {
-								value = 10
-								is_part_of_hre = yes
-								controlled_by = ROOT
-							}
-						}
-						emperor = {
-							num_of_owned_provinces_with = {
-								value = 5
-								is_part_of_hre = yes
-								controlled_by = ROOT
-							}
-						}
-						emperor = {
-							num_of_owned_provinces_with = {
-								value = 1
-								is_part_of_hre = yes
-								controlled_by = TUR
-							}
-						}
-					}	
-				}
-				emperor = {
-					add_country_modifier = {
-						name = ME_TUR_Iminent_Surrender
-						duration = -1
 					}
 				}
 			}
-			else = { add_prestige = 10 }
 		}
 	}
 }
@@ -762,7 +775,10 @@ ME_Ramazan_incident_missions_5 = {
 
 	RAM_Council_Fool = {
 		icon = me_ram_copt
-		position = 1
+		position = 2
+		required_missions = {
+			RAM_War_Time_Policies
+		}
 		provinces_to_highlight = {
 			AND = {
 				owner = { is_elector = yes }
@@ -785,7 +801,10 @@ ME_Ramazan_incident_missions_5 = {
 						casus_belli = ME_Ottomans_Roman_Facade_CB
 					}
 				}
-				white_peace = TUR
+				add_opinion = {
+					who = emperor
+					modifier = ME_TUR_abandoned
+				}
 			}
 		}
 	}
