@@ -197,10 +197,10 @@ country_event = { #Roman Pretenders
 		hidden_effect = {
 			create_vassal = RAM
 			RAM = { 
+				set_country_flag = ME_TUR_Change_Tree
 				country_event = {
 					id = ME_Ottoman_Events.2
 				}
-				set_country_flag = ME_TUR_Change_Tree
 			}
 		}
 	}
@@ -3924,5 +3924,149 @@ country_event = { #A Diplomatic Move
 			name = ME_TUR_refused_peace
 			duration = 1825
 		}
+	}
+}
+country_event = { #Hidden event that integrated Mamluks when counter reaches 10
+	id = ME_Ottoman_Events.84
+	title = ME_Ottoman_Events.84.t 
+	desc = ME_Ottoman_Events.84.d
+	picture = PAINTER_ARTIST_eventPicture
+	hidden = yes
+	trigger = {
+		tag = TUR
+		exists = MAM
+		MAM = { is_subject_of = ROOT }
+		has_country_flag = ME_TUR_integration_flag
+		check_variable = {
+			which = ME_TUR_integration_counter
+			value = 10
+		}
+	}
+	immediate = {
+		clr_country_flag = ME_TUR_integration_reset
+	}
+	option = {
+		name = ME_Ottoman_Events.84.OPT1
+		inherit = MAM
+	}
+}
+country_event = { #Future of the Meditteranean
+	id = ME_Ottoman_Events.85
+	title = ME_Ottoman_Events.85.t
+	desc = ME_Ottoman_Events.85.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.85.OPT1
+		custom_tooltip = ME_TUR_Lepanto_start_tt
+		add_casus_belli = {
+			type = ME_TUR_navy
+			target = VEN
+		}
+		hidden_effect = {
+			create_vassal = ATH
+			ATH = { 
+				set_country_flag = ME_TUR_Change_Tree
+				country_event = {
+					id = ME_Ottoman_Events.2
+				}
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.85.OPT2
+		add_prestige = -10
+	}
+}
+country_event = { #Sinking a Floating City
+	id = ME_Ottoman_Events.86
+	title = ME_Ottoman_Events.86.t
+	desc = ME_Ottoman_Events.86.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	major = yes
+	option = {
+		name = ME_Ottoman_Events.86.OPT1
+		VEN = {
+			capital_scope = {
+				add_province_modifier = {
+					name = ME_TUR_VEN_navy_humiliated
+					duration = -1
+				}
+			}
+		}
+		151 = {
+			add_province_modifier = {
+				name = ME_TUR_Venedik_Arsenla
+				duration = -1
+			}
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.86.OPT2
+		151 = {
+			if = {
+				limit = {
+					NOT = { has_dock_building_trigger = yes }
+				}
+				add_or_upgrade_dock_building = yes
+			}
+			add_province_modifier = {
+				name = ME_TUR_expansion_maritime_sector
+				duration = -1
+			}
+			add_base_production = 3
+			add_base_manpower = 3
+		}
+	}
+}
+country_event = { #hidden event for modifier
+	id = ME_Ottoman_Events.87
+	title = ME_Ottoman_Events.87.t
+	desc = ME_Ottoman_Events.87.d
+	picture = PAINTER_ARTIST_eventPicture
+	hidden = yes
+	trigger = {
+		has_country_flag = ME_TUR_reward_after_war_flag
+		TUR = {
+			NOT = {	is_at_war = yes }
+		}
+	}
+	option = {
+		name = ME_Ottoman_Events.87.OPT1
+		add_country_modifier = {
+			name = ME_TUR_exposed_genoan_commerce
+			duration = -1
+		}
+	}
+}
+country_event = { #Victory Against the Holy League
+	id = ME_Ottoman_Events.88
+	title = ME_Ottoman_Events.88.t
+	desc = ME_Ottoman_Events.88.d
+	picture = PAINTER_ARTIST_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ME_Ottoman_Events.88.OPT1
+		custom_tooltip = ME_TUR_naval_jihad_unlock_tt
+		set_country_flag = ME_TUR_naval_jihad_flag
+		clr_country_flag = ME_TUR_crusade_stop
+	}
+}
+country_event = { #swap ideas
+	id = ME_Ottoman_Events.89
+	title = ideagroups.1.t
+	desc = ideagroups.1.d
+	picture = ADVISOR_eventPicture
+	is_triggered_only = yes
+	option = {
+		name = ideagroups.1.a
+		ai_chance = { factor = 0 }
+		remove_idea = imperial_school_of_naval_engineering
+		add_idea = rulers_of_mediterranean
+	}
+	option = {
+		name = ideagroups.1.b 
+		ai_chance = { factor = 1 }
 	}
 }
