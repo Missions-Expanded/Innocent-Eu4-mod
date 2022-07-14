@@ -2104,7 +2104,7 @@ ME_give_claims = {
 	[[region]
 		ME_give_area_claims = { group = $region$ tag = ROOT }
 	]
-	
+
 }
 
 ME_add_years_of_trade_income = {
@@ -2127,3 +2127,111 @@ add_positive_or_negative_piety = {
 
 ME_technology_split_120_power = { #placeholder, I will put the implementation here later!
 }
+
+#tag = { ME_add_to_empire = yes }
+ME_add_to_empire = {
+	#custom_tooltip = ME_join_the_empire
+	if = {
+		limit = {
+			capital_scope = {
+				continent = europe #In case their capital is not in Europe
+			}
+		}
+		tooltip = {
+			set_in_empire = yes
+		}
+
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					continent = europe
+				}
+				set_in_empire = yes
+			}
+			set_country_flag = reined_in_for_shadow_kingdom #in case that happens
+		}
+	}
+}
+
+# ME_distribute_development = {
+#	type = x //The 3 development types. E.G. type = production
+#	amount = x //How many development to add. E.G amount = 10
+#	limit = " " OPTIONAL //takes actual triggers. E.G. limit = " NOT = { culture = ROOT } "
+#}
+ME_distribute_development = {
+	hidden_effect = {
+		set_variable = {
+			which = ME_$type$_loop
+			value = 0
+		}
+		while = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = ME_$type$_loop
+						value = $amount$
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					[[limit] $limit$ ]
+				}
+				add_base_$type$ = 1
+			}
+			change_variable = {
+				which = ME_$type$_loop
+				value = 1
+			}
+		}
+	}
+	custom_tooltip = $type$_$amount$
+}
+
+# ME_remove_development_distributed = {
+#	type = x //The 3 development types. E.G. type = production
+#	amount = x //How many development to add. E.G amount = 10
+#	limit = " " OPTIONAL //takes actual triggers. E.G. limit = " NOT = { culture = ROOT } "
+#}
+ME_remove_development_distributed = {
+	hidden_effect = {
+		set_variable = {
+			which = ME_$type$_loop
+			value = 0
+		}
+		while = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = ME_$type$_loop
+						value = $amount$
+					}
+				}
+			}
+			random_owned_province = {
+				limit = {
+					[[limit] $limit$ ]
+					base_$type$ = 2 #In case the province has 1 development of that type
+				}
+				add_base_$type$ = -1
+			}
+			change_variable = {
+				which = ME_$type$_loop
+				value = 1
+			}
+		}
+	}
+	custom_tooltip = remove_$type$_$amount$
+}
+
+#ME_country_event_delay = { id = x }
+#Done for some small flavor
+#Will let Stiopa make the final verdict
+#ME_country_event_delay = {
+#	hidden_effect = {
+#		country_event = { id = $id$ days = 1 }
+#	}
+#	tooltip = {
+#		country_event = { id = $id$ }
+#	}
+#}
