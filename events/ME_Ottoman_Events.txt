@@ -2961,9 +2961,12 @@ country_event = { #A Call for help
 			days = 60
 		}
 		NOT = {
-			AKK = { 
-				has_spawned_rebels = ME_TUR_AQQ_pretender_rebels
-				any_owned_province = { has_rebel_faction = ME_TUR_AQQ_pretender_rebels }
+			AKK = {
+				OR = {
+					has_spawned_rebels = ME_TUR_AQQ_pretender_rebels
+					any_owned_province = { has_rebel_faction = ME_TUR_AQQ_pretender_rebels }
+					is_subject_of = ROOT
+				}
 			}
 		}
 	}
@@ -3048,17 +3051,21 @@ country_event = { #Ottoman Reinforcements
 }
 country_event = { #A New Monarch
 	id = ME_Ottoman_Events.60
-	title = ME_Ottoman_Events.60.t 
+	title = ME_Ottoman_Events.60.t
 	desc = ME_Ottoman_Events.60.d
 	picture = GOOD_WITH_MONARCH_eventPicture
 	trigger = {
-		tag = TUR
-		has_country_flag = ME_TUR_AKK_rebels_last
-		AKK = {
-			calc_true_if = {
-				amount = 5
-				all_owned_province = {
-					has_rebel_faction = ME_TUR_AQQ_pretender_rebels
+		OR = {
+			has_country_flag = ME_TUR_AKK_broke
+			AND = {
+				tag = TUR
+				AKK = {
+					calc_true_if = {
+						amount = 5
+						all_owned_province = {
+							has_rebel_faction = ME_TUR_AQQ_pretender_rebels
+						}
+					}
 				}
 			}
 		}
@@ -3076,14 +3083,13 @@ country_event = { #A Failed Attempt
 	desc = ME_Ottoman_Events.61.d
 	picture = BAD_WITH_MONARCH_eventPicture
 	trigger = {
-		tag = TUR
-		has_country_flag = ME_TUR_AKK_rebels_last
-		AKK = {
-			NOT = {
-				OR = {
-					any_owned_province = { has_rebel_faction = ME_TUR_AQQ_pretender_rebels }
-					has_spawned_rebels = ME_TUR_AQQ_pretender_rebels
-				}
+		had_country_flag = {
+			flag = ME_TUR_AKK_rebels_last
+			days = 730
+		}
+		NOT = {
+			AKK = {
+				is_subject_of = ROOT
 			}
 		}
 	}
