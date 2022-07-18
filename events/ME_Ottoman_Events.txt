@@ -846,14 +846,7 @@ country_event = { #The Millet System
 	picture = RELIGION_eventPicture
 	trigger = {
 		has_country_flag = TUR_Millet_start
-		NOT = {
-			OR = {
-				has_country_modifier = ME_TUR_millet_supported_catholic
-				has_country_modifier = ME_TUR_millet_supported_coptic
-				has_country_modifier = ME_TUR_millet_supported_orthodox
-				has_country_modifier = ME_TUR_millet_denied
-			}
-		}
+		NOT = { has_ruler_flag = ME_TUR_millet_event }
 	}
 	mean_time_to_happen = { months = 5 }
 	option = {
@@ -867,21 +860,15 @@ country_event = { #The Millet System
 		add_adm_power = -100
 		add_dip_power = -100
 		add_mil_power = -100
-		every_owned_province = {
-			limit = { religion = orthodox }
-			add_province_modifier = {
-				name = ME_TUR_millet_supported_orthodox
-				duration = 36000
-			}
-		}
-		every_owned_province = {
-			limit = { 
-				religion = catholic
-				religion = coptic
-			}
-			add_province_modifier = {
-				name = ME_TUR_denied_support
-				duration = 36000
+		custom_tooltip = ME_TUR_orthodox_millet_reward
+		hidden_effect = {
+			set_ruler_flag = ME_TUR_millet_event
+			every_owned_province = {
+				limit = { religion = orthodox }
+				add_province_modifier = {
+					name = ME_TUR_millet_supported_orthodox
+					duration = -1
+				}
 			}
 		}
 	}
@@ -896,21 +883,15 @@ country_event = { #The Millet System
 		add_adm_power = -100
 		add_dip_power = -100
 		add_mil_power = -100
-		every_owned_province = {
-			limit = { religion = coptic }
-			add_province_modifier = {
-				name = ME_TUR_millet_supported_coptic
-				duration = 36000
-			}
-		}
-		every_owned_province = {
-			limit = { 
-				religion = catholic
-				religion = orthodox
-			}
-			add_province_modifier = {
-				name = ME_TUR_denied_support
-				duration = 36000
+		custom_tooltip = ME_TUR_catholic_millet_reward
+		hidden_effect = {
+			set_ruler_flag = ME_TUR_millet_event
+			every_owned_province = {
+				limit = { religion = coptic }
+				add_province_modifier = {
+					name = ME_TUR_millet_supported_coptic
+					duration = -1
+				}
 			}
 		}
 	}
@@ -925,29 +906,24 @@ country_event = { #The Millet System
 		add_adm_power = -100
 		add_dip_power = -100
 		add_mil_power = -100
-		every_owned_province = {
-			limit = { religion = catholic }
-			add_province_modifier = {
-				name = ME_TUR_millet_supported_catholic
-				duration = 36000
-			}
-		}
-		every_owned_province = {
-			limit = { 
-				religion = orthodox
-				religion = coptic
-			}
-			add_province_modifier = {
-				name = ME_TUR_denied_support
-				duration = 36000
+		custom_tooltip = ME_TUR_coptic_millet_reward
+		hidden_effect = {
+			set_ruler_flag = ME_TUR_millet_event
+			every_owned_province = {
+				limit = { religion = catholic }
+				add_province_modifier = {
+					name = ME_TUR_millet_supported_catholic
+					duration = -1
+				}
 			}
 		}
 	}
 	option = {
 		name = ME_Ottoman_Events.17.OPT4
+		set_ruler_flag = ME_TUR_millet_event
 		add_country_modifier = {
 			name = ME_TUR_millet_denied
-			duration = 36000
+			duration = -1
 		}
 	}
 }
@@ -1151,6 +1127,14 @@ country_event = { #Civic Duties
 	option = {
 		name = ME_Ottoman_Events.20.OPT1
 		add_yearly_manpower = -0.5
+		add_estate_influence_modifier = {
+			influence = 10
+			duration = 730
+		}
+		add_estate_loyalty = {
+			estate = ME_TUR_Askeri_Estate
+			loyalty = -10
+		}
 		random_owned_province = {
 			limit = {
 				religion_group = christian
@@ -1162,6 +1146,10 @@ country_event = { #Civic Duties
 	}
 	option = {
 		name = ME_Ottoman_Events.20.OPT2
+		add_estate_loyalty = {
+			estate = ME_TUR_Askeri_Estate
+			loyalty = 10
+		}
 	}
 }
 country_event = { #Second Caput Mundi
@@ -4072,5 +4060,32 @@ country_event = { #A New Monarch
 		AKK = { clr_country_flag = ME_TUR_AKK_unlock_pretender }
 		clr_country_flag = ME_TUR_AKK_rebels_last
 		set_country_flag = ME_TUR_new_monarch_event_fired
+	}
+}
+country_event = { #Hidden event to remove millet modifiers
+	id = ME_Ottoman_Events.93
+	title = ME_Ottoman_Events.93.t
+	desc = ME_Ottoman_Events.93.d
+	picture = RELIGION_eventPicture
+	hidden = yes
+	trigger = {
+		has_country_flag = TUR_Millet_start
+		NOT = { has_ruler_flag = ME_TUR_millet_event }
+	}
+	option = {
+		name = ME_Ottoman_Events.93.OPT1
+		every_owned_province = {
+			limit = { religion = orthodox }
+			remove_province_modifier = ME_TUR_millet_supported_orthodox
+		}
+		every_owned_province = {
+			limit = { religion = coptic }
+			remove_province_modifier = ME_TUR_millet_supported_coptic
+		}
+		every_owned_province = {
+			limit = { religion = catholic }
+			remove_province_modifier = ME_TUR_millet_supported_catholic
+		}
+		remove_country_modifier = ME_TUR_millet_denied
 	}
 }
