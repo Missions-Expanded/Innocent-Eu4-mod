@@ -361,7 +361,8 @@ ME_Ottomans_missions_1 = {
 			if = {
 				limit = {
 					NOT = { 
-						has_country_flag = ME_TUR_enderun_fired }
+						has_country_flag = ME_TUR_enderun_fired 
+					}
 				}
 				country_event = {
 					id = flavor_tur.3357
@@ -1699,7 +1700,7 @@ ME_Ottomans_missions_2 = {
 			monthly_dip = 13
 		}
 		effect = {
-			add_prestige = 1
+			custom_tooltip = ME_TUR_2nd_golden_era_tt
 		}
 	}
 }
@@ -2269,17 +2270,7 @@ ME_Ottomans_missions_3 = {
 		}
 		effect = {
 			custom_tooltip = ME_TUR_jizyah_modifier_tt
-			hidden_effect = {
-				every_owned_province = {
-					limit = {
-						religion_group = christian
-					}
-					add_province_modifier = {
-						name = ME_TUR_jizyah
-						duration = -1
-					}
-				}
-			}
+			set_country_flag = ME_TUR_jizyah_mission_complete
 		}
 	}
 	TUR_tax_farming = { 
@@ -2387,7 +2378,7 @@ ME_Ottomans_missions_3 = {
 			151 = {
 				add_province_modifier = {
 					name = ME_TUR_center_world
-					duration = -1
+					duration = 18250
 				}
 			}
 		}
@@ -2413,9 +2404,18 @@ ME_Ottomans_missions_3 = {
 			add_adm_power = 50
 			add_dip_power = 50
 			add_mil_power = 50
-			add_country_modifier = {
-				name = ME_TUR_tulip_period
-				duration = 18250
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				custom_tooltip = ME_TUR_tulip_period_tt
+				set_country_flag = ME_TUR_tulip_mission_complete
+			}
+			else = {
+				add_country_modifier = {
+					name = ME_TUR_tulip_period
+					duration = 18250
+				}
 			}
 		}
 	}
@@ -2840,6 +2840,44 @@ ME_Ottomans_missions_4 = {
 			country_event = {
 				id = ME_Ottoman_Events.51
 			}
+			custom_tooltip = ME_TUR_events_give_rewards_tt
+			hidden_effect = {
+				if = {
+					limit = {
+						has_global_flag = expulsion_of_the_moriscos_flag
+					}
+					every_owned_province = {
+						limit = {
+							religion = jewish
+						}
+						add_base_production = 1
+					}
+				}
+				if = {
+					limit = {
+						has_global_flag = ME_TUR_alhambra_event_fired
+					}
+					every_owned_province = {
+						limit = {
+							religion = jewish
+						}
+						add_base_production = 1
+					}
+				}
+				if = {
+					limit = {
+						any_country = {
+							has_country_flag = spa_holy_inquisition
+						}
+					}
+					every_owned_province = {
+						limit = {
+							religion = jewish
+						}
+						add_base_production = 1
+					}
+				}
+			}
 		}
 	}
 	TUR_educating_masses = {
@@ -2850,7 +2888,10 @@ ME_Ottomans_missions_4 = {
 			TUR_beginning_cag
 		}
 		trigger = {
-			all_owned_province = { development = 8 }
+			num_of_owned_provinces_with = {
+				value = 5
+				num_of_times_improved_by_owner = 1
+			}
 			if = {
 				limit = {
 					has_dlc = "Rule Britannia"
@@ -2966,6 +3007,8 @@ ME_Ottomans_missions_4 = {
 			}
 		}
 		effect = {
+			custom_tooltip = emp_ven_plague_doctor_training_tt
+			set_country_flag = has_competent_doctors
 			add_country_modifier = {
 				name = ME_TUR_advancement_medical_field
 				duration = -1
@@ -2977,7 +3020,19 @@ ME_Ottomans_missions_4 = {
 		position = 18
 		required_missions = { TUR_imperial_surgery }
 		trigger = {
-			employed_advisor = { is_female = yes }
+			OR = {
+				employed_advisor = { is_female = yes }
+				innovativeness_ideas = 4
+				if = {
+					limit = {
+						has_dlc = "Rights of Man"
+					}
+					OR = {
+						ruler_has_personality = well_advised_personality
+						ruler_has_personality = well_connected_personality
+					}
+				}
+			}
 			if = {
 				limit = {
 					has_dlc = "Rights of Man"
@@ -3127,6 +3182,54 @@ ME_Ottomans_missions_4 = {
 						duration = -1
 						power = 25
 						key = ME_TUR_bizim_deniz
+					}
+				}
+				if = {
+					limit = {
+						1320 = {
+							has_trade_modifier = {
+								who = ROOT
+								key = "The Fall"
+							}
+						}
+					}
+					1320 = {
+						remove_trade_modifier = {
+							who = ROOT
+							key = "The Fall"
+						}
+					}
+				}
+				if = {
+					limit = {
+						377 = {
+							has_trade_modifier = {
+								who = ROOT
+								key = "The Fall"
+							}
+						}
+					}
+					377 = {
+						remove_trade_modifier = {
+							who = ROOT
+							key = "The Fall"
+						}
+					}
+				}
+				if = {
+					limit = {
+						358 = {
+							has_trade_modifier = {
+								who = ROOT
+								key = "The Fall"
+							}
+						}
+					}
+					358 = {
+						remove_trade_modifier = {
+							who = ROOT
+							key = "The Fall"
+						}
 					}
 				}
 			}
@@ -3704,6 +3807,8 @@ ME_Ottomans_missions_5 = {
 						name = ME_TUR_defence_shore
 						duration = -1
 					}
+					add_or_upgrade_dock_building = yes
+					add_or_upgrade_shipyard_building = yes
 				}
 			}
 		}
@@ -3716,7 +3821,7 @@ ME_Ottomans_missions_5 = {
 			num_of_owned_provinces_with = {
 				value = 10
 				region = anatolia_region
-				has_building = marketplace
+				has_trade_building_trigger = yes
 			}
 		}
 		effect = {
@@ -3751,14 +3856,9 @@ ME_Ottomans_missions_5 = {
 						value = 2
 						has_port = yes
 						OR = {
-							OR = {
-								province_id = 377
-								any_trade_node_member_province = { province_id = 377 }
-							}
-							OR = {
-								province_id = 358
-								any_trade_node_member_province = { province_id = 358 }
-							}
+							region = mashriq_region
+							region = egypt_region
+							province_id = 327
 						}
 						province_has_center_of_trade_of_level = 2
 					}
@@ -3771,14 +3871,9 @@ ME_Ottomans_missions_5 = {
 						value = 2
 						has_port = yes
 						OR = {
-							OR = {
-								province_id = 377
-								any_trade_node_member_province = { province_id = 377 }
-							}
-							OR = {
-								province_id = 358
-								any_trade_node_member_province = { province_id = 358 }
-							}
+							region = mashriq_region
+							region = egypt_region
+							province_id = 327
 						}
 						development = 30
 						has_trade_building_trigger = yes
@@ -3794,14 +3889,9 @@ ME_Ottomans_missions_5 = {
 					limit = {
 						has_port = yes
 						OR = {
-							OR = {
-								province_id = 377
-								any_trade_node_member_province = { province_id = 377 }
-							}
-							OR = {
-								province_id = 358
-								any_trade_node_member_province = { province_id = 358 }
-							}
+							region = mashriq_region
+							region = egypt_region
+							province_id = 327
 						}
 						province_has_center_of_trade_of_level = 2
 					}
@@ -3894,8 +3984,9 @@ ME_Ottomans_missions_5 = {
 			define_admiral = {
 				fire = 4
 				shock = 4
-				manuever = 2
+				manuever = 3
 				name = "Piri Reis"
+				trait = accomplished_sailor_personality
 			}
 		}
 	}
@@ -3949,6 +4040,13 @@ ME_Ottomans_missions_5 = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					has_dlc = "Emperor"
+				}
+				custom_tooltip = ME_TUR_unlock_naval_hegemony
+				set_country_flag = ME_TUR_leviathan_hegemony
+			}
 			add_country_modifier = {
 				name = ME_TUR_superiority_cemented
 				duration = -1
