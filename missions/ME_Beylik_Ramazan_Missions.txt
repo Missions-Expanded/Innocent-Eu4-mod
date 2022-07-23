@@ -221,7 +221,7 @@ ME_Ramazan_incident_missions_2 = {
 	has_country_shield = yes
 
 	RAM_Preparing_Forces = {
-		icon = me_ram_copt
+		icon = mission_assemble_an_army
 		position = 1
 		trigger = {
 			TUR = {
@@ -229,6 +229,7 @@ ME_Ramazan_incident_missions_2 = {
 					army_size_percentage = 0.1
 					army_size = 100
 				}
+				is_in_war = { casus_belli = ME_Ottomans_Roman_Facade_CB }
 			}
 		}
 		effect = {
@@ -239,16 +240,18 @@ ME_Ramazan_incident_missions_2 = {
 				}
 			}
 			hidden_effect = {
+				TUR = { save_global_event_target_as = ME_TUR_turkey_target }
 				export_to_variable = {
 					which = ME_TUR_starting_army_variable
 					value = trigger_value:army_size
+					who = event_target:ME_TUR_turkey_target
 				}
 			}
 		}
 	}
 
 	RAM_Supplying_Front = {
-		icon = me_ram_copt
+		icon = mission_trade_company_region_abroad
 		required_missions = { RAM_Preparing_Forces }
 		position = 2
 		trigger = {
@@ -258,6 +261,7 @@ ME_Ramazan_incident_missions_2 = {
 					export_to_variable = {
 						which = ME_TUR_soldier_current_variable
 						value = trigger_value:army_size
+						who = event_target:ME_TUR_turkey_target
 					}
 					change_variable = {
 						which = ME_TUR_soldier_current_variable
@@ -282,7 +286,7 @@ ME_Ramazan_incident_missions_2 = {
 	}
 
 	RAM_Pride_Humiliation = {
-		icon = me_ram_copt
+		icon = mission_conquer_5_states
 		position = 3
 		required_missions = { 
 			RAM_Wing_Plucking
@@ -379,17 +383,20 @@ ME_Ramazan_incident_missions_3 = {
 	has_country_shield = yes
 
 	RAM_cloak_dagger = {
-		icon = me_ram_copt
+		icon = mission_asian_trader
 		position = 1
 		trigger = {
 			calc_true_if = {
 				amount = 2
 				all_country = {
 					has_spy_network_from = {
-						who = ROOT
+						who = TUR
 						value = 25
 					}
 				}
+			}
+			TUR = { 
+				is_in_war = { casus_belli = ME_Ottomans_Roman_Facade_CB } 
 			}
 		}
 		effect = {
@@ -419,7 +426,7 @@ ME_Ramazan_incident_missions_3 = {
 	}
 
 	RAM_Time_Need = {
-		icon = me_ram_copt
+		icon = mission_noble_council
 		position = 3
 		required_missions = { 
 			RAM_Supplying_Front 
@@ -588,7 +595,7 @@ ME_Ramazan_incident_missions_3 = {
 	}
 
 	RAM_Show_Strength = {
-		icon = me_ram_copt
+		icon = mission_non-western_soldiers
 		position = 4
 		required_missions = { 
 			RAM_Pride_Humiliation
@@ -642,13 +649,14 @@ ME_Ramazan_incident_missions_3 = {
 					}
 					remove_country_modifier = ME_TUR_Crippled_Horse_Supply
 				}
-				remove_country_modifier = ME_TUR_Ottoman_Storm
+				TUR = { remove_country_modifier = ME_TUR_Ottoman_Storm }
 				every_elector = {
 					remove_opinion = {
 						who = emperor
 						modifier = ME_TUR_abandoned
 					}
 				}
+				clear_global_event_target = ME_TUR_turkey_target
 			}
 			TUR = { set_country_flag = ME_TUR_Roman_Facade_End }
 		}
@@ -666,31 +674,36 @@ ME_Ramazan_incident_missions_4 = {
 	has_country_shield = yes
 
 	RAM_War_Time_Policies = {
-		icon = me_ram_copt
+		icon = mission_build_up_to_force_limit
 		position = 1
 		provinces_to_highlight = {
 			owned_by = TUR
 			has_manpower_building_trigger = yes
 		}
 		trigger = {
-			calc_true_if = {
-				amount = 5
-				all_province = {
-					has_manpower_building_trigger = yes
-					num_of_times_improved_by_owner = 5
-				}	
+			TUR = {
+				is_in_war = { casus_belli = ME_Ottomans_Roman_Facade_CB }
+				calc_true_if = {
+					amount = 5
+					all_province = {
+						has_manpower_building_trigger = yes
+						num_of_times_improved_by_owner = 5
+					}	
+				}
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = ME_TUR_conscription_center
-				duration = 1825
+			TUR = {
+				add_country_modifier = {
+					name = ME_TUR_conscription_center
+					duration = 1825
+				}
 			}
 		}
 	}
 
 	RAM_art_war = {
-		icon = me_ram_copt
+		icon = mission_landsknecht_soldier
 		position = 2
 		required_missions = { RAM_War_Time_Policies }
 		trigger = {
@@ -702,13 +715,13 @@ ME_Ramazan_incident_missions_4 = {
 				}
 			}
 		}
-		effect = {
-			add_years_of_income = 2
+		effect = { 
+			TUR = { add_years_of_income = 2 }
 		}
 	}
 
 	RAM_Fishing_Off = {
-		icon = me_ram_copt
+		icon = mission_steppe_warriors
 		position = 3
 		required_missions = { 
 			RAM_art_war
@@ -789,7 +802,7 @@ ME_Ramazan_incident_missions_4 = {
 		}
 		effect = {
 			custom_tooltip = ME_TUR_winning_sieges_gives_manpower_tt
-			set_country_flag = ME_TUR_sieges_give_manpower
+			TUR = { set_country_flag = ME_TUR_sieges_give_manpower }
 		}
 	}
 }
@@ -805,7 +818,7 @@ ME_Ramazan_incident_missions_5 = {
 	has_country_shield = yes
 
 	RAM_Council_Fool = {
-		icon = me_ram_copt
+		icon = mission_alliances
 		position = 2
 		required_missions = {
 			RAM_War_Time_Policies
