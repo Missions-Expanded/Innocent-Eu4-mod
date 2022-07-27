@@ -108,6 +108,7 @@ me_hab_1_branching_germany = {
 				}
 			}
 			custom_tooltip = me_hab_salt_modifier_renew
+			set_country_flag = me_hab_salt_castle
 			custom_tooltip = " "
 			custom_tooltip = me_hab_hre_branch
 			if = {
@@ -687,15 +688,7 @@ me_hab_1_1 = {
 			}
 		}
 		effect = {
-			custom_tooltip = me_hab_founding_the_austrian_army
-			set_country_flag = me_hab_hofkriegstrat
-			tooltip = {
-				add_country_modifier = {
-					name = me_hab_war_council
-					duration = -1
-					desc = "for as long as we are at war"
-				}
-			}
+			country_event = { id = me_austria_missions.40 }
 		}
 	}
 	
@@ -717,31 +710,7 @@ me_hab_1_1 = {
 			army_professionalism = 0.75
 		}
 		effect = {
-			custom_tooltip = me_whilst_we_are_at_peace
-			tooltip = {
-				add_country_modifier = {
-					name = me_hab_peacetime_army
-					duration = -1
-					desc = me_as_long_as_we_are_at_peace
-				}
-			}
-
-			custom_tooltip = me_whilst_we_are_at_war
-			tooltip = {
-				add_country_modifier = {
-					name = me_hab_wartime_army
-					duration = -1
-					desc = me_as_long_as_we_are_at_war
-				}
-			}
-			define_advisor = {
-				type = army_reformer
-				name = "Fredrick Wilhelm von Haugwitz"
-				skill = 3
-				culture = ROOT
-				religion = ROOT
-				cost_multiplier = 0.25
-			}
+			country_event = { id = me_austria_missions.41 }
 		}
 	}
 	
@@ -789,14 +758,36 @@ me_hab_1_1 = {
 				name = me_hab_state_of_council
 				duration = 10950
 			}
-			custom_tooltip = me_if_all_Our_advisors_are_level_5
+			has_country_flag = me_hab_stattstrat_flag
+			
+			custom_tooltip = me_mil_advisor_is_level_5
 			tooltip = {
 				add_country_modifier = {
-					name = me_hab_reform_advice
+					name = me_hab_military_advice
 					duration = -1
-					desc = me_as_long_as_we_maintain_them
+					desc = "as long as the advisor is maintained"
 				}
 			}
+			
+			custom_tooltip = me_dip_advisor_is_level_5
+			tooltip = {
+				add_country_modifier = {
+					name = me_hab_diplo_advice
+					duration = -1
+					desc = "as long as the advisor is maintained"
+				}
+			}
+			
+			custom_tooltip = me_admin_advisor_is_level_5
+			tooltip = {
+				add_country_modifier = {
+					name = me_hab_admin_advice
+					duration = -1
+					desc = "as long as the advisor is maintained"
+				}
+			}
+			
+			
 		}
 	}
 }
@@ -1057,8 +1048,6 @@ me_hab_2_hre = {
 			}
 		}
 		effect = {
-			custom_tooltip = " "
-			custom_tooltip = me_hab_hre_branch
 			hidden_effect = {
 				every_province = {
 					limit = {
@@ -1363,8 +1352,18 @@ me_hab_2_1 = {
 		}
 		effect = {
 			set_country_flag = me_pi_from_bulls
-			custom_tooltip = me_give_50_pi_per_bull
-			#something else as well
+			if = {
+				limit = {
+					religion = catholic
+				}
+				custom_tooltip = me_give_50_pi_per_bull
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_conquest_of_rome
+					duration = 7300
+				}
+			}
 		}
 	}
 	
@@ -1848,6 +1847,7 @@ me_hab_2_1 = {
 						mil_tech = 10
 					}
 				}
+				set_country_flag = me_hab_imperial_pike_and_shot_flag
 				add_country_modifier = {
 					name = me_hab_imperial_pike_and_shot
 					duration = -1
@@ -2375,8 +2375,8 @@ me_hab_3_hre = {
 			}
 		}
 		effect = {
+			add_imperial_influence = 10
 			hidden_effect = {
-				add_imperial_influence = 10
 				every_country = {
 					limit = {
 						NOT = { tag = ROOT }
@@ -2798,8 +2798,7 @@ me_hab_3_branching_navy = {
 			else = {
 				random_owned_province = {
 					limit = { has_port = yes }
-					create_flagship = {    
-						name = "Maria Theresa"
+					create_flagship = {
 						type = heavy_ship
 					}
 				}
@@ -2843,12 +2842,12 @@ me_hab_3_navy_venetian = {
 				}
 			}
 			hidden_effect = {
+				set_country_flag = me_hab_venetian_modifier
 				if = {
 					limit = {
 						venetia_area = {
 							type = all
 							owned_by = ROOT
-							controlled_by = ROOT
 						}
 					}
 					add_country_modifier = {
@@ -3073,6 +3072,19 @@ me_hab_3_2 = {
 				}
 				set_government_rank = 3
 			}
+			custom_tooltip = me_hab_gain_5_of_each_mana_per_foreign_culture_province
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						NOT = { culture = ROOT }
+					}
+					owner = {
+						add_adm_power = 5
+						add_mil_power = 5
+						add_dip_power = 5
+					}
+				}
+			}
 		}
 	}
 	
@@ -3106,15 +3118,103 @@ me_hab_3_2 = {
 		}
 		position = 15
 		trigger = {
-			calc_true_if = {
-				all_country = {
-					dynasty = ROOT
+			if = {
+				limit = {
+					calc_true_if = {
+						all_country = {
+							is_subject = no
+						}
+						amount = 3
+					}
 				}
-				amount = 10
+				calc_true_if = {
+					all_country = {
+						dynasty = ROOT
+						is_subject = no
+					}
+					amount = 3
+				}
+			}
+			else = {
+				calc_true_if = {
+					all_country = {
+						dynasty = ROOT
+					}
+					amount = 10
+				}
 			}
 		}
 		effect = {
-			#A New Habsburg order
+			if = {
+				limit = {
+					NOT = {
+						calc_true_if = {
+							all_country = {
+								dynasty = ROOT
+								is_subject = no
+							}
+							amount = 5
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					calc_true_if = {
+						all_country = {
+							dynasty = ROOT
+							is_subject = no
+						}
+						amount = 1
+					}
+				}
+				custom_tooltip = me_hab_pu_5_random_nations
+				tooltip = {
+					country_event = { id = me_austria_missions.46 }
+				}
+				hidden_effect = {
+					random_known_country = {
+						limit = {
+							dynasty = ROOT
+							is_subject = no
+						}
+						country_event = { id = me_austria_missions.46 }
+					}
+					random_known_country = {
+						limit = {
+							dynasty = ROOT
+							is_subject = no
+						}
+						country_event = { id = me_austria_missions.46 }
+					}
+					random_known_country = {
+						limit = {
+							dynasty = ROOT
+							is_subject = no
+						}
+						country_event = { id = me_austria_missions.46 }
+					}
+					random_known_country = {
+						limit = {
+							dynasty = ROOT
+							is_subject = no
+						}
+						country_event = { id = me_austria_missions.46 }
+					}
+					random_known_country = {
+						limit = {
+							dynasty = ROOT
+							is_subject = no
+						}
+						country_event = { id = me_austria_missions.46 }
+					}
+				}
+			}
+			else = {
+				every_subject_country = {
+					add_liberty_desire = -100
+				}
+			}
 		}
 	}
 	
@@ -3170,19 +3270,55 @@ me_hab_3_2 = {
 			}
 		}
 		effect = {
-			add_country_modifier = {
-				name = me_hab_chivalric_legacy
-				duration = -1
-				desc = me_until_age_of_exploration
-			}
-			custom_tooltip = me_modifier_will_evolve_over_the_ages
-			set_country_flag = me_chivalric_legacy_evolve
-			custom_tooltip = me_if_its_age_of_exploration
 			if = {
 				limit = {
 					current_age = age_of_discovery
 				}
+				add_country_modifier = {
+					name = me_hab_chivalric_legacy
+					duration = -1
+					desc = "until the end of the Age of Discovery"
+				}
+			}
+			else_if = {
+				limit = {
+					current_age = age_of_reformation
+				}
+				add_country_modifier = {
+					name = me_hab_chivalric_legacy_reformation
+					duration = -1
+					desc = "until the end of the Age of Reformation"
+				}
+			}
+			else_if = {
+				limit = {
+					current_age = age_of_absolutism
+				}
+				add_country_modifier = {
+					name = me_hab_chivalric_legacy_absolutism
+					duration = -1
+					desc = "until the end of the Age of Absolutism"
+				}
+			}
+			else = {
+				add_country_modifier = {
+					name = me_hab_chivalric_legacy_revolutions
+					duration = -1
+				}
+			}
+			custom_tooltip = me_modifier_will_evolve_over_the_ages
+			set_country_flag = me_chivalric_legacy_evolve
+			custom_tooltip = me_if_its_age_of_exploration
+			tooltip = {
 				country_event = { id = me_austria_missions.5 }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						current_age = age_of_discovery
+					}
+					country_event = { id = me_austria_missions.5 }
+				}
 			}
 		}
 	}
@@ -3217,6 +3353,12 @@ me_hab_3_2 = {
 		effect = {
 			set_country_flag = me_allow_grenzens
 			custom_tooltip = me_unlocks_grenzens_privilege
+			custom_tooltip = "The highlighted provinces:"
+			ME_distribute_development = {
+				type = manpower
+				value = 5
+				limit = " OR = { area = croatia_area area = slavonia_area } "
+			}
 		}
 	}
 }
@@ -3395,31 +3537,37 @@ me_hab_3_mainland_focus = {
 			}
 		}
 		effect = {
-			tooltip = {
-				define_advisor = {
-					type = ME_executioner
-					skill = 3
-					culture = ROOT
-					religion = ROOT
-					cost_multiplier = 0.25
-				}
+			define_advisor = {
+				type = ME_executioner
+				skill = 3
+				culture = ROOT
+				religion = ROOT
+				cost_multiplier = 0.25
 			}
-			custom_tooltip = me_hab_bonus_will_depend_on_number_of_courthouses
-			hidden_effect = {
-				#define advisor here
-			}
+			custom_tooltip = me_hab_executioner_scaling
 			if = {
 				limit = {
 					has_country_flag = me_hab_aulic_council
 				}
 				custom_tooltip = me_hab_2_reform_progress_power_town_hall
 				hidden_effect = {
-					every_owned_province = {
+					if = {
 						limit = {
-							has_building = town_hall
+							num_of_owned_provinces_with = {
+								has_building = town_hall
+								value = 10
+							}
 						}
-						owner = {
-							change_government_reform_progress = 2
+						change_government_reform_progress = 100
+					}
+					else = {
+						every_owned_province = {
+							limit = {
+								has_building = town_hall
+							}
+							owner = {
+								change_government_reform_progress = 10
+							}
 						}
 					}
 				}
@@ -3536,7 +3684,7 @@ me_hab_3_branching_modern_state = {
 		effect = {
 			custom_tooltip = me_hab_mainland_focus_branch
 			add_absolutism = 100
-			add_legitimacy_equivalent = { value = 100 }
+			add_legitimacy_equivalent = { amount = 100 }
 			add_country_modifier = {
 				name = me_hab_a_modern_state
 				duration = -1
@@ -3544,7 +3692,7 @@ me_hab_3_branching_modern_state = {
 			custom_tooltip = " "
 			custom_tooltip = me_hab_minorities_branch
 			add_absolutism = 100
-			add_legitimacy_equivalent = { value = 100 }
+			add_legitimacy_equivalent = { amount = 100 }
 			add_country_modifier = {
 				name = me_hab_a_modern_state_minorities
 				duration = -1
@@ -3586,7 +3734,7 @@ me_hab_3_modern_state_mainland = {
 		}
 		effect = {
 			add_absolutism = 100
-			add_legitimacy_equivalent = { value = 100 }
+			add_legitimacy_equivalent = { amount = 100 }
 			add_country_modifier = {
 				name = me_hab_a_modern_state
 				duration = -1
@@ -3628,7 +3776,7 @@ me_hab_3_modern_state_minorities = {
 		}
 		effect = {
 			add_absolutism = 100
-			add_legitimacy_equivalent = { value = 100 }
+			add_legitimacy_equivalent = { amount = 100 }
 			add_country_modifier = {
 				name = me_hab_a_modern_state_minorities
 				duration = -1
@@ -3809,8 +3957,9 @@ me_hab_4_branching_germany = {
 			custom_tooltip = me_hab_german_branch
 			85 = {
 				add_center_of_trade_level = 1
+				add_base_production = 3
 			}
-			#add the spice
+			
 			custom_tooltip = me_hab_hre_branch
 			add_power_projection = {
 				type = mission_rewards_power_projection
@@ -3820,7 +3969,6 @@ me_hab_4_branching_germany = {
 			add_dip_power = 50
 			add_mil_power = 50
 			add_adm_power = 50
-			#add more spice here plez
 		}
 	}
 }
@@ -3919,6 +4067,7 @@ me_hab_4_germany_branch = {
 		effect = {
 			85 = {
 				add_center_of_trade_level = 1
+				add_base_production = 3
 			}
 			#add the spice
 		}
@@ -3968,30 +4117,36 @@ me_hab_4_1 = {
 		}
 		effect = {
 			custom_tooltip = me_gas_prevent_transylvanian_revolt
-			transylvania_area = {
-				if = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = {
+					transylvania_area = {
 						has_province_modifier = autonomy_decreased
 					}
+				}
+				transylvania_area = {
 					remove_province_modifier = autonomy_decreased
 				}
-				else = {
+			}
+			else = {
+				transylvania_area = {
 					add_province_modifier = {
 						name = me_placated_transylvanian_nobility
 						duration = 7300
 					}
 				}
 			}
-			southern_transylvania_area = {
-				if = {
-					limit = {
-						country_or_non_sovereign_subject_holds = ROOT
+			if = {
+				limit = {
+					southern_transylvania_area = {
 						has_province_modifier = autonomy_decreased
 					}
+				}
+				southern_transylvania_area = {
 					remove_province_modifier = autonomy_decreased
 				}
-				else = {
+			}
+			else = {
+				southern_transylvania_area = {
 					add_province_modifier = {
 						name = me_placated_transylvanian_nobility
 						duration = 7300
@@ -4814,6 +4969,7 @@ me_hab_4_2 = {
 				name = me_habsburg_land
 				duration = 18250
 			}
+			country_event = { id = me_austria_missions.26 }
 			set_country_flag = me_hab_baroque_monarchy
 		}
 	}
@@ -5027,7 +5183,7 @@ me_hab_4_internal_development = {
 				}
 			}
 			custom_tooltip = me_hab_developing_those_areas_will_give_loyalty
-			custom_flag = me_hab_increase_minority_loyalty_through_development
+			set_consort_flag = me_hab_increase_minority_loyalty_through_development
 		}
 	}
 }
@@ -5277,6 +5433,12 @@ me_hab_4_3 = {
 		}
 		effect = {
 			custom_tooltip = me_if_we_maintain_their_loyalty
+			set_country_flag = me_hab_nobles_enlightenment
+			add_estate_loyalty_modifier = {
+				estate = estate_nobles
+				loyalty = 10
+				duration = 7300
+			}
 		}
 	}
 	
@@ -5287,9 +5449,6 @@ me_hab_4_3 = {
 			me_hab_raabisation
 		}
 		position = 24
-		provinces_to_highlight = {
-			##PROVINCESHIGHLIGHTCODE
-		}
 		trigger = {
 			NOT = { unrest = 0.01 }
 			legitimacy = 100
@@ -5305,6 +5464,18 @@ me_hab_4_3 = {
 				add_country_modifier = {
 					name = ME_hab_more_absolutism
 					duration = -1
+				}
+			}
+			hidden_effect = {
+				set_country_flag = me_hab_more_absolutism_flag
+				if = {
+					limit = {
+						absolutism = 120
+					}
+					add_country_modifier = {
+						name = ME_hab_more_absolutism
+						duration = -1
+					}
 				}
 			}
 		}
@@ -5472,29 +5643,14 @@ me_hab_5 = {
 				country_event = { id = me_austria.11 }
 			}
 			else = {
-				ME_distribute_development = { 
-					type = production
-					amount = 5
-					limit = " OR = {
-						area = transdanubia_area
-						area = alfold_area
-						area = slovakia_area } "
+				transdanubia_area = {
+					add_local_autonomy = -100
 				}
-				ME_distribute_development = { 
-					type = manpower
-					amount = 5
-					limit = " OR = {
-						area = transdanubia_area
-						area = alfold_area
-						area = slovakia_area } "
+				alfold_area = {
+					add_local_autonomy = -100
 				}
-				ME_distribute_development = { 
-					type = tax
-					amount = 5
-					limit = " OR = {
-						area = transdanubia_area
-						area = alfold_area
-						area = slovakia_area } "
+				slovakia_area = {
+					add_local_autonomy = -100
 				}
 			}
 		}
@@ -5888,7 +6044,7 @@ me_hab_5_modern_navy = {
 			}
 		}
 		effect = {
-			country_event = { id = me_austria_missions.23 }
+			country_event = { id = me_austria_missions.22 }
 		}
 	}
 }
@@ -6269,7 +6425,7 @@ me_hab_5_minorities_branch = {
 			}
 		}
 		effect = {
-			custom_tooltip = me_hab_minorities_branch
+			set_country_flag = me_hab_germanization_flag
 			custom_tooltip = me_hab_unlocks_geramnization_mechanic
 		}
 	}

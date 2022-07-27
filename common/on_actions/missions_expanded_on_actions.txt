@@ -34,6 +34,32 @@ on_adm_development = {
 			}
 		}
 	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_increase_minority_loyalty_through_development
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					area = moravia_area
+					area = bohemia_area
+					area = erzgebirge_area
+					area = transdanubia_area
+					area = alfold_area
+					area = slovakia_area
+				}
+			}
+			owner = {
+				add_estate_loyalty = {
+					estate = me_hab_cultural_minorities
+					loyalty = 0.5
+				}
+			}
+		}
+	}
 }
 
 # province
@@ -66,6 +92,31 @@ on_dip_development = {
 			}
 			owner = {
 				change_variable = { ME_czech_loyalty = 0.5 }
+			}
+		}
+	}
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_increase_minority_loyalty_through_development
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					area = moravia_area
+					area = bohemia_area
+					area = erzgebirge_area
+					area = transdanubia_area
+					area = alfold_area
+					area = slovakia_area
+				}
+			}
+			owner = {
+				add_estate_loyalty = {
+					estate = me_hab_cultural_minorities
+					loyalty = 0.5
+				}
 			}
 		}
 	}
@@ -104,6 +155,32 @@ on_mil_development = {
 			}
 			owner = {
 				change_variable = { ME_czech_loyalty = 0.5 }
+			}
+		}
+	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_increase_minority_loyalty_through_development
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					area = moravia_area
+					area = bohemia_area
+					area = erzgebirge_area
+					area = transdanubia_area
+					area = alfold_area
+					area = slovakia_area
+				}
+			}
+			owner = {
+				add_estate_loyalty = {
+					estate = me_hab_cultural_minorities
+					loyalty = 0.5
+				}
 			}
 		}
 	}
@@ -320,3 +397,185 @@ on_successive_emperor  = {
 #		100 = ME_Manchu_Events.23
 #	}
 #}
+
+on_golden_bull_enacted = {
+	set_country_flag = enacted_golden_bull
+	
+	if = {
+		limit = {
+			has_country_flag = me_pi_from_bulls
+		}
+		add_papal_influence = 50
+	}
+}
+
+on_battle_lost_unit = {
+    if = {
+        limit = {
+            unit_owner = {
+                tag = MNG
+                has_ruler_flag = mng_militry_incompetence
+            }
+            is_ruler_commanding_unit = yes
+			enemy_unit = {
+				unit_owner = {
+					tag = OIR
+				}
+			}
+        }
+        OIR = {
+            country_event = { id = flavor_oir.2 }
+        }
+    }
+	
+	if = {
+		limit = {
+			unit_owner = {
+				tag = BUR
+			}
+			enemy_unit = {
+				unit_owner = {
+					has_country_flag = me_bur_beating_bur_king_in_battle
+				}
+			}
+		}
+		unit_owner = {
+			country_event = { id = incidents_bur_inheritance.1 }
+		}
+	}
+}
+
+on_monarch_death = {
+	if = {
+		limit = {
+			tag = ANS
+			BRA = {
+				has_country_flag = albrecht_achilles_flag
+			}
+		}
+		BRA = {
+			clr_country_flag = albrecht_achilles_flag #Just to be sure
+			kill_heir = {} #If Albrecht Achilles dies in Ansbach he will also be dead in Brandenburg, will appear as normal death of heir to BRA.
+		}
+	}
+	if = {
+		limit = { has_country_modifier = sought_after_bachelor }
+		remove_country_modifier = sought_after_bachelor
+	}
+	if = {
+		limit = {
+			tag = SAX
+			has_country_flag = sax_thuringen_split_to_happen
+			OR = {
+				NOT = { dynasty = "von Wettin" }
+				NOT = { senior_union_with = THU }
+				has_regency = yes
+			}
+		}
+		clr_country_flag = sax_thuringen_split_to_happen
+	}
+	if = {
+		limit = { tag = SAM }
+		country_event = { id = polynesian.35 }
+	}
+	if = {
+		limit = { tag = TOG }
+		country_event = { id = polynesian.36 }
+	}
+	if = {	# Ascension of Trailokanat	
+		limit = { tag = AYU }
+		country_event = { id = flavor_suk.1 }		 			
+	}
+	burgundian_inheritance_start_effect = yes
+	ladislaus_postumus_king_died_effect = yes
+	joan_de_trastamara_king_died_effect = yes
+	events = {
+		flavor_wal.1 # Vlad the Impaler. So that he doesn't try to usurp his father.
+		flavor_nav.4 # Navarra succession event
+		flavor_sax.8 # Treaty of Leipzig
+		flavor_pap.16 # Borgia Pope
+		flavor_pap.19 # death of borgia pope
+		flavor_tus.22 # Medici Pope
+		flavor_tus.24 # death of the Medici Pope
+		majapahit.8 # Majapahit pretenders
+		flavor_mal.11 # Mali pretenders
+		flavor_mal.47 # Pilgrimage ends prematurely
+	}
+	
+	if = {
+		limit = {
+			has_country_flag = me_hab_iron_fist_flag
+		}
+		change_variable = { #To count how many ruler deaths have happened
+			which = MEIronFistVar
+			value = 1
+		}
+		if = {
+			limit = {
+				change_variable = { #To count how many ruler deaths have happened
+					which = MEIronFistVar
+					value = 1
+				}
+			}
+			clr_country_flag = me_hab_iron_fist_flag
+			every_owned_province = {
+				remove_province_modifier = me_hab_iron_fist
+			}
+		}
+	}
+}
+
+on_general_recruited = {
+	add_army_professionalism = 0.01
+	if = {
+		limit = {
+			has_country_modifier = me_hab_general_staff
+		}
+		add_army_tradition = 2
+		if = {
+			limit = {
+				num_of_generals = 10
+			}
+			add_country_modifier = {
+				name = me_hab_staff_planning
+				duration = -1
+			}
+		}
+	}
+}
+
+# province:  spawned whenever a new owner takes over the province
+# FROM = The previous owner.
+on_conquest = {
+	remove_named_unrest = estate_land_seized
+	clr_province_flag = has_estate_unrest_flag
+	
+	if = {
+		limit = {
+			has_country_flag = me_hab_venetian_modifier
+		}
+		if = {
+			limit = {
+				venetia_area = {
+					type = all
+					owned_by = ROOT
+				}
+			}
+			add_country_modifier = {
+				name = me_hab_venetian_sailors
+				duration = -1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = {
+					venetia_area = {
+						type = all
+						owned_by = ROOT
+					}
+				}
+			}
+			remove_country_modifier = me_hab_venetian_sailors
+		}
+	}
+}
