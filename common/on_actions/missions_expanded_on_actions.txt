@@ -233,6 +233,50 @@ on_province_culture_converted = {
 	owner = {
 		change_variable = { num_of_culture_converted_provinces = 1 }
 	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_dev_cost_in_foreign_culture_provinces
+			}
+			culture_group = ROOT
+		}
+		remove_country_modifier = me_hab_development_law
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_dev_cost_in_foreign_culture_provinces
+			}
+			NOT = { culture_group = ROOT }
+		}
+		add_province_modifier = {
+			name = me_hab_development_law
+			duration = -1
+		}
+	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_conscription_on_foreign_provinces
+			}
+			culture_group = ROOT
+		}
+		remove_country_modifier = me_hab_conscription_law
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_conscription_on_foreign_provinces
+			}
+			NOT = { culture_group = ROOT }
+		}
+		add_province_modifier = {
+			name = me_hab_conscription_law
+			duration = -1
+		}
+	}
 }
 
 
@@ -301,6 +345,10 @@ on_mercenary_recruited = {
 			OR = {
 				FROM = { NOT = { has_country_flag = oyo_cavalry_do_not_consume_ap } }
 				ROOT = { NOT = { mercenary_company = merc_oyo_cavalry } }
+			}
+			AND = {
+				ROOT = { NOT = { mercenary_company = merc_doppelsoeldner } }
+				FROM = { NOT = { has_country_flag = me_hab_free_doppelsoldner } }
 			}
 		}
 		FROM = {
@@ -440,7 +488,11 @@ on_battle_lost_unit = {
 			}
 		}
 		unit_owner = {
-			country_event = { id = incidents_bur_inheritance.1 }
+			random = { 
+				chance = 10
+				
+				country_event = { id = incidents_bur_inheritance.1 }
+			}
 		}
 	}
 }
@@ -523,6 +575,13 @@ on_monarch_death = {
 			}
 		}
 	}
+	
+	if = {
+		limit = {
+			is_emperor = yes
+		}
+		me_decrease_emperor_of_romans_level = yes
+	}
 }
 
 on_general_recruited = {
@@ -577,5 +636,188 @@ on_conquest = {
 			}
 			remove_country_modifier = me_hab_venetian_sailors
 		}
+	}
+	
+	if = {
+		limit = {
+			owner = {
+				NOT = { has_country_flag = me_hab_dev_cost_in_foreign_culture_provinces }
+			}
+			has_country_modifier = me_hab_development_law
+		}
+		remove_country_modifier = me_hab_development_law
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_dev_cost_in_foreign_culture_provinces
+			}
+			NOT = { has_country_modifier = me_hab_development_law }
+		}
+		add_province_modifier = {
+			name = me_hab_development_law
+			duration = -1
+		}
+	}
+	
+	if = {
+		limit = {
+			owner = {
+				NOT = { has_country_flag = me_hab_conscription_on_foreign_provinces }
+			}
+			has_country_modifier = me_hab_conscription_law
+		}
+		remove_country_modifier = me_hab_conscription_law
+	}
+	else_if = {
+		limit = {
+			owner = {
+				has_country_flag = me_hab_conscription_on_foreign_provinces
+			}
+			NOT = { has_country_modifier = me_hab_conscription_law }
+		}
+		add_province_modifier = {
+			name = me_hab_conscription_law
+			duration = -1
+		}
+	}
+}
+
+# country
+# root = winning country, from = loser country
+on_war_won = {
+	FROM = { country_event = { id = flavor_cri.6 } }
+	ROOT = { country_event = { id = tributary_events.32 } }
+	
+	if = {
+		limit = {
+			is_part_of_hre = yes
+			FROM  = { is_part_of_hre = yes }
+		}
+		ROOT = { save_global_event_target_as = hre_winner }
+		FROM = { save_global_event_target_as = hre_loser }
+		random_known_country = {
+			limit = {
+				has_reform = free_city
+				NOT = {
+					prestige = 40
+				}
+				NOT = {
+					has_country_modifier = fc_treatyconference_timer
+				}
+			}
+			add_country_modifier = {
+				name = fc_treatyconference_timer
+				duration = 3650
+				hidden = yes
+			}
+			country_event = {
+				id = free_cities.7
+				days = 7
+			}
+		}
+	}
+
+	if = {
+		limit = {
+			tag = MLO
+			NOT = { has_country_flag = emp_mlo_won_war_with_swiss_mercs }
+			any_hired_mercenary_company = {
+				home_province = {
+					OR = {
+						area = switzerland_area
+						area = romandie_area
+					}
+				}
+			}
+		}
+		set_country_flag = emp_mlo_won_war_with_swiss_mercs
+	}
+	
+	if = {
+		limit = {
+			is_hiring_condottiere_from = SWI
+		}
+		SWI = { set_country_flag = won_condottiere_war }
+		if = {
+			limit = {
+				tag = PAP
+			}
+			SWI = {
+				set_country_flag = hired_to_pope
+			}
+		}
+	}
+	
+	if = {
+		limit = {
+			primary_culture = melanesian
+			NOT = { has_country_modifier = warlord_mod }
+		}
+		FROM = {
+			country_event = {
+				id = polynesian.17
+			}
+		}
+	}
+	if = {
+		limit = {
+			ROOT = {
+				religion = jewish
+				has_church_aspect = judaism_purim_teachings_aspect
+			}
+		}
+		add_church_power = 10
+	}
+	
+	if = {
+		limit = {
+			FROM = {
+				capital_scope = {
+					OR = {
+						area = lower_swabia_area
+						area = upper_swabia_area
+					}
+				}
+			}
+		}
+		FROM = {
+			set_country_flag = me_hab_beaten_by_habsburgs
+		}
+		change_variable = {
+			which = meBeatSwabians
+			value = 1
+		}
+	}
+	
+	if = {
+		limit = {
+			has_country_flag = me_hab_von_haugwitz_reforms
+		}
+		change_variable = {
+			which = MEHABWarsWon
+			value = 1
+		}
+	}
+	
+	if = {
+		limit = {
+			has_global_flag = imperial_treasurer_established
+		}
+		##check
+	}
+	
+	if = {
+		limit = {
+			has_global_flag = imperial_marshall_established
+		}
+		##check
+	}
+	
+	if = {
+		limit = {
+			has_global_flag = imperial_marshall_established
+		}
+		##check
 	}
 }

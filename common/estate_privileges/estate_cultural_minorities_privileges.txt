@@ -13,7 +13,7 @@ estate_cultural_minorities_land_rights = {
 	on_granted = {
 	}
 	benefits = {
-		government_capacity = 100
+		governing_capacity = 100
 	}
 	ai_will_do = {
 		factor = 1
@@ -34,7 +34,7 @@ estate_cultural_minorities_foreign_advisors = {
 	}
 	
 	benefits = {
-		advisor_cost = -0.5
+		advisor_cost = -0.05
 	}
 	modifier_by_land_ownership = {
 		yearly_corruption = 0.2
@@ -99,10 +99,33 @@ estate_cultural_minorities_foreign_invest_in_minority_land = {
 	on_granted = {
 		set_country_flag = me_hab_dev_cost_in_foreign_culture_provinces
 		custom_tooltip = me_hab_dev_cost_in_foreign_culture_provinces_tt
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = {
+						culture_group = ROOT
+					}
+				}
+				add_province_modifier = {
+					name = me_hab_development_law
+					duration = -1
+				}
+			}
+		}
 	}
 	
 	on_removed = {
 		clr_country_flag = me_hab_dev_cost_in_foreign_culture_provinces
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = {
+						culture_group = ROOT
+					}
+				}
+				remove_country_modifier = me_hab_development_law
+			}
+		}
 	}
 	ai_will_do = {
 		factor = 1
@@ -152,20 +175,39 @@ estate_cultural_minorities_conscription_law = {
 	}
 	can_select = {
 		has_country_flag = me_hab_unlock_minority_conscription
-	}
-	
-	benefits = {
-		infantry_fire = 0.2
-		is_mercenary_modifier = yes
+		NOT = { has_country_flag = me_hab_conscription_on_foreign_provinces }
 	}
 	
 	on_granted = {
 		set_country_flag = me_hab_conscription_on_foreign_provinces
 		custom_tooltip = me_hab_allow_conscription
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = {
+						culture_group = ROOT
+					}
+				}
+				add_province_modifier = {
+					name = me_hab_conscription_law
+					duration = -1
+				}
+			}
+		}
 	}
 	
 	on_removed = {
 		clr_country_flag = me_hab_conscription_on_foreign_provinces
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					NOT = {
+						culture_group = ROOT
+					}
+				}
+				remove_country_modifier = me_hab_conscription_law
+			}
+		}
 	}
 	
 	ai_will_do = {
@@ -184,6 +226,7 @@ estate_cultural_minorities_recruit_grenzens = {
 	}
 	can_select = {
 		has_country_flag = me_allow_grenzens
+		NOT = { has_country_flag = me_hab_allows_grenzen_merc_company }
 	}
 	
 	benefits = {

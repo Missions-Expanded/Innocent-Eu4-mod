@@ -75,6 +75,8 @@ HAB_determine_habsburg_glory_bonus = {
 HAB_balkanize_poland_into_hre_effect = {
 	#Deal with Polish subjects - the ones in the german region are to be released and the rest inherited. Leave Lithuania (they are important to the end)
 	
+	set_country_flag = me_hab_balkanized_poland
+	
 	$Poland$ = {
 		every_subject_country = {
 			limit = {
@@ -417,56 +419,132 @@ HAB_balkanize_poland_into_hre_effect = {
 	}
 }
 
-HAB_reduce_disloyal_nobility = {
+hf_decrease_emperor_of_romans_level = {
+	subtract_variable = {
+		which = hf_emperor_of_romans_level
+		value = 1
+	}
 	if = {
 		limit = {
-			OR = {
-				has_country_modifier = HAB_disloyal_nobility
-				has_country_modifier = HAB_disloyal_nobility_2
-				has_country_modifier = HAB_disloyal_nobility_3
-			}
+			NOT = { check_variable = { which = hf_emperor_of_romans_level value = 0 } }
 		}
-		custom_tooltip = modify_HAB_disloyal_nobility
+		set_variable = { which = hf_emperor_of_romans_level value = 0 }
 	}
-	else = {
-		tooltip = {
-			remove_country_modifier = HAB_disloyal_nobility_4
+	if = {
+		limit = {
+			check_variable = { which = hf_emperor_of_romans_level value = 4 }
+			NOT = { check_variable = { which = hf_emperor_of_romans_level value = 5 } }
+		}
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_1
+			duration = -1
 		}
 	}
-	
-	hidden_effect = {
-		if = {
-			limit = {
-				has_country_modifier = HAB_disloyal_nobility
-			}
-			remove_country_modifier = HAB_disloyal_nobility
-			add_country_modifier = {
-				name = HAB_disloyal_nobility_2
-				duration = -1
-			}
+	else_if = {
+		limit = {
+			check_variable = { which = hf_emperor_of_romans_level value = 3 }
+			NOT = { check_variable = { which = hf_emperor_of_romans_level value = 4 } }
 		}
-		else_if = {
-			limit = {
-				has_country_modifier = HAB_disloyal_nobility_2
-			}
-			remove_country_modifier = HAB_disloyal_nobility_2
-			add_country_modifier = {
-				name = HAB_disloyal_nobility_3
-				duration = -1
-			}
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_2
+			duration = -1
 		}
-		else_if = {
-			limit = {
-				has_country_modifier = HAB_disloyal_nobility_3
-			}
-			remove_country_modifier = HAB_disloyal_nobility_3
-			add_country_modifier = {
-				name = HAB_disloyal_nobility_4
-				duration = -1
-			}
+	}
+	else_if = {
+		limit = {
+			check_variable = { which = hf_emperor_of_romans_level value = 2 }
+			NOT = { check_variable = { which = hf_emperor_of_romans_level value = 3 } }
 		}
-		else = {
-			remove_country_modifier = HAB_disloyal_nobility_4
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_3
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { which = hf_emperor_of_romans_level value = 1 }
+			NOT = { check_variable = { which = hf_emperor_of_romans_level value = 2 } }
+		}
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_4
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			check_variable = { which = hf_emperor_of_romans_level value = 0 }
+			NOT = { check_variable = { which = hf_emperor_of_romans_level value = 1 } }
+		}
+		#Do absolutely nothing
+	}
+}
+
+hf_increase_emperor_of_romans_level = {
+	change_variable = {
+		which = hf_emperor_of_romans_level
+		value = 1
+	}
+	if = {
+		limit = {
+			check_variable = { which = hf_emperor_of_romans_level value = 5 }
+		}
+		set_variable = { which = hf_emperor_of_romans_level value = 4 }
+	}
+	if = {
+		limit = {
+			has_ruler_modifier = me_sty_emperor_of_romans_4
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans }
+		}
+		remove_country_modifier = me_sty_emperor_of_romans_4
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_3
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_ruler_modifier = me_sty_emperor_of_romans_3
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans }
+		}
+		remove_country_modifier = me_sty_emperor_of_romans_3
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_2
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_ruler_modifier = me_sty_emperor_of_romans_3
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans }
+		}
+		remove_country_modifier = me_sty_emperor_of_romans_3
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_2
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			has_ruler_modifier = me_sty_emperor_of_romans_2
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans }
+		}
+		remove_country_modifier = me_sty_emperor_of_romans_2
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_1
+			duration = -1
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans_1 }
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans_2 }
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans_3 }
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans_4 }
+			NOT = { has_ruler_modifier = me_sty_emperor_of_romans }
+		}
+		add_ruler_modifier = {
+			name = me_sty_emperor_of_romans_4
+			duration = -1
 		}
 	}
 }

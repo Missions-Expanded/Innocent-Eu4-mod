@@ -1,0 +1,725 @@
+estate_cultural_minorities_increase_autonomy = {
+	can_select = {
+		any_owned_province = {
+			is_state_core = root
+			NOT = { local_autonomy = 75 }
+			NOT = { culture_group = ROOT }
+			is_capital = no
+			NOT = { has_province_modifier = autonomy_increased }
+			NOT = { has_province_modifier = autonomy_decreased }
+		}
+	}
+	selection_weight = {
+		factor = 1.5
+	}
+	pre_effect = {
+		set_variable = {
+			which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+			value = 0
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				NOT = { local_autonomy = 75 }
+				NOT = { culture_group = ROOT }
+				is_capital = no
+				NOT = { has_province_modifier = autonomy_increased }
+				NOT = { has_province_modifier = autonomy_decreased }
+			}
+			save_event_target_as = agenda_province
+			choose_random_development_bonus_effect = yes
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					local_autonomy = 60
+				}
+				root = {
+					set_variable = {
+						which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+						value = 5
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					local_autonomy = 45
+				}
+				root = {
+					set_variable = {
+						which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+						value = 4
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					local_autonomy = 30
+				}
+				root = {
+					set_variable = {
+						which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+						value = 3
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					local_autonomy = 15
+				}
+				root = {
+					set_variable = {
+						which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+						value = 2
+					}
+				}
+			}
+			else = {
+				root = {
+					set_variable = {
+						which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+						value = 1
+					}
+				}
+			}
+		}
+	}
+	on_invalid = {
+		event_target:agenda_province = {
+			clear_random_development_bonus_flags_effect = yes
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+	fail_if = {
+		OR = {
+			event_target:agenda_province = {
+				NOT = { owned_by = root }
+			}
+			event_target:agenda_province = {
+				religion_group = root
+			}
+			custom_trigger_tooltip = {
+				tooltip = estate_dhimmi_increase_autonomy_in_province_x_tooltip
+				hidden_trigger = {
+					if = {
+						limit = {
+							check_variable = {
+								which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+								value = 5
+							}
+						}
+						event_target:agenda_province = {
+							NOT = { local_autonomy = 50 }
+						}
+					}
+					else_if = {
+						limit = {
+							check_variable = {
+								which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+								value = 4
+							}
+						}
+						event_target:agenda_province = {
+							NOT = { local_autonomy = 35 }
+						}
+					}
+					else_if = {
+						limit = {
+							check_variable = {
+								which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+								value = 3
+							}
+						}
+						event_target:agenda_province = {
+							NOT = { local_autonomy = 20 }
+						}
+					}
+					else_if = {
+						limit = {
+							check_variable = {
+								which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+								value = 2
+							}
+						}
+						event_target:agenda_province = {
+							NOT = { local_autonomy = 5 }
+						}
+					}
+					else = {
+						hidden_trigger = {
+							always = no
+						}
+					}
+				}
+			}	
+		}
+	}
+	task_requirements = {
+		if = {
+			limit = {
+				check_variable = {
+					which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+					value = 5
+				}
+			}
+			event_target:agenda_province = {
+				local_autonomy = 75
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+					value = 4
+				}
+			}
+			event_target:agenda_province = {
+				local_autonomy = 60
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+					value = 3
+				}
+			}
+			event_target:agenda_province = {
+				local_autonomy = 45
+			}
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = estate_cultural_minorities_increase_autonomy_in_province_x_var
+					value = 2
+				}
+			}
+			event_target:agenda_province = {
+				local_autonomy = 30
+			}
+		}
+		else = {
+			event_target:agenda_province = {
+				local_autonomy = 15
+			}
+		}
+	}
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = me_estate_cultural_minorities
+			loyalty = 10
+		}
+		event_target:agenda_province = {
+			apply_random_development_bonus_bonus_effect = yes
+		}
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			clear_random_development_bonus_flags_effect = yes
+		}
+        add_estate_loyalty_modifier = {
+            estate = me_estate_cultural_minorities
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_cultural_minorities_fire_advisor = {
+	can_select = {
+		employed_advisor = {
+			category = ADM
+			culture = ROOT
+		}
+	}
+	selection_weight = {
+		factor = 1
+		modifier = {
+			factor = 0.5
+			always = yes
+		}
+	}
+	immediate_effect = {
+		hidden_effect = {
+			set_country_flag = need_to_fire_adm_advisor
+		}
+	}
+	on_invalid = {
+		clr_country_flag = need_to_fire_adm_advisor
+	}
+	task_requirements = {
+		custom_trigger_tooltip = {
+			tooltip = fire_adm_advisor_tooltip
+			has_country_flag = just_fired_adm_advisor
+		}
+	}
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = me_estate_cultural_minorities
+			loyalty = 10
+		}
+		clr_country_flag = just_fired_adm_advisor
+		clr_country_flag = need_to_fire_adm_advisor
+	}
+	invalid_trigger = {
+		NOT = {
+			employed_advisor = {
+				category = ADM
+			}
+		}
+		NOT = { has_country_flag = just_fired_adm_advisor }
+	}
+    failing_effect = {
+        add_estate_loyalty_modifier = {
+            estate = estate_dhimmi
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+		clr_country_flag = need_to_fire_adm_advisor
+    }
+}
+
+estate_cultural_minorities_develop_x = {
+	can_select = {
+		any_owned_province = {
+			NOT = { culture_group = ROOT }
+			is_state_core = root
+		}
+	}
+	selection_weight = {
+		factor = 1
+	}
+	pre_effect = {
+		set_variable = {
+			which = develop_x_category
+			value = 0
+		}
+		random_list = {
+			1 = { #mil
+				set_variable = {
+					which = develop_x_category
+					value = 3
+				}
+			}
+			1 = { #dip
+				set_variable = {
+					which = develop_x_category
+					value = 2
+				}
+			}
+			1 = { #adm
+				set_variable = {
+					which = develop_x_category
+					value = 1
+				}
+			}
+		}
+		random_owned_province = {
+			limit = {
+				NOT = { culture_group = ROOT }
+				is_state_core = root
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				is_state_core = root
+				NOT = { culture_group = ROOT }
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					root = {
+						check_variable = {
+							which = develop_x_category
+							value = 3
+						}
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = province_mil_var
+							value = 1
+						}
+					}
+					set_variable = {
+						which = province_mil_var
+						value = 0
+					}
+				}
+				export_to_variable = {
+					which = province_mil_var
+					value = trigger_value:base_manpower
+				}
+				change_variable = {
+					which = province_mil_var
+					value = 2
+				}
+			}
+			else_if = {
+				limit = {
+					root = {
+						check_variable = {
+							which = develop_x_category
+							value = 2
+						}
+					}
+				}
+				if = {
+					limit = {
+						check_variable = {
+							which = province_dip_var
+							value = 1
+						}
+					}
+					set_variable = {
+						which = province_dip_var
+						value = 0
+					}
+				}
+				export_to_variable = {
+					which = province_dip_var
+					value = trigger_value:base_production
+				}
+				change_variable = {
+					which = province_dip_var
+					value = 2
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						check_variable = {
+							which = province_adm_var
+							value = 1
+						}
+					}
+					set_variable = {
+						which = province_adm_var
+						value = 0
+					}
+				}
+				export_to_variable = {
+					which = province_adm_var
+					value = trigger_value:base_tax
+				}
+				change_variable = {
+					which = province_adm_var
+					value = 2
+				}
+			}
+		}
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			NOT = { owned_by = root }
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+    task_requirements = {
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					root = {
+						check_variable = {
+							which = develop_x_category
+							value = 3
+						}
+					}
+				}
+				base_manpower = "province_mil_var"
+			}
+			else_if = {
+				limit = {
+					root = {
+						check_variable = {
+							which = develop_x_category
+							value = 2
+						}
+					}
+				}
+				base_production = "province_dip_var"
+			}
+			else = {
+				base_tax = "province_adm_var"
+			}
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = me_estate_cultural_minorities
+			loyalty = 10
+		}
+		if = {
+			limit = {
+				check_variable = {
+					which = develop_x_category
+					value = 3
+				}
+			}
+			add_yearly_manpower = 0.3
+		}
+		else_if = {
+			limit = {
+				check_variable = {
+					which = develop_x_category
+					value = 2
+				}
+			}
+			add_years_of_income = 0.3
+		}
+		else = {
+			add_prestige = 10
+		}
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_dhimmi_displeased
+					value = 5
+				}
+			}
+		}
+        add_estate_loyalty_modifier = {
+            estate = me_estate_cultural_minorities
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+        }
+    }
+}
+
+estate_dhimmi_build_courthouse_in_y = {
+	can_select = {
+		adm_tech = 4
+		any_owned_province = {
+			NOT = { religion_group = root }
+			NOT = { has_building = townhall }
+			is_state_core = root
+			OR = {
+				AND = {
+					NOT = { has_building = courthouse }
+					num_free_building_slots = 1
+				}
+				AND = {
+					ROOT = { adm_tech = 19 }
+					has_building = courthouse
+				}
+			}
+		}
+	}
+	selection_weight = {
+		factor = 1
+		modifier = {
+			factor = 0.65
+			NOT = {
+				any_owned_province = {
+					NOT = { religion_group = root }
+					is_state_core = root
+					base_tax = 4
+					NOT = { has_building = townhall }
+					OR = {
+						AND = {
+							NOT = { has_building = courthouse }
+							num_free_building_slots = 1
+						}
+						AND = {
+							ROOT = { adm_tech = 19 }
+							has_building = courthouse
+						}
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 1.2
+			any_owned_province = {
+				NOT = { religion_group = root }
+				is_state_core = root
+				base_tax = 7
+				NOT = { has_building = townhall }
+				OR = {
+					AND = {
+						NOT = { has_building = courthouse }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 19 }
+						has_building = courthouse
+					}
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			NOT = {
+				crown_land_share = 15
+			}
+		}
+	}
+	pre_effect = {
+		set_variable = {
+			which = estate_church_build_temple_in_y_var
+			value = 0
+		}
+		random_owned_province = {
+			limit = {
+				NOT = { religion_group = root }
+				is_state_core = root
+				NOT = { has_building = townhall }
+				OR = {
+					AND = {
+						NOT = { has_building = courthouse }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 19 }
+						has_building = courthouse
+					}
+				}
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				NOT = { religion_group = root }
+				is_state_core = root
+				base_tax = 4
+				NOT = { has_building = townhall }
+				OR = {
+					AND = {
+						NOT = { has_building = courthouse }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 19 }
+						has_building = courthouse
+					}
+				}
+			}
+			save_event_target_as = agenda_province
+		}
+		random_owned_province = {
+			limit = {
+				NOT = { religion_group = root }
+				is_state_core = root
+				base_tax = 7
+				NOT = { has_building = townhall }
+				OR = {
+					AND = {
+						NOT = { has_building = courthouse }
+						num_free_building_slots = 1
+					}
+					AND = {
+						ROOT = { adm_tech = 19 }
+						has_building = courthouse
+					}
+				}
+			}
+			save_event_target_as = agenda_province
+		}
+		event_target:agenda_province = {
+			if = {
+				limit = {
+					NOT = { has_building = courthouse }
+				}
+				ROOT = {
+					set_variable = {
+						which = estate_townhall_build_temple_in_y_var
+						value = 1
+					}
+				}
+			}
+			else = {
+				ROOT = {
+					set_variable = {
+						which = estate_townhall_build_temple_in_y_var
+						value = 2
+					}
+				}
+			}
+		}
+	}
+	fail_if = {
+		event_target:agenda_province = {
+			OR = {
+				religion_group = root
+				NOT = { owned_by = root }
+			}
+		}
+	}
+	provinces_to_highlight = {
+		province_id = event_target:agenda_province
+	}
+    task_requirements = {
+		if = {
+			limit = {
+				check_variable = {
+					which = estate_townhall_build_temple_in_y_var
+					value = 2
+				}
+			}
+			event_target:agenda_province = {
+				has_building = townhall
+			}
+		}
+		else = {
+			event_target:agenda_province = {
+				OR = {
+					has_building = courthouse
+					has_building = townhall
+				}
+			}
+		}
+    }
+    task_completed_effect = {
+		add_estate_loyalty = {
+			estate = me_estate_cultural_minorities
+			loyalty = 10
+		}
+		if = {
+			limit = {
+				NOT = { crown_land_share = 15 }
+				estate_territory = {
+					estate = me_estate_cultural_minorities
+					territory = 10
+				}
+			}
+			take_estate_land_share_small = { estate = me_estate_cultural_minorities }
+		}
+		else = {
+			event_target:agenda_province = {
+				add_base_tax = 1
+			}
+		}
+    }
+    failing_effect = {
+		event_target:agenda_province = {
+			if = {
+				limit = { owned_by = root }
+				add_named_unrest = {
+					name = local_dhimmi_displeased
+					value = 5
+				}
+			}
+		}
+		add_estate_loyalty_modifier = {
+			estate = me_estate_cultural_minorities
+			desc = EST_VAL_AGENDA_DENIED
+			loyalty = -5
+			duration = 7300
+		}
+    }
+}

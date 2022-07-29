@@ -41,8 +41,55 @@ austria_increase_relations = {
 			NOT = { preferred_emperor = ROOT }
 		}
 		OR = {
-			NOT = { has_country_flag = me_hab_improved_relations }
-			had_country_flag = { flag = me_hab_improved_relations days = 1825 }
+			NOT = { has_country_flag = me_hab_add_favors }
+			had_country_flag = { flag = me_hab_add_favors days = 1825 }
+		}
+	}
+}
+
+austria_add_favors = {
+	category = influence
+
+	require_acceptance = no
+
+	is_visible = {
+		has_country_flag = habsburg_glory_unlocked
+		dynasty = "von Habsburg"
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = habsburg_glory_unlocked
+			dynasty = "von Habsburg"
+		}
+		check_variable = {
+			which = habsburg_glory
+			value = 25
+		}
+	}
+
+	on_accept = {
+		add_favors = {
+		   who = FROM
+		   amount = 10
+		}
+		HAB_change_habsburg_glory = { amount = -25 }
+		clr_country_flag = me_hab_add_favors
+		set_country_flag = me_hab_add_favors
+	}
+
+	ai_will_do = {
+		check_variable = {
+			which = habsburg_glory
+			value = 60
+		}
+		FROM = {
+			is_elector = yes
+			NOT = { preferred_emperor = ROOT }
+		}
+		OR = {
+			NOT = { has_country_flag = me_hab_add_favors }
+			had_country_flag = { flag = me_hab_add_favors days = 1825 }
 		}
 	}
 }
@@ -98,7 +145,15 @@ austria_put_relative_as_heir = {
 				block_disinherit = yes
 			}
 		}
-		HAB_change_habsburg_glory = { amount = -50 }
+		if = {
+			limit = {
+				has_country_flag me_hab_spread_dynasty_cheaper
+			}
+			HAB_change_habsburg_glory = { amount = -25 }
+		}
+		else = {
+			HAB_change_habsburg_glory = { amount = -50 }
+		}
 	}
 
 	on_decline = {
@@ -247,5 +302,124 @@ austria_put_relative_as_heir = {
 				had_country_flag = { flag = declined_heir_from_@ROOT days = 1825 }
 			}
 		}
+	}
+}
+
+
+################
+#HRE Unique ones
+################
+
+austria_establish_imperial_treasurer = {
+	category = emperor
+
+	require_acceptance = no
+
+	is_visible = {
+		has_country_flag = me_hab_new_diplo_actions
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = me_hab_new_diplo_actions
+		}
+		NOT = { has_global_flag = imperial_treasurer_established }
+	}
+
+	on_accept = {
+		hidden_effect = {
+			FROM = {
+				country_event = { id = me_austria_missions.58 }
+			}
+			set_global_flag = imperial_treasurer_established
+		}
+		tooltip = {
+			FROM = {
+				add_country_modifier = {
+					name = me_hab_imperial_treasurer
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		NOT = { has_global_flag = imperial_treasurer_established }
+	}
+}
+
+austria_establish_imperial_marshall = {
+	category = emperor
+
+	require_acceptance = no
+
+	is_visible = {
+		has_country_flag = me_hab_new_diplo_actions
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = me_hab_new_diplo_actions
+		}
+		NOT = { has_global_flag = imperial_marshall_established }
+	}
+
+	on_accept = {
+		hidden_effect = {
+			FROM = {
+				country_event = { id = me_austria_missions.59 }
+			}
+			set_global_flag = imperial_marshall_established
+		}
+		tooltip = {
+			FROM = {
+				add_country_modifier = {
+					name = me_hab_imperial_marshall
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		NOT = { has_global_flag = imperial_marshall_established }
+	}
+}
+
+austria_establish_imperial_court_chaplain = {
+	category = emperor
+
+	require_acceptance = no
+
+	is_visible = {
+		has_country_flag = me_hab_new_diplo_actions
+	}
+
+	is_allowed = {
+		hidden_trigger = {
+			has_country_flag = me_hab_new_diplo_actions
+		}
+		NOT = { has_global_flag = imperial_court_chaplain_established }
+	}
+
+	on_accept = {
+		hidden_effect = {
+			FROM = {
+				country_event = { id = me_austria_missions.60 }
+			}
+			set_global_flag = imperial_court_chaplain_established
+		}
+		tooltip = {
+			FROM = {
+				add_country_modifier = {
+					name = me_hab_imperial_court_chaplain
+					duration = -1
+				}
+			}
+		}
+	}
+
+	ai_will_do = {
+		NOT = { has_global_flag = imperial_court_chaplain_established }
 	}
 }
