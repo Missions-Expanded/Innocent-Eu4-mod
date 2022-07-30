@@ -666,12 +666,12 @@ me_hab_1_1 = {
 				}
 				custom_trigger_tooltip = {
 					tooltip = me_has_used_peace_deal_on_france
-					has_country_flag = me_hab_balkanized_france
+					has_global_flag = me_hab_balkanized_france
 				}
 			}
 		}
 		effect = {
-			country_event = { id = me_austria_missions.56 }
+			country_event = { id = me_austria_missions.560 }
 		}
 	}
 	
@@ -1501,6 +1501,12 @@ me_hab_2_1 = {
 						}
 					}
 				}
+				AND = {
+					266 = {
+						owned_by = BOH
+						controlled_by = ROOT
+					}
+				}
 				NOT = { exists = BOH }
 			}
 		}
@@ -1847,6 +1853,11 @@ me_hab_2_1 = {
 						add_nationalism = -10
 					}
 				}
+			}
+			add_casus_belli = {
+				target = FRA
+				type = cb_austria_balkanize_france
+				months = 120
 			}
 		}
 	}
@@ -3145,7 +3156,6 @@ me_hab_3_2 = {
 			OR = {
 				area = central_poland_area
 				area = mazovia_area
-				area = wielpolska_area
 				area = malopolska_area
 				area = sandomierz_area
 			}
@@ -3165,10 +3175,6 @@ me_hab_3_2 = {
 						country_or_non_sovereign_subject_holds = ROOT
 					}
 					mazovia_area = {
-						type = all
-						country_or_non_sovereign_subject_holds = ROOT
-					}
-					wielpolska_area = {
 						type = all
 						country_or_non_sovereign_subject_holds = ROOT
 					}
@@ -3721,26 +3727,35 @@ me_hab_3_branching_internal = {
 				cost_multiplier = 0.25
 			}
 			custom_tooltip = me_hab_executioner_scaling
-			if = {
-				limit = {
-					has_country_flag = me_hab_aulic_council
-				}
-				custom_tooltip = me_hab_2_reform_progress_power_town_hall
-				hidden_effect = {
-					every_owned_province = {
-						limit = {
-							has_building = town_hall
-						}
-						owner = {
-							change_government_reform_progress = 2
-						}
+			custom_tooltip = me_hab_2_reform_progress_power_town_hall
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						has_building = town_hall
+					}
+					owner = {
+						change_government_reform_progress = 2
 					}
 				}
 			}
 			custom_tooltip = " "
 			custom_tooltip = me_hab_minorities_branch
-			set_country_flag = me_hab_more_cultural_minorities_choices
-			custom_tooltip = me_hab_more_minorities_bonuses
+			add_estate_loyalty_modifier = {
+				name = me_estate_cultural_minorities
+				loyalty = 20
+				duration = -1
+			}
+			custom_tooltip = me_hab_gain_02_years_of_manpower_for_each_foreign_culture_province
+			hidden_effect = {
+				every_owned_province = {
+					limit = {
+						NOT = { culture = ROOT }
+					}
+					owner = {
+						add_yearly_manpower = 0.2
+					}
+				}
+			}
 		}
 	}
 }
@@ -5115,6 +5130,13 @@ me_hab_4_2 = {
 			}
 		}
 		trigger = {
+			OR = {
+				is_year = 1470
+				custom_trigger_tooltip = {
+					tooltip = me_hab_castilian_civil_war_happened
+					any_country = { has_country_flag = had_cas_civil_war }
+				}
+			}
 			if = {
 				limit = {
 					exists = CAS
@@ -5915,8 +5937,8 @@ me_hab_5 = {
 						tooltip = me_gas_ladislaus_was_heir
 						HUN = {
 							OR = {
-								has_country_flag = ladislaus_postumus_heir
-								has_country_flag = ladislaus_postumus_ruler
+								has_country_flag = hun_ladislaus_postumus_heir
+								has_country_flag = hun_ladislaus_postumus_ruler
 							}
 						}
 					}
@@ -5939,14 +5961,12 @@ me_hab_5 = {
 			custom_tooltip = me_increases_chances_of_hungarians_suppoirting_us
 			custom_tooltip = me_hab_if_pu
 			tooltip = {
-				HUN = {
-					add_liberty_desire = -100
-				}
+				add_liberty_desire = -100
 			}
 			custom_tooltip = "Else:"
 			tooltip = {
-				me_add_claim = { area = slovakia_area }
-				me_add_claim = { area = alfold_area }
+				ME_give_claims = { area = slovakia_area }
+				ME_give_claims = { area = alfold_area }
 			}
 			hidden_effect = {
 				if = {
@@ -5965,8 +5985,8 @@ me_hab_5 = {
 							owned_by = ROOT
 						}
 					}
-					me_add_claim = { area = slovakia_area }
-					me_add_claim = { area = alfold_area }
+					ME_give_claims = { area = slovakia_area }
+					ME_give_claims = { area = alfold_area }
 				}
 				else = {
 					HUN = {
@@ -6017,7 +6037,7 @@ me_hab_5 = {
 		effect = {
 			custom_tooltip = me_hab_if_pu
 			tooltip = {
-				country_event = { id = me_austria.11 }
+				country_event = { id = me_austria_missions.11 }
 			}
 			custom_tooltip = "Else:"
 			tooltip = {
@@ -6036,7 +6056,7 @@ me_hab_5 = {
 					limit = {
 						senior_union_with = HUN
 					}
-					country_event = { id = me_austria.11 }
+					country_event = { id = me_austria_missions.11 }
 				}
 				else = {
 					transdanubia_area = {
@@ -6470,17 +6490,27 @@ me_hab_5_1 = {
 			}
 		}
 		effect = {
-			every_subject_country = {
-				limit = {
-					capital_scope = {
-						region = iberia_region
-					}
-				}
+			custom_tooltip = "Every subject country in Iberia:"
+			tooltip = {
 				add_country_modifier = {
 					name = me_hab_iberian_hegemony
 					duration = -1
 				}
 			}
+			hidden_effect = {
+				every_subject_country = {
+					limit = {
+						capital_scope = {
+							region = iberia_region
+						}
+					}
+					add_country_modifier = {
+						name = me_hab_iberian_hegemony
+						duration = -1
+					}
+				}
+			}
+			set_country_flag = me_hab_iberian_ties_flag
 			add_country_modifier = {
 				name = me_hab_iberian_ties
 				duration = -1
