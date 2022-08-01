@@ -519,7 +519,10 @@ country_event = {
 		ai_chance = { factor = 1 }
 
 		FROM = {
-			vassalize = ROOT
+			create_subject = {
+				subject_type = march
+				subject = ROOT
+			}
 		}
 		white_peace = FROM
 
@@ -630,13 +633,13 @@ country_event = {
 	}
 	
 	option = {
-		name = ME_Austria_Events.13.C
+		name = ME_Austria_Events.13.c
 
 		ai_chance = { factor = 0 }
 		
 		trigger = {
 			BRA = {
-				vassal_of = ROOT
+				is_subject_of = ROOT
 			}
 		}
 		
@@ -653,6 +656,22 @@ country_event = {
 			}
 			cede_province = BRA
 			add_core = BRA
+		}
+		if = {
+			limit = {
+				NOT = { exists = PRU }
+			}
+			BRA = {
+				change_tag = PRU
+				swap_non_generic_missions = yes
+				swap_free_idea_group = yes
+				if = {
+					limit = {
+						religion = protestant
+					}
+					add_government_reform = prussian_monarchy
+				}
+			}
 		}
 	}
 }
@@ -843,6 +862,26 @@ country_event = {
 			add_local_autonomy = -50
 			add_nationalism = -10
 		}
+		add_stability = 1
+		custom_tooltip = me_hab_if_connected_upgrade_fort
+		tooltip = {
+			1880 = {
+				add_or_upgrade_fort_building = yes
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					1880 = {
+						owned_by = root
+						is_in_capital_area = yes
+					}
+				}
+				1880 = {
+					add_or_upgrade_fort_building = yes
+				}
+			}
+		}
 	}
 
 	option = {
@@ -864,6 +903,20 @@ country_event = {
 			add_province_modifier = {
 				name = me_hab_revenge_fulfilled
 				duration = 7300
+			}
+		}
+		custom_tooltip = me_hab_01_income_per_swiss_province
+		hidden_effect = {
+			every_owned_province = {
+				limit = {
+					OR = {
+						area = switzerland_area
+						area = romandie_area
+					}
+				}
+				owner = {
+					add_years_of_income = 0.1
+				}
 			}
 		}
 	}
@@ -1207,30 +1260,11 @@ country_event = {
 		ai_chance = { factor = 10 } #because ai is dumb
 		
 		VEN = {
-			country_event = { id = ME_Austria_Events.29 }
+			country_event = { id = ME_Austria_Events.68 }
 		}
 		custom_tooltip = "If they accept: "
 		tooltip = {
-			VEN = {
-				custom_tooltip = me_join_the_empire
-				white_peace = ROOT
-			}
-			add_imperial_influence = 10
-		}
-	}
-	
-	option = {
-		name = ME_Austria_Events.28.b
-		
-		ai_chance = { factor = 90 }
-		
-		111 = {
-			cede_province = ROOT
-			add_core = ROOT
-		}
-		1774 = {
-			cede_province = ROOT
-			add_core = ROOT
+			vassalize = VEN
 		}
 	}
 }
@@ -1591,9 +1625,18 @@ country_event = {
 		
 		add_imperial_influence = 10
 		custom_tooltip = me_hab_every_italian_nation
-		add_opinion = {
-			who = ROOT
-			modifier = me_hab_kingdom_of_italy_opinion
+		tooltip = {
+			random_known_country = {
+				limit = {
+					capital_scope = {
+						region = italy_region
+					}
+				}
+				add_opinion = {
+					who = ROOT
+					modifier = me_hab_kingdom_of_italy_opinion
+				}
+			}
 		}
 		hidden_effect = {
 			every_country = {
@@ -2647,8 +2690,153 @@ country_event = {
 	is_triggered_only = yes
 	
 	option = {
-		name = ME_Austria_Events.65.a
+		name = ME_Austria_Events.66.a
 		
 		HAB_balkanize_france_into_hre_effect = { France = FRA }
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.67
+	title = ME_Austria_Events.67.t
+	desc = ME_Austria_Events.67.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.67.a
+		
+		VEN = {
+			country_event = { id = ME_Austria_Events.29 }
+		}
+		custom_tooltip = "If they accept: "
+		tooltip = {
+			VEN = {
+				custom_tooltip = me_join_the_empire
+				white_peace = ROOT
+			}
+			add_imperial_influence = 10
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.68
+	title = ME_Austria_Events.68.t
+	desc = ME_Austria_Events.68.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.68.a
+		
+		white_peace = FROM
+		FROM = {
+			vassalize = ROOT
+		}
+	}
+	
+	option = {
+		name = ME_Austria_Events.68.b
+		
+		FROM = {
+			venetia_area = {
+				limit = {
+					country_or_non_sovereign_subject_holds = ROOT
+				}
+				add_core = FROM
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.69
+	title = ME_Austria_Events.69.t
+	desc = ME_Austria_Events.69.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.69.a
+		
+		VEN = {
+			country_event = { id = ME_Austria_Events.29 }
+		}
+		custom_tooltip = "If they accept: "
+		tooltip = {
+			VEN = {
+				custom_tooltip = me_join_the_empire
+				white_peace = ROOT
+			}
+			add_imperial_influence = 10
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.70
+	title = ME_Austria_Events.70.t
+	desc = ME_Austria_Events.70.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.70.a
+		
+		me_join_the_empire = yes
+	}
+	
+	option = {
+		name = ME_Austria_Events.70.b
+		
+		me_join_the_empire = yes
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.71
+	title = ME_Austria_Events.71.t
+	desc = ME_Austria_Events.71.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.71.a
+		
+		tooltip = {
+			FROM = {
+				me_join_the_empire = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = ME_Austria_Events.72
+	title = ME_Austria_Events.72.t
+	desc = ME_Austria_Events.72.d
+
+	is_triggered_only = yes
+	
+	option = {
+		name = ME_Austria_Events.72.a
+		
+		set_country_flag = me_bur_higher_acceptance_chances
+		custom_tooltip = me_bur_higher_acceptance_chances_tt
+		add_favors = {
+			who = BUR
+			amount = 10
+		}
+		define_consort = {
+			country_of_origin = BUR
+			religion = BUR
+			culture = BUR
+			name = "Marie"
+			dynasty = "de Bourgogne"
+			adm = 4
+			dip = 5
+			mil = 3
+		}
 	}
 }

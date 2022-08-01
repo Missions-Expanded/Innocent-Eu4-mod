@@ -29,7 +29,7 @@ me_hab_1 = {
 					tooltip = me_hab_beaten_3_swabian_nations
 					check_variable = {
 						which = meBeatSwabians
-						value = 3
+						value = 2
 					}
 				}
 				AND = {
@@ -1093,12 +1093,30 @@ me_hab_2_hre = {
 			}
 		}
 		effect = {
+			custom_tooltip = me_hab_every_prince
+			tooltip = {
+				add_country_modifier = {
+					name = me_hab_a_secure_empire
+					duration = 7300
+				}
+			}
 			hidden_effect = {
 				every_province = {
 					limit = {
 						is_part_of_hre = yes
 					}
 					set_province_flag = me_hab_part_of_hre
+				}
+				every_known_country = {
+					limit = {
+						capital_scope = {
+							is_part_of_hre = yes
+						}
+					}
+					add_country_modifier = {
+						name = me_hab_a_secure_empire
+						duration = 7300
+					}
 				}
 			}
 			add_country_modifier = {
@@ -1298,14 +1316,22 @@ me_hab_2_1 = {
 						owned_by = VEN
 					}
 				}
-				offensive_war_with = VEN
 				OR = {
-					112 = {
-						controlled_by = ROOT
+					AND = {
+						offensive_war_with = VEN
+						OR = {
+							112 = {
+								controlled_by = ROOT
+							}
+							war_score_against = {
+								who = VEN
+								value = 50
+							}
+						}
 					}
-					war_score_against = {
-						who = VEN
-						value = 50
+					AND = {
+						alliance_with = VEN
+						trust = { who = VEN value = 70 }
 					}
 				}
 			}
@@ -1323,21 +1349,59 @@ me_hab_2_1 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					exists = VEN
-				}
+			custom_tooltip = me_hab_if_war
+			tooltip = {
+				country_event = { id = ME_Austria_Events.69 }
+			}
+			custom_tooltip = " "
+			custom_tooltip = me_hab_if_peaceful
+			tooltip = {
 				country_event = { id = ME_Austria_Events.28 }
 			}
-			else = {
+			custom_tooltip = " "
+			custom_tooltip = me_hab_else
+			tooltip = {
 				venetia_area = {
-					limit = {
-						owned_by = ROOT
-					}
 					add_local_autonomy = -20
-					custom_tooltip = me_build_shipyard_in_province
 					hidden_effect = {
 						add_or_upgrade_shipyard_building = yes
+					}
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						exists = VEN
+						112 = {
+							controlled_by = ROOT
+						}
+						war_score_against = {
+							who = VEN
+							value = 50
+						}
+					}
+					country_event = { id = ME_Austria_Events.69 }
+				}
+				
+				else_if = {
+					limit = {
+						exists = VEN
+						alliance_with = VEN
+						trust = { who = VEN value = 70 }
+					}
+					country_event = { id = ME_Austria_Events.28 }
+				}
+				
+				else = {
+					venetia_area = {
+						limit = {
+							owned_by = ROOT
+						}
+						add_local_autonomy = -20
+						custom_tooltip = me_build_shipyard_in_province
+						hidden_effect = {
+							add_or_upgrade_shipyard_building = yes
+						}
 					}
 				}
 			}
@@ -1727,9 +1791,11 @@ me_hab_2_1 = {
 						marriage_with = BUR
 						custom_trigger_tooltip = {
 							tooltip = me_hab_bur_has_maria
-							OR = {
-								has_heir_flag = mary_is_heir
-								has_country_modifier = mary_is_on_the_throne #in case that happens
+							BUR = {
+								OR = {
+									has_heir_flag = mary_is_heir
+									has_country_modifier = mary_is_on_the_throne #in case that happens
+								}
 							}
 						}
 					}
@@ -1754,12 +1820,7 @@ me_hab_2_1 = {
 		effect = {
 			custom_tooltip = me_hab_if_we_married_burgundy
 			tooltip = {
-				set_country_flag = me_bur_higher_acceptance_chances
-				custom_tooltip = me_bur_higher_acceptance_chances_tt
-				add_favors = {
-					who = BUR
-					amount = 10
-				}
+				country_event = { id = ME_Austria_Events.72 }
 			}
 			custom_tooltip = "Else:"
 			tooltip = {
@@ -1773,12 +1834,7 @@ me_hab_2_1 = {
 					limit = {
 						marriage_with = BUR
 					}
-					set_country_flag = me_bur_higher_acceptance_chances
-					custom_tooltip = me_bur_higher_acceptance_chances_tt
-					add_favors = {
-						who = BUR
-						amount = 10
-					}
+					country_event = { id = ME_Austria_Events.72 }
 				}
 				else = {
 					set_country_flag = me_bur_beating_bur_king_in_battle
@@ -2007,7 +2063,7 @@ me_hab_2_1 = {
 					desc = me_hab_until_tech_16
 				}
 			}
-			custom_tooltiphas_building  = "Else:"
+			custom_tooltip = "Else:"
 			add_country_modifier = {
 				name = me_hab_advanced_pike_and_shot
 				duration = 7300
@@ -2272,27 +2328,79 @@ me_hab_3 = {
 		position = 1
 		provinces_to_highlight = {
 			OR = {
-				area = tirol_area
 				area = switzerland_area
 				area = romandie_area
 			}
 			NOT = { owned_by = ROOT }
 		}
 		trigger = {
-			num_of_owned_provinces_with = {
-				OR = {
-					area = switzerland_area
-					area = romandie_area
+			OR = {
+				num_of_owned_provinces_with = {
+					OR = {
+						area = switzerland_area
+						area = romandie_area
+					}
+					value = 3
 				}
-				value = 3
-			}
-			tirol_area = {
-				type = all
-				owned_by = ROOT
+				AND = {
+					alliance_with = SWI
+					custom_trigger_tooltip = {
+						tooltip = me_hab_bestowed_imperial_grace
+						SWI = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = improved_imperial_relations 
+							}
+						}
+					}
+				}
+				custom_trigger_tooltip = {
+					tooltip = me_hab_beaten_swiss_in_war
+					has_country_flag = me_hab_won_against_swiss
+				}
 			}
 		}
 		effect = {
-			country_event = { id = ME_Austria_Events.18 }
+			custom_tooltip = me_hab_if_friendly_with_swiss
+			tooltip = {
+				add_favors = {
+				   who = SWI
+				   amount = 20
+				}
+				add_trust = {
+					who = SWI
+					value = 30
+				}
+				custom_tooltip = me_hab_swiss_will_not_leave_empire
+			}
+			custom_tooltip = " "
+			custom_tooltip = me_hab_else
+			tooltip = {
+				country_event = { id = ME_Austria_Events.18 }
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						SWI = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = improved_imperial_relations 
+							}
+						}
+					}
+					add_favors = {
+					   who = SWI
+					   amount = 20
+					}
+					add_trust = {
+						who = SWI
+						value = 30
+					}
+				}
+				else = {
+					country_event = { id = ME_Austria_Events.18 }
+				}
+			}
 		}
 	}
 }
@@ -2617,6 +2725,9 @@ me_hab_3_hre = {
 				}
 			}
 			custom_tooltip = me_hab_every_hre_memeber
+			custom_tooltip = " "
+			custom_tooltip = me_hab_pragmatic_sanction
+			set_country_flag = me_free_pragmatic_sanction
 		}
 	}
 	
@@ -2663,10 +2774,11 @@ me_hab_3_hre = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					hre_reform_passed = emperor_reichskrieg
-				}
+			custom_tooltip = me_hab_if_centralized
+			custom_tooltip = me_hab_gain_money_and_manpower_per_prince
+			custom_tooltip = " "
+			custom_tooltip = me_hab_if_decentralized
+			tooltip = {
 				add_country_modifier = {
 					name = me_hab_imperial_war_leader
 					duration = -1
@@ -2674,10 +2786,29 @@ me_hab_3_hre = {
 				set_country_flag = me_hab_new_diplo_actions
 				custom_tooltip = me_hab_unlock_new_hre_diplo_actions
 			}
-			else = {
-				add_country_modifier = {
-					name = me_hab_the_empire_stands_triumphant
-					duration = -1
+			hidden_effect = {
+				if = {
+					limit = {
+						hre_reform_passed = emperor_reichskrieg
+					}
+					add_country_modifier = {
+						name = me_hab_imperial_war_leader
+						duration = -1
+					}
+					set_country_flag = me_hab_new_diplo_actions
+					custom_tooltip = me_hab_unlock_new_hre_diplo_actions
+				}
+				else = {
+					every_known_country = {
+						limit = {
+							is_part_of_hre = yes
+							is_subject = ROOT
+						}
+						overlord = {
+							add_years_of_income = 0.1
+							add_yearly_manpower = 0.1
+						}
+					}
 				}
 			}
 		}
@@ -2889,7 +3020,9 @@ me_hab_3_1 = {
 		}
 		trigger = {
 			OR = {
-				senior_union_with = NAP
+				NAP = {
+					is_subject_of = ROOT
+				}
 				AND = {
 					apulia_area = {
 						type = all
@@ -2907,18 +3040,40 @@ me_hab_3_1 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					senior_union_with = NAP
-				}
-				NAP = {
-					add_liberty_desire = -100
-				}
+			custom_tooltip = me_hab_naples_vassal
+			tooltip = {
+				add_liberty_desire = -100
 				country_event = { id = ME_Austria_Events.21 }
 			}
-			else = {
+			custom_tooltip = " "
+			custom_tooltip = me_hab_else
+			tooltip = {
 				121 = {
 					add_center_of_trade_level = 1
+				}
+				add_country_modifier = {
+					name = me_hab_conquest_of_naples
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				if = {
+					NAP = {
+						is_subject_of = ROOT
+					}
+					NAP = {
+						add_liberty_desire = -100
+					}
+					country_event = { id = ME_Austria_Events.21 }
+				}
+				else = {
+					121 = {
+						add_center_of_trade_level = 1
+					}
+					add_country_modifier = {
+						name = me_hab_conquest_of_naples
+						duration = 7300
+					}
 				}
 			}
 		}
@@ -4400,16 +4555,6 @@ me_hab_4_hre = {
 			owner = {
 				NOT = { tag = root }
 				NOT = { is_subject_of = ROOT }
-				OR = {
-					AND = {
-						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-							value = 14
-							continent = europe
-						}
-						is_part_of_hre = yes
-					}
-					is_emperor = yes
-				}
 			}
 			owner = {
 				is_rival = ROOT
@@ -4421,26 +4566,13 @@ me_hab_4_hre = {
 		trigger = {
 			is_emperor = yes
 			custom_trigger_tooltip = {
-				tooltip = me_hab_no_one_to_threaten_us_trigger_tooltip
-				NOT = {
-					any_country = {
-						NOT = { tag = root }
-						NOT = { is_subject_of = ROOT }
-						is_part_of_hre = yes
-						num_of_provinces_owned_or_owned_by_non_sovereign_subjects_with = {
-							value = 14
-							continent = europe
-						}
-					}
+				tooltip = me_hab_has_beaten_5_non_hre_nations
+				check_variable = {
+					variable = MEHabBeatenEnemies
+					value = 5
 				}
 			}
-			calc_true_if = {
-				desc = emp_hab_no_one_to_threaten_us_trigger2_tooltip
-				amount = 10
-				all_country = {
-					has_reform = free_city
-				}
-			}
+			
 			all_rival_country = {
 				NOT = { army_size = ROOT }
 			}
@@ -4448,12 +4580,9 @@ me_hab_4_hre = {
 		effect = {
 			add_power_projection = {
 				type = mission_rewards_power_projection
-				amount = 10
+				amount = 25
 			}
-			add_imperial_influence = 5
-			add_dip_power = 50
-			add_mil_power = 50
-			add_adm_power = 50
+			add_imperial_influence = 10
 		}
 	}
 }
@@ -4590,6 +4719,7 @@ me_hab_4_1 = {
 					}
 				}
 			}
+			custom_tooltip = me_hab_remove_autonomy_decreased
 			if = {
 				limit = {
 					4128 = {
@@ -4628,10 +4758,17 @@ me_hab_4_1 = {
 				limit = {
 					exists = TUR
 				}
-				offensive_war_with = TUR
-				war_score_against = {
-					who = TUR
-					value = 50
+				OR = {
+					AND = {
+						offensive_war_with = TUR
+						war_score_against = {
+							who = TUR
+							value = 50
+						}
+					}
+					TUR = {
+						NOT = { army_size = ROOT }
+					}
 				}
 			}
 			else = {
@@ -4661,11 +4798,14 @@ me_hab_4_1 = {
 						add_permanent_claim = ROOT
 					}
 				}
+				add_casus_belli = {
+					target = TUR
+					type = cb_order_crusade
+					months = 120
+				}
 			}
-			else = {
-				ME_give_claims = { area = thrace_area }
-				ME_give_claims = { area = macedonia_area }
-			}
+			ME_give_claims = { area = thrace_area }
+			ME_give_claims = { area = macedonia_area }
 			add_yearly_manpower = 1
 		}
 	}
@@ -6176,6 +6316,7 @@ me_hab_5 = {
 					}
 					ME_give_claims = { area = slovakia_area }
 					ME_give_claims = { area = alfold_area }
+					add_accepted_culture = hungarian
 				}
 				else = {
 					HUN = {
@@ -6235,6 +6376,7 @@ me_hab_5 = {
 				slovakia_area = {
 					add_local_autonomy = -100
 				}
+				custom_tooltip = me_hab_unlock_black_army
 			}
 			hidden_effect = {
 				if = {
@@ -6253,6 +6395,7 @@ me_hab_5 = {
 					slovakia_area = {
 						add_local_autonomy = -100
 					}
+					set_country_flag = me_hab_black_army
 				}
 			}
 		}
@@ -6374,6 +6517,7 @@ me_hab_5 = {
 					}
 				}
 			}
+			custom_tooltip = me_hab_remove_autonomy_decreased
 		}
 	}
 	##Mission End
