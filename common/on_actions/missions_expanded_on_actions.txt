@@ -69,6 +69,17 @@ on_adm_development = {
 			}
 		}
 	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_modifier = me_hab_imperial_treasurer
+			}
+		}
+		emperor = {
+			add_imperial_influence = 1
+		}
+	}
 }
 
 # province
@@ -137,6 +148,17 @@ on_dip_development = {
 				estate = me_hab_cultural_minorities
 				loyalty = 0.5
 			}
+		}
+	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_modifier = me_hab_imperial_treasurer
+			}
+		}
+		emperor = {
+			add_imperial_influence = 1
 		}
 	}
 }
@@ -210,6 +232,17 @@ on_mil_development = {
 				estate = me_hab_cultural_minorities
 				loyalty = 0.5
 			}
+		}
+	}
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_modifier = me_hab_imperial_treasurer
+			}
+		}
+		emperor = {
+			add_imperial_influence = 1
 		}
 	}
 }
@@ -362,6 +395,15 @@ on_battle_won_country = {
 			mission_completed = takeda_rise_of_takeda_shingen
 		}
 		change_variable = { which = num_of_won_battles value = 1 }
+	}
+	
+	if = {
+		limit = {
+			has_country_modifier = me_hab_imperial_marshall
+		}
+		emperor = {
+			add_imperial_influence = 1
+		}
 	}
 }
 
@@ -828,8 +870,51 @@ on_war_won = {
 
 on_four_year_pulse_3 = { #for our nobles
 	random_events = {
-		1000 = 0
+		500 = 0
 		100 = me_austria_nobles.2
 		100 = me_austria_nobles.3
+	}
+}
+
+# province
+on_province_religion_converted = {
+	on_province_religion_converted_estate_privileges_effect = yes
+	if = {
+		limit = {
+			owner = {
+				has_country_modifier = son_fetishism_as_secondary_religion
+			}
+			religion = shamanism
+			NOT = { has_province_modifier = son_fetishism_as_secondary_religion_province }
+		}
+		add_province_modifier = {
+			name = son_fetishism_as_secondary_religion_province
+			duration = -1
+			desc = son_fetishism_as_secondary_religion_province_desc
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				owner = {
+					NOT = { has_country_modifier = son_fetishism_as_secondary_religion }
+				}
+				NOT = { religion = shamanism }
+			}
+			has_province_modifier = son_fetishism_as_secondary_religion_province
+		}
+		remove_province_modifier = son_fetishism_as_secondary_religion_province
+	}
+	judaism_on_province_change_religion_or_change_owner_effect = yes
+	
+	if = {
+		limit = {
+			owner = {
+				has_country_modifier = me_hab_imperial_court_chaplain
+			}
+		}
+		emperor = {
+			add_imperial_influence = 1
+		}
 	}
 }
