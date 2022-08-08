@@ -1642,10 +1642,64 @@ me_hab_2_1 = {
 					}
 				}
 				NOT = { exists = BOH }
+				BOH = {
+					custom_trigger_tooltip = {
+						tooltip = has_been_insulted_by_root
+						OR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+						}
+					}
+				}
 			}
 		}
 		effect = {
-			country_event = { id = ME_Austria_Events.33 }
+			custom_tooltip = me_hab_if_pu
+			tooltip = {
+				country_event = { id = ME_Austria_Events.33 }
+			}
+			custom_tooltip = " "
+			custom_tooltip = me_hab_if_insult
+			tooltip = {
+				add_casus_belli = {
+					target = BOH
+					type = cb_restore_personal_union
+					duration = 120
+				}
+				custom_tooltip = me_hab_will_last_10_years
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						BOH = {
+							OR = {
+								has_opinion_modifier = {
+									who = ROOT
+									modifier = insulted
+								}
+								has_opinion_modifier = {
+									who = ROOT
+									modifier = scornfully_insulted
+								}
+							}
+						}
+					}
+					add_casus_belli = {
+						target = BOH
+						type = cb_restore_personal_union
+						duration = 120
+					}
+				}
+				else = {
+					country_event = { id = ME_Austria_Events.33 }
+				}
+			}
 		}
 	}
 	
@@ -2834,7 +2888,7 @@ me_hab_3_hre = {
 					has_dlc = "Emperor"
 				}
 				OR = {
-					hre_reform_passed =	emperor_reichskrieg
+					hre_reform_passed =	emperor_reichstag_collegia
 					hre_reform_passed =	emperor_privilegia_de_non_appelando
 				}
 			}
@@ -2858,7 +2912,7 @@ me_hab_3_hre = {
 			hidden_effect = {
 				if = {
 					limit = {
-						hre_reform_passed = emperor_reichskrieg
+						hre_reform_passed = emperor_reichstag_collegia 
 					}
 					add_country_modifier = {
 						name = me_hab_imperial_war_leader
@@ -6463,6 +6517,21 @@ me_hab_5 = {
 					type = all
 					owned_by = ROOT
 				}
+				HUN = {
+					custom_trigger_tooltip = {
+						tooltip = has_been_insulted_by_root
+						OR = {
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = insulted
+							}
+							has_opinion_modifier = {
+								who = ROOT
+								modifier = scornfully_insulted
+							}
+						}
+					}
+				}
 			}
 		}
 		effect = {
@@ -6472,6 +6541,16 @@ me_hab_5 = {
 			custom_tooltip = me_hab_if_pu
 			tooltip = {
 				add_liberty_desire = -100
+			}
+			custom_tooltip = " "
+			custom_tooltip = me_hab_if_insult
+			tooltip = {
+				add_casus_belli = {
+					target = HUN
+					type = cb_restore_personal_union
+					months = 120
+				}
+				custom_tooltip = me_hab_will_last_10_years
 			}
 			custom_tooltip = " "
 			custom_tooltip = me_hab_else_hun
@@ -6501,9 +6580,19 @@ me_hab_5 = {
 					ME_give_claims = { area = alfold_area }
 					add_accepted_culture_or_dip_power = { culture = hungarian }
 				}
-				else = {
+				else_if = {
+					limit = {
+						senior_union_with = HUN
+					}
 					HUN = {
 						add_liberty_desire = -100
+					}
+				}
+				else = {
+					add_casus_belli = {
+						target = HUN
+						type = cb_restore_personal_union
+						months = 120
 					}
 				}
 			}
