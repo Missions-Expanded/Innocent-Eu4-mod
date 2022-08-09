@@ -2126,6 +2126,157 @@ add_positive_or_negative_piety = {
 }
 
 ME_technology_split_120_power = { #placeholder, I will put the implementation here later!
+	custom_tooltip = "ME_split_120_MP"
+	hidden_effect = {
+		export_to_variable = {
+			which = MSA_our_adm_tech
+			value = trigger_value:adm_tech
+		}
+		export_to_variable = {
+			which = MSA_our_dip_tech
+			value = trigger_value:dip_tech
+		}
+		export_to_variable = {
+			which = MSA_our_mil_tech
+			value = trigger_value:mil_tech
+		}
+		set_variable = {
+			which = MSA_our_lowest_tech
+			which = MSA_our_adm_tech
+		}
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = MSA_our_dip_tech
+						which = MSA_our_lowest_tech
+					}
+				}
+			}
+			set_variable = {
+				which = MSA_our_lowest_tech
+				which = MSA_our_dip_tech
+			}
+		}
+		if = {
+			limit = {
+				NOT = {
+					check_variable = {
+						which = MSA_our_mil_tech
+						which = MSA_our_lowest_tech
+					}
+				}
+			}
+			set_variable = {
+				which = MSA_our_lowest_tech
+				which = MSA_our_mil_tech
+			}
+		}
+		
+		subtract_variable = {
+			which = MSA_our_adm_tech
+			which = MSA_our_lowest_tech
+		}
+		subtract_variable = {
+			which = MSA_our_dip_tech
+			which = MSA_our_lowest_tech
+		}
+		subtract_variable = {
+			which = MSA_our_mil_tech
+			which = MSA_our_lowest_tech
+		}
+		
+		if = {
+			limit = {
+				is_variable_equal = {
+					which = MSA_our_adm_tech
+					value = 0
+				}
+			}
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = MSA_our_dip_tech
+						value = 0
+					}
+				}
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = MSA_our_mil_tech
+							value = 0
+						}
+					}
+					add_adm_power = 40
+					add_dip_power = 40
+					add_mil_power = 40
+				}
+				else = {
+					add_adm_power = 60
+					add_dip_power = 60
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = MSA_our_mil_tech
+							value = 0
+						}
+					}
+					add_adm_power = 60
+					add_mil_power = 60
+				}
+				else = {
+					add_adm_power = 120
+				}
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					is_variable_equal = {
+						which = MSA_our_dip_tech
+						value = 0
+					}
+				}
+				if = {
+					limit = {
+						is_variable_equal = {
+							which = MSA_our_mil_tech
+							value = 0
+						}
+					}
+					add_dip_power = 60
+					add_mil_power = 60
+				}
+				else = {
+					add_dip_power = 120
+				}
+			}
+			else = {
+				add_mil_power = 120
+			}
+		}
+		
+		#flush the vars
+		set_variable = {
+			which = MSA_our_adm_tech
+			value = 0
+		}
+		set_variable = {
+			which = MSA_our_dip_tech
+			value = 0
+		}
+		set_variable = {
+			which = MSA_our_mil_tech
+			value = 0
+		}
+		set_variable = {
+			which = MSA_our_lowest_tech
+			value = 0
+		}
+	}
 }
 
 #tag = { ME_add_to_empire = yes }
