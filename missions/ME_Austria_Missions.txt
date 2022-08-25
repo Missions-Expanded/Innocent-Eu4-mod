@@ -35,11 +35,27 @@ me_hab_1 = {
 				AND = {
 					lower_swabia_area = {
 						type = all
-						country_or_non_sovereign_subject_holds = ROOT
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								OR = {
+									has_reform = free_city
+									alliance_with = ROOT
+								}
+							}
+						}
 					}
 					upper_swabia_area = {
 						type = all
-						country_or_non_sovereign_subject_holds = ROOT
+						OR = {
+							country_or_non_sovereign_subject_holds = ROOT
+							owner = {
+								OR = {
+									has_reform = free_city
+									alliance_with = ROOT
+								}
+							}
+						}
 					}
 				}
 			}
@@ -328,6 +344,10 @@ me_hab_1_1 = {
 					add_base_manpower = 2
 				}
 			}
+			custom_tooltip = ESTATES_SEIZE_LAND_DESC
+			hidden_effect = {
+				take_estate_land_share_massive = { estate = all }
+			}
 		}
 	}
 	
@@ -465,38 +485,73 @@ me_hab_1_1 = {
 			}
 		}
 		effect = {
-			if = {
-				limit = {
-					has_country_flag = me_hab_shadow_kingdom_peaceful
-				}
-				every_country = {
-					limit = {
-						capital_scope = {
-							region = italy_region
-							is_part_of_hre = yes
-						}
-						has_opinion = {
-							who = ROOT
-							value = 150
-						}
-					}
-					add_country_modifier = {
-						name = me_hab_peaceful_rein
-						duration = 10950
-					}
+			custom_tooltip = me_hab_if_peaceful_italy
+			tooltip = {
+				custom_tooltip = me_hab_every_italian_country
+				add_country_modifier = {
+					name = me_hab_peaceful_rein
+					duration = 10950
 				}
 			}
-			else_if = {
-				limit = {
-					has_country_flag = me_hab_shadow_kingdom_military
-				}
+			custom_tooltip = " "
+			custom_tooltip = me_hab_if_military
+			tooltip = {
 				add_country_modifier = {
 					name = me_hab_iron_fist_ita
 					duration = 7300
 				}
 			}
-			else = {
-				custom_tooltip = me_reward_will_depend
+			custom_tooltip = " "
+			custom_tooltip = me_hab_else_italy
+			tooltip = {
+				custom_tooltip = me_hab_every_italian_province
+				add_province_modifier = {
+					name = me_hab_habsburg_rule
+					duration = 7300
+				}
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_flag = me_hab_shadow_kingdom_peaceful
+					}
+					every_country = {
+						limit = {
+							capital_scope = {
+								region = italy_region
+								is_part_of_hre = yes
+							}
+							has_opinion = {
+								who = ROOT
+								value = 150
+							}
+						}
+						add_country_modifier = {
+							name = me_hab_peaceful_rein
+							duration = 10950
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						has_country_flag = me_hab_shadow_kingdom_military
+					}
+					add_country_modifier = {
+						name = me_hab_iron_fist_ita
+						duration = 7300
+					}
+				}
+				else = {
+					every_owned_province = {
+						limit = {
+							region = italy_region
+						}
+						add_province_modifier = {
+							name = me_hab_habsburg_rule
+							duration = 7300
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1506,6 +1561,11 @@ me_hab_2_1 = {
 					religion = catholic
 				}
 				custom_tooltip = me_give_30_pi_per_bull
+				custom_tooltip = " "
+				add_country_modifier = {
+					name = me_hab_papal_cooperation
+					duration = 7300
+				}
 			}
 			else = {
 				add_country_modifier = {
@@ -4904,7 +4964,8 @@ me_hab_4_1 = {
 		}
 		effect = {
 			custom_tooltip = me_gas_prevent_transylvanian_revolt
-			
+			set_country_flag = me_hab_no_transylvania_revolt
+			custom_tooltip = " "
 			if = {
 				limit = {
 					transylvania_area = {
@@ -4942,15 +5003,12 @@ me_hab_4_1 = {
 				}
 			}
 			custom_tooltip = me_hab_remove_autonomy_decreased
+			custom_tooltip = " "
 			if = {
 				limit = {
 					4128 = {
 						culture_group = carpathian
 						province_is_or_accepts_culture = yes
-						has_great_project = {
-							type = bran_castle 
-							tier = 0
-						}
 					}
 				}
 				add_great_project_tier = {
@@ -6653,7 +6711,7 @@ me_hab_5 = {
 					limit = {
 						senior_union_with = HUN
 					}
-					country_event = { id = ME_Austria_Events.11 }
+					country_event = { id = ME_Austria_Events.65 }
 				}
 				else = {
 					transdanubia_area = {
