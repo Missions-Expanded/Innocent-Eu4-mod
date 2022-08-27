@@ -1,0 +1,111 @@
+ME_hungarian_revolt = {
+	ended_by_country_breaking_to_rebels = no
+	potential = {
+		num_of_owned_provinces_with = {
+			value = 10
+			OR = {
+				culture = hungarian
+				culture = slovak
+				culture = transylvanian
+			}
+		}
+		is_free_or_tributary_trigger = yes
+		tag = HAB
+		NOT = { exists = HUN }
+		current_age = age_of_revolutions
+		has_country_flag = use_missions_expanded_missions_instead_of_paradox
+	}
+	
+	can_start = {
+		has_any_disaster = no
+		NOT = { has_estate_privilege = estate_cultural_minorities_elevate_cultural_status }
+	}
+	
+	can_stop = { 
+		has_any_disaster = yes
+		has_estate_privilege = estate_cultural_minorities_elevate_cultural_status
+	}
+	
+	
+	progress = {
+		modifier = {
+			factor = 1
+			is_at_war = yes
+		}
+		modifier = {
+			factor = 2
+			NOT = {
+				estate_loyalty = {
+					estate = me_estate_cultural_minorities
+					loyalty = 30
+				}
+			}
+		}
+		modifier = {
+			factor = 2
+			estate_influence = {
+				estate = me_estate_cultural_minorities
+				influence = 100
+			}
+		}
+		modifier = {
+			factor = 1
+			NOT = { dip = 2 }
+		}
+		modifier = {
+			factor = 2
+			unrest = 0
+		}
+	}
+	
+	can_end = {
+		stability = 1
+		OR = {
+			AND = {
+				NOT = { num_of_rebel_armies = 1 }
+				NOT = { num_of_rebel_controlled_provinces = 3 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = "Has accepted the Hungarian demands"
+				has_country_flag = me_hab_austria_hungary
+			}
+			custom_trigger_tooltip = {
+				tooltip = "We have lost our rule over the Hungarian lands"
+				NOT = {
+					num_of_owned_provinces_with = {
+						value = 10
+						OR = {
+							culture = hungarian
+							culture = slovak
+							culture = transylvanian
+						}
+					}
+				}
+			}
+		}
+	}
+	
+
+	modifier = {
+		global_unrest = 10
+		#manpower in different culture provinces
+	}
+	
+	on_start = ME_Hungarian_Revolution_Events.1
+	on_end = ME_Hungarian_Revolution_Events.2
+	
+	on_monthly = {
+		events = {
+		}
+		random_events = {
+			600 = 0
+			7 = ME_Hungarian_Revolution_Events.3 #People in Bohemia rebel
+			20 = ME_Hungarian_Revolution_Events.4 #Our nobility demands reconciliation with the Hungarians 
+			20 = ME_Hungarian_Revolution_Events.5 #Rebels
+			5 = ME_Hungarian_Revolution_Events.6 #Sabotage in our capital
+			7 = ME_Hungarian_Revolution_Events.7 #Red Ruthenia revolts
+			7 = ME_Hungarian_Revolution_Events.8 #Italy revolts
+			7 = ME_Hungarian_Revolution_Events.9 #Croatia revolts
+		}
+	}
+}
