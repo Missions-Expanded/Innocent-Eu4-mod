@@ -29,10 +29,10 @@ nitra_first = {
 			custom_tooltip = SLO_VELEHRAD_RENAME
 			custom_tooltip = SLO_MVA_DEV
 			hidden_effect = {
-			4726 = {
-				change_province_name = "Velehrad"
-				rename_capital = "Velehrad"
-			}
+				4726 = {
+					change_province_name = "Velehrad"
+					rename_capital = "Velehrad"
+				}
 				moravia_area = {
 					add_base_tax = 1
 					add_base_production = 1
@@ -1294,7 +1294,6 @@ nitra_fourth = {
 				}
 				add_permanent_claim = ROOT
 			}
-			custom_tooltip = SLO_SPACE
 			4752 = {
 				add_unit_construction = {
 					type = light_ship
@@ -1697,6 +1696,7 @@ nitra_fourth = {
 					"
 				}
 			}
+			custom_tooltip = SLO_DEVELOPING_BONUS
 		}
 	}
 
@@ -1868,6 +1868,41 @@ nitra_fifth = {
 			}
 		}
 		effect = {
+			if = {
+				limit = {
+					capital_scope = {
+						NOT = {
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+								has_building = fort_18th
+							}
+						}
+					}
+				}
+				custom_tooltip = SLO_BUILD_FORT
+			}
+			else_if = {
+				limit = {
+					capital_scope = {
+						has_building = fort_18th
+					}
+				}
+				custom_tooltip = SLO_ADD_MANPOWER
+			}
+			else_if = {
+				limit = {
+					capital_scope = {
+						OR = {
+							has_building = fort_15th
+							has_building = fort_16th
+							has_building = fort_17th
+						}
+					}
+				}	
+				custom_tooltip = SLO_ADVANCE_FORT
+			}
 			add_country_modifier = {
 				name = "slo_carpathian_wall"
 				duration = -1
@@ -1878,6 +1913,95 @@ nitra_fifth = {
 				religion = ROOT
 				culture = ROOT
 				cost_multiplier = 0.5
+			}
+			hidden_effect = {
+				if = {
+					limit = {
+						capital_scope = {
+							has_building = fort_18th
+						}
+					}
+					capital_scope = {
+						add_base_manpower = 3
+					}
+				}
+				else_if = {
+					limit = {
+						capital_scope = {
+							OR = {
+								has_building = fort_15th
+								has_building = fort_16th
+								has_building = fort_17th
+							}
+						}
+					}		
+					capital_scope = {
+						if = {
+							limit = {
+								has_building = fort_15th
+							}
+							remove_building = fort_15th
+							add_building = fort_16th
+						}
+						else_if = {
+							limit = {
+								has_building = fort_16th
+							}
+							remove_building = fort_16th
+							add_building = fort_17th
+						}
+						else_if = {
+							limit = {
+								has_building = fort_17th
+							}
+							remove_building = fort_17th
+							add_building = fort_18th
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						capital_scope = {
+							NOT = {
+								OR = {
+									has_building = fort_15th
+									has_building = fort_16th
+									has_building = fort_17th
+									has_building = fort_18th
+								}
+							}
+						}
+					}
+					if = {
+						limit = {
+							ROOT = { mil_tech = 24 }
+						}
+						capital_scope = {
+							add_building = fort_18th
+						}
+					}
+					else_if = {
+						limit = {
+							ROOT = { mil_tech = 19 }
+						}
+						capital_scope = {
+							add_building = fort_17th
+						}
+					}
+					else_if = {
+						limit = {
+							ROOT = { mil_tech = 14 }
+						}
+						capital_scope = {
+							add_building = fort_16th
+						}
+					}
+					else = {
+						capital_scope = {
+							add_building = fort_16th
+						}
+					}
+				}
 			}
 		}
 	}
@@ -1940,12 +2064,7 @@ nitra_fifth = {
 		}
 
 		effect = {
-			custom_tooltip = SLO_PANSLAVISM
-			set_country_flag = slo_panslavism_flag
-			add_country_modifier = {
-				name = "slo_blood_faith"
-				duration = -1
-			}
+			country_event = { id = me_nitra.9 }
 		}
 	}
 
